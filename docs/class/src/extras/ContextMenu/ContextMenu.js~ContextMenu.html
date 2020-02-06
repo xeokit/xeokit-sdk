@@ -138,13 +138,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber100">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber125">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber100">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber125">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -172,13 +172,23 @@
 <h2 id="overview">Overview</h2><ul>
 <li>Attach to anything that fires a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event">contextmenu</a> event</li>
 <li>Configure custom items</li>
+<li>Allows to dynamically enable or disable items</li>
 <li>Configure custom style with custom CSS (see examples above)</li>
 </ul>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a ContextMenu that pops up whenever we right-click on an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within
 our <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
-<p>First, we&apos;ll create the ContextMenu, configuring it with a list of menu items. Each item has a title to display
-in the menu, along with a callback to fire when its title is clicked. Note how each callback accepts a <code>context</code>
-object, which we set on the ContextMenu whenever we show it. The context object can be anything. In this example,
+<p>First, we&apos;ll create the ContextMenu, configuring it with a list of menu items.</p>
+<p>Each item has:</p>
+<ul>
+<li>a title to display it in the menu,</li>
+<li>a <code>doAction()</code> callback to fire when the item&apos;s title is clicked, and</li>
+<li>an optional <code>getEnabled()</code> callback that indicates if the item should enabled in the menu or not.</li>
+</ul>
+<p>The <code>getEnabled()</code> callbacks are invoked whenever the menu is shown. When an item&apos;s <code>getEnabled()</code> callback
+returns <code>true</code>, then the item is enabled and clickable. When it returns <code>false</code>, then the item is disabled
+and cannot be clicked. An item without a <code>getEnabled()</code> callback is always enabled and clickable.</p>
+<p>Note how the <code>doAction()</code> and <code>getEnabled()</code> callbacks accept a <code>context</code>
+object. That must be set on the ContextMenu before we&apos;re able to we show it. The context object can be anything. In this example,
 we&apos;ll use the context object to provide the callbacks with the Entity that we right-clicked.</p>
 <p>We&apos;ll also initially enable the ContextMenu.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom">Run this example</a>]</p>
@@ -189,24 +199,33 @@ we&apos;ll use the context object to provide the callbacks with the Entity that 
    items: [
       [
          {
-            title: &quot;Hide object&quot;,
-            callback: function (context) {
+            title: &quot;Hide Object&quot;,
+            getEnabled: (context) =&gt; {
+                return context.entity.visible; // Can&apos;t hide entity if already hidden
+            },
+            doAction: function (context) {
                 context.entity.visible = false;
             }
          }
       ],
       [
          {
-            title: &quot;Select object&quot;,
-            callback: function (context) {
+            title: &quot;Select Object&quot;,
+            getEnabled: (context) =&gt; {
+                return (!context.entity.selected); // Can&apos;t select an entity that&apos;s already selected
+            },
+            doAction: function (context) {
                 context.entity.selected = true;
             }
          }
       ],
       [
          {
-            title: &quot;X-ray object&quot;,
-            callback: function (context) {
+            title: &quot;X-Ray Object&quot;,
+            getEnabled: (context) =&gt; {
+                return (!context.entity.xrayed); // Can&apos;t X-ray an entity that&apos;s already X-rayed
+            },
+            doAction: (context) =&gt; {
                 context.entity.xrayed = true;
             }
          }
@@ -216,8 +235,10 @@ we&apos;ll use the context object to provide the callbacks with the Entity that 
 <p>Next, we&apos;ll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
 on the canvas, we&apos;ll attempt to pick the Entity at those mouse coordinates. If we succeed, we&apos;ll feed the
 Entity into ContextMenu via the context object, then show the ContextMenu.</p>
-<p>From there, if we click an item in the ContextMenu, the corresponding callback will be invoked with our
-context object.</p>
+<p>From there, each ContextMenu item&apos;s <code>getEnabled()</code> callback will be invoked (if provided), to determine if the item should
+be enabled. If we click an item, its <code>doAction()</code> callback will be invoked with our context object.</p>
+<p>Remember that we must set the context on our ContextMenu before we show it, otherwise it will log an error to the console,
+and ignore our attempt to show it.</p>
 <pre><code class="lang-javascript*"><code class="source-code prettyprint">viewer.scene.canvas.canvas.oncontextmenu = (e) =&gt; { // Right-clicked on the canvas
 
     if (!objectContextMenu.enabled) {
@@ -318,6 +339,7 @@ ContextMenu instances depending on what we clicked.</p>
         
         <div data-ice="description"><p>Sets the menu&apos;s current context.</p>
 <p>The context can be any object that you need to be provides to the callbacks configured on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>.</p>
+<p>This must be set before calling <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span>.</p>
 </div>
       </div>
     </td>
@@ -587,7 +609,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber110">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -618,14 +640,14 @@ ContextMenu instances depending on what we clicked.</p>
       <td data-ice="name" class="code" data-depth="1">cfg.items</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The context menu items. These can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>. See <span>DefaultEntityContextMenuItems</span> for an example.</p>
+      <td data-ice="description"><p>The context menu items. These can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>. See the class documentation for an example.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.context</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The context, which is passed into the item callbacks. This can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context">ContextMenu#context</a></span>.</p>
+      <td data-ice="description"><p>The context, which is passed into the item callbacks. This can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context">ContextMenu#context</a></span>. This must be set before calling <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -673,7 +695,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber246">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber290">source</a></span></span>
     </span>
   </h3>
 
@@ -682,6 +704,7 @@ ContextMenu instances depending on what we clicked.</p>
   
   <div data-ice="description"><p>Sets the menu&apos;s current context.</p>
 <p>The context can be any object that you need to be provides to the callbacks configured on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>.</p>
+<p>This must be set before calling <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span>.</p>
 </div>
 
   
@@ -718,7 +741,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -762,7 +785,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
@@ -807,7 +830,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber277">source</a></span></span>
     </span>
   </h3>
 
@@ -852,7 +875,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -861,7 +884,7 @@ ContextMenu instances depending on what we clicked.</p>
   
   <div data-ice="description"><p>Sets the context menu items.</p>
 <p>These can be dynamically updated.</p>
-<p>See <span>DefaultEntityContextMenuItems</span> for an example.</p>
+<p>See class documentation for an example.</p>
 </div>
 
   
@@ -898,7 +921,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
@@ -945,7 +968,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
@@ -989,7 +1012,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber364">source</a></span></span>
     </span>
   </h3>
 
@@ -1033,7 +1056,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -1041,7 +1064,9 @@ ContextMenu instances depending on what we clicked.</p>
   
   
   <div data-ice="description"><p>Shows this context menu at the given page coordinates.</p>
+<p>Also calls the <code>getEnabled()</code> callback on the menu items, where supplied, to enable or disable them. See the class documentation for more info.</p>
 <p>Does nothing when <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-enabled">ContextMenu#enabled</a></span> is <code>false</code>.</p>
+<p>Logs error to console and does nothing if <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context">ContextMenu#context</a></span> has not been set.</p>
 </div>
 
   
