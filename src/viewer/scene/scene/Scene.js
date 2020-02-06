@@ -387,6 +387,7 @@ class Scene extends Component {
          * @type {{String:Entity}}
          */
         this.objects = {};
+        this._numObjects = 0;
 
         /**
          * Map of currently visible {@link Entity}s that represent objects.
@@ -398,6 +399,7 @@ class Scene extends Component {
          * @type {{String:Object}}
          */
         this.visibleObjects = {};
+        this._numVisibleObjects = 0;
 
         /**
          * Map of currently xrayed {@link Entity}s that represent objects.
@@ -411,6 +413,7 @@ class Scene extends Component {
          * @type {{String:Object}}
          */
         this.xrayedObjects = {};
+        this._numXRayedObjects = 0;
 
         /**
          * Map of currently highlighted {@link Entity}s that represent objects.
@@ -424,6 +427,7 @@ class Scene extends Component {
          * @type {{String:Object}}
          */
         this.highlightedObjects = {};
+        this._numHighlightedObjects = 0;
 
         /**
          * Map of currently selected {@link Entity}s that represent objects.
@@ -437,6 +441,7 @@ class Scene extends Component {
          * @type {{String:Object}}
          */
         this.selectedObjects = {};
+        this._numSelectedObjects = 0;
 
         // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
 
@@ -916,19 +921,23 @@ class Scene extends Component {
 
     _registerObject(entity) {
         this.objects[entity.id] = entity;
+        this._numObjects++;
         this._objectIds = null; // Lazy regenerate
     }
 
     _deregisterObject(entity) {
         delete this.objects[entity.id];
+        this._numObjects--;
         this._objectIds = null; // Lazy regenerate
     }
 
     _objectVisibilityUpdated(entity, notify = true) {
         if (entity.visible) {
             this.visibleObjects[entity.id] = entity;
+            this._numVisibleObjects++;
         } else {
             delete this.visibleObjects[entity.id];
+            this._numVisibleObjects--;
         }
         this._visibleObjectIds = null; // Lazy regenerate
         if (notify) {
@@ -939,8 +948,10 @@ class Scene extends Component {
     _objectXRayedUpdated(entity) {
         if (entity.xrayed) {
             this.xrayedObjects[entity.id] = entity;
+            this._numXRayedObjects++;
         } else {
             delete this.xrayedObjects[entity.id];
+            this._numXRayedObjects--;
         }
         this._xrayedObjectIds = null; // Lazy regenerate
     }
@@ -948,8 +959,10 @@ class Scene extends Component {
     _objectHighlightedUpdated(entity) {
         if (entity.highlighted) {
             this.highlightedObjects[entity.id] = entity;
+            this._numHighlightedObjects++;
         } else {
             delete this.highlightedObjects[entity.id];
+            this._numHighlightedObjects--;
         }
         this._highlightedObjectIds = null; // Lazy regenerate
     }
@@ -957,8 +970,10 @@ class Scene extends Component {
     _objectSelectedUpdated(entity) {
         if (entity.selected) {
             this.selectedObjects[entity.id] = entity;
+            this._numSelectedObjects++;
         } else {
             delete this.selectedObjects[entity.id];
+            this._numSelectedObjects--;
         }
         this._selectedObjectIds = null; // Lazy regenerate
     }
@@ -1110,6 +1125,15 @@ class Scene extends Component {
     }
 
     /**
+     * Gets the number of {@link Entity}s in {@link Scene#objects}.
+     *
+     * @type {Number}
+     */
+    get numObjects() {
+        return this._numObjects;
+    }
+
+    /**
      * Gets the IDs of the {@link Entity}s in {@link Scene#objects}.
      *
      * @type {String[]}
@@ -1119,6 +1143,15 @@ class Scene extends Component {
             this._objectIds = Object.keys(this.objects);
         }
         return this._objectIds;
+    }
+
+    /**
+     * Gets the number of {@link Entity}s in {@link Scene#visibleObjects}.
+     *
+     * @type {Number}
+     */
+    get numVisibleObjects() {
+        return this._numVisibleObjects;
     }
 
     /**
@@ -1134,6 +1167,15 @@ class Scene extends Component {
     }
 
     /**
+     * Gets the number of {@link Entity}s in {@link Scene#xrayedObjects}.
+     *
+     * @type {Number}
+     */
+    get numXRayedObjects() {
+        return this._numXRayedObjects;
+    }
+
+    /**
      * Gets the IDs of the {@link Entity}s in {@link Scene#xrayedObjects}.
      *
      * @type {String[]}
@@ -1146,6 +1188,15 @@ class Scene extends Component {
     }
 
     /**
+     * Gets the number of {@link Entity}s in {@link Scene#highlightedObjects}.
+     *
+     * @type {Number}
+     */
+    get numHighlightedObjects() {
+        return this._numHighlightedObjects;
+    }
+
+    /**
      * Gets the IDs of the {@link Entity}s in {@link Scene#highlightedObjects}.
      *
      * @type {String[]}
@@ -1155,6 +1206,15 @@ class Scene extends Component {
             this._highlightedObjectIds = Object.keys(this.highlightedObjects);
         }
         return this._highlightedObjectIds;
+    }
+
+    /**
+     * Gets the number of {@link Entity}s in {@link Scene#selectedObjects}.
+     *
+     * @type {Number}
+     */
+    get numSelectedObjects() {
+        return this._numSelectedObjects;
     }
 
     /**
