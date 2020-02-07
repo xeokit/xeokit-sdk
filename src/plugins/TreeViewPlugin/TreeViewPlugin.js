@@ -232,7 +232,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *             [
  *                 {
  *                     title: "Hide",
- *                     callback: function (context) {
+ *                     doAction: function (context) {
  *                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
  *                             if (treeViewNode.objectId) {
  *                                 const entity = context.viewer.scene.objects[treeViewNode.objectId];
@@ -245,7 +245,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *                 },
  *                 {
  *                     title: "Hide all",
- *                     callback: function (context) {
+ *                     doAction: function (context) {
  *                         context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
  *                     }
  *                 }
@@ -253,7 +253,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *             [
  *                 {
  *                     title: "Show",
- *                     callback: function (context) {
+ *                     doAction: function (context) {
  *                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
  *                             if (treeViewNode.objectId) {
  *                                 const entity = context.viewer.scene.objects[treeViewNode.objectId];
@@ -268,7 +268,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *                 },
  *                 {
  *                     title: "Show all",
- *                     callback: function (context) {
+ *                     doAction: function (context) {
  *                         const scene = context.viewer.scene;
  *                         scene.setObjectsVisible(scene.objectIds, true);
  *                         scene.setObjectsXRayed(scene.xrayedObjectIds, false);
