@@ -161,8 +161,7 @@ const Renderer = function (scene, options) {
      */
     this.clear = function (params) {
         params = params || {};
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         if (canvasTransparent) { // Canvas is transparent
             gl.clearColor(0, 0, 0, 0);
         } else {
@@ -272,8 +271,7 @@ const Renderer = function (scene, options) {
         frameCtx.shadowViewMatrix = light.getShadowViewMatrix();
         frameCtx.shadowProjMatrix = light.getShadowProjMatrix();
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 1);
         gl.enable(gl.DEPTH_TEST);
@@ -351,8 +349,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
@@ -429,8 +426,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             if (canvasTransparent) { // Canvas is transparent
                 gl.clearColor(0, 0, 0, 0);
@@ -842,8 +838,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -906,8 +901,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -944,8 +938,7 @@ const Renderer = function (scene, options) {
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
@@ -1002,8 +995,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1063,9 +1055,7 @@ const Renderer = function (scene, options) {
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
 
-            const boundary = scene.viewport.boundary;
-
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);

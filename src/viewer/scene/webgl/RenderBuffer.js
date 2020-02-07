@@ -46,8 +46,8 @@ class RenderBuffer {
             height = this.size[1];
 
         } else {
-            width = this.canvas.clientWidth;
-            height = this.canvas.clientHeight;
+            width = gl.drawingBufferWidth;
+            height = gl.drawingBufferHeight;
         }
 
         if (this.buffer) {
@@ -136,7 +136,7 @@ class RenderBuffer {
 
     read(pickX, pickY) {
         const x = pickX;
-        const y = this.canvas.height - pickY;
+        const y = this.gl.drawingBufferHeight - pickY;
         const pix = new Uint8Array(4);
         const gl = this.gl;
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pix);

@@ -168,7 +168,7 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._aFlags2 = program.getAttribute("flags2");
     this._uSAOEnabled = program.getLocation("uSAOEnabled");
     this._uOcclusionTexture = "uOcclusionTexture";
-    this._uOcclusionParams = program.getLocation("uSAOParams");
+    this._uSAOParams = program.getLocation("uSAOParams");
 };
 
 BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -230,15 +230,14 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const saoEnabled = sao.enabled && sao.supported;
     gl.uniform1i(this._uSAOEnabled, saoEnabled);
     if (saoEnabled) {
-        const canvasBoundary = scene.canvas.boundary;
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
-        tempVec4[0] = canvasWidth;
-        tempVec4[1] = canvasHeight;
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
+        tempVec4[0] = viewportWidth;
+        tempVec4[1] = viewportHeight;
         tempVec4[2] = sao.blendCutoff;
         tempVec4[3] = sao.blendFactor;
         this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-        gl.uniform4fv(this._uOcclusionParams, tempVec4);
+        gl.uniform4fv(this._uSAOParams, tempVec4);
     }
 };
 

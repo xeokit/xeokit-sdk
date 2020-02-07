@@ -167,23 +167,20 @@ class SAOBlurRenderer {
 
         const gl = this._scene.canvas.gl;
         const program = this._program;
-        const scene = this._scene;
-        const canvasBoundary = scene.canvas.boundary;
-
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
 
         if (direction === 0) {
             // Horizontal
-            this._texelOffset[0] = 1.0 / canvasWidth;
+            this._texelOffset[0] = 1.0 / viewportWidth;
             this._texelOffset[1] = 0.0;
         } else {
             // Vertical
             this._texelOffset[0] = 0.0;
-            this._texelOffset[1] = 1.0 / canvasHeight;
+            this._texelOffset[1] = 1.0 / viewportHeight;
         }
 
-        gl.viewport(canvasBoundary[0], canvasBoundary[1], canvasBoundary[2], canvasBoundary[3]);
+        gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.disable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);

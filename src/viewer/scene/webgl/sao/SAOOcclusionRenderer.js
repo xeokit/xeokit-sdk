@@ -289,9 +289,8 @@ class SAOOcclusionRenderer {
         const program = this._program;
         const scene = this._scene;
         const sao = scene.sao;
-        const canvasBoundary = scene.canvas.boundary;
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
         const projectState = scene.camera.project._state;
         const near = projectState.near;
         const far = projectState.far;
@@ -300,12 +299,12 @@ class SAOOcclusionRenderer {
         const randomSeed = Math.random();
         const perspective = (scene.camera.projection === "perspective");
 
-        tempVec2[0] = canvasWidth;
-        tempVec2[1] = canvasHeight;
+        tempVec2[0] = viewportWidth;
+        tempVec2[1] = viewportHeight;
 
         gl.getExtension("OES_standard_derivatives");
 
-        gl.viewport(canvasBoundary[0], canvasBoundary[1], canvasBoundary[2], canvasBoundary[3]);
+        gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.disable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);

@@ -245,10 +245,8 @@ class SAODepthLimitedBlurRenderer {
         const gl = this._scene.canvas.gl;
         const program = this._program;
         const scene = this._scene;
-        const sao = scene.sao;
-        const canvasBoundary = scene.canvas.boundary;
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
         const projectState = scene.camera.project._state;
         const near = projectState.near;
         const far = projectState.far;
@@ -258,15 +256,15 @@ class SAODepthLimitedBlurRenderer {
 
         if (direction === 0) {
             // Horizontal
-            this._uvIncrement[0] = 1.0 / canvasWidth;
+            this._uvIncrement[0] = 1.0 / viewportWidth;
             this._uvIncrement[1] = 0.0;
         } else {
             // Vertical
             this._uvIncrement[0] = 0.0;
-            this._uvIncrement[1] = 1.0 / canvasHeight;
+            this._uvIncrement[1] = 1.0 / viewportHeight;
         }
 
-        gl.viewport(canvasBoundary[0], canvasBoundary[1], canvasBoundary[2], canvasBoundary[3]);
+        gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);
