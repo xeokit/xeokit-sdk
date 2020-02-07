@@ -12,6 +12,10 @@
             background: lightblue;
         }
 
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
         #treeViewContainer {
             padding-top: 25px;
             pointer-events: all;
@@ -40,9 +44,9 @@
         }
 
         #treeViewContainer ul li {
-            margin: 2px 0;
             position: relative;
             width: 500px;
+
         }
 
         #treeViewContainer ul li a {
@@ -70,20 +74,17 @@
             top: 1px;
         }
 
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+        }
+
         #treeViewContainer ul li span {
             display: inline-block;
-        }
-
-        #treeViewContainer ul li span:hover {
-            color: blue;
-            cursor: pointer;
-        }
-
-        #treeViewContainer .top-right {
-            font-size: small;
-            position: fixed;
-            right: 1em;
-            top: 1em;
+            width: calc(100% - 50px);
+            padding-left: 2px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -93,6 +94,10 @@
             padding-left: 1px;
             padding-right: 5px;
         }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* ContextMenu */
+        /* ----------------------------------------------------------------------------------------------------------*/
 
         .xeokit-context-menu {
             font-family: 'Roboto', sans-serif;
@@ -730,21 +735,21 @@
 
         if (hit && hit.entity.isObject) {
 
-            objectContextMenu.show(e.event.pageX, e.event.pageY);
-
-            objectContextMenu.context = {
+            objectContextMenu.context = { // Must set context before showing menu
                 viewer: viewer,
                 treeViewPlugin: treeView,
                 entity: hit.entity
             };
 
+            objectContextMenu.show(e.event.pageX, e.event.pageY);
+
         } else {
 
-            canvasContextMenu.show(e.event.pageX, e.event.pageY);
-
-            canvasContextMenu.context = {
+            canvasContextMenu.context = { // Must set context before showing menu
                 viewer: viewer
             };
+
+            canvasContextMenu.show(e.event.pageX, e.event.pageY);
         }
 
         e.event.preventDefault();

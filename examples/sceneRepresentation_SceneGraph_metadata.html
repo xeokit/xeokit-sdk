@@ -11,6 +11,10 @@
             background: #ffffff;
         }
 
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
         #treeViewContainer {
             padding-top: 25px;
             pointer-events: all;
@@ -30,7 +34,7 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 250px;
+            width: 550px;
         }
 
         #treeViewContainer ul {
@@ -39,9 +43,9 @@
         }
 
         #treeViewContainer ul li {
-            margin: 2px 0;
             position: relative;
             width: 500px;
+
         }
 
         #treeViewContainer ul li a {
@@ -71,13 +75,8 @@
 
         #treeViewContainer ul li span {
             display: inline-block;
-        }
-
-        #treeViewContainer .top-right {
-            font-size: small;
-            position: fixed;
-            right: 1em;
-            top: 1em;
+            width: calc(100% - 50px);
+            padding-left: 2px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */

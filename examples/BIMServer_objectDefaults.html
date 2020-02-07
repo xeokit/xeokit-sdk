@@ -13,6 +13,10 @@
             background: #ffffff;
         }
 
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
         #treeViewContainer {
             padding-top: 25px;
             pointer-events: all;
@@ -41,7 +45,6 @@
         }
 
         #treeViewContainer ul li {
-            margin: 2px 0;
             position: relative;
             width: 500px;
         }
@@ -73,13 +76,7 @@
 
         #treeViewContainer ul li span {
             display: inline-block;
-        }
-
-        #treeViewContainer .top-right {
-            font-size: small;
-            position: fixed;
-            right: 1em;
-            top: 1em;
+            width: calc(100% - 50px);
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
