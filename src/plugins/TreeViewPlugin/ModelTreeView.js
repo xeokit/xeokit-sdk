@@ -37,7 +37,7 @@ class ModelTreeView {
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
 
-        this._showListItemElementId
+        this._showListItemElementId = null;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -88,18 +88,18 @@ class ModelTreeView {
             this._muteTreeEvents = false;
         });
 
-        this.groupExpandHandler = (event) => {
+        this.switchExpandHandler = (event) => {
             event.preventDefault();
             event.stopPropagation();
-            const groupElement = event.target;
-            this._expandGroupElement(groupElement);
+            const switchElement = event.target;
+            this._expandSwitchElement(switchElement);
         };
 
-        this.groupCollapseHandler = (event) => {
+        this.switchCollapseHandler = (event) => {
             event.preventDefault();
             event.stopPropagation();
-            const groupElement = event.target;
-            this._collapseGroupElement(groupElement);
+            const switchElement = event.target;
+            this._collapseSwitchElement(switchElement);
         };
 
         this._checkboxChangeHandler = (event) => {
@@ -553,14 +553,14 @@ class ModelTreeView {
         const nodeId = this._objectToNodeID(node.objectId);
         nodeElement.id = 'node-' + nodeId;
         if (node.children.length > 0) {
-            const groupElementId = "a-" + nodeId;
-            const groupElement = document.createElement('a');
-            groupElement.href = '#';
-            groupElement.id = groupElementId;
-            groupElement.textContent = '+';
-            groupElement.classList.add('plus');
-            groupElement.addEventListener('click', this.groupExpandHandler);
-            nodeElement.appendChild(groupElement);
+            const switchElementId = "switch-" + nodeId;
+            const switchElement = document.createElement('a');
+            switchElement.href = '#';
+            switchElement.id = switchElementId;
+            switchElement.textContent = '+';
+            switchElement.classList.add('plus');
+            switchElement.addEventListener('click', this.switchExpandHandler);
+            nodeElement.appendChild(switchElement);
         }
         const checkbox = document.createElement('input');
         checkbox.id = nodeId;
@@ -598,10 +598,10 @@ class ModelTreeView {
                 return;
             }
             const nodeId = node.nodeId;
-            const groupElementId = "a-" + nodeId;
-            const groupElement = document.getElementById(groupElementId);
-            if (groupElement) {
-                this._expandGroupElement(groupElement);
+            const switchElementId = "switch-" + nodeId;
+            const switchElement = document.getElementById(switchElementId);
+            if (switchElement) {
+                this._expandSwitchElement(switchElement);
                 const childNodes = node.children;
                 for (var i = 0, len = childNodes.length; i < len; i++) {
                     const childNode = childNodes[i];
@@ -616,10 +616,11 @@ class ModelTreeView {
     }
 
     collapse() {
-        if (!this._rootMetaObject) {
-            return;
+        for (let i = 0, len = this._rootNodes.length; i < len; i++) {
+            const rootNode = this._rootNodes[i];
+            const objectId = rootNode.objectId;
+            this._collapseNode(objectId);
         }
-        this._collapseNode(this._rootMetaObject.id);
     }
 
     showNode(objectId) {
@@ -631,11 +632,11 @@ class ModelTreeView {
             return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
         }
         const nodeId = node.nodeId;
-        const groupElementId = "a-" + nodeId;
-        const groupElement = document.getElementById(groupElementId);
-        if (groupElement) {
-            this._expandGroupElement(groupElement);
-            groupElement.scrollIntoView();
+        const switchElementId = "switch-" + nodeId;
+        const switchElement = document.getElementById(switchElementId);
+        if (switchElement) {
+            this._expandSwitchElement(switchElement);
+            switchElement.scrollIntoView();
             return;
         }
         const path = [];
@@ -648,10 +649,10 @@ class ModelTreeView {
         for (let i = 0, len = path.length; i < len; i++) {
             const node = path[i];
             const nodeId = node.nodeId;
-            const groupElementId = "a-" + nodeId;
-            const groupElement = document.getElementById(groupElementId);
-            if (groupElement) {
-                this._expandGroupElement(groupElement);
+            const switchElementId = "switch-" + nodeId;
+            const switchElement = document.getElementById(switchElementId);
+            if (switchElement) {
+                this._expandSwitchElement(switchElement);
             }
         }
         const listItemElementId = 'node-' + nodeId;
@@ -674,16 +675,16 @@ class ModelTreeView {
         this._showListItemElementId = null;
     }
 
-    _expandGroupElement(groupElement) {
-        const parentElement = groupElement.parentElement;
+    _expandSwitchElement(switchElement) {
+        const parentElement = switchElement.parentElement;
         const expanded = parentElement.getElementsByTagName('li')[0];
         if (expanded) {
             return;
         }
         const nodeId = parentElement.id.replace('node-', '');
         const objectId = this._nodeToObjectID(nodeId);
-        const groupNode = this._objectNodes[objectId];
-        const childNodes = groupNode.children;
+        const switchNode = this._objectNodes[objectId];
+        const childNodes = switchNode.children;
         const nodeElements = childNodes.map((node) => {
             return this._createNodeElement(node);
         });
@@ -692,25 +693,25 @@ class ModelTreeView {
             ul.appendChild(nodeElement);
         });
         parentElement.appendChild(ul);
-        groupElement.classList.remove('plus');
-        groupElement.classList.add('minus');
-        groupElement.textContent = '-';
-        groupElement.removeEventListener('click', this.groupExpandHandler);
-        groupElement.addEventListener('click', this.groupCollapseHandler);
+        switchElement.classList.remove('plus');
+        switchElement.classList.add('minus');
+        switchElement.textContent = '-';
+        switchElement.removeEventListener('click', this.switchExpandHandler);
+        switchElement.addEventListener('click', this.switchCollapseHandler);
     }
 
     _collapseNode(objectId) {
         const nodeId = this._objectToNodeID(objectId);
-        const groupElementId = "a-" + nodeId;
-        const groupElement = document.getElementById(groupElementId);
-        this._collapseGroupElement(groupElement);
+        const switchElementId = "switch-" + nodeId;
+        const switchElement = document.getElementById(switchElementId);
+        this._collapseSwitchElement(switchElement);
     }
 
-    _collapseGroupElement(groupElement) {
-        if (!groupElement) {
+    _collapseSwitchElement(switchElement) {
+        if (!switchElement) {
             return;
         }
-        const parent = groupElement.parentElement;
+        const parent = switchElement.parentElement;
         if (!parent) {
             return;
         }
@@ -719,11 +720,11 @@ class ModelTreeView {
             return;
         }
         parent.removeChild(ul);
-        groupElement.classList.remove('minus');
-        groupElement.classList.add('plus');
-        groupElement.textContent = '+';
-        groupElement.removeEventListener('click', this.groupCollapseHandler);
-        groupElement.addEventListener('click', this.groupExpandHandler);
+        switchElement.classList.remove('minus');
+        switchElement.classList.add('plus');
+        switchElement.textContent = '+';
+        switchElement.removeEventListener('click', this.switchCollapseHandler);
+        switchElement.addEventListener('click', this.switchExpandHandler);
     }
 
     /**
