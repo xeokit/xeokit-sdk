@@ -115,7 +115,6 @@ class SAOBlendRenderer {
 
         const gl = this._scene.canvas.gl;
         const program = this._program;
-        const scene = this._scene;
         const viewportWidth = gl.drawingBufferWidth;
         const viewportHeight = gl.drawingBufferHeight;
 
