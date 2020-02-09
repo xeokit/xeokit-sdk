@@ -289,7 +289,7 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
         }
     }
     const sao = scene.sao;
-    const saoEnabled = sao.enabled && sao.supported;
+    const saoEnabled = sao.possible;
     gl.uniform1i(this._uSAOEnabled, saoEnabled);
     if (saoEnabled) {
         const viewportWidth = gl.drawingBufferWidth;

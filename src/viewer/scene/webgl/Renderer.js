@@ -299,7 +299,8 @@ const Renderer = function (scene, options) {
 
         const sao = scene.sao;
 
-        if (sao.enabled && sao.supported) {
+        if (sao.possible) {
+
 
             // Render depth buffer
 
@@ -331,7 +332,7 @@ const Renderer = function (scene, options) {
                 saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
                 occlusionBuffer1.unbind();
             }
-        }
+            }
 
         drawColor(params);
     };
@@ -442,8 +443,7 @@ const Renderer = function (scene, options) {
             gl.lineWidth(1);
             frameCtx.lineWidth = 1;
 
-            const sao = scene.sao;
-            frameCtx.occlusionTexture = (sao.enabled && sao.supported) ? occlusionBuffer1.getTexture() : null;
+            frameCtx.occlusionTexture = scene.sao.possible ? occlusionBuffer1.getTexture() : null;
 
             let i;
             let len;

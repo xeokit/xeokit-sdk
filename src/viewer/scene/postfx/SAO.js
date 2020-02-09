@@ -151,6 +151,29 @@ class SAO extends Component {
     }
 
     /**
+     * Returns true if SAO is currently possible, where it is supported, enabled, and current scene state is compatible.
+     * Called internally by renderer logic.
+     * @private
+     * @returns {boolean}
+     */
+    get possible() {
+        if (!this._supported) {
+            return false;
+        }
+        if (!this._enabled) {
+            return false;
+        }
+        const projection = this.scene.camera.projection;
+        if (projection === "customProjection") {
+            return false;
+        }
+        if (projection === "frustum") {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Sets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
      *
      * When this is ````false````, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.
