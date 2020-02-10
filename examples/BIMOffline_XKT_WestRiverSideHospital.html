@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TreeViewPlugin - HTML tree view of IFC structure</title>
+    <title>TreeViewPlugin - HTML Tree View of Seven BIM Models Loaded from the File System</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -107,7 +107,7 @@
 <div id="treeViewContainer"></div>
 
 <div id="info">
-    <h1>XKTLoaderPlugin - Loading an IFC Model from the File System</h1><br>
+    <h1>XKTLoaderPlugin - Loading Seven BIM Models from the File System</h1><br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -177,83 +177,107 @@
         autoExpandDepth: 0 // Don't initially expand nodes (default)
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Load model and metadata
-    //------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load seven models and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     var t0 = performance.now();
 
-    document.getElementById("time").innerHTML = "Loading model 1 of 5";
+    document.getElementById("time").innerHTML = "Loading model 1 of 7";
 
-    const structure = xktLoader.load({
-        id: "structure",
-        src: "./models/xkt/WestRiverSideHospital/structure.xkt",
-        metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
-        edges: true,
-        Zxrayed: true
+    const mechanical = xktLoader.load({
+        id: "mechanical",
+        src: "./models/xkt/WestRiverSideHospital/mechanical.xkt",
+        metaModelSrc: "./metaModels/WestRiverSideHospital/mechanical.json",
+        edges: true
     });
 
-    structure.on("loaded", () => {
+    mechanical.on("loaded", () => {
 
-        document.getElementById("time").innerHTML = "Loading model 2 of 5";
+        document.getElementById("time").innerHTML = "Loading model 2 of 7";
 
-        const electrical = xktLoader.load({
-            id: "electrical",
-            src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
-            metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
+        const plumbing = xktLoader.load({
+            id: "plumbing",
+            src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
+            metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
             edges: true
         });
 
-        electrical.on("loaded", () => {
+        plumbing.on("loaded", () => {
 
-            document.getElementById("time").innerHTML = "Loading model 3 of 5";
+            document.getElementById("time").innerHTML = "Loading model 3 of 7";
 
-            const fireAlarms = xktLoader.load({
-                id: "fireAlarms",
-                src: "./models/xkt/WestRiverSideHospital/fireAlarms.xkt",
-                metaModelSrc: "./metaModels/WestRiverSideHospital/fireAlarms.json",
+            const electrical = xktLoader.load({
+                id: "electrical",
+                src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
+                metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
                 edges: true
             });
 
-            fireAlarms.on("loaded", () => {
+            electrical.on("loaded", () => {
 
-                document.getElementById("time").innerHTML = "Loading model 4 of 5";
+                document.getElementById("time").innerHTML = "Loading model 4 of 7";
 
-                const sprinklers = xktLoader.load({
-                    id: "sprinklers",
-                    src: "./models/xkt/WestRiverSideHospital/sprinklers.xkt",
-                    metaModelSrc: "./metaModels/WestRiverSideHospital/sprinklers.json",
+                const fireAlarms = xktLoader.load({
+                    id: "fireAlarms",
+                    src: "./models/xkt/WestRiverSideHospital/fireAlarms.xkt",
+                    metaModelSrc: "./metaModels/WestRiverSideHospital/fireAlarms.json",
                     edges: true
                 });
 
-                sprinklers.on("loaded", () => {
+                fireAlarms.on("loaded", () => {
 
-                    document.getElementById("time").innerHTML = "Loading model 5 of 5";
+                    document.getElementById("time").innerHTML = "Loading model 5 of 7";
 
-                    const plumbing = xktLoader.load({
-                        id: "plumbing",
-                        src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
-                        metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
+                    const sprinklers = xktLoader.load({
+                        id: "sprinklers",
+                        src: "./models/xkt/WestRiverSideHospital/sprinklers.xkt",
+                        metaModelSrc: "./metaModels/WestRiverSideHospital/sprinklers.json",
                         edges: true
                     });
 
-                    plumbing.on("loaded", () => {
+                    sprinklers.on("loaded", () => {
 
-                        document.getElementById("time").innerHTML = "Loaded model 5 of 5";
+                        document.getElementById("time").innerHTML = "Loading model 6 of 7";
 
-                        var numEntities = 0;
+                        const structure = xktLoader.load({
+                            id: "structure",
+                            src: "./models/xkt/WestRiverSideHospital/structure.xkt",
+                            metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+                            excludeUnclassifiedObjects: true,
+                            edges: true
+                        });
 
-                        for (var id in viewer.scene.models) {
-                            const model = viewer.scene.models[id];
-                            numEntities += model.numEntities;
-                        }
+                        structure.on("loaded", () => {
 
-                        var t1 = performance.now();
+                            document.getElementById("time").innerHTML = "Loading model 7 of 7";
 
-                        document.getElementById("time").innerHTML = "Loaded 5 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
+                            const architectural = xktLoader.load({
+                                id: "architectural",
+                                src: "./models/xkt/WestRiverSideHospital/architectural.xkt",
+                                metaModelSrc: "./metaModels/WestRiverSideHospital/architectural.json",
+                                excludeUnclassifiedObjects: true,
+                                edges: true
+                            });
 
+                            architectural.on("loaded", () => {
+
+                                document.getElementById("time").innerHTML = "Loaded model 7 of 7";
+
+                                var numEntities = 0;
+
+                                for (var id in viewer.scene.models) {
+                                    const model = viewer.scene.models[id];
+                                    numEntities += model.numEntities;
+                                }
+
+                                var t1 = performance.now();
+
+                                document.getElementById("time").innerHTML = "Loaded 7 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
+                            });
+                        });
                     });
                 });
             });
@@ -289,6 +313,25 @@
                 lastEntity.highlighted = false;
                 lastEntity = null;
             }
+        }
+    });
+
+    viewer.scene.input.on("mousedown", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            const entity = hit.entity;
+
+            const metaObject = viewer.metaScene.metaObjects[entity.id];
+
+            if (metaObject) {
+                console.log(metaObject.type);
+            }
+
         }
     });
 
