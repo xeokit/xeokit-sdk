@@ -301,8 +301,7 @@ const Renderer = function (scene, options) {
      */
     this.clear = function (params) {
         params = params || {};
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         if (canvasTransparent) { // Canvas is transparent
             gl.clearColor(0, 0, 0, 0);
         } else {
@@ -412,8 +411,7 @@ const Renderer = function (scene, options) {
         frameCtx.shadowViewMatrix = light.getShadowViewMatrix();
         frameCtx.shadowProjMatrix = light.getShadowProjMatrix();
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 1);
         gl.enable(gl.DEPTH_TEST);
@@ -441,7 +439,8 @@ const Renderer = function (scene, options) {
 
         const sao = scene.sao;
 
-        if (sao.enabled &amp;&amp; sao.supported) {
+        if (sao.possible) {
+
 
             // Render depth buffer
 
@@ -473,7 +472,7 @@ const Renderer = function (scene, options) {
                 saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
                 occlusionBuffer1.unbind();
             }
-        }
+            }
 
         drawColor(params);
     };
@@ -491,8 +490,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
@@ -569,8 +567,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             if (canvasTransparent) { // Canvas is transparent
                 gl.clearColor(0, 0, 0, 0);
@@ -586,8 +583,7 @@ const Renderer = function (scene, options) {
             gl.lineWidth(1);
             frameCtx.lineWidth = 1;
 
-            const sao = scene.sao;
-            frameCtx.occlusionTexture = (sao.enabled &amp;&amp; sao.supported) ? occlusionBuffer1.getTexture() : null;
+            frameCtx.occlusionTexture = scene.sao.possible ? occlusionBuffer1.getTexture() : null;
 
             let i;
             let len;
@@ -982,8 +978,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1046,8 +1041,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1084,8 +1078,7 @@ const Renderer = function (scene, options) {
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
 
-            const boundary = scene.viewport.boundary;
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
@@ -1142,8 +1135,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
 
-        const boundary = scene.viewport.boundary;
-        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1203,9 +1195,7 @@ const Renderer = function (scene, options) {
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // &quot;ccw&quot;
 
-            const boundary = scene.viewport.boundary;
-
-            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);

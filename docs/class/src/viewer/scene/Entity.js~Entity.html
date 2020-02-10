@@ -909,6 +909,35 @@ of scene element can be accessed and manipulated uniformly.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if this Entity can have shadows cast upon it</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">set</span>
       <span class="abstract" data-ice="abstract">abstract</span>
       <span class="override" data-ice="override"></span>
@@ -948,13 +977,13 @@ of scene element can be accessed and manipulated uniformly.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-saoEnabled">saoEnabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets if this Entity can have shadows cast upon it</p>
+        <div data-ice="description"><p>Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.</p>
 </div>
       </div>
     </td>
@@ -2273,6 +2302,50 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-receivesShadow">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    <span class="abstract" data-ice="abstract">abstract</span>
+    
+    
+    <span class="code" data-ice="name">receivesShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/Entity.js.html#lineNumber398">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if this Entity can have shadows cast upon it</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-receivesShadow">
     <span class="access" data-ice="access">public</span>
     
@@ -2317,25 +2390,26 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-receivesShadow">
+  <h3 data-ice="anchor" id="instance-get-saoEnabled">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     <span class="abstract" data-ice="abstract">abstract</span>
     
     
-    <span class="code" data-ice="name">receivesShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">saoEnabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/Entity.js.html#lineNumber398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/Entity.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets if this Entity can have shadows cast upon it</p>
+  <div data-ice="description"><p>Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.</p>
+<p>SAO is configured by <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span>.</p>
 </div>
 
   
@@ -2653,7 +2727,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/Entity.js.html#lineNumber405">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/Entity.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 

@@ -237,6 +237,11 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
         frameCtx.bindArray++;
     }
+
+    const sao = scene.sao;
+    const saoEnabled = (sao.possible &amp;&amp; model.saoEnabled);
+    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+
     state.indicesBuf.bind();
     frameCtx.bindArray++;
     gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -308,7 +313,7 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._aFlags2 = program.getAttribute(&quot;flags2&quot;);
     this._uSAOEnabled = program.getLocation(&quot;uSAOEnabled&quot;);
     this._uOcclusionTexture = &quot;uOcclusionTexture&quot;;
-    this._uOcclusionParams = program.getLocation(&quot;uSAOParams&quot;);
+    this._uSAOParams = program.getLocation(&quot;uSAOParams&quot;);
 };
 
 BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -367,18 +372,16 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
         }
     }
     const sao = scene.sao;
-    const saoEnabled = sao.enabled &amp;&amp; sao.supported;
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+    const saoEnabled = sao.possible;
     if (saoEnabled) {
-        const canvasBoundary = scene.canvas.boundary;
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
-        tempVec4[0] = canvasWidth;
-        tempVec4[1] = canvasHeight;
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
+        tempVec4[0] = viewportWidth;
+        tempVec4[1] = viewportHeight;
         tempVec4[2] = sao.blendCutoff;
         tempVec4[3] = sao.blendFactor;
         this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-        gl.uniform4fv(this._uOcclusionParams, tempVec4);
+        gl.uniform4fv(this._uSAOParams, tempVec4);
     }
 };
 

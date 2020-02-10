@@ -157,6 +157,9 @@ import {EdgeMaterial} from &apos;../materials/EdgeMaterial.js&apos;;
 import {Metrics} from &quot;../metriqs/Metriqs.js&quot;;
 import {SAO} from &quot;../postfx/SAO.js&quot;;
 
+// Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
+const ASSERT_OBJECT_STATE_UPDATE = false;
+
 // Cached vars to avoid garbage collection
 
 function getEntityIDMap(scene, entityIds) {
@@ -1073,9 +1076,17 @@ class Scene extends Component {
 
     _objectVisibilityUpdated(entity, notify = true) {
         if (entity.visible) {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; this.visibleObjects[entity.id]) {
+                console.error(&quot;Redundant object visibility update (visible=true)&quot;);
+                return;
+            }
             this.visibleObjects[entity.id] = entity;
             this._numVisibleObjects++;
         } else {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; (!this.visibleObjects[entity.id])) {
+                console.error(&quot;Redundant object visibility update (visible=false)&quot;);
+                return;
+            }
             delete this.visibleObjects[entity.id];
             this._numVisibleObjects--;
         }
@@ -1087,9 +1098,17 @@ class Scene extends Component {
 
     _objectXRayedUpdated(entity) {
         if (entity.xrayed) {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; this.xrayedObjects[entity.id]) {
+                console.error(&quot;Redundant object xray update (xrayed=true)&quot;);
+                return;
+            }
             this.xrayedObjects[entity.id] = entity;
             this._numXRayedObjects++;
         } else {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; (!this.xrayedObjects[entity.id])) {
+                console.error(&quot;Redundant object xray update (xrayed=false)&quot;);
+                return;
+            }
             delete this.xrayedObjects[entity.id];
             this._numXRayedObjects--;
         }
@@ -1098,9 +1117,17 @@ class Scene extends Component {
 
     _objectHighlightedUpdated(entity) {
         if (entity.highlighted) {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; this.highlightedObjects[entity.id]) {
+                console.error(&quot;Redundant object highlight update (highlighted=true)&quot;);
+                return;
+            }
             this.highlightedObjects[entity.id] = entity;
             this._numHighlightedObjects++;
         } else {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; (!this.highlightedObjects[entity.id])) {
+                console.error(&quot;Redundant object highlight update (highlighted=false)&quot;);
+                return;
+            }
             delete this.highlightedObjects[entity.id];
             this._numHighlightedObjects--;
         }
@@ -1109,9 +1136,17 @@ class Scene extends Component {
 
     _objectSelectedUpdated(entity) {
         if (entity.selected) {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; this.selectedObjects[entity.id]) {
+                console.error(&quot;Redundant object select update (selected=true)&quot;);
+                return;
+            }
             this.selectedObjects[entity.id] = entity;
             this._numSelectedObjects++;
         } else {
+            if (ASSERT_OBJECT_STATE_UPDATE &amp;&amp; (!this.selectedObjects[entity.id])) {
+                console.error(&quot;Redundant object select update (selected=false)&quot;);
+                return;
+            }
             delete this.selectedObjects[entity.id];
             this._numSelectedObjects--;
         }

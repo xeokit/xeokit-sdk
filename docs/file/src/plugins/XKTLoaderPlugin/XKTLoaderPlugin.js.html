@@ -650,8 +650,9 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Number[]} [params.rotation=[0,0,0]] The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] Indicates if the model&apos;s edges are initially emphasized.
-     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene&apos;s {@link SAO} component.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
 

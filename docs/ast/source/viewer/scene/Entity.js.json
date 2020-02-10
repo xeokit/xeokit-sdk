@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 9344,
+  "end": 9571,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 410,
+      "line": 422,
       "column": 16
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 9344,
+    "end": 9571,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 410,
+        "line": 422,
         "column": 16
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 1516,
-        "end": 9326,
+        "end": 9553,
         "loc": {
           "start": {
             "line": 36,
             "column": 0
           },
           "end": {
-            "line": 408,
+            "line": 420,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 1529,
-          "end": 9326,
+          "end": 9553,
           "loc": {
             "start": {
               "line": 36,
               "column": 13
             },
             "end": {
-              "line": 408,
+              "line": 420,
               "column": 1
             }
           },
@@ -3365,16 +3365,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 9261,
-                  "end": 9301,
+                  "end": 9452,
                   "loc": {
                     "start": {
                       "line": 402,
                       "column": 4
                     },
                     "end": {
-                      "line": 404,
+                      "line": 409,
                       "column": 7
                     }
                   }
@@ -3383,15 +3383,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 9306,
-              "end": 9324,
+              "start": 9457,
+              "end": 9482,
               "loc": {
                 "start": {
-                  "line": 405,
+                  "line": 410,
                   "column": 4
                 },
                 "end": {
-                  "line": 407,
+                  "line": 412,
                   "column": 5
                 }
               },
@@ -3399,15 +3399,110 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 9306,
-                "end": 9313,
+                "start": 9461,
+                "end": 9471,
                 "loc": {
                   "start": {
-                    "line": 405,
+                    "line": 410,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 410,
+                    "column": 18
+                  },
+                  "identifierName": "saoEnabled"
+                },
+                "name": "saoEnabled"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 9474,
+                "end": 9482,
+                "loc": {
+                  "start": {
+                    "line": 410,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 412,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "start": 9261,
+                  "end": 9452,
+                  "loc": {
+                    "start": {
+                      "line": 402,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 409,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "start": 9488,
+                  "end": 9528,
+                  "loc": {
+                    "start": {
+                      "line": 414,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 416,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 9533,
+              "end": 9551,
+              "loc": {
+                "start": {
+                  "line": 417,
+                  "column": 4
+                },
+                "end": {
+                  "line": 419,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 9533,
+                "end": 9540,
+                "loc": {
+                  "start": {
+                    "line": 417,
                     "column": 4
                   },
                   "end": {
-                    "line": 405,
+                    "line": 417,
                     "column": 11
                   },
                   "identifierName": "destroy"
@@ -3423,15 +3518,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 9316,
-                "end": 9324,
+                "start": 9543,
+                "end": 9551,
                 "loc": {
                   "start": {
-                    "line": 405,
+                    "line": 417,
                     "column": 14
                   },
                   "end": {
-                    "line": 407,
+                    "line": 419,
                     "column": 5
                   }
                 },
@@ -3442,15 +3537,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Destroys this Entity.\n     ",
-                  "start": 9261,
-                  "end": 9301,
+                  "start": 9488,
+                  "end": 9528,
                   "loc": {
                     "start": {
-                      "line": 402,
+                      "line": 414,
                       "column": 4
                     },
                     "end": {
-                      "line": 404,
+                      "line": 416,
                       "column": 7
                     }
                   }
@@ -3465,15 +3560,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9328,
-        "end": 9344,
+        "start": 9555,
+        "end": 9571,
         "loc": {
           "start": {
-            "line": 410,
+            "line": 422,
             "column": 0
           },
           "end": {
-            "line": 410,
+            "line": 422,
             "column": 16
           }
         },
@@ -3481,29 +3576,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 9336,
-            "end": 9342,
+            "start": 9563,
+            "end": 9569,
             "loc": {
               "start": {
-                "line": 410,
+                "line": 422,
                 "column": 8
               },
               "end": {
-                "line": 410,
+                "line": 422,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 9336,
-              "end": 9342,
+              "start": 9563,
+              "end": 9569,
               "loc": {
                 "start": {
-                  "line": 410,
+                  "line": 422,
                   "column": 8
                 },
                 "end": {
-                  "line": 410,
+                  "line": 422,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -3512,15 +3607,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 9336,
-              "end": 9342,
+              "start": 9563,
+              "end": 9569,
               "loc": {
                 "start": {
-                  "line": 410,
+                  "line": 422,
                   "column": 8
                 },
                 "end": {
-                  "line": 410,
+                  "line": 422,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -3533,29 +3628,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9328,
-        "end": 9344,
+        "start": 9555,
+        "end": 9571,
         "loc": {
           "start": {
-            "line": 410,
+            "line": 422,
             "column": 0
           },
           "end": {
-            "line": 410,
+            "line": 422,
             "column": 16
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 1516,
-          "end": 9326,
+          "end": 9553,
           "loc": {
             "start": {
               "line": 36,
               "column": 0
             },
             "end": {
-              "line": 408,
+              "line": 420,
               "column": 1
             }
           },
@@ -3581,14 +3676,14 @@
           "body": {
             "type": "ClassBody",
             "start": 1529,
-            "end": 9326,
+            "end": 9553,
             "loc": {
               "start": {
                 "line": 36,
                 "column": 13
               },
               "end": {
-                "line": 408,
+                "line": 420,
                 "column": 1
               }
             },
@@ -6882,16 +6977,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 9261,
-                    "end": 9301,
+                    "end": 9452,
                     "loc": {
                       "start": {
                         "line": 402,
                         "column": 4
                       },
                       "end": {
-                        "line": 404,
+                        "line": 409,
                         "column": 7
                       }
                     }
@@ -6900,15 +6995,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 9306,
-                "end": 9324,
+                "start": 9457,
+                "end": 9482,
                 "loc": {
                   "start": {
-                    "line": 405,
+                    "line": 410,
                     "column": 4
                   },
                   "end": {
-                    "line": 407,
+                    "line": 412,
                     "column": 5
                   }
                 },
@@ -6916,15 +7011,110 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 9306,
-                  "end": 9313,
+                  "start": 9461,
+                  "end": 9471,
                   "loc": {
                     "start": {
-                      "line": 405,
+                      "line": 410,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 410,
+                      "column": 18
+                    },
+                    "identifierName": "saoEnabled"
+                  },
+                  "name": "saoEnabled"
+                },
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 9474,
+                  "end": 9482,
+                  "loc": {
+                    "start": {
+                      "line": 410,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 412,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "start": 9261,
+                    "end": 9452,
+                    "loc": {
+                      "start": {
+                        "line": 402,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 409,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "start": 9488,
+                    "end": 9528,
+                    "loc": {
+                      "start": {
+                        "line": 414,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 416,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 9533,
+                "end": 9551,
+                "loc": {
+                  "start": {
+                    "line": 417,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 419,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 9533,
+                  "end": 9540,
+                  "loc": {
+                    "start": {
+                      "line": 417,
                       "column": 4
                     },
                     "end": {
-                      "line": 405,
+                      "line": 417,
                       "column": 11
                     },
                     "identifierName": "destroy"
@@ -6940,15 +7130,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 9316,
-                  "end": 9324,
+                  "start": 9543,
+                  "end": 9551,
                   "loc": {
                     "start": {
-                      "line": 405,
+                      "line": 417,
                       "column": 14
                     },
                     "end": {
-                      "line": 407,
+                      "line": 419,
                       "column": 5
                     }
                   },
@@ -6959,15 +7149,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this Entity.\n     ",
-                    "start": 9261,
-                    "end": 9301,
+                    "start": 9488,
+                    "end": 9528,
                     "loc": {
                       "start": {
-                        "line": 402,
+                        "line": 414,
                         "column": 4
                       },
                       "end": {
-                        "line": 404,
+                        "line": 416,
                         "column": 7
                       }
                     }
@@ -7535,16 +7725,32 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 9261,
-      "end": 9301,
+      "end": 9452,
       "loc": {
         "start": {
           "line": 402,
           "column": 4
         },
         "end": {
-          "line": 404,
+          "line": 409,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 9488,
+      "end": 9528,
+      "loc": {
+        "start": {
+          "line": 414,
+          "column": 4
+        },
+        "end": {
+          "line": 416,
           "column": 7
         }
       }
@@ -13444,16 +13650,184 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.\n     *\n     * SAO is configured by {@link SAO}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 9261,
-      "end": 9301,
+      "end": 9452,
       "loc": {
         "start": {
           "line": 402,
           "column": 4
         },
         "end": {
-          "line": 404,
+          "line": 409,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 9457,
+      "end": 9460,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 4
+        },
+        "end": {
+          "line": 410,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "saoEnabled",
+      "start": 9461,
+      "end": 9471,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 8
+        },
+        "end": {
+          "line": 410,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 9471,
+      "end": 9472,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 18
+        },
+        "end": {
+          "line": 410,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 9472,
+      "end": 9473,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 19
+        },
+        "end": {
+          "line": 410,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 9474,
+      "end": 9475,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 21
+        },
+        "end": {
+          "line": 410,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 9481,
+      "end": 9482,
+      "loc": {
+        "start": {
+          "line": 412,
+          "column": 4
+        },
+        "end": {
+          "line": 412,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 9488,
+      "end": 9528,
+      "loc": {
+        "start": {
+          "line": 414,
+          "column": 4
+        },
+        "end": {
+          "line": 416,
           "column": 7
         }
       }
@@ -13471,15 +13845,15 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 9306,
-      "end": 9313,
+      "start": 9533,
+      "end": 9540,
       "loc": {
         "start": {
-          "line": 405,
+          "line": 417,
           "column": 4
         },
         "end": {
-          "line": 405,
+          "line": 417,
           "column": 11
         }
       }
@@ -13496,15 +13870,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9313,
-      "end": 9314,
+      "start": 9540,
+      "end": 9541,
       "loc": {
         "start": {
-          "line": 405,
+          "line": 417,
           "column": 11
         },
         "end": {
-          "line": 405,
+          "line": 417,
           "column": 12
         }
       }
@@ -13521,15 +13895,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9314,
-      "end": 9315,
+      "start": 9541,
+      "end": 9542,
       "loc": {
         "start": {
-          "line": 405,
+          "line": 417,
           "column": 12
         },
         "end": {
-          "line": 405,
+          "line": 417,
           "column": 13
         }
       }
@@ -13546,15 +13920,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9316,
-      "end": 9317,
+      "start": 9543,
+      "end": 9544,
       "loc": {
         "start": {
-          "line": 405,
+          "line": 417,
           "column": 14
         },
         "end": {
-          "line": 405,
+          "line": 417,
           "column": 15
         }
       }
@@ -13571,15 +13945,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9323,
-      "end": 9324,
+      "start": 9550,
+      "end": 9551,
       "loc": {
         "start": {
-          "line": 407,
+          "line": 419,
           "column": 4
         },
         "end": {
-          "line": 407,
+          "line": 419,
           "column": 5
         }
       }
@@ -13596,15 +13970,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9325,
-      "end": 9326,
+      "start": 9552,
+      "end": 9553,
       "loc": {
         "start": {
-          "line": 408,
+          "line": 420,
           "column": 0
         },
         "end": {
-          "line": 408,
+          "line": 420,
           "column": 1
         }
       }
@@ -13624,15 +13998,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 9328,
-      "end": 9334,
+      "start": 9555,
+      "end": 9561,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 0
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 6
         }
       }
@@ -13649,15 +14023,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9335,
-      "end": 9336,
+      "start": 9562,
+      "end": 9563,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 7
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 8
         }
       }
@@ -13675,15 +14049,15 @@
         "binop": null
       },
       "value": "Entity",
-      "start": 9336,
-      "end": 9342,
+      "start": 9563,
+      "end": 9569,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 8
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 14
         }
       }
@@ -13700,15 +14074,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9342,
-      "end": 9343,
+      "start": 9569,
+      "end": 9570,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 14
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 15
         }
       }
@@ -13726,15 +14100,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9343,
-      "end": 9344,
+      "start": 9570,
+      "end": 9571,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 15
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 16
         }
       }
@@ -13752,15 +14126,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9344,
-      "end": 9344,
+      "start": 9571,
+      "end": 9571,
       "loc": {
         "start": {
-          "line": 410,
+          "line": 422,
           "column": 16
         },
         "end": {
-          "line": 410,
+          "line": 422,
           "column": 16
         }
       }

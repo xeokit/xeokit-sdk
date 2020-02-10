@@ -282,6 +282,10 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
     }
 
+    const sao = scene.sao;
+    const saoEnabled = (sao.possible &amp;&amp; model.saoEnabled);
+    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+
     frameCtx.drawElements++;
 };
 
@@ -369,7 +373,7 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
 
     this._uSAOEnabled = program.getLocation(&quot;uSAOEnabled&quot;);
     this._uOcclusionTexture = &quot;uOcclusionTexture&quot;;
-    this._uOcclusionParams = program.getLocation(&quot;uSAOParams&quot;);
+    this._uSAOParams = program.getLocation(&quot;uSAOParams&quot;);
 };
 
 InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -429,18 +433,16 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
         }
     }
     const sao = scene.sao;
-    const saoEnabled = sao.enabled &amp;&amp; sao.supported;
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+    const saoEnabled = sao.possible;
     if (saoEnabled) {
-        const canvasBoundary = scene.canvas.boundary;
-        const canvasWidth = canvasBoundary[2];
-        const canvasHeight = canvasBoundary[3];
-        tempVec4[0] = canvasWidth;
-        tempVec4[1] = canvasHeight;
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
+        tempVec4[0] = viewportWidth;
+        tempVec4[1] = viewportHeight;
         tempVec4[2] = sao.blendCutoff;
         tempVec4[3] = sao.blendFactor;
         this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-        gl.uniform4fv(this._uOcclusionParams, tempVec4);
+        gl.uniform4fv(this._uSAOParams, tempVec4);
     }
 };
 

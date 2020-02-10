@@ -177,7 +177,7 @@ class ModelTreeView {
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
 
-        this._showListItemElementId
+        this._showListItemElementId = null;
 
         this._containerElement.oncontextmenu = (e) =&gt; {
             e.preventDefault();
@@ -228,18 +228,18 @@ class ModelTreeView {
             this._muteTreeEvents = false;
         });
 
-        this.groupExpandHandler = (event) =&gt; {
+        this.switchExpandHandler = (event) =&gt; {
             event.preventDefault();
             event.stopPropagation();
-            const groupElement = event.target;
-            this._expandGroupElement(groupElement);
+            const switchElement = event.target;
+            this._expandSwitchElement(switchElement);
         };
 
-        this.groupCollapseHandler = (event) =&gt; {
+        this.switchCollapseHandler = (event) =&gt; {
             event.preventDefault();
             event.stopPropagation();
-            const groupElement = event.target;
-            this._collapseGroupElement(groupElement);
+            const switchElement = event.target;
+            this._collapseSwitchElement(switchElement);
         };
 
         this._checkboxChangeHandler = (event) =&gt; {
@@ -693,14 +693,14 @@ class ModelTreeView {
         const nodeId = this._objectToNodeID(node.objectId);
         nodeElement.id = &apos;node-&apos; + nodeId;
         if (node.children.length &gt; 0) {
-            const groupElementId = &quot;a-&quot; + nodeId;
-            const groupElement = document.createElement(&apos;a&apos;);
-            groupElement.href = &apos;#&apos;;
-            groupElement.id = groupElementId;
-            groupElement.textContent = &apos;+&apos;;
-            groupElement.classList.add(&apos;plus&apos;);
-            groupElement.addEventListener(&apos;click&apos;, this.groupExpandHandler);
-            nodeElement.appendChild(groupElement);
+            const switchElementId = &quot;switch-&quot; + nodeId;
+            const switchElement = document.createElement(&apos;a&apos;);
+            switchElement.href = &apos;#&apos;;
+            switchElement.id = switchElementId;
+            switchElement.textContent = &apos;+&apos;;
+            switchElement.classList.add(&apos;plus&apos;);
+            switchElement.addEventListener(&apos;click&apos;, this.switchExpandHandler);
+            nodeElement.appendChild(switchElement);
         }
         const checkbox = document.createElement(&apos;input&apos;);
         checkbox.id = nodeId;
@@ -738,10 +738,10 @@ class ModelTreeView {
                 return;
             }
             const nodeId = node.nodeId;
-            const groupElementId = &quot;a-&quot; + nodeId;
-            const groupElement = document.getElementById(groupElementId);
-            if (groupElement) {
-                this._expandGroupElement(groupElement);
+            const switchElementId = &quot;switch-&quot; + nodeId;
+            const switchElement = document.getElementById(switchElementId);
+            if (switchElement) {
+                this._expandSwitchElement(switchElement);
                 const childNodes = node.children;
                 for (var i = 0, len = childNodes.length; i &lt; len; i++) {
                     const childNode = childNodes[i];
@@ -756,10 +756,11 @@ class ModelTreeView {
     }
 
     collapse() {
-        if (!this._rootMetaObject) {
-            return;
+        for (let i = 0, len = this._rootNodes.length; i &lt; len; i++) {
+            const rootNode = this._rootNodes[i];
+            const objectId = rootNode.objectId;
+            this._collapseNode(objectId);
         }
-        this._collapseNode(this._rootMetaObject.id);
     }
 
     showNode(objectId) {
@@ -771,11 +772,11 @@ class ModelTreeView {
             return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
         }
         const nodeId = node.nodeId;
-        const groupElementId = &quot;a-&quot; + nodeId;
-        const groupElement = document.getElementById(groupElementId);
-        if (groupElement) {
-            this._expandGroupElement(groupElement);
-            groupElement.scrollIntoView();
+        const switchElementId = &quot;switch-&quot; + nodeId;
+        const switchElement = document.getElementById(switchElementId);
+        if (switchElement) {
+            this._expandSwitchElement(switchElement);
+            switchElement.scrollIntoView();
             return;
         }
         const path = [];
@@ -788,10 +789,10 @@ class ModelTreeView {
         for (let i = 0, len = path.length; i &lt; len; i++) {
             const node = path[i];
             const nodeId = node.nodeId;
-            const groupElementId = &quot;a-&quot; + nodeId;
-            const groupElement = document.getElementById(groupElementId);
-            if (groupElement) {
-                this._expandGroupElement(groupElement);
+            const switchElementId = &quot;switch-&quot; + nodeId;
+            const switchElement = document.getElementById(switchElementId);
+            if (switchElement) {
+                this._expandSwitchElement(switchElement);
             }
         }
         const listItemElementId = &apos;node-&apos; + nodeId;
@@ -814,16 +815,16 @@ class ModelTreeView {
         this._showListItemElementId = null;
     }
 
-    _expandGroupElement(groupElement) {
-        const parentElement = groupElement.parentElement;
+    _expandSwitchElement(switchElement) {
+        const parentElement = switchElement.parentElement;
         const expanded = parentElement.getElementsByTagName(&apos;li&apos;)[0];
         if (expanded) {
             return;
         }
         const nodeId = parentElement.id.replace(&apos;node-&apos;, &apos;&apos;);
         const objectId = this._nodeToObjectID(nodeId);
-        const groupNode = this._objectNodes[objectId];
-        const childNodes = groupNode.children;
+        const switchNode = this._objectNodes[objectId];
+        const childNodes = switchNode.children;
         const nodeElements = childNodes.map((node) =&gt; {
             return this._createNodeElement(node);
         });
@@ -832,25 +833,25 @@ class ModelTreeView {
             ul.appendChild(nodeElement);
         });
         parentElement.appendChild(ul);
-        groupElement.classList.remove(&apos;plus&apos;);
-        groupElement.classList.add(&apos;minus&apos;);
-        groupElement.textContent = &apos;-&apos;;
-        groupElement.removeEventListener(&apos;click&apos;, this.groupExpandHandler);
-        groupElement.addEventListener(&apos;click&apos;, this.groupCollapseHandler);
+        switchElement.classList.remove(&apos;plus&apos;);
+        switchElement.classList.add(&apos;minus&apos;);
+        switchElement.textContent = &apos;-&apos;;
+        switchElement.removeEventListener(&apos;click&apos;, this.switchExpandHandler);
+        switchElement.addEventListener(&apos;click&apos;, this.switchCollapseHandler);
     }
 
     _collapseNode(objectId) {
         const nodeId = this._objectToNodeID(objectId);
-        const groupElementId = &quot;a-&quot; + nodeId;
-        const groupElement = document.getElementById(groupElementId);
-        this._collapseGroupElement(groupElement);
+        const switchElementId = &quot;switch-&quot; + nodeId;
+        const switchElement = document.getElementById(switchElementId);
+        this._collapseSwitchElement(switchElement);
     }
 
-    _collapseGroupElement(groupElement) {
-        if (!groupElement) {
+    _collapseSwitchElement(switchElement) {
+        if (!switchElement) {
             return;
         }
-        const parent = groupElement.parentElement;
+        const parent = switchElement.parentElement;
         if (!parent) {
             return;
         }
@@ -859,11 +860,11 @@ class ModelTreeView {
             return;
         }
         parent.removeChild(ul);
-        groupElement.classList.remove(&apos;minus&apos;);
-        groupElement.classList.add(&apos;plus&apos;);
-        groupElement.textContent = &apos;+&apos;;
-        groupElement.removeEventListener(&apos;click&apos;, this.groupCollapseHandler);
-        groupElement.addEventListener(&apos;click&apos;, this.groupExpandHandler);
+        switchElement.classList.remove(&apos;minus&apos;);
+        switchElement.classList.add(&apos;plus&apos;);
+        switchElement.textContent = &apos;+&apos;;
+        switchElement.removeEventListener(&apos;click&apos;, this.switchCollapseHandler);
+        switchElement.addEventListener(&apos;click&apos;, this.switchExpandHandler);
     }
 
     /**

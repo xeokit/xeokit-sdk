@@ -255,11 +255,10 @@ class SAOBlendRenderer {
 
         const gl = this._scene.canvas.gl;
         const program = this._program;
-        const scene = this._scene;
-        const sao = scene.sao;
-        const canvasBoundary = scene.canvas.boundary;
+        const viewportWidth = gl.drawingBufferWidth;
+        const viewportHeight = gl.drawingBufferHeight;
 
-        gl.viewport(canvasBoundary[0], canvasBoundary[1], canvasBoundary[2], canvasBoundary[3]);
+        gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.disable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);

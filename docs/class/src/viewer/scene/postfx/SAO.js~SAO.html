@@ -138,13 +138,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber86">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber144">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber86">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber144">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -174,8 +174,16 @@ in regions such as the corners, and the crevices between stairs. This increases 
 light is high, or when objects have uniform colors across their surfaces. Run the example to experiment with the various
 SAO configurations.</p>
 <p>xeokit&apos;s implementation of SAO is based on the paper <a href="https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf">Scalable Ambient Obscurance</a>.</p>
+<h2 id="caveats">Caveats</h2><p>Currently, SAO only works with perspective and orthographic projections. Therefore, to use SAO, make sure <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is
+either &quot;perspective&quot; or &quot;ortho&quot;.</p>
+<p><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale">SAO#scale</a></span> and <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-intensity">SAO#intensity</a></span> must be tuned to the distance
+between <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-near">Perspective#near</a></span> and <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-far">Perspective#far</a></span>, or the distance
+between <span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-near">Ortho#near</a></span> and <span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-far">Ortho#far</a></span>, depending on which of those two projections the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is currently
+using. Use the <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">live example</a> to get a
+feel for that.</p>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll start by logging a warning message to the console if SAO is not supported by the
-system. Then we&apos;ll configure SAO, position the camera, and configure the near and far perspective and orthographic
+system.</p>
+<p>Then we&apos;ll enable and configure SAO, position the camera, and configure the near and far perspective and orthographic
 clipping planes. Finally, we&apos;ll use <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load the OTC Conference Center model.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
@@ -206,10 +214,10 @@ camera.look = [84.31, -29.88, -116.21];
 camera.up = [0.18, 0.96, -0.21];
 
 camera.perspective.near = 0.1;
-camera.perspective.far = 5000.0;
+camera.perspective.far = 2000.0;
 
 camera.ortho.near = 0.1;
-camera.ortho.far = 5000.0;
+camera.ortho.far = 2000.0;
 camera.projection = &quot;perspective&quot;;
 
 const xktLoader = new XKTLoaderPlugin(viewer);
@@ -227,6 +235,44 @@ it&apos;s recommended to use a low value for <span><a href="class/src/viewer/sce
 to the source pixel, which will allow the GPU to efficiently cache those pixels. When <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is &quot;perspective&quot;,
 objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
 is more expensive than for objects far away, that occupy fewer pixels on the canvas.</p>
+<h2 id="selectively-enabling-for-models">Selectively enabling for models</h2><p>When loading multiple models into a Scene, we sometimes only want SAO on the models that are actually going to
+show it, such as the architecture or structure, and not show SAO on models that won&apos;t show it well, such as the
+electrical wiring, or plumbing.</p>
+<p>To illustrate, lets load some of the models for the West Riverside Hospital. We&apos;ll enable SAO on the structure model,
+but disable it on the electrical and plumbing.</p>
+<p>This will only apply SAO to those models if <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-supported">SAO#supported</a></span> and <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-enabled">SAO#enabled</a></span> are both true.</p>
+<p>Note, by the way, how we load the models in sequence. Since XKTLoaderPlugin uses scratch memory as part of its loading
+process, this allows the plugin to reuse that same memory across multiple loads, instead of having to create multiple
+pools of scratch memory.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const structure = xktLoader.load({
+     id: &quot;structure&quot;,
+     src: &quot;./models/xkt/WestRiverSideHospital/structure.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/WestRiverSideHospital/structure.json&quot;,
+     edges: true,
+     saoEnabled: true
+ });
+
+ structure.on(&quot;loaded&quot;, () =&gt; {
+
+     const electrical = xktLoader.load({
+         id: &quot;electrical&quot;,
+         src: &quot;./models/xkt/WestRiverSideHospital/electrical.xkt&quot;,
+         metaModelSrc: &quot;./metaModels/WestRiverSideHospital/electrical.json&quot;,
+         edges: true
+     });
+
+     electrical.on(&quot;loaded&quot;, () =&gt; {
+
+         const plumbing = xktLoader.load({
+             id: &quot;plumbing&quot;,
+             src: &quot;./models/xkt/WestRiverSideHospital/plumbing.xkt&quot;,
+             metaModelSrc: &quot;./metaModels/WestRiverSideHospital/plumbing.json&quot;,
+                 edges: true
+             });
+         });
+     });
+});</code>
+</code></pre>
 </div>
   
 
@@ -1355,7 +1401,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber390">source</a></span></span>
     </span>
   </h3>
 
@@ -1400,7 +1446,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber372">source</a></span></span>
     </span>
   </h3>
 
@@ -1445,7 +1491,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber394">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber475">source</a></span></span>
     </span>
   </h3>
 
@@ -1490,7 +1536,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1535,7 +1581,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -1581,7 +1627,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber188">source</a></span></span>
     </span>
   </h3>
 
@@ -1627,7 +1673,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber280">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -1672,7 +1718,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber262">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber343">source</a></span></span>
     </span>
   </h3>
 
@@ -1717,7 +1763,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber179">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 
@@ -1763,7 +1809,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber243">source</a></span></span>
     </span>
   </h3>
 
@@ -1809,7 +1855,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -1855,7 +1901,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -1901,7 +1947,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber251">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber332">source</a></span></span>
     </span>
   </h3>
 
@@ -1946,7 +1992,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -1991,7 +2037,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -2036,7 +2082,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber448">source</a></span></span>
     </span>
   </h3>
 
@@ -2081,7 +2127,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber338">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber419">source</a></span></span>
     </span>
   </h3>
 
@@ -2126,7 +2172,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber401">source</a></span></span>
     </span>
   </h3>
 
@@ -2171,7 +2217,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -2219,7 +2265,7 @@ is more expensive than for objects far away, that occupy fewer pixels on the can
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber552">source</a></span></span>
     </span>
   </h3>
 
