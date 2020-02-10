@@ -696,6 +696,18 @@ class Node extends Component {
         return this._receivesShadow;
     }
 
+    /**
+     * Gets if this Node can have Scalable Ambient Obscurance (SAO) applied to it.
+     *
+     * SAO is configured by {@link SAO}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return false; // TODO: Support SAO on Nodes
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Node members
     //------------------------------------------------------------------------------------------------------------------

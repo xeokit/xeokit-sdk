@@ -97,6 +97,11 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
         frameCtx.bindArray++;
     }
+
+    const sao = scene.sao;
+    const saoEnabled = (sao.possible && model.saoEnabled);
+    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+
     state.indicesBuf.bind();
     frameCtx.bindArray++;
     gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -228,7 +233,6 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
     const sao = scene.sao;
     const saoEnabled = sao.possible;
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
     if (saoEnabled) {
         const viewportWidth = gl.drawingBufferWidth;
         const viewportHeight = gl.drawingBufferHeight;

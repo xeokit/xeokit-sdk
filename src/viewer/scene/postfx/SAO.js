@@ -20,10 +20,23 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *
  * xeokit's implementation of SAO is based on the paper [Scalable Ambient Obscurance](https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf).
  *
+ * ## Caveats
+ *
+ * Currently, SAO only works with perspective and orthographic projections. Therefore, to use SAO, make sure {@link Camera#projection} is
+ * either "perspective" or "ortho".
+ *
+ * {@link SAO#scale} and {@link SAO#intensity} must be tuned to the distance
+ * between {@link Perspective#near} and {@link Perspective#far}, or the distance
+ * between {@link Ortho#near} and {@link Ortho#far}, depending on which of those two projections the {@link Camera} is currently
+ * using. Use the [live example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter) to get a
+ * feel for that.
+ *
  * ## Usage
  *
  * In the example below, we'll start by logging a warning message to the console if SAO is not supported by the
- * system. Then we'll configure SAO, position the camera, and configure the near and far perspective and orthographic
+ * system.
+ *
+ *Then we'll enable and configure SAO, position the camera, and configure the near and far perspective and orthographic
  * clipping planes. Finally, we'll use {@link XKTLoaderPlugin} to load the OTC Conference Center model.
  *
  * ````javascript
@@ -56,10 +69,10 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * camera.up = [0.18, 0.96, -0.21];
  *
  * camera.perspective.near = 0.1;
- * camera.perspective.far = 5000.0;
+ * camera.perspective.far = 2000.0;
  *
  * camera.ortho.near = 0.1;
- * camera.ortho.far = 5000.0;
+ * camera.ortho.far = 2000.0;
  * camera.projection = "perspective";
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
@@ -82,6 +95,51 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
  * is more expensive than for objects far away, that occupy fewer pixels on the canvas.
  *
+ * ## Selectively enabling for models
+ *
+ * When loading multiple models into a Scene, we sometimes only want SAO on the models that are actually going to
+ * show it, such as the architecture or structure, and not show SAO on models that won't show it well, such as the
+ * electrical wiring, or plumbing.
+ *
+ * To illustrate, lets load some of the models for the West Riverside Hospital. We'll enable SAO on the structure model,
+ * but disable it on the electrical and plumbing.
+ *
+ * This will only apply SAO to those models if {@link SAO#supported} and {@link SAO#enabled} are both true.
+ *
+ * Note, by the way, how we load the models in sequence. Since XKTLoaderPlugin uses scratch memory as part of its loading
+ * process, this allows the plugin to reuse that same memory across multiple loads, instead of having to create multiple
+ * pools of scratch memory.
+ *
+ * ````javascript
+ * const structure = xktLoader.load({
+ *      id: "structure",
+ *      src: "./models/xkt/WestRiverSideHospital/structure.xkt",
+ *      metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+ *      edges: true,
+ *      saoEnabled: true
+ *  });
+ *
+ *  structure.on("loaded", () => {
+ *
+ *      const electrical = xktLoader.load({
+ *          id: "electrical",
+ *          src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
+ *          metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
+ *          edges: true
+ *      });
+ *
+ *      electrical.on("loaded", () => {
+ *
+ *          const plumbing = xktLoader.load({
+ *              id: "plumbing",
+ *              src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
+ *              metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
+ *                  edges: true
+ *              });
+ *          });
+ *      });
+ * });
+ * ````
  */
 class SAO extends Component {
 
@@ -151,7 +209,7 @@ class SAO extends Component {
     }
 
     /**
-     * Returns true if SAO is currently possible, where it is supported, enabled, and current scene state is compatible.
+     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.
      * Called internally by renderer logic.
      * @private
      * @returns {boolean}

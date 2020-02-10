@@ -400,6 +400,18 @@ class Entity {
     }
 
     /**
+     * Gets if this Entity can have Scalable Ambient Obscurance (SAO) applied to it.
+     *
+     * SAO is configured by {@link SAO}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+
+    }
+
+    /**
      * Destroys this Entity.
      */
     destroy() {

@@ -1237,6 +1237,18 @@ class Mesh extends Component {
     }
 
     /**
+     * Gets if this Mesh can have Scalable Ambient Obscurance (SAO) applied to it.
+     *
+     * SAO is configured by {@link SAO}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return false; // TODO: Support SAO on Meshes
+    }
+
+    /**
      * Sets the RGB colorize color for this Mesh.
      *
      * Multiplies by rendered fragment colors.

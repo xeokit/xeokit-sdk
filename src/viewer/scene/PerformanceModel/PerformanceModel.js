@@ -59,6 +59,7 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Boolean} [cfg.preCompressed=false] When this is ````true````, ````positions```` are assumed to be
      * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````, {@link PerformanceModel#createMesh}
      * will ignore ````matrix````, ````position````, ````scale```` and ````rotation```` parameters.
@@ -163,6 +164,8 @@ class PerformanceModel extends Component {
 
         this._opacity = 1.0;
         this._colorize = [1, 1, 1];
+
+        this._saoEnabled = (cfg.saoEnabled !== false)
 
         this._isModel = cfg.isModel;
         if (this._isModel) {
@@ -1094,6 +1097,18 @@ class PerformanceModel extends Component {
      */
     get receivesShadow() { // TODO
         return false;
+    }
+
+    /**
+     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel.
+     *
+     * SAO is configured by the Scene's {@link SAO} component.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return this._saoEnabled;
     }
 
     //------------------------------------------------------------------------------------------------------------------

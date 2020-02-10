@@ -142,6 +142,10 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
     }
 
+    const sao = scene.sao;
+    const saoEnabled = (sao.possible && model.saoEnabled);
+    gl.uniform1i(this._uSAOEnabled, saoEnabled);
+
     frameCtx.drawElements++;
 };
 
@@ -290,7 +294,6 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
     const sao = scene.sao;
     const saoEnabled = sao.possible;
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
     if (saoEnabled) {
         const viewportWidth = gl.drawingBufferWidth;
         const viewportHeight = gl.drawingBufferHeight;

@@ -525,6 +525,18 @@ class PerformanceNode {
         return false;
     }
 
+    /**
+     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceNode.
+     *
+     * SAO is configured by the Scene's {@link SAO} component.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return this.model.saoEnabled;
+    }
+
     _finalize() {
         const scene = this.model.scene;
         if (this._isObject) {
