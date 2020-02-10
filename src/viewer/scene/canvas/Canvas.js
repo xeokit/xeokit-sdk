@@ -82,12 +82,8 @@ class Canvas extends Component {
         this.contextAttr = cfg.contextAttr || {};
         this.contextAttr.alpha = this.transparent;
 
-        if (this.contextAttr.preserveDrawingBuffer === undefined || this.contextAttr.preserveDrawingBuffer === null) {
-            this.contextAttr.preserveDrawingBuffer = true;
-        }
-
+        this.contextAttr.preserveDrawingBuffer = !!this.contextAttr.preserveDrawingBuffer;
         this.contextAttr.stencil = false;
-        this.contextAttr.antialias = true;
         this.contextAttr.premultipliedAlpha = (!!this.contextAttr.premultipliedAlpha);  // False by default: https://github.com/xeokit/xeokit-sdk/issues/251
         this.contextAttr.antialias = (this.contextAttr.antialias !== false);
 
