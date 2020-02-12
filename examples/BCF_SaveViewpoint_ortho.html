@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BCFViewpointsPlugin - Saving a BCF Viewpoint</title>
+    <title>BCFViewpointsPlugin - Saving a BCF Viewpoint, for Orthographic Camera</title>
     <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -18,7 +18,8 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Saving a BCF Viewpoint</h1>
+    <h1>Saving a BCF Viewpoint, for Orthographic Camera</h1>
+    <br>
     <ul>
         <li>
             <a target="_other"
@@ -72,10 +73,12 @@
 
     const camera = viewer.camera;
 
+    camera.projection = "ortho";
+    camera.ortho.scale = 70;
+
     camera.eye = [-2.37, 18.97, -26.12];
     camera.look = [10.97, 5.82, -11.22];
     camera.up = [0.36, 0.83, 0.40];
-
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
