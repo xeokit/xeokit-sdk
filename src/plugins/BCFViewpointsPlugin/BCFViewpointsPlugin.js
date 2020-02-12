@@ -437,7 +437,7 @@ class BCFViewpointsPlugin extends Plugin {
                 look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
                 up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
-                camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
+                camera.ortho.scale = bcfViewpoint.orthogonal_camera.view_to_world_scale;
 
                 projection = "ortho";
             }
