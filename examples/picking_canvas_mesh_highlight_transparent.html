@@ -85,17 +85,16 @@
             if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
                 if (lastEntity) {
-                //    lastEntity.highlighted = false;
+                    lastEntity.highlighted = false;
                 }
 
                 lastEntity = hit.entity;
                 hit.entity.highlighted = true;
-                hit.entity.pickable = false;
             }
         } else {
 
             if (lastEntity) {
-            //    lastEntity.highlighted = false;
+                lastEntity.highlighted = false;
                 lastEntity = null;
             }
         }
