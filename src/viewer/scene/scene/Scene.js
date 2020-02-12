@@ -347,7 +347,7 @@ class Scene extends Component {
             throw "Mandatory config expected: valid canvasId or canvasElement";
         }
 
-        const transparent = !!cfg.transparent;
+        const transparent = (!!cfg.transparent);
 
         this._aabbDirty = true;
 

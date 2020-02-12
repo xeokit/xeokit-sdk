@@ -9,7 +9,7 @@
         #myCanvas {
             width: 100%;
             height: 100%;
-            background: #0001e6;
+            background: #00f70d;
         }
     </style>
 
@@ -55,6 +55,9 @@
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
+    viewer.scene.xrayMaterial.fillColor = [1.0, 0.0, 0.0];
+    viewer.scene.xrayMaterial.fillAlpha = 0.5;
+
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -85,17 +88,17 @@
             if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
                 if (lastEntity) {
-                //    lastEntity.highlighted = false;
+                    //    lastEntity.highlighted = false;
                 }
 
                 lastEntity = hit.entity;
-                hit.entity.highlighted = true;
+                hit.entity.xrayed = true;
                 hit.entity.pickable = false;
             }
         } else {
 
             if (lastEntity) {
-            //    lastEntity.highlighted = false;
+                //    lastEntity.highlighted = false;
                 lastEntity = null;
             }
         }

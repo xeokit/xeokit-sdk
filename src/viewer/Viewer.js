@@ -28,6 +28,7 @@ class Viewer {
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
      * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
+     * @param {Boolean} [cfg.premultipliedAlpha=false]  Whether or not you want alpha composition with premultiplied alpha. Highlighting and selection works best when this is ````false````.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean} [cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param {Number} [cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
@@ -58,10 +59,11 @@ class Viewer {
             canvasElement: cfg.canvasElement,
             webgl2: false,
             contextAttr: {
-                preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
+                preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,
+                premultipliedAlpha: (!!cfg.premultipliedAlpha)
             },
             spinnerElementId: cfg.spinnerElementId,
-            transparent: cfg.transparent !== false,
+            transparent: (cfg.transparent !== false),
             gammaInput: true,
             gammaOutput: true,
             clearColorAmbient: cfg.clearColorAmbient,

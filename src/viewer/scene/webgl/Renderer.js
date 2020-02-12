@@ -21,7 +21,7 @@ const Renderer = function (scene, options) {
     const frameCtx = new FrameContext();
     const canvas = scene.canvas.canvas;
     const gl = scene.canvas.gl;
-    const canvasTransparent = options.transparent === true;
+    const canvasTransparent = (!!options.transparent);
 
     const pickIDs = new Map({});
 
@@ -36,8 +36,6 @@ const Renderer = function (scene, options) {
     let stateSortDirty = true;
     let imageDirty = true;
     let shadowsDirty = true;
-
-    let blendOneMinusSrcAlpha = true;
 
     const saoDepthBuffer = new RenderBuffer(canvas, gl);
     const occlusionBuffer1 = new RenderBuffer(canvas, gl);
@@ -65,10 +63,6 @@ const Renderer = function (scene, options) {
 
     this.imageDirty = function () {
         imageDirty = true;
-    };
-
-    this.setBlendOneMinusSrcAlpha = function (value) {
-        blendOneMinusSrcAlpha = value;
     };
 
     this.webglContextLost = function () {
@@ -162,7 +156,7 @@ const Renderer = function (scene, options) {
     this.clear = function (params) {
         params = params || {};
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        if (canvasTransparent) { // Canvas is transparent
+        if (canvasTransparent) {
             gl.clearColor(0, 0, 0, 0);
         } else {
             const color = params.ambientColor || scene.canvas.backgroundColor || this.lights.getAmbientColor();
@@ -429,7 +423,7 @@ const Renderer = function (scene, options) {
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-            if (canvasTransparent) { // Canvas is transparent
+            if (canvasTransparent) {
                 gl.clearColor(0, 0, 0, 0);
             } else {
                 const clearColor = scene.canvas.backgroundColor || ambientColor;
@@ -591,12 +585,14 @@ const Renderer = function (scene, options) {
             if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0) {
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-                if (blendOneMinusSrcAlpha) { // Makes glTF windows appear correct
+
+                if (canvasTransparent) {
                     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
                 } else {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 }
+
                 frameCtx.backfaces = false;
                 if (!transparentDepthMask) {
                     gl.depthMask(false);
@@ -646,7 +642,14 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+                if (canvasTransparent) {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+
                 if (highlightedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
                         highlightedEdgesTransparentBin[i].drawHighlightedEdgesTransparent(frameCtx);
@@ -680,7 +683,14 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+                if (canvasTransparent) {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+
                 if (selectedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < selectedEdgesTransparentBinLen; i++) {
                         selectedEdgesTransparentBin[i].drawSelectedEdgesTransparent(frameCtx);
@@ -715,12 +725,6 @@ const Renderer = function (scene, options) {
             for (let ii = 0; ii < numVertexAttribs; ii++) {
                 gl.disableVertexAttribArray(ii);
             }
-
-            // Set the backbuffer's alpha to 1.0
-            // gl.clearColor(1, 1, 1, 1);
-            // gl.colorMask(false, false, false, true);
-            // gl.clear(gl.COLOR_BUFFER_BIT);
-            // gl.colorMask(true, true, true, true);
 
             if (unbindOutputFrameBuffer) {
                 unbindOutputFrameBuffer(params.pass);
