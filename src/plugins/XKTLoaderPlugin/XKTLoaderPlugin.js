@@ -656,7 +656,7 @@ class XKTLoaderPlugin extends Plugin {
             elements.push(dataArray.subarray(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
-        if (xktVersion >= 2) {
+        if (xktVersion >= 3) {
             return { // XKT version 3
                 xktVersion: xktVersion,
                 positions: elements[0],
