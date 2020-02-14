@@ -208,7 +208,7 @@ class ModelTreeView {
         this.expandToDepth(this._autoExpandDepth);
     }
 
-    _findEmptyNodes(metaObject = this._rootMetaObject, countEntities = 0) {
+    _findEmptyNodes(metaObject = this._rootMetaObject) {
         const viewer = this._treeViewPlugin.viewer;
         const scene = viewer.scene;
         const children = metaObject.children;
