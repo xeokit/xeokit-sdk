@@ -45,9 +45,6 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *      workerScriptsPath : "../../src/plugins/XML3DLoader/zipjs/" // Path to zip.js workers dir
  * });
  *
- * // We can also get the plugin by its ID on the Viewer
- * plugin = viewer.plugins.XML3DLoader;
- *
  * // Load the 3DXML model
  * var model = plugin.load({ // Model is an Entity
  *     id: "myModel",

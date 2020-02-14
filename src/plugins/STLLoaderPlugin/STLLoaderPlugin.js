@@ -53,9 +53,6 @@ import {utils} from "../../viewer/scene/utils.js";
  *      id: "STLModels"  // Default value
  * });
  *
- * // We can also get the plugin by its ID on the Viewer
- * plugin = viewer.plugins.STLModels;
- *
  * // Load the STL model
  * var model = plugin.load({ // Model is an Entity
  *      id: "myModel",
