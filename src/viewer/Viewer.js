@@ -119,12 +119,7 @@ class Viewer {
             doublePickFlyTo: true
         });
 
-        /**
-         * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.
-         * @property plugins
-         * @type {{string:Plugin}}
-         */
-        this.plugins = {};
+        this._plugins = [];
 
         /**
          * Subscriptions to events sent with {@link fire}.
@@ -195,10 +190,7 @@ class Viewer {
      * @private
      */
     addPlugin(plugin) {
-        if (this.plugins[plugin.id]) {
-            this.error(`Plugin with this ID already installed: ${plugin.id}`);
-        }
-        this.plugins[plugin.id] = plugin;
+        this._plugins.push(plugin);
     }
 
     /**
@@ -207,19 +199,16 @@ class Viewer {
      * @private
      */
     removePlugin(plugin) {
-        const installedPlugin = this.plugins[plugin.id];
-        if (!installedPlugin) {
-            this.error(`Can't remove plugin - no plugin with this ID is installed: ${plugin.id}`);
-            return;
+        for (let i = 0, len = this._plugins.length; i < len; i++) {
+            const p = this._plugins[i];
+            if (p === plugin) {
+                if (p.clear) {
+                    p.clear();
+                }
+                this._plugins.splice(i, 1);
+                return;
+            }
         }
-        if (installedPlugin !== plugin) {
-            this.error(`Can't remove plugin - a different plugin is installed with this ID: ${plugin.id}`);
-            return;
-        }
-        if (installedPlugin.clear) {
-            installedPlugin.clear();
-        }
-        delete this.plugins[plugin.id];
     }
 
     /**
@@ -229,10 +218,10 @@ class Viewer {
      * @private
      */
     sendToPlugins(name, value) {
-        const plugins = this.plugins;
-        for (const id in plugins) {
-            if (plugins.hasOwnProperty(id)) {
-                plugins[id].send(name, value);
+        for (let i = 0, len = this._plugins.length; i < len; i++) {
+            const p = this._plugins[i];
+            if (p.send) {
+                p.send(name, value);
             }
         }
     }
@@ -251,13 +240,6 @@ class Viewer {
      */
     resetView() {
         this.sendToPlugins("resetView");
-
-        // Clear sectionPlanes at xeokit level
-
-        // TODO
-        // this.show();
-        // this.hide("space");
-        // this.hide("DEFAULT");
     }
 
     /**
@@ -317,10 +299,9 @@ class Viewer {
     /** Destroys this Viewer.
      */
     destroy() {
-        for (let id in this.plugins) {
-            if (this.plugins.hasOwnProperty(id)) {
-                this.plugins[id].destroy();
-            }
+        for (let i = 0, len = this._plugins.length; i < len; i++) {
+            const plugin = this._plugins[i];
+            plugin.destroy();
         }
         this.scene.destroy();
     }
