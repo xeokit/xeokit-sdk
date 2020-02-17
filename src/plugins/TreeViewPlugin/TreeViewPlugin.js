@@ -167,10 +167,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * ## Sorting Nodes
  *
  * TreeViewPlugin sorts its tree nodes by default. For a "storeys" hierarchy, it orders ````IfcBuildingStorey```` nodes
- * spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
- * 3D World-space boundaries of the ````IfcBuildingStory```` elements are actually spatially sortable, which may not be the case
- * in all IFC models. Some models may have ````IfcBuildingStory```` elements that contain objects that span multiple storeys,
- * which would defeat this sorting.
+ * spatially, with the node for the highest story at the top, down to the lowest at the bottom.
  *
  * For all the hierarchy types ("containment", "classes" and "storeys"), TreeViewPlugin sorts the other node types
  * alphanumerically on their titles.
@@ -185,7 +182,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * });
  * ````
  *
- * Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
+ * Note that, for all hierarchy modes, node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
  * update dynamically if we later transform the {@link Entity}s corresponding to the nodes.
  *
  * ## Pruning empty nodes
