@@ -130,8 +130,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/FrameBuffer.js~FrameBuffer.html">FrameBuffer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
 </ul>
 </div>
@@ -394,35 +393,6 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
         
         
         <div data-ice="description"><p>Metadata about the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> and the models and objects within it.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins">plugins</a></span></span><span class="code" data-ice="signature">: {string: <span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>}</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>s that have been installed into this Viewer, mapped to their IDs.</p>
 </div>
       </div>
     </td>
@@ -756,7 +726,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -840,6 +810,14 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Whether or not the canvas is transparent.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.premultipliedAlpha</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether or not you want alpha composition with premultiplied alpha. Highlighting and selection works best when this is <code>false</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -955,7 +933,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber99">source</a></span></span>
     </span>
   </h3>
 
@@ -1015,7 +993,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1076,7 +1054,7 @@ controls the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Sc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -1137,7 +1115,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1197,7 +1175,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -1257,7 +1235,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -1306,66 +1284,6 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-plugins">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">plugins</span><span class="code" data-ice="signature">: {string: <span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>}</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber125">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>s that have been installed into this Viewer, mapped to their IDs.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">plugins</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-scene">
     <span class="access" data-ice="access">public</span>
     
@@ -1377,7 +1295,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -1440,7 +1358,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
@@ -1484,7 +1402,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 
@@ -1528,7 +1446,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -1589,7 +1507,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1657,7 +1575,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
@@ -1759,7 +1677,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber177">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 
@@ -1820,7 +1738,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -1880,7 +1798,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber137">source</a></span></span>
     </span>
   </h3>
 
@@ -1948,7 +1866,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber241">source</a></span></span>
     </span>
   </h3>
 

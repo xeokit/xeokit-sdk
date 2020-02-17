@@ -130,8 +130,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/FrameBuffer.js~FrameBuffer.html">FrameBuffer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
 </ul>
 </div>
@@ -384,17 +383,29 @@ class MetaScene {
      * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the given subtree.
      *
      * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
+     * @param {String[]} [includeTypes] Optional list of types to include.
+     * @param {String[]} [excludeTypes] Optional list of types to exclude.
      * @returns {String[]} Array of {@link MetaObject#id}s.
      */
-    getObjectIDsInSubtree(id) {
+    getObjectIDsInSubtree(id, includeTypes, excludeTypes) {
         const list = [];
         const metaObject = this.metaObjects[id];
+        const includeMask = (includeTypes &amp;&amp; includeTypes.length &gt; 0) ? arrayToMap(includeTypes) : null;
+        const excludeMask = (excludeTypes &amp;&amp; excludeTypes.length &gt; 0) ? arrayToMap(excludeTypes) : null;
 
         function visit(metaObject) {
             if (!metaObject) {
                 return;
             }
-            list.push(metaObject.id);
+            var include = true;
+            if (excludeMask &amp;&amp; excludeMask[metaObject.type]) {
+                include = false;
+            } else if (includeMask &amp;&amp; (!includeMask[metaObject.type])) {
+                include = false;
+            }
+            if (include) {
+                list.push(metaObject.id);
+            }
             const children = metaObject.children;
             if (children) {
                 for (var i = 0, len = children.length; i &lt; len; i++) {
@@ -420,6 +431,14 @@ class MetaScene {
         }
         metaObject.withMetaObjectsInSubtree(callback);
     }
+}
+
+function arrayToMap(array) {
+    const map = {};
+    for (var i = 0, len = array.length; i &lt; len; i++) {
+        map[array[i]] = true;
+    }
+    return map;
 }
 
 export {MetaScene};</code></pre>

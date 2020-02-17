@@ -1,7 +1,7 @@
 {
-  "coverage": "44.77%",
-  "expectCount": 4199,
-  "actualCount": 1880,
+  "coverage": "44.96%",
+  "expectCount": 4172,
+  "actualCount": 1876,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -1091,8 +1091,8 @@
       ]
     },
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
-      "expectCount": 10,
-      "actualCount": 8,
+      "expectCount": 8,
+      "actualCount": 6,
       "undocumentLines": [
         61,
         63
@@ -1130,7 +1130,7 @@
       ]
     },
     "src/plugins/TreeViewPlugin/ModelTreeView.js": {
-      "expectCount": 50,
+      "expectCount": 51,
       "actualCount": 3,
       "undocumentLines": [
         4,
@@ -1161,25 +1161,26 @@
         167,
         171,
         179,
-        208,
-        303,
-        380,
-        419,
-        426,
-        443,
-        476,
+        211,
+        231,
+        325,
+        397,
+        431,
+        438,
+        455,
         488,
-        525,
-        536,
-        551,
-        595,
-        618,
-        626,
-        665,
-        678,
-        703,
-        710,
-        737
+        500,
+        537,
+        548,
+        563,
+        607,
+        630,
+        638,
+        677,
+        690,
+        715,
+        722,
+        749
       ]
     },
     "src/plugins/TreeViewPlugin/TreeViewNode.js": {
@@ -1191,13 +1192,13 @@
       "expectCount": 19,
       "actualCount": 12,
       "undocumentLines": [
+        375,
+        376,
         378,
         379,
+        380,
         381,
-        382,
-        383,
-        384,
-        424
+        421
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
@@ -1222,8 +1223,8 @@
         620,
         634,
         643,
-        696,
-        734
+        717,
+        776
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
@@ -1260,7 +1261,7 @@
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        180
+        177
       ]
     },
     "src/plugins/lib/html/Dot.js": {
@@ -1329,8 +1330,10 @@
     },
     "src/viewer/Viewer.js": {
       "expectCount": 23,
-      "actualCount": 23,
-      "undocumentLines": []
+      "actualCount": 22,
+      "undocumentLines": [
+        122
+      ]
     },
     "src/viewer/metadata/IFCObjectDefaults.js": {
       "expectCount": 1,
@@ -1352,9 +1355,11 @@
       ]
     },
     "src/viewer/metadata/MetaScene.js": {
-      "expectCount": 17,
+      "expectCount": 18,
       "actualCount": 17,
-      "undocumentLines": []
+      "undocumentLines": [
+        297
+      ]
     },
     "src/viewer/scene/Component.js": {
       "expectCount": 44,
@@ -2292,11 +2297,11 @@
       "actualCount": 18,
       "undocumentLines": [
         9,
-        174,
-        243,
-        281,
-        342,
-        445
+        168,
+        237,
+        275,
+        336,
+        439
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
@@ -3349,38 +3354,6 @@
       "actualCount": 26,
       "undocumentLines": []
     },
-    "src/viewer/scene/webgl/FrameBuffer.js": {
-      "expectCount": 26,
-      "actualCount": 0,
-      "undocumentLines": [
-        2,
-        4,
-        6,
-        7,
-        8,
-        11,
-        12,
-        13,
-        20,
-        21,
-        34,
-        35,
-        37,
-        38,
-        40,
-        42,
-        45,
-        52,
-        62,
-        167,
-        187,
-        195,
-        203,
-        209,
-        232,
-        257
-      ]
-    },
     "src/viewer/scene/webgl/FrameContext.js": {
       "expectCount": 19,
       "actualCount": 18,
@@ -3529,11 +3502,6 @@
         16,
         27
       ]
-    },
-    "src/viewer/scene/webgl/Renderer.#260fixes.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
     },
     "src/viewer/scene/webgl/Renderer.js": {
       "expectCount": 1,

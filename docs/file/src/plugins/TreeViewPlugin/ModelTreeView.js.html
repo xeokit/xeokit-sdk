@@ -130,8 +130,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/FrameBuffer.js~FrameBuffer.html">FrameBuffer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
 </ul>
 </div>
@@ -182,7 +181,7 @@ class ModelTreeView {
         this._containerElement.oncontextmenu = (e) =&gt; {
             e.preventDefault();
         };
-        
+
         this._onObjectVisibility = this._viewer.scene.on(&quot;objectVisibility&quot;, (entity) =&gt; {
             if (this._muteSceneEvents) {
                 return;
@@ -323,6 +322,9 @@ class ModelTreeView {
         }
         this._rootNodes = [];
         this._objectNodes = {};
+        if (this._pruneEmptyNodes) {
+            this._findEmptyNodes();
+        }
         switch (this._hierarchy) {
             case &quot;storeys&quot;:
                 this._createStoreysNodes();
@@ -345,23 +347,38 @@ class ModelTreeView {
         this.expandToDepth(this._autoExpandDepth);
     }
 
+    _findEmptyNodes(metaObject = this._rootMetaObject, countEntities = 0) {
+        const viewer = this._treeViewPlugin.viewer;
+        const scene = viewer.scene;
+        const children = metaObject.children;
+        const objectId = metaObject.id;
+        const entity = scene.objects[objectId];
+        metaObject._countEntities = 0;
+        if (entity) {
+            metaObject._countEntities++;
+        }
+        if (children) {
+            for (let i = 0, len = children.length; i &lt; len; i++) {
+                const childMetaObject = children[i];
+                childMetaObject._countEntities = this._findEmptyNodes(childMetaObject);
+                metaObject._countEntities += childMetaObject._countEntities;
+            }
+        }
+        return metaObject._countEntities;
+    }
+
     _createStoreysNodes(
         metaObject = this._rootMetaObject,
         buildingNode,
         storeyNode,
         typeNodes) {
+        if (this._pruneEmptyNodes &amp;&amp; (metaObject._countEntities === 0)) {
+            return;
+        }
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
         const children = metaObject.children;
         const objectId = metaObject.id;
-        if (this._pruneEmptyNodes &amp;&amp; (!children || children.length === 0)) {
-            const viewer = this._treeViewPlugin.viewer;
-            const scene = viewer.scene;
-            const entity = scene.objects[objectId];
-            if (!entity) {
-                return;
-            }
-        }
         if (metaObjectType === &quot;IfcBuilding&quot;) {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
@@ -397,39 +414,43 @@ class ModelTreeView {
             typeNodes = {};
         } else {
             if (storeyNode) {
-                typeNodes = typeNodes || {};
-                var typeNode = typeNodes[metaObjectType];
-                if (!typeNode) {
-                    const typeNodeObjectId = storeyNode.objectId + &quot;.&quot; + metaObjectType;
-                    const typeNodeNodeId = this._objectToNodeID(typeNodeObjectId);
-                    typeNode = {
-                        nodeId: typeNodeNodeId,
-                        objectId: typeNodeObjectId,
-                        title: metaObjectType,
+                const objects = this._viewer.scene.objects;
+                const object = objects[objectId];
+                if (object) {
+                    typeNodes = typeNodes || {};
+                    let typeNode = typeNodes[metaObjectType];
+                    if (!typeNode) {
+                        const typeNodeObjectId = storeyNode.objectId + &quot;.&quot; + metaObjectType;
+                        const typeNodeNodeId = this._objectToNodeID(typeNodeObjectId);
+                        typeNode = {
+                            nodeId: typeNodeNodeId,
+                            objectId: typeNodeObjectId,
+                            title: metaObjectType,
+                            type: metaObjectType,
+                            parent: storeyNode,
+                            numEntities: 0,
+                            numVisibleEntities: 0,
+                            checked: false,
+                            children: []
+                        };
+                        storeyNode.children.push(typeNode);
+                        this._objectNodes[typeNodeObjectId] = typeNode;
+                        typeNodes[metaObjectType] = typeNode;
+                    }
+                    const node = {
+                        nodeId: this._objectToNodeID(objectId),
+                        objectId: objectId,
+                        title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
                         type: metaObjectType,
-                        parent: storeyNode,
+                        parent: typeNode,
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
                         children: []
                     };
-                    storeyNode.children.push(typeNode);
-                    this._objectNodes[typeNodeObjectId] = typeNode;
-                    typeNodes[metaObjectType] = typeNode;
+                    typeNode.children.push(node);
+                    this._objectNodes[node.objectId] = node;
                 }
-                const node = {
-                    nodeId: this._objectToNodeID(objectId),
-                    objectId: objectId,
-                    title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
-                    type: metaObjectType,
-                    parent: typeNode,
-                    numEntities: 0,
-                    numVisibleEntities: 0,
-                    checked: false,
-                    children: []
-                };
-                typeNode.children.push(node);
-                this._objectNodes[node.objectId] = node;
             }
         }
         if (children) {
@@ -444,18 +465,13 @@ class ModelTreeView {
         metaObject = this._rootMetaObject,
         buildingNode,
         typeNodes) {
+        if (this._pruneEmptyNodes &amp;&amp; (metaObject._countEntities === 0)) {
+            return;
+        }
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
         const children = metaObject.children;
         const objectId = metaObject.id;
-        if (this._pruneEmptyNodes &amp;&amp; (!children || children.length === 0)) {
-            const viewer = this._treeViewPlugin.viewer;
-            const scene = viewer.scene;
-            const entity = scene.objects[objectId];
-            if (!entity) {
-                return;
-            }
-        }
         if (metaObjectType === &quot;IfcBuilding&quot;) {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
@@ -518,18 +534,13 @@ class ModelTreeView {
     }
 
     _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
+        if (this._pruneEmptyNodes &amp;&amp; (metaObject._countEntities === 0)) {
+            return;
+        }
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name || metaObjectType;
         const children = metaObject.children;
         const objectId = metaObject.id;
-        if (this._pruneEmptyNodes &amp;&amp; (!children || children.length === 0)) {
-            const viewer = this._treeViewPlugin.viewer;
-            const scene = viewer.scene;
-            const entity = scene.objects[objectId];
-            if (!entity) {
-                return;
-            }
-        }
         const node = {
             nodeId: this._objectToNodeID(objectId),
             objectId: objectId,
@@ -586,13 +597,13 @@ class ModelTreeView {
         const camera = scene.camera;
         const metaScene = viewer.metaScene;
         return this._spatialSortFunc || (this._spatialSortFunc = (node1, node2) =&gt; {
-            if (!node1.center || !node2.center) {
-                // Sorting on center more robust when objects could overlap storeys
-                if (!node1.center) {
-                    node1.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId)));
+            if (!node1.aabb || !node2.aabb) {
+                // Sorting on lowest point of the AABB is likely more more robust when objects could overlap storeys
+                if (!node1.aabb) {
+                    node1.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId));
                 }
-                if (!node2.center) {
-                    node2.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId)));
+                if (!node2.aabb) {
+                    node2.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId));
                 }
             }
             let idx = 0;
@@ -603,10 +614,10 @@ class ModelTreeView {
             } else {
                 idx = 2;
             }
-            if (node1.center[idx] &gt; node2.center[idx]) {
+            if (node1.aabb[idx] &gt; node2.aabb[idx]) {
                 return -1;
             }
-            if (node1.center[idx] &lt; node2.center[idx]) {
+            if (node1.aabb[idx] &lt; node2.aabb[idx]) {
                 return 1;
             }
             return 0;

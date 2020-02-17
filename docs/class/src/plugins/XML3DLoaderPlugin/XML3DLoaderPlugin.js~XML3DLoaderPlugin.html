@@ -130,21 +130,20 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/FrameBuffer.js~FrameBuffer.html">FrameBuffer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber155">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber155">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -196,9 +195,6 @@ var plugin = new XML3DLoaderPlugin(viewer, {
      id: &quot;XML3DLoader&quot;,  // Default value
      workerScriptsPath : &quot;../../src/plugins/XML3DLoader/zipjs/&quot; // Path to zip.js workers dir
 });
-
-// We can also get the plugin by its ID on the Viewer
-plugin = viewer.plugins.XML3DLoader;
 
 // Load the 3DXML model
 var model = plugin.load({ // Model is an Entity
@@ -688,7 +684,7 @@ Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong mate
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber171">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber168">source</a></span></span>
     </span>
   </h3>
 
@@ -727,7 +723,7 @@ Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong mate
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: &quot;XML3DLoader&quot;</li></ul></td>
-      <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
+      <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span>Viewer#plugins</span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -792,7 +788,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -855,7 +851,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 

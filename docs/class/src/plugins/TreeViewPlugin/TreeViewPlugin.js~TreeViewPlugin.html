@@ -130,21 +130,20 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/FrameBuffer.js~FrameBuffer.html">FrameBuffer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber353">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber350">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber353">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber350">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -292,10 +291,7 @@ The table below shows what the hierarchies look like:
 });</code>
 </code></pre>
 <h2 id="sorting-nodes">Sorting Nodes</h2><p>TreeViewPlugin sorts its tree nodes by default. For a &quot;storeys&quot; hierarchy, it orders <code>IfcBuildingStorey</code> nodes
-spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
-3D World-space boundaries of the <code>IfcBuildingStory</code> elements are actually spatially sortable, which may not be the case
-in all IFC models. Some models may have <code>IfcBuildingStory</code> elements that contain objects that span multiple storeys,
-which would defeat this sorting.</p>
+spatially, with the node for the highest story at the top, down to the lowest at the bottom.</p>
 <p>For all the hierarchy types (&quot;containment&quot;, &quot;classes&quot; and &quot;storeys&quot;), TreeViewPlugin sorts the other node types
 alphanumerically on their titles.</p>
 <p>If for some reason you need to prevent sorting, create your TreeViewPlugin with the option disabled, like so:</p>
@@ -305,7 +301,7 @@ alphanumerically on their titles.</p>
      sortNodes: false // &lt;&lt;------ Disable node sorting
 });</code>
 </code></pre>
-<p>Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
+<p>Note that, for all hierarchy modes, node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
 update dynamically if we later transform the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s corresponding to the nodes.</p>
 <h2 id="pruning-empty-nodes">Pruning empty nodes</h2><p>Sometimes a model contains subtrees of objects that don&apos;t have any geometry. These are models whose
 <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> contains trees of <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s that don&apos;t have any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
@@ -1054,7 +1050,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber366">source</a></span></span>
     </span>
   </h3>
 
@@ -1173,7 +1169,7 @@ vertical World axis. For all hierarchy types, other node types will be ordered i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber415">source</a></span></span>
     </span>
   </h3>
 
@@ -1226,7 +1222,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber437">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber434">source</a></span></span>
     </span>
   </h3>
 
@@ -1273,7 +1269,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber450">source</a></span></span>
     </span>
   </h3>
 
@@ -1351,7 +1347,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber504">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber501">source</a></span></span>
     </span>
   </h3>
 
@@ -1395,7 +1391,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber600">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber597">source</a></span></span>
     </span>
   </h3>
 
@@ -1439,7 +1435,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber569">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
@@ -1501,7 +1497,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber488">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber485">source</a></span></span>
     </span>
   </h3>
 
@@ -1562,7 +1558,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber529">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber526">source</a></span></span>
     </span>
   </h3>
 
@@ -1630,7 +1626,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber553">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber550">source</a></span></span>
     </span>
   </h3>
 
@@ -1676,7 +1672,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber586">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber583">source</a></span></span>
     </span>
   </h3>
 
