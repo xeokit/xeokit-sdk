@@ -111,31 +111,29 @@
 
     const timeoutDuration = 150;
     var timer = timeoutDuration;
-    var performanceEnabled = false;
+    var qualityEnabled = false;
     const saoEnabled = true;
     const edgesEnabled = true;
 
     const onCameraMatrix = scene.camera.on("matrix", () => {
         timer = timeoutDuration;
-        if (performanceEnabled) {
+        if (!qualityEnabled) {
             scene.sao.enabled = false;
             scene.edgeMaterial.edges = false;
-            performanceEnabled = false;
-            console.log("Performance disabled");
+            qualityEnabled = true;
         }
     });
 
     const onSceneTick = scene.on("tick", (e) => {
-        if (performanceEnabled) {
+        if (!qualityEnabled) {
             return;
         }
         timer -= e.deltaTime;
         if (timer <= 0) {
-            if (!performanceEnabled) {
+            if (qualityEnabled) {
                 scene.sao.enabled = saoEnabled;
                 scene.edgeMaterial.edges = edgesEnabled;
-                performanceEnabled = true;
-                console.log("Performance enabled");
+                qualityEnabled = false;
             }
         }
     });
