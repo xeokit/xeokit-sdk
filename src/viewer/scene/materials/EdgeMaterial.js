@@ -167,6 +167,7 @@ class EdgeMaterial extends Material {
 
         this._state = new RenderState({
             type: "EdgeMaterial",
+            edges: null,
             edgeColor: null,
             edgeAlpha: null,
             edgeWidth: null
@@ -190,8 +191,36 @@ class EdgeMaterial extends Material {
             this.edgeAlpha = cfg.edgeAlpha;
             this.edgeWidth = cfg.edgeWidth;
         }
+        this.edges = (cfg.edges !== false);
     }
 
+
+    /**
+     * Sets if edges are visible.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set edges(value) {
+        value = value !== false;
+        if (this._state.edges === value) {
+            return;
+        }
+        this._state.edges = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if edges are visible.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return this._state.edges;
+    }
 
     /**
      * Sets RGB edge color.

@@ -165,7 +165,7 @@ class PerformanceModel extends Component {
         this._opacity = 1.0;
         this._colorize = [1, 1, 1];
 
-        this._saoEnabled = (cfg.saoEnabled !== false)
+        this._saoEnabled = (cfg.saoEnabled !== false);
 
         this._isModel = cfg.isModel;
         if (this._isModel) {
@@ -1164,10 +1164,12 @@ class PerformanceModel extends Component {
 
         if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
-            if (edgeMaterial.alpha < 1.0) {
-                renderFlags.normalEdgesTransparent = true;
-            } else {
-                renderFlags.normalEdgesOpaque = true;
+            if (edgeMaterial.edges) {
+                if (edgeMaterial.alpha < 1.0) {
+                    renderFlags.normalEdgesTransparent = true;
+                } else {
+                    renderFlags.normalEdgesOpaque = true;
+                }
             }
         }
 

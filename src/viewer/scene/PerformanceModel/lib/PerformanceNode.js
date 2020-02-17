@@ -255,7 +255,10 @@ class PerformanceNode {
     }
 
     /**
-     * Sets if this PerformanceNode's edges are enhanced.
+     * Sets if this PerformanceNode is selected.
+     *
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
