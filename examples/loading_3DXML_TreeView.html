@@ -352,7 +352,7 @@
                 {
                     title: "Hide",
                     getEnabled: function (context) {
-                        return (context.entity.visible);
+                        return ((!context.entity) || context.entity.visible);
                     },
                     doAction: function (context) {
                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
@@ -444,7 +444,7 @@
                 {
                     title: "X-Ray",
                     getEnabled: function (context) {
-                        return (!context.entity.xrayed);
+                        return ((!context.entity) || !context.entity.xrayed);
                     },
                     doAction: function (context) {
                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
@@ -462,7 +462,7 @@
                 {
                     title: "Undo X-Ray",
                     getEnabled: function (context) {
-                        return (context.entity.xrayed);
+                        return ((!context.entity) || context.entity.xrayed);
                     },
                     doAction: function (context) {
                         context.entity.xrayed = false;
@@ -500,7 +500,7 @@
                 {
                     title: "Select",
                     getEnabled: function (context) {
-                        return (!context.entity.selected);
+                        return ((!context.entity) || !context.entity.selected);
                     },
                     doAction: function (context) {
                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
@@ -518,7 +518,7 @@
                 {
                     title: "Undo Select",
                     getEnabled: function (context) {
-                        return (context.entity.selected);
+                        return ((!context.entity) || context.entity.selected);
                     },
                     doAction: function (context) {
                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
