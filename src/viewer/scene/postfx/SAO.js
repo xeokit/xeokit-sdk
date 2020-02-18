@@ -95,7 +95,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
  * is more expensive than for objects far away, that occupy fewer pixels on the canvas.
  *
- * ## Selectively enabling for models
+ * ## Selectively enabling SAO for models
  *
  * When loading multiple models into a Scene, we sometimes only want SAO on the models that are actually going to
  * show it, such as the architecture or structure, and not show SAO on models that won't show it well, such as the
@@ -140,6 +140,39 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *      });
  * });
  * ````
+ *
+ * ## Disabling SAO while camera is moving
+ *
+ * For smoother interaction with large models on low-power hardware, we can disable SAO while the {@link Camera} is moving:
+ *
+ * ````javascript
+ * const timeoutDuration = 150; // Milliseconds
+ * var timer = timeoutDuration;
+ * var saoDisabled = false;
+ *
+ * const onCameraMatrix = scene.camera.on("matrix", () => {
+ *     timer = timeoutDuration;
+ *     if (!saoDisabled) {
+ *         scene.sao.enabled = false;
+ *         saoDisabled = true;
+ *     }
+ * });
+ *
+ * const onSceneTick = scene.on("tick", (tickEvent) => {
+ *     if (!saoDisabled) {
+ *         return;
+ *     }
+ *     timer -= tickEvent.deltaTime; // Milliseconds
+ *     if (timer <= 0) {
+ *         if (saoDisabled) {
+ *             scene.sao.enabled = true;
+ *             saoDisabled = false;
+ *         }
+ *     }
+ * });
+ * ````
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#techniques_nonInteractiveQuality)]
  */
 class SAO extends Component {
 
@@ -149,12 +182,8 @@ class SAO extends Component {
         super(owner, cfg);
 
         this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
-        this._interactiveActive = true;
-        this._interactiveCountDown = 0;
 
         this.enabled = cfg.enabled;
-        this.interactive = cfg.interactive;
-        this.interactiveDelay = cfg.interactiveDelay;
         this.kernelRadius = cfg.kernelRadius;
         this.intensity = cfg.intensity;
         this.bias = cfg.bias;
@@ -229,71 +258,6 @@ class SAO extends Component {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Sets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
-     *
-     * When this is ````false````, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    set interactive(value) {
-        value = !!value;
-        if (this._interactive === value) {
-            return;
-        }
-        this._interactive = value;
-    }
-
-    /**
-     * Gets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
-     *
-     * When this is ````false````, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    get interactive() {
-        return this._interactive;
-    }
-
-    /**
-     * Sets the interaction time delay after the {@link Camera} stops moving before SAO is applied.
-     *
-     * Only applies when {@link SAO#interactive} is ````true````.
-     *
-     * Default value is ````2.0````.
-     *
-     * @type {Number}
-     */
-    set interactiveDelay(value) {
-        if (value === undefined || value === null) {
-            value = 2.0;
-        }
-        if (this._interactiveDelay === value) {
-            return;
-        }
-        this._interactiveDelay = value;
-        this._interactiveCountDown = this._interactiveDelay;
-
-        //this.glRedraw();
-    }
-
-    /**
-     * Gets the interaction time delay after the {@link Camera} stops moving before SAO is applied.
-     *
-     * Only applies when {@link SAO#interactive} is ````true````.
-     *
-     * Default value is ````2.0````.
-     *
-     * @type {Number}
-     */
-    get interactiveDelay() {
-        return this._interactiveDelay;
     }
 
     /**
@@ -550,7 +514,6 @@ class SAO extends Component {
      * Destroys this component.
      */
     destroy() {
-        this.interactive = false; // Unbinds Scene and Camera events
         super.destroy();
     }
 }
