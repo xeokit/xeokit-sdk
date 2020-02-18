@@ -1,7 +1,7 @@
 {
-  "coverage": "44.96%",
-  "expectCount": 4172,
-  "actualCount": 1876,
+  "coverage": "44.98%",
+  "expectCount": 4166,
+  "actualCount": 1874,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -1454,8 +1454,8 @@
         56,
         57,
         151,
-        540,
-        561
+        543,
+        564
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingBuffer.js": {
@@ -2621,12 +2621,12 @@
       ]
     },
     "src/viewer/scene/materials/EdgeMaterial.js": {
-      "expectCount": 16,
-      "actualCount": 13,
+      "expectCount": 18,
+      "actualCount": 15,
       "undocumentLines": [
         4,
         168,
-        175
+        176
       ]
     },
     "src/viewer/scene/materials/EmphasisMaterial.js": {
@@ -2804,7 +2804,7 @@
         27,
         28,
         30,
-        1754,
+        1758,
         214,
         235,
         236,
@@ -3171,23 +3171,19 @@
       ]
     },
     "src/viewer/scene/postfx/SAO.js": {
-      "expectCount": 42,
-      "actualCount": 28,
+      "expectCount": 34,
+      "actualCount": 24,
       "undocumentLines": [
-        151,
-        152,
-        153,
-        193,
-        248,
-        280,
-        321,
-        350,
-        379,
-        408,
-        437,
-        464,
-        496,
-        531
+        184,
+        222,
+        285,
+        314,
+        343,
+        372,
+        401,
+        428,
+        460,
+        495
       ]
     },
     "src/viewer/scene/scene/Scene.js": {

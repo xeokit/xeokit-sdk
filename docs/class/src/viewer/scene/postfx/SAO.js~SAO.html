@@ -137,13 +137,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber144">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber144">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -234,7 +234,7 @@ it&apos;s recommended to use a low value for <span><a href="class/src/viewer/sce
 to the source pixel, which will allow the GPU to efficiently cache those pixels. When <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is &quot;perspective&quot;,
 objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
 is more expensive than for objects far away, that occupy fewer pixels on the canvas.</p>
-<h2 id="selectively-enabling-for-models">Selectively enabling for models</h2><p>When loading multiple models into a Scene, we sometimes only want SAO on the models that are actually going to
+<h2 id="selectively-enabling-sao-for-models">Selectively enabling SAO for models</h2><p>When loading multiple models into a Scene, we sometimes only want SAO on the models that are actually going to
 show it, such as the architecture or structure, and not show SAO on models that won&apos;t show it well, such as the
 electrical wiring, or plumbing.</p>
 <p>To illustrate, lets load some of the models for the West Riverside Hospital. We&apos;ll enable SAO on the structure model,
@@ -272,6 +272,33 @@ pools of scratch memory.</p>
      });
 });</code>
 </code></pre>
+<h2 id="disabling-sao-while-camera-is-moving">Disabling SAO while camera is moving</h2><p>For smoother interaction with large models on low-power hardware, we can disable SAO while the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const timeoutDuration = 150; // Milliseconds
+var timer = timeoutDuration;
+var saoDisabled = false;
+
+const onCameraMatrix = scene.camera.on(&quot;matrix&quot;, () =&gt; {
+    timer = timeoutDuration;
+    if (!saoDisabled) {
+        scene.sao.enabled = false;
+        saoDisabled = true;
+    }
+});
+
+const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
+    if (!saoDisabled) {
+        return;
+    }
+    timer -= tickEvent.deltaTime; // Milliseconds
+    if (timer &lt;= 0) {
+        if (saoDisabled) {
+            scene.sao.enabled = true;
+            saoDisabled = false;
+        }
+    }
+});</code>
+</code></pre>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#techniques_nonInteractiveQuality">Run this example</a>]</p>
 </div>
   
 
@@ -292,35 +319,6 @@ pools of scratch memory.</p>
   <tbody>
   
   <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-bias">bias</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the SAO bias.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -363,13 +361,13 @@ pools of scratch memory.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blur">blur</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-bias">bias</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether Guassian blur is enabled.</p>
+        <div data-ice="description"><p>Gets the SAO bias.</p>
 </div>
       </div>
     </td>
@@ -421,13 +419,13 @@ pools of scratch memory.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-enabled">enabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blur">blur</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
+        <div data-ice="description"><p>Gets whether Guassian blur is enabled.</p>
 </div>
       </div>
     </td>
@@ -457,6 +455,35 @@ pools of scratch memory.</p>
         
         
         <div data-ice="description"><p>Sets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-enabled">enabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
 </div>
       </div>
     </td>
@@ -515,122 +542,6 @@ pools of scratch memory.</p>
         
         
         <div data-ice="description"><p>Sets the degree of darkening (ambient obscurance) produced by the SAO effect.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-interactive">interactive</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets whether SAO is applied interactively, ie.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-interactive">interactive</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether SAO is applied interactively, ie.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-interactiveDelay">interactiveDelay</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the interaction time delay after the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> stops moving before SAO is applied.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-interactiveDelay">interactiveDelay</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the interaction time delay after the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> stops moving before SAO is applied.</p>
 </div>
       </div>
     </td>
@@ -1389,51 +1300,6 @@ pools of scratch memory.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-bias">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">bias</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber390">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the SAO bias.</p>
-<p>Default value is <code>0.5</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-bias">
     <span class="access" data-ice="access">public</span>
     
@@ -1445,7 +1311,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber372">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1479,26 +1345,26 @@ pools of scratch memory.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-blur">
+  <h3 data-ice="anchor" id="instance-get-bias">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">blur</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">bias</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber475">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber354">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether Guassian blur is enabled.</p>
-<p>Default value is <code>true</code>.</p>
+  <div data-ice="description"><p>Gets the SAO bias.</p>
+<p>Default value is <code>0.5</code>.</p>
 </div>
 
   
@@ -1535,7 +1401,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber459">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -1569,27 +1435,26 @@ pools of scratch memory.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-enabled">
+  <h3 data-ice="anchor" id="instance-get-blur">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">enabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">blur</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber439">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
-<p>Even when enabled, SAO will only apply if supported.</p>
-<p>Default value is <code>false</code>.</p>
+  <div data-ice="description"><p>Gets whether Guassian blur is enabled.</p>
+<p>Default value is <code>true</code>.</p>
 </div>
 
   
@@ -1626,7 +1491,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber188">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
@@ -1635,6 +1500,52 @@ pools of scratch memory.</p>
   
   <div data-ice="description"><p>Sets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
 <p>Even when enabled, SAO will only work if supported.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-enabled">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">enabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber236">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether SAO is enabled for the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
+<p>Even when enabled, SAO will only apply if supported.</p>
 <p>Default value is <code>false</code>.</p>
 </div>
 
@@ -1672,7 +1583,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber361">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber325">source</a></span></span>
     </span>
   </h3>
 
@@ -1717,7 +1628,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber343">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -1726,190 +1637,6 @@ pools of scratch memory.</p>
   
   <div data-ice="description"><p>Sets the degree of darkening (ambient obscurance) produced by the SAO effect.</p>
 <p>Default value is <code>0.25</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-interactive">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">interactive</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber260">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether SAO is applied interactively, ie. while the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving.</p>
-<p>When this is <code>false</code>, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.</p>
-<p>Default value is <code>true</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-interactive">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">interactive</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber243">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether SAO is applied interactively, ie. while the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving.</p>
-<p>When this is <code>false</code>, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.</p>
-<p>Default value is <code>true</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-interactiveDelay">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">interactiveDelay</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber295">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the interaction time delay after the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> stops moving before SAO is applied.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-interactive">SAO#interactive</a></span> is <code>true</code>.</p>
-<p>Default value is <code>2.0</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-interactiveDelay">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">interactiveDelay</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber273">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the interaction time delay after the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> stops moving before SAO is applied.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-interactive">SAO#interactive</a></span> is <code>true</code>.</p>
-<p>Default value is <code>2.0</code>.</p>
 </div>
 
   
@@ -1946,7 +1673,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber296">source</a></span></span>
     </span>
   </h3>
 
@@ -1991,7 +1718,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -2036,7 +1763,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber430">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
@@ -2081,7 +1808,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber448">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber412">source</a></span></span>
     </span>
   </h3>
 
@@ -2126,7 +1853,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber419">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -2171,7 +1898,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber365">source</a></span></span>
     </span>
   </h3>
 
@@ -2216,7 +1943,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber175">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber204">source</a></span></span>
     </span>
   </h3>
 
@@ -2264,7 +1991,7 @@ pools of scratch memory.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber516">source</a></span></span>
     </span>
   </h3>
 
