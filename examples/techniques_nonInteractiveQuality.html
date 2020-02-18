@@ -109,31 +109,29 @@
     // Only enable SAO and normal edge emphasis while camera is not moving
     //------------------------------------------------------------------------------------------------------------------
 
-    const timeoutDuration = 150;
+    const timeoutDuration = 150; // Milliseconds
     var timer = timeoutDuration;
-    var qualityEnabled = false;
-    const saoEnabled = true;
-    const edgesEnabled = true;
+    var saoAndEdgesDisabled = false;
 
-    const onCameraMatrix = scene.camera.on("matrix", () => {
+    scene.camera.on("matrix", () => {
         timer = timeoutDuration;
-        if (!qualityEnabled) {
+        if (!saoAndEdgesDisabled) {
             scene.sao.enabled = false;
             scene.edgeMaterial.edges = false;
-            qualityEnabled = true;
+            saoAndEdgesDisabled = true;
         }
     });
 
-    const onSceneTick = scene.on("tick", (e) => {
-        if (!qualityEnabled) {
+    scene.on("tick", (tickEvent) => {  // Milliseconds
+        if (!saoAndEdgesDisabled) {
             return;
         }
-        timer -= e.deltaTime;
+        timer -= tickEvent.deltaTime;
         if (timer <= 0) {
-            if (qualityEnabled) {
-                scene.sao.enabled = saoEnabled;
-                scene.edgeMaterial.edges = edgesEnabled;
-                qualityEnabled = false;
+            if (saoAndEdgesDisabled) {
+                scene.sao.enabled = true;
+                scene.edgeMaterial.edges = true;
+                saoAndEdgesDisabled = false;
             }
         }
     });
