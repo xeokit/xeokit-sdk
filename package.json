@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "JavaScript SDK for viewing high-detail 3D BIM and CAD models in the Web browser",
   "main": "index.js",
   "scripts": {
