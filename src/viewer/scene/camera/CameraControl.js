@@ -1496,10 +1496,12 @@ class CameraControl extends Component {
                     needPickSurface = self._pivoting;
                     updatePick();
                     if (self._pivoting) {
-                        if (pickResult) {
-                            self._pivoter.startPivot(pickResult.worldPos);
-                        } else {
-                            self._pivoter.startPivot(); // Continue to use last pivot point
+                        if (e.which === 1) {// Left button
+                            if (pickResult) {
+                                self._pivoter.startPivot(pickResult.worldPos);
+                            } else {
+                                self._pivoter.startPivot(); // Continue to use last pivot point
+                            }
                         }
                     }
                 });
