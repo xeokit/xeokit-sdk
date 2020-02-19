@@ -46,7 +46,7 @@ function buildVertex(layer) {
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
-    src.push("bool selected     = false;");
+    src.push("bool selected     = (float(flags.w) > 0.0);");
     src.push("bool edges        = (float(flags2.y) > 0.0);");
 
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EdgeMaterial.edgeColor, so is not quantized

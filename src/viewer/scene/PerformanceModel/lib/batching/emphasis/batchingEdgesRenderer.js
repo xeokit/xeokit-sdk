@@ -100,7 +100,6 @@ BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPas
 
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
     gl.uniform1i(this._uRenderPass, renderPass);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
