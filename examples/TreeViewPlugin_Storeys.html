@@ -89,6 +89,13 @@
             padding-left: 2px;
         }
 
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+        }
+
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
             border: black solid 1px;
             background: yellow;
@@ -205,7 +212,13 @@
         containerElement: document.getElementById("treeViewContainer"),
         autoExpandDepth: 1, // Initially expand tree one level deep
         hierarchy: "storeys",
-        sortNodes: true
+        sortNodes: true,
+
+        // With hierarchy:"storeys" and sortNodes:true we can optionally specify which element types
+        // we derive the center of each storey from, which we use to spatially sort the storeys on the
+        // vertical axis. By default, this is all types, but sometimes some types of element will
+        // span multiple storeys, so we have the ability to refine which types contribute to those center points.
+        sortableStoreysTypes: ["IfcWall", "IfcWallStandardCase", "IfcSlab", "IfcFurniture", "IfcFurnishingElement", "IfcDoor", "IfcRoof"]
     });
 
     //----------------------------------------------------------------------------------------------------------------------
