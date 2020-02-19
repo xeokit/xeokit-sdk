@@ -138,8 +138,11 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
-        document.addEventListener("click", (e) => {
-            this.hide();
+        document.addEventListener("mousedown", (event) => {
+            if (!event.target.classList.contains("xeokit-context-menu-item")) {
+                this.hide();
+            }
+            event.preventDefault();
         });
         if (cfg.items) {
             this.items = cfg.items;
@@ -221,7 +224,7 @@ class ContextMenu {
             }
             const itemId = "xeokit-context-menu-" + this._id + "-" + ctx.id++;
             const actionTitle = item.title;
-            html.push('<li id="' + itemId + '" style="' + ((ctx.groupIdx === ctx.groupLen - 1) || ((i < len - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') + '">' + actionTitle + '</li>');
+            html.push('<li id="' + itemId + '" class="xeokit-context-menu-item" style="' + ((ctx.groupIdx === ctx.groupLen - 1) || ((i < len - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') + '">' + actionTitle + '</li>');
             item._itemId = itemId;
         }
     }
