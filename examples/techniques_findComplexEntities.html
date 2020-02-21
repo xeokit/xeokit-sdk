@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>A Function to Find Complex Entities</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
+
+    </style>
+
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>A Function to Find Complex Entities</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads xeokit XKT model from the file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+        </li>
+    </ul>
+</div>
+<div id="my-gui-container"></div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak highlight color to red, enable SAO
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    viewer.scene.highlightMaterial.fillAlpha = 0.5;
+    viewer.scene.highlightMaterial.fillColor = [1, 0, 0];
+    viewer.scene.highlightMaterial.edgeColor = [1, 0.5, 0.5];
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
+    sao.intensity = 0.5;
+    sao.bias = 0.5;
+    sao.scale = 1500.0;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create an XKT loader plugin and load a model
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // Function that finds complex entities, with a callback to highlight those entities
+    //-----------------------------------------------------------------------------------------------------------------
+
+    function visitEntity(entity, isComplex) {
+        if (isComplex) {
+            entity.highlighted = true;
+        } else {
+            entity.highlighted = false;
+        }
+    }
+
+    /**
+     *
+     * @param viewer
+     * @param params
+     * @param visitEntity
+     */
+    function findComplexEntities(viewer, params, visitEntity) {
+
+        const scene = viewer.scene;
+        const objectIds = scene.objectIds;
+        const entities = scene.objects;
+        const numEntities = objectIds.length;
+
+        const filterComplexity = (params.filterComplexity !== false);
+        const filterSize = (params.filterSize !== false);
+
+        const complexityThreshold = params.complexityThreshold || 0;
+        const sizeThreshold = params.sizeThreshold || 0;
+
+        let maxTriangles = 0;
+        let maxAABBDiag = 0;
+
+        for (var i = 0; i < numEntities; i++) {
+            const objectId = objectIds[i];
+            const entity = entities[objectId];
+            if (entity) {
+                const entityTriangles = (entity.numTriangles || 0);
+                if (entityTriangles > maxTriangles) {
+                    maxTriangles = entityTriangles;
+                }
+
+                const entityAABBDiag = math.getAABB3Diag(entity.aabb);
+                if (entityAABBDiag > maxAABBDiag) {
+                    maxAABBDiag = entityAABBDiag;
+                }
+            }
+        }
+
+        for (var i = 0; i < numEntities; i++) {
+            const objectId = objectIds[i];
+            const entity = entities[objectId];
+            if (entity) {
+                const numTriangles = (entity.numTriangles || 0);
+                const objectAABB = entity.aabb;
+                const objectAABBDiag = math.getAABB3Diag(objectAABB);
+                const objectComplexity = ((numTriangles / maxTriangles) * 100.0);
+                const objectSize = ((objectAABBDiag / maxAABBDiag) * 100.0);
+                const isComplex = ((filterComplexity && (objectComplexity >= complexityThreshold)) || (filterSize && (objectSize >= sizeThreshold)));
+
+                visitEntity(entity, isComplex);
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // When the model has loaded, create a GUI to interactively control our complex-entity-finding function
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", () => {
+
+        const params = new function () {
+            this.filterComplexity = true;
+            this.complexityThreshold = 10;
+            this.filterSize = false;
+            this.sizeThreshold = 49;
+        }();
+
+        const prevParams = {};
+
+        var update = function () {
+
+            if ((prevParams.filterComplexity !== params.filterComplexity) ||
+                (prevParams.complexityThreshold !== params.complexityThreshold) ||
+                (prevParams.filterSize !== params.filterSize) ||
+                (prevParams.sizeThreshold !== params.sizeThreshold)) {
+
+                findComplexEntities(viewer, params, visitEntity);
+
+                Object.assign(prevParams, params);
+            }
+
+            requestAnimationFrame(update);
+        };
+
+        update();
+
+        const gui = new dat.GUI({autoPlace: false, width: 300 });
+        const complexityFolder = gui.addFolder('Complexity Factor');
+        complexityFolder.add(params, 'filterComplexity', true);
+        complexityFolder.add(params, 'complexityThreshold', 0, 100);
+        complexityFolder.open();
+        const sizeFolder = gui.addFolder('Size Factor');
+        sizeFolder.add(params, 'filterSize', true);
+        sizeFolder.add(params, 'sizeThreshold', 0, 100);
+        sizeFolder.open();
+        var customContainer = document.getElementById('my-gui-container');
+        customContainer.appendChild(gui.domElement);
+    });
+</script>
+</html>
+
