@@ -126,6 +126,8 @@ class ReadableGeometry extends Geometry {
             hash: ""
         });
 
+        this._numTriangles = 0;
+
         this._edgeThreshold = cfg.edgeThreshold || 10.0;
 
         // Lazy-generated VBOs
@@ -224,6 +226,9 @@ class ReadableGeometry extends Geometry {
                 return;
             }
             state.indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new IndexArrayType(cfg.indices);
+            if (this._state.primitiveName === "triangles") {
+                this._numTriangles = (cfg.indices.length / 3);
+            }
         }
 
         this._buildHash();
@@ -617,6 +622,17 @@ class ReadableGeometry extends Geometry {
             this._obbDirty = false;
         }
         return this._obb;
+    }
+
+    /**
+     * Approximate number of triangles in this ReadableGeometry.
+     *
+     * Will be zero if {@link ReadableGeometry#primitive} is not 'triangles', 'triangle-strip' or 'triangle-fan'.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     _setAABBDirty() {

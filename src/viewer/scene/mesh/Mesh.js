@@ -252,6 +252,8 @@ class Mesh extends Component {
         this._aabb = null;
         this._aabbDirty = true;
 
+        this._numTriangles = (this._geometry ? this._geometry.numTriangles : 0);
+
         this.scene._aabbDirty = true;
 
         this._scale = math.vec3();
@@ -915,6 +917,15 @@ class Mesh extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * The approximate number of triangles in this Mesh.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /**

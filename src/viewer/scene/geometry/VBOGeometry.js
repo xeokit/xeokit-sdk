@@ -99,6 +99,8 @@ class VBOGeometry extends Geometry {
             hash: ""
         });
 
+        this._numTriangles = 0;
+
         this._edgeThreshold = cfg.edgeThreshold || 10.0;
         this._aabb = null;
         this._obb = math.OBB3();
@@ -212,6 +214,10 @@ class VBOGeometry extends Geometry {
             memoryStats.indices += state.indicesBuf.numItems;
             const edgeIndices = buildEdgeIndices(positions, indices, state.positionsDecodeMatrix, this._edgeThreshold);
             this._edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, edgeIndices.length, 1, gl.STATIC_DRAW);
+
+            if (this._state.primitiveName === "triangles") {
+                this._numTriangles = (cfg.indices.length / 3);
+            }
         }
 
         this._buildHash();
@@ -275,6 +281,17 @@ class VBOGeometry extends Geometry {
      */
     get obb() {
         return this._obb;
+    }
+
+    /**
+     * Approximate number of triangles in this VBOGeometry.
+     *
+     * Will be zero if {@link VBOGeometry#primitive} is not 'triangles', 'triangle-strip' or 'triangle-fan'.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /** @private */

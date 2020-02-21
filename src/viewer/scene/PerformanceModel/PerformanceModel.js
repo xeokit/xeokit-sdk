@@ -126,7 +126,7 @@ class PerformanceModel extends Component {
         this.numEntities = 0;
 
         /** @private */
-        this.numTriangles = 0;
+        this._numTriangles = 0;
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -386,14 +386,14 @@ class PerformanceModel extends Component {
         tile.layers.push(instancingLayer);
         tile.instancingLayers[geometryId] = instancingLayer;
         this.numGeometries++;
-        this.numTriangles += cfg.indices ? cfg.indices.length / 3 : 0;
+        this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
     }
 
     /**
      * Creates a mesh within this PerformanceModel.
      *
      * A mesh has a geometry, given either as the ID of a shared geometry created with {@link PerformanceModel#createGeometry}, or as
-     * geometr data arrays to create a unique geometry belong to the mesh.
+     * geometry data arrays to create a unique geometry belong to the mesh.
      *
      * When you provide a geometry ID, then the PerformanceModelMesh will instance the shared geometry for the mesh.
      *
@@ -495,7 +495,10 @@ class PerformanceModel extends Component {
             layer = instancingLayer;
             portionId = instancingLayer.createPortion(flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
-            this.numTriangles += instancingLayer.numIndices.length / 3;
+
+            const numTriangles = Math.round(instancingLayer.numIndices / 3);
+            this._numTriangles += numTriangles;
+            mesh.numTriangles = numTriangles;
 
         } else {
 
@@ -570,7 +573,10 @@ class PerformanceModel extends Component {
             math.expandAABB3(this._aabb, aabb);
 
             this.numGeometries++;
-            this.numTriangles += indices.length / 3;
+
+            const numTriangles = Math.round(indices.length / 3);
+            this._numTriangles += numTriangles;
+            mesh.numTriangles = numTriangles;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
@@ -793,6 +799,15 @@ class PerformanceModel extends Component {
      */
     get aabb() {
         return this._aabb;
+    }
+
+    /**
+     * The approximate number of triangles in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /**

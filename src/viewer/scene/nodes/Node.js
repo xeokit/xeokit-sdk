@@ -188,6 +188,8 @@ class Node extends Component {
 
         this.scene._aabbDirty = true;
 
+        this._numTriangles = 0;
+
         this._scale = math.vec3();
         this._quaternion = math.identityQuaternion();
         this._rotation = math.vec3();
@@ -310,6 +312,15 @@ class Node extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * The number of triangles in this Node.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /**
@@ -845,6 +856,7 @@ class Node extends Component {
         }
         child._setWorldMatrixDirty();
         child._setAABBDirty();
+        this._numTriangles += child.numTriangles;
         return child;
     }
 
@@ -861,6 +873,7 @@ class Node extends Component {
                 child._setWorldMatrixDirty();
                 child._setAABBDirty();
                 this._setAABBDirty();
+                this._numTriangles -= child.numTriangles;
                 return;
             }
         }
@@ -876,6 +889,7 @@ class Node extends Component {
             child._parentNode = null;
             child._setWorldMatrixDirty();
             child._setAABBDirty();
+            this._numTriangles -= child.numTriangles;
         }
         this._children = [];
         this._setAABBDirty();

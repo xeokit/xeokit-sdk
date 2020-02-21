@@ -40,9 +40,12 @@ class PerformanceNode {
          */
         this.meshes = meshes;
 
+        this._numTriangles = 0;
+
         for (var i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
             mesh.parent = this;
+            this._numTriangles += mesh.numTriangles;
         }
 
         /**
@@ -104,6 +107,15 @@ class PerformanceNode {
      */
     get aabb() {
         return this._aabb;
+    }
+
+    /**
+     * The approximate number of triangles in this PerformanceNode.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /**

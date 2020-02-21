@@ -75,6 +75,8 @@ class PerformanceMesh {
         this._color = [color[0], color[1], color[2], opacity]; // [0..255]
         this._colorize = [color[0], color[1], color[2], opacity]; // [0..255]
         this._colorizing = false;
+
+        this.numTriangles = 0;
     }
 
     /**
