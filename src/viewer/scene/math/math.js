@@ -3216,6 +3216,18 @@ const math = {
     }))(),
 
     /**
+     * Gets the area of an AABB.
+     *
+     * @private
+     */
+    getAABB3Area(aabb) {
+        const width = (aabb[3] - aabb[0]);
+        const height = (aabb[4] - aabb[1]);
+        const depth = (aabb[5] - aabb[2]);
+        return (width * height * depth);
+    },
+
+    /**
      * Gets the center of an AABB.
      *
      * @private
