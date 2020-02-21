@@ -57,7 +57,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * sao.enabled = true; // Enable SAO - only works if supported (see above)
  * sao.intensity = 0.25;
  * sao.bias = 0.5;
- * sao.scale = 1000.0;
+ * sao.scale = 500.0;
  * sao.minResolution = 0.0;
  * sao.kernelRadius = 100;
  * sao.blendCutoff = 0.2;
@@ -358,13 +358,13 @@ class SAO extends Component {
     /**
      * Sets the SAO occlusion scale.
      *
-     * Default value is ````1000.0````.
+     * Default value is ````500.0````.
      *
      * @type {Number}
      */
     set scale(value) {
         if (value === undefined || value === null) {
-            value = 1000.0;
+            value = 500.0;
         }
         if (this._scale === value) {
             return;
@@ -376,7 +376,7 @@ class SAO extends Component {
     /**
      * Gets the SAO occlusion scale.
      *
-     * Default value is ````1000.0````.
+     * Default value is ````500.0````.
      *
      * @type {Number}
      */
