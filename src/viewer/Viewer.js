@@ -227,19 +227,19 @@ class Viewer {
     }
 
     /**
-     * Clears content from this Viewer and all installed {@link Plugin}s.
+     * @private
+     * @deprecated
      */
     clear() {
-        this.sendToPlugins("clear");
+        throw "Viewer#clear() no longer implemented - use '#sendToPlugins(\"clear\") instead";
     }
 
     /**
-     * Resets viewing state.
-     *
-     * Sends a "resetView" message to each installed {@link Plugin}.
+     * @private
+     * @deprecated
      */
     resetView() {
-        this.sendToPlugins("resetView");
+        throw "Viewer#resetView() no longer implemented - use CameraMemento & ObjectsMemento classes instead";
     }
 
     /**
