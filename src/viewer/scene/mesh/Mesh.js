@@ -1474,14 +1474,10 @@ class Mesh extends Component {
             }
             if (state.edges) {
                 const edgeMaterial = this._edgeMaterial._state;
-                if (this.numEdgesLayerPortions > 0) {
-                    if (edgeMaterial.edges) {
-                        if (edgeMaterial.alpha < 1.0) {
-                            renderFlags.normalEdgesTransparent = true;
-                        } else {
-                            renderFlags.normalEdgesOpaque = true;
-                        }
-                    }
+                if (edgeMaterial.alpha < 1.0) {
+                    renderFlags.normalEdgesTransparent = true;
+                } else {
+                    renderFlags.normalEdgesOpaque = true;
                 }
             }
             if (state.selected) {
