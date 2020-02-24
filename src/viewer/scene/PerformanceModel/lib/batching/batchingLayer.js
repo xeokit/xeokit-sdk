@@ -616,8 +616,14 @@ class BatchingLayer {
         if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._drawRenderer) {
-            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
+        if (frameCtx.withSAO) {
+            if (this._drawRendererWithSAO) {
+                this._drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
+            }
+        } else {
+            if (this._drawRenderer) {
+                this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
+            }
         }
     }
 
@@ -836,6 +842,10 @@ class BatchingLayer {
             this._drawRenderer.put();
             this._drawRenderer = null;
         }
+        if (this._drawRendererWithSAO && this._drawRendererWithSAO.getValid() === false) {
+            this._drawRendererWithSAO.put();
+            this._drawRendererWithSAO = null;
+        }
         if (this._depthRenderer && this._depthRenderer.getValid() === false) {
             this._depthRenderer.put();
             this._depthRenderer = null;
@@ -871,6 +881,10 @@ class BatchingLayer {
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
+        if (!this._drawRendererWithSAO) {
+            const withSAO = true;
+            this._drawRendererWithSAO = BatchingDrawRenderer.get(this, withSAO);
+        }
 
         // Lazy-get normals and depth renderers when needed
 
@@ -898,6 +912,10 @@ class BatchingLayer {
         if (this._drawRenderer) {
             this._drawRenderer.put();
             this._drawRenderer = null;
+        }
+        if (this._drawRendererWithSAO) {
+            this._drawRendererWithSAO.put();
+            this._drawRendererWithSAO = null;
         }
         if (this._depthRenderer) {
             this._depthRenderer.put();

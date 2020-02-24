@@ -326,7 +326,7 @@ const Renderer = function (scene, options) {
                 saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
                 occlusionBuffer1.unbind();
             }
-            }
+        }
 
         drawColor(params);
     };
@@ -389,6 +389,7 @@ const Renderer = function (scene, options) {
 
     const drawColor = (function () { // Draws the drawables in drawableListSorted
 
+        const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
         const normalFillTransparentBin = [];
         const normalEdgesTransparentBin = [];
@@ -420,6 +421,7 @@ const Renderer = function (scene, options) {
 
             frameCtx.reset();
             frameCtx.pass = params.pass;
+            frameCtx.withSAO = false;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -437,7 +439,8 @@ const Renderer = function (scene, options) {
             gl.lineWidth(1);
             frameCtx.lineWidth = 1;
 
-            frameCtx.occlusionTexture = scene.sao.possible ? occlusionBuffer1.getTexture() : null;
+            const saoPossible = scene.sao.possible;
+            frameCtx.occlusionTexture = saoPossible ? occlusionBuffer1.getTexture() : null;
 
             let i;
             let len;
@@ -453,6 +456,7 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
             }
 
+            let normalDrawSAOBinLen = 0;
             let normalEdgesOpaqueBinLen = 0;
             let normalFillTransparentBinLen = 0;
             let normalEdgesTransparentBinLen = 0;
@@ -493,7 +497,11 @@ const Renderer = function (scene, options) {
                         drawable.getRenderFlags(renderFlags);
 
                         if (renderFlags.normalFillOpaque) {
-                            drawable.drawNormalFillOpaque(frameCtx);
+                            if (saoPossible && drawable.saoEnabled) {
+                                normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                            } else {
+                                drawable.drawNormalFillOpaque(frameCtx);
+                            }
                         }
 
                         if (renderFlags.normalEdgesOpaque) {
@@ -562,6 +570,13 @@ const Renderer = function (scene, options) {
             //------------------------------------------------------------------------------------------------------
             // Render deferred bins
             //------------------------------------------------------------------------------------------------------
+
+            if (normalDrawSAOBinLen > 0) {
+                frameCtx.withSAO = true;
+                for (i = 0; i < normalDrawSAOBinLen; i++) {
+                    normalDrawSAOBin[i].drawNormalFillOpaque(frameCtx);
+                }
+            }
 
             if (normalEdgesOpaqueBinLen > 0) {
                 for (i = 0; i < normalEdgesOpaqueBinLen; i++) {

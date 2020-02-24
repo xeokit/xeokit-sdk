@@ -11,23 +11,24 @@ const tempVec4 = math.vec4();
  * @private
  * @constructor
  */
-const BatchingDrawRenderer = function (hash, layer) {
+const BatchingDrawRenderer = function (hash, layer, withSAO) {
     this.id = ids.addItem({});
     this._hash = hash;
+    this._withSAO = withSAO;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new BatchingDrawShaderSource(layer);
+    this._shaderSource = new BatchingDrawShaderSource(layer, withSAO);
     this._allocate(layer);
 };
 
 const renderers = {};
 
-BatchingDrawRenderer.get = function (layer) {
+BatchingDrawRenderer.get = function (layer, withSAO = false) {
     const scene = layer.model.scene;
-    const hash = getHash(scene);
+    const hash = getHash(scene, withSAO);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new BatchingDrawRenderer(hash, layer);
+        renderer = new BatchingDrawRenderer(hash, layer, withSAO);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -39,8 +40,8 @@ BatchingDrawRenderer.get = function (layer) {
     return renderer;
 };
 
-function getHash(scene) {
-    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._sectionPlanesState.getHash()].join(";")
+function getHash(scene, withSAO) {
+    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (withSAO ? "sao" : "nosao")].join(";");
 }
 
 BatchingDrawRenderer.prototype.getValid = function () {
@@ -97,11 +98,6 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
         frameCtx.bindArray++;
     }
-
-    const sao = scene.sao;
-    const saoEnabled = (sao.possible && model.saoEnabled);
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
-
     state.indicesBuf.bind();
     frameCtx.bindArray++;
     gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -171,9 +167,11 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
-    this._uSAOEnabled = program.getLocation("uSAOEnabled");
-    this._uOcclusionTexture = "uOcclusionTexture";
-    this._uSAOParams = program.getLocation("uSAOParams");
+    if (this._withSAO) {
+        this._uSAOEnabled = program.getLocation("uSAOEnabled");
+        this._uOcclusionTexture = "uOcclusionTexture";
+        this._uSAOParams = program.getLocation("uSAOParams");
+    }
 };
 
 BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -231,17 +229,19 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
             }
         }
     }
-    const sao = scene.sao;
-    const saoEnabled = sao.possible;
-    if (saoEnabled) {
-        const viewportWidth = gl.drawingBufferWidth;
-        const viewportHeight = gl.drawingBufferHeight;
-        tempVec4[0] = viewportWidth;
-        tempVec4[1] = viewportHeight;
-        tempVec4[2] = sao.blendCutoff;
-        tempVec4[3] = sao.blendFactor;
-        this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-        gl.uniform4fv(this._uSAOParams, tempVec4);
+    if (this._withSAO) {
+        const sao = scene.sao;
+        const saoEnabled = sao.possible;
+        if (saoEnabled) {
+            const viewportWidth = gl.drawingBufferWidth;
+            const viewportHeight = gl.drawingBufferHeight;
+            tempVec4[0] = viewportWidth;
+            tempVec4[1] = viewportHeight;
+            tempVec4[2] = sao.blendCutoff;
+            tempVec4[3] = sao.blendFactor;
+            gl.uniform4fv(this._uSAOParams, tempVec4);
+            this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+        }
     }
 };
 

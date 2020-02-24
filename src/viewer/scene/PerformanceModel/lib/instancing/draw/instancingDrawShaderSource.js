@@ -7,9 +7,9 @@ import {RENDER_PASSES} from '../../renderPasses.js';
 /**
  * @private
  */
-const InstancingDrawShaderSource = function (layer) {
+const InstancingDrawShaderSource = function (layer, withSAO) {
     this.vertex = buildVertex(layer);
-    this.fragment = buildFragment(layer);
+    this.fragment = buildFragment(layer, withSAO);
 };
 
 function buildVertex(layer) {
@@ -159,7 +159,7 @@ function buildVertex(layer) {
     return src;
 }
 
-function buildFragment(layer) {
+function buildFragment(layer, withSAO) {
     const scene = layer.model.scene;
     const sectionPlanesState = scene._sectionPlanesState;
     let i;
@@ -170,19 +170,19 @@ function buildFragment(layer) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
 
-    src.push("uniform bool      uSAOEnabled;");
-    src.push("uniform sampler2D uOcclusionTexture;");
-    src.push("uniform vec4      uSAOParams;");
+    if (withSAO) {
+        src.push("uniform sampler2D uOcclusionTexture;");
+        src.push("uniform vec4      uSAOParams;");
 
-    src.push("const float       packUpscale = 256. / 255.;");
-    src.push("const float       unpackDownScale = 255. / 256.;");
+        src.push("const float       packUpscale = 256. / 255.;");
+        src.push("const float       unpackDownScale = 255. / 256.;");
+        src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+        src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
 
-    src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-    src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-
-    src.push("float unpackRGBAToDepth( const in vec4 v ) {");
-    src.push("    return dot( v, unPackFactors );");
-    src.push("}");
+        src.push("float unpackRGBAToDepth( const in vec4 v ) {");
+        src.push("    return dot( v, unPackFactors );");
+        src.push("}");
+    }
 
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -211,17 +211,17 @@ function buildFragment(layer) {
     // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
     // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
 
-    src.push("  if (uSAOEnabled) {");
-    src.push("      float viewportWidth     = uSAOParams[0];");
-    src.push("      float viewportHeight    = uSAOParams[1];");
-    src.push("      float blendCutoff       = uSAOParams[2];");
-    src.push("      float blendFactor       = uSAOParams[3];");
-    src.push("      vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-    src.push("      float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-    src.push("      gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);");
-    src.push("  } else {");
-    src.push("      gl_FragColor = vColor;");
-    src.push("  }");
+    if (withSAO) {
+        src.push("   float viewportWidth     = uSAOParams[0];");
+        src.push("   float viewportHeight    = uSAOParams[1];");
+        src.push("   float blendCutoff       = uSAOParams[2];");
+        src.push("   float blendFactor       = uSAOParams[3];");
+        src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
+        src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
+        src.push("   gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);");
+    } else {
+        src.push("    gl_FragColor           = vColor;");
+    }
     src.push("}");
     return src;
 }

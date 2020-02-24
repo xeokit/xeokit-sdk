@@ -10,10 +10,11 @@ const tempVec4 = math.vec4();
 /**
  * @private
  */
-const InstancingDrawRenderer = function (hash, layer) {
+const InstancingDrawRenderer = function (hash, layer, withSAO) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
+    this._withSAO = withSAO;
     this._useCount = 0;
     this._shaderSource = new InstancingDrawShaderSource(layer);
     this._allocate(layer);
@@ -21,9 +22,9 @@ const InstancingDrawRenderer = function (hash, layer) {
 
 const renderers = {};
 
-InstancingDrawRenderer.get = function (layer) {
+InstancingDrawRenderer.get = function (layer, withSAO = false) {
     const scene = layer.model.scene;
-    const hash = getHash(scene);
+    const hash = getHash(scene, withSAO);
     let renderer = renderers[hash];
     if (!renderer) {
         renderer = new InstancingDrawRenderer(hash, layer);
@@ -38,8 +39,8 @@ InstancingDrawRenderer.get = function (layer) {
     return renderer;
 };
 
-function getHash(scene) {
-    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._sectionPlanesState.getHash()].join(";")
+function getHash(scene, withSAO) {
+    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (withSAO ? "sao" : "nosao")].join(";");
 }
 
 InstancingDrawRenderer.prototype.getValid = function () {
@@ -141,11 +142,6 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     if (this._aFlags2) { // Won't be in shader when not clipping
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
     }
-
-    const sao = scene.sao;
-    const saoEnabled = (sao.possible && model.saoEnabled);
-    gl.uniform1i(this._uSAOEnabled, saoEnabled);
-
     frameCtx.drawElements++;
 };
 
@@ -292,17 +288,19 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
             }
         }
     }
-    const sao = scene.sao;
-    const saoEnabled = sao.possible;
-    if (saoEnabled) {
-        const viewportWidth = gl.drawingBufferWidth;
-        const viewportHeight = gl.drawingBufferHeight;
-        tempVec4[0] = viewportWidth;
-        tempVec4[1] = viewportHeight;
-        tempVec4[2] = sao.blendCutoff;
-        tempVec4[3] = sao.blendFactor;
-        this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-        gl.uniform4fv(this._uSAOParams, tempVec4);
+    if (this._withSAO) {
+        const sao = scene.sao;
+        const saoEnabled = sao.possible;
+        if (saoEnabled) {
+            const viewportWidth = gl.drawingBufferWidth;
+            const viewportHeight = gl.drawingBufferHeight;
+            tempVec4[0] = viewportWidth;
+            tempVec4[1] = viewportHeight;
+            tempVec4[2] = sao.blendCutoff;
+            tempVec4[3] = sao.blendFactor;
+            gl.uniform4fv(this._uSAOParams, tempVec4);
+            this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+        }
     }
 };
 

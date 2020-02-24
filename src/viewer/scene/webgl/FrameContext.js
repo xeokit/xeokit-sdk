@@ -22,6 +22,14 @@ class FrameContext {
         this.lastProgramId = null;
 
         /**
+         * Whether SAO is currently enabled during the current frame.
+         * @property withSAO
+         * @default false
+         * @type {Boolean}
+         */
+        this.withSAO = false;
+
+        /**
          * Whether backfaces are currently enabled during the current frame.
          * @property backfaces
          * @default false
