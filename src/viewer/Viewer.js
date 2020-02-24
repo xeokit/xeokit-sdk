@@ -299,8 +299,9 @@ class Viewer {
     /** Destroys this Viewer.
      */
     destroy() {
-        for (let i = 0, len = this._plugins.length; i < len; i++) {
-            const plugin = this._plugins[i];
+        const plugins = this._plugins.slice(); // Array will modify as we delete plugins
+        for (let i = 0, len = plugins.length; i < len; i++) {
+            const plugin = plugins[i];
             plugin.destroy();
         }
         this.scene.destroy();
