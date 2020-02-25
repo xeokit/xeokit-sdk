@@ -119,42 +119,42 @@
         }
     }
 
-    function getMaxDiagSize(viewer) {
+    function getMaxSize(viewer) {
         const scene = viewer.scene;
         const objectIds = scene.objectIds;
         const entities = scene.objects;
         const numEntities = objectIds.length;
-        let maxDiagSize = 0;
-        for (var i = 0; i < numEntities; i++) {
+        let maxSize = 0;
+        for (let i = 0; i < numEntities; i++) {
             const objectId = objectIds[i];
             const entity = entities[objectId];
             if (entity) {
                 const entityDiagSize = math.getAABB3Diag(entity.aabb);
-                if (entityDiagSize > maxDiagSize) {
-                    maxDiagSize = entityDiagSize;
+                if (entityDiagSize > maxSize) {
+                    maxSize = entityDiagSize;
                 }
             }
         }
-        return maxDiagSize;
+        return maxSize;
     }
 
-    function getMaxTriangles(viewer) {
+    function getMinComplexity(viewer) {
         const scene = viewer.scene;
         const objectIds = scene.objectIds;
         const entities = scene.objects;
         const numEntities = objectIds.length;
-        let maxTriangles = 0;
+        let minComplexity = 0;
         for (let i = 0; i < numEntities; i++) {
             const objectId = objectIds[i];
             const entity = entities[objectId];
             if (entity) {
                 const entityTriangles = (entity.numTriangles || 0);
-                if (entityTriangles > maxTriangles) {
-                    maxTriangles = entityTriangles;
+                if (entityTriangles > minComplexity) {
+                    minComplexity = entityTriangles;
                 }
             }
         }
-        return maxTriangles;
+        return minComplexity;
     }
     
     /**
@@ -168,19 +168,19 @@
         const scene = viewer.scene;
         const objectIds = scene.objectIds;
         const entities = scene.objects;
-        const testMinTriangles = (params.testMinTriangles !== false);
-        const testDiagSize = (params.testDiagSize !== false);
+        const testComplexity = (params.testComplexity !== false);
+        const testSize = (params.testSize !== false);
 
-        const minTriangles = params.minTriangles;
-        const maxDiagSize = params.maxDiagSize;
+        const minComplexity = params.minComplexity;
+        const maxSize = params.maxSize;
 
         for (var i = 0, len = objectIds.length; i < len; i++) {
             const objectId = objectIds[i];
             const entity = entities[objectId];
             if (entity) {
-                const numTriangles = entity.numTriangles;
-                const diagSize = math.getAABB3Diag(entity.aabb);
-                const isComplex = ((testMinTriangles && (numTriangles >= minTriangles)) || (testDiagSize && (diagSize <= maxDiagSize)));
+                const entityComplexity = entity.numTriangles;
+                const entitySize = math.getAABB3Diag(entity.aabb);
+                const isComplex = (((!testComplexity) || (minComplexity <= entityComplexity)) && ((!testSize) || (entitySize <= maxSize)));
                 visitEntity(entity, isComplex);
             }
         }
@@ -193,19 +193,19 @@
     model.on("loaded", () => {
 
         const params = new function () {
-            this.testMinTriangles = true;
-            this.minTriangles = 10;
-            this.testDiagSize = false;
-            this.maxDiagSize = 49;
+            this.testComplexity = true;
+            this.minComplexity = 409;
+            this.testSize = true;
+            this.maxSize = 14;
         }();
 
         const prevParams = {};
 
         function update() {
-            if ((prevParams.testMinTriangles !== params.testMinTriangles) ||
-                (prevParams.minTriangles !== params.minTriangles) ||
-                (prevParams.testDiagSize !== params.testDiagSize) ||
-                (prevParams.maxDiagSize !== params.maxDiagSize)) {
+            if ((prevParams.testComplexity !== params.testComplexity) ||
+                (prevParams.minComplexity !== params.minComplexity) ||
+                (prevParams.testSize !== params.testSize) ||
+                (prevParams.maxSize !== params.maxSize)) {
 
                 findComplexEntities(viewer, params, visitEntity);
 
@@ -216,18 +216,18 @@
         }
 
         update();
-
-        const maxDiagSize = getMaxDiagSize(viewer);
-        const maxTriangles = getMaxTriangles(viewer);
-
+        
+        const minComplexity = getMinComplexity(viewer);
+        const maxSize = getMaxSize(viewer);
+        
         const gui = new dat.GUI({autoPlace: false, width: 300 });
-        const complexityFolder = gui.addFolder('Min Triangles');
-        complexityFolder.add(params, 'testMinTriangles', true);
-        complexityFolder.add(params, 'minTriangles', 0, maxTriangles);
+        const complexityFolder = gui.addFolder('Complexity Filter');
+        complexityFolder.add(params, 'testComplexity', true);
+        complexityFolder.add(params, 'minComplexity', 0, minComplexity);
         complexityFolder.open();
-        const sizeFolder = gui.addFolder('Max Diagonal Size');
-        sizeFolder.add(params, 'testDiagSize', true);
-        sizeFolder.add(params, 'maxDiagSize', 0, maxDiagSize);
+        const sizeFolder = gui.addFolder('Size Filter');
+        sizeFolder.add(params, 'testSize', true);
+        sizeFolder.add(params, 'maxSize', 0, maxSize);
         sizeFolder.open();
         var customContainer = document.getElementById('my-gui-container');
         customContainer.appendChild(gui.domElement);
