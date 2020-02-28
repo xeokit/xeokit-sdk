@@ -31,7 +31,7 @@
     "3d-viewer"
   ],
   "author": "Lindsay Kay",
-  "license": "https://xeokit.github.io/xeokit-licensing/",
+  "license": "See LICENSE.txt",
   "bugs": {
     "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
