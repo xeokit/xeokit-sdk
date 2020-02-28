@@ -14,18 +14,18 @@ The SDK is provided under an [Affero GPL V3](https://github.com/xeokit/xeokit-sd
 
 To install from npm:
 
-````
+````bash
 npm i @xeokit/xeokit-sdk
 ````
 
 ## Links 
 
-* [Website](https://xeokit.io/)
-* [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
-* [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
-* [User Guides](https://github.com/xeokit/xeokit-sdk/wiki)
-* [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
-* [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
-* [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
-* [Contact](http://xeolabs.com/contact/)
+ * [Website](https://xeokit.io/)
+ * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
+ * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
+ * [User Guides](https://github.com/xeokit/xeokit-sdk/wiki)
+ * [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
+ * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
+ * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
+ * [Contact](http://xeolabs.com/contact/)
 
