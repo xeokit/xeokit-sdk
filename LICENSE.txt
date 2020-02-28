@@ -1,8 +1,9 @@
 -------------------------------------------------------------------------
-xeokit is licensed under the Affero GPL V3 license with the option to buy
-a license for commercial use. For more information:
+The xeokit SDK is licensed under the Affero GPL V3 license with the option to buy
+a license for commercial use. For more information on pricing and what is included
+in the xeokit SDK, see:
 
-https://xeokit.github.io/xeokit-licensing/
+https://xeokit.io/index.html#pricing
 
 xeokit also contains the following components with MIT and GNU Lesser
 General Public License v3.0:
