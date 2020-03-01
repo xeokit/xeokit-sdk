@@ -168,8 +168,8 @@
         const scene = viewer.scene;
         const objectIds = scene.objectIds;
         const entities = scene.objects;
-        const testComplexity = (params.testComplexity !== false);
-        const testSize = (params.testSize !== false);
+        const enableComplexityTest = (params.enableComplexityTest !== false);
+        const enableSizeTest = (params.enableSizeTest !== false);
 
         const minComplexity = params.minComplexity;
         const maxSize = params.maxSize;
@@ -180,7 +180,7 @@
             if (entity) {
                 const entityComplexity = entity.numTriangles;
                 const entitySize = math.getAABB3Diag(entity.aabb);
-                const isComplex = (((!testComplexity) || (minComplexity <= entityComplexity)) && ((!testSize) || (entitySize <= maxSize)));
+                const isComplex = (((!enableComplexityTest) || (minComplexity <= entityComplexity)) && ((!enableSizeTest) || (entitySize <= maxSize)));
                 visitEntity(entity, isComplex);
             }
         }
@@ -193,18 +193,18 @@
     model.on("loaded", () => {
 
         const params = new function () {
-            this.testComplexity = true;
+            this.enableComplexityTest = true;
             this.minComplexity = 409;
-            this.testSize = true;
+            this.enableSizeTest = true;
             this.maxSize = 14;
         }();
 
         const prevParams = {};
 
         function update() {
-            if ((prevParams.testComplexity !== params.testComplexity) ||
+            if ((prevParams.enableComplexityTest !== params.enableComplexityTest) ||
                 (prevParams.minComplexity !== params.minComplexity) ||
-                (prevParams.testSize !== params.testSize) ||
+                (prevParams.enableSizeTest !== params.enableSizeTest) ||
                 (prevParams.maxSize !== params.maxSize)) {
 
                 findComplexEntities(viewer, params, visitEntity);
@@ -222,11 +222,11 @@
         
         const gui = new dat.GUI({autoPlace: false, width: 300 });
         const complexityFolder = gui.addFolder('Complexity Filter');
-        complexityFolder.add(params, 'testComplexity', true);
+        complexityFolder.add(params, 'enableComplexityTest', true);
         complexityFolder.add(params, 'minComplexity', 0, minComplexity);
         complexityFolder.open();
         const sizeFolder = gui.addFolder('Size Filter');
-        sizeFolder.add(params, 'testSize', true);
+        sizeFolder.add(params, 'enableSizeTest', true);
         sizeFolder.add(params, 'maxSize', 0, maxSize);
         sizeFolder.open();
         var customContainer = document.getElementById('my-gui-container');
