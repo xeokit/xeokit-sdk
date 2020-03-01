@@ -52,14 +52,14 @@
     // Create a Viewer, arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
-    const viewer = new Viewer({
+    const myViewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
 
-    const cameraControl = viewer.cameraControl;
-    const scene = viewer.scene;
-    const cameraFlight = viewer.cameraFlight;
+    const cameraControl = myViewer.cameraControl;
+    const scene = myViewer.scene;
+    const cameraFlight = myViewer.cameraFlight;
     const sao = scene.sao;
     const camera = scene.camera;
 
@@ -86,7 +86,7 @@
     // Create an XKT loader plugin, load a model
     //------------------------------------------------------------------------------------------------------------------
 
-    const xktLoader = new XKTLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(myViewer);
 
     var t0 = performance.now();
 
@@ -109,15 +109,15 @@
     // Only enable SAO and normal edge emphasis while camera is not moving
     //------------------------------------------------------------------------------------------------------------------
 
-    const timeoutDuration = 150; // Milliseconds
-    var timer = timeoutDuration;
-    var saoAndEdgesDisabled = false;
+    let timeoutDuration = 150; // Milliseconds
+    let timer = timeoutDuration;
+    let saoAndEdgesDisabled = false;
 
-    scene.camera.on("matrix", () => {
+    myViewer.scene.camera.on("matrix", () => {
         timer = timeoutDuration;
         if (!saoAndEdgesDisabled) {
-            scene.sao.enabled = false;
-            scene.edgeMaterial.edges = false;
+            myViewer.scene.sao.enabled = false;
+            myViewer.scene.edgeMaterial.edges = false;
             saoAndEdgesDisabled = true;
         }
     });
@@ -129,8 +129,8 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-                scene.sao.enabled = true;
-                scene.edgeMaterial.edges = true;
+                myViewer.scene.sao.enabled = true;
+                myViewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }
         }
