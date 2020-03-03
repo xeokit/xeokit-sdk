@@ -46,10 +46,9 @@ const decompressColor = (function () {
  * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
  * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
  *
- * ## Creating *````.xkt````* files
+ * ## Creating *````.xkt````* files and metadata
  *
- * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to
- * convert your ````glTF```` IFC files to *````.xkt````* format.
+ * See [Creating Files for Offline BIM](https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM).
  *
  * ## Scene representation
  *
