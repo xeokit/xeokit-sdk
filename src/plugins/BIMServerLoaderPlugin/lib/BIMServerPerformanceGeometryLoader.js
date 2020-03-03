@@ -37,7 +37,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         if (messageType === 0) {
         	if (!readStart(stream)) {
 				return false;
-			}
+        	}
         } else if (messageType === 6) {
             readEnd(stream);
         } else {
@@ -57,10 +57,10 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             if (type == 0) {
             	while (processMessage(stream)) {
 
-                }
-			} else if (type == 1) {
-				// End of stream
-			}
+            	}
+            } else if (type == 1) {
+            	// End of stream
+            }
             data = todo.shift();
         }
     };
@@ -225,8 +225,8 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             performanceModelBuilder.error("Unimplemented protocol version");
             return false;
         } else {
-			currentState.version = protocolVersion;
-		}
+        	currentState.version = protocolVersion;
+        }
         if (protocolVersion > 15) {
             o.multiplierToMm = data.readFloat();
         }
