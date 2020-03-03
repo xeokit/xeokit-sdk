@@ -35,7 +35,9 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     function processMessage(stream) {
         var messageType = stream.readByte();
         if (messageType === 0) {
-            readStart(stream);
+        	if (!readStart(stream)) {
+				return false;
+			}
         } else if (messageType === 6) {
             readEnd(stream);
         } else {
@@ -51,9 +53,14 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         while (data != null) {
             stream = new DataInputStreamReader(data);
             var topicId = stream.readLong();
-            while (processMessage(stream)) {
+            var type = stream.readLong();
+            if (type == 0) {
+            	while (processMessage(stream)) {
 
-            }
+                }
+			} else if (type == 1) {
+				// End of stream
+			}
             data = todo.shift();
         }
     };
@@ -214,10 +221,12 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         }
         protocolVersion = data.readByte();
         performanceModelBuilder.log("BIMServer protocol version = " + protocolVersion);
-        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 && protocolVersion !== 17) {
+        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 && protocolVersion !== 17 && protocolVersion != 18 && protocolVersion != 19 && protocolVersion != 20) {
             performanceModelBuilder.error("Unimplemented protocol version");
             return false;
-        }
+        } else {
+			currentState.version = protocolVersion;
+		}
         if (protocolVersion > 15) {
             o.multiplierToMm = data.readFloat();
         }
@@ -229,6 +238,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             progressListener("start", currentState.nrObjectsRead, currentState.nrObjectsRead);
         });
         updateProgress();
+        return true;
     }
 
     function readEnd(data) {
@@ -540,6 +550,86 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             }
 
             //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
+        } else if (geometryType === 3) {
+			var reused = stream.readInt();
+			var type = stream.readUTF8();
+			stream.align8();
+			var hasTransparency = stream.readLong() == 1;
+			var coreIds = [];
+			var geometryDataOid = stream.readLong();
+			var nrParts = stream.readInt();
+
+			for (var i=0; i<nrParts; i++) {
+				var partId = stream.readLong();
+				var coreId = geometryDataOid + "_" + i;
+				coreIds.push(coreId);
+				var nrIndices = stream.readInt();
+				//o.stats.nrPrimitives += nrIndices / 3;
+				var indices = stream.readShortArray(nrIndices);
+				stream.align4();
+				var b = stream.readIstream;
+				if (b == 1) {
+					color = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
+				}
+				stream.align4();
+				var nrVertices = stream.readInt();
+				//o.stats.nrVertices += nrVertices;
+				var vertices = stream.readFloatArray(nrVertices);
+				var nrNormals = stream.readInt();
+				//o.stats.nrNormals += nrNormals;
+				var normals = stream.readFloatArray(nrNormals);
+				var nrColors = stream.readInt();
+				//o.stats.nrColors += nrColors;
+				var colors = stream.readFloatArray(nrColors);
+				
+				var geometry = {
+					type: "geometry",
+					//primitive: o.type
+				};
+				
+				if (color != null) {
+					// Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+					geometry.colors = new Array(nrVertices * 4);
+					for (var j=0; j<nrVertices; j++) {
+						geometry.colors[j * 4 + 0] = color.r;
+						geometry.colors[j * 4 + 1] = color.g;
+						geometry.colors[j * 4 + 2] = color.b;
+						geometry.colors[j * 4 + 3] = color.a;
+					}
+				}
+				
+				geometry.coreId = coreId;
+				
+				/*if (o.type == "lines") {
+					geometry.indices = o.convertToLines(indices);
+				} else {
+					geometry.indices = indices;
+				}*/
+				geometry.positions = vertices;
+				geometry.normals = normals;
+				
+				if (colors != null && colors.length > 0) {
+					geometry.colors = colors;
+				}
+				//o.library.add("node", geometry);
+			}
+			stream.align8();
+			//o.loadedGeometry[geometryDataOid] = coreIds;
+			/*if (o.dataToInfo[geometryDataOid] != null) {
+				o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
+					var node = o.viewer.scene.findNode(geometryInfoId);
+					if (node != null && node.nodes[0] != null) {
+						coreIds.forEach(function(coreId){
+							node.nodes[0].addNode({
+								type: "geometry",
+								coreId: coreId
+							});
+						});
+					}
+				});
+				delete o.dataToInfo[geometryDataOid];
+			}*/
+
         } else if (geometryType === 7) {
             //  this.processPreparedBuffer(stream, true);
 
