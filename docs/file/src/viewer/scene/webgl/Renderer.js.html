@@ -45,11 +45,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-complexityplugin">plugins/ComplexityPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ComplexityPlugin/ComplexityPlugin.js~ComplexityPlugin.html">ComplexityPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-motioncullplugin">plugins/MotionCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/MotionCullPlugin/MotionCullPlugin.js~MotionCullPlugin.html">MotionCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
@@ -465,7 +467,7 @@ const Renderer = function (scene, options) {
                 saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
                 occlusionBuffer1.unbind();
             }
-            }
+        }
 
         drawColor(params);
     };
@@ -528,6 +530,7 @@ const Renderer = function (scene, options) {
 
     const drawColor = (function () { // Draws the drawables in drawableListSorted
 
+        const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
         const normalFillTransparentBin = [];
         const normalEdgesTransparentBin = [];
@@ -559,6 +562,7 @@ const Renderer = function (scene, options) {
 
             frameCtx.reset();
             frameCtx.pass = params.pass;
+            frameCtx.withSAO = false;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -576,7 +580,8 @@ const Renderer = function (scene, options) {
             gl.lineWidth(1);
             frameCtx.lineWidth = 1;
 
-            frameCtx.occlusionTexture = scene.sao.possible ? occlusionBuffer1.getTexture() : null;
+            const saoPossible = scene.sao.possible;
+            frameCtx.occlusionTexture = saoPossible ? occlusionBuffer1.getTexture() : null;
 
             let i;
             let len;
@@ -592,6 +597,7 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
             }
 
+            let normalDrawSAOBinLen = 0;
             let normalEdgesOpaqueBinLen = 0;
             let normalFillTransparentBinLen = 0;
             let normalEdgesTransparentBinLen = 0;
@@ -632,7 +638,11 @@ const Renderer = function (scene, options) {
                         drawable.getRenderFlags(renderFlags);
 
                         if (renderFlags.normalFillOpaque) {
-                            drawable.drawNormalFillOpaque(frameCtx);
+                            if (saoPossible &amp;&amp; drawable.saoEnabled) {
+                                normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                            } else {
+                                drawable.drawNormalFillOpaque(frameCtx);
+                            }
                         }
 
                         if (renderFlags.normalEdgesOpaque) {
@@ -702,6 +712,13 @@ const Renderer = function (scene, options) {
             // Render deferred bins
             //------------------------------------------------------------------------------------------------------
 
+            if (normalDrawSAOBinLen &gt; 0) {
+                frameCtx.withSAO = true;
+                for (i = 0; i &lt; normalDrawSAOBinLen; i++) {
+                    normalDrawSAOBin[i].drawNormalFillOpaque(frameCtx);
+                }
+            }
+
             if (normalEdgesOpaqueBinLen &gt; 0) {
                 for (i = 0; i &lt; normalEdgesOpaqueBinLen; i++) {
                     normalEdgesOpaqueBin[i].drawNormalEdgesOpaque(frameCtx);
@@ -733,7 +750,7 @@ const Renderer = function (scene, options) {
                 }
 
                 frameCtx.backfaces = false;
-                if (!transparentDepthMask) {
+                if (transparentDepthMask) {
                     gl.depthMask(false);
                 }
                 if (xrayEdgesTransparentBinLen &gt; 0) {
@@ -759,6 +776,7 @@ const Renderer = function (scene, options) {
                     }
                 }
                 gl.disable(gl.BLEND);
+                gl.depthMask(true);
             }
 
             if (highlightedFillOpaqueBinLen &gt; 0 || highlightedEdgesOpaqueBinLen &gt; 0) {

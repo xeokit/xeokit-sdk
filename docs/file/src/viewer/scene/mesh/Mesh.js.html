@@ -45,11 +45,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-complexityplugin">plugins/ComplexityPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ComplexityPlugin/ComplexityPlugin.js~ComplexityPlugin.html">ComplexityPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-motioncullplugin">plugins/MotionCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/MotionCullPlugin/MotionCullPlugin.js~MotionCullPlugin.html">MotionCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
@@ -390,6 +392,8 @@ class Mesh extends Component {
 
         this._aabb = null;
         this._aabbDirty = true;
+
+        this._numTriangles = (this._geometry ? this._geometry.numTriangles : 0);
 
         this.scene._aabbDirty = true;
 
@@ -1057,6 +1061,15 @@ class Mesh extends Component {
     }
 
     /**
+     * The approximate number of triangles in this Mesh.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
+    }
+
+    /**
      * Sets if this Mesh is visible.
      *
      * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
@@ -1602,14 +1615,10 @@ class Mesh extends Component {
             }
             if (state.edges) {
                 const edgeMaterial = this._edgeMaterial._state;
-                if (this.numEdgesLayerPortions &gt; 0) {
-                    if (edgeMaterial.edges) {
-                        if (edgeMaterial.alpha &lt; 1.0) {
-                            renderFlags.normalEdgesTransparent = true;
-                        } else {
-                            renderFlags.normalEdgesOpaque = true;
-                        }
-                    }
+                if (edgeMaterial.alpha &lt; 1.0) {
+                    renderFlags.normalEdgesTransparent = true;
+                } else {
+                    renderFlags.normalEdgesOpaque = true;
                 }
             }
             if (state.selected) {

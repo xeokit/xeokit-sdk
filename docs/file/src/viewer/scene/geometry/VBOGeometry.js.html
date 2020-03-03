@@ -45,11 +45,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-complexityplugin">plugins/ComplexityPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ComplexityPlugin/ComplexityPlugin.js~ComplexityPlugin.html">ComplexityPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-motioncullplugin">plugins/MotionCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/MotionCullPlugin/MotionCullPlugin.js~MotionCullPlugin.html">MotionCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
@@ -238,6 +240,8 @@ class VBOGeometry extends Geometry {
             hash: &quot;&quot;
         });
 
+        this._numTriangles = 0;
+
         this._edgeThreshold = cfg.edgeThreshold || 10.0;
         this._aabb = null;
         this._obb = math.OBB3();
@@ -351,6 +355,10 @@ class VBOGeometry extends Geometry {
             memoryStats.indices += state.indicesBuf.numItems;
             const edgeIndices = buildEdgeIndices(positions, indices, state.positionsDecodeMatrix, this._edgeThreshold);
             this._edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, edgeIndices.length, 1, gl.STATIC_DRAW);
+
+            if (this._state.primitiveName === &quot;triangles&quot;) {
+                this._numTriangles = (cfg.indices.length / 3);
+            }
         }
 
         this._buildHash();
@@ -414,6 +422,17 @@ class VBOGeometry extends Geometry {
      */
     get obb() {
         return this._obb;
+    }
+
+    /**
+     * Approximate number of triangles in this VBOGeometry.
+     *
+     * Will be zero if {@link VBOGeometry#primitive} is not &apos;triangles&apos;, &apos;triangle-strip&apos; or &apos;triangle-fan&apos;.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
     }
 
     /** @private */

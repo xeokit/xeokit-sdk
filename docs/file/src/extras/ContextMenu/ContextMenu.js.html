@@ -45,11 +45,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-complexityplugin">plugins/ComplexityPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ComplexityPlugin/ComplexityPlugin.js~ComplexityPlugin.html">ComplexityPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-motioncullplugin">plugins/MotionCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/MotionCullPlugin/MotionCullPlugin.js~MotionCullPlugin.html">MotionCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
@@ -277,8 +279,11 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
-        document.addEventListener(&quot;click&quot;, (e) =&gt; {
-            this.hide();
+        document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
+            if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
+                this.hide();
+            }
+            event.preventDefault();
         });
         if (cfg.items) {
             this.items = cfg.items;
@@ -360,7 +365,7 @@ class ContextMenu {
             }
             const itemId = &quot;xeokit-context-menu-&quot; + this._id + &quot;-&quot; + ctx.id++;
             const actionTitle = item.title;
-            html.push(&apos;&lt;li id=&quot;&apos; + itemId + &apos;&quot; style=&quot;&apos; + ((ctx.groupIdx === ctx.groupLen - 1) || ((i &lt; len - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
+            html.push(&apos;&lt;li id=&quot;&apos; + itemId + &apos;&quot; class=&quot;xeokit-context-menu-item&quot; style=&quot;&apos; + ((ctx.groupIdx === ctx.groupLen - 1) || ((i &lt; len - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
             item._itemId = itemId;
         }
     }
