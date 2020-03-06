@@ -610,6 +610,10 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].colorize = colorize;
         }
+        if (this._isObject) {
+            const colorized = (!!rgb);
+            this.scene._objectColorizeUpdated(this, colorized);
+        }
     }
 
     /**
@@ -1244,6 +1248,10 @@ class Node extends Component {
             }
             if (this._highlighted) {
                 this.scene._objectHighlightedUpdated(this, false);
+            }
+            if (this._isObject) {
+                const colorized = false;
+                this.scene._objectColorizeUpdated(this, colorized);
             }
         }
         if (this._isModel) {

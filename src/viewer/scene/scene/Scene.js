@@ -446,6 +446,20 @@ class Scene extends Component {
         this.selectedObjects = {};
         this._numSelectedObjects = 0;
 
+        /**
+         * Map of currently colorized {@link Entity}s that represent objects.
+         *
+         * An Entity represents an object if {@link Entity#isObject} is ````true````.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
+         * @property colorizedObjects
+         * @final
+         * @type {{String:Object}}
+         */
+        this.colorizedObjects = {};
+        this._numColorizedObjects = 0;
+
         // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
 
         /**
@@ -457,6 +471,7 @@ class Scene extends Component {
         this._xrayedObjectIds = null;
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
+        this._colorizedObjectIds = null;
 
         this._collidables = {}; // Components that contribute to the Scene AABB
         this._compilables = {}; // Components that require shader compilation
@@ -1013,6 +1028,17 @@ class Scene extends Component {
         this._selectedObjectIds = null; // Lazy regenerate
     }
 
+    _objectColorizeUpdated(entity, colorized) {
+        if (colorized) {
+            this.colorizedObjects[entity.id] = entity;
+            this._numColorizedObjects++;
+        } else {
+            delete this.colorizedObjects[entity.id];
+            this._numColorizedObjects--;
+        }
+        this._colorizedObjectIds = null; // Lazy regenerate
+    }
+    
     _webglContextLost() {
         //  this.loading++;
         this.canvas.spinner.processes++;
@@ -1262,6 +1288,27 @@ class Scene extends Component {
             this._selectedObjectIds = Object.keys(this.selectedObjects);
         }
         return this._selectedObjectIds;
+    }
+
+    /**
+     * Gets the number of {@link Entity}s in {@link Scene#colorizedObjects}.
+     *
+     * @type {Number}
+     */
+    get numColorizedObjects() {
+        return this._numColorizedObjects;
+    }
+
+    /**
+     * Gets the IDs of the {@link Entity}s in {@link Scene#colorizedObjects}.
+     *
+     * @type {String[]}
+     */
+    get colorizedObjectIds() {
+        if (!this._colorizedObjectIds) {
+            this._colorizedObjectIds = Object.keys(this.colorizedObjects);
+        }
+        return this._colorizedObjectIds;
     }
 
     /**
@@ -2164,6 +2211,7 @@ class Scene extends Component {
         this.xrayedObjects = null;
         this.highlightedObjects = null;
         this.selectedObjects = null;
+        this.colorizedObjects = null;
         this.sectionPlanes = null;
         this.lights = null;
         this.lightMaps = null;
@@ -2173,6 +2221,7 @@ class Scene extends Component {
         this._xrayedObjectIds = null;
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
+        this._colorizedObjectIds = null;
         this.types = null;
         this.components = null;
         this.canvas = null;

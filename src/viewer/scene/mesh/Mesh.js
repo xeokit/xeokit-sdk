@@ -1283,6 +1283,8 @@ class Mesh extends Component {
             colorize[1] = 1;
             colorize[2] = 1;
         }
+        const colorized = (!!value);
+        this.scene._objectColorizeUpdated(this, colorized);
         this.glRedraw();
     }
 
@@ -1752,6 +1754,8 @@ class Mesh extends Component {
             if (this._highlighted) {
                 this.scene._objectHighlightedUpdated(this, false);
             }
+            const colorized = false;
+            this.scene._objectColorizeUpdated(this, colorized);
         }
         if (this._isModel) {
             this.scene._deregisterModel(this);

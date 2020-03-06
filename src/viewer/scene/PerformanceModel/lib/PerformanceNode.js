@@ -441,6 +441,10 @@ class PerformanceNode {
                 this.meshes[i]._setColorize(null);
             }
         }
+        if (this._isObject) {
+            const colorized = (!!color);
+            this.scene._objectColorizeUpdated(this, colorized);
+        }
         this.model.glRedraw();
     }
 
@@ -588,6 +592,10 @@ class PerformanceNode {
             }
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
+            }
+            if (this._isObject) {
+                const colorized = false;
+                this.scene._objectColorizeUpdated(this, colorized);
             }
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
