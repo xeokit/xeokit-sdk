@@ -609,7 +609,7 @@ const Renderer = function (scene, options) {
                 }
 
                 frameCtx.backfaces = false;
-                if (!transparentDepthMask) {
+                if (transparentDepthMask) {
                     gl.depthMask(false);
                 }
                 if (xrayEdgesTransparentBinLen > 0) {
@@ -635,6 +635,7 @@ const Renderer = function (scene, options) {
                     }
                 }
                 gl.disable(gl.BLEND);
+                gl.depthMask(true);
             }
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
