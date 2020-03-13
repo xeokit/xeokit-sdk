@@ -427,7 +427,7 @@ class StoreyViewsPlugin extends Plugin {
         eye2[1] = look2[1] + (camera.worldUp[1] * sca);
         eye2[2] = look2[2] + (camera.worldUp[2] * sca);
 
-        const up2 = math.mulVec3Scalar(camera.worldForward, -1, []);
+        const up2 = camera.worldForward;
 
         if (options.done) {
 
