@@ -3,91 +3,30 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>XKTLoaderPlugin - Loading an IFC Model from the File System</title>
+    <title>Repeatedly creating and destroying a viewer, reusing same canvas</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet" />
 
     <style>
-        #treePanel {
-            padding-top: 25px;
-            pointer-events: all;
-            height: 100%;
-            overflow-y: scroll;
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
-            color: black;
-            top: 0;
-            z-index: 200000;
-            float: left;
-            left: 0;
-            font-family: "Roboto", sans-serif;
-            font-size: 15px;
-            user-select: none;
-            -ms-user-select: none;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            width: 350px;
-        }
-
         #myCanvas {
             background: #ffffff;
         }
+ </style>
 
-        #myNavCubeCanvas {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            bottom: 50px;
-            right: 10px;
-            z-index: 200000;
-        }
-    </style>
-    <script src="./libs/lodash.js"></script>
-
-    <!--    <script src="./libs/pako.js"></script>-->
 </head>
 
 <body>
 <canvas id="myCanvas"></canvas>
 
-<!-- <canvas id="myOverviewCanvas"></canvas> -->
-<!-- <canvas id="myNavCubeCanvas"></canvas> -->
-
 <div id="info">
-    <h1>XKTLoaderPlugin - Loading an IFC Model from the File System</h1>
-    <br />
+    <h1>Repeatedly creating and destroying a viewer, reusing same canvas</h1>
+    <br/>
     <ul>
         <li>
-            <div id="time">Loading JavaScript modules...</div>
+            A stress test to check for bugs.
         </li>
         <li>
-            <a
-                    target="_other"
-                    href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-            >XKTLoaderPlugin</a
-            >
-            - Loads model and IFC data from file system
-        </li>
-        <li>
-            <a
-                    target="_other"
-                    href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
-            >NavCubePlugin</a
-            >
-            - Camera navigation cube gizmo
-        </li>
-        <li>
-            <a
-                    target="_other"
-                    href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
-            >Model source</a
-            >
-        </li>
-        <li>
-            <a
-                    target="_other"
-                    href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline"
-            >User Guide</a
-            >
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
         </li>
     </ul>
 </div>
@@ -113,16 +52,10 @@
     viewer.camera.eye = [-3.933, 2.855, 27.018];
     viewer.camera.look = [4.4, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
-
     viewer.cameraFlight.fitFOV = 15;
 
-    viewer.scene.xrayMaterial.fillAlpha = 0.1;
-    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
-    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
-    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
-
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+    const scene = viewer.scene;
+    const sao = scene.sao;
 
     //------------------------------------------------------------------------------------------------------------------
     // Load model and metadata
@@ -134,7 +67,8 @@
         id: "myModel",
         src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json",
-        edges: true
+        edges: true,
+        saoEnabled: true // Allows SAO to be applied to the model (default is true)
     });
 
     model.on("loaded", () => {

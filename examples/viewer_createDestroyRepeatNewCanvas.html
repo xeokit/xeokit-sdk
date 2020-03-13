@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>>Repeatedly creating and destroying a viewer and canvas</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        canvas {
+            background: #ffffff;
+            width: 600px;
+            height: 600px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="info">
+    <h1>Repeatedly creating and destroying a viewer and canvas</h1>
+    <br/>
+    <ul>
+        <li>
+            A stress test to check for bugs.
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    function create() {
+
+        const theCanvas = document.createElement("canvas");
+
+        document.body.appendChild(theCanvas);
+
+        let viewer = new Viewer({
+            canvasElement: theCanvas,
+            transparent: true
+        });
+
+        viewer.camera.eye = [-3.933, 2.855, 27.018];
+        viewer.camera.look = [4.4, 3.724, 8.899];
+        viewer.camera.up = [-0.018, 0.999, 0.039];
+        viewer.cameraFlight.fitFOV = 15;
+
+        const scene = viewer.scene;
+        const sao = scene.sao;
+
+        sao.enabled = false; // Only works if supported (see above)
+        sao.intensity = 0.25;
+        sao.bias = 0.5;
+        sao.scale = 1000.0;
+        sao.minResolution = 0.0;
+        sao.kernelRadius = 100;
+
+        let xktLoader = new XKTLoaderPlugin(viewer);
+
+        const model = xktLoader.load({
+            id: "myModel",
+            src: "./models/xkt/duplex/duplex.xkt",
+            metaModelSrc: "./metaModels/duplex/metaModel.json",
+            edges: true,
+            saoEnabled: true // Allows SAO to be applied to the model (default is true)
+        });
+
+        const useTimeout = true;
+
+        model.on("loaded", () => {
+
+            if (useTimeout) {
+
+                // This breaks when we run this page in a tab that's not visible;
+                // viewer.scene.canvas is null when is the viewer is trying to render.
+                // Since setTimeout can run continuously in a non-visible tab, it seems
+                // as if the DOM doesn't actually create the canvas in a non-visible tab,
+                // then Viewer finds the canvas is missing.
+
+                setTimeout(() => {
+
+                    viewer.destroy();
+
+                    theCanvas.remove();
+
+                    create();
+
+                }, 3000);
+
+            } else {
+
+                requestAnimationFrame(() => {
+
+                    // This does work on a non-visible tab, since requestAnimationFrame
+                    // only runs when the tab is visible. The DOM therefore has created
+                    // the canvas in time, for when Viewer needs it.
+
+                    viewer.destroy();
+
+                    theCanvas.remove();
+
+                    create();
+
+                });
+            }
+        });
+    }
+
+    create();
+
+
+</script>
+</html>
