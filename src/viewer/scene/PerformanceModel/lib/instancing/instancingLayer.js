@@ -877,6 +877,10 @@ class InstancingLayer {
             this._drawRenderer.put();
             this._drawRenderer = null;
         }
+        if (this._drawRendererWithSAO) {
+            this._drawRendererWithSAO.put();
+            this._drawRendererWithSAO = null;
+        }
         if (this._depthRenderer) {
             this._depthRenderer.put();
             this._depthRenderer = null;
