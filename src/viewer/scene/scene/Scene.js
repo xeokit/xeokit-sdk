@@ -774,7 +774,7 @@ class Scene extends Component {
 
         new AmbientLight(this, {
             color: [0.3, 0.3, 0.3],
-            intensity: 0.6
+            intensity: 0.7
         });
 
         new DirLight(this, {
