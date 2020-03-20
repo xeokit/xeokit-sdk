@@ -384,7 +384,6 @@ class BCFViewpointsPlugin extends Plugin {
             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
             scene.setObjectsPickable(scene.objectIds, true);
-            scene.setObjectsOpacity(scene.objectIds, 1);
         }
 
         if (bcfViewpoint.components) {
