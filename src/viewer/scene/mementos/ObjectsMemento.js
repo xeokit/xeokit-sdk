@@ -9,6 +9,11 @@ const color = math.vec3();
  * * An Entity represents an object when {@link Entity#isObject} is ````true````.
  * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.
  *
+ * ## See Also
+ *
+ * * {@link CameraMemento} - Saves and restores the state of a {@link Scene}'s {@link Camera}.
+ * * {@link ModelMemento} - Saves and restores a snapshot of the visual state of the {@link Entity}'s of a model within a {@link Scene}.
+ *
  * ## Usage
  *
  * In the example below, we'll create a {@link Viewer} and use an {@link XKTLoaderPlugin} to load an ````.xkt```` model. When the model has loaded, we'll hide a couple of {@link Entity}s and save a snapshot of the visual states of all the Entitys in an ObjectsMemento. Then we'll show all the Entitys

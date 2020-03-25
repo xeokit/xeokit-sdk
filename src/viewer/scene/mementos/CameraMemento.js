@@ -3,6 +3,11 @@ import {math} from "../math/math.js";
 /**
  * @desc Saves and restores the state of a {@link Scene}'s {@link Camera}.
  *
+ * ## See Also
+ *
+ * * {@link ModelMemento} - Saves and restores a snapshot of the visual state of the {@link Entity}'s of a model within a {@link Scene}.
+ * * {@link ObjectsMemento} - Saves and restores a snapshot of the visual state of the {@link Entity}'s that represent objects within a {@link Scene}.
+ *
  * ## Usage
  *
  * In the example below, we'll create a {@link Viewer} and use an {@link XKTLoaderPlugin} to load an ````.xkt```` model. When the model has loaded, we'll save a snapshot of the {@link Camera} state in an CameraMemento. Then we'll move the Camera, and then we'll restore its original state again from the CameraMemento.
