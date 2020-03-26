@@ -100,8 +100,8 @@ class BatchingLayer {
         this._portions = [];
 
         this._finalized = false;
-        this._preCompressed = !!cfg.preCompressed;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
+        this._preCompressed = (!!this._positionsDecodeMatrix);
 
         this.compileShaders();
     }

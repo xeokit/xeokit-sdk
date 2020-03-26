@@ -82,9 +82,12 @@ class InstancingLayer {
             numInstances: 0,
             obb: math.OBB3()
         };
+
+        const preCompressed = (!!cfg.positionsDecodeMatrix);
+
         if (cfg.positions) {
 
-            if (cfg.preCompressed) {
+            if (preCompressed) {
 
                 let normalized = false;
                 stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
@@ -108,7 +111,7 @@ class InstancingLayer {
         }
         if (cfg.normals) {
 
-            if (cfg.preCompressed) {
+            if (preCompressed) {
 
                 let normalized = true; // For oct-encoded UInt8
                 stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
@@ -166,8 +169,6 @@ class InstancingLayer {
         this._portions = [];
 
         this._finalized = false;
-
-        this._preCompressed = !!cfg.preCompressed;
 
         this.compileShaders();
     }
