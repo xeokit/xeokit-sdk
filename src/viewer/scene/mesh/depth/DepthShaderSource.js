@@ -251,7 +251,15 @@ function buildFragmentLambert(mesh) {
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
     src.push("// Lambertian drawing fragment shader");
-    src.push("precision lowp float;");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");

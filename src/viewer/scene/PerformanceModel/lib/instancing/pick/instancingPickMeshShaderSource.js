@@ -68,7 +68,15 @@ function buildFragment(layer) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Batched geometry picking fragment shader");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
     src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");

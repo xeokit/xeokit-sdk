@@ -78,7 +78,15 @@ function buildFragment(mesh) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Shadow fragment shader");
-    src.push("precision " + getFragmentFloatPrecision(gl) + " float;");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     if (clipping) {
         src.push("uniform bool clippable;");
         src.push("varying vec4 vWorldPosition;");
@@ -111,19 +119,6 @@ function buildFragment(mesh) {
     src.push("gl_FragColor = packDepth(gl_FragCoord.z);");
     src.push("}");
     return src;
-}
-
-function getFragmentFloatPrecision(gl) {
-    if (!gl.getShaderPrecisionFormat) {
-        return "mediump";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
-        return "highp";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0) {
-        return "mediump";
-    }
-    return "lowp";
 }
 
 export {ShadowShaderSource};
