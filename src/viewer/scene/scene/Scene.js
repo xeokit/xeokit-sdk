@@ -1038,7 +1038,7 @@ class Scene extends Component {
         }
         this._colorizedObjectIds = null; // Lazy regenerate
     }
-    
+
     _webglContextLost() {
         //  this.loading++;
         this.canvas.spinner.processes++;
@@ -1151,6 +1151,7 @@ class Scene extends Component {
                 this._compilables[id].compile();
             }
         }
+        this.fire("compile", this, true);
     }
 
     _saveAmbientColor() {

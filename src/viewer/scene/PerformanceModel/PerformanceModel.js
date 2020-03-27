@@ -5,9 +5,9 @@ import {WEBGL_INFO} from '../webglInfo.js';
 
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
-import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffer.js";
-import {BatchingLayer} from './lib/batching/batchingLayer.js';
-import {InstancingLayer} from './lib/instancing/instancingLayer.js';
+import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/BatchingBuffer.js";
+import {BatchingLayer} from './lib/batching/BatchingLayer.js';
+import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
@@ -521,7 +521,7 @@ class PerformanceModel extends Component {
             }
 
             if (!this._currentBatchingLayer) {
-               // console.log("New batching layer");
+                // console.log("New batching layer");
                 this._currentBatchingLayer = new BatchingLayer(this, {
                     primitive: "triangles",
                     buffer: this._batchingBuffer,
@@ -1392,17 +1392,6 @@ class PerformanceModel extends Component {
             this._layerList[i].drawOcclusion(frameCtx);
         }
     }
-
-    /**
-     * Called by xeokit to compile shaders for this PerformanceModel.
-     * @private
-     */
-    compile() {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].compileShaders();
-        }
-    }
-
 
     //------------------------------------------------------------------------------------------------------------------
     // Component members

@@ -22,6 +22,10 @@ function joinSansComments(srcLines) {
     return src.join("\n");
 }
 
+function logErrors(errors) {
+    console.error(errors.join("\n"));
+}
+
 /**
  * @desc Represents a WebGL program.
  * @private
@@ -48,19 +52,23 @@ class Program {
         this._fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, joinSansComments(this.source.fragment));
         if (!this._vertexShader.allocated) {
             this.errors = ["Vertex shader failed to allocate"].concat(this._vertexShader.errors);
+            logErrors(this.errors);
             return;
         }
         if (!this._fragmentShader.allocated) {
             this.errors = ["Fragment shader failed to allocate"].concat(this._fragmentShader.errors);
+            logErrors(this.errors);
             return;
         }
         this.allocated = true;
         if (!this._vertexShader.compiled) {
             this.errors = ["Vertex shader failed to compile"].concat(this._vertexShader.errors);
+            logErrors(this.errors);
             return;
         }
         if (!this._fragmentShader.compiled) {
             this.errors = ["Fragment shader failed to compile"].concat(this._fragmentShader.errors);
+            logErrors(this.errors);
             return;
         }
         this.compiled = true;
@@ -89,6 +97,7 @@ class Program {
             this.errors = this.errors.concat(this.source.vertex);
             this.errors.push("\nFragment shader:\n");
             this.errors = this.errors.concat(this.source.fragment);
+            logErrors(this.errors);
             return;
         }
         const numUniforms = gl.getProgramParameter(this.handle, gl.ACTIVE_UNIFORMS);
