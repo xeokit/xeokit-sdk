@@ -24,11 +24,6 @@ function buildVertex(layer) {
     src.push("precision mediump int;");
     src.push("#endif");
 
-    src.push("#else");
-    src.push("precision mediump float;");
-    src.push("precision mediump int;");
-    src.push("#endif");
-
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
