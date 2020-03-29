@@ -118,7 +118,7 @@ function getBatchingRenderers(scene) {
         batchingRenderers = new BatchingRenderers(scene);
         sceneBatchingRenderers[sceneId] = batchingRenderers;
         batchingRenderers._compile();
-        scene.on("compiling", () => {
+        scene.on("compile", () => {
             batchingRenderers._compile();
         });
         scene.on("destroyed", () => {
