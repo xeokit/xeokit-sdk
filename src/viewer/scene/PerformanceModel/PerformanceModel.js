@@ -2,10 +2,10 @@ import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../webglInfo.js';
-
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
 import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/BatchingBuffer.js";
+import {getBatchingLayerScratchMemory} from "./lib/batching/BatchingLayerScratchMemory.js";
 import {BatchingLayer} from './lib/batching/BatchingLayer.js';
 import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
@@ -71,6 +71,7 @@ class PerformanceModel extends Component {
         this._instancingLayers = {};
         this._currentBatchingLayer = null;
         this._batchingBuffer = getBatchingBuffer();
+        this._batchingScratchMemory = getBatchingLayerScratchMemory(this);
 
         this._meshes = {};
         this._nodes = {};
@@ -525,6 +526,7 @@ class PerformanceModel extends Component {
                 this._currentBatchingLayer = new BatchingLayer(this, {
                     primitive: "triangles",
                     buffer: this._batchingBuffer,
+                    scratchMemory: this._batchingScratchMemory,
                     positionsDecodeMatrix: cfg.positionsDecodeMatrix,
                 });
                 this._layerList.push(this._currentBatchingLayer);

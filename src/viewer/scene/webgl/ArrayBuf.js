@@ -68,7 +68,7 @@ class ArrayBuf {
         }
         if (this._handle) {
             this._gl.bindBuffer(this.type, this._handle);
-            this._gl.bufferData(this.type, data, this.usage);
+            this._gl.bufferData(this.type, data.length > this.dataLength ? data.slice(0, this.dataLength) : data, this.usage);
             this._gl.bindBuffer(this.type, null);
             this.length = data.length;
             this.numItems = this.length / this.itemSize;

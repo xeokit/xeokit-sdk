@@ -8,14 +8,12 @@ import {RENDER_PASSES} from '../renderPasses.js';
 import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 import {getBatchingRenderers} from "./BatchingRenderers.js";
 
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const tempUint8Vec4 = new Uint8Array((bigIndicesSupported ? 5000000 : 65530) * 4); // Scratch memory for dynamic flags VBO update
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
 const tempVec3c = math.vec4([0, 0, 0, 1]);
-var tempOBB3 = math.OBB3();
+const tempOBB3 = math.OBB3();
 
 /**
  * @private
@@ -26,12 +24,14 @@ class BatchingLayer {
      * @param model
      * @param cfg
      * @param cfg.buffer
+     * @param cfg.scratchMemory
      * @param cfg.primitive
      */
     constructor(model, cfg) {
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
         this._buffer = cfg.buffer;
+        this._scratchMemory = cfg.scratchMemory;
         var primitiveName = cfg.primitive || "triangles";
         var primitive;
         const gl = model.scene.canvas.gl;
@@ -351,38 +351,38 @@ class BatchingLayer {
 
         if (this._preCompressed) {
             state.positionsDecodeMatrix = this._positionsDecodeMatrix;
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions, buffer.lenPositions, 3, gl.STATIC_DRAW);
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
         } else {
             quantizePositions(buffer.positions, buffer.lenPositions, this._modelAABB, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
             if (buffer.lenPositions > 0) {
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions, buffer.lenPositions, 3, gl.STATIC_DRAW);
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
             }
         }
 
         if (buffer.lenNormals > 0) {
-            let normalized = true; // For oct encoded UIn
+            let normalized = true; // For oct encoded UInts
             //let normalized = false; // For scaled
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals, buffer.lenNormals, 3, gl.STATIC_DRAW, normalized);
+            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals.slice(0, buffer.lenNormals), buffer.lenNormals, 3, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenColors > 0) {
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors, buffer.lenColors, 4, gl.DYNAMIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.slice(0, buffer.Colors), buffer.lenColors, 4, gl.DYNAMIC_DRAW, normalized);
         }
         if (buffer.lenFlags > 0) {
             let normalized = true;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags, buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
-            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2, buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
+            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
         }
         if (buffer.lenPickColors > 0) {
             let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.pickColors, buffer.lenPickColors, 4, gl.STATIC_DRAW, normalized);
+            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.pickColors.slice(0, buffer.lenPickColors), buffer.lenPickColors, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenIndices > 0) {
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices, buffer.lenIndices, 1, gl.STATIC_DRAW);
+            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices.slice(0, buffer.lenIndices), buffer.lenIndices, 1, gl.STATIC_DRAW);
         }
         if (buffer.lenEdgeIndices > 0) {
-            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices, buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
+            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.slice(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
         }
 
         buffer.lenPositions = 0;
@@ -535,15 +535,16 @@ class BatchingLayer {
         var numVerts = this._portions[portionsIdx + 1];
         var firstColor = vertexBase * 4;
         var lenColor = numVerts * 4;
+        const tempArray = this._scratchMemory.getUInt8Array(numVerts);
         const r = color[0];
         const g = color[1];
         const b = color[2];
         const a = color[3];
         for (var i = 0; i < lenColor; i += 4) {
-            tempUint8Vec4[i + 0] = r;
-            tempUint8Vec4[i + 1] = g;
-            tempUint8Vec4[i + 2] = b;
-            tempUint8Vec4[i + 3] = a;
+            tempArray[i + 0] = r;
+            tempArray[i + 1] = g;
+            tempArray[i + 2] = b;
+            tempArray[i + 3] = a;
         }
         if (setOpacity) {
             const opacity = color[3];
@@ -555,7 +556,7 @@ class BatchingLayer {
                 this.model.numTransparentLayerPortions--;
             }
         }
-        this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColor), firstColor, lenColor); // OPTIMIZE: slice() is expensive - Support WebGL2 and use bufferSubData with length?
+        this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
     }
 
     _setFlags(portionId, flags) {
@@ -567,17 +568,18 @@ class BatchingLayer {
         var numVerts = this._portions[portionsIdx + 1];
         var firstFlag = vertexBase * 4;
         var lenFlags = numVerts * 4;
+        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
         var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
         for (var i = 0; i < lenFlags; i += 4) {
-            tempUint8Vec4[i + 0] = visible;
-            tempUint8Vec4[i + 1] = xrayed;
-            tempUint8Vec4[i + 2] = highlighted;
-            tempUint8Vec4[i + 3] = selected;
+            tempArray[i + 0] = visible;
+            tempArray[i + 1] = xrayed;
+            tempArray[i + 2] = highlighted;
+            tempArray[i + 3] = selected;
         }
-        this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags); // OPTIMIZE: slice() is expensive - Support WebGL2 and use bufferSubData with length?
+        this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
     }
 
     _setFlags2(portionId, flags) {
@@ -592,12 +594,13 @@ class BatchingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
         for (var i = 0; i < lenFlags; i += 4) {
-            tempUint8Vec4[i + 0] = clippable;
-            tempUint8Vec4[i + 1] = edges;
-            tempUint8Vec4[i + 2] = pickable;
+            tempArray[i + 0] = clippable;
+            tempArray[i + 1] = edges;
+            tempArray[i + 2] = pickable;
         }
-        this._state.flags2Buf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags); // OPTIMIZE: slice() is expensive - Support WebGL2 and use bufferSubData with length?
+        this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
