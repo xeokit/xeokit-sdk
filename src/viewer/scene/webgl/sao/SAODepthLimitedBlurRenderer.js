@@ -78,7 +78,15 @@ class SAODepthLimitedBlurRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`attribute vec3 aPosition;
+            vertex: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
+                    attribute vec3 aPosition;
                     attribute vec2 aUV;
                     uniform vec2 uViewport;
                     varying vec2 vUV;
@@ -89,7 +97,15 @@ class SAODepthLimitedBlurRenderer {
                         gl_Position = vec4(aPosition, 1.0);
                     }`],
 
-            fragment: [`#define PI 3.14159265359
+            fragment: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
+                    #define PI 3.14159265359
                 #define PI2 6.28318530718
                 #define EPSILON 1e-6
 

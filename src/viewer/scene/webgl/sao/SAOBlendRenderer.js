@@ -38,8 +38,14 @@ class SAOBlendRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`#extension GL_OES_standard_derivatives : require
-            
+            vertex: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
                     attribute   vec3 aPosition;
                     attribute   vec2 aUV;
             
@@ -50,7 +56,14 @@ class SAOBlendRenderer {
                        vUV = aUV;
                     }`],
 
-            fragment: [`precision highp float;
+            fragment: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
                     
                     const float packUpscale = 256. / 255.;
                     const float unpackDownScale = 255. / 256.; 

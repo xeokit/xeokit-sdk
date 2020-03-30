@@ -6,12 +6,12 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import * as p from "./lib/pako.js";
 
 let pako = window.pako || p;
-if(!pako.inflate) {
+if (!pako.inflate) {
     // See https://github.com/nodeca/pako/issues/97
     pako = pako.default;
 }
 
-const XKT_VERSION = 3; // XKT format version supported by this XKTLoaderPlugin
+const XKT_VERSION = 4; // Maximum XKT format version supported by this XKTLoaderPlugin
 
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
@@ -872,7 +872,7 @@ class XKTLoaderPlugin extends Plugin {
                             _alreadyCreatedGeometries [geometryId] = true;
                         }
 
-                        performanceModel.createMesh(utils.apply(meshDefaults,{
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             color: color,
                             opacity: opacity,
@@ -1005,7 +1005,7 @@ class XKTLoaderPlugin extends Plugin {
                             _alreadyCreatedGeometries [geometryId] = true;
                         }
 
-                        performanceModel.createMesh(utils.apply(meshDefaults,{
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             color: color,
                             opacity: opacity,

@@ -2,9 +2,8 @@ import {RENDER_PASSES} from '../../renderPasses.js';
 
 /**
  * @private
- * @constructor
  */
-const BatchingDrawShaderSource = function (scene, withSAO) {
+const InstancingDrawShaderSource = function (scene, withSAO) {
     this.vertex = buildVertex(scene);
     this.fragment = buildFragment(scene, withSAO);
 };
@@ -18,18 +17,27 @@ function buildVertex(scene) {
     let light;
     const src = [];
 
-    src.push("// Batched geometry drawing vertex shader");
+    src.push("// Instancing geometry drawing vertex shader");
 
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
-    src.push("attribute vec3 normal;");
+    src.push("attribute vec2 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
 
     if (clipping) {
         src.push("attribute vec4 flags2;");
     }
+
+
+    src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
+    src.push("attribute vec4 modelMatrixCol1;");
+    src.push("attribute vec4 modelMatrixCol2;");
+
+    src.push("attribute vec4 modelNormalMatrixCol0;");
+    src.push("attribute vec4 modelNormalMatrixCol1;");
+    src.push("attribute vec4 modelNormalMatrixCol2;");
 
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
@@ -72,7 +80,6 @@ function buildVertex(scene) {
 
     src.push("void main(void) {");
 
-
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
@@ -80,8 +87,8 @@ function buildVertex(scene) {
 
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
-    src.push(`if (
-    !visible ||  
+    src.push(`if 
+    (!visible || 
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
@@ -89,19 +96,20 @@ function buildVertex(scene) {
     (renderPass == ${RENDER_PASSES.SELECTED} && !selected)) {`);
 
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-
     src.push("} else {");
 
-    src.push("vec4 worldPosition = (positionsDecodeMatrix * vec4(position, 1.0)); ");
+    src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+
+    src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-    src.push("vec4 worldNormal =  vec4(octDecode(normal.xy), 0.0); ");
-
-    src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+    src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
+    src.push("vec4 worldNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+    src.push("vec3 viewNormal = normalize(vec4(worldNormal * viewNormalMatrix).xyz);");
 
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-
 
     src.push("float lambertian = 1.0;");
     for (i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -134,7 +142,7 @@ function buildVertex(scene) {
         src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
     }
 
-    src.push("vColor =  vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);");
+    src.push("vColor = vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);");
 
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
@@ -152,7 +160,7 @@ function buildFragment(scene, withSAO) {
     let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Batched geometry drawing fragment shader");
+    src.push("// Instancing geometry drawing fragment shader");
 
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
@@ -175,6 +183,7 @@ function buildFragment(scene, withSAO) {
         src.push("    return dot( v, unPackFactors );");
         src.push("}");
     }
+
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
@@ -195,12 +204,14 @@ function buildFragment(scene, withSAO) {
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
-        src.push("  if (dist > 0.0) { discard; }");
+        src.push("if (dist > 0.0) { discard; }");
         src.push("}");
     }
+
+    // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+    // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+
     if (withSAO) {
-        // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-        // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
         src.push("   float viewportWidth     = uSAOParams[0];");
         src.push("   float viewportHeight    = uSAOParams[1];");
         src.push("   float blendCutoff       = uSAOParams[2];");
@@ -209,10 +220,10 @@ function buildFragment(scene, withSAO) {
         src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
         src.push("   gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);");
     } else {
-        src.push("   gl_FragColor            = vColor;");
+        src.push("    gl_FragColor           = vColor;");
     }
     src.push("}");
     return src;
 }
 
-export {BatchingDrawShaderSource};
+export {InstancingDrawShaderSource};

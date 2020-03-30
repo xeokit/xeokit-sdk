@@ -59,7 +59,15 @@ class SAOOcclusionRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`attribute vec3 aPosition;
+            vertex: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
+                    attribute vec3 aPosition;
                     attribute vec2 aUV;            
                     varying vec2 vUV;
                     void main () {
@@ -68,7 +76,15 @@ class SAOOcclusionRenderer {
                     }`],
 
             fragment: [
-                `#extension GL_OES_standard_derivatives : require
+                `#ifdef GL_FRAGMENT_PRECISION_HIGH
+                    precision highp float;
+                    precision highp int;
+                    #else
+                    precision mediump float;
+                    precision mediump int;
+                    #endif
+                    
+                    #extension GL_OES_standard_derivatives : require
                 
                 #define NORMAL_TEXTURE 0
                 #define PI 3.14159265359
