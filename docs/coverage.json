@@ -1,7 +1,7 @@
 {
-  "coverage": "47.33%",
-  "expectCount": 3927,
-  "actualCount": 1859,
+  "coverage": "47.74%",
+  "expectCount": 3881,
+  "actualCount": 1853,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -13,10 +13,10 @@
         138,
         139,
         140,
-        201,
-        210,
-        232,
-        340
+        200,
+        209,
+        231,
+        339
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -428,13 +428,6 @@
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/plugins/ComplexityPlugin/ComplexityPlugin.js": {
-      "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        10
-      ]
-    },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
       "expectCount": 57,
       "actualCount": 17,
@@ -548,28 +541,6 @@
         18,
         22,
         46
-      ]
-    },
-    "src/plugins/MotionCullPlugin/MotionCullPlugin.js": {
-      "expectCount": 19,
-      "actualCount": 3,
-      "undocumentLines": [
-        75,
-        76,
-        78,
-        85,
-        93,
-        108,
-        109,
-        112,
-        116,
-        117,
-        120,
-        124,
-        128,
-        132,
-        168,
-        209
       ]
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {
@@ -1081,8 +1052,8 @@
         59,
         60,
         163,
-        555,
-        576
+        559,
+        580
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingBuffer.js": {
@@ -1240,31 +1211,6 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/draw/batchingDrawShaderSource.js": {
-      "expectCount": 3,
-      "actualCount": 1,
-      "undocumentLines": [
-        12,
-        150
-      ]
-    },
-    "src/viewer/scene/PerformanceModel/lib/batching/drawSmooth/batchingDrawSmoothRenderer.js": {
-      "expectCount": 12,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        24,
-        26,
-        43,
-        47,
-        51,
-        62,
-        66,
-        107,
-        177
-      ]
-    },
-    "src/viewer/scene/PerformanceModel/lib/batching/drawSmooth/batchingDrawSmoothShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -1506,31 +1452,6 @@
         162
       ]
     },
-    "src/viewer/scene/PerformanceModel/lib/instancing/drawSmooth/instancingDrawSmoothRenderer.js": {
-      "expectCount": 12,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        23,
-        25,
-        42,
-        46,
-        50,
-        61,
-        65,
-        148,
-        235
-      ]
-    },
-    "src/viewer/scene/PerformanceModel/lib/instancing/drawSmooth/instancingDrawSmoothShaderSource.js": {
-      "expectCount": 3,
-      "actualCount": 1,
-      "undocumentLines": [
-        15,
-        162
-      ]
-    },
     "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/instancingEdgesRenderer.js": {
       "expectCount": 11,
       "actualCount": 1,
@@ -1592,11 +1513,11 @@
         27,
         28,
         29,
-        974,
-        1009,
-        1045,
-        1062,
-        1080,
+        978,
+        1013,
+        1049,
+        1066,
+        1084,
         46,
         47,
         135,
@@ -2460,7 +2381,7 @@
       "actualCount": 14,
       "undocumentLines": [
         4,
-        144
+        149
       ]
     },
     "src/viewer/scene/mementos/ObjectsMemento.js": {
@@ -2468,7 +2389,7 @@
       "actualCount": 14,
       "undocumentLines": [
         4,
-        130
+        135
       ]
     },
     "src/viewer/scene/mesh/Mesh.js": {
@@ -2485,7 +2406,7 @@
         27,
         28,
         30,
-        1765,
+        1769,
         214,
         235,
         236,
@@ -2785,14 +2706,14 @@
         515,
         541,
         567,
-        669,
-        693,
-        734,
-        739,
-        746,
-        758,
-        767,
-        776
+        673,
+        697,
+        738,
+        743,
+        750,
+        762,
+        771,
+        780
       ]
     },
     "src/viewer/scene/paths/CubicBezierCurve.js": {
@@ -2870,8 +2791,8 @@
       ]
     },
     "src/viewer/scene/scene/Scene.js": {
-      "expectCount": 129,
-      "actualCount": 76,
+      "expectCount": 135,
+      "actualCount": 79,
       "undocumentLines": [
         21,
         25,
@@ -2881,51 +2802,54 @@
         419,
         433,
         447,
-        455,
-        456,
-        457,
-        458,
-        459,
         461,
-        462,
-        464,
-        540,
-        544,
-        585,
-        747,
-        753,
-        791,
-        805,
-        841,
-        866,
-        873,
-        879,
-        885,
-        891,
-        897,
-        903,
-        909,
-        915,
-        920,
-        925,
-        931,
-        937,
-        959,
-        978,
-        997,
-        1016,
-        1030,
-        1122,
-        1130,
-        1141,
-        1285,
-        1317,
-        1349,
-        1376,
-        1610,
-        1632,
-        1691,
-        2128
+        469,
+        470,
+        471,
+        472,
+        473,
+        474,
+        476,
+        477,
+        479,
+        555,
+        559,
+        600,
+        762,
+        768,
+        806,
+        820,
+        856,
+        881,
+        888,
+        894,
+        900,
+        906,
+        912,
+        918,
+        924,
+        930,
+        935,
+        940,
+        946,
+        952,
+        974,
+        993,
+        1012,
+        1031,
+        1042,
+        1056,
+        1148,
+        1156,
+        1167,
+        1332,
+        1364,
+        1396,
+        1423,
+        1657,
+        1679,
+        1738,
+        2175
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
