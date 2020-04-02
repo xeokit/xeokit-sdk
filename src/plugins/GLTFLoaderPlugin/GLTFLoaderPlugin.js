@@ -342,41 +342,6 @@ class GLTFLoaderPlugin extends Plugin {
 
                 params.readableGeometry = false;
 
-                params.prioritizeGLTFNode = (modelId, glTFNode) => {
-
-                    // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
-                    // in the MetaModel we just loaded. We'll create Node components in the Scene for all the nodes as we
-                    // descend into them, but will give special treatment to those nodes that have a "name", ie. set initial
-                    // state for those according to the MetaModel.
-
-                    const name = glTFNode.name;
-
-                    if (!name) {
-                        return 0;
-                    }
-
-                    const nodeId = name;
-                    const metaObject = this.viewer.metaScene.metaObjects[nodeId];
-                    const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
-
-                    if (metaObject) {
-                        if (excludeTypes) {
-                            if (excludeTypes[type]) {
-                                return null;
-                            }
-                        }
-                        if (includeTypes) {
-                            if (!includeTypes[type]) {
-                                return null;
-                            }
-                        }
-                    }
-
-                    const props = objectDefaults[type];
-
-                    return props ? (props.priority || 0) : 0;
-                };
-
                 params.handleGLTFNode = (modelId, glTFNode, actions) => {
 
                     const name = glTFNode.name;

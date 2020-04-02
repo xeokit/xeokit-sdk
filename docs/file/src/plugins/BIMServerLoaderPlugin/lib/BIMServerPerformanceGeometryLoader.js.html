@@ -39,13 +39,11 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-complexityplugin">plugins/ComplexityPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ComplexityPlugin/ComplexityPlugin.js~ComplexityPlugin.html">ComplexityPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-motioncullplugin">plugins/MotionCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/MotionCullPlugin/MotionCullPlugin.js~MotionCullPlugin.html">MotionCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
@@ -170,7 +168,9 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     function processMessage(stream) {
         var messageType = stream.readByte();
         if (messageType === 0) {
-            readStart(stream);
+        	if (!readStart(stream)) {
+				return false;
+        	}
         } else if (messageType === 6) {
             readEnd(stream);
         } else {
@@ -186,8 +186,13 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         while (data != null) {
             stream = new DataInputStreamReader(data);
             var topicId = stream.readLong();
-            while (processMessage(stream)) {
+            var type = stream.readLong();
+            if (type == 0) {
+            	while (processMessage(stream)) {
 
+            	}
+            } else if (type == 1) {
+            	// End of stream
             }
             data = todo.shift();
         }
@@ -349,9 +354,11 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         }
         protocolVersion = data.readByte();
         performanceModelBuilder.log(&quot;BIMServer protocol version = &quot; + protocolVersion);
-        if (protocolVersion !== 10 &amp;&amp; protocolVersion !== 11 &amp;&amp; protocolVersion !== 16 &amp;&amp; protocolVersion !== 17) {
+        if (protocolVersion !== 10 &amp;&amp; protocolVersion !== 11 &amp;&amp; protocolVersion !== 16 &amp;&amp; protocolVersion !== 17 &amp;&amp; protocolVersion != 18 &amp;&amp; protocolVersion != 19 &amp;&amp; protocolVersion != 20) {
             performanceModelBuilder.error(&quot;Unimplemented protocol version&quot;);
             return false;
+        } else {
+        	currentState.version = protocolVersion;
         }
         if (protocolVersion &gt; 15) {
             o.multiplierToMm = data.readFloat();
@@ -364,6 +371,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             progressListener(&quot;start&quot;, currentState.nrObjectsRead, currentState.nrObjectsRead);
         });
         updateProgress();
+        return true;
     }
 
     function readEnd(data) {
@@ -675,6 +683,86 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             }
 
             //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
+        } else if (geometryType === 3) {
+			var reused = stream.readInt();
+			var type = stream.readUTF8();
+			stream.align8();
+			var hasTransparency = stream.readLong() == 1;
+			var coreIds = [];
+			var geometryDataOid = stream.readLong();
+			var nrParts = stream.readInt();
+
+			for (var i=0; i&lt;nrParts; i++) {
+				var partId = stream.readLong();
+				var coreId = geometryDataOid + &quot;_&quot; + i;
+				coreIds.push(coreId);
+				var nrIndices = stream.readInt();
+				//o.stats.nrPrimitives += nrIndices / 3;
+				var indices = stream.readShortArray(nrIndices);
+				stream.align4();
+				var b = stream.readIstream;
+				if (b == 1) {
+					color = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
+				}
+				stream.align4();
+				var nrVertices = stream.readInt();
+				//o.stats.nrVertices += nrVertices;
+				var vertices = stream.readFloatArray(nrVertices);
+				var nrNormals = stream.readInt();
+				//o.stats.nrNormals += nrNormals;
+				var normals = stream.readFloatArray(nrNormals);
+				var nrColors = stream.readInt();
+				//o.stats.nrColors += nrColors;
+				var colors = stream.readFloatArray(nrColors);
+				
+				var geometry = {
+					type: &quot;geometry&quot;,
+					//primitive: o.type
+				};
+				
+				if (color != null) {
+					// Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+					geometry.colors = new Array(nrVertices * 4);
+					for (var j=0; j&lt;nrVertices; j++) {
+						geometry.colors[j * 4 + 0] = color.r;
+						geometry.colors[j * 4 + 1] = color.g;
+						geometry.colors[j * 4 + 2] = color.b;
+						geometry.colors[j * 4 + 3] = color.a;
+					}
+				}
+				
+				geometry.coreId = coreId;
+				
+				/*if (o.type == &quot;lines&quot;) {
+					geometry.indices = o.convertToLines(indices);
+				} else {
+					geometry.indices = indices;
+				}*/
+				geometry.positions = vertices;
+				geometry.normals = normals;
+				
+				if (colors != null &amp;&amp; colors.length &gt; 0) {
+					geometry.colors = colors;
+				}
+				//o.library.add(&quot;node&quot;, geometry);
+			}
+			stream.align8();
+			//o.loadedGeometry[geometryDataOid] = coreIds;
+			/*if (o.dataToInfo[geometryDataOid] != null) {
+				o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
+					var node = o.viewer.scene.findNode(geometryInfoId);
+					if (node != null &amp;&amp; node.nodes[0] != null) {
+						coreIds.forEach(function(coreId){
+							node.nodes[0].addNode({
+								type: &quot;geometry&quot;,
+								coreId: coreId
+							});
+						});
+					}
+				});
+				delete o.dataToInfo[geometryDataOid];
+			}*/
+
         } else if (geometryType === 7) {
             //  this.processPreparedBuffer(stream, true);
 

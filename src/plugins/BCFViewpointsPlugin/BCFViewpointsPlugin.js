@@ -383,7 +383,6 @@ class BCFViewpointsPlugin extends Plugin {
         if (reset) {
             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
-            scene.setObjectsPickable(scene.objectIds, true);
         }
 
         if (bcfViewpoint.components) {
@@ -398,11 +397,11 @@ class BCFViewpointsPlugin extends Plugin {
 
             const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
             if (view_setup_hints) {
-                if (view_setup_hints.spaces_visible !== undefined) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), !!view_setup_hints.spaces_visible);
+                if (view_setup_hints.spaces_visible === false) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
                 }
-                if (view_setup_hints.openings_visible !== undefined) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), !!view_setup_hints.openings_visible);
+                if (view_setup_hints.openings_visible === false) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), false);
                 }
                 if (view_setup_hints.space_boundaries_visible !== undefined) {
                     // TODO: Ability to show boundaries

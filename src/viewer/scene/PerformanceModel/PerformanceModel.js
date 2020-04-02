@@ -2,12 +2,12 @@ import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../webglInfo.js';
-
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
-import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffer.js";
-import {BatchingLayer} from './lib/batching/batchingLayer.js';
-import {InstancingLayer} from './lib/instancing/instancingLayer.js';
+import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/BatchingBuffer.js";
+import {getBatchingLayerScratchMemory} from "./lib/batching/BatchingLayerScratchMemory.js";
+import {BatchingLayer} from './lib/batching/BatchingLayer.js';
+import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
@@ -18,8 +18,6 @@ const defaultScale = math.vec3([1, 1, 1]);
 const defaultPosition = math.vec3([0, 0, 0]);
 const defaultRotation = math.vec3([0, 0, 0]);
 const defaultQuaternion = math.identityQuaternion();
-
-const DEFAULT_TILE_ID = "__default";
 
 /**
  * @desc A high-performance model representation for efficient rendering and low memory usage.
@@ -60,20 +58,23 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
-     * @param {Boolean} [cfg.preCompressed=false] When this is ````true````, ````positions```` are assumed to be
-     * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````, {@link PerformanceModel#createMesh}
-     * will ignore ````matrix````, ````position````, ````scale```` and ````rotation```` parameters.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
-        this._preCompressed = !!cfg.preCompressed;
-
-        this._tiles = {};
         this._aabb = math.collapseAABB3();
-        this._layers = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
-        this._nodes = [];
+        this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
+        this._nodeList = [];
+        this._lastDecodeMatrix = null;
+
+        this._instancingLayers = {};
+        this._currentBatchingLayer = null;
+        this._batchingBuffer = getBatchingBuffer();
+        this._batchingScratchMemory = getBatchingLayerScratchMemory(this);
+
+        this._meshes = {};
+        this._nodes = {};
 
         /**
          * @private
@@ -171,10 +172,6 @@ class PerformanceModel extends Component {
         if (this._isModel) {
             this.scene._registerModel(this);
         }
-
-        this.createTile({ // Create geometries, meshes and entities in this tile by default
-            id: DEFAULT_TILE_ID
-        });
 
         this._onCameraViewMatrix = this.scene.camera.on("matrix", () => {
             this._viewMatrixDirty = true;
@@ -319,47 +316,24 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * Starts building a tile.
-     *
-     * Tiles are used to incrementally show the {@link Entity}s within a PerformanceModel as it is being built. As each
-     * geometry, mesh or {@link Entity} is created in the PerformanceModel, it may be optionally added to a tile. When that
-     * tile is then finalized, then all its {@link Entity}s are immediately created within the {@link Scene}.
-     *
-     * @param {*} cfg Geometry properties.
-     * @param {String|Number} cfg.id Mandatory ID for the tile, to refer to with {@link PerformanceModel#finalizeTile}.
-     */
-    createTile(cfg) {
-        if (this._tiles[cfg.id]) {
-            this.warn("Tile already exists: " + cfg.id);
-            return;
-        }
-        const tile = {
-            id: cfg.id,
-            layers: [],
-            instancingLayers: {}, // InstancingLayer for each geometry - can build many of these concurrently
-            currentBatchingLayer: null, // Current BatchingLayer - can only build one of these at a time due to its use of global geometry buffers
-            buffer: getBatchingBuffer(), // Each PerformanceModel gets it's own batching buffer - allows multiple PerformanceModels to load concurrently
-            meshes: {},
-            nodes: []
-        };
-        this._tiles[cfg.id] = tile;
-    }
-
-    /**
      * Creates a reusable geometry within this PerformanceModel.
      *
      * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
      *
-     * Note that positions, normals and indices are all required in geometry data.
+     * If provide a  ````positionsDecodeMatrix```` , then ````createGeometry()```` will assume
+     * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
+     * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
+     *
+     * Note that ````positions````, ````normals```` and ````indices```` are all required together.
      *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
-     * @param {String} [cfg.tileId] Optional ID of a tile to add the geometry to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
      * @param {String} [cfg.primitive="triangles"] The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} cfg.normals Flat array of normal vectors.
      * @param {Number[]} cfg.indices Array of triangle indices.
      * @param {Number[]} cfg.edgeIndices Array of edge line indices.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -371,20 +345,13 @@ class PerformanceModel extends Component {
             this.error("Config missing: id");
             return;
         }
-        const tileId = cfg.tileId || DEFAULT_TILE_ID;
-        var tile = this._tiles[tileId];
-        if (!tile) {
-            this.error("Tile not found: " + tileId + " - using default tile");
-            tile = this._tiles[DEFAULT_TILE_ID];
-        }
-        if (tile.instancingLayers[geometryId]) {
+        if (this._instancingLayers[geometryId]) {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        cfg.preCompressed = this._preCompressed;
-        var instancingLayer = new InstancingLayer(this, cfg);
-        tile.layers.push(instancingLayer);
-        tile.instancingLayers[geometryId] = instancingLayer;
+        const instancingLayer = new InstancingLayer(this, cfg);
+        this._instancingLayers[geometryId] = instancingLayer;
+        this._layerList.push(instancingLayer);
         this.numGeometries++;
         this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
     }
@@ -392,24 +359,33 @@ class PerformanceModel extends Component {
     /**
      * Creates a mesh within this PerformanceModel.
      *
-     * A mesh has a geometry, given either as the ID of a shared geometry created with {@link PerformanceModel#createGeometry}, or as
-     * geometry data arrays to create a unique geometry belong to the mesh.
+     * A mesh can either share geometry with other meshes, or have its own unique geometry.
      *
-     * When you provide a geometry ID, then the PerformanceModelMesh will instance the shared geometry for the mesh.
+     * To share a geometry with other meshes, provide the ID of a geometry created earlier
+     * with {@link PerformanceModel#createGeometry}.
      *
-     * When you provide arrays, then PerformanceModel will combine the geometry in a batch with the other non-shared unique geometries in the model.
+     * To create unique geometry for the mesh, provide geometry data arrays.
      *
-     * Note that positions, normals and indices are all required in geometry data.
+     * Internally, PerformanceModel will batch all unique mesh geometries into the same arrays, which improves
+     * rendering performance.
+     *
+     * If you accompany the arrays with a  ````positionsDecodeMatrix```` , then ````createMesh()```` will assume
+     * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
+     * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
+     *
+     * When creating compressed batches, ````createMesh()```` will start a new batch each time ````positionsDecodeMatrix````
+     * changes. Therefore, to combine arrays into the minimum number of batches, it's best for performance to create
+     * your shared meshes in runs that have the value for ````positionsDecodeMatrix````.
+     *
+     * Note that ````positions````, ````normals```` and ````indices```` are all required together.
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-     * @param {String} [cfg.tileId] Optional ID of a tile to add the mesh to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
-     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method. If a tile ID is also given, then the geometry must exist within that tile.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
-
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````. Only used when ````preCompressed```` is true.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
@@ -421,32 +397,25 @@ class PerformanceModel extends Component {
      */
     createMesh(cfg) {
 
-        var id = cfg.id;
+        let id = cfg.id;
         if (id === undefined || id === null) {
             this.error("Config missing: id");
             return;
         }
-        if (this.scene.components[id]) {
-            this.error("Scene already has a Component with this ID: " + id + " - will assign random ID");
-            id = math.createUUID();
+        if (this._meshes[id]) {
+            this.error("PerformanceModel already has a Mesh with this ID: " + id + "");
+            return;
         }
 
         const geometryId = cfg.geometryId;
         const instancing = (geometryId !== undefined);
-
-        const tileId = cfg.tileId || DEFAULT_TILE_ID;
-        var tile = this._tiles[tileId];
-        if (!tile) {
-            this.error("Tile not found: " + tileId + " - using default tile");
-            tile = this._tiles[DEFAULT_TILE_ID];
-        }
 
         if (instancing) {
             if (!instancedArraysSupported) {
                 this.error("WebGL instanced arrays not supported"); // TODO: Gracefully use batching?
                 return;
             }
-            if (!tile.instancingLayers[geometryId]) {
+            if (!this._instancingLayers[geometryId]) {
                 this.error("Geometry not found: " + geometryId + " - ensure that you create it first with createGeometry()");
                 return;
             }
@@ -491,7 +460,7 @@ class PerformanceModel extends Component {
                 meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
             }
 
-            var instancingLayer = tile.instancingLayers[geometryId];
+            var instancingLayer = this._instancingLayers[geometryId];
             layer = instancingLayer;
             portionId = instancingLayer.createPortion(flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
@@ -500,7 +469,7 @@ class PerformanceModel extends Component {
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
 
-        } else {
+        } else { // Batching
 
             var primitive = cfg.primitive || "triangles";
             if (primitive !== "points" && primitive !== "lines" && primitive !== "line-loop" &&
@@ -531,24 +500,39 @@ class PerformanceModel extends Component {
                 return null;
             }
 
-            if (tile.currentBatchingLayer) {
-                if (!tile.currentBatchingLayer.canCreatePortion(positions.length)) {
-                    tile.currentBatchingLayer.finalize();
-                    tile.currentBatchingLayer = null;
+            if (cfg.positionsDecodeMatrix) {
+                if (!this._lastDecodeMatrix) {
+                    this._lastDecodeMatrix = math.mat4(cfg.positionsDecodeMatrix);
+                } else {
+                    if (!math.compareMat4(this._lastDecodeMatrix, cfg.positionsDecodeMatrix)) {
+                        if (this._currentBatchingLayer) {
+                            this._currentBatchingLayer.finalize();
+                            this._currentBatchingLayer = null;
+                        }
+                        this._lastDecodeMatrix.set(cfg.positionsDecodeMatrix)
+                    }
                 }
             }
 
-            if (!tile.currentBatchingLayer) {
-                tile.currentBatchingLayer = new BatchingLayer(this, {
-                    primitive: "triangles",
-                    buffer: tile.buffer,
-                    preCompressed: this._preCompressed,
-                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,
-                });
-                tile.layers.push(tile.currentBatchingLayer);
+            if (this._currentBatchingLayer) {
+                if (!this._currentBatchingLayer.canCreatePortion(positions.length)) {
+                    this._currentBatchingLayer.finalize();
+                    this._currentBatchingLayer = null;
+                }
             }
 
-            layer = tile.currentBatchingLayer;
+            if (!this._currentBatchingLayer) {
+                // console.log("New batching layer");
+                this._currentBatchingLayer = new BatchingLayer(this, {
+                    primitive: "triangles",
+                    buffer: this._batchingBuffer,
+                    scratchMemory: this._batchingScratchMemory,
+                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,
+                });
+                this._layerList.push(this._currentBatchingLayer);
+            }
+
+            layer = this._currentBatchingLayer;
 
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
@@ -556,7 +540,9 @@ class PerformanceModel extends Component {
 
             let meshMatrix;
             let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
-            if (!this._preCompressed) {
+
+            if (!cfg.positionsDecodeMatrix) {
+
                 if (cfg.matrix) {
                     meshMatrix = cfg.matrix;
                 } else {
@@ -568,7 +554,7 @@ class PerformanceModel extends Component {
                 }
             }
 
-            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
+            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
 
             math.expandAABB3(this._aabb, aabb);
 
@@ -584,7 +570,7 @@ class PerformanceModel extends Component {
         mesh._portionId = portionId;
         mesh.aabb = aabb;
 
-        tile.meshes[id] = mesh;
+        this._meshes[id] = mesh;
     }
 
     /**
@@ -594,7 +580,8 @@ class PerformanceModel extends Component {
      *
      * @param {Object} cfg Entity configuration.
      * @param {String} cfg.id Optional ID for the new Entity. Must not clash with any existing components within the {@link Scene}.
-     * @param {String} [cfg.tileId] Optional ID of a tile to add the Entity to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
+     * @param {String[]} cfg.meshIds IDs of one or more meshes created previously with {@link PerformanceModel@createMesh}.
+
      * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
@@ -611,7 +598,7 @@ class PerformanceModel extends Component {
      */
     createEntity(cfg) {
         // Validate or generate Entity ID
-        var id = cfg.id;
+        let id = cfg.id;
         if (id === undefined) {
             id = math.createUUID();
         } else if (this.scene.components[id]) {
@@ -619,16 +606,10 @@ class PerformanceModel extends Component {
             id = math.createUUID();
         }
         // Collect PerformanceModelNode's PerformanceModelMeshes
-        var meshIds = cfg.meshIds;
+        const meshIds = cfg.meshIds;
         if (meshIds === undefined) {
             this.error("Config missing: meshIds");
             return;
-        }
-        const tileId = cfg.tileId || DEFAULT_TILE_ID;
-        var tile = this._tiles[tileId];
-        if (!tile) {
-            this.error("Tile not found: " + tileId + " - using default tile");
-            tile = this._tiles[DEFAULT_TILE_ID];
         }
         var i;
         var len;
@@ -637,7 +618,7 @@ class PerformanceModel extends Component {
         var meshes = [];
         for (i = 0, len = meshIds.length; i < len; i++) {
             meshId = meshIds[i];
-            mesh = tile.meshes[meshId];
+            mesh = this._meshes[meshId];
             if (!mesh) {
                 this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
                 continue;
@@ -646,7 +627,6 @@ class PerformanceModel extends Component {
                 this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
                 continue;
             }
-            delete tile.meshes[meshId];
             meshes.push(mesh);
         }
         // Create PerformanceModelNode flags
@@ -687,73 +667,40 @@ class PerformanceModel extends Component {
             }
         }
 
-        var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
-        tile.nodes.push(node);
+        const node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        this._nodeList.push(node);
+        this._nodes[id] = node;
         this.numEntities++;
         return node;
     }
 
     /**
-     * Finalizes a tile.
-     *
-     * Immediately creates the tile's {@link Entity}s within the {@link Scene}.
-     *
-     * Once finalized, you can't add anything more to the tile.
-     *
-     * @param {String} tileId ID of tile previously created with {@link PerformanceModel#createTile}.
-     */
-    finalizeTile(tileId) {
-        const tile = this._tiles[tileId];
-        if (!tile) {
-            this.warn("Tile not found: " + tileId);
-            return;
-        }
-        if (tile.currentBatchingLayer) {
-            tile.currentBatchingLayer.finalize();
-            tile.currentBatchingLayer = null;
-        }
-        if (tile.buffer) {
-            putBatchingBuffer(tile.buffer);
-            tile.buffer = null;
-        }
-        for (const geometryId in tile.instancingLayers) {
-            if (tile.instancingLayers.hasOwnProperty(geometryId)) {
-                tile.instancingLayers[geometryId].finalize();
-            }
-        }
-        for (var i = 0, len = tile.nodes.length; i < len; i++) {
-            const node = tile.nodes[i];
-            node._finalize();
-            this._nodes.push(node);
-        }
-        for (var i = 0, len = tile.layers.length; i < len; i++) {
-            const layer = tile.layers[i];
-            if (layer instanceof InstancingLayer) { // For efficient GL state sorting, instancing layers are rendered before batching layers
-                this._layers.unshift(layer);
-            } else {
-                this._layers.push(layer);
-            }
-        }
-        delete this._tiles[tileId];
-        this.glRedraw();
-        this.scene._aabbDirty = true;
-    }
-
-    /**
      * Finalizes this PerformanceModel.
-     *
-     * Implicitly finalizes all tiles created with {#link PerformanceModel#createTile}.
      *
      * Immediately creates the PerformanceModel's {@link Entity}s within the {@link Scene}.
      *
      * Once finalized, you can't add anything more to this PerformanceModel.
      */
     finalize() {
-        for (var tileId in this._tiles) {
-            if (this._tiles.hasOwnProperty(tileId)) {
-                this.finalizeTile(tileId);
+        if (this._currentBatchingLayer) {
+            this._currentBatchingLayer.finalize();
+            this._currentBatchingLayer = null;
+        }
+        if (this._batchingBuffer) {
+            putBatchingBuffer(this._batchingBuffer);
+            this._batchingBuffer = null;
+        }
+        for (const geometryId in this._instancingLayers) {
+            if (this._instancingLayers.hasOwnProperty(geometryId)) {
+                this._instancingLayers[geometryId].finalize();
             }
         }
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            const node = this._nodeList[i];
+            node._finalize();
+        }
+        this.glRedraw();
+        this.scene._aabbDirty = true;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -820,8 +767,8 @@ class PerformanceModel extends Component {
     set visible(visible) {
         visible = visible !== false;
         this._visible = visible;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].visible = visible;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].visible = visible;
         }
         this.glRedraw();
     }
@@ -845,8 +792,8 @@ class PerformanceModel extends Component {
     set xrayed(xrayed) {
         xrayed = !!xrayed;
         this._xrayed = xrayed;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].xrayed = xrayed;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].xrayed = xrayed;
         }
         this.glRedraw();
     }
@@ -868,8 +815,8 @@ class PerformanceModel extends Component {
     set highlighted(highlighted) {
         highlighted = !!highlighted;
         this._highlighted = highlighted;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].highlighted = highlighted;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].highlighted = highlighted;
         }
         this.glRedraw();
     }
@@ -891,8 +838,8 @@ class PerformanceModel extends Component {
     set selected(selected) {
         selected = !!selected;
         this._selected = selected;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].selected = selected;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].selected = selected;
         }
         this.glRedraw();
     }
@@ -914,8 +861,8 @@ class PerformanceModel extends Component {
     set edges(edges) {
         edges = !!edges;
         this._edges = edges;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].edges = edges;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].edges = edges;
         }
         this.glRedraw();
     }
@@ -963,8 +910,8 @@ class PerformanceModel extends Component {
     set clippable(clippable) {
         clippable = clippable !== false;
         this._clippable = clippable;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].clippable = clippable;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].clippable = clippable;
         }
         this.glRedraw();
     }
@@ -988,8 +935,8 @@ class PerformanceModel extends Component {
     set collidable(collidable) {
         collidable = collidable !== false;
         this._collidable = collidable;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].collidable = collidable;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].collidable = collidable;
         }
     }
 
@@ -1012,8 +959,8 @@ class PerformanceModel extends Component {
     set pickable(pickable) {
         pickable = pickable !== false;
         this._pickable = pickable;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].pickable = pickable;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].pickable = pickable;
         }
     }
 
@@ -1039,8 +986,8 @@ class PerformanceModel extends Component {
      */
     set colorize(colorize) {
         this._colorize = colorize;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].colorize = colorize;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].colorize = colorize;
         }
     }
 
@@ -1064,8 +1011,8 @@ class PerformanceModel extends Component {
      */
     set opacity(opacity) {
         this._opacity = opacity;
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].opacity = opacity;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].opacity = opacity;
         }
     }
 
@@ -1276,127 +1223,127 @@ class PerformanceModel extends Component {
     /** @private */
     drawNormalFillOpaque(frameCtx) {
         this.scene.canvas.gl.disable(this.scene.canvas.gl.CULL_FACE);
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawNormalFillOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawNormalFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawDepth(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawDepth(frameCtx);
         }
     }
 
     /** @private */
     drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawNormals(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawNormals(frameCtx);
         }
     }
 
     /** @private */
     drawNormalEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawNormalEdgesOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawNormalEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawNormalFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawNormalFillTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawNormalFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawNormalEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawNormalEdgesTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawNormalEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawXRayedFillOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawXRayedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawXRayedEdgesOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawXRayedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawXRayedFillTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawXRayedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawXRayedEdgesTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawXRayedEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawHighlightedFillOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawHighlightedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawHighlightedEdgesOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawHighlightedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawHighlightedFillTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawHighlightedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawHighlightedEdgesTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawHighlightedEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawSelectedFillOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawSelectedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawSelectedEdgesOpaque(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawSelectedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawSelectedFillTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawSelectedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawSelectedEdgesTransparent(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawSelectedEdgesTransparent(frameCtx);
         }
     }
 
@@ -1405,8 +1352,8 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawPickMesh(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawPickMesh(frameCtx);
         }
     }
 
@@ -1418,8 +1365,8 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawPickDepths(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawPickDepths(frameCtx);
         }
     }
 
@@ -1431,8 +1378,8 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawPickNormals(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawPickNormals(frameCtx);
         }
     }
 
@@ -1443,21 +1390,10 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawOcclusion(frameCtx);
+        for (var i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawOcclusion(frameCtx);
         }
     }
-
-    /**
-     * Called by xeokit to compile shaders for this PerformanceModel.
-     * @private
-     */
-    compile() {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].compileShaders();
-        }
-    }
-
 
     //------------------------------------------------------------------------------------------------------------------
     // Component members
@@ -1467,22 +1403,20 @@ class PerformanceModel extends Component {
      * Destroys this PerformanceModel.
      */
     destroy() {
-        for (var tileId in this._tiles) {
-            if (this._tiles.hasOwnProperty(tileId)) {
-                const tile = this._tiles[tileId];
-                for (var i = 0, leni = tile.nodes.length; i < len; i++) {
-                    const node = tile.nodes[i];
-                    node._destroy();
-                }
-                putBatchingBuffer(tile.buffer);
-            }
+        if (this._currentBatchingLayer) {
+            this._currentBatchingLayer.destroy();
+            this._currentBatchingLayer = null;
+        }
+        if (this._batchingBuffer) {
+            putBatchingBuffer(this._batchingBuffer);
+            this._batchingBuffer = null;
         }
         this.scene.camera.off(this._onCameraViewMatrix);
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].destroy();
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].destroy();
         }
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i]._destroy();
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i]._destroy();
         }
         this.scene._aabbDirty = true;
         if (this._isModel) {

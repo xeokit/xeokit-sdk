@@ -55,7 +55,15 @@ function buildFragment(mesh) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Surface picking fragment shader");
-    src.push("precision lowp float;");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     src.push("varying vec4 vColor;");
     if (clipping) {
         src.push("uniform bool clippable;");

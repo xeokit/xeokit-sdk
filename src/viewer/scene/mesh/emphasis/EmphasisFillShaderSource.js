@@ -183,7 +183,15 @@ function buildFragment(mesh) {
     let len;
     const src = [];
     src.push("// Lambertian drawing fragment shader");
-    src.push("precision lowp float;");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     if (gammaOutput) {
         src.push("uniform float gammaFactor;");
         src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");

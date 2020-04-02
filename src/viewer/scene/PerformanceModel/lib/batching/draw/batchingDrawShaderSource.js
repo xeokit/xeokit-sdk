@@ -4,13 +4,12 @@ import {RENDER_PASSES} from '../../renderPasses.js';
  * @private
  * @constructor
  */
-const BatchingDrawShaderSource = function (layer, withSAO) {
-    this.vertex = buildVertex(layer);
-    this.fragment = buildFragment(layer, withSAO);
+const BatchingDrawShaderSource = function (scene, withSAO) {
+    this.vertex = buildVertex(scene);
+    this.fragment = buildFragment(scene, withSAO);
 };
 
-function buildVertex(layer) {
-    var scene = layer.model.scene;
+function buildVertex(scene) {
     const sectionPlanesState = scene._sectionPlanesState;
     const lightsState = scene._lightsState;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
@@ -147,16 +146,21 @@ function buildVertex(layer) {
     return src;
 }
 
-function buildFragment(layer, withSAO) {
-    const scene = layer.model.scene;
+function buildFragment(scene, withSAO) {
     const sectionPlanesState = scene._sectionPlanesState;
     let i;
     let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Batched geometry drawing fragment shader");
+
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
     src.push("precision mediump float;");
     src.push("precision mediump int;");
+    src.push("#endif");
 
     if (withSAO) {
         src.push("uniform sampler2D uOcclusionTexture;");
