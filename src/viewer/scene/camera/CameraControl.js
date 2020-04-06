@@ -209,6 +209,7 @@ class CameraControl extends Component {
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
         this.pointerEnabled = true;
+        this.keyboardEnabled = true;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -526,6 +527,28 @@ class CameraControl extends Component {
      */
     get keyboardLayout() {
         return this._keyboardLayout;
+    }
+
+    /**
+     * Sets whether or not keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````true```` to enable mouse input.
+     */
+    set keyBoardEnabled(value) {
+        this._keyboardEnabled = value;
+    }
+
+    /**
+     * Gets whether keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` if keyboard input is enabled.
+     */
+    get keyboardEnabled() {
+        return this._keyboardEnabled;
     }
 
     _initEvents() {
@@ -945,7 +968,7 @@ class CameraControl extends Component {
             }
 
             document.addEventListener("keydown", function (e) {
-                if (!self._active) {
+                if (!self._active || (!this._keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
@@ -957,7 +980,7 @@ class CameraControl extends Component {
             }, true);
 
             document.addEventListener("keyup", function (e) {
-                if (!self._active) {
+                if (!self._active || (!this._keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
