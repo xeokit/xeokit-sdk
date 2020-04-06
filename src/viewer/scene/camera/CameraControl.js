@@ -209,7 +209,6 @@ class CameraControl extends Component {
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
         this.pointerEnabled = true;
-        this.keyboardEnabled = true;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -529,28 +528,6 @@ class CameraControl extends Component {
      */
     get keyboardLayout() {
         return this._keyboardLayout;
-    }
-
-    /**
-     * Sets whether or not keyboard input is enabled.
-     *
-     * Default value is ````true````.
-     *
-     * @param {Boolean} value Set ````true```` to enable keyboard input.
-     */
-    set keyboardEnabled(value) {
-        this._keyboardEnabled = value;
-    }
-
-    /**
-     * Gets whether keyboard input is enabled.
-     *
-     * Default value is ````true````.
-     *
-     * @returns {Boolean} Returns ````true```` if keyboard input is enabled.
-     */
-    get keyboardEnabled() {
-        return this._keyboardEnabled;
     }
 
     _initEvents() {
@@ -970,7 +947,7 @@ class CameraControl extends Component {
             }
 
             document.addEventListener("keydown", function (e) {
-                if (!self._active || (!this._keyboardEnabled)) {
+                if (!self._active || (!scene.input.keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
@@ -982,7 +959,7 @@ class CameraControl extends Component {
             }, true);
 
             document.addEventListener("keyup", function (e) {
-                if (!self._active || (!this._keyboardEnabled)) {
+                if (!self._active || (!scene.input.keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
@@ -1210,7 +1187,7 @@ class CameraControl extends Component {
                 // Keyboard zoom
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1238,7 +1215,7 @@ class CameraControl extends Component {
                 (function () {
 
                     scene.on("tick", function (e) {
-                        if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
+                        if (!(self._active && self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                             return;
                         }
                         if (!over) {
@@ -1414,7 +1391,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1453,7 +1430,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {

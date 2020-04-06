@@ -1,5 +1,5 @@
 /**
- Publishes keyboard and mouse events that occur on the parent {@link Scene}'s {@link Canvas}.
+ @desc  Publishes keyboard and mouse events that occur on the parent {@link Scene}'s {@link Canvas}.
 
  * Each {@link Scene} provides an Input on itself as a read-only property.
 
@@ -84,9 +84,17 @@
  input.off(handle);
  ````
 
- @class Input
- @module xeokit
- @submodule input
+ ## Disabling keyboard input
+
+ When the mouse is over the canvas, the canvas will consume "keydown" events. Therefore, sometimes we need to prevent
+ disable keyboard control, so that other UI elements can get those events.
+
+ To disable keyboard control, set {@link Input#keyboardEnabled} ````false````:
+
+ ````javascript
+ myViewer.scene.input.keyboardEnabled = false;
+ ````
+
  @extends Component
  */
 import {Component} from '../Component.js';
@@ -101,7 +109,7 @@ class Input extends Component {
         return "Input";
     }
 
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -942,6 +950,16 @@ class Input extends Component {
          */
         this.enabled = true;
 
+        /** True while keyboard input enabled.
+         *
+         * Default value is ````true````.
+         *
+         * {@link CameraControl} will not respond to keyboard events while this is ````false````.
+         *
+         * @type {boolean}
+         */
+        this.keyboardEnabled = true;
+
         /** True while mouse is over the parent {@link Scene} {@link Canvas"}}Canvas{{/crossLink}}
          *
          * @type {boolean}
@@ -952,7 +970,7 @@ class Input extends Component {
 
         document.addEventListener("keydown", this._keyDownListener = function (e) {
 
-            if (!self.enabled) {
+            if (!self.enabled || (!self.keyboardEnabled)) {
                 return;
             }
 
@@ -983,7 +1001,7 @@ class Input extends Component {
 
         document.addEventListener("keyup", this._keyUpListener = function (e) {
 
-            if (!self.enabled) {
+            if (!self.enabled || (!self.keyboardEnabled)) {
                 return;
             }
 
@@ -1416,8 +1434,7 @@ class Input extends Component {
             event = window.event;
             coords.x = event.x;
             coords.y = event.y;
-        }
-        else {
+        } else {
             let element = event.target;
             let totalOffsetLeft = 0;
             let totalOffsetTop = 0;
@@ -1442,6 +1459,32 @@ class Input extends Component {
         if (this.enabled !== enable) {
             this.fire("enabled", this.enabled = enable);
         }
+    }
+
+    /**
+     * Sets whether or not keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable keyboard input.
+     */
+    setKeyboardEnabled(value) {
+        this.keyboardEnabled = value;
+    }
+
+    /**
+     * Gets whether keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if keyboard input is enabled.
+     */
+    getKeyboardEnabled() {
+        return this.keyboardEnabled;
     }
 
     destroy() {
