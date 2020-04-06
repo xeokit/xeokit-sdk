@@ -432,6 +432,7 @@ class CameraControl extends Component {
     set doublePickFlyTo(value) {
         this._doublePickFlyTo = value !== false;
     }
+
     /**
      * Gets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
@@ -453,6 +454,7 @@ class CameraControl extends Component {
     set panRightClick(value) {
         this._panRightClick = value !== false;
     }
+
     /**
      * Gets whether right-clicking pans the {@link Camera}.
      *
@@ -1170,7 +1172,7 @@ class CameraControl extends Component {
                     if (panning) {
 
                         // Panning
-                        if (shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight) ) {
+                        if (shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight)) {
                             panVx = xDelta * mousePanRate;
                             panVy = yDelta * mousePanRate;
                         }
@@ -1208,7 +1210,7 @@ class CameraControl extends Component {
                 // Keyboard zoom
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1236,7 +1238,7 @@ class CameraControl extends Component {
                 (function () {
 
                     scene.on("tick", function (e) {
-                        if (!(self._active && self._pointerEnabled)) {
+                        if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
                             return;
                         }
                         if (!over) {
@@ -1412,7 +1414,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1451,7 +1453,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!(self._active && self._pointerEnabled)) {
+                    if (!(self._active && self._pointerEnabled) || (!this._keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
