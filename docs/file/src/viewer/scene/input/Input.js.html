@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -132,7 +134,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/input/Input.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- Publishes keyboard and mouse events that occur on the parent {@link Scene}&apos;s {@link Canvas}.
+ @desc  Publishes keyboard and mouse events that occur on the parent {@link Scene}&apos;s {@link Canvas}.
 
  * Each {@link Scene} provides an Input on itself as a read-only property.
 
@@ -217,9 +219,17 @@
  input.off(handle);
  ````
 
- @class Input
- @module xeokit
- @submodule input
+ ## Disabling keyboard input
+
+ When the mouse is over the canvas, the canvas will consume &quot;keydown&quot; events. Therefore, sometimes we need to prevent
+ disable keyboard control, so that other UI elements can get those events.
+
+ To disable keyboard control, set {@link Input#keyboardEnabled} ````false````:
+
+ ````javascript
+ myViewer.scene.input.keyboardEnabled = false;
+ ````
+
  @extends Component
  */
 import {Component} from &apos;../Component.js&apos;;
@@ -234,7 +244,7 @@ class Input extends Component {
         return &quot;Input&quot;;
     }
 
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -1075,6 +1085,16 @@ class Input extends Component {
          */
         this.enabled = true;
 
+        /** True while keyboard input enabled.
+         *
+         * Default value is ````true````.
+         *
+         * {@link CameraControl} will not respond to keyboard events while this is ````false````.
+         *
+         * @type {boolean}
+         */
+        this.keyboardEnabled = true;
+
         /** True while mouse is over the parent {@link Scene} {@link Canvas&quot;}}Canvas{{/crossLink}}
          *
          * @type {boolean}
@@ -1085,7 +1105,7 @@ class Input extends Component {
 
         document.addEventListener(&quot;keydown&quot;, this._keyDownListener = function (e) {
 
-            if (!self.enabled) {
+            if (!self.enabled || (!self.keyboardEnabled)) {
                 return;
             }
 
@@ -1116,7 +1136,7 @@ class Input extends Component {
 
         document.addEventListener(&quot;keyup&quot;, this._keyUpListener = function (e) {
 
-            if (!self.enabled) {
+            if (!self.enabled || (!self.keyboardEnabled)) {
                 return;
             }
 
@@ -1549,8 +1569,7 @@ class Input extends Component {
             event = window.event;
             coords.x = event.x;
             coords.y = event.y;
-        }
-        else {
+        } else {
             let element = event.target;
             let totalOffsetLeft = 0;
             let totalOffsetTop = 0;
@@ -1575,6 +1594,32 @@ class Input extends Component {
         if (this.enabled !== enable) {
             this.fire(&quot;enabled&quot;, this.enabled = enable);
         }
+    }
+
+    /**
+     * Sets whether or not keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable keyboard input.
+     */
+    setKeyboardEnabled(value) {
+        this.keyboardEnabled = value;
+    }
+
+    /**
+     * Gets whether keyboard input is enabled.
+     *
+     * Default value is ````true````.
+     *
+     * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if keyboard input is enabled.
+     */
+    getKeyboardEnabled() {
+        return this.keyboardEnabled;
     }
 
     destroy() {

@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -2418,6 +2420,31 @@ const math = {
     },
 
     /**
+     * Returns true if the two 4x4 matrices are the same.
+     * @param m1
+     * @param m2
+     * @returns {boolean}
+     */
+    compareMat4(m1, m2) {
+        return m1[0] === m2[0] &amp;&amp;
+            m1[1] === m2[1] &amp;&amp;
+            m1[2] === m2[2] &amp;&amp;
+            m1[3] === m2[3] &amp;&amp;
+            m1[4] === m2[4] &amp;&amp;
+            m1[5] === m2[5] &amp;&amp;
+            m1[6] === m2[6] &amp;&amp;
+            m1[7] === m2[7] &amp;&amp;
+            m1[8] === m2[8] &amp;&amp;
+            m1[9] === m2[9] &amp;&amp;
+            m1[10] === m2[10] &amp;&amp;
+            m1[11] === m2[11] &amp;&amp;
+            m1[12] === m2[12] &amp;&amp;
+            m1[13] === m2[13] &amp;&amp;
+            m1[14] === m2[14] &amp;&amp;
+            m1[15] === m2[15];
+    },
+
+    /**
      * Transforms a three-element position by a 4x4 matrix.
      * @method transformPoint3
      * @static
@@ -3738,8 +3765,8 @@ const math = {
             for (i = 0; i &lt; lenPositions; i += 3) {
 
                 tempVec3a[0] = positions[i];
-                tempVec3a[1] = positions[i+1];
-                tempVec3a[2] = positions[i+2];
+                tempVec3a[1] = positions[i + 1];
+                tempVec3a[2] = positions[i + 2];
 
                 dist = Math.abs(math.lenVec3(math.subVec3(tempVec3a, sphere, tempVec3b)));
 
@@ -5219,7 +5246,6 @@ math.buildEdgeIndices = (function () {
         return (largeIndex) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
     };
 })();
-
 
 
 export {math};</code></pre>

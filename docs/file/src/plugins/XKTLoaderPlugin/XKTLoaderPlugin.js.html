@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -139,12 +141,12 @@ import {IFCObjectDefaults} from &quot;../../viewer/metadata/IFCObjectDefaults.js
 import * as p from &quot;./lib/pako.js&quot;;
 
 let pako = window.pako || p;
-if(!pako.inflate) {
+if (!pako.inflate) {
     // See https://github.com/nodeca/pako/issues/97
     pako = pako.default;
 }
 
-const XKT_VERSION = 3; // XKT format version supported by this XKTLoaderPlugin
+const XKT_VERSION = 4; // Maximum XKT format version supported by this XKTLoaderPlugin
 
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
@@ -1005,7 +1007,7 @@ class XKTLoaderPlugin extends Plugin {
                             _alreadyCreatedGeometries [geometryId] = true;
                         }
 
-                        performanceModel.createMesh(utils.apply(meshDefaults,{
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             color: color,
                             opacity: opacity,
@@ -1138,7 +1140,7 @@ class XKTLoaderPlugin extends Plugin {
                             _alreadyCreatedGeometries [geometryId] = true;
                         }
 
-                        performanceModel.createMesh(utils.apply(meshDefaults,{
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             color: color,
                             opacity: opacity,

@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -930,7 +932,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber478">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber476">source</a></span></span>
     </span>
   </h3>
 
@@ -1184,7 +1186,7 @@ the direction of <code>camera_direction</code>.</p>
       <td data-ice="name" class="code" data-depth="0">bcfViewpoint</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>BCF JSON viewpoint object or &quot;reset&quot; / &quot;RESET&quot; to reset the viewer, which clears SectionPlanes,
+      <td data-ice="description"><p>BCF JSON viewpoint object,
 shows default visible entities and restores camera to initial default position.</p>
 </td>
     </tr>
@@ -1215,14 +1217,15 @@ point of surface intersection with a ray fired from the BCF <code>camera_view_po
       <td data-ice="name" class="code" data-depth="1">options.duration</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Flight duration in seconds.  Overrides <span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">CameraFlightAnimation#duration</a></span>.</p>
+      <td data-ice="description"><p>Flight duration in seconds.  Overrides <span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">CameraFlightAnimation#duration</a></span>. Only applies when <code>immediate</code> is <code>true</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.reset</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>When <code>true</code> (default), set scene objects xrayed property to false, highlighted to false, pickable to true and opacity to 1.</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When <code>true</code> (default), set <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> <code>false</code> on all scene objects.</p>
 </td>
     </tr>
 </tbody>

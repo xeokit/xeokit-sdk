@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -474,41 +476,6 @@ class GLTFLoaderPlugin extends Plugin {
                 }
 
                 params.readableGeometry = false;
-
-                params.prioritizeGLTFNode = (modelId, glTFNode) =&gt; {
-
-                    // The &quot;name&quot; property of the glTF scene node contains the object ID, with which we can find a MetaObject
-                    // in the MetaModel we just loaded. We&apos;ll create Node components in the Scene for all the nodes as we
-                    // descend into them, but will give special treatment to those nodes that have a &quot;name&quot;, ie. set initial
-                    // state for those according to the MetaModel.
-
-                    const name = glTFNode.name;
-
-                    if (!name) {
-                        return 0;
-                    }
-
-                    const nodeId = name;
-                    const metaObject = this.viewer.metaScene.metaObjects[nodeId];
-                    const type = (metaObject ? metaObject.type : &quot;DEFAULT&quot;) || &quot;DEFAULT&quot;;
-
-                    if (metaObject) {
-                        if (excludeTypes) {
-                            if (excludeTypes[type]) {
-                                return null;
-                            }
-                        }
-                        if (includeTypes) {
-                            if (!includeTypes[type]) {
-                                return null;
-                            }
-                        }
-                    }
-
-                    const props = objectDefaults[type];
-
-                    return props ? (props.priority || 0) : 0;
-                };
 
                 params.handleGLTFNode = (modelId, glTFNode, actions) =&gt; {
 

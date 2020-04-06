@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -564,6 +566,7 @@ class CameraControl extends Component {
     set doublePickFlyTo(value) {
         this._doublePickFlyTo = value !== false;
     }
+
     /**
      * Gets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
@@ -585,6 +588,7 @@ class CameraControl extends Component {
     set panRightClick(value) {
         this._panRightClick = value !== false;
     }
+
     /**
      * Gets whether right-clicking pans the {@link Camera}.
      *
@@ -1078,7 +1082,7 @@ class CameraControl extends Component {
             }
 
             document.addEventListener(&quot;keydown&quot;, function (e) {
-                if (!self._active) {
+                if (!self._active || (!scene.input.keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== &quot;INPUT&quot; &amp;&amp; e.target.tagName !== &quot;TEXTAREA&quot;) {
@@ -1090,7 +1094,7 @@ class CameraControl extends Component {
             }, true);
 
             document.addEventListener(&quot;keyup&quot;, function (e) {
-                if (!self._active) {
+                if (!self._active || (!scene.input.keyboardEnabled)) {
                     return;
                 }
                 if (e.target.tagName !== &quot;INPUT&quot; &amp;&amp; e.target.tagName !== &quot;TEXTAREA&quot;) {
@@ -1280,7 +1284,7 @@ class CameraControl extends Component {
                     if (panning) {
 
                         // Panning
-                        if (shiftDown || (!self._panRightClick &amp;&amp; mouseDownMiddle) || (self._panRightClick &amp;&amp; mouseDownRight) ) {
+                        if (shiftDown || (!self._panRightClick &amp;&amp; mouseDownMiddle) || (self._panRightClick &amp;&amp; mouseDownRight)) {
                             panVx = xDelta * mousePanRate;
                             panVy = yDelta * mousePanRate;
                         }
@@ -1318,7 +1322,7 @@ class CameraControl extends Component {
                 // Keyboard zoom
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1346,7 +1350,7 @@ class CameraControl extends Component {
                 (function () {
 
                     scene.on(&quot;tick&quot;, function (e) {
-                        if (!(self._active &amp;&amp; self._pointerEnabled)) {
+                        if (!(self._active &amp;&amp; self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                             return;
                         }
                         if (!over) {
@@ -1522,7 +1526,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1561,7 +1565,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                         return;
                     }
                     if (!over) {

@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -479,14 +481,14 @@ class BCFViewpointsPlugin extends Plugin {
      * (on the surface of any visible and pickable {@link Entity}) with a 3D ray fired from ````camera_view_point```` in
      * the direction of ````camera_direction````.
      *
-     * @param {*} bcfViewpoint  BCF JSON viewpoint object or &quot;reset&quot; / &quot;RESET&quot; to reset the viewer, which clears SectionPlanes,
+     * @param {*} bcfViewpoint  BCF JSON viewpoint object,
      * shows default visible entities and restores camera to initial default position.
      * @param {*} [options] Options for setting the viewpoint.
      * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
      * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
-     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
-     * @param {Boolean} [options.reset] When ````true```` (default), set scene objects xrayed property to false, highlighted to false, pickable to true and opacity to 1.
+     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````true````.
+     * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
      */
     setViewpoint(bcfViewpoint, options = {}) {
 
@@ -516,8 +518,6 @@ class BCFViewpointsPlugin extends Plugin {
         if (reset) {
             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
-            scene.setObjectsPickable(scene.objectIds, true);
-            scene.setObjectsOpacity(scene.objectIds, 1);
         }
 
         if (bcfViewpoint.components) {
@@ -532,11 +532,11 @@ class BCFViewpointsPlugin extends Plugin {
 
             const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
             if (view_setup_hints) {
-                if (view_setup_hints.spaces_visible !== undefined) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcSpace&quot;), !!view_setup_hints.spaces_visible);
+                if (view_setup_hints.spaces_visible === false) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcSpace&quot;), false);
                 }
-                if (view_setup_hints.openings_visible !== undefined) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcOpening&quot;), !!view_setup_hints.openings_visible);
+                if (view_setup_hints.openings_visible === false) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcOpening&quot;), false);
                 }
                 if (view_setup_hints.space_boundaries_visible !== undefined) {
                     // TODO: Ability to show boundaries

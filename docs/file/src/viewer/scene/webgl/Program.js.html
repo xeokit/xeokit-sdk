@@ -67,6 +67,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
@@ -155,6 +157,10 @@ function joinSansComments(srcLines) {
     return src.join(&quot;\n&quot;);
 }
 
+function logErrors(errors) {
+    console.error(errors.join(&quot;\n&quot;));
+}
+
 /**
  * @desc Represents a WebGL program.
  * @private
@@ -181,19 +187,23 @@ class Program {
         this._fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, joinSansComments(this.source.fragment));
         if (!this._vertexShader.allocated) {
             this.errors = [&quot;Vertex shader failed to allocate&quot;].concat(this._vertexShader.errors);
+            logErrors(this.errors);
             return;
         }
         if (!this._fragmentShader.allocated) {
             this.errors = [&quot;Fragment shader failed to allocate&quot;].concat(this._fragmentShader.errors);
+            logErrors(this.errors);
             return;
         }
         this.allocated = true;
         if (!this._vertexShader.compiled) {
             this.errors = [&quot;Vertex shader failed to compile&quot;].concat(this._vertexShader.errors);
+            logErrors(this.errors);
             return;
         }
         if (!this._fragmentShader.compiled) {
             this.errors = [&quot;Fragment shader failed to compile&quot;].concat(this._fragmentShader.errors);
+            logErrors(this.errors);
             return;
         }
         this.compiled = true;
@@ -222,6 +232,7 @@ class Program {
             this.errors = this.errors.concat(this.source.vertex);
             this.errors.push(&quot;\nFragment shader:\n&quot;);
             this.errors = this.errors.concat(this.source.fragment);
+            logErrors(this.errors);
             return;
         }
         const numUniforms = gl.getProgramParameter(this.handle, gl.ACTIVE_UNIFORMS);
