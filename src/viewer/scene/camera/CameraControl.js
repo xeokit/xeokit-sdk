@@ -536,7 +536,7 @@ class CameraControl extends Component {
      *
      * @param {Boolean} value Set ````true```` to enable keyboard input.
      */
-    set keyBoardEnabled(value) {
+    set keyboardEnabled(value) {
         this._keyboardEnabled = value;
     }
 
