@@ -534,7 +534,7 @@ class CameraControl extends Component {
      *
      * Default value is ````true````.
      *
-     * @param {Boolean} value Set ````true```` to enable mouse input.
+     * @param {Boolean} value Set ````true```` to enable keyboard input.
      */
     set keyBoardEnabled(value) {
         this._keyboardEnabled = value;
