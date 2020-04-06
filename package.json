@@ -1,7 +1,7 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "0.9.5",
-  "description": "JavaScript SDK for viewing high-detail 3D BIM and CAD models in the Web browser",
+  "version": "0.9.5.1",
+  "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
