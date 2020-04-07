@@ -1804,7 +1804,7 @@ class CameraControl extends Component {
 
             document.addEventListener("keydown", function (e) {
 
-                if (!(self._active && self._pointerEnabled)) {
+                if (!(self._active && self._pointerEnabled) || (!scene.input.keyboardEnabled)) {
                     return;
                 }
 
