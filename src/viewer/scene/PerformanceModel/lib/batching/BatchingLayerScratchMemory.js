@@ -31,7 +31,7 @@ const batchingLayerScratchMemory = new BatchingLayerScratchMemory();
  */
 function getBatchingLayerScratchMemory(performanceModel) {
     performanceModel.once("destroyed", () => {
-        batchingLayerScratchMemory.clear();
+        batchingLayerScratchMemory._clear();
     });
     return batchingLayerScratchMemory;
 }
