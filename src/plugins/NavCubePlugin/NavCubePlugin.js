@@ -113,6 +113,9 @@ class NavCubePlugin extends Plugin {
             });
 
             this._navCubeCanvas = this._navCubeScene.canvas.canvas;
+
+            this._navCubeScene.input.keyboardEnabled = false; // Don't want keyboard input in the NavCube
+
         } catch (error) {
             this.error(error);
             return;
@@ -535,7 +538,7 @@ class NavCubePlugin extends Plugin {
      *
      * @param {Boolean} fitVisible Set ````true```` to fit only visible object-Entitys.
      */
-    setFitVisible(fitVisible =false) {
+    setFitVisible(fitVisible = false) {
         this._fitVisible = fitVisible;
     }
 
