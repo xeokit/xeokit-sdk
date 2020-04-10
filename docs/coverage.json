@@ -1,7 +1,7 @@
 {
-  "coverage": "44.24%",
-  "expectCount": 4202,
-  "actualCount": 1859,
+  "coverage": "44.34%",
+  "expectCount": 4188,
+  "actualCount": 1857,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -554,29 +554,29 @@
       "undocumentLines": [
         109,
         115,
-        129,
-        134,
-        138,
-        162,
-        164,
-        171,
-        205,
-        224,
-        225,
-        238,
-        243,
-        488,
-        497,
-        539,
-        562,
-        585,
-        608,
-        629,
-        667,
-        668,
-        669,
+        132,
+        137,
+        141,
+        165,
+        167,
+        174,
+        208,
+        227,
+        228,
+        241,
+        246,
+        491,
+        500,
+        542,
+        565,
+        588,
+        611,
+        632,
         670,
-        671
+        671,
+        672,
+        673,
+        674
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
@@ -857,7 +857,7 @@
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        177
+        178
       ]
     },
     "src/plugins/lib/html/Dot.js": {
@@ -2030,30 +2030,6 @@
       "undocumentLines": [
         9,
         61
-      ]
-    },
-    "src/viewer/scene/PerformanceModel/lib/instancing/snapToVertex/instancingSnapToVertexRenderer.js": {
-      "expectCount": 11,
-      "actualCount": 1,
-      "undocumentLines": [
-        6,
-        20,
-        22,
-        39,
-        43,
-        47,
-        58,
-        62,
-        125,
-        165
-      ]
-    },
-    "src/viewer/scene/PerformanceModel/lib/instancing/snapToVertex/instancingSnapToVertexShaderSource.js": {
-      "expectCount": 3,
-      "actualCount": 1,
-      "undocumentLines": [
-        13,
-        58
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/renderFlags.js": {
