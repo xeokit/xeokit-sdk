@@ -234,7 +234,7 @@ class BCFViewpointsPlugin extends Plugin {
      *     }
      * }
      */
-    getViewpoint(options={}) {
+    getViewpoint(options = {}) {
         const scene = this.viewer.scene;
         const camera = scene.camera;
         const realWorldOffset = scene.realWorldOffset;
@@ -389,10 +389,14 @@ class BCFViewpointsPlugin extends Plugin {
 
             if (!bcfViewpoint.components.visibility.default_visibility) {
                 scene.setObjectsVisible(scene.objectIds, false);
-                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
+                if (bcfViewpoint.components.visibility.exceptions) {
+                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
+                }
             } else {
                 scene.setObjectsVisible(scene.objectIds, true);
-                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
+                if (bcfViewpoint.components.visibility.exceptions) {
+                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
+                }
             }
 
             const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
@@ -465,7 +469,7 @@ class BCFViewpointsPlugin extends Plugin {
                 camera.up = up;
                 camera.projection = projection;
             } else {
-                viewer.cameraFlight.flyTo({ eye, look, up, duration: options.duration, projection });
+                viewer.cameraFlight.flyTo({eye, look, up, duration: options.duration, projection});
             }
         }
     }
