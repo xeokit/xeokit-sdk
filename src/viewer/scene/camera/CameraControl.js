@@ -243,6 +243,8 @@ class CameraControl extends Component {
      *
      * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
      *
+     * You can configure an HTML element to show the pivot position via {@link CameraControl#pivotElement}.
+     *
      * Default value is ````false````.
      *
      * @param {Boolean} value Set ````true```` to enable pivoting.
@@ -257,6 +259,8 @@ class CameraControl extends Component {
      * The pivot point is indicated by {@link CameraControl#pivotPos}.
      *
      * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
+     *
+     * You can configure an HTML element to show the pivot position via {@link CameraControl#pivotElement}.
      *
      * Default value is ````false````.
      *
