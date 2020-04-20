@@ -40,6 +40,8 @@ class CameraControl extends Component {
 
         const self = this;
 
+        this._pivotElement = null;
+
         this._pivoter = new (function () { // Pivots the Camera around an arbitrary World-space position
 
             // Pivot math by: http://www.derschmale.com/
@@ -53,23 +55,6 @@ class CameraControl extends Component {
             let polar = 0;
             let radius = 0;
             let pivoting = false; // True while pivoting
-
-            const spot = document.createElement("div");
-            spot.innerText = " ";
-            spot.style.color = "#ffffff";
-            spot.style.position = "absolute";
-            spot.style.width = "25px";
-            spot.style.height = "25px";
-            spot.style.left = "0px";
-            spot.style.top = "0px";
-            spot.style["border-radius"] = "15px";
-            spot.style["border"] = "2px solid #ffffff";
-            spot.style["background"] = "black";
-            spot.style.visibility = "hidden";
-            spot.style["box-shadow"] = "5px 5px 15px 1px #000000";
-            spot.style["z-index"] = 0;
-            spot.style["pointer-events"] = "none";
-            document.body.appendChild(spot);
 
             (function () {
                 const viewPos = math.vec4();
@@ -92,9 +77,11 @@ class CameraControl extends Component {
                         canvasPos[1] = Math.floor((1 - projPos[1] / projPos[3]) * aabb[3] / 2);
                         const canvasElem = canvas.canvas;
                         const rect = canvasElem.getBoundingClientRect();
-                        spot.style.left = (Math.floor(rect.left + canvasPos[0]) - 12) + "px";
-                        spot.style.top = (Math.floor(rect.top + canvasPos[1]) - 12) + "px";
-                        spot.style.visibility = "visible";
+                        if (self._pivotElement) {
+                            self._pivotElement.style.left = (Math.floor(rect.left + canvasPos[0]) - 12) + "px";
+                            self._pivotElement.style.top = (Math.floor(rect.top + canvasPos[1]) - 12) + "px";
+                            self._pivotElement.style.visibility = "visible";
+                        }
                         distDirty = false;
                     }
                 });
@@ -173,18 +160,24 @@ class CameraControl extends Component {
                 camera.eye = [lookat[12], lookat[13], lookat[14]];
                 math.subVec3(camera.eye, math.mulVec3Scalar(zAxis, eyeLookLen), camera.look);
                 camera.up = [lookat[4], lookat[5], lookat[6]];
-                spot.style.visibility = "visible";
+                if (self._pivotElement) {
+                    self._pivotElement.style.visibility = "visible";
+                }
             };
 
             this.showPivot = function () {
-                spot.style.visibility = "visible";
-                window.setTimeout(() => {
-                    spot.style.visibility = "hidden";
-                }, 1000)
+                if (self._pivotElement) {
+                    self._pivotElement.style.visibility = "visible";
+                    window.setTimeout(() => {
+                        self._pivotElement.style.visibility = "hidden";
+                    }, 1000);
+                }
             };
 
             this.hidePivot = function () {
-                spot.style.visibility = "hidden";
+                if (self._pivotElement) {
+                    self._pivotElement.style.visibility = "hidden";
+                }
             };
 
             this.endPivot = function () {
@@ -211,6 +204,14 @@ class CameraControl extends Component {
         this.pointerEnabled = true;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
+    }
+
+    /**
+     * Sets the HTMl element to represent the pivot point when {@link CameraControl#pivoting} is true.
+     * @param {HTMLElement} element HTML element representing the pivot point.
+     */
+    set pivotElement(element) {
+        this._pivotElement = element;
     }
 
     /**
