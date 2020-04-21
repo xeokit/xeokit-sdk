@@ -85,6 +85,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
@@ -253,6 +254,64 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-get-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current dolly speed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>sets the current dolly speed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
@@ -359,35 +418,6 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia">inertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -405,6 +435,35 @@
         
         
         <div data-ice="description"><p>Gets the inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia">inertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
 </div>
       </div>
     </td>
@@ -475,35 +534,6 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -521,6 +551,35 @@
         
         
         <div data-ice="description"><p>Gets whether scrolling the mouse wheel, when mouse is over an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
 </div>
       </div>
     </td>
@@ -738,35 +797,6 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-planView">planView</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -784,6 +814,35 @@
         
         
         <div data-ice="description"><p>Gets whether this CameraControl is in plan-view mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-planView">planView</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
 </div>
       </div>
     </td>
@@ -1465,7 +1524,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -1523,7 +1582,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber224">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -1532,6 +1591,107 @@
   
   <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
 <p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber537">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the current dolly speed.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current dolly speed.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber529">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>sets the current dolly speed. This is the number of units the camera moves per second while moving forwards or backwards.</p>
 </div>
 
   
@@ -1568,7 +1728,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber447">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber448">source</a></span></span>
     </span>
   </h3>
 
@@ -1626,7 +1786,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber436">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -1671,7 +1831,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber393">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
@@ -1730,7 +1890,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
@@ -1740,56 +1900,6 @@
   <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
 <p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> rotates about <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
 <p>Default value is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-inertia">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber487">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
-<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
-while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
-<p>You may choose an inertia of zero when you want be able to precisely position or rotate the camera,
-without interference from inertia. ero inertia can also mean that less frames are rendered while
-you are positioning the camera.</p>
-<p>Default value is <code>0.5</code>.</p>
 </div>
 
   
@@ -1826,7 +1936,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber498">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber499">source</a></span></span>
     </span>
   </h3>
 
@@ -1873,6 +1983,56 @@ you are positioning the camera.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-inertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber488">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
+<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
+while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
+<p>You may choose an inertia of zero when you want be able to precisely position or rotate the camera,
+without interference from inertia. ero inertia can also mean that less frames are rendered while
+you are positioning the camera.</p>
+<p>Default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-panRightClick">
     <span class="access" data-ice="access">public</span>
     
@@ -1884,7 +2044,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber469">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -1942,7 +2102,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber458">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1951,51 +2111,6 @@ you are positioning the camera.</p>
   
   <div data-ice="description"><p>Sets whether either right-clicking (true) or middle-clicking (false) pans the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</p>
 <p>Default value is <code>true</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-panToPivot">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber323">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
-<p>Default value is <code>false</code>.</p>
 </div>
 
   
@@ -2032,7 +2147,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber337">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber338">source</a></span></span>
     </span>
   </h3>
 
@@ -2079,6 +2194,51 @@ you are positioning the camera.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-panToPivot">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber324">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-panToPointer">
     <span class="access" data-ice="access">public</span>
     
@@ -2090,7 +2250,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber313">source</a></span></span>
     </span>
   </h3>
 
@@ -2148,7 +2308,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber298">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -2193,7 +2353,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber214">source</a></span></span>
     </span>
   </h3>
 
@@ -2237,7 +2397,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber288">source</a></span></span>
     </span>
   </h3>
 
@@ -2294,7 +2454,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber279">source</a></span></span>
     </span>
   </h3>
 
@@ -2338,7 +2498,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber269">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber270">source</a></span></span>
     </span>
   </h3>
 
@@ -2399,7 +2559,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber252">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber253">source</a></span></span>
     </span>
   </h3>
 
@@ -2410,52 +2570,6 @@ you are positioning the camera.</p>
 <p>The pivot point is indicated by <span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivotPos">CameraControl#pivotPos</a></span>.</p>
 <p>When in pivoting mode, clicking on an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> will set <span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivotPos">CameraControl#pivotPos</a></span> to the clicked position on the surface of the Entity.</p>
 <p>You can configure an HTML element to show the pivot position via <span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivotElement">CameraControl#pivotElement</a></span>.</p>
-<p>Default value is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-planView">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">planView</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber350">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
-<p>When in plan-view mode, rotation is disabled.</p>
 <p>Default value is <code>false</code>.</p>
 </div>
 
@@ -2493,7 +2607,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber363">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber364">source</a></span></span>
     </span>
   </h3>
 
@@ -2541,6 +2655,52 @@ you are positioning the camera.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-planView">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">planView</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber351">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
+<p>When in plan-view mode, rotation is disabled.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-pointerEnabled">
     <span class="access" data-ice="access">public</span>
     
@@ -2552,7 +2712,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber509">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber510">source</a></span></span>
     </span>
   </h3>
 
@@ -2597,7 +2757,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber520">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -2655,7 +2815,7 @@ you are positioning the camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber425">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -2716,7 +2876,7 @@ this is useful to allow us to look upwards or downwards as we move, while keepin
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber409">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
@@ -2767,7 +2927,7 @@ this is useful to allow us to look upwards or downwards as we move, while keepin
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber1938">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/CameraControl.js.html#lineNumber1975">source</a></span></span>
     </span>
   </h3>
 

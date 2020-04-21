@@ -85,6 +85,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
@@ -234,7 +235,7 @@ class CameraControl extends Component {
                 const diff = math.vec3();
                 math.subVec3(camera.eye, pivotPoint, diff);
                 math.addVec3(diff, offset);
-                if (camera.worldUp[2] === 1) {
+                if (camera.zUp) {
                     const t = diff[1];
                     diff[1] = diff[2];
                     diff[2] = t;
@@ -337,6 +338,7 @@ class CameraControl extends Component {
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
         this.pointerEnabled = true;
+        this.dollyRate = cfg.dollyRate;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -657,6 +659,22 @@ class CameraControl extends Component {
     }
 
     /**
+     * sets the current dolly speed. This is the number of units the camera moves per second while moving forwards or backwards.
+     * @param {Number} dollyRate The new dolly speed.
+     */
+    set dollyRate(dollyRate) {
+        this._dollyRate = dollyRate || 1.0;
+    }
+
+    /**
+     * Returns the current dolly speed.
+     * @returns {Number} The current dolly speed.
+     */
+    get dollyRate() {
+        return this._dollyRate;
+    }
+
+    /**
      * @private
      */
     set keyboardLayout(value) {
@@ -963,7 +981,10 @@ class CameraControl extends Component {
                 };
             })();
 
-            scene.on(&quot;tick&quot;, function () {
+            scene.on(&quot;tick&quot;, function (e) {
+
+                const deltaTimeSecs = e.deltaTime; //(e.deltaTime / 1000);
+                const dollySpeed = deltaTimeSecs * self._dollyRate;
 
                 const cameraInertia = self._inertia;
 
@@ -1022,10 +1043,24 @@ class CameraControl extends Component {
                 }
 
                 if (panVx !== 0 || panVy !== 0 || panVz !== 0) {
+
                     const f = getEyeLookDist() / 80;
+
+                    const vec = math.vec3();
+                    const vec2 = math.vec3();
+
+                    vec[0] = panVx;
+                    vec[1] = panVy;
+                    vec[2] = panVz;
+
+                    math.normalizeVec3(vec);
+                    math.mulVec3Scalar(vec, dollySpeed, vec2);
+
                     if (self._walking) {
                         let y = camera.eye[1];
-                        camera.pan([panVx * f, panVy * f, panVz * f]);
+
+                        //      camera.pan([panVx * f, panVy * f, panVz * f]);
+                        camera.pan(vec2);
                         let eye = camera.eye;
                         eye[1] = y;
                         camera.eye = eye;
@@ -1033,7 +1068,8 @@ class CameraControl extends Component {
                         if (self._pivoter.getPivoting()) {
                             self._pivoter.showPivot();
                         }
-                        camera.pan([panVx * f, panVy * f, panVz * f]);
+                        camera.pan(vec2);
+                        // camera.pan([panVx * f, panVy * f, panVz * f]);
                     }
                 }
 
@@ -1046,15 +1082,17 @@ class CameraControl extends Component {
                 }
 
                 if (vZoom !== 0) {
+
                     if (self._firstPerson) {
+
                         let y;
                         if (self._walking) {
                             y = camera.eye[1];
                         }
                         if (panToMouse) { // Using mouse input
-                            panToMousePos(mousePos, -vZoom * 2);
+                            panToMousePos(mousePos, -vZoom * dollySpeed);
                         } else {
-                            camera.pan([0, 0, vZoom]); // Touchscreen input with no cursor
+                            camera.pan([0, 0, vZoom * dollySpeed]); // Touchscreen input with no cursor
                         }
                         if (self._walking) {
                             let eye = camera.eye;
@@ -1064,11 +1102,11 @@ class CameraControl extends Component {
                     } else {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
-                            panToMousePos(mousePos, -vZoom * 2);
+                            panToMousePos(mousePos, -vZoom * dollySpeed);
                         } else if (self._panToPivot) {
-                            panToWorldPos(self._pivoter.getPivotPos(), -vZoom); // FIXME: What about when pivotPos undefined?
+                            panToWorldPos(self._pivoter.getPivotPos(), -vZoom * dollySpeed); // FIXME: What about when pivotPos undefined?
                         } else {
-                            camera.zoom(vZoom);
+                            camera.zoom(vZoom * dollySpeed);
                         }
                         camera.ortho.scale = camera.ortho.scale + vZoom;
                     }

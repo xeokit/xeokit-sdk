@@ -1,7 +1,7 @@
 {
-  "coverage": "44.34%",
-  "expectCount": 4190,
-  "actualCount": 1858,
+  "coverage": "44.37%",
+  "expectCount": 4194,
+  "actualCount": 1861,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -2078,27 +2078,28 @@
       ]
     },
     "src/viewer/scene/camera/CameraControl.js": {
-      "expectCount": 48,
-      "actualCount": 30,
+      "expectCount": 51,
+      "actualCount": 32,
       "undocumentLines": [
         43,
         45,
         189,
-        225,
-        253,
-        299,
-        301,
-        351,
-        377,
-        410,
-        437,
-        459,
-        488,
-        510,
-        528,
-        538,
-        1902,
-        1938
+        226,
+        254,
+        300,
+        302,
+        352,
+        378,
+        411,
+        438,
+        460,
+        489,
+        511,
+        530,
+        545,
+        555,
+        1939,
+        1975
       ]
     },
     "src/viewer/scene/camera/CameraFlightAnimation.js": {
@@ -2332,6 +2333,11 @@
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildCylinderGeometry.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/geometry/builders/buildGridGeometry.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
