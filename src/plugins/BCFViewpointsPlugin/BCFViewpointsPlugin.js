@@ -411,13 +411,13 @@ class BCFViewpointsPlugin extends Plugin {
                     // TODO: Ability to show boundaries
                 }
             }
-        }
 
-        if (bcfViewpoint.components.selection) {
-            scene.setObjectsSelected(scene.selectedObjectIds, false);
-            Object.keys(scene.models).forEach(() => {
-                bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
-            });
+            if (bcfViewpoint.components.selection) {
+                scene.setObjectsSelected(scene.selectedObjectIds, false);
+                Object.keys(scene.models).forEach(() => {
+                    bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
+                });
+            }
         }
 
         if (bcfViewpoint.perspective_camera || bcfViewpoint.orthogonal_camera) {
