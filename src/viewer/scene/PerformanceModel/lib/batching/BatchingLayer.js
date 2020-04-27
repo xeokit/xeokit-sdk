@@ -530,12 +530,12 @@ class BatchingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        var portionsIdx = portionId * 2;
-        var vertexBase = this._portions[portionsIdx];
-        var numVerts = this._portions[portionsIdx + 1];
-        var firstColor = vertexBase * 4;
-        var lenColor = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(numVerts);
+        const portionsIdx = portionId * 2;
+        const vertexBase = this._portions[portionsIdx];
+        const numVerts = this._portions[portionsIdx + 1];
+        const firstColor = vertexBase * 4;
+        const lenColor = numVerts * 4;
+        const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
         const g = color[1];
         const b = color[2];
