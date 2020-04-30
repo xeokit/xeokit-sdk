@@ -120,7 +120,7 @@ function getInstancingRenderers(scene) {
         instancingRenderers = new InstancingRenderers(scene);
         sceneInstancingRenderers[sceneId] = instancingRenderers;
         instancingRenderers._compile();
-        scene.on("compiling", () => {
+        scene.on("compile", () => {
             instancingRenderers._compile();
         });
         scene.on("destroyed", () => {
