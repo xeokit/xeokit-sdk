@@ -1,121 +1,149 @@
-/**
- @desc  Publishes keyboard and mouse events that occur on the parent {@link Scene}'s {@link Canvas}.
-
- * Each {@link Scene} provides an Input on itself as a read-only property.
-
- ## Usage
-
- In this example, we're subscribing to some mouse and key events that will occur on
- a {@link Scene} {@link Canvas"}}Canvas{{/crossLink}}.
-
- ````javascript
- var myScene = new xeokit.Scene();
-
- var input = myScene.input;
-
- // We'll save a handle to this subscription
- // to show how to unsubscribe, further down
- var handle = input.on("mousedown", function(coords) {
-       console.log("Mouse down at: x=" + coords[0] + ", y=" + coords[1]);
- });
-
- input.on("mouseup", function(coords) {
-       console.log("Mouse up at: x=" + coords[0] + ", y=" + coords[1]);
- });
-
- input.on("mouseclicked", function(coords) {
-      console.log("Mouse clicked at: x=" + coords[0] + ", y=" + coords[1]);
- });
-
- input.on("dblclick", function(coords) {
-       console.log("Double-click at: x=" + coords[0] + ", y=" + coords[1]);
- });
-
- input.on("keydown", function(keyCode) {
-        switch (keyCode) {
-
-            case this.KEY_A:
-               console.log("The 'A' key is down");
-               break;
-
-            case this.KEY_B:
-               console.log("The 'B' key is down");
-               break;
-
-            case this.KEY_C:
-               console.log("The 'C' key is down");
-               break;
-
-            default:
-               console.log("Some other key is down");
-       }
-     });
-
- input.on("keyup", function(keyCode) {
-        switch (keyCode) {
-
-            case this.KEY_A:
-               console.log("The 'A' key is up");
-               break;
-
-            case this.KEY_B:
-               console.log("The 'B' key is up");
-               break;
-
-            case this.KEY_C:
-               console.log("The 'C' key is up");
-               break;
-
-            default:
-               console.log("Some other key is up");
-        }
-     });
-
- // TODO: ALT and CTRL keys etc
- ````
-
- ### Unsubscribing from Events
-
- In the snippet above, we saved a handle to one of our event subscriptions.
-
- We can then use that handle to unsubscribe again, like this:
-
- ````javascript
- input.off(handle);
- ````
-
- ## Disabling keyboard input
-
- When the mouse is over the canvas, the canvas will consume "keydown" events. Therefore, sometimes we need to prevent
- disable keyboard control, so that other UI elements can get those events.
-
- To disable keyboard control, set {@link Input#keyboardEnabled} ````false````:
-
- ````javascript
- myViewer.scene.input.keyboardEnabled = false;
- ````
-
- @extends Component
- */
 import {Component} from '../Component.js';
 import {math} from '../math/math.js';
 
+/**
+ * @desc Meditates mouse, touch and keyboard events for various interaction controls.
+ *
+ * Ordinarily, you would only use this component as a utility to help manage input events and state for your
+ * own custom input handlers.
+ *
+ * * Located at {@link Scene#input}
+ * * Used by (at least) {@link CameraControl}
+ *
+ * ## Usage
+ *
+ * Subscribing to mouse events on the canvas:
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * const input = viewer.scene.input;
+ *
+ * const onMouseDown = input.on("mousedown", (canvasCoords) => {
+ *       console.log("Mouse down at: x=" + canvasCoords[0] + ", y=" + coords[1]);
+ * });
+ *
+ * const onMouseUp = input.on("mouseup", (canvasCoords) => {
+ *       console.log("Mouse up at: x=" + canvasCoords[0] + ", y=" + canvasCoords[1]);
+ * });
+ *
+ * const onMouseClicked = input.on("mouseclicked", (canvasCoords) => {
+ *      console.log("Mouse clicked at: x=" + canvasCoords[0] + ", y=" + canvasCoords[1]);
+ * });
+ *
+ * const onDblClick = input.on("dblclick", (canvasCoords) => {
+ *       console.log("Double-click at: x=" + canvasCoords[0] + ", y=" + canvasCoords[1]);
+ * });
+ * ````
+ *
+ * Subscribing to keyboard events on the canvas:
+ *
+ * ````javascript
+ * const onKeyDown = input.on("keydown", (keyCode) => {
+ *      switch (keyCode) {
+ *          case this.KEY_A:
+ *              console.log("The 'A' key is down");
+ *              break;
+ *
+ *          case this.KEY_B:
+ *              console.log("The 'B' key is down");
+ *              break;
+ *
+ *          case this.KEY_C:
+ *              console.log("The 'C' key is down");
+ *              break;
+ *
+ *          default:
+ *              console.log("Some other key is down");
+ *      }
+ * });
+ *
+ * const onKeyUp = input.on("keyup", (keyCode) => {
+ *      switch (keyCode) {
+ *          case this.KEY_A:
+ *              console.log("The 'A' key is up");
+ *              break;
+ *
+ *          case this.KEY_B:
+ *              console.log("The 'B' key is up");
+ *              break;
+ *
+ *          case this.KEY_C:
+ *              console.log("The 'C' key is up");
+ *              break;
+ *
+ *          default:
+ *              console.log("Some other key is up");
+ *      }
+ *  });
+ * ````
+ *
+ * Checking if keys are down:
+ *
+ * ````javascript
+ * const isCtrlDown = input.ctrlDown;
+ * const isAltDown = input.altDown;
+ * const shiftDown = input.shiftDown;
+ * //...
+ *
+ * const isAKeyDown = input.keyDown[input.KEY_A];
+ * const isBKeyDown = input.keyDown[input.KEY_B];
+ * const isShiftKeyDown = input.keyDown[input.KEY_SHIFT];
+ * //...
+ *
+ * ````
+ * Unsubscribing from events:
+ *
+ * ````javascript
+ * input.off(onMouseDown);
+ * input.off(onMouseUp);
+ * //...
+ * ````
+ *
+ * ## Disabling all events
+ *
+ * Event handling is enabled by default.
+ *
+ * To disable all events:
+ *
+ * ````javascript
+ * myViewer.scene.input.setEnabled(false);
+ * ````
+ * To enable all events again:
+ *
+ * ````javascript
+ * myViewer.scene.input.setEnabled(true);
+ * ````
+ *
+ * ## Disabling keyboard input
+ *
+ * When the mouse is over the canvas, the canvas will consume keyboard events. Therefore, sometimes we need
+ * to disable keyboard control, so that other UI elements can get those events.
+ *
+ * To disable keyboard events:
+ *
+ * ````javascript
+ * myViewer.scene.input.setKeyboardEnabled(false);
+ * ````
+ *
+ * To enable keyboard events again:
+ *
+ * ````javascript
+ * myViewer.scene.input.setKeyboardEnabled(true)
+ * ````
+ */
 class Input extends Component {
 
     /**
-     @private
+     * @private
      */
-    get type() {
-        return "Input";
-    }
-
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
-
-        const self = this;
-
-        // Key codes
 
         /**
          * Code for the BACKSPACE key.
@@ -909,38 +937,50 @@ class Input extends Component {
          */
         this.KEY_SPACE = 32;
 
-        this._element = cfg.element;
+        /**
+         * The canvas element that mouse and keyboards are bound to.
+         *
+         * @final
+         * @type {HTMLCanvasElement}
+         */
+        this.element = cfg.element;
 
-        // True when ALT down
+        /** True whenever ALT key is down.
+         *
+         * @type {boolean}
+         */
         this.altDown = false;
 
-        /** True whenever CTRL is down
+        /** True whenever CTRL key is down.
          *
          * @type {boolean}
          */
         this.ctrlDown = false;
 
-        /** True whenever left mouse button is down
+        /** True whenever left mouse button is down.
          *
          * @type {boolean}
          */
         this.mouseDownLeft = false;
 
-        /** True whenever middle mouse button is down
+        /**
+         * True whenever middle mouse button is down.
          *
          * @type {boolean}
          */
         this.mouseDownMiddle = false;
 
-        /** True whenever right mouse button is down
+        /**
+         * True whenever the right mouse button is down.
          *
          * @type {boolean}
          */
         this.mouseDownRight = false;
 
-        /** Flag for each key that's down
+        /**
+         * Flag for each key that's down.
          *
-         * @type {boolean}
+         * @type {boolean[]}
          */
         this.keyDown = [];
 
@@ -950,7 +990,7 @@ class Input extends Component {
          */
         this.enabled = true;
 
-        /** True while keyboard input enabled.
+        /** True while keyboard input is enabled.
          *
          * Default value is ````true````.
          *
@@ -960,347 +1000,226 @@ class Input extends Component {
          */
         this.keyboardEnabled = true;
 
-        /** True while mouse is over the parent {@link Scene} {@link Canvas"}}Canvas{{/crossLink}}
+        /** True while the mouse is over the canvas.
          *
          * @type {boolean}
          */
         this.mouseover = false;
 
-        // Capture input events and publish them on this component
+        /**
+         * Current mouse position within the canvas.
+         * @type {Number[]}
+         */
+        this.mouseCanvasPos = math.vec2();
 
-        document.addEventListener("keydown", this._keyDownListener = function (e) {
+        this._bindEvents();
+    }
 
-            if (!self.enabled || (!self.keyboardEnabled)) {
+    _bindEvents() {
+
+        if (this._eventsBound) {
+            return;
+        }
+
+        document.addEventListener("keydown", this._keyDownListener = (e) => {
+            if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
-
             if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
-
-                if (e.keyCode === self.KEY_CTRL) {
-                    self.ctrlDown = true;
-                } else if (e.keyCode === self.KEY_ALT) {
-                    self.altDown = true;
+                if (e.keyCode === this.KEY_CTRL) {
+                    this.ctrlDown = true;
+                } else if (e.keyCode === this.KEY_ALT) {
+                    this.altDown = true;
+                } else if (e.keyCode === this.KEY_SHIFT) {
+                    this.shiftDown = true;
                 }
-
-                self.keyDown[e.keyCode] = true;
-
-                /**
-                 * Fired whenever a key is pressed while the parent
-                 * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
-                 * @event keydown
-                 * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
-                 */
-                self.fire("keydown", e.keyCode, true);
+                this.keyDown[e.keyCode] = true;
+                this.fire("keydown", e.keyCode, true);
             }
 
-            if (self.mouseover) {
+            if (this.mouseover) {
                 e.preventDefault();
             }
-
         }, false);
 
-        document.addEventListener("keyup", this._keyUpListener = function (e) {
-
-            if (!self.enabled || (!self.keyboardEnabled)) {
+        document.addEventListener("keyup", this._keyUpListener = (e) => {
+            if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
-
             if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
-
-                if (e.keyCode === self.KEY_CTRL) {
-                    self.ctrlDown = false;
-                } else if (e.keyCode === self.KEY_ALT) {
-                    self.altDown = false;
+                if (e.keyCode === this.KEY_CTRL) {
+                    this.ctrlDown = false;
+                } else if (e.keyCode === this.KEY_ALT) {
+                    this.altDown = false;
+                } else if (e.keyCode === this.KEY_SHIFT) {
+                    this.shiftDown = false;
                 }
-
-                self.keyDown[e.keyCode] = false;
-
-                /**
-                 * Fired whenever a key is released while the parent
-                 * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
-                 * @event keyup
-                 * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
-                 */
-                self.fire("keyup", e.keyCode, true);
+                this.keyDown[e.keyCode] = false;
+                this.fire("keyup", e.keyCode, true);
             }
         });
 
-        cfg.element.addEventListener("mouseenter", this._mouseEnterListener = function (e) {
-
-            if (!self.enabled) {
+        this.element.addEventListener("mouseenter", this._mouseEnterListener = (e) => {
+            if (!this.enabled) {
                 return;
             }
-
-            self.mouseover = true;
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is moved into of the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mouseenter
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("mouseenter", coords, true);
+            this.mouseover = true;
+            this._getMouseCanvasPos(e);
+            this.fire("mouseenter", this.mouseCanvasPos, true);
         });
 
-        cfg.element.addEventListener("mouseleave", this._mouseLeaveListener = function (e) {
-
-            if (!self.enabled) {
+        this.element.addEventListener("mouseleave", this._mouseLeaveListener = (e) => {
+            if (!this.enabled) {
                 return;
             }
-
-            self.mouseover = false;
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is moved out of the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mouseleave
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("mouseleave", coords, true);
+            this.mouseover = false;
+            this._getMouseCanvasPos(e);
+            this.fire("mouseleave", this.mouseCanvasPos, true);
         });
 
-
-        cfg.element.addEventListener("mousedown", this._mouseDownListener = function (e) {
-
-            if (!self.enabled) {
+        this.element.addEventListener("mousedown", this._mouseDownListener = (e) => {
+            if (!this.enabled) {
                 return;
             }
-
             switch (e.which) {
-
                 case 1:// Left button
-                    self.mouseDownLeft = true;
+                    this.mouseDownLeft = true;
                     break;
-
                 case 2:// Middle/both buttons
-                    self.mouseDownMiddle = true;
+                    this.mouseDownMiddle = true;
                     break;
-
                 case 3:// Right button
-                    self.mouseDownRight = true;
+                    this.mouseDownRight = true;
                     break;
-
                 default:
                     break;
             }
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            cfg.element.focus();
-
-            /**
-             * Fired whenever the mouse is pressed over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mousedown
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("mousedown", coords, true);
-
-            if (self.mouseover) {
+            this._getMouseCanvasPos(e);
+            this.element.focus();
+            this.fire("mousedown", this.mouseCanvasPos, true);
+            if (this.mouseover) {
                 e.preventDefault();
             }
         });
 
-        document.addEventListener("mouseup", this._mouseUpListener = function (e) {
+        // document.addEventListener("mouseup", this._mouseUpListener = (e) => {
+        //     if (!this.enabled) {
+        //         return;
+        //     }
+        //     switch (e.which) {
+        //         case 1:// Left button
+        //             this.mouseDownLeft = false;
+        //             break;
+        //         case 2:// Middle/both buttons
+        //             this.mouseDownMiddle = false;
+        //             break;
+        //         case 3:// Right button
+        //             this.mouseDownRight = false;
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     this.fire("mouseup", this.mouseCanvasPos, true);
+        //     // if (this.mouseover) {
+        //     //     e.preventDefault();
+        //     // }
+        // }, true);
 
-            if (!self.enabled) {
+        // document.addEventListener("click", this._clickListener = (e) => {
+        //     if (!this.enabled) {
+        //         return;
+        //     }
+        //     switch (e.which) {
+        //         case 1:// Left button
+        //             this.mouseDownLeft = false;
+        //             this.mouseDownRight = false;
+        //             break;
+        //         case 2:// Middle/both buttons
+        //             this.mouseDownMiddle = false;
+        //             break;
+        //         case 3:// Right button
+        //             this.mouseDownLeft = false;
+        //             this.mouseDownRight = false;
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     this._getMouseCanvasPos(e);
+        //     this.fire("click", this.mouseCanvasPos, true);
+        //     if (this.mouseover) {
+        //         e.preventDefault();
+        //     }
+        // });
+
+        // document.addEventListener("dblclick", this._dblClickListener = (e) => {
+        //     if (!this.enabled) {
+        //         return;
+        //     }
+        //     switch (e.which) {
+        //         case 1:// Left button
+        //             this.mouseDownLeft = false;
+        //             this.mouseDownRight = false;
+        //             break;
+        //         case 2:// Middle/both buttons
+        //             this.mouseDownMiddle = false;
+        //             break;
+        //         case 3:// Right button
+        //             this.mouseDownLeft = false;
+        //             this.mouseDownRight = false;
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     this._getMouseCanvasPos(e);
+        //     this.fire("dblclick", this.mouseCanvasPos, true);
+        //     if (this.mouseover) {
+        //         e.preventDefault();
+        //     }
+        // });
+
+        this.element.addEventListener("mousemove", this._mouseMoveListener = (e) => {
+            if (!this.enabled) {
                 return;
             }
-
-            switch (e.which) {
-
-                case 1:// Left button
-                    self.mouseDownLeft = false;
-                    break;
-
-                case 2:// Middle/both buttons
-                    self.mouseDownMiddle = false;
-                    break;
-
-                case 3:// Right button
-                    self.mouseDownRight = false;
-                    break;
-
-                default:
-                    break;
-            }
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is released over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mouseup
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("mouseup", coords, true);
-
-            if (self.mouseover) {
-                e.preventDefault();
-            }
-        }, true);
-
-        document.addEventListener("click", this._clickListener = function (e) {
-
-            if (!self.enabled) {
-                return;
-            }
-
-            switch (e.which) {
-
-                case 1:// Left button
-                    self.mouseDownLeft = false;
-                    self.mouseDownRight = false;
-                    break;
-
-                case 2:// Middle/both buttons
-                    self.mouseDownMiddle = false;
-                    break;
-
-                case 3:// Right button
-                    self.mouseDownLeft = false;
-                    self.mouseDownRight = false;
-                    break;
-
-                default:
-                    break;
-            }
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is clicked over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event dblclick
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("click", coords, true);
-
-            if (self.mouseover) {
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener("dblclick", this._dblClickListener = function (e) {
-
-            if (!self.enabled) {
-                return;
-            }
-
-            switch (e.which) {
-
-                case 1:// Left button
-                    self.mouseDownLeft = false;
-                    self.mouseDownRight = false;
-                    break;
-
-                case 2:// Middle/both buttons
-                    self.mouseDownMiddle = false;
-                    break;
-
-                case 3:// Right button
-                    self.mouseDownLeft = false;
-                    self.mouseDownRight = false;
-                    break;
-
-                default:
-                    break;
-            }
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is double-clicked over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event dblclick
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("dblclick", coords, true);
-
-            if (self.mouseover) {
+            this._getMouseCanvasPos(e);
+            this.fire("mousemove", this.mouseCanvasPos, true);
+            if (this.mouseover) {
                 e.preventDefault();
             }
         });
 
-        cfg.element.addEventListener("mousemove", this._mouseMoveListener = function (e) {
-
-            if (!self.enabled) {
+        this.element.addEventListener("wheel", this._mouseWheelListener = (e, d) => {
+            if (!this.enabled) {
                 return;
             }
-
-            const coords = self._getClickCoordsWithinElement(e);
-
-            /**
-             * Fired whenever the mouse is moved over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mousedown
-             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-             */
-            self.fire("mousemove", coords, true);
-
-            if (self.mouseover) {
-                e.preventDefault();
-            }
-        });
-
-        cfg.element.addEventListener("wheel", this._mouseWheelListener = function (e, d) {
-
-            if (!self.enabled) {
-                return;
-            }
-
             const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-
-            /**
-             * Fired whenever the mouse wheel is moved over the parent
-             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-             * @event mousewheel
-             * @param delta {Number} The mouse wheel delta,
-             */
-            self.fire("mousewheel", delta, true);
+            this.fire("mousewheel", delta, true);
         }, {passive: true});
 
         // mouseclicked
 
-        (function () {
-
+        {
             let downX;
             let downY;
-
             // Tolerance between down and up positions for a mouse click
             const tolerance = 2;
-
-            self.on("mousedown", function (params) {
+            this.on("mousedown", (params) => {
                 downX = params[0];
                 downY = params[1];
             });
-
-            self.on("mouseup", function (params) {
-
+            this.on("mouseup", (params) => {
                 if (downX >= (params[0] - tolerance) &&
                     downX <= (params[0] + tolerance) &&
                     downY >= (params[1] - tolerance) &&
                     downY <= (params[1] + tolerance)) {
-
-                    /**
-                     * Fired whenever the mouse is clicked over the parent
-                     * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
-                     * @event mouseclicked
-                     * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
-                     */
-                    self.fire("mouseclicked", params, true);
+                    this.fire("mouseclicked", params, true);
                 }
             });
-        })();
-
+        }
 
         // VR
 
-        (function () {
+        {
 
             const orientationAngleLookup = {
                 'landscape-primary': 90,
@@ -1335,7 +1254,7 @@ class Input extends Component {
             };
 
             if (window.OrientationChangeEvent) {
-                window.addEventListener('orientationchange', self._orientationchangedListener = function () {
+                window.addEventListener('orientationchange', this._orientationchangedListener = () => {
 
                         orientation = window.screen.orientation || window.screen.mozOrientation || window.msOrientation || null;
                         orientationAngle = orientation ? (orientationAngleLookup[orientation] || 0) : 0;
@@ -1350,13 +1269,13 @@ class Input extends Component {
                          * @param orientation The orientation: "landscape-primary", "landscape-secondary", "portrait-secondary" or "portrait-primary"
                          * @param orientationAngle The orientation angle in degrees: 90 for landscape-primary, -90 for landscape-secondary, 180 for portrait-secondary or 0 for portrait-primary.
                          */
-                        self.fire("orientationchange", orientationChangeEvent);
+                        this.fire("orientationchange", orientationChangeEvent);
                     },
                     false);
             }
 
             if (window.DeviceMotionEvent) {
-                window.addEventListener('devicemotion', self._deviceMotionListener = function (e) {
+                window.addEventListener('devicemotion', this._deviceMotionListener = (e) => {
 
                         deviceMotionEvent.interval = e.interval;
                         deviceMotionEvent.orientationAngle = orientationAngle;
@@ -1396,13 +1315,13 @@ class Input extends Component {
                          * @param, Number interval The interval, in milliseconds, at which this event is fired. The next event will be fired in approximately this amount of time.
                          * @param  Float32Array rotationRate The rates of rotation of the device about each axis, in degrees per second.
                          */
-                        self.fire("devicemotion", deviceMotionEvent);
+                        this.fire("devicemotion", deviceMotionEvent);
                     },
                     false);
             }
 
             if (window.DeviceOrientationEvent) {
-                window.addEventListener("deviceorientation", self._deviceOrientListener = function (e) {
+                window.addEventListener("deviceorientation", this._deviceOrientListener = (e) => {
 
                         deviceOrientationEvent.gamma = e.gamma;
                         deviceOrientationEvent.beta = e.beta;
@@ -1421,44 +1340,81 @@ class Input extends Component {
                          * @param Number gamma The current orientation of the device around the Y axis in degrees; that is, how far the device is turned left or right.
                          * @param Boolean absolute This value is true if the orientation is provided as a difference between the device coordinate frame and the Earth coordinate frame; if the device can't detect the Earth coordinate frame, this value is false.
                          */
-                        self.fire("deviceorientation", deviceOrientationEvent);
+                        this.fire("deviceorientation", deviceOrientationEvent);
                     },
                     false);
             }
-        })();
+        }
+        this._eventsBound = true;
     }
 
-    _getClickCoordsWithinElement(event) {
-        const coords = [0, 0];
+    _unbindEvents() {
+        if (!this._eventsBound) {
+            return;
+        }
+        document.removeEventListener("keydown", this._keyDownListener);
+        document.removeEventListener("keyup", this._keyUpListener);
+        this.element.removeEventListener("mouseenter", this._mouseEnterListener);
+        this.element.removeEventListener("mouseleave", this._mouseLeaveListener);
+        this.element.removeEventListener("mousedown", this._mouseDownListener);
+        document.removeEventListener("mouseup", this._mouseDownListener);
+        document.removeEventListener("click", this._clickListener);
+        document.removeEventListener("dblclick", this._dblClickListener);
+        this.element.removeEventListener("mousemove", this._mouseMoveListener);
+        this.element.removeEventListener("wheel", this._mouseWheelListener);
+        if (window.OrientationChangeEvent) {
+            window.removeEventListener('orientationchange', this._orientationchangedListener);
+        }
+        if (window.DeviceMotionEvent) {
+            window.removeEventListener('devicemotion', this._deviceMotionListener);
+        }
+        if (window.DeviceOrientationEvent) {
+            window.removeEventListener("deviceorientation", this._deviceOrientListener);
+        }
+        this._eventsBound = false;
+    }
+
+    _getMouseCanvasPos(event) {
         if (!event) {
             event = window.event;
-            coords.x = event.x;
-            coords.y = event.y;
+            this.mouseCanvasPos[0] = event.x;
+            this.mouseCanvasPos[1] = event.y;
         } else {
             let element = event.target;
             let totalOffsetLeft = 0;
             let totalOffsetTop = 0;
-
             while (element.offsetParent) {
                 totalOffsetLeft += element.offsetLeft;
                 totalOffsetTop += element.offsetTop;
                 element = element.offsetParent;
             }
-            coords[0] = event.pageX - totalOffsetLeft;
-            coords[1] = event.pageY - totalOffsetTop;
+            this.mouseCanvasPos[0] = event.pageX - totalOffsetLeft;
+            this.mouseCanvasPos[1] = event.pageY - totalOffsetTop;
         }
-        return coords;
     }
 
     /**
-     * Enable or disable all input handlers
+     * Sets whether input handlers are enabled.
      *
-     * @param enable
+     * Default value is ````true````.
+     *
+     * @param {Boolean} enable Indicates if input handlers are enabled.
      */
     setEnabled(enable) {
         if (this.enabled !== enable) {
             this.fire("enabled", this.enabled = enable);
         }
+    }
+
+    /**
+     * Gets whether input handlers are enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Indicates if input handlers are enabled.
+     */
+    getEnabled() {
+        return this.enabled;
     }
 
     /**
@@ -1468,7 +1424,7 @@ class Input extends Component {
      *
      * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
      *
-     * @param {Boolean} value Set ````true```` to enable keyboard input.
+     * @param {Boolean} value Indicates whether keyboard input is enabled.
      */
     setKeyboardEnabled(value) {
         this.keyboardEnabled = value;
@@ -1481,34 +1437,18 @@ class Input extends Component {
      *
      * {@link CameraControl} will not respond to keyboard events while this is set ````false````.
      *
-     * @returns {Boolean} Returns ````true```` if keyboard input is enabled.
+     * @returns {Boolean} Returns whether keyboard input is enabled.
      */
     getKeyboardEnabled() {
         return this.keyboardEnabled;
     }
 
+    /**
+     * @private
+     */
     destroy() {
         super.destroy();
-        // Prevent memory leak when destroying canvas/WebGL context
-        document.removeEventListener("keydown", this._keyDownListener);
-        document.removeEventListener("keyup", this._keyUpListener);
-        this._element.removeEventListener("mouseenter", this._mouseEnterListener);
-        this._element.removeEventListener("mouseleave", this._mouseLeaveListener);
-        this._element.removeEventListener("mousedown", this._mouseDownListener);
-        document.removeEventListener("mouseup", this._mouseDownListener);
-        document.removeEventListener("click", this._clickListener);
-        document.removeEventListener("dblclick", this._dblClickListener);
-        this._element.removeEventListener("mousemove", this._mouseMoveListener);
-        this._element.removeEventListener("wheel", this._mouseWheelListener);
-        if (window.OrientationChangeEvent) {
-            window.removeEventListener('orientationchange', this._orientationchangedListener);
-        }
-        if (window.DeviceMotionEvent) {
-            window.removeEventListener('devicemotion', this._deviceMotionListener);
-        }
-        if (window.DeviceOrientationEvent) {
-            window.removeEventListener("deviceorientation", this._deviceOrientListener);
-        }
+        this._unbindEvents();
     }
 }
 

@@ -151,24 +151,24 @@ function getEntityIDMap(scene, entityIds) {
  * For example, to pick a point on the surface of the closest entity at the given canvas coordinates:
  *
  * ````javascript
- * var hit = scene.pick({
+ * var pickResult = scene.pick({
  *      pickSurface: true,
  *      canvasPos: [23, 131]
  * });
  *
- * if (hit) { // Picked an entity
+ * if (pickResult) { // Picked an entity
  *
- *     var entity = hit.entity;
+ *     var entity = pickResult.entity;
  *
- *     var primitive = hit.primitive; // Type of primitive that was picked, usually "triangles"
- *     var primIndex = hit.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
- *     var indices = hit.indices; // UInt32Array containing the triangle's vertex indices
- *     var localPos = hit.localPos; // Float32Array containing the picked Local-space position on the triangle
- *     var worldPos = hit.worldPos; // Float32Array containing the picked World-space position on the triangle
- *     var viewPos = hit.viewPos; // Float32Array containing the picked View-space position on the triangle
- *     var bary = hit.bary; // Float32Array containing the picked barycentric position within the triangle
- *     var normal = hit.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
- *     var uv = hit.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+ *     var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
+ *     var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+ *     var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
+ *     var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+ *     var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+ *     var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+ *     var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+ *     var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+ *     var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
  * }
  * ````
  *
@@ -182,14 +182,14 @@ function getEntityIDMap(scene, entityIds) {
  * in the way, as if they weren't there:
  *
  * ````javascript
- * var hit = scene.pick({
+ * var pickResult = scene.pick({
  *      canvasPos: [23, 131],
  *      includeEntities: ["gearbox#77.0", "gearbox#79.0"]
  * });
  *
- * if (hit) {
+ * if (pickResult) {
  *       // Entity will always be either "gearbox#77.0" or "gearbox#79.0"
- *       var entity = hit.entity;
+ *       var entity = pickResult.entity;
  * }
  * ````
  *
@@ -197,14 +197,14 @@ function getEntityIDMap(scene, entityIds) {
  * Entities if they happen to be in the way:
  *
  * ````javascript
- * var hit = scene.pick({
+ * var pickResult = scene.pick({
  *      canvasPos: [23, 131],
  *      excludeEntities: ["gearbox#77.0", "gearbox#79.0"]
  * });
  *
- * if (hit) {
+ * if (pickResult) {
  *       // Entity will never be "gearbox#77.0" or "gearbox#79.0"
- *       var entity = hit.entity;
+ *       var entity = pickResult.entity;
  * }
  * ````
  *
@@ -1787,7 +1787,7 @@ class Scene extends Component {
      *         var worldNormal = pickResult.worldNormal; // Float32Array containing the interpolated World-space normal vector at the picked position on the triangle
      *         var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
      *
-     *     } else if (pickResult.worldPos) {
+     *     } else if (pickResult.worldPos && pickResult.worldNormal) {
      *
      *         // Picked a point and normal on the entity surface
      *
@@ -1826,20 +1826,23 @@ class Scene extends Component {
      *           var origin = pickResult.origin; // Float32Array containing the World-space ray origin
      *           var direction = pickResult.direction; // Float32Array containing the World-space ray direction
      *
-     *     } else if (pickResult.worldPos) {
+     *     } else if (pickResult.worldPos && pickResult.worldNormal) {
      *
      *         // Picked a point and normal on the entity surface
      *
      *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
      *         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
      *     }
+     * }
      *  ````
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
+     * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
      * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
+     * @param {Number[]} [params.matrix] 4x4 transformation matrix to define the World-space ray origin and direction, as an alternative to ````origin```` and ````direction````.
      * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
      * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
      * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
@@ -1856,8 +1859,8 @@ class Scene extends Component {
 
         params.pickSurface = params.pickSurface || params.rayPick; // Backwards compatibility
 
-        if (!params.canvasPos && (!params.origin || !params.direction)) {
-            this.warn("picking without canvasPos or ray origin and direction");
+        if (!params.canvasPos && !params.matrix && (!params.origin || !params.direction)) {
+            this.warn("picking without canvasPos, matrix, or ray origin and direction");
         }
 
         const includeEntities = params.includeEntities || params.include; // Backwards compat

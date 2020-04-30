@@ -57,6 +57,7 @@ import {Map} from "./utils/Map.js";
  *
  * We can then find those components like this:
  *
+ * ````javascript
  * // Find the Material
  * var material = viewer.scene.components["myMaterial"];
  *
