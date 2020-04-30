@@ -388,28 +388,31 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.components) {
 
-            if (!bcfViewpoint.components.visibility.default_visibility) {
-                scene.setObjectsVisible(scene.objectIds, false);
-                if (bcfViewpoint.components.visibility.exceptions) {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
-                }
-            } else {
-                scene.setObjectsVisible(scene.objectIds, true);
-                if (bcfViewpoint.components.visibility.exceptions) {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
-                }
-            }
+            if (bcfViewpoint.components.visibility) {
 
-            const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
-            if (view_setup_hints) {
-                if (view_setup_hints.spaces_visible === false) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
+                if (!bcfViewpoint.components.visibility.default_visibility) {
+                    scene.setObjectsVisible(scene.objectIds, false);
+                    if (bcfViewpoint.components.visibility.exceptions) {
+                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
+                    }
+                } else {
+                    scene.setObjectsVisible(scene.objectIds, true);
+                    if (bcfViewpoint.components.visibility.exceptions) {
+                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
+                    }
                 }
-                if (view_setup_hints.openings_visible === false) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), false);
-                }
-                if (view_setup_hints.space_boundaries_visible !== undefined) {
-                    // TODO: Ability to show boundaries
+
+                const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
+                if (view_setup_hints) {
+                    if (view_setup_hints.spaces_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
+                    }
+                    if (view_setup_hints.openings_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), false);
+                    }
+                    if (view_setup_hints.space_boundaries_visible !== undefined) {
+                        // TODO: Ability to show boundaries
+                    }
                 }
             }
 
