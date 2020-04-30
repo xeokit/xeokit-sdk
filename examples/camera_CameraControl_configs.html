@@ -85,7 +85,7 @@
     sao.minResolution = 0.0;
     sao.kernelRadius = 100;
 
-    cameraControl.panToPointer = true;
+    cameraControl.dollyToPointer = true;
     cameraControl.pivoting = true;
     cameraControl.firstPerson = false;
 
@@ -176,8 +176,8 @@
     //     this.dollyInertia = cameraControl.dollyInertia;
     //     this.firstPerson = cameraControl.firstPerson;
     //     this.constrainVertical = cameraControl.constrainVertical;
-    //     this.panToPointer = cameraControl.panToPointer;
-    //     this.panToPivot = cameraControl.panToPivot;
+    //     this.dollyToPointer = cameraControl.dollyToPointer;
+    //     this.dollyToPivot = cameraControl.dollyToPivot;
     //     this.pivoting = cameraControl.pivoting;
     //     this.doublePickFlyTo = cameraControl.doublePickFlyTo;
     //     this.keyboardLayout = cameraControl.keyboardLayout;
@@ -189,8 +189,8 @@
     //     cameraControl.dollyInertia = cameraControlParams.dollyInertia;
     //     cameraControl.firstPerson = cameraControlParams.firstPerson;
     //     cameraControl.constrainVertical = cameraControlParams.constrainVertical;
-    //     cameraControl.panToPointer = cameraControlParams.panToPointer;
-    //     cameraControl.panToPivot = cameraControlParams.panToPivot;
+    //     cameraControl.dollyToPointer = cameraControlParams.dollyToPointer;
+    //     cameraControl.dollyToPivot = cameraControlParams.dollyToPivot;
     //     cameraControl.pivoting = cameraControlParams.pivoting;
     //     cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
     //     cameraControl.keyboardLayout = cameraControlParams.keyboardLayout;
@@ -204,8 +204,8 @@
     // const cameraControlFolder = gui.addFolder('cameraControl');
     // cameraControlFolder.add(cameraControlParams, 'firstPerson');
     // cameraControlFolder.add(cameraControlParams, 'constrainVertical');
-    // cameraControlFolder.add(cameraControlParams, 'panToPointer');
-    // cameraControlFolder.add(cameraControlParams, 'panToPivot');
+    // cameraControlFolder.add(cameraControlParams, 'dollyToPointer');
+    // cameraControlFolder.add(cameraControlParams, 'dollyToPivot');
     // cameraControlFolder.add(cameraControlParams, 'pivoting');
     // cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
     // cameraControlFolder.add(cameraControlParams, 'dollyRate', 0, 30);

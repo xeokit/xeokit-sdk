@@ -185,7 +185,7 @@ class CameraUpdater {
                         }
                     }
 
-                    if (updates.inputFromMouse && configs.panToPointer) { // Using mouse input
+                    if (updates.inputFromMouse && configs.dollyToPointer) { // Using mouse input
                         controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
                     } else {
                         camera.pan([0, 0, updates.dollyDelta * dollySpeed]); // Touchscreen input with no cursor
@@ -210,10 +210,10 @@ class CameraUpdater {
 
                 } else { // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
 
-                    if (updates.inputFromMouse && configs.panToPointer) {
+                    if (updates.inputFromMouse && configs.dollyToPointer) {
                         controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
 
-                    } else if (configs.panToPivot) {
+                    } else if (configs.dollyToPivot) {
                         controllers.panController.panToWorldPos(controllers.pivotController.getPivotPos(), -updates.dollyDelta * dollySpeed); // FIXME: What about when pivotPos undefined?
 
                     } else {

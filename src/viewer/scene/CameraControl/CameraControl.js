@@ -17,49 +17,128 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 /**
  * @desc Controls a {@link Camera} with keyboard, mouse and touch input.
  *
- * Located at {@link Viewer#cameraControl}.
+ * * Located at {@link Viewer#cameraControl}.
  *
- * ## Orbiting
+ * | Property | Type | Range | Default Value | Description |
+ *  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
+ *  | {@link CameraControl#navMode} | String |  | | |
  *
- * Pivoting
+ * ## Orbit Mode
+ *
+ * Enable orbit mode by setting {@link CameraControl#firstPerson} ````false```` (default value).
+ *
+ * In orbit mode, your current position will then orbit about the point that you're looking at.
+ *
+ * Let's enable orbit mode:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = false;
+ * ````
+ *
+ * ## Dolly-to-Pointer
+ *
+ * While in orbit mode, setting {@link CameraControl#dollyToPointer} ````true```` will cause dollying to always move you
+ * closer or farther from the position that the mouse is currently pointing at. This has no effect in first-person mode.
+ *
+ * Lets ensure that we're in orbit mode, then enable dolly-to-pointer:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = false;
+ * cameraControl.dollyToPointer = true;
+ * ````
+ *
+ * ## Pivoting Mode
+ *
+ * When in orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
+ * your position and the point you're looking at, in unison, about the current *pivot position*.
+ *
+ * When in orbit mode, and pivoting, left-clicking with the mouse on the surface of an object will set the pivot point
+ * on that surface. When using a touch device, we double-tap to set the pivot. Then the pivot point becomes that surface position.
+ *
+ * Lets ensure that we're in orbit mode, then enable pivoting:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = false;
+ * cameraControl.pivoting = true;
+ * ````
+ *
+ * Now, if using a mouse, we can left-click on an object, then hold the button down and drag to pivot that point. If we
+ * again click and drag, but this time not clicking an object, we'll continue to pivot the point on the object surface
+ * that we clicked the last time.
+ *
+ * ## Dolly-to-Pivot
+ *
+ * When in orbit mode and pivoting, setting {@link CameraControl#dollyToPivot} ````true```` will cause dollying to
+ * always move your position, and the point you're looking at, in unison, towards and away from the current pivot point.
+ *
+ * Dolly using the mouse wheel, the keyboard (see table of inputs), or pinch gesture with touch pads.
+ *
+ * Let's ensure that we're in orbit mode and that pivoting is also enabled, then enable dolly-to-pivot:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = false;
+ * cameraControl.pivoting = true;
+ * cameraControl.dollyToPointer = false;
+ * cameraControl.dollyToPivot = true;
+ * ````
+ *
+ * ## First-Person Navigation
+ *
+ * Enable first-person navigation mode by setting {@link CameraControl#firstPerson} ````true````.
+ *
+ * In first-person mode, the camera will always rotate about your current position, and dollying will move both your
+ * position and point-of-interest backwards and forwards, in unison.
+ *
+ * First-person mode also prevents dolly-to-pivot behaviour.
+ *
+ * To enable first-person mode:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = true;
+ * ````
+ *
+ *
+ *
+ * ## Rotation
+ *
+ * The {@link CameraControl#firstPerson}
+ * and {@link CameraControl#pivoting} flags determine CameraControl's rotation behaviour.
+ *
+ * When {@link CameraControl#firstPerson} and {@link CameraControl#pivoting} are both ````false````, {@link Camera#eye} and
+ * {@link Camera#up} orbit around {@link Camera#look}.
+ *
+ * When  {@link CameraControl#firstPerson} is ````false```` and {@link CameraControl#pivoting} is ````true````, {@link Camera#eye} and
+ * {@link Camera#up} orbit the current pivot position, which is set by clicking or double-tapping on a pickable {@link Entity}.
+ *
+ * ### Mouse Rotation
+ *
+ * Rotate with the mouse by dragging with the left button down.
+ *
+ * ### Mouse Pad rotation
+ *
+ * Rotate with the mouse pad by double-clicking then dragging. When {@link CameraControl#firstPerson} is ````false````
+ * and {@link CameraControl#pivoting} is ````true````, the double-tap, if over an {@link Entity}, will set the pivot
+ * point about which you'll orbit. Double-tap on empty space will continue to orbit the the last pivot point that was set.
+ *
+ * ### Touch Rotation
+ *
+ * TODO
  *
  * ## Panning
  *
- * Panning is on local axis
+ * Panning (in xeokit) moves {@link Camera#eye} and {@link Camera#look} in unison, left/right or up/down.
  *
- * Pan with keyboard, ALT to scale rate by 0.3
- * Pan with mouse left button and SHIFT
- * Pan with laptop touch pad and SHIFT
+ * ## Dollying
  *
- * Mouse wheel - variable rate
+ * Dollying moves {@link Camera#eye} and {@link Camera#look} in unison, forwards or backwards.
  *
- * Dollying
- *
- * Panning to mouse position
- *
- * Panning to pivot position
- *
- * Inertia/damping
- *
- * ## First Person
- *
- * First-person rotation
- *
- * Constraining vertical movement
- *
- * Inertia/damping
- *
- * ## Axis Views
+ * The {@link CameraControl#firstPerson}, {@link CameraControl#pivoting}, {@link CameraControl#dollyToPivot}
+ * and {@link CameraControl#dollyToPointer} flags determine CameraControl's dollying behaviour.
  *
  * ## Picking
  *
- * Double-pick fly-to
+ * ## Fly-to
  *
- * Hover object
- *
- * Hover object surface
- *
- * ## Plan View Mode
  *
  *
  * @emits "hover" - pointer hovers over a new object
@@ -116,8 +195,8 @@ class CameraControl extends Component {
             panRightClick: true,
 
             pivoting: false,
-            panToPointer: false,
-            panToPivot: false,
+            dollyToPointer: false,
+            dollyToPivot: false,
 
             rotationInertia: 0,
             dollyInertia: 0,
@@ -195,8 +274,8 @@ class CameraControl extends Component {
         this.panRightClick = cfg.panRightClick;
         this.active = cfg.active;
         this.pivoting = cfg.pivoting;
-        this.panToPointer = cfg.panToPointer;
-        this.panToPivot = cfg.panToPivot;
+        this.dollyToPointer = cfg.dollyToPointer;
+        this.dollyToPivot = cfg.dollyToPivot;
         this.rotationInertia = cfg.rotationInertia;
         this.dollyInertia = cfg.dollyInertia;
         this.pointerEnabled = true;
@@ -331,10 +410,10 @@ class CameraControl extends Component {
      *
      * @param {Boolean} value Set ````true```` to enable pan-to-pointer behaviour.
      */
-    set panToPointer(value) {
-        this._configs.panToPointer = !!value;
-        if (this._configs.panToPointer) {
-            this._configs.panToPivot = false;
+    set dollyToPointer(value) {
+        this._configs.dollyToPointer = !!value;
+        if (this._configs.dollyToPointer) {
+            this._configs.dollyToPivot = false;
         }
     }
 
@@ -345,8 +424,8 @@ class CameraControl extends Component {
      *
      * @returns {Boolean} Returns ````true```` if pan-to-pointer behaviour is enabled.
      */
-    get panToPointer() {
-        return this._configs.panToPointer;
+    get dollyToPointer() {
+        return this._configs.dollyToPointer;
     }
 
     /**
@@ -356,10 +435,10 @@ class CameraControl extends Component {
      *
      * @param {Boolean} value Set ````true```` to enable pan-to-pivot behaviour.
      */
-    set panToPivot(value) {
-        this._configs.panToPivot = !!value;
-        if (this._configs.panToPivot) {
-            this._configs.panToPointer = false;
+    set dollyToPivot(value) {
+        this._configs.dollyToPivot = !!value;
+        if (this._configs.dollyToPivot) {
+            this._configs.dollyToPointer = false;
         }
     }
 
@@ -370,8 +449,8 @@ class CameraControl extends Component {
      *
      * @returns {Boolean} Returns ````true```` if enable pan-to-pivot behaviour is enabled.
      */
-    get panToPivot() {
-        return this._configs.panToPivot;
+    get dollyToPivot() {
+        return this._configs.dollyToPivot;
     }
 
     /**
