@@ -26,6 +26,8 @@ class CameraUpdater {
                 return;
             }
 
+         //   pivotController.updatePivotElement();
+
             let cursorType = "default";
 
             const deltaTimeMilliSecs = e.deltaTime;
@@ -46,14 +48,14 @@ class CameraUpdater {
 
             if (updates.rotateDeltaY !== 0 || updates.rotateDeltaX !== 0) {
 
-                if (pivotController.getPivoting()) {
+                if (pivotController.getPivoting() && configs.pivoting) {
                     pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
                     pivotController.showPivot();
 
                 } else {
 
                     if (updates.rotateDeltaX !== 0) {
-                        if (states.firstPerson) {
+                        if (configs.firstPerson) {
                             camera.pitch(-updates.rotateDeltaX);
                         } else {
                             camera.orbitPitch(updates.rotateDeltaX);
@@ -61,7 +63,7 @@ class CameraUpdater {
                     }
 
                     if (updates.rotateDeltaY !== 0) {
-                        if (states.firstPerson) {
+                        if (configs.firstPerson) {
                             camera.yaw(updates.rotateDeltaY);
                         } else {
                             camera.orbitYaw(updates.rotateDeltaY);
@@ -74,8 +76,6 @@ class CameraUpdater {
 
                 cursorType = "grabbing";
 
-            } else {
-                //   pivotController.hidePivot();
             }
 
             //----------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ class CameraUpdater {
                     camera.eye = eye;
                     camera.look = look;
                 } else {
-                    if (controllers.pivotController.getPivoting()) {
+                    if (controllers.pivotController.getPivoting() && configs.pivoting) {
                         controllers.pivotController.showPivot();
                     }
                     camera.pan(vec2);
@@ -213,7 +213,7 @@ class CameraUpdater {
                     if (updates.inputFromMouse && configs.dollyToPointer) {
                         controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
 
-                    } else if (configs.dollyToPivot) {
+                    } else if (configs.dollyToPivot && configs.pivoting) {
                         controllers.panController.panToWorldPos(controllers.pivotController.getPivotPos(), -updates.dollyDelta * dollySpeed); // FIXME: What about when pivotPos undefined?
 
                     } else {
@@ -225,7 +225,7 @@ class CameraUpdater {
 
                 updates.dollyDelta *= configs.dollyInertia;
 
-                if (pivotController.getPivoting()) {
+                if (pivotController.getPivoting() && configs.pivoting) {
                     pivotController.showPivot();
                 }
             }

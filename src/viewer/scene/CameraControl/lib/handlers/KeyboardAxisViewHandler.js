@@ -92,16 +92,20 @@ class KeyboardAxisViewHandler {
                     return;
             }
 
+            if ((!configs.firstPerson) && configs.pivoting) {
+                controllers.pivotController.startPivot(center);
+            }
+
             if (controllers.cameraFlight.duration > 0) {
                 controllers.cameraFlight.flyTo(tempCameraTarget, () => {
-                    if (controllers.pivotController.getPivoting()) {
+                    if (controllers.pivotController.getPivoting() && configs.pivoting) {
                         controllers.pivotController.showPivot();
                     }
                 });
 
             } else {
                 controllers.cameraFlight.jumpTo(tempCameraTarget);
-                if (controllers.pivotController.getPivoting()) {
+                if (controllers.pivotController.getPivoting() && configs.pivoting) {
                     controllers.pivotController.showPivot();
                 }
             }

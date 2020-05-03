@@ -34,11 +34,11 @@ class PivotController {
         });
 
         this._scene.on("tick", () => {
-            this._update();
+            this.updatePivotElement();
         });
     }
 
-    _update() {
+    updatePivotElement() {
 
         const camera = this._scene.camera;
         const canvas = this._scene.canvas;
@@ -203,7 +203,7 @@ class PivotController {
             this._hideTimeout = null;
         }
         if (this._pivotElement) {
-            this._update();
+            this.updatePivotElement();
             this._pivotElement.style.visibility = "visible";
             this._shown = true;
             this._hideTimeout = window.setTimeout(() => {

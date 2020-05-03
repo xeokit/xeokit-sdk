@@ -10,6 +10,8 @@ class KeyboardPanRotateDollyHandler {
 
         const keyDown = [];
 
+        const canvas = scene.canvas.canvas;
+
         document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -19,6 +21,10 @@ class KeyboardPanRotateDollyHandler {
             }
             const keyCode = e.keyCode;
             keyDown[keyCode] = true;
+
+            if (keyCode === input.KEY_SHIFT) {
+                canvas.style.cursor = "move";
+            }
         });
 
         document.addEventListener("keyup", this._documentKeyUpHandler = (e) => {
@@ -30,6 +36,10 @@ class KeyboardPanRotateDollyHandler {
             }
             const keyCode = e.keyCode;
             keyDown[keyCode] = false;
+
+            if (keyCode === input.KEY_SHIFT) {
+                canvas.style.cursor = "default";
+            }
         });
 
         this._onTick = scene.on("tick", (e) => {
@@ -42,9 +52,6 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
 
-            if (configs.planView) {
-                return;
-            }
 
             const elapsed = e.deltaTime;
 
@@ -52,48 +59,57 @@ class KeyboardPanRotateDollyHandler {
             // Keyboard rotation
             //-------------------------------------------------------------------------------------------------
 
-            const leftArrowKey = keyDown[input.KEY_LEFT_ARROW];
-            const rightArrowKey = keyDown[input.KEY_RIGHT_ARROW];
-            const upArrowKey = keyDown[input.KEY_UP_ARROW];
-            const downArrowKey = keyDown[input.KEY_DOWN_ARROW];
+            if (!configs.planView) {
 
-            if (leftArrowKey || rightArrowKey || upArrowKey || downArrowKey) {
-                if (configs.pivoting) {
-                    controllers.pivotController.startPivot();
+                const leftArrowKey = keyDown[input.KEY_LEFT_ARROW];
+                const rightArrowKey = keyDown[input.KEY_RIGHT_ARROW];
+                const upArrowKey = keyDown[input.KEY_UP_ARROW];
+                const downArrowKey = keyDown[input.KEY_DOWN_ARROW];
+
+                const orbitRate = elapsed * configs.keyboardOrbitRate * .05;
+
+                if (leftArrowKey || rightArrowKey || upArrowKey || downArrowKey) {
+
+                    if ((!configs.firstPerson) && configs.pivoting) {
+                        controllers.pivotController.startPivot();
+                    }
+                    if (rightArrowKey) {
+                        updates.rotateDeltaY -= orbitRate;
+
+                    } else if (leftArrowKey) {
+                        updates.rotateDeltaY += orbitRate;
+                    }
+                    if (downArrowKey) {
+                        updates.rotateDeltaX += orbitRate;
+
+                    } else if (upArrowKey) {
+                        updates.rotateDeltaX -= orbitRate;
+                    }
                 }
-                if (rightArrowKey) {
-                    updates.rotateDeltaY += -elapsed * configs.keyboardOrbitRate;
 
-                } else if (leftArrowKey) {
-                    updates.rotateDeltaY += elapsed * configs.keyboardOrbitRate;
+                let rotateLeft;
+                let rotateRight;
+
+                if (configs.keyboardLayout === 'azerty') {
+                    rotateLeft = keyDown[input.KEY_A];
+                    rotateRight = keyDown[input.KEY_E];
+
+                } else {
+                    rotateLeft = keyDown[input.KEY_Q];
+                    rotateRight = keyDown[input.KEY_E];
                 }
-                if (downArrowKey) {
-                    updates.rotateDeltaX += elapsed * configs.keyboardOrbitRate;
 
-                } else if (upArrowKey) {
-                    updates.rotateDeltaX += -elapsed * configs.keyboardOrbitRate;
-                }
-            }
+                if (rotateRight || rotateLeft) {
+                    if (rotateLeft) {
+                        updates.rotateDeltaY += orbitRate;
 
-            let rotateLeft;
-            let rotateRight;
+                    } else if (rotateRight) {
+                        updates.rotateDeltaY -= orbitRate;
+                    }
 
-            if (configs.keyboardLayout === 'azerty') {
-                rotateLeft = keyDown[input.KEY_A];
-                rotateRight = keyDown[input.KEY_E];
-
-            } else {
-                rotateLeft = keyDown[input.KEY_Q];
-                rotateRight = keyDown[input.KEY_E];
-            }
-
-            if (rotateRight || rotateLeft) {
-
-                if (rotateLeft) {
-                    updates.rotateDeltaY += elapsed * configs.keyboardOrbitRate;
-
-                } else if (rotateRight) {
-                    updates.rotateDeltaY += -elapsed * configs.keyboardOrbitRate;
+                    if ((!configs.firstPerson) && configs.pivoting) {
+                        controllers.pivotController.startPivot();
+                    }
                 }
             }
 
@@ -107,7 +123,7 @@ class KeyboardPanRotateDollyHandler {
                 const subtractKey = keyDown[input.KEY_SUBTRACT];
 
                 if (addKey || subtractKey) {
-                    if (configs.pivoting) {
+                    if ((!configs.firstPerson) && configs.pivoting) {
                         controllers.pivotController.startPivot();
                     }
                     if (subtractKey) {
@@ -124,7 +140,8 @@ class KeyboardPanRotateDollyHandler {
             let panRightKey;
             let panUpKey;
             let panDownKey;
-            let panRate = keyDown[input.KEY_ALT] ? 0.3 : 1.0; // ALT for slower pan rate
+
+            const panRate = (keyDown[input.KEY_ALT] ? 0.2 : 0.8) * configs.keyboardPanRate; // ALT for slower pan rate
 
             if (configs.keyboardLayout === 'azerty') {
 
@@ -147,7 +164,7 @@ class KeyboardPanRotateDollyHandler {
 
             if (panForwardKey || panBackKey || panLeftKey || panRightKey || panUpKey || panDownKey) {
 
-                if (configs.pivoting) {
+                if ((!configs.firstPerson) && configs.pivoting) {
                     controllers.pivotController.startPivot();
                 }
 

@@ -19,57 +19,84 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * * Located at {@link Viewer#cameraControl}.
  *
- * | Property | Type | Range | Default Value | Description |
- *  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- *  | {@link CameraControl#navMode} | String |  | | |
+ * # Contents
  *
- * ## Orbit Mode
  *
- * Enable orbit mode by setting {@link CameraControl#firstPerson} ````false```` (default value).
+ * # Orbit Navigation
  *
- * In orbit mode, your current position will then orbit about the point that you're looking at.
+ * ## Enabling Orbit Mode
+ *
+ * Enable orbit mode by setting {@link CameraControl#navMode} to ````"orbit"````.
+ *
+ * In orbit mode, your current eye position ({@link Camera#eye}) will then orbit about the point-of-interest ({@link Camera#look}).
  *
  * Let's enable orbit mode:
  *
  * ````javascript
- * cameraControl.firstPerson = false;
+ * cameraControl.navMode = "orbit"; // Default
  * ````
  *
- * ## Dolly-to-Pointer
+ * Using the keyboard, orbit the camera using the arrow keys. We can also use certain letter keys to orbit, depending on
+ * your keyboard layout. For a QWERTY keyboard these are Q and E. For AZERTY, these are A and E.
  *
- * While in orbit mode, setting {@link CameraControl#dollyToPointer} ````true```` will cause dollying to always move you
- * closer or farther from the position that the mouse is currently pointing at. This has no effect in first-person mode.
- *
- * Lets ensure that we're in orbit mode, then enable dolly-to-pointer:
- *
- * ````javascript
- * cameraControl.firstPerson = false;
- * cameraControl.dollyToPointer = true;
- * ````
- *
- * ## Pivoting Mode
+ * ## Pivoting
  *
  * When in orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
- * your position and the point you're looking at, in unison, about the current *pivot position*.
+ * both your eye position and point-of-interest, in unison, about the current World-space *pivot position*, which is held
+ * in {@link CameraControl#pivotPos}.
  *
- * When in orbit mode, and pivoting, left-clicking with the mouse on the surface of an object will set the pivot point
- * on that surface. When using a touch device, we double-tap to set the pivot. Then the pivot point becomes that surface position.
+ * When in orbit mode and pivoting, left-clicking with the mouse on the surface of an object will set the pivot position
+ * on that surface. When using a touch device, we double-tap to set the pivot position. Then the pivot position becomes
+ * that surface position.
  *
  * Lets ensure that we're in orbit mode, then enable pivoting:
  *
  * ````javascript
- * cameraControl.firstPerson = false;
+ * cameraControl.navMode = "orbit";
  * cameraControl.pivoting = true;
  * ````
  *
- * Now, if using a mouse, we can left-click on an object, then hold the button down and drag to pivot that point. If we
- * again click and drag, but this time not clicking an object, we'll continue to pivot the point on the object surface
- * that we clicked the last time.
+ * Using a mouse, we can left-click on an object and drag, to pivot about that position. If we subsequently click empty space
+ * and drag, we'll continue to pivot the position we clicked on the object.
+ *
+ * ## Showing the Pivot Position
+ *
+ * We can optionally configure {@link CameraControl#pivotElement} with an HTML element to indicate the current pivot position.
+ *
+ * First we'll define some CSS to make our pivot indicator a black dot with a white border:
+ *
+ * ````css
+ * .camera-pivot-marker {
+ *      color: #ffffff;
+ *      position: absolute;
+ *      width: 25px;
+ *      height: 25px;
+ *      border-radius: 15px;
+ *      border: 2px solid #ebebeb;
+ *      background: black;
+ *      visibility: hidden;
+ *      box-shadow: 5px 5px 15px 1px #000000;
+ *      z-index: 10000;
+ *      pointer-events: none;
+ * }
+ * ````
+ *
+ * Then we'll attach our HTML element:
+ *
+ * ````javascript
+ * const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+ *
+ * document.body.appendChild(pivotElement);
+ *
+ * cameraControl.pivotElement = pivotElement;
+ * ````
  *
  * ## Dolly-to-Pivot
  *
- * When in orbit mode and pivoting, setting {@link CameraControl#dollyToPivot} ````true```` will cause dollying to
- * always move your position, and the point you're looking at, in unison, towards and away from the current pivot point.
+ * Dollying is when we move the camera forwards and backwards.
+ *
+ * When orbit and pivoting are enabled, setting {@link CameraControl#dollyToPivot} ````true```` will cause dollying to
+ * always move your eye position and point-of-interest, towards and away from the current pivot position.
  *
  * Dolly using the mouse wheel, the keyboard (see table of inputs), or pinch gesture with touch pads.
  *
@@ -82,9 +109,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.dollyToPivot = true;
  * ````
  *
- * ## First-Person Navigation
+ * # First-Person Navigation
  *
- * Enable first-person navigation mode by setting {@link CameraControl#firstPerson} ````true````.
+ * Enable first-person navigation mode by setting {@link CameraControl#navMode} to ````"firstPerson"````.
  *
  * In first-person mode, the camera will always rotate about your current position, and dollying will move both your
  * position and point-of-interest backwards and forwards, in unison.
@@ -97,7 +124,25 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.firstPerson = true;
  * ````
  *
+ * ## Constraining Vertical Position
  *
+ *
+ * # Dolly-to-Pointer
+ *
+ * While in orbit mode, setting {@link CameraControl#dollyToPointer} ````true```` will cause dollying to always move you
+ * closer or farther from the position that the mouse is currently pointing at. This has no effect in first-person mode.
+ *
+ * Lets ensure that we're in orbit mode, then enable dolly-to-pointer:
+ *
+ * ````javascript
+ * cameraControl.firstPerson = false;
+ * cameraControl.dollyToPointer = true;
+ * ````
+ *
+ * # Picking
+ *
+ *
+ * =====================================================================================================================
  *
  * ## Rotation
  *
@@ -177,9 +222,9 @@ class CameraControl extends Component {
             doubleTapInterval: 325, // Millisecs
             tapDistanceThreshold: 4, // Pixels
 
-            mousePanRate: 0.1,
-            keyboardPanRate: .02,
-            keyboardOrbitRate: .02,
+            mousePanRate: 1.0,
+            keyboardPanRate: 1.0,
+            keyboardOrbitRate: 1.0,
 
             touchRotateRate: 0.3,
             touchPanRate: 0.2,
@@ -188,6 +233,7 @@ class CameraControl extends Component {
             dollyRate: 10,
 
             planView: false,
+            navMode: "orbit",
             firstPerson: false,
             constrainVertical: false,
 
@@ -267,7 +313,7 @@ class CameraControl extends Component {
         // Set initial user configurations
 
         this.planView = cfg.planView;
-        this.firstPerson = cfg.firstPerson;
+        this.navMode = cfg.navMode;
         this.constrainVertical = cfg.constrainVertical;
         this.keyboardLayout = cfg.keyboardLayout;
         this.doublePickFlyTo = cfg.doublePickFlyTo;
@@ -326,6 +372,41 @@ class CameraControl extends Component {
      */
     get active() {
         return this._configs.active;
+    }
+
+    /**
+     * Sets the current navigation mode.
+     *
+     * Accepted values are:
+     *
+     * * "orbit" - rotation orbits about the current point-of-interest or pivot point,
+     * * "firstPerson" - rotation is about the current eye position,
+     * * "plan" - rotation is disabled.
+     *
+     * @param {String} navMode The navigation mode: "orbit", "firstPerson" or "plan".
+     */
+    set navMode(navMode) {
+        navMode = navMode || "orbit";
+        if (navMode !== "firstPerson" && navMode !== "orbit"  && navMode !== "plan") {
+            this.error("Unsupported value for navMode: " + navMode + " - supported values are 'orbit', 'firstPerson' and 'plan' - defaulting to 'orbit'");
+            navMode = "orbit";
+        }
+        this._configs.firstPerson = (navMode === "firstPerson");
+        this._configs.planView = (navMode === "plan");
+        if (this._configs.firstPerson || this._configs.planView) {
+            this._controllers.pivotController.hidePivot();
+            this._controllers.pivotController.endPivot();
+        }
+        this._configs.navMode = navMode;
+    }
+
+    /**
+     * Gets the current navigation mode.
+     *
+     * @returns {String} The navigation mode: "orbit" or "firstPerson".
+     */
+    get navMode() {
+        return this._configs.navMode;
     }
 
     /**
@@ -460,10 +541,18 @@ class CameraControl extends Component {
      *
      * Default value is ````false````.
      *
+     * Deprecated - use {@link CameraControl#navMode} instead.
+     *
      * @param {Boolean} value Set ````true```` to enable plan-view mode.
+     * @deprecated
      */
     set planView(value) {
         this._configs.planView = !!value;
+        this._configs.firstPerson = false;
+        if (this._configs.planView) {
+            this._controllers.pivotController.hidePivot();
+            this._controllers.pivotController.endPivot();
+        }
     }
 
     /**
@@ -473,7 +562,10 @@ class CameraControl extends Component {
      *
      * Default value is ````false````.
      *
+     * Deprecated - use {@link CameraControl#navMode} instead.
+     *
      * @returns {Boolean} Returns ````true```` if plan-view mode is enabled.
+     * @deprecated
      */
     get planView() {
         return this._configs.planView;
@@ -486,10 +578,14 @@ class CameraControl extends Component {
      *
      * Default value is ````false````.
      *
+     * Deprecated - use {@link CameraControl#navMode} instead.
+     *
      * @param {Boolean} value Set ````true```` to enable first-person mode.
+     * @deprecated
      */
     set firstPerson(value) {
         this._configs.firstPerson = !!value;
+        this._configs.planView = false;
         if (this._configs.firstPerson) {
             this._controllers.pivotController.hidePivot();
             this._controllers.pivotController.endPivot();
@@ -503,7 +599,10 @@ class CameraControl extends Component {
      *
      * Default value is ````false````.
      *
+     * Deprecated - use {@link CameraControl#navMode} instead.
+     *
      * @returns {Boolean} Returns ````true```` if first-person mode is enabled.
+     * @deprecated
      */
     get firstPerson() {
         return this._configs.firstPerson;

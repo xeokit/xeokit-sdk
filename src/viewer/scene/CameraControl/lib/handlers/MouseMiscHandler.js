@@ -15,6 +15,7 @@ class MouseMiscHandler {
 
         canvas.addEventListener("mouseleave", this._mouseLeaveHandler = () => {
             states.mouseover = false;
+            canvas.style.cursor = "default";
         });
 
         canvas.addEventListener("mousemove", this._mouseMoveHandler = (e) => {

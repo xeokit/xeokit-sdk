@@ -64,9 +64,10 @@ class MousePanRotateDollyHandler {
             this._down = true;
 
             switch (e.which) {
+
                 case 1: // Left button
 
-                    if (keyDown[scene.input.KEY_SHIFT]) {
+                    if (keyDown[scene.input.KEY_SHIFT] || configs.planView) {
 
                         canvas.style.cursor = "move";
 
@@ -191,7 +192,7 @@ class MousePanRotateDollyHandler {
             const x = states.mouseCanvasPos[0];
             const y = states.mouseCanvasPos[1];
 
-            const panning = keyDown[scene.input.KEY_SHIFT] || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
+            const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
 
             if (panning) {
 
@@ -205,17 +206,26 @@ class MousePanRotateDollyHandler {
                     const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
                     const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                    updates.panDeltaX += ((2 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((2 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
+
+                } else {
+
+                    const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
+                    const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+
+                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
                 }
 
-                // updates.panDeltaX += xPanDelta * configs.mousePanRate;
-                // updates.panDeltaY += yPanDelta * configs.mousePanRate;
-
             } else {
-                const sweep = configs.firstPerson ? 180 : 180;
-                updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep;
-                updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep;
+
+                if (!configs.planView) {
+
+                    const sweep = configs.firstPerson ? 180 : 180;
+                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep;
+                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep;
+                }
             }
 
             lastX = x;

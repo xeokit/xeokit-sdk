@@ -13,8 +13,9 @@ class MousePickHandler {
         const pivotController = controllers.pivotController;
         const cameraControl = controllers.cameraControl;
 
-        let clicks = 0;
-        let timeout;
+        this._clicks = 0;
+        this._timeout = null;
+
         const canvas = this._scene.canvas.canvas;
 
         const flyCameraTo = (pickResult) => {
@@ -67,7 +68,7 @@ class MousePickHandler {
             states.mouseDownCursorX = states.mouseCanvasPos[0];
             states.mouseDownCursorY = states.mouseCanvasPos[1];
 
-            if (configs.pivoting) {
+            if ((!configs.firstPerson) && configs.pivoting) {
 
                 pickController.pickCursorPos = states.mouseCanvasPos;
                 pickController.schedulePickSurface = true;
@@ -96,77 +97,138 @@ class MousePickHandler {
                 return;
             }
 
+            const pickedSubs = cameraControl.hasSubs("picked");
+            const pickedNothingSubs = cameraControl.hasSubs("pickedNothing");
+            const pickedSurfaceSubs = cameraControl.hasSubs("pickedSurface");
+            const doublePickedSubs = cameraControl.hasSubs("doublePicked");
+            const doublePickedSurfaceSubs = cameraControl.hasSubs("doublePickedSurface");
+            const doublePickedNothingSubs = cameraControl.hasSubs("doublePickedNothing");
+
             if ((!configs.doublePickFlyTo) &&
-                (!cameraControl.hasSubs("doublePicked")) &&
-                (!cameraControl.hasSubs("doublePickedSurface")) &&
-                (!cameraControl.hasSubs("doublePickedNothing"))) {  //  Avoid the single/double click differentiation timeout
+                (!doublePickedSubs) &&
+                (!doublePickedSurfaceSubs) &&
+                (!doublePickedNothingSubs)) {
 
-                pickController.pickCursorPos = states.mouseCanvasPos;
-                pickController.schedulePickSurface = (!!cameraControl.hasSubs("pickedSurface"));
-                pickController.update();
+                //  Avoid the single/double click differentiation timeout
 
-                if (pickController.pickResult) {
-                    cameraControl.fire("picked", pickController.pickResult, true);
-                    if (pickController.pickedSurface) {
-                        cameraControl.fire("pickedSurface", pickController.pickResult, true);
-                    }
-                } else {
-                    cameraControl.fire("pickedNothing", {}, true);
-                }
-                return;
-            }
-
-            clicks++;
-
-            if (clicks === 1) { // First click
-
-                timeout = setTimeout(function () {
+                if (pickedSubs || pickedNothingSubs || pickedSurfaceSubs) {
 
                     pickController.pickCursorPos = states.mouseCanvasPos;
-                    pickController.schedulePickEntity = configs.doublePickFlyTo;
-                    pickController.schedulePickSurface = (!!cameraControl.hasSubs("pickedSurface"));
+                    pickController.schedulePickSurface = pickedSurfaceSubs;
                     pickController.update();
 
                     if (pickController.pickResult) {
+
                         cameraControl.fire("picked", pickController.pickResult, true);
+
                         if (pickController.pickedSurface) {
                             cameraControl.fire("pickedSurface", pickController.pickResult, true);
                         }
                     } else {
                         cameraControl.fire("pickedNothing", {}, true);
                     }
-                    clicks = 0;
+                }
+
+                this._clicks = 0;
+
+                return;
+            }
+
+            this._clicks++;
+
+            if (this._clicks === 1) { // First click
+
+                this._timeout = setTimeout(() => {
+
+                    pickController.pickCursorPos = states.mouseCanvasPos;
+                    pickController.schedulePickEntity = configs.doublePickFlyTo;
+                    pickController.schedulePickSurface = pickedSurfaceSubs;
+                    pickController.update();
+
+                    if (pickController.pickResult) {
+
+                        cameraControl.fire("picked", pickController.pickResult, true);
+
+                        if (pickController.pickedSurface) {
+
+                            cameraControl.fire("pickedSurface", pickController.pickResult, true);
+
+                            if ((!configs.firstPerson) && configs.pivoting) {
+                                controllers.pivotController.startPivot(pickController.pickResult.worldPos);
+                                controllers.pivotController.showPivot();
+                            }
+                        }
+                    } else {
+                        cameraControl.fire("pickedNothing", {}, true);
+                    }
+
+                    this._clicks = 0;
+
                 }, 250);  // FIXME: Too short for track pads
 
             } else { // Second click
 
-                clearTimeout(timeout);
+                if (this._timeout !== null) {
+                    window.clearTimeout(this._timeout);
+                    this._timeout = null;
+                }
 
                 pickController.pickCursorPos = states.mouseCanvasPos;
                 pickController.schedulePickEntity = configs.doublePickFlyTo;
-                pickController.schedulePickSurface = pickController.schedulePickEntity && !!cameraControl.hasSubs("doublePickedSurface");
+                pickController.schedulePickSurface = pickController.schedulePickEntity && doublePickedSurfaceSubs;
                 pickController.update();
 
                 if (pickController.pickResult) {
+
                     cameraControl.fire("doublePicked", pickController.pickResult, true);
+
                     if (pickController.pickedSurface) {
                         cameraControl.fire("doublePickedSurface", pickController.pickResult, true);
                     }
+
                     if (configs.doublePickFlyTo) {
+
                         flyCameraTo(pickController.pickResult);
+
+                        if ((!configs.firstPerson) && configs.pivoting) {
+
+                            const pickedEntityAABB = pickController.pickResult.entity.aabb;
+                            const pickedEntityCenterPos = math.getAABB3Center(pickedEntityAABB);
+
+                            controllers.pivotController.startPivot(pickedEntityCenterPos);
+                            controllers.pivotController.showPivot();
+                        }
                     }
                 } else {
+
                     cameraControl.fire("doublePickedNothing", true);
+
                     if (configs.doublePickFlyTo) {
+
                         flyCameraTo();
+
+                        if ((!configs.firstPerson) && configs.pivoting) {
+
+                            const sceneAABB = scene.aabb;
+                            const sceneCenterPos = math.getAABB3Center(sceneAABB);
+
+                            controllers.pivotController.startPivot(sceneCenterPos);
+                            controllers.pivotController.showPivot();
+                        }
                     }
                 }
-                clicks = 0;
+
+                this._clicks = 0;
             }
         }, false);
     }
 
     reset() {
+        this._clicks = 0;
+        if (this._timeout) {
+            window.clearTimeout(this._timeout);
+            this._timeout = null;
+        }
     }
 
     destroy() {
@@ -174,6 +236,10 @@ class MousePickHandler {
         canvas.addEventListener("mousemove", this._canvasMouseMoveHandler);
         canvas.addEventListener("mousedown", this._canvasMouseDownHandler);
         canvas.addEventListener("mouseup", this._canvasMouseUpHandler);
+        if (this._timeout) {
+            window.clearTimeout(this._timeout);
+            this._timeout = null;
+        }
     }
 }
 
