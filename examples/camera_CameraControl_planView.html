@@ -88,8 +88,8 @@
     cameraControl.navMode = "planView";
     cameraControl.dollyToPointer = true;
 
-    viewer.camera.eye =  [4.313576698303223, 24.567310333251953, 6.592319488525391];
-    viewer.camera.look = [4.313576698303223, -29.305259704589844, 6.592319488525391];
+    viewer.camera.eye =  [4.31, 24.56, 6.59];
+    viewer.camera.look = [4.31, -29.30, 6.5];
     viewer.camera.up = [0, 0, 1];
 
     camera.perspective.near = 0.1;
@@ -115,6 +115,10 @@
         src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json",
         edges: true
+    });
+
+    model.on("loaded", ()=> { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(model);
     });
 
     //------------------------------------------------------------------------------------------------------------------

@@ -38,6 +38,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * # Orbit Mode
  *
+ * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)]
+ * <br><br>
+ *
  * In orbit mode, we are rotating about a point-of-interest.
  *
  * To enable orbit navigation mode:
@@ -135,6 +138,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * # First-Person Mode
  *
+ * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)]
+ * <br><br>
+ *
  * First-person model allows us to roam freely around our {@link Scene}.
  *
  * To enable first-person navigation mode:
@@ -199,6 +205,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
  *
  * # Plan-View Mode
+ *
+ * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)]
+ * <br><br>
  *
  * Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
  * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
