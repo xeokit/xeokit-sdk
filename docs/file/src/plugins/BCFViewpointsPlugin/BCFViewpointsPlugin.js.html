@@ -66,11 +66,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
@@ -519,41 +519,45 @@ class BCFViewpointsPlugin extends Plugin {
         if (reset) {
             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+            scene.setObjectsSelected(scene.selectedObjectIds, false);
         }
 
         if (bcfViewpoint.components) {
 
-            if (!bcfViewpoint.components.visibility.default_visibility) {
-                scene.setObjectsVisible(scene.objectIds, false);
-                if (bcfViewpoint.components.visibility.exceptions) {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x =&gt; scene.setObjectsVisible(x.ifc_guid, true));
+            if (bcfViewpoint.components.visibility) {
+
+                if (!bcfViewpoint.components.visibility.default_visibility) {
+                    scene.setObjectsVisible(scene.objectIds, false);
+                    if (bcfViewpoint.components.visibility.exceptions) {
+                        bcfViewpoint.components.visibility.exceptions.forEach(x =&gt; scene.setObjectsVisible(x.ifc_guid, true));
+                    }
+                } else {
+                    scene.setObjectsVisible(scene.objectIds, true);
+                    if (bcfViewpoint.components.visibility.exceptions) {
+                        bcfViewpoint.components.visibility.exceptions.forEach(x =&gt; scene.setObjectsVisible(x.ifc_guid, false));
+                    }
                 }
-            } else {
-                scene.setObjectsVisible(scene.objectIds, true);
-                if (bcfViewpoint.components.visibility.exceptions) {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x =&gt; scene.setObjectsVisible(x.ifc_guid, false));
+
+                const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
+                if (view_setup_hints) {
+                    if (view_setup_hints.spaces_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcSpace&quot;), false);
+                    }
+                    if (view_setup_hints.openings_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcOpening&quot;), false);
+                    }
+                    if (view_setup_hints.space_boundaries_visible !== undefined) {
+                        // TODO: Ability to show boundaries
+                    }
                 }
             }
 
-            const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
-            if (view_setup_hints) {
-                if (view_setup_hints.spaces_visible === false) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcSpace&quot;), false);
-                }
-                if (view_setup_hints.openings_visible === false) {
-                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType(&quot;IfcOpening&quot;), false);
-                }
-                if (view_setup_hints.space_boundaries_visible !== undefined) {
-                    // TODO: Ability to show boundaries
-                }
+            if (bcfViewpoint.components.selection) {
+                scene.setObjectsSelected(scene.selectedObjectIds, false);
+                Object.keys(scene.models).forEach(() =&gt; {
+                    bcfViewpoint.components.selection.forEach(x =&gt; scene.setObjectsSelected(x.ifc_guid, true));
+                });
             }
-        }
-
-        if (bcfViewpoint.components.selection) {
-            scene.setObjectsSelected(scene.selectedObjectIds, false);
-            Object.keys(scene.models).forEach(() =&gt; {
-                bcfViewpoint.components.selection.forEach(x =&gt; scene.setObjectsSelected(x.ifc_guid, true));
-            });
         }
 
         if (bcfViewpoint.perspective_camera || bcfViewpoint.orthogonal_camera) {

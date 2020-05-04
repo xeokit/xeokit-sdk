@@ -66,11 +66,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
@@ -219,50 +219,50 @@ canvas.on(&quot;boundary&quot;, function(boundary) {
 </code></pre>
 <h2 id="picking">Picking</h2><p>Use <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span> to pick and raycast entites.</p>
 <p>For example, to pick a point on the surface of the closest entity at the given canvas coordinates:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var hit = scene.pick({
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var pickResult = scene.pick({
      pickSurface: true,
      canvasPos: [23, 131]
 });
 
-if (hit) { // Picked an entity
+if (pickResult) { // Picked an entity
 
-    var entity = hit.entity;
+    var entity = pickResult.entity;
 
-    var primitive = hit.primitive; // Type of primitive that was picked, usually &quot;triangles&quot;
-    var primIndex = hit.primIndex; // Position of triangle&apos;s first index in the picked Mesh&apos;s Geometry&apos;s indices array
-    var indices = hit.indices; // UInt32Array containing the triangle&apos;s vertex indices
-    var localPos = hit.localPos; // Float32Array containing the picked Local-space position on the triangle
-    var worldPos = hit.worldPos; // Float32Array containing the picked World-space position on the triangle
-    var viewPos = hit.viewPos; // Float32Array containing the picked View-space position on the triangle
-    var bary = hit.bary; // Float32Array containing the picked barycentric position within the triangle
-    var normal = hit.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
-    var uv = hit.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+    var primitive = pickResult.primitive; // Type of primitive that was picked, usually &quot;triangles&quot;
+    var primIndex = pickResult.primIndex; // Position of triangle&apos;s first index in the picked Mesh&apos;s Geometry&apos;s indices array
+    var indices = pickResult.indices; // UInt32Array containing the triangle&apos;s vertex indices
+    var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+    var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+    var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+    var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+    var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+    var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
 }</code>
 </code></pre>
 <h2 id="pick-masking">Pick masking</h2><p>We can use <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>&apos;s <code>includeEntities</code> and <code>excludeEntities</code>  options to mask which <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es we attempt to pick.</p>
 <p>This is useful for picking through things, to pick only the Entities of interest.</p>
 <p>To pick only Entities <code>&quot;gearbox#77.0&quot;</code> and <code>&quot;gearbox#79.0&quot;</code>, picking through any other Entities that are
 in the way, as if they weren&apos;t there:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var hit = scene.pick({
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var pickResult = scene.pick({
      canvasPos: [23, 131],
      includeEntities: [&quot;gearbox#77.0&quot;, &quot;gearbox#79.0&quot;]
 });
 
-if (hit) {
+if (pickResult) {
       // Entity will always be either &quot;gearbox#77.0&quot; or &quot;gearbox#79.0&quot;
-      var entity = hit.entity;
+      var entity = pickResult.entity;
 }</code>
 </code></pre>
 <p>To pick any pickable Entity, except for <code>&quot;gearbox#77.0&quot;</code> and <code>&quot;gearbox#79.0&quot;</code>, picking through those
 Entities if they happen to be in the way:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var hit = scene.pick({
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var pickResult = scene.pick({
      canvasPos: [23, 131],
      excludeEntities: [&quot;gearbox#77.0&quot;, &quot;gearbox#79.0&quot;]
 });
 
-if (hit) {
+if (pickResult) {
       // Entity will never be &quot;gearbox#77.0&quot; or &quot;gearbox#79.0&quot;
-      var entity = hit.entity;
+      var entity = pickResult.entity;
 }</code>
 </code></pre>
 <p>See <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span> for more info on picking.</p>
@@ -5916,7 +5916,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1892">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1895">source</a></span></span>
     </span>
   </h3>
 
@@ -5960,7 +5960,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1907">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1910">source</a></span></span>
     </span>
   </h3>
 
@@ -6004,7 +6004,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1917">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1920">source</a></span></span>
     </span>
   </h3>
 
@@ -6048,7 +6048,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2198">source</a></span></span>
     </span>
   </h3>
 
@@ -6138,7 +6138,7 @@ in the Scene, or <code>false</code> if an Entity is occluding it.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1936">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1939">source</a></span></span>
     </span>
   </h3>
 
@@ -6215,7 +6215,7 @@ in the Scene, or <code>false</code> if an Entity is occluding it.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1848">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1851">source</a></span></span>
     </span>
   </h3>
 
@@ -6257,7 +6257,7 @@ if (pickResult) { // Picked an Entity
         var worldNormal = pickResult.worldNormal; // Float32Array containing the interpolated World-space normal vector at the picked position on the triangle
         var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
 
-    } else if (pickResult.worldPos) {
+    } else if (pickResult.worldPos &amp;&amp; pickResult.worldNormal) {
 
         // Picked a point and normal on the entity surface
 
@@ -6293,13 +6293,14 @@ if (pickResult) { // Picked an Entity with the ray
           var origin = pickResult.origin; // Float32Array containing the World-space ray origin
           var direction = pickResult.direction; // Float32Array containing the World-space ray direction
 
-    } else if (pickResult.worldPos) {
+    } else if (pickResult.worldPos &amp;&amp; pickResult.worldNormal) {
 
         // Picked a point and normal on the entity surface
 
         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
-    }</code>
+    }
+}</code>
 </code></pre>
 </div>
 
@@ -6329,6 +6330,14 @@ if (pickResult) { // Picked an Entity with the ray
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.pickSurfaceNormal</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether to find the picked normal on the surface of the Entity. Only works if <code>pickSurface</code> is given.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.canvasPos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
@@ -6347,6 +6356,13 @@ if (pickResult) { // Picked an Entity with the ray
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>4x4 transformation matrix to define the World-space ray origin and direction, as an alternative to <code>origin</code> and <code>direction</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -6482,7 +6498,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2025">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2028">source</a></span></span>
     </span>
   </h3>
 
@@ -6564,7 +6580,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2139">source</a></span></span>
     </span>
   </h3>
 
@@ -6647,7 +6663,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2042">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2045">source</a></span></span>
     </span>
   </h3>
 
@@ -6729,7 +6745,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2122">source</a></span></span>
     </span>
   </h3>
 
@@ -6811,7 +6827,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2082">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2085">source</a></span></span>
     </span>
   </h3>
 
@@ -6895,7 +6911,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2154">source</a></span></span>
     </span>
   </h3>
 
@@ -6978,7 +6994,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2171">source</a></span></span>
     </span>
   </h3>
 
@@ -7060,7 +7076,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2062">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2065">source</a></span></span>
     </span>
   </h3>
 
@@ -7144,7 +7160,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2008">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2011">source</a></span></span>
     </span>
   </h3>
 
@@ -7228,7 +7244,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2105">source</a></span></span>
     </span>
   </h3>
 

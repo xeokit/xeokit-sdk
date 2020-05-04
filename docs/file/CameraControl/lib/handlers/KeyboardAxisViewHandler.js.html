@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">CameraControl/lib/handlers/KeyboardAxisViewHandler.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">CameraControl/lib/handlers/KeyboardAxisViewHandler.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../../math/math.js&quot;;
+
+const center = math.vec3();
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+
+const tempCameraTarget = {
+    eye: math.vec3(),
+    look: math.vec3(),
+    up: math.vec3()
+};
+
+/**
+ * @private
+ */
+class KeyboardAxisViewHandler {
+
+    constructor(scene, controllers, configs, states, updates) {
+
+        this._scene = scene;
+        const input = scene.input;
+
+        const camera = scene.camera;
+
+        document.addEventListener(&quot;keydown&quot;, this._documentKeyDownHandler = (e) =&gt; {
+
+            if (!(configs.active &amp;&amp; configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
+                return;
+            }
+
+            if (!states.mouseover) {
+                return;
+            }
+
+            const keyCode = e.keyCode;
+
+            if (keyCode !== input.KEY_NUM_1 &amp;&amp; keyCode !== input.KEY_NUM_2 &amp;&amp; keyCode !== input.KEY_NUM_3 &amp;&amp;
+                keyCode !== input.KEY_NUM_4 &amp;&amp; keyCode !== input.KEY_NUM_5 &amp;&amp; keyCode !== input.KEY_NUM_6) {
+                return;
+            }
+
+            const aabb = scene.aabb;
+            const diag = math.getAABB3Diag(aabb);
+
+            center[0] = aabb[0] + aabb[3] / 2.0;
+            center[1] = aabb[1] + aabb[4] / 2.0;
+            center[2] = aabb[2] + aabb[5] / 2.0;
+
+            const dist = Math.abs((diag) / Math.tan(controllers.cameraFlight.fitFOV / 2));
+
+            switch (keyCode) {
+
+                case input.KEY_NUM_1: // Right
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(camera.worldUp);
+                    break;
+
+                case input.KEY_NUM_2: // Back
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(camera.worldUp);
+                    break;
+
+                case input.KEY_NUM_3: // Left
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(camera.worldUp);
+                    break;
+
+                case input.KEY_NUM_4: // Front
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(camera.worldUp);
+                    break;
+
+                case input.KEY_NUM_5: // Top
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
+                    break;
+
+                case input.KEY_NUM_6: // Bottom
+                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
+                    tempCameraTarget.look.set(center);
+                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
+                    break;
+
+                default:
+                    return;
+            }
+
+            if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                controllers.pivotController.startPivot(center);
+            }
+
+            if (controllers.cameraFlight.duration &gt; 0) {
+                controllers.cameraFlight.flyTo(tempCameraTarget, () =&gt; {
+                    if (controllers.pivotController.getPivoting() &amp;&amp; configs.pivoting) {
+                        controllers.pivotController.showPivot();
+                    }
+                });
+
+            } else {
+                controllers.cameraFlight.jumpTo(tempCameraTarget);
+                if (controllers.pivotController.getPivoting() &amp;&amp; configs.pivoting) {
+                    controllers.pivotController.showPivot();
+                }
+            }
+        });
+    }
+
+    reset() {
+    }
+
+    destroy() {
+        document.removeEventListener(&quot;keydown&quot;, this._documentKeyDownHandler);
+    }
+}
+
+export {KeyboardAxisViewHandler};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,3006 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">CameraControl | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CameraControl} from &apos;<span><a href="file/CameraControl/CameraControl.js.html#lineNumber407">@xeokit/xeokit-sdk/CameraControl/CameraControl.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/CameraControl/CameraControl.js.html#lineNumber407">source</a></span></span>
+</div>
+
+<div class="self-detail detail">
+  <h1 data-ice="name">CameraControl</h1>
+
+  
+
+  
+  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>Component.js~Component</span> &#x2192; CameraControl</div></div>
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <div class="description" data-ice="description"><p>Controls the <span>Camera</span> with keyboard, mouse and touch input, and fires events when we
+hover, click or tap <span>Entity</span>s.</p>
+<h2 id="contents">Contents</h2><ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#orbit-mode">Orbit Mode</a><ul>
+<li><a href="#--pivoting-in-orbit-mode--">Pivoting in Orbit Mode</a></li>
+<li><a href="#--showing-the-pivot-position--">Showing the Pivot Position</a></li>
+<li><a href="#--axis-aligned-views-in-orbit-mode--">Axis-Aligned Views in Orbit Mode</a></li>
+<li><a href="#--view-fitting-entitys-in-orbit-mode--">View-Fitting Entitys in Orbit Mode</a></li>
+</ul>
+</li>
+<li><a href="#first-person-mode">First-Person Mode</a><ul>
+<li><a href="#--dollying-to-the-mouse-pointer-in-first-person-mode--">Dollying to the Mouse Pointer in First-Person Mode</a></li>
+<li><a href="#--constraining-vertical-position-in-first-person-mode--">Constraining Vertical Position in First-Person Mode</a></li>
+<li><a href="#--axis-aligned-views-in-first-person-mode--">Axis-Aligned Views in First-Person Mode</a></li>
+<li><a href="#--focusing-on-entitys-in-first-person-mode--">Focusing on Entitys in First-Person Mode</a></li>
+</ul>
+</li>
+<li><a href="#plan-view-mode">Plan-View Mode</a><ul>
+<li><a href="#--dollying-to-the-mouse-pointer-in-plan-view-mode--">Dollying to the Mouse Pointer in Plan-View Mode</a></li>
+<li><a href="#--axis-aligned-views-in-plan-view-mode--">Axis-Aligned Views in Plan-View Mode</a></li>
+</ul>
+</li>
+<li><a href="#picking-events">Picking Events</a><ul>
+<li><a href="#-------hover-------">&quot;hover&quot;</a></li>
+<li><a href="#-------hoveroff-------">&quot;hoverOff&quot;</a></li>
+<li><a href="#-------hoverenter-------">&quot;hoverEnter&quot;</a></li>
+<li><a href="#-------hoverout-------">&quot;hoverOut&quot;</a></li>
+<li><a href="#-------picked-------">&quot;picked&quot;</a></li>
+<li><a href="#-------pickedsurface-------">&quot;pickedSurface&quot;</a></li>
+<li><a href="#-------pickednothing-------">&quot;pickedNothing&quot;</a></li>
+<li><a href="#-------doublepicked-------">&quot;doublePicked&quot;</a></li>
+<li><a href="#-------doublepickedsurface-------">&quot;doublePickedSurface&quot;</a></li>
+<li><a href="#-------doublepickednothing-------">&quot;doublePickedNothing&quot;</a>
+<br></li>
+</ul>
+</li>
+</ul>
+<h2 id="overview">Overview</h2><ul>
+<li>Each <span>Viewer</span> has a CameraControl, located at <span>Viewer#cameraControl</span>.</li>
+<li>CameraControl supports three navigation modes:<ul>
+<li><strong>Orbit mode</strong> orbits the <span>Camera</span> position about the point-of-interest. In this mode, we also have the option to orbit an
+arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
+and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.</li>
+<li><strong>First-person mode</strong> orbits the point-of-interest about the eye position. Dollying can either move the eye and
+point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
+to pivot in first-person mode.</li>
+<li><strong>Plan-view mode</strong> is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
+mode, CameraControl prevents us from rotating and pivoting the Camera, which keeps the Camera in correct axis alignment
+for our plan view.</li>
+</ul>
+</li>
+<li>CameraControl also fires &quot;pick&quot; events when we hover, click or tap on <span>Entity</span>s.
+<br></li>
+</ul>
+<h2 id="examples">Examples</h2><ul>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit">Orbit mode example</a></li>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson">First-person mode example</a></li>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView">Plan-view mode example</a>
+<br></li>
+</ul>
+<h2 id="orbit-mode">Orbit Mode</h2><ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit">Run orbit mode example</a>]
+<br><br></li>
+</ul>
+<p>In orbit mode, we are rotating about a point-of-interest.</p>
+<p>To enable orbit navigation mode:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;orbit&quot;; // Default</code>
+</code></pre>
+<p>We can then orbit by:</p>
+<ul>
+<li>left-dragging the mouse,</li>
+<li>tap-dragging the touch pad, and</li>
+<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.</li>
+</ul>
+<p><br>
+We can dolly forwards and backwards by:</p>
+<ul>
+<li>spinning the mouse wheel,</li>
+<li>pinching on the touch pad, and</li>
+<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.</li>
+</ul>
+<p><br>
+We can pan horizontally and vertically by:</p>
+<ul>
+<li>right-dragging the mouse,</li>
+<li>left-dragging the mouse with the SHIFT key down,</li>
+<li>tap-dragging the touch pad with SHIFT down,</li>
+<li>pressing the <code>A</code>, <code>D</code>, <code>Z</code> and <code>X</code> keys on a QWERTY keyboard, and</li>
+<li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
+<br><br></li>
+</ul>
+<h3 id="-strong-pivoting-in-orbit-mode--strong-"><strong>Pivoting in Orbit Mode</strong></h3><p>In orbit mode, setting <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> <code>true</code> will cause CameraControl to always pivot
+our eye position and point-of-interest about the current pivot position, and dolly our eye position and
+point-of-interest towards and away from the pivot position.</p>
+<p>We can set the current pivot position by left-clicking, or tapping, on the surface of an Entity.</p>
+<p>Lets ensure that we&apos;re in orbit mode, then enable pivoting:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;orbit&quot;;
+cameraControl.pivoting = true;</code>
+</code></pre>
+<p>If we now left-click or tap an Entity, we&apos;ll pivot about that position. If we then left-click-drag or tap-drag
+empty space, we&apos;ll continue to pivot the position we set earlier.</p>
+<h3 id="-strong-showing-the-pivot-position--strong-"><strong>Showing the Pivot Position</strong></h3><p>We can configure <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivotElement">CameraControl#pivotElement</a></span> with an HTML element to indicate the current
+pivot position. The indicator will appear momentarily each time we move the Camera while in orbit mode with
+pivoting enabled.</p>
+<p>First we&apos;ll define some CSS to style our pivot indicator as a black dot with a white border:</p>
+<pre><code class="lang-css"><code class="source-code prettyprint">.camera-pivot-marker {
+     color: #ffffff;
+     position: absolute;
+     width: 25px;
+     height: 25px;
+     border-radius: 15px;
+     border: 2px solid #ebebeb;
+     background: black;
+     visibility: hidden;
+     box-shadow: 5px 5px 15px 1px #000000;
+     z-index: 10000;
+     pointer-events: none;
+}</code>
+</code></pre>
+<p>Then we&apos;ll attach our pivot indicator&apos;s HTML element to the CameraControl:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const pivotElement = document.createRange().createContextualFragment(&quot;&lt;div class=&apos;camera-pivot-marker&apos;&gt;&lt;/div&gt;&quot;).firstChild;
+
+document.body.appendChild(pivotElement);
+
+cameraControl.pivotElement = pivotElement;</code>
+</code></pre>
+<h3 id="-strong-axis-aligned-views-in-orbit-mode--strong-"><strong>Axis-Aligned Views in Orbit Mode</strong></h3><p>In orbit mode, we can use keys 1-6 to position the <span>Camera</span> to look at the center of the <span>Scene</span> from along each of the
+six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.</p>
+<h3 id="-strong-view-fitting-entitys-in-orbit-mode--strong-"><strong>View-Fitting Entitys in Orbit Mode</strong></h3><p>In orbit mode and <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can double-click or
+double-tap (ie. &quot;double-pick&quot;) an <span>Entity</span> to fit it to view. This will cause the <span>Camera</span>
+to fly to that Entity. Our point-of-interest then becomes the center of that Entity. If we are currently pivoting,
+then our pivot position is then also set to the Entity center.</p>
+<p>Disable that behaviour by setting <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> <code>false</code>.</p>
+<h2 id="first-person-mode">First-Person Mode</h2><ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson">Run first-person mode example</a>]
+<br><br></li>
+</ul>
+<p>First-person model allows us to roam freely around our <span>Scene</span>.</p>
+<p>To enable first-person navigation mode:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;firstPerson&quot;;</code>
+</code></pre>
+<p>We can then rotate our point-of-interest about our eye position by:</p>
+<ul>
+<li>left-dragging the mouse,</li>
+<li>tap-dragging the touch pad,</li>
+<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.</li>
+</ul>
+<p><br>
+We can dolly forwards and backwards by:</p>
+<ul>
+<li>spinning the mouse wheel,</li>
+<li>pinching on the touch pad, and</li>
+<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.</li>
+</ul>
+<p><br>
+We can pan horizontally and vertically by:</p>
+<ul>
+<li>right-dragging the mouse,</li>
+<li>left-dragging the mouse with the SHIFT key down,</li>
+<li>tap-dragging the touch pad with SHIFT down,</li>
+<li>pressing the <code>A</code>, <code>D</code>, <code>Z</code> and <code>X</code> keys on a QWERTY keyboard, and</li>
+<li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
+<br><br></li>
+</ul>
+<h3 id="-strong-dollying-to-the-mouse-pointer-in-first-person-mode--strong-"><strong>Dollying to the Mouse Pointer in First-Person Mode</strong></h3><p>To cause dollying to move our eye position and point-of-interest towards and away from the current mouse position:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.dollyToPointer = true;</code>
+</code></pre>
+<h3 id="-strong-constraining-vertical-position-in-first-person-mode--strong-"><strong>Constraining Vertical Position in First-Person Mode</strong></h3><p>To prevent the Camera from changing it&apos;s vertical position in first-person mode, which is useful for walk-through
+navigation:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.constrainVertical = true;</code>
+</code></pre>
+<h3 id="-strong-axis-aligned-views-in-first-person-mode--strong-"><strong>Axis-Aligned Views in First-Person Mode</strong></h3><p>As in orbit mode, in first-person mode we can use keys 1-6 to position the <span>Camera</span> to look at the center of
+the <span>Scene</span> from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+corresponding axis-aligned view.</p>
+<p>If we are currently pivoting, then our pivot position is then set to the Scene center.</p>
+<h3 id="-strong-focusing-on-entitys-in-first-person-mode--strong-"><strong>Focusing on Entitys in First-Person Mode</strong></h3><p>As in orbit mode, when in first-person mode and <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can double-click
+or double-tap an <span>Entity</span> (ie. &quot;double-picking&quot;) to fit it in view. This will cause the <span>Camera</span> to fly to
+that Entity. Our point-of-interest then becomes the center of that Entity.</p>
+<p>Disable that behaviour by setting <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> <code>false</code>.</p>
+<h2 id="plan-view-mode">Plan-View Mode</h2><ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView">Run plan-view mode example</a>]
+<br><br></li>
+</ul>
+<p>Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
+mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.</p>
+<p>To enable plan-view navigation mode:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;planView&quot;;</code>
+</code></pre>
+<p>In plan-view mode, we cannot orbit, rotate or pivot the Camera.</p>
+<p>We can dolly forwards and backwards by:</p>
+<ul>
+<li>spinning the mouse wheel,</li>
+<li>pinching on the touch pad, and</li>
+<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code></code>S&apos; for AZERTY.</li>
+</ul>
+<p><br>
+We can pan horizontally and vertically by:</p>
+<ul>
+<li>left-dragging or right-dragging the mouse,</li>
+<li>tap-dragging the touch pad with SHIFT down,</li>
+<li>pressing the <code>A</code>, <code>D</code>, <code>Z`</code> and <code>X</code> keys on a QWERTY keyboard, and</li>
+<li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
+<br><br></li>
+</ul>
+<h3 id="-strong-dollying-to-the-mouse-pointer-in-plan-view-mode--strong-"><strong>Dollying to the Mouse Pointer in Plan-View Mode</strong></h3><p>As in orbit and first-person modes, we can cause dollying to move our eye position and point-of-interest towards
+and away from the current mouse position:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.dollyToPointer = true;</code>
+</code></pre>
+<h3 id="-strong-axis-aligned-views-in-plan-view-mode--strong-"><strong>Axis-Aligned Views in Plan-View Mode</strong></h3><p>As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the <span>Camera</span> to look at the center of
+the <span>Scene</span> from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+corresponding axis-aligned view.</p>
+<h2 id="picking-events">Picking Events</h2><p>We can use CameraControl to get events whenever we pick <span>Entity</span>s.</p>
+<p>The following subsections describe the pick-related events fired by CameraControl.</p>
+<h3 id="-strong--quot-hover-quot---strong-"><strong>&quot;hover&quot;</strong></h3><p>Pointer hovers over an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hover&quot;, (e) =&gt; {
+     const entity = e.entity; // Entity
+     const canvasPos = e.canvasPos; // 2D canvas position
+})</code>
+</code></pre>
+<h3 id="-strong--quot-hoveroff-quot---strong-"><strong>&quot;hoverOff&quot;</strong></h3><p>Pointer hovers over no Entitys.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverOff&quot;, (e) =&gt; {
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-hoverenter-quot---strong-"><strong>&quot;hoverEnter&quot;</strong></h3><p>Pointer begins hovering over an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverEnter&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-hoverout-quot---strong-"><strong>&quot;hoverOut&quot;</strong></h3><p>Pointer stops hovering over an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverOut&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-picked-quot---strong-"><strong>&quot;picked&quot;</strong></h3><p>Mouse click or touch-tap on an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;picked&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-pickedsurface-quot---strong-"><strong>&quot;pickedSurface&quot;</strong></h3><p>Mouse click or touch-tap on the surface of an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;picked&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+     const worldPos = e.worldPos; // 3D World-space position
+     const viewPos = e.viewPos; // 3D View-space position
+     const worldNormal = e.worldNormal; // 3D World-space normal vector
+})</code>
+</code></pre>
+<h3 id="-strong--quot-pickednothing-quot---strong-"><strong>&quot;pickedNothing&quot;</strong></h3><p>Mouse click or touch-tap on no Entitys.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;pickedNothing&quot;, (e) =&gt; {
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-doublepicked-quot---strong-"><strong>&quot;doublePicked&quot;</strong></h3><p>Mouse double-click or double-touch-tap on an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePicked&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-doublepickedsurface-quot---strong-"><strong>&quot;doublePickedSurface&quot;</strong></h3><p>Mouse double-click or double-touch-tap on the surface of an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePickedSurface&quot;, (e) =&gt; {
+     const entity = e.entity;
+     const canvasPos = e.canvasPos;
+     const worldPos = e.worldPos;
+     const viewPos = e.viewPos;
+     const worldNormal = e.worldNormal;
+})</code>
+</code></pre>
+<h3 id="-strong--quot-doublepickednothing-quot---strong-"><strong>&quot;doublePickedNothing&quot;</strong></h3><p>Mouse double-click or double-touch-tap on no Entitys.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePickedNothing&quot;, (e) =&gt; {
+     const canvasPos = e.canvasPos;
+})</code>
+</code></pre>
+</div>
+  
+
+  
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-active">active</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-active">active</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-constrainVertical">constrainVertical</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether this CameraControl is in constrainVertical mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-constrainVertical">constrainVertical</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether this CameraControl is in constrainVertical mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyInertia">dollyInertia</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the dolly inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyInertia">dollyInertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish dollying it.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current dolly rate.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the current dolly rate.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">dollyToPointer</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyToPointer">dollyToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether double-picking an <span>Entity</span> causes the <span>Camera</span> to fly to its boundary.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether double-picking an <span>Entity</span> causes the <span>Camera</span> to fly to its boundary.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+        
+        <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+        
+        <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardLayout">keyboardLayout</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Selects the keyboard layout.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-navMode">navMode</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the current navigation mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">navMode</a></span></span><span class="code" data-ice="signature">(navMode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the current navigation mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-panRightClick">panRightClick</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether either right-clicking (true) or middle-clicking (false) pans the <span>Camera</span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-panRightClick">panRightClick</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether right-clicking pans the <span>Camera</span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+        
+        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+        
+        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivotElement">pivotElement</a></span></span><span class="code" data-ice="signature">(element: <span>HTMLElement</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is true.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-pivotPos">pivotPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the current World-space 3D pivot position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivotPos">pivotPos</a></span></span><span class="code" data-ice="signature">(worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the current World-space 3D pivot position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether orbit mode currently pivots the <span>Camera</span> about an arbitrary user-settable pivot position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether orbit mode currently pivots the <span>Camera</span> about an arbitrary user-settable pivot position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-planView">planView</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+        
+        <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-planView">planView</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+        
+        <div data-ice="description"><p>Gets whether this CameraControl is in plan-view mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-pointerEnabled">pointerEnabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether mouse and touch input is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pointerEnabled">pointerEnabled</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether mouse and touch input is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-rotationInertia">rotationInertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish rotating it.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-get-rotationInertia">rotationInertia</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the rotation inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+
+
+
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-active">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber555">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
+<p>When inactive, the CameraControl will not react to input.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-active">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber568">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
+<p>When inactive, the CameraControl will not react to input.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if this CameraControl is active.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-constrainVertical">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">constrainVertical</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber867">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether this CameraControl is in constrainVertical mode.</p>
+<p>When set <code>true</code>, this constrains <span>Camera#eye</span> movement to the horizontal X-Z plane. When doing a walkthrough,
+this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;firstPerson&quot;</code>.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when in constrainVertical mode.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-constrainVertical">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">constrainVertical</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber851">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether this CameraControl is in constrainVertical mode.</p>
+<p>When set <code>true</code>, this constrains <span>Camera#eye</span> movement to the horizontal X-Z plane. When doing a walkthrough,
+this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;firstPerson&quot;</code>.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyInertia</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber991">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the dolly inertia factor.</p>
+<p>Default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The dolly inertia factor.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyInertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber980">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish dollying it.</p>
+<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
+while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
+<p>You may choose an dollyInertia of zero when you want be able to precisely position or rotate the Camera,
+without interference from inertia. Zero inertia can also mean that less frames are rendered while
+you are positioning the Camera.</p>
+<p>Default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber962">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the current dolly rate.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current dolly speed.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber953">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the current dolly rate.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyToPointer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyToPointer</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber713">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyToPointer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber725">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if dolly-to-pointer behaviour is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-doublePickFlyTo">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber878">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether double-picking an <span>Entity</span> causes the <span>Camera</span> to fly to its boundary.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-doublePickFlyTo">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber889">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether double-picking an <span>Entity</span> causes the <span>Camera</span> to fly to its boundary.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when double-pick-fly-to mode is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-firstPerson">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber812">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+  
+  <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+<p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span>Camera#eye</span> rotates about <span>Camera#look</span>.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-firstPerson">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber834">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+  
+  <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
+<p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span>Camera#eye</span> rotates about <span>Camera#look</span>.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if first-person mode is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-keyboardLayout">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">keyboardLayout</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber1005">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Selects the keyboard layout.</p>
+<p>Options are:</p>
+<ul>
+<li>&quot;qwerty&quot;</li>
+<li>&quot;azerty&quot;</li>
+</ul>
+<p>Default is &quot;qwerty&quot;.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-navMode">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">navMode</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber605">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the current navigation mode.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The navigation mode: &quot;orbit&quot;, &quot;firstPerson&quot; or &quot;planView&quot;.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-navMode">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">navMode</span><span class="code" data-ice="signature">(navMode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber585">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the current navigation mode.</p>
+<p>Accepted values are:</p>
+<ul>
+<li>&quot;orbit&quot; - rotation orbits about the current point-of-interest or pivot point,</li>
+<li>&quot;firstPerson&quot; - rotation is about the current eye position,</li>
+<li>&quot;planView&quot; - rotation is disabled.</li>
+</ul>
+<p>See class comments for more info.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-panRightClick">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">panRightClick</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber900">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether either right-clicking (true) or middle-clicking (false) pans the <span>Camera</span>.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-panRightClick">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">panRightClick</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber911">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether right-clicking pans the <span>Camera</span>.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>false</code> when pan on right-click is disabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-panToPointer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber740">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+  
+  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">CameraControl#dollyToPointer</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-panToPointer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber756">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+  
+  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span>Camera</span>
+towards or away from the mouse pointer position.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">CameraControl#dollyToPointer</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if dolly-to-pointer behaviour is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pivotElement">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pivotElement</span><span class="code" data-ice="signature">(element: <span>HTMLElement</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber542">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is true.</p>
+<p>See class comments for an example.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-pivotPos">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">pivotPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber701">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the current World-space 3D pivot position.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>worldPos The current World-space 3D pivot position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pivotPos">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pivotPos</span><span class="code" data-ice="signature">(worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber690">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the current World-space 3D pivot position.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-pivoting">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber679">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether orbit mode currently pivots the <span>Camera</span> about an arbitrary user-settable pivot position.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;orbit&quot;</code>.</p>
+<p>See class comments for more info.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> to enable pivoting.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pivoting">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber664">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether orbit mode currently pivots the <span>Camera</span> about an arbitrary user-settable pivot position.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Only applies when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;orbit&quot;</code>.</p>
+<p>See class comments for more info.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-planView">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">planView</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber773">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
+  
+  <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
+<p>When in plan-view mode, rotation is disabled.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-planView">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">planView</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber795">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+  
+  <div data-ice="description"><p>Gets whether this CameraControl is in plan-view mode.</p>
+<p>When in plan-view mode, rotation is disabled.</p>
+<p>Default value is <code>false</code>.</p>
+<p>Deprecated - use <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if plan-view mode is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-pointerEnabled">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">pointerEnabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber649">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether mouse and touch input is enabled.</p>
+<p>Default value is <code>true</code>.</p>
+<p>Disabling mouse and touch input on CameraControl is desirable when we want to temporarily use mouse or
+touch input to interact with some other 3D control, without interfering with the <span>Camera</span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if mouse and touch input is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pointerEnabled">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pointerEnabled</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber619">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether mouse and touch input is enabled.</p>
+<p>Default value is <code>true</code>.</p>
+<p>Disabling mouse and touch input on CameraControl is useful when we want to temporarily use mouse or
+touch input to interact with some other 3D control, without disturbing the <span>Camera</span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-rotationInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">rotationInertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber931">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish rotating it.</p>
+<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
+while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of rotation.</p>
+<p>You may choose an inertia of zero when you want be able to precisely rotate the Camera,
+without interference from inertia. Zero inertia can also mean that less frames are rendered while
+you are rotating the Camera.</p>
+<p>Default value is <code>0.5</code>.</p>
+<p>Does not apply when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;planView&quot;</code>, which disallows rotation.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-rotationInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">rotationInertia</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/CameraControl/CameraControl.js.html#lineNumber944">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the rotation inertia factor.</p>
+<p>Default value is <code>0.5</code>.</p>
+<p>Does not apply when <span><a href="class/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;planView&quot;</code>, which disallows rotation.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The inertia factor.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
