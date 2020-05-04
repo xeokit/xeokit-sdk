@@ -26,7 +26,7 @@ class CameraUpdater {
                 return;
             }
 
-         //   pivotController.updatePivotElement();
+            //   pivotController.updatePivotElement();
 
             let cursorType = "default";
 
@@ -188,7 +188,7 @@ class CameraUpdater {
                     if (updates.inputFromMouse && configs.dollyToPointer) { // Using mouse input
                         controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
                     } else {
-                        camera.pan([0, 0, updates.dollyDelta * dollySpeed]); // Touchscreen input with no cursor
+                        camera.pan([0, 0, updates.dollyDelta * dollySpeed]);
                     }
 
                     if (configs.constrainVertical) {
@@ -208,20 +208,25 @@ class CameraUpdater {
                         camera.look = look;
                     }
 
-                } else { // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
+                } else if (configs.planView) {
 
                     if (updates.inputFromMouse && configs.dollyToPointer) {
                         controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
+                    } else {
+                        camera.pan([0, 0, updates.dollyDelta * dollySpeed]);
+                    }
 
-                    } else if (configs.dollyToPivot && configs.pivoting) {
+                } else { // Orbiting
+
+                    if (configs.pivoting) {
                         controllers.panController.panToWorldPos(controllers.pivotController.getPivotPos(), -updates.dollyDelta * dollySpeed); // FIXME: What about when pivotPos undefined?
 
                     } else {
                         camera.zoom(updates.dollyDelta * dollySpeed);
                     }
-
-                    camera.ortho.scale = camera.ortho.scale + updates.dollyDelta;
                 }
+
+                camera.ortho.scale = camera.ortho.scale + updates.dollyDelta;
 
                 updates.dollyDelta *= configs.dollyInertia;
 

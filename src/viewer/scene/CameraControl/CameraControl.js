@@ -15,39 +15,62 @@ import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDol
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
- * @desc Controls a {@link Camera} with keyboard, mouse and touch input.
+ * @desc Controls the {@link Camera} with keyboard, mouse and touch input.
  *
- * * Located at {@link Viewer#cameraControl}.
+ * # Overview
  *
- * # Contents
+ * CameraControl is located at {@link Viewer#cameraControl}.
  *
+ * CameraControl supports three navigation modes:
  *
- * # Orbit Navigation
+ * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. We also have the option to orbit an arbitrary
+ * pivot position that we can pick. Dollying the camera in orbit mode can either vary the distance between the eye
+ * and the point-of-interest, or move the eye and point-of-interest in unison towards and away from the pivot position.
  *
- * ## Enabling Orbit Mode
+ * * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
+ * point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
+ * to pivot in first-person mode.
  *
- * Enable orbit mode by setting {@link CameraControl#navMode} to ````"orbit"````.
+ * * **Plan-view mode** is typically used when the Camera is axis-aligned and using orthographic projection. In this
+ * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
  *
- * In orbit mode, your current eye position ({@link Camera#eye}) will then orbit about the point-of-interest ({@link Camera#look}).
+ * # Orbit Mode
  *
- * Let's enable orbit mode:
+ * To enable orbit navigation mode:
  *
  * ````javascript
  * cameraControl.navMode = "orbit"; // Default
  * ````
  *
- * Using the keyboard, orbit the camera using the arrow keys. We can also use certain letter keys to orbit, depending on
- * your keyboard layout. For a QWERTY keyboard these are Q and E. For AZERTY, these are A and E.
+ * We can then orbit by:
  *
- * ## Pivoting
+ * * left-dragging the mouse,
+ * * tap-dragging the touch pad,
+ * * pressing arrow keys, or 'Q' and 'E' on a QWERTY keyboard, or 'A' and 'E' on an AZERTY keyboard.
  *
- * When in orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
- * both your eye position and point-of-interest, in unison, about the current World-space *pivot position*, which is held
- * in {@link CameraControl#pivotPos}.
+ * <br>
+ * We can dolly forwards and backwards by:
  *
- * When in orbit mode and pivoting, left-clicking with the mouse on the surface of an object will set the pivot position
- * on that surface. When using a touch device, we double-tap to set the pivot position. Then the pivot position becomes
- * that surface position.
+ * * spinning the mouse wheel,
+ * * pinching on the touch pad, and
+ * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
+ *
+ * <br>
+ * We can pan horizontally and vertically by:
+ *
+ * * right-dragging the mouse,
+ * * left-dragging the mouse with the SHIFT key down,
+ * * tap-dragging the touch pad with SHIFT down,
+ * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
+ * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ *
+ * ## Pivoting in Orbit Mode
+ *
+ * In orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
+ * our eye position and point-of-interest about the current pivot position, and dolly our eye position and
+ * point-of-interest towards and away from the pivot position.
+ *
+ * We can set the current pivot position by left-clicking, or tapping, on the surface of an object.
  *
  * Lets ensure that we're in orbit mode, then enable pivoting:
  *
@@ -56,14 +79,20 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.pivoting = true;
  * ````
  *
- * Using a mouse, we can left-click on an object and drag, to pivot about that position. If we subsequently click empty space
- * and drag, we'll continue to pivot the position we clicked on the object.
+ * If we now left-click or tap an object, we'll pivot about that position. If we then left-click-drag or tap-drag
+ * empty space, we'll continue to pivot the position we set earlier.
+ *
+ * ````javascript
+ * cameraControl.dollyToPivot = true;
+ * ````
  *
  * ## Showing the Pivot Position
  *
- * We can optionally configure {@link CameraControl#pivotElement} with an HTML element to indicate the current pivot position.
+ * We can configure {@link CameraControl#pivotElement} with an HTML element to indicate the current
+ * pivot position. The indicator will appear momentarily each time we move the Camera while in orbit mode with
+ * pivoting enabled.
  *
- * First we'll define some CSS to make our pivot indicator a black dot with a white border:
+ * First we'll define some CSS to style our pivot indicator as a black dot with a white border:
  *
  * ````css
  * .camera-pivot-marker {
@@ -81,7 +110,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * }
  * ````
  *
- * Then we'll attach our HTML element:
+ * Then we'll attach our pivot indicator's HTML element to the CameraControl:
  *
  * ````javascript
  * const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
@@ -90,99 +119,108 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * cameraControl.pivotElement = pivotElement;
  * ````
+ * ## Axis-Aligned Views in Orbit Mode
  *
- * ## Dolly-to-Pivot
+ * In orbit mode, we can use keys 1-6 to position the {@link Camera} to look at the center of the {@link Scene} from along each of the
+ * six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.
  *
- * Dollying is when we move the camera forwards and backwards.
+ * # First-Person Mode
  *
- * When orbit and pivoting are enabled, setting {@link CameraControl#dollyToPivot} ````true```` will cause dollying to
- * always move your eye position and point-of-interest, towards and away from the current pivot position.
+ * First-person model allows us to roam freely around our {@link Scene}.
  *
- * Dolly using the mouse wheel, the keyboard (see table of inputs), or pinch gesture with touch pads.
- *
- * Let's ensure that we're in orbit mode and that pivoting is also enabled, then enable dolly-to-pivot:
+ * To enable first-person navigation mode:
  *
  * ````javascript
- * cameraControl.firstPerson = false;
- * cameraControl.pivoting = true;
- * cameraControl.dollyToPointer = false;
- * cameraControl.dollyToPivot = true;
+ * cameraControl.navMode = "firstPerson";
  * ````
  *
- * # First-Person Navigation
+ * We can then rotate our point-of-interest about our eye position by:
  *
- * Enable first-person navigation mode by setting {@link CameraControl#navMode} to ````"firstPerson"````.
+ * * left-dragging the mouse,
+ * * tap-dragging the touch pad,
+ * * pressing arrow keys, or 'Q' and 'E' on a QWERTY keyboard, or 'A' and 'E' on an AZERTY keyboard.
  *
- * In first-person mode, the camera will always rotate about your current position, and dollying will move both your
- * position and point-of-interest backwards and forwards, in unison.
+ * <br>
+ * We can dolly forwards and backwards by:
  *
- * First-person mode also prevents dolly-to-pivot behaviour.
+ * * spinning the mouse wheel,
+ * * pinching on the touch pad, and
+ * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
  *
- * To enable first-person mode:
+ * <br>
+ * We can pan horizontally and vertically by:
+ *
+ * * right-dragging the mouse,
+ * * left-dragging the mouse with the SHIFT key down,
+ * * tap-dragging the touch pad with SHIFT down,
+ * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
+ * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ *
+ * ## Dollying to the Mouse Pointer in First-Person Mode
+ *
+ * To cause dollying to move our eye position and point-of-interest towards and away from the current mouse position:
  *
  * ````javascript
- * cameraControl.firstPerson = true;
- * ````
- *
- * ## Constraining Vertical Position
- *
- *
- * # Dolly-to-Pointer
- *
- * While in orbit mode, setting {@link CameraControl#dollyToPointer} ````true```` will cause dollying to always move you
- * closer or farther from the position that the mouse is currently pointing at. This has no effect in first-person mode.
- *
- * Lets ensure that we're in orbit mode, then enable dolly-to-pointer:
- *
- * ````javascript
- * cameraControl.firstPerson = false;
  * cameraControl.dollyToPointer = true;
  * ````
  *
+ * ## Constraining Vertical Position in First-Person Mode
+ *
+ * To prevent the Camera from changing it's vertical position in first-person mode, which is useful for walk-through
+ * navigation:
+ *
+ * ````javascript
+ * cameraControl.constrainVertical = true;
+ * ````
+ *
+ * ## Axis-Aligned Views in First-Person Mode
+ *
+ * As in orbit mode, in first-person mode we can use keys 1-6 to position the {@link Camera} to look at the center of
+ * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+ * corresponding axis-aligned view.
+*
+ * # Plan-View Mode
+ *
+ * Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
+ * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
+ *
+ * To enable plan-view navigation mode:
+ *
+ * ````javascript
+ * cameraControl.navMode = "planView";
+ * ````
+ * In plan-view mode, we cannot orbit, rotate or pivot the camera.
+ *
+ * We can dolly forwards and backwards by:
+ *
+ * * spinning the mouse wheel,
+ * * pinching on the touch pad, and
+ * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
+ *
+ * <br>
+ * We can pan horizontally and vertically by:
+ *
+ * * left-dragging or right-dragging the mouse,
+ * * tap-dragging the touch pad with SHIFT down,
+ * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
+ * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ *
+ * ## Dollying to the Mouse Pointer in Plan-View Mode
+ *
+ * As in orbit and first-person modes, we can cause dollying to move our eye position and point-of-interest towards
+ * and away from the current mouse position:
+ *
+ * ````javascript
+ * cameraControl.dollyToPointer = true;
+ * ````
+ *
+ * ## Axis-Aligned Views in Plan-View Mode
+ *
+ * As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the {@link Camera} to look at the center of
+ * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+ * corresponding axis-aligned view.
+ *
  * # Picking
- *
- *
- * =====================================================================================================================
- *
- * ## Rotation
- *
- * The {@link CameraControl#firstPerson}
- * and {@link CameraControl#pivoting} flags determine CameraControl's rotation behaviour.
- *
- * When {@link CameraControl#firstPerson} and {@link CameraControl#pivoting} are both ````false````, {@link Camera#eye} and
- * {@link Camera#up} orbit around {@link Camera#look}.
- *
- * When  {@link CameraControl#firstPerson} is ````false```` and {@link CameraControl#pivoting} is ````true````, {@link Camera#eye} and
- * {@link Camera#up} orbit the current pivot position, which is set by clicking or double-tapping on a pickable {@link Entity}.
- *
- * ### Mouse Rotation
- *
- * Rotate with the mouse by dragging with the left button down.
- *
- * ### Mouse Pad rotation
- *
- * Rotate with the mouse pad by double-clicking then dragging. When {@link CameraControl#firstPerson} is ````false````
- * and {@link CameraControl#pivoting} is ````true````, the double-tap, if over an {@link Entity}, will set the pivot
- * point about which you'll orbit. Double-tap on empty space will continue to orbit the the last pivot point that was set.
- *
- * ### Touch Rotation
- *
- * TODO
- *
- * ## Panning
- *
- * Panning (in xeokit) moves {@link Camera#eye} and {@link Camera#look} in unison, left/right or up/down.
- *
- * ## Dollying
- *
- * Dollying moves {@link Camera#eye} and {@link Camera#look} in unison, forwards or backwards.
- *
- * The {@link CameraControl#firstPerson}, {@link CameraControl#pivoting}, {@link CameraControl#dollyToPivot}
- * and {@link CameraControl#dollyToPointer} flags determine CameraControl's dollying behaviour.
- *
- * ## Picking
- *
- * ## Fly-to
  *
  *
  *
@@ -232,8 +270,8 @@ class CameraControl extends Component {
 
             dollyRate: 10,
 
-            planView: false,
             navMode: "orbit",
+            planView: false,
             firstPerson: false,
             constrainVertical: false,
 
@@ -242,7 +280,6 @@ class CameraControl extends Component {
 
             pivoting: false,
             dollyToPointer: false,
-            dollyToPivot: false,
 
             rotationInertia: 0,
             dollyInertia: 0,
@@ -321,7 +358,6 @@ class CameraControl extends Component {
         this.active = cfg.active;
         this.pivoting = cfg.pivoting;
         this.dollyToPointer = cfg.dollyToPointer;
-        this.dollyToPivot = cfg.dollyToPivot;
         this.rotationInertia = cfg.rotationInertia;
         this.dollyInertia = cfg.dollyInertia;
         this.pointerEnabled = true;
@@ -344,23 +380,7 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to activate this CameraControl.
      */
     set active(value) {
-        this._reset();
         this._configs.active = value !== false;
-    }
-
-    _reset() {
-        for (let i = 0, len = this._handlers.length; i < len; i++) {
-            const handler = this._handlers[i];
-            if (handler.reset) {
-                handler.reset();
-            }
-        }
-
-        this._updates.panDeltaX = 0;
-        this._updates.panDeltaY = 0;
-        this._updates.rotateDeltaX = 0;
-        this._updates.rotateDeltaY = 0;
-        this._updates.dolyDelta = 0;
     }
 
     /**
@@ -381,18 +401,18 @@ class CameraControl extends Component {
      *
      * * "orbit" - rotation orbits about the current point-of-interest or pivot point,
      * * "firstPerson" - rotation is about the current eye position,
-     * * "plan" - rotation is disabled.
+     * * "planView" - rotation is disabled.
      *
-     * @param {String} navMode The navigation mode: "orbit", "firstPerson" or "plan".
+     * @param {String} navMode The navigation mode: "orbit", "firstPerson" or "planView".
      */
     set navMode(navMode) {
         navMode = navMode || "orbit";
-        if (navMode !== "firstPerson" && navMode !== "orbit"  && navMode !== "plan") {
-            this.error("Unsupported value for navMode: " + navMode + " - supported values are 'orbit', 'firstPerson' and 'plan' - defaulting to 'orbit'");
+        if (navMode !== "firstPerson" && navMode !== "orbit"  && navMode !== "planView") {
+            this.error("Unsupported value for navMode: " + navMode + " - supported values are 'orbit', 'firstPerson' and 'planView' - defaulting to 'orbit'");
             navMode = "orbit";
         }
         this._configs.firstPerson = (navMode === "firstPerson");
-        this._configs.planView = (navMode === "plan");
+        this._configs.planView = (navMode === "planView");
         if (this._configs.firstPerson || this._configs.planView) {
             this._controllers.pivotController.hidePivot();
             this._controllers.pivotController.endPivot();
@@ -419,6 +439,21 @@ class CameraControl extends Component {
     set pointerEnabled(value) {
         this._reset();
         this._configs.pointerEnabled = !!value;
+    }
+
+    _reset() {
+        for (let i = 0, len = this._handlers.length; i < len; i++) {
+            const handler = this._handlers[i];
+            if (handler.reset) {
+                handler.reset();
+            }
+        }
+
+        this._updates.panDeltaX = 0;
+        this._updates.panDeltaY = 0;
+        this._updates.rotateDeltaX = 0;
+        this._updates.rotateDeltaY = 0;
+        this._updates.dolyDelta = 0;
     }
 
     /**
@@ -493,9 +528,6 @@ class CameraControl extends Component {
      */
     set dollyToPointer(value) {
         this._configs.dollyToPointer = !!value;
-        if (this._configs.dollyToPointer) {
-            this._configs.dollyToPivot = false;
-        }
     }
 
     /**
@@ -507,31 +539,6 @@ class CameraControl extends Component {
      */
     get dollyToPointer() {
         return this._configs.dollyToPointer;
-    }
-
-    /**
-     * Sets whether scrolling the mouse wheel, when mouse is over an {@link Entity}, will zoom the {@link Camera} towards the pivot point.
-     *
-     * Default value is ````false````.
-     *
-     * @param {Boolean} value Set ````true```` to enable pan-to-pivot behaviour.
-     */
-    set dollyToPivot(value) {
-        this._configs.dollyToPivot = !!value;
-        if (this._configs.dollyToPivot) {
-            this._configs.dollyToPointer = false;
-        }
-    }
-
-    /**
-     * Gets whether scrolling the mouse wheel, when mouse is over an {@link Entity}, will zoom the {@link Camera} towards the pivot point.
-     *
-     * Default value is ````false````.
-     *
-     * @returns {Boolean} Returns ````true```` if enable pan-to-pivot behaviour is enabled.
-     */
-    get dollyToPivot() {
-        return this._configs.dollyToPivot;
     }
 
     /**
