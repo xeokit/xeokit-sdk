@@ -23,18 +23,20 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * CameraControl supports three navigation modes:
  *
- * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. We also have the option to orbit an arbitrary
- * pivot position that we can pick. Dollying the camera in orbit mode can either vary the distance between the eye
- * and the point-of-interest, or move the eye and point-of-interest in unison towards and away from the pivot position.
+ * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. We also have the option to orbit an
+ * arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
+ * and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.
  *
  * * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
  * point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
  * to pivot in first-person mode.
  *
- * * **Plan-view mode** is typically used when the Camera is axis-aligned and using orthographic projection. In this
+ * * **Plan-view mode** is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
  * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
  *
  * # Orbit Mode
+ *
+ * In orbit mode, we are rotating about a point-of-interest.
  *
  * To enable orbit navigation mode:
  *
@@ -124,6 +126,15 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * In orbit mode, we can use keys 1-6 to position the {@link Camera} to look at the center of the {@link Scene} from along each of the
  * six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.
  *
+ * ## Focusing on Objects in Orbit Mode
+ *
+ * In orbit mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click or
+ * double-tap (ie. "double-pick") an {@link Entity} to fit it to view. This will cause the {@link Camera}
+ * to fly to that Entity. Our point-of-interest then becomes the center of that Entity. If we are currently pivoting,
+ * then our pivot position is then also set to the Entity center.
+ *
+ * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
+ *
  * # First-Person Mode
  *
  * First-person model allows us to roam freely around our {@link Scene}.
@@ -178,7 +189,17 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * As in orbit mode, in first-person mode we can use keys 1-6 to position the {@link Camera} to look at the center of
  * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
  * corresponding axis-aligned view.
-*
+ *
+ * If we are currently pivoting, then our pivot position is then set to the Scene center.
+ *
+ * ## Focusing on Objects in First-Person Mode
+ *
+ * As in orbit mode, when in first-person mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click
+ * or double-tap an {@link Entity} (ie. "double-picking") to fit it in view. This will cause the {@link Camera} to fly to
+ * that Entity. Our point-of-interest then becomes the center of that Entity.
+ *
+ * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
+ *
  * # Plan-View Mode
  *
  * Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
