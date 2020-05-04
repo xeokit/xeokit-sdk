@@ -17,28 +17,62 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * @desc Controls the {@link Camera} with keyboard, mouse and touch input, and fires events when we
  * hover, click or tap {@link Entity}s.
  *
- * # Overview
+ * ## Contents
  *
- * CameraControl is located at {@link Viewer#cameraControl}.
+ * - [Overview](#overview)
+ * - [Examples](#examples)
+ * - [Orbit Mode](#orbit-mode)
+ *      * [**Pivoting in Orbit Mode**](#pivoting-in-orbit-mode)
+ *      * [**Showing the Pivot Position**](#--showing-the-pivot-position--)
+ *      * [**Axis-Aligned Views in Orbit Mode**](#--axis-aligned-views-in-orbit-mode--)
+ *      * [**View-Fitting Entitys in Orbit Mode**](#--view-fitting-entitys-in-orbit-mode--)
+ * - [First-Person Mode](#first-person-mode)
+ *      * [**Dollying to the Mouse Pointer in First-Person Mode**](#--dollying-to-the-mouse-pointer-in-first-person-mode--)
+ *      * [**Constraining Vertical Position in First-Person Mode**](#--constraining-vertical-position-in-first-person-mode--)
+ *      * [**Axis-Aligned Views in First-Person Mode**](#--axis-aligned-views-in-first-person-mode--)
+ *      * [**View-Fitting Entitys in First-Person Mode**](#--view-fitting-entitys-in-first-person-mode--)
+ * - [Plan-View Mode](#plan-view-mode)
+ *      * [**Dollying to the Mouse Pointer in Plan-View Mode**](#--dollying-to-the-mouse-pointer-in-plan-view-mode--)
+ *      * [**Axis-Aligned Views in Plan-View Mode**](#--axis-aligned-views-in-plan-view-mode--)
+ * - [Picking Events](#picking-events)
+ *      * [**"hover"**](#---hover---)
+ *      * [**"hoverOff"**](#---hoveroff---)
+ *      * [**"hoverEnter"**](#---hoverenter---)
+ *      * [**"hoverOut"**](#---hoverout---)
+ *      * [**"picked"**](#---picked---)
+ *      * [**"pickedSurface"**](#---pickedsurface---)
+ *      * [**"pickedNothing"**](#---pickednothing---)
+ *      * [**"doublePicked"**](#---doublepicked---)
+ *      * [**"doublePickedSurface"**](#---doublepickedsurface---)
+ *      * [**"doublePickedNothing"**](#---doublepickednothing---)
+ * <br>
  *
- * CameraControl supports three navigation modes:
+ * ## Overview
  *
- * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. In this mode, we also have the option to orbit an
+ * * Each {@link Viewer} has a CameraControl, located at {@link Viewer#cameraControl}.
+ * * CameraControl supports three navigation modes:
+ *      * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. In this mode, we also have the option to orbit an
  * arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
  * and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.
- * * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
+ *      * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
  * point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
  * to pivot in first-person mode.
- * * **Plan-view mode** is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
+ *      * **Plan-view mode** is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
  * mode, CameraControl prevents us from rotating and pivoting the Camera, which keeps the Camera in correct axis alignment
  * for our plan view.
- *
+ * * CameraControl also fires "pick" events when we hover, click or tap on {@link Entity}s.
  * <br>
- * CameraControl also fires "pick" events when we hover, click or tap on {@link Entity}s.
  *
- * # Orbit Mode
+ * ## Examples
  *
- * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)]
+ * * [Orbit mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)
+ * * [First-person mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)
+ * * [Plan-view mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)
+ * <br>
+ *
+ * ## Orbit Mode
+ *
+ * * [[Run orbit mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)]
  * <br><br>
  *
  * In orbit mode, we are rotating about a point-of-interest.
@@ -52,15 +86,15 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * We can then orbit by:
  *
  * * left-dragging the mouse,
- * * tap-dragging the touch pad,
- * * pressing arrow keys, or 'Q' and 'E' on a QWERTY keyboard, or 'A' and 'E' on an AZERTY keyboard.
+ * * tap-dragging the touch pad, and
+ * * pressing arrow keys, or ````Q```` and ````E```` on a QWERTY keyboard, or ````A```` and ````E```` on an AZERTY keyboard.
  *
  * <br>
  * We can dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
- * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
+ * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S```` for AZERTY.
  *
  * <br>
  * We can pan horizontally and vertically by:
@@ -68,16 +102,17 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * * right-dragging the mouse,
  * * left-dragging the mouse with the SHIFT key down,
  * * tap-dragging the touch pad with SHIFT down,
- * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
- * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ * * pressing the ````A````, ````D````, ````Z```` and ````X```` keys on a QWERTY keyboard, and
+ * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
+ * <br><br>
  *
- * ## Pivoting in Orbit Mode
+ * ### **Pivoting in Orbit Mode**
  *
  * In orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
  * our eye position and point-of-interest about the current pivot position, and dolly our eye position and
  * point-of-interest towards and away from the pivot position.
  *
- * We can set the current pivot position by left-clicking, or tapping, on the surface of an object.
+ * We can set the current pivot position by left-clicking, or tapping, on the surface of an Entity.
  *
  * Lets ensure that we're in orbit mode, then enable pivoting:
  *
@@ -86,10 +121,10 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.pivoting = true;
  * ````
  *
- * If we now left-click or tap an object, we'll pivot about that position. If we then left-click-drag or tap-drag
+ * If we now left-click or tap an Entity, we'll pivot about that position. If we then left-click-drag or tap-drag
  * empty space, we'll continue to pivot the position we set earlier.
  *
- * ## Showing the Pivot Position
+ * ### **Showing the Pivot Position**
  *
  * We can configure {@link CameraControl#pivotElement} with an HTML element to indicate the current
  * pivot position. The indicator will appear momentarily each time we move the Camera while in orbit mode with
@@ -122,12 +157,12 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * cameraControl.pivotElement = pivotElement;
  * ````
- * ## Axis-Aligned Views in Orbit Mode
+ * ### **Axis-Aligned Views in Orbit Mode**
  *
  * In orbit mode, we can use keys 1-6 to position the {@link Camera} to look at the center of the {@link Scene} from along each of the
  * six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.
  *
- * ## Focusing on Objects in Orbit Mode
+ * ### **View-Fitting Entitys in Orbit Mode**
  *
  * In orbit mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click or
  * double-tap (ie. "double-pick") an {@link Entity} to fit it to view. This will cause the {@link Camera}
@@ -136,9 +171,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
  *
- * # First-Person Mode
+ * ## First-Person Mode
  *
- * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)]
+ * * [[Run first-person mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)]
  * <br><br>
  *
  * First-person model allows us to roam freely around our {@link Scene}.
@@ -153,14 +188,14 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * * left-dragging the mouse,
  * * tap-dragging the touch pad,
- * * pressing arrow keys, or 'Q' and 'E' on a QWERTY keyboard, or 'A' and 'E' on an AZERTY keyboard.
+ * * pressing arrow keys, or ````Q```` and ````E```` on a QWERTY keyboard, or ````A```` and ````E```` on an AZERTY keyboard.
  *
  * <br>
  * We can dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
- * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
+ * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S```` for AZERTY.
  *
  * <br>
  * We can pan horizontally and vertically by:
@@ -168,10 +203,11 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * * right-dragging the mouse,
  * * left-dragging the mouse with the SHIFT key down,
  * * tap-dragging the touch pad with SHIFT down,
- * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
- * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ * * pressing the ````A````, ````D````, ````Z```` and ````X```` keys on a QWERTY keyboard, and
+ * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
+ * <br><br>
  *
- * ## Dollying to the Mouse Pointer in First-Person Mode
+ * ### **Dollying to the Mouse Pointer in First-Person Mode**
  *
  * To cause dollying to move our eye position and point-of-interest towards and away from the current mouse position:
  *
@@ -179,7 +215,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.dollyToPointer = true;
  * ````
  *
- * ## Constraining Vertical Position in First-Person Mode
+ * ### **Constraining Vertical Position in First-Person Mode**
  *
  * To prevent the Camera from changing it's vertical position in first-person mode, which is useful for walk-through
  * navigation:
@@ -188,7 +224,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.constrainVertical = true;
  * ````
  *
- * ## Axis-Aligned Views in First-Person Mode
+ * ### **Axis-Aligned Views in First-Person Mode**
  *
  * As in orbit mode, in first-person mode we can use keys 1-6 to position the {@link Camera} to look at the center of
  * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
@@ -196,7 +232,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * If we are currently pivoting, then our pivot position is then set to the Scene center.
  *
- * ## Focusing on Objects in First-Person Mode
+ * ### **View-Fitting Entitys in First-Person Mode**
  *
  * As in orbit mode, when in first-person mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click
  * or double-tap an {@link Entity} (ie. "double-picking") to fit it in view. This will cause the {@link Camera} to fly to
@@ -204,9 +240,9 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
  *
- * # Plan-View Mode
+ * ## Plan-View Mode
  *
- * * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)]
+ * * [[Run plan-view mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)]
  * <br><br>
  *
  * Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
@@ -217,23 +253,24 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * ````javascript
  * cameraControl.navMode = "planView";
  * ````
- * In plan-view mode, we cannot orbit, rotate or pivot the camera.
+ * In plan-view mode, we cannot orbit, rotate or pivot the Camera.
  *
  * We can dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
- * * pressing the '+' and '-' keys, or 'W' and 'S' on a QWERTY keyboard, or 'Z' and 'S' for AZERTY.
+ * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S' for AZERTY.
  *
  * <br>
  * We can pan horizontally and vertically by:
  *
  * * left-dragging or right-dragging the mouse,
  * * tap-dragging the touch pad with SHIFT down,
- * * pressing the 'A', 'D', 'Z' and 'X' keys on a QWERTY keyboard, and
- * * pressing the 'Q', 'D', 'W' and 'X' keys on an AZERTY keyboard,
+ * * pressing the ````A````, ````D````, ```Z```` and ````X```` keys on a QWERTY keyboard, and
+ * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
+ * <br><br>
  *
- * ## Dollying to the Mouse Pointer in Plan-View Mode
+ * ### **Dollying to the Mouse Pointer in Plan-View Mode**
  *
  * As in orbit and first-person modes, we can cause dollying to move our eye position and point-of-interest towards
  * and away from the current mouse position:
@@ -242,32 +279,130 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * cameraControl.dollyToPointer = true;
  * ````
  *
- * ## Axis-Aligned Views in Plan-View Mode
+ * ### **Axis-Aligned Views in Plan-View Mode**
  *
  * As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the {@link Camera} to look at the center of
  * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
  * corresponding axis-aligned view.
  *
- * # Picking
+ * ## Picking Events
  *
  * We can use CameraControl to get events whenever we pick {@link Entity}s.
  *
- * We can pick an Entity in several ways:
+ * The following subsections describe the pick-related events fired by CameraControl.
  *
- * * ````"picked"```` - left-click with the mouse, or tap with the touch pad to pick an Entity,
- * * left-double-click
+ * ### **"hover"**
  *
- * @emits "hover" - pointer hovers over a new object
- * @emits "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
- * @emits "hoverOut"  - Hover has left the last object we were hovering over
- * @emits "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
- * @emits "picked" - Clicked or tapped object
- * @emits "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
- * @emits "doublePicked" - Double-clicked or double-tapped object
- * @emits "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
- * @emits "pickedNothing" - Clicked or tapped, but not on any objects
- * @emits "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
- * @emits "rightClick" - Right-click
+ * Pointer hovers over an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("hover", (e) => {
+ *      const entity = e.entity; // Entity
+ *      const canvasPos = e.canvasPos; // 2D canvas position
+ * })
+ * ````
+ *
+ * ### **"hoverOff"**
+ *
+ * Pointer hovers over no Entitys.
+ *
+ * ````javascript
+ * cameraControl.on("hoverOff", (e) => {
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"hoverEnter"**
+ *
+ * Pointer begins hovering over an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("hoverEnter", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"hoverOut"**
+ *
+ * Pointer stops hovering over an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("hoverOut", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"picked"**
+ *
+ * Mouse click or touch-tap on an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("picked", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"pickedSurface"**
+ *
+ * Mouse click or touch-tap on the surface of an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("picked", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ *      const worldPos = e.worldPos; // 3D World-space position
+ *      const viewPos = e.viewPos; // 3D View-space position
+ *      const worldNormal = e.worldNormal; // 3D World-space normal vector
+ * })
+ * ````
+ *
+ * ### **"pickedNothing"**
+ *
+ * Mouse click or touch-tap on no Entitys.
+ *
+ * ````javascript
+ * cameraControl.on("pickedNothing", (e) => {
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"doublePicked"**
+ *
+ * Mouse double-click or double-touch-tap on an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("doublePicked", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
+ *
+ * ### **"doublePickedSurface"**
+ *
+ * Mouse double-click or double-touch-tap on the surface of an Entity.
+ *
+ * ````javascript
+ * cameraControl.on("doublePickedSurface", (e) => {
+ *      const entity = e.entity;
+ *      const canvasPos = e.canvasPos;
+ *      const worldPos = e.worldPos;
+ *      const viewPos = e.viewPos;
+ *      const worldNormal = e.worldNormal;
+ * })
+ * ````
+ *
+ * ### **"doublePickedNothing"**
+ *
+ * Mouse double-click or double-touch-tap on no Entitys.
+ *
+ * ````javascript
+ * cameraControl.on("doublePickedNothing", (e) => {
+ *      const canvasPos = e.canvasPos;
+ * })
+ * ````
  */
 class CameraControl extends Component {
 
@@ -778,14 +913,14 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets a factor in range ````[0..1]```` indicating how much the camera keeps moving after you finish rotating it.
+     * Sets a factor in range ````[0..1]```` indicating how much the Camera keeps moving after you finish rotating it.
      *
      * A value of ````0.0```` causes it to immediately stop, ````0.5```` causes its movement to decay 50% on each tick,
      * while ````1.0```` causes no decay, allowing it continue moving, by the current rate of rotation.
      *
-     * You may choose an inertia of zero when you want be able to precisely rotate the camera,
+     * You may choose an inertia of zero when you want be able to precisely rotate the Camera,
      * without interference from inertia. Zero inertia can also mean that less frames are rendered while
-     * you are rotating the camera.
+     * you are rotating the Camera.
      *
      * Default value is ````0.5````.
      *
@@ -829,14 +964,14 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets a factor in range ````[0..1]```` indicating how much the camera keeps moving after you finish dollying it.
+     * Sets a factor in range ````[0..1]```` indicating how much the Camera keeps moving after you finish dollying it.
      *
      * A value of ````0.0```` causes it to immediately stop, ````0.5```` causes its movement to decay 50% on each tick,
      * while ````1.0```` causes no decay, allowing it continue moving, by the current rate of pan or rotation.
      *
-     * You may choose an dollyInertia of zero when you want be able to precisely position or rotate the camera,
+     * You may choose an dollyInertia of zero when you want be able to precisely position or rotate the Camera,
      * without interference from inertia. Zero inertia can also mean that less frames are rendered while
-     * you are positioning the camera.
+     * you are positioning the Camera.
      *
      * Default value is ````0.5````.
      *
