@@ -278,7 +278,8 @@ class DistanceMeasurement extends Component {
             this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
             this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
 
-            this._lengthLabel.setText((Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)) * scale).toFixed(2)) + unitAbbrev);
+            this._length = Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)))
+            this._lengthLabel.setText((this._length * scale).toFixed(2) + unitAbbrev);
 
             const xAxisCanvasLength = Math.abs(lengthWire(cp[0], cp[1], cp[2], cp[3]));
             const yAxisCanvasLength = Math.abs(lengthWire(cp[2], cp[3], cp[4], cp[5]));
