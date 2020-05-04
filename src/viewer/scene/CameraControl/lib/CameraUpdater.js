@@ -22,10 +22,6 @@ class CameraUpdater {
                 return;
             }
 
-            if (!states.mouseover) {
-                return;
-            }
-
             //   pivotController.updatePivotElement();
 
             let cursorType = "default";
