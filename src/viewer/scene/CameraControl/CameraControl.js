@@ -14,7 +14,8 @@ import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDol
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
- * @desc Controls the {@link Camera} with keyboard, mouse and touch input.
+ * @desc Controls the {@link Camera} with keyboard, mouse and touch input, and fires events when we
+ * hover, click or tap {@link Entity}s.
  *
  * # Overview
  *
@@ -22,16 +23,18 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * CameraControl supports three navigation modes:
  *
- * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. We also have the option to orbit an
+ * * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. In this mode, we also have the option to orbit an
  * arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
  * and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.
- *
  * * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
  * point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
  * to pivot in first-person mode.
- *
  * * **Plan-view mode** is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
- * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
+ * mode, CameraControl prevents us from rotating and pivoting the Camera, which keeps the Camera in correct axis alignment
+ * for our plan view.
+ *
+ * <br>
+ * CameraControl also fires "pick" events when we hover, click or tap on {@link Entity}s.
  *
  * # Orbit Mode
  *
@@ -82,10 +85,6 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * If we now left-click or tap an object, we'll pivot about that position. If we then left-click-drag or tap-drag
  * empty space, we'll continue to pivot the position we set earlier.
- *
- * ````javascript
- * cameraControl.dollyToPivot = true;
- * ````
  *
  * ## Showing the Pivot Position
  *
