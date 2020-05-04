@@ -3,6 +3,9 @@
  */
 import {math} from "../../../math/math.js";
 
+/**
+ * @private
+ */
 class MousePanRotateDollyHandler {
 
     constructor(scene, controllers, configs, states, updates) {
