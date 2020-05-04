@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <title>CameraControl Plan View Mode</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        .camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 150px;
+            right: 20px;
+            z-index: 10;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1><a target="_other"
+           href="./../docs/class/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> - Plan View Mode
+    </h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+</div>
+
+
+<div id="my-gui-container"></div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+    const camera = scene.camera;
+
+    cameraControl.navMode = "planView";
+    cameraControl.dollyToPointer = true;
+
+    viewer.camera.eye =  [4.313576698303223, 24.567310333251953, 6.592319488525391];
+    viewer.camera.look = [4.313576698303223, -29.305259704589844, 6.592319488525391];
+    viewer.camera.up = [0, 0, 1];
+
+    camera.perspective.near = 0.1;
+    camera.perspective.far = 5000.0;
+
+    camera.ortho.near = 0.1;
+    camera.ortho.far = 5000.0;
+
+    camera.projection = "perspective";
+
+    scene.highlightMaterial.fill = true;
+    scene.highlightMaterial.fillAlpha = 0.3;
+    scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with grid
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 300,
+            divisions: 60
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [0, -1.6, 0],
+        collidable: false
+    });
+
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with Camera configs
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControlParams = new function () {
+
+        this.active = cameraControl.active;
+        this.keyboardLayout = cameraControl.keyboardLayout;
+        this.ortho = camera.projection === "ortho";
+        this.dollyToPointer = cameraControl.dollyToPointer;
+        this.doublePickFlyTo = cameraControl.doublePickFlyTo;
+        this.panRightClick = cameraControl.panRightClick;
+        this.dollyRate = cameraControl.dollyRate;
+        this.rotationInertia = cameraControl.rotationInertia;
+        this.dollyInertia = cameraControl.dollyInertia;
+    }();
+
+    const update = () => {
+        cameraControl.active = cameraControlParams.active;
+        cameraControl.keyboardLayout = cameraControlParams.keyboardLayout;
+        camera.projection = cameraControlParams.ortho ? "ortho" : "perspective";
+        cameraControl.dollyToPointer = cameraControlParams.dollyToPointer;
+        cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
+        cameraControl.panRightClick = cameraControlParams.panRightClick;
+        cameraControl.dollyRate = cameraControlParams.dollyRate;
+        cameraControl.rotationInertia = cameraControlParams.rotationInertia;
+        cameraControl.dollyInertia = cameraControlParams.dollyInertia;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const cameraControlFolder = gui.addFolder('cameraControl');
+
+    cameraControlFolder.add(cameraControlParams, 'active');
+    cameraControlFolder.add(cameraControlParams, 'keyboardLayout', ["qwerty", "azerty"]);
+    cameraControlFolder.add(cameraControlParams, 'ortho');
+    cameraControlFolder.add(cameraControlParams, 'dollyToPointer');
+    cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
+    cameraControlFolder.add(cameraControlParams, 'panRightClick');
+    cameraControlFolder.add(cameraControlParams, 'dollyRate', 0, 30);
+    cameraControlFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
+    cameraControlFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
+
+    cameraControlFolder.open();
+
+    const customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
+    window.camera = camera;
+
+</script>
+</html>
