@@ -1,4 +1,3 @@
-import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 
 import {CameraFlightAnimation} from './../camera/CameraFlightAnimation.js';
@@ -243,7 +242,12 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * # Picking
  *
+ * We can use CameraControl to get events whenever we pick {@link Entity}s.
  *
+ * We can pick an Entity in several ways:
+ *
+ * * ````"picked"```` - left-click with the mouse, or tap with the touch pad to pick an Entity,
+ * * left-double-click
  *
  * @emits "hover" - pointer hovers over a new object
  * @emits "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
@@ -387,6 +391,9 @@ class CameraControl extends Component {
 
     /**
      * Sets the HTMl element to represent the pivot point when {@link CameraControl#pivoting} is true.
+     *
+     * See class comments for an example.
+     *
      * @param {HTMLElement} element HTML element representing the pivot point.
      */
     set pivotElement(element) {
@@ -395,6 +402,8 @@ class CameraControl extends Component {
 
     /**
      *  Sets if this CameraControl is active or not.
+     *
+     * When inactive, the CameraControl will not react to input.
      *
      * Default value is ````true````.
      *
@@ -406,6 +415,8 @@ class CameraControl extends Component {
 
     /**
      * Gets if this CameraControl is active or not.
+     *
+     * When inactive, the CameraControl will not react to input.
      *
      * Default value is ````true````.
      *
@@ -424,11 +435,13 @@ class CameraControl extends Component {
      * * "firstPerson" - rotation is about the current eye position,
      * * "planView" - rotation is disabled.
      *
+     * See class comments for more info.
+     *
      * @param {String} navMode The navigation mode: "orbit", "firstPerson" or "planView".
      */
     set navMode(navMode) {
         navMode = navMode || "orbit";
-        if (navMode !== "firstPerson" && navMode !== "orbit"  && navMode !== "planView") {
+        if (navMode !== "firstPerson" && navMode !== "orbit" && navMode !== "planView") {
             this.error("Unsupported value for navMode: " + navMode + " - supported values are 'orbit', 'firstPerson' and 'planView' - defaulting to 'orbit'");
             navMode = "orbit";
         }
@@ -444,18 +457,21 @@ class CameraControl extends Component {
     /**
      * Gets the current navigation mode.
      *
-     * @returns {String} The navigation mode: "orbit" or "firstPerson".
+     * @returns {String} The navigation mode: "orbit", "firstPerson" or "planView".
      */
     get navMode() {
         return this._configs.navMode;
     }
 
     /**
-     * Sets whether canvas pointer events are enabled.
+     * Sets whether mouse and touch input is enabled.
      *
      * Default value is ````true````.
      *
-     * @param {Boolean} value Set ````true```` to enable drag events.
+     * Disabling mouse and touch input on CameraControl is useful when we want to temporarily use mouse or
+     * touch input to interact with some other 3D control, without disturbing the {@link Camera}.
+     *
+     * @param {Boolean} value Set ````true```` to enable mouse and touch input.
      */
     set pointerEnabled(value) {
         this._reset();
@@ -478,26 +494,27 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether canvas pointer events are enabled.
+     * Gets whether mouse and touch input is enabled.
      *
      * Default value is ````true````.
      *
-     * @returns {Boolean} Returns ````true```` to enable drag events.
+     * Disabling mouse and touch input on CameraControl is desirable when we want to temporarily use mouse or
+     * touch input to interact with some other 3D control, without interfering with the {@link Camera}.
+     *
+     * @returns {Boolean} Returns ````true```` if mouse and touch input is enabled.
      */
     get pointerEnabled() {
         return this._configs.pointerEnabled;
     }
 
     /**
-     * Sets whether dragging will pivot the {@link Camera} about the current 3D pivot point.
-     *
-     * The pivot point is indicated by {@link CameraControl#pivotPos}.
-     *
-     * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
-     *
-     * You can configure an HTML element to show the pivot position via {@link CameraControl#pivotElement}.
+     * Sets whether orbit mode currently pivots the {@link Camera} about an arbitrary user-settable pivot position.
      *
      * Default value is ````false````.
+     *
+     * Only applies when {@link CameraControl#navMode} is ````"orbit"````.
+     *
+     * See class comments for more info.
      *
      * @param {Boolean} value Set ````true```` to enable pivoting.
      */
@@ -506,15 +523,13 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether dragging will pivot the {@link Camera} about the current 3D pivot point.
-     *
-     * The pivot point is indicated by {@link CameraControl#pivotPos}.
-     *
-     * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
-     *
-     * You can configure an HTML element to show the pivot position via {@link CameraControl#pivotElement}.
+     * Gets whether orbit mode currently pivots the {@link Camera} about an arbitrary user-settable pivot position.
      *
      * Default value is ````false````.
+     *
+     * Only applies when {@link CameraControl#navMode} is ````"orbit"````.
+     *
+     * See class comments for more info.
      *
      * @returns {Boolean} Returns ````true```` to enable pivoting.
      */
@@ -525,6 +540,8 @@ class CameraControl extends Component {
     /**
      * Sets the current World-space 3D pivot position.
      *
+     * Only applies when {@link CameraControl#pivoting} is ````true````.
+     *
      * @param {Number[]} worldPos The new World-space 3D pivot position.
      */
     set pivotPos(worldPos) {
@@ -534,6 +551,8 @@ class CameraControl extends Component {
     /**
      * Gets the current World-space 3D pivot position.
      *
+     * Only applies when {@link CameraControl#pivoting} is ````true````.
+     *
      * @return {Number[]} worldPos The current World-space 3D pivot position.
      */
     get pivotPos() {
@@ -541,25 +560,59 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether scrolling the mouse wheel, when the mouse is over an {@link Entity}, will zoom the {@link Camera} towards the hovered point on the Entity's surface.
+     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
+     * towards or away from the mouse pointer position.
      *
      * Default value is ````false````.
      *
-     * @param {Boolean} value Set ````true```` to enable pan-to-pointer behaviour.
+     * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set dollyToPointer(value) {
         this._configs.dollyToPointer = !!value;
     }
 
     /**
-     * Gets whether scrolling the mouse wheel, when the mouse is over an {@link Entity}, will zoom the {@link Camera} towards the hovered point on the Entity's surface.
+     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
+     * towards or away from the mouse pointer position.
      *
      * Default value is ````false````.
      *
-     * @returns {Boolean} Returns ````true```` if pan-to-pointer behaviour is enabled.
+     * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get dollyToPointer() {
         return this._configs.dollyToPointer;
+    }
+
+    /**
+     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
+     * towards or away from the mouse pointer position.
+     *
+     * Default value is ````false````.
+     *
+     * Deprecated - use {@link CameraControl#dollyToPointer} instead.
+     *
+     * @deprecated
+     * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
+     */
+    set panToPointer(value) {
+        this.warn("panToPointer is deprecated - use dollyToPointer instead");
+        this.dollyToPointer = value;
+    }
+
+    /**
+     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
+     * towards or away from the mouse pointer position.
+     *
+     * Default value is ````false````.
+     *
+     * Deprecated - use {@link CameraControl#dollyToPointer} instead.
+     *
+     * @deprecated
+     * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
+     */
+    get panToPointer() {
+        this.warn("panToPointer is deprecated - use dollyToPointer instead");
+        return this.dollyToPointer;
     }
 
     /**
@@ -581,6 +634,7 @@ class CameraControl extends Component {
             this._controllers.pivotController.hidePivot();
             this._controllers.pivotController.endPivot();
         }
+        this.warn("planView property is deprecated - use navMode instead");
     }
 
     /**
@@ -596,6 +650,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get planView() {
+        this.warn("planView property is deprecated - use navMode instead");
         return this._configs.planView;
     }
 
@@ -612,6 +667,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     set firstPerson(value) {
+        this.warn("firstPerson property is deprecated - use navMode instead");
         this._configs.firstPerson = !!value;
         this._configs.planView = false;
         if (this._configs.firstPerson) {
@@ -633,6 +689,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get firstPerson() {
+        this.warn("firstPerson property is deprecated - use navMode instead");
         return this._configs.firstPerson;
     }
 
@@ -642,7 +699,7 @@ class CameraControl extends Component {
      * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
      * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
      *
-     * This only has an effect when {@link CameraControl#firstPerson} is ````true````.
+     * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
      *
      * Default value is ````false````.
      *
@@ -658,7 +715,7 @@ class CameraControl extends Component {
      * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
      * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
      *
-     * This only has an effect when {@link CameraControl#firstPerson} is ````true````.
+     * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
      *
      * Default value is ````false````.
      *
@@ -724,6 +781,8 @@ class CameraControl extends Component {
      *
      * Default value is ````0.5````.
      *
+     * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
+     *
      * @param {Number} value New inertial factor.
      */
     set rotationInertia(value) {
@@ -735,6 +794,8 @@ class CameraControl extends Component {
      *
      * Default value is ````0.5````.
      *
+     * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
+     *
      * @returns {Number} The inertia factor.
      */
     get rotationInertia() {
@@ -742,7 +803,8 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets the current dolly speed. This is the number of World-space coordinate units the camera moves per second while moving forwards or backwards.
+     * Sets the current dolly rate.
+     *
      * @param {Number} dollyRate The new dolly speed.
      */
     set dollyRate(dollyRate) {
@@ -750,7 +812,8 @@ class CameraControl extends Component {
     }
 
     /**
-     * Returns the current dolly speed.
+     * Returns the current dolly rate.
+     *
      * @returns {Number} The current dolly speed.
      */
     get dollyRate() {
@@ -812,6 +875,10 @@ class CameraControl extends Component {
         return this._configs.keyboardLayout;
     }
 
+    /**
+     * Destroys this CameraControl.
+     * @private
+     */
     destroy() {
         this._destroyHandlers();
         this._cameraUpdater.destroy();
