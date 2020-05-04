@@ -120,9 +120,11 @@ class PanController {
     panToWorldPos(worldPos, factor) {
         const camera = this._scene.camera;
         math.subVec3(worldPos, camera.eye, eyeCursorVec);
+        const dist = math.lenVec3(eyeCursorVec);
+        if (dist < factor) {
+            return;
+        }
         math.normalizeVec3(eyeCursorVec);
-        //const dist = math.lenVec3(eyeCursorVec);
-
         const px = eyeCursorVec[0] * factor;
         const py = eyeCursorVec[1] * factor;
         const pz = eyeCursorVec[2] * factor;
