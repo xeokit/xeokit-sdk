@@ -58,6 +58,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
+     * @param {Boolean} [cfg.backfaces=false] Indicates if backfaces are visible.
      */
     constructor(owner, cfg = {}) {
 
@@ -142,6 +143,8 @@ class PerformanceModel extends Component {
         this.edges = cfg.edges;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
+
+        this.backfaces = cfg.backfaces;
 
         // Build static matrix
 
@@ -703,6 +706,35 @@ class PerformanceModel extends Component {
         this.scene._aabbDirty = true;
     }
 
+
+    //------------------------------------------------------------------------------------------------------------------
+    // PerformanceModel members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set backfaces(backfaces) {
+        backfaces = !!backfaces;
+        this._backfaces = backfaces;
+        this.glRedraw();
+    }
+
+    /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get backfaces() {
+        return this._backfaces;
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Entity members
     //------------------------------------------------------------------------------------------------------------------
@@ -1222,14 +1254,31 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawNormalFillOpaque(frameCtx) {
-        this.scene.canvas.gl.disable(this.scene.canvas.gl.CULL_FACE);
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawNormalFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawDepth(frameCtx);
         }
@@ -1237,6 +1286,15 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawNormals(frameCtx);
         }
@@ -1352,6 +1410,15 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawPickMesh(frameCtx);
         }
@@ -1364,6 +1431,15 @@ class PerformanceModel extends Component {
     drawPickDepths(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
         }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawPickDepths(frameCtx);
@@ -1378,6 +1454,15 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawPickNormals(frameCtx);
         }
@@ -1389,6 +1474,15 @@ class PerformanceModel extends Component {
     drawOcclusion(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
         }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawOcclusion(frameCtx);
