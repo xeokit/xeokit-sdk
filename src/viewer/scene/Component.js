@@ -2,6 +2,13 @@ import {core} from "./core.js";
 import {utils} from './utils.js';
 import {Map} from "./utils/Map.js";
 
+const idRegex = RegExp('(_[0-9]*)');
+
+console.log(idRegex.test("_9"));
+console.log(idRegex.test("_d"));
+console.log(idRegex.test("_02"));
+console.log(idRegex.test("_02d"));
+
 /**
  * @desc Base class for all xeokit components.
  *
@@ -67,6 +74,20 @@ import {Map} from "./utils/Map.js";
  * // Find our Material within the PhongMaterials
  * var materialAgain = phongMaterials["myMaterial"];
  * ````
+ *
+ * ## Restriction on IDs
+ *
+ * Auto-generated IDs are of the form ````"__0"````, ````"__1"````, ````"__2"```` ... and so on.
+ *
+ * Scene maintains a map of these IDs, along with a counter that it increments each time it generates a new ID.
+ *
+ * If Scene has created the IDs listed above, and we then destroy the ````Component```` with ID ````"__1"````,
+ * Scene will mark that ID as available, and will reuse it for the next default ID.
+ *
+ * Therefore, two restrictions your on IDs:
+ *
+ * * don't use IDs that begin with two underscores, and
+ * * don't reuse auto-generated IDs of destroyed Components.
  *
  * ## Logging
  *
@@ -168,6 +189,7 @@ class Component {
          @type Object
          */
         this.meta = cfg.meta || {};
+
 
         /**
          * ID of this Component, unique within the {@link Scene}.

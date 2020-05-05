@@ -571,6 +571,7 @@ class Scene extends Component {
                     return this.hash = ";";
                 }
                 let sectionPlane;
+
                 const hashParts = [];
                 for (let i = 0, len = sectionPlanes.length; i < len; i++) {
                     sectionPlane = sectionPlanes[i];
@@ -829,7 +830,7 @@ class Scene extends Component {
                 window.nextID = 0;
             }
             //component.id = math.createUUID();
-            component.id = "_" + window.nextID++;
+            component.id = "__" + window.nextID++;
             while (this.components[component.id]) {
                 component.id = math.createUUID();
             }
