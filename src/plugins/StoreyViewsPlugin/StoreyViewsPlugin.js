@@ -13,7 +13,6 @@ const tempMat4 = math.mat4();
 const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
 
 
-
 /**
  * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
@@ -240,6 +239,16 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *     useObjectStates: true // <<--------- Apply custom appearances
  * });
  *````
+ *
+ * We can also specify a ````height```` for the plan image, as an alternative to ````width````:
+ *
+ *  ````javascript
+ *  const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
+ *      height: 200,
+ *      format: "png",
+ *      useObjectStates: true
+ * });
+ * ````
  *
  * ## Picking Entities in StoreyMaps
  *
@@ -559,7 +568,8 @@ class StoreyViewsPlugin extends Plugin {
      *
      * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for creating the image.
-     * @param {Number} [options.width=300] Image width in pixels. Height will be automatically determined.
+     * @param {Number} [options.width=300] Image width in pixels. Height will be automatically determined from this, if not given.
+     * @param {Number} [options.height=300] Image height in pixels, as an alternative to width. Width will be automatically determined from this, if not given.
      * @param {String} [options.format="png"] Image format. Accepted values are "png" and "jpeg".
      * @returns {StoreyMap} The StoreyMap.
      */
@@ -574,11 +584,29 @@ class StoreyViewsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const format = options.format || "png";
-        const width = options.width || 300;
         const aabb = storey.aabb;
         const aspect = (aabb[5] - aabb[2]) / (aabb[3] - aabb[0]);
-        const height = width * aspect;
         const padding = options.padding || 0;
+
+        let width;
+        let height;
+
+        if (options.width && options.height) {
+            width = options.width;
+            height = options.height;
+
+        } else if (options.height) {
+            height = options.height;
+            width = height / aspect;
+
+        } else if (options.width) {
+            width = options.width;
+            height = width * aspect;
+
+        } else {
+            width = 300;
+            height = width * aspect;
+        }
 
         this._objectsMemento.saveObjects(scene);
         this._cameraMemento.saveCamera(scene);
@@ -639,7 +667,7 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Boolean} [options.pickSurface=false] Whether to return the picked position on the surface of the Entity.
      * @returns {PickResult} The pick result, if an Entity was successfully picked, else null.
      */
-    pickStoreyMap(storeyMap, imagePos, options={}) {
+    pickStoreyMap(storeyMap, imagePos, options = {}) {
 
         const storeyId = storeyMap.storeyId;
         const storey = this.storeys[storeyId];
