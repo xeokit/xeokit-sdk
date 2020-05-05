@@ -231,6 +231,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     }
 }
 
+/** @private */
 const ParserV5 = {
     version: 5,
     parse: function (viewer, options, elements, performanceModel) {

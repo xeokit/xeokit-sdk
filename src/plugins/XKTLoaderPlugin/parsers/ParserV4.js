@@ -266,6 +266,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     }
 }
 
+/** @private */
 const ParserV4 = {
     version: 4,
     parse: function (viewer, options, elements, performanceModel) {
