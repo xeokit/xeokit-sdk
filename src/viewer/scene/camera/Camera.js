@@ -860,6 +860,7 @@ class Camera extends Component {
          @param value The property's new value
          */
         this.fire("projection",  this._projectionType);
+        this.fire("projMatrix",  this._project.matrix);
     }
 
     /**
