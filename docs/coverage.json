@@ -1,7 +1,7 @@
 {
-  "coverage": "44.08%",
-  "expectCount": 4312,
-  "actualCount": 1901,
+  "coverage": "43.97%",
+  "expectCount": 4332,
+  "actualCount": 1905,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -717,13 +717,13 @@
         10,
         11,
         13,
-        278,
-        279,
-        303,
-        309,
-        338,
-        364,
-        607
+        287,
+        288,
+        312,
+        318,
+        347,
+        373,
+        635
       ]
     },
     "src/plugins/TreeViewPlugin/ModelTreeView.js": {
@@ -806,22 +806,61 @@
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js": {
-      "expectCount": 27,
+      "expectCount": 22,
       "actualCount": 14,
       "undocumentLines": [
-        8,
+        13,
+        367,
+        389,
+        414,
+        442,
+        471,
+        606,
+        623
+      ]
+    },
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV2.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
         14,
-        16,
-        373,
-        395,
-        420,
-        448,
-        477,
-        619,
-        633,
-        642,
-        716,
-        775
+        19,
+        44,
+        68,
+        78
+      ]
+    },
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV3.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        12,
+        17,
+        38,
+        59,
+        69
+      ]
+    },
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV4.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        12,
+        17,
+        38,
+        58,
+        68
+      ]
+    },
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV5.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        12,
+        17,
+        35,
+        53,
+        63
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
@@ -980,7 +1019,7 @@
         12,
         14,
         19,
-        242
+        238
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1128,27 +1167,28 @@
       ]
     },
     "src/viewer/scene/Component.js": {
-      "expectCount": 44,
+      "expectCount": 45,
       "actualCount": 26,
       "undocumentLines": [
-        129,
-        156,
-        157,
-        160,
-        190,
-        191,
-        192,
-        193,
-        194,
-        195,
-        196,
-        197,
-        198,
-        204,
-        436,
-        711,
-        736,
-        763
+        5,
+        150,
+        177,
+        178,
+        181,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        226,
+        458,
+        733,
+        758,
+        785
       ]
     },
     "src/viewer/scene/Entity.js": {
@@ -3285,42 +3325,42 @@
         479,
         555,
         559,
-        600,
-        762,
-        768,
-        806,
-        820,
-        856,
-        881,
-        888,
-        894,
-        900,
-        906,
-        912,
-        918,
-        924,
-        930,
-        935,
-        940,
-        946,
-        952,
-        974,
-        993,
-        1012,
-        1031,
-        1042,
-        1056,
-        1148,
-        1157,
-        1168,
-        1333,
-        1365,
-        1397,
-        1424,
-        1658,
-        1680,
-        1739,
-        2179
+        601,
+        763,
+        769,
+        807,
+        821,
+        857,
+        882,
+        889,
+        895,
+        901,
+        907,
+        913,
+        919,
+        925,
+        931,
+        936,
+        941,
+        947,
+        953,
+        975,
+        994,
+        1013,
+        1032,
+        1043,
+        1057,
+        1149,
+        1158,
+        1169,
+        1334,
+        1366,
+        1398,
+        1425,
+        1659,
+        1681,
+        1740,
+        2180
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {

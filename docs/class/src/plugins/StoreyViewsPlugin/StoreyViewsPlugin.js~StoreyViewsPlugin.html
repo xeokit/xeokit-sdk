@@ -134,13 +134,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber264">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber273">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber264">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber273">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -322,6 +322,13 @@ images according to their IFC types, using the lookup table configured on <span>
     width: 300,
     format: &quot;png&quot;,
     useObjectStates: true // &lt;&lt;--------- Apply custom appearances
+});</code>
+</code></pre>
+<p>We can also specify a <code>height</code> for the plan image, as an alternative to <code>width</code>:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint"> const storeyMap = storeyViewsPlugin.createStoreyMap(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
+     height: 200,
+     format: &quot;png&quot;,
+     useObjectStates: true
 });</code>
 </code></pre>
 <h2 id="picking-entities-in-storeymaps">Picking Entities in StoreyMaps</h2><p>We can use <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap">StoreyViewsPlugin#pickStoreyMap</a></span> to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>&apos;s 2D plan image.</p>
@@ -1033,7 +1040,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -1119,7 +1126,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber299">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -1164,7 +1171,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber363">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber372">source</a></span></span>
     </span>
   </h3>
 
@@ -1209,7 +1216,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -1254,7 +1261,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -1303,7 +1310,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber566">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber576">source</a></span></span>
     </span>
   </h3>
 
@@ -1342,7 +1349,15 @@ if (pickResult &amp;&amp; pickResult.entity) {
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 300</li></ul></td>
-      <td data-ice="description"><p>Image width in pixels. Height will be automatically determined.</p>
+      <td data-ice="description"><p>Image width in pixels. Height will be automatically determined from this, if not given.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 300</li></ul></td>
+      <td data-ice="description"><p>Image height in pixels, as an alternative to width. Width will be automatically determined from this, if not given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1400,7 +1415,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber800">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber828">source</a></span></span>
     </span>
   </h3>
 
@@ -1444,7 +1459,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber697">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber725">source</a></span></span>
     </span>
   </h3>
 
@@ -1519,7 +1534,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber388">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber397">source</a></span></span>
     </span>
   </h3>
 
@@ -1602,7 +1617,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber642">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber670">source</a></span></span>
     </span>
   </h3>
 
@@ -1698,7 +1713,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber472">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -1787,7 +1802,7 @@ of the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber538">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber547">source</a></span></span>
     </span>
   </h3>
 
@@ -1864,7 +1879,7 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber775">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber803">source</a></span></span>
     </span>
   </h3>
 
@@ -1939,7 +1954,7 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber717">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber745">source</a></span></span>
     </span>
   </h3>
 
