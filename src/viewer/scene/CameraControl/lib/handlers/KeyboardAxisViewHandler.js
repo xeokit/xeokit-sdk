@@ -48,7 +48,7 @@ class KeyboardAxisViewHandler {
             center[1] = aabb[1] + aabb[4] / 2.0;
             center[2] = aabb[2] + aabb[5] / 2.0;
 
-            const dist = Math.abs((diag) / Math.tan(controllers.cameraFlight.fitFOV / 2));
+            const dist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
 
             switch (keyCode) {
 
