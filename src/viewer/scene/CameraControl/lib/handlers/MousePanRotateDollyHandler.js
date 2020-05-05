@@ -214,11 +214,8 @@ class MousePanRotateDollyHandler {
 
                 } else {
 
-                    const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
-                    const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
-
-                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += camera.ortho.scale * xPanDelta / canvasWidth;
+                    updates.panDeltaY += camera.ortho.scale * yPanDelta / canvasHeight;
                 }
 
             } else {
