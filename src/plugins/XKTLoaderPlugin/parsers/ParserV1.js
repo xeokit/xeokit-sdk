@@ -152,7 +152,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     }
 }
 
-/** @private *
+/** @private */
 const ParserV1 = {
     version: 1,
     parse: function (viewer, options, elements, performanceModel) {
