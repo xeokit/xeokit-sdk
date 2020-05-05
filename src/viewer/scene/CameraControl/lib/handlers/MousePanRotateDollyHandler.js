@@ -214,8 +214,8 @@ class MousePanRotateDollyHandler {
 
                 } else {
 
-                    updates.panDeltaX += camera.ortho.scale * xPanDelta / canvasWidth;
-                    updates.panDeltaY += camera.ortho.scale * yPanDelta / canvasHeight;
+                    updates.panDeltaX += configs.mousePanRate * camera.ortho.scale * (xPanDelta / canvasHeight);
+                    updates.panDeltaY += configs.mousePanRate * camera.ortho.scale * (yPanDelta / canvasHeight);
                 }
 
             } else {
