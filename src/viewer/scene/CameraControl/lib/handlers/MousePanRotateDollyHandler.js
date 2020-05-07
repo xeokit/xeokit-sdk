@@ -3,6 +3,28 @@
  */
 import {math} from "../../../math/math.js";
 
+const canvasPos = math.vec2();
+
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
+
 /**
  * @private
  */
@@ -245,6 +267,15 @@ class MousePanRotateDollyHandler {
                     break;
                 case 3: // Right button
                     mouseDownRight = false;
+                    getCanvasPosFromEvent(e, canvasPos);
+                    const x = canvasPos[0];
+                    const y = canvasPos[1];
+                    if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
+                        controllers.cameraControl.fire("rightClick", { // For context menus
+                            canvasPos: canvasPos,
+                            event: e
+                        }, true);
+                    }
                     break;
                 default:
                     break;
