@@ -1102,80 +1102,80 @@ class Input extends Component {
             }
         });
 
-        // document.addEventListener("mouseup", this._mouseUpListener = (e) => {
-        //     if (!this.enabled) {
-        //         return;
-        //     }
-        //     switch (e.which) {
-        //         case 1:// Left button
-        //             this.mouseDownLeft = false;
-        //             break;
-        //         case 2:// Middle/both buttons
-        //             this.mouseDownMiddle = false;
-        //             break;
-        //         case 3:// Right button
-        //             this.mouseDownRight = false;
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        //     this.fire("mouseup", this.mouseCanvasPos, true);
-        //     // if (this.mouseover) {
-        //     //     e.preventDefault();
-        //     // }
-        // }, true);
+        document.addEventListener("mouseup", this._mouseUpListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            switch (e.which) {
+                case 1:// Left button
+                    this.mouseDownLeft = false;
+                    break;
+                case 2:// Middle/both buttons
+                    this.mouseDownMiddle = false;
+                    break;
+                case 3:// Right button
+                    this.mouseDownRight = false;
+                    break;
+                default:
+                    break;
+            }
+            this.fire("mouseup", this.mouseCanvasPos, true);
+            // if (this.mouseover) {
+            //     e.preventDefault();
+            // }
+        }, true);
 
-        // document.addEventListener("click", this._clickListener = (e) => {
-        //     if (!this.enabled) {
-        //         return;
-        //     }
-        //     switch (e.which) {
-        //         case 1:// Left button
-        //             this.mouseDownLeft = false;
-        //             this.mouseDownRight = false;
-        //             break;
-        //         case 2:// Middle/both buttons
-        //             this.mouseDownMiddle = false;
-        //             break;
-        //         case 3:// Right button
-        //             this.mouseDownLeft = false;
-        //             this.mouseDownRight = false;
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        //     this._getMouseCanvasPos(e);
-        //     this.fire("click", this.mouseCanvasPos, true);
-        //     if (this.mouseover) {
-        //         e.preventDefault();
-        //     }
-        // });
+        document.addEventListener("click", this._clickListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            switch (e.which) {
+                case 1:// Left button
+                    this.mouseDownLeft = false;
+                    this.mouseDownRight = false;
+                    break;
+                case 2:// Middle/both buttons
+                    this.mouseDownMiddle = false;
+                    break;
+                case 3:// Right button
+                    this.mouseDownLeft = false;
+                    this.mouseDownRight = false;
+                    break;
+                default:
+                    break;
+            }
+            this._getMouseCanvasPos(e);
+            this.fire("click", this.mouseCanvasPos, true);
+            if (this.mouseover) {
+                e.preventDefault();
+            }
+        });
 
-        // document.addEventListener("dblclick", this._dblClickListener = (e) => {
-        //     if (!this.enabled) {
-        //         return;
-        //     }
-        //     switch (e.which) {
-        //         case 1:// Left button
-        //             this.mouseDownLeft = false;
-        //             this.mouseDownRight = false;
-        //             break;
-        //         case 2:// Middle/both buttons
-        //             this.mouseDownMiddle = false;
-        //             break;
-        //         case 3:// Right button
-        //             this.mouseDownLeft = false;
-        //             this.mouseDownRight = false;
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        //     this._getMouseCanvasPos(e);
-        //     this.fire("dblclick", this.mouseCanvasPos, true);
-        //     if (this.mouseover) {
-        //         e.preventDefault();
-        //     }
-        // });
+        document.addEventListener("dblclick", this._dblClickListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            switch (e.which) {
+                case 1:// Left button
+                    this.mouseDownLeft = false;
+                    this.mouseDownRight = false;
+                    break;
+                case 2:// Middle/both buttons
+                    this.mouseDownMiddle = false;
+                    break;
+                case 3:// Right button
+                    this.mouseDownLeft = false;
+                    this.mouseDownRight = false;
+                    break;
+                default:
+                    break;
+            }
+            this._getMouseCanvasPos(e);
+            this.fire("dblclick", this.mouseCanvasPos, true);
+            if (this.mouseover) {
+                e.preventDefault();
+            }
+        });
 
         this.element.addEventListener("mousemove", this._mouseMoveListener = (e) => {
             if (!this.enabled) {
