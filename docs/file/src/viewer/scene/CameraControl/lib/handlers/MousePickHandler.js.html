@@ -416,9 +416,9 @@ class MousePickHandler {
 
     destroy() {
         const canvas = this._scene.canvas.canvas;
-        canvas.addEventListener(&quot;mousemove&quot;, this._canvasMouseMoveHandler);
-        canvas.addEventListener(&quot;mousedown&quot;, this._canvasMouseDownHandler);
-        canvas.addEventListener(&quot;mouseup&quot;, this._canvasMouseUpHandler);
+        canvas.removeEventListener(&quot;mousemove&quot;, this._canvasMouseMoveHandler);
+        canvas.removeEventListener(&quot;mousedown&quot;, this._canvasMouseDownHandler);
+        canvas.removeEventListener(&quot;mouseup&quot;, this._canvasMouseUpHandler);
         if (this._timeout) {
             window.clearTimeout(this._timeout);
             this._timeout = null;

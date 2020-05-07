@@ -895,13 +895,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/extras/contextmenu/contextmenu.js~contextmenu#context",
-    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-context",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#context",
     "member"
   ],
   [
     "src/extras/contextmenu/contextmenu.js~contextmenu#context",
-    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-context",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#context",
     "member"
   ],
@@ -913,13 +913,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/extras/contextmenu/contextmenu.js~contextmenu#enabled",
-    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-enabled",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-enabled",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#enabled",
     "member"
   ],
   [
     "src/extras/contextmenu/contextmenu.js~contextmenu#enabled",
-    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-enabled",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-enabled",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#enabled",
     "member"
   ],
@@ -1009,13 +1009,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#originwirevisible",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-originWireVisible",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-originWireVisible",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#originWireVisible",
     "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#originwirevisible",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-originWireVisible",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-originWireVisible",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#originWireVisible",
     "member"
   ],
@@ -1057,13 +1057,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#visible",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-visible",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-visible",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#visible",
     "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#visible",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-visible",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-visible",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#visible",
     "member"
   ],
@@ -1282,6 +1282,18 @@ window.esdocSearchIndex = [
     "class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-destroyAnnotation",
     "src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin#destroyAnnotation",
     "method"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#surfaceoffset",
+    "class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-get-surfaceOffset",
+    "src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin#surfaceOffset",
+    "member"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#surfaceoffset",
+    "class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-set-surfaceOffset",
+    "src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin#surfaceOffset",
+    "member"
   ],
   [
     "src/plugins/axisgizmoplugin/axisgizmoplugin.js",
@@ -1993,25 +2005,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#targetvisible",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-targetVisible",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#targetVisible",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#targetvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-targetVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#targetVisible",
     "member"
   ],
   [
-    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#visible",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-visible",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#visible",
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#targetvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-targetVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#targetVisible",
     "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#visible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-visible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#visible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#visible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-visible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#visible",
     "member"
   ],
@@ -2107,13 +2119,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#labelminaxislength",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-set-labelMinAxisLength",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-labelMinAxisLength",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#labelMinAxisLength",
     "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#labelminaxislength",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-labelMinAxisLength",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-set-labelMinAxisLength",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#labelMinAxisLength",
     "member"
   ],
@@ -2167,13 +2179,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#datasource",
-    "class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-get-dataSource",
+    "class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-dataSource",
     "src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#dataSource",
     "member"
   ],
   [
     "src/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#datasource",
-    "class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-dataSource",
+    "class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-get-dataSource",
     "src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#dataSource",
     "member"
   ],
@@ -2623,13 +2635,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
-    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
     "member"
   ],
   [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
-    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
     "member"
   ],
@@ -2767,13 +2779,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-set-hierarchy",
+    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-hierarchy",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
     "member"
   ],
   [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-hierarchy",
+    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-set-hierarchy",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
     "member"
   ],
@@ -2839,25 +2851,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#datasource",
-    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-dataSource",
-    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#dataSource",
-    "member"
-  ],
-  [
-    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#datasource",
     "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-dataSource",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#dataSource",
     "member"
   ],
   [
-    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#excludetypes",
-    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeTypes",
-    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#excludeTypes",
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#datasource",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#dataSource",
     "member"
   ],
   [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#excludetypes",
     "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-excludeTypes",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#excludeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#excludetypes",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeTypes",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#excludeTypes",
     "member"
   ],
@@ -2893,13 +2905,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#objectdefaults",
-    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-objectDefaults",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#objectDefaults",
     "member"
   ],
   [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#objectdefaults",
-    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-objectDefaults",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#objectDefaults",
     "member"
   ],
@@ -2913,6 +2925,12 @@ window.esdocSearchIndex = [
     "src/plugins/xktloaderplugin/lib/pako.js",
     "file/src/plugins/XKTLoaderPlugin/lib/pako.js.html",
     "src/plugins/XKTLoaderPlugin/lib/pako.js",
+    "file"
+  ],
+  [
+    "src/plugins/xktloaderplugin/parsers/parserv1.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV1.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js",
     "file"
   ],
   [
@@ -3385,13 +3403,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#constrainvertical",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-constrainVertical",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-constrainVertical",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#constrainVertical",
     "member"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#constrainvertical",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-constrainVertical",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-constrainVertical",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#constrainVertical",
     "member"
   ],
@@ -3421,20 +3439,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollytopointer",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer",
-    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyToPointer",
-    "member"
-  ],
-  [
-    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollytopointer",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyToPointer",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyToPointer",
     "member"
   ],
   [
-    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#doublepickflyto",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
-    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#doublePickFlyTo",
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollytopointer",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyToPointer",
     "member"
   ],
   [
@@ -3444,9 +3456,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#firstperson",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-firstPerson",
-    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#firstPerson",
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#doublepickflyto",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#doublePickFlyTo",
     "member"
   ],
   [
@@ -3456,9 +3468,63 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#firstperson",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-firstPerson",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#firstPerson",
+    "member"
+  ],
+  [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardlayout",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardLayout",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardLayout",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardpanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyboardPanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardPanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardpanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardPanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardPanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardrotationrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyboardRotationRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardRotationRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardrotationrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardRotationRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardRotationRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#mousepanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-mousePanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#mousePanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#mousepanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-mousePanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#mousePanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#mouserotationrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-mouseRotationRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#mouseRotationRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#mouserotationrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-mouseRotationRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#mouseRotationRate",
     "member"
   ],
   [
@@ -3475,13 +3541,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#panrightclick",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-panRightClick",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-panRightClick",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#panRightClick",
     "member"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#panrightclick",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-panRightClick",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-panRightClick",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#panRightClick",
     "member"
   ],
@@ -3517,13 +3583,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pivoting",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-pivoting",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#pivoting",
     "member"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pivoting",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-pivoting",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#pivoting",
     "member"
   ],
@@ -3553,13 +3619,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotationinertia",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-rotationInertia",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-rotationInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#rotationInertia",
     "member"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotationinertia",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-rotationInertia",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-rotationInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#rotationInertia",
     "member"
   ],
@@ -3781,20 +3847,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/entity.js~entity#collidable",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-collidable",
-    "src/viewer/scene/Entity.js~Entity#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/entity.js~entity#collidable",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-collidable",
     "src/viewer/scene/Entity.js~Entity#collidable",
     "member"
   ],
   [
-    "src/viewer/scene/entity.js~entity#colorize",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-colorize",
-    "src/viewer/scene/Entity.js~Entity#colorize",
+    "src/viewer/scene/entity.js~entity#collidable",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-collidable",
+    "src/viewer/scene/Entity.js~Entity#collidable",
     "member"
   ],
   [
@@ -3804,14 +3864,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/entity.js~entity#culled",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-culled",
-    "src/viewer/scene/Entity.js~Entity#culled",
+    "src/viewer/scene/entity.js~entity#colorize",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-colorize",
+    "src/viewer/scene/Entity.js~Entity#colorize",
     "member"
   ],
   [
     "src/viewer/scene/entity.js~entity#culled",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-culled",
+    "src/viewer/scene/Entity.js~Entity#culled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/entity.js~entity#culled",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-culled",
     "src/viewer/scene/Entity.js~Entity#culled",
     "member"
   ],
@@ -3877,13 +3943,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/entity.js~entity#opacity",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-opacity",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-opacity",
     "src/viewer/scene/Entity.js~Entity#opacity",
     "member"
   ],
   [
     "src/viewer/scene/entity.js~entity#opacity",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-opacity",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-opacity",
     "src/viewer/scene/Entity.js~Entity#opacity",
     "member"
   ],
@@ -3895,25 +3961,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/entity.js~entity#pickable",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-pickable",
-    "src/viewer/scene/Entity.js~Entity#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/entity.js~entity#pickable",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-pickable",
     "src/viewer/scene/Entity.js~Entity#pickable",
     "member"
   ],
   [
-    "src/viewer/scene/entity.js~entity#receivesshadow",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-receivesShadow",
-    "src/viewer/scene/Entity.js~Entity#receivesShadow",
+    "src/viewer/scene/entity.js~entity#pickable",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-pickable",
+    "src/viewer/scene/Entity.js~Entity#pickable",
     "member"
   ],
   [
     "src/viewer/scene/entity.js~entity#receivesshadow",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-receivesShadow",
+    "src/viewer/scene/Entity.js~Entity#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/entity.js~entity#receivesshadow",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-receivesShadow",
     "src/viewer/scene/Entity.js~Entity#receivesShadow",
     "member"
   ],
@@ -3925,13 +3991,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/entity.js~entity#selected",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-selected",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-selected",
     "src/viewer/scene/Entity.js~Entity#selected",
     "member"
   ],
   [
     "src/viewer/scene/entity.js~entity#selected",
-    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-selected",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-selected",
     "src/viewer/scene/Entity.js~Entity#selected",
     "member"
   ],
@@ -3972,6 +4038,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#backfaces",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-backfaces",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#backfaces",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#backfaces",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-backfaces",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#backfaces",
+    "member"
+  ],
+  [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#castsshadow",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-castsShadow",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#castsShadow",
@@ -3997,25 +4075,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#collidable",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-collidable",
-    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#collidable",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-collidable",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#collidable",
     "member"
   ],
   [
-    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#colorize",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-colorize",
-    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#colorize",
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#collidable",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-collidable",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#collidable",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#colorize",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-colorize",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#colorize",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-colorize",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#colorize",
     "member"
   ],
@@ -4045,13 +4123,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#culled",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#culled",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#culled",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#culled",
     "member"
   ],
@@ -4069,13 +4147,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#edges",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-edges",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#edges",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-edges",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
     "member"
   ],
@@ -4147,13 +4225,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#opacity",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-opacity",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#opacity",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#opacity",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-opacity",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#opacity",
     "member"
   ],
@@ -4183,13 +4261,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#receivesshadow",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-receivesShadow",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-receivesShadow",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#receivesShadow",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#receivesshadow",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-receivesShadow",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-receivesShadow",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#receivesShadow",
     "member"
   ],
@@ -4213,13 +4291,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#selected",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-selected",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-selected",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#selected",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#selected",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-selected",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-selected",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#selected",
     "member"
   ],
@@ -4231,13 +4309,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#visible",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#visible",
     "member"
   ],
   [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#visible",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#visible",
     "member"
   ],
@@ -4585,13 +4663,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#eye",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-eye",
     "src/viewer/scene/camera/Camera.js~Camera#eye",
     "member"
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#eye",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-eye",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye",
     "src/viewer/scene/camera/Camera.js~Camera#eye",
     "member"
   ],
@@ -4609,13 +4687,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#gimballock",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
     "src/viewer/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#gimballock",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
     "src/viewer/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
@@ -4693,25 +4771,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#projection",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection",
-    "src/viewer/scene/camera/Camera.js~Camera#projection",
-    "member"
-  ],
-  [
-    "src/viewer/scene/camera/camera.js~camera#projection",
     "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-projection",
     "src/viewer/scene/camera/Camera.js~Camera#projection",
     "member"
   ],
   [
-    "src/viewer/scene/camera/camera.js~camera#up",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-up",
-    "src/viewer/scene/camera/Camera.js~Camera#up",
+    "src/viewer/scene/camera/camera.js~camera#projection",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection",
+    "src/viewer/scene/camera/Camera.js~Camera#projection",
     "member"
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#up",
     "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up",
+    "src/viewer/scene/camera/Camera.js~Camera#up",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/camera.js~camera#up",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-up",
     "src/viewer/scene/camera/Camera.js~Camera#up",
     "member"
   ],
@@ -4729,13 +4807,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#worldaxis",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
     "src/viewer/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#worldaxis",
-    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
     "src/viewer/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
@@ -4819,13 +4897,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
-    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit",
+    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
     "src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
   [
     "src/viewer/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
-    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
+    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit",
     "src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
@@ -4861,13 +4939,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
+    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
     "src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
   [
     "src/viewer/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
+    "class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
     "src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
@@ -5071,13 +5149,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#bottom",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-bottom",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-bottom",
     "src/viewer/scene/camera/Frustum.js~Frustum#bottom",
     "member"
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#bottom",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-bottom",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-bottom",
     "src/viewer/scene/camera/Frustum.js~Frustum#bottom",
     "member"
   ],
@@ -5089,13 +5167,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#far",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-far",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-far",
     "src/viewer/scene/camera/Frustum.js~Frustum#far",
     "member"
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#far",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-far",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-far",
     "src/viewer/scene/camera/Frustum.js~Frustum#far",
     "member"
   ],
@@ -5119,13 +5197,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#near",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-near",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-near",
     "src/viewer/scene/camera/Frustum.js~Frustum#near",
     "member"
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#near",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-set-near",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-near",
     "src/viewer/scene/camera/Frustum.js~Frustum#near",
     "member"
   ],
@@ -5185,13 +5263,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/ortho.js~ortho#near",
-    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-get-near",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-near",
     "src/viewer/scene/camera/Ortho.js~Ortho#near",
     "member"
   ],
   [
     "src/viewer/scene/camera/ortho.js~ortho#near",
-    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-near",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-get-near",
     "src/viewer/scene/camera/Ortho.js~Ortho#near",
     "member"
   ],
@@ -5221,20 +5299,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/camera/perspective.js~perspective#far",
-    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-far",
-    "src/viewer/scene/camera/Perspective.js~Perspective#far",
-    "member"
-  ],
-  [
-    "src/viewer/scene/camera/perspective.js~perspective#far",
     "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-far",
     "src/viewer/scene/camera/Perspective.js~Perspective#far",
     "member"
   ],
   [
-    "src/viewer/scene/camera/perspective.js~perspective#fov",
-    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
-    "src/viewer/scene/camera/Perspective.js~Perspective#fov",
+    "src/viewer/scene/camera/perspective.js~perspective#far",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-far",
+    "src/viewer/scene/camera/Perspective.js~Perspective#far",
     "member"
   ],
   [
@@ -5244,14 +5316,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/camera/perspective.js~perspective#fovaxis",
-    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis",
-    "src/viewer/scene/camera/Perspective.js~Perspective#fovAxis",
+    "src/viewer/scene/camera/perspective.js~perspective#fov",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
+    "src/viewer/scene/camera/Perspective.js~Perspective#fov",
     "member"
   ],
   [
     "src/viewer/scene/camera/perspective.js~perspective#fovaxis",
     "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-fovAxis",
+    "src/viewer/scene/camera/Perspective.js~Perspective#fovAxis",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/perspective.js~perspective#fovaxis",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis",
     "src/viewer/scene/camera/Perspective.js~Perspective#fovAxis",
     "member"
   ],
@@ -5407,13 +5485,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#colors",
-    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-colors",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-colors",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#colors",
     "member"
   ],
   [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#colors",
-    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-colors",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-colors",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#colors",
     "member"
   ],
@@ -5467,13 +5545,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#positions",
-    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-positions",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#positions",
     "member"
   ],
   [
     "src/viewer/scene/geometry/readablegeometry.js~readablegeometry#positions",
-    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-positions",
+    "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions",
     "src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry#positions",
     "member"
   ],
@@ -6331,13 +6409,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/lights/ambientlight.js~ambientlight#intensity",
-    "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-intensity",
+    "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-intensity",
     "src/viewer/scene/lights/AmbientLight.js~AmbientLight#intensity",
     "member"
   ],
   [
     "src/viewer/scene/lights/ambientlight.js~ambientlight#intensity",
-    "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-intensity",
+    "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-intensity",
     "src/viewer/scene/lights/AmbientLight.js~AmbientLight#intensity",
     "member"
   ],
@@ -6379,13 +6457,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/lights/dirlight.js~dirlight#color",
-    "class/src/viewer/scene/lights/DirLight.js~DirLight.html#instance-set-color",
+    "class/src/viewer/scene/lights/DirLight.js~DirLight.html#instance-get-color",
     "src/viewer/scene/lights/DirLight.js~DirLight#color",
     "member"
   ],
   [
     "src/viewer/scene/lights/dirlight.js~dirlight#color",
-    "class/src/viewer/scene/lights/DirLight.js~DirLight.html#instance-get-color",
+    "class/src/viewer/scene/lights/DirLight.js~DirLight.html#instance-set-color",
     "src/viewer/scene/lights/DirLight.js~DirLight#color",
     "member"
   ],
@@ -6523,20 +6601,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/lights/pointlight.js~pointlight#linearattenuation",
-    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-linearAttenuation",
-    "src/viewer/scene/lights/PointLight.js~PointLight#linearAttenuation",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lights/pointlight.js~pointlight#linearattenuation",
     "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-get-linearAttenuation",
     "src/viewer/scene/lights/PointLight.js~PointLight#linearAttenuation",
     "member"
   ],
   [
-    "src/viewer/scene/lights/pointlight.js~pointlight#pos",
-    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-pos",
-    "src/viewer/scene/lights/PointLight.js~PointLight#pos",
+    "src/viewer/scene/lights/pointlight.js~pointlight#linearattenuation",
+    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-linearAttenuation",
+    "src/viewer/scene/lights/PointLight.js~PointLight#linearAttenuation",
     "member"
   ],
   [
@@ -6546,14 +6618,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/lights/pointlight.js~pointlight#quadraticattenuation",
-    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-quadraticAttenuation",
-    "src/viewer/scene/lights/PointLight.js~PointLight#quadraticAttenuation",
+    "src/viewer/scene/lights/pointlight.js~pointlight#pos",
+    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-pos",
+    "src/viewer/scene/lights/PointLight.js~PointLight#pos",
     "member"
   ],
   [
     "src/viewer/scene/lights/pointlight.js~pointlight#quadraticattenuation",
     "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-get-quadraticAttenuation",
+    "src/viewer/scene/lights/PointLight.js~PointLight#quadraticAttenuation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lights/pointlight.js~pointlight#quadraticattenuation",
+    "class/src/viewer/scene/lights/PointLight.js~PointLight.html#instance-set-quadraticAttenuation",
     "src/viewer/scene/lights/PointLight.js~PointLight#quadraticAttenuation",
     "member"
   ],
@@ -6643,13 +6721,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/marker/marker.js~marker#entity",
-    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-entity",
+    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-entity",
     "src/viewer/scene/marker/Marker.js~Marker#entity",
     "member"
   ],
   [
     "src/viewer/scene/marker/marker.js~marker#entity",
-    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-entity",
+    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-entity",
     "src/viewer/scene/marker/Marker.js~Marker#entity",
     "member"
   ],
@@ -6721,13 +6799,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
+    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
     "src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
   [
     "src/viewer/scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
+    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
     "src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
@@ -6757,13 +6835,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/edgematerial.js~edgematerial#preset",
-    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
+    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
     "src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
   [
     "src/viewer/scene/materials/edgematerial.js~edgematerial#preset",
-    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
+    "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
     "src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
@@ -6805,13 +6883,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
-    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeAlpha",
+    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeAlpha",
     "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
     "member"
   ],
   [
     "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
-    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeAlpha",
+    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeAlpha",
     "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
     "member"
   ],
@@ -6841,25 +6919,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#edges",
-    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edges",
-    "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#edges",
     "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edges",
     "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
     "member"
   ],
   [
-    "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#fill",
-    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fill",
-    "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
+    "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#edges",
+    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edges",
+    "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
     "member"
   ],
   [
     "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#fill",
     "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fill",
+    "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/emphasismaterial.js~emphasismaterial#fill",
+    "class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fill",
     "src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
     "member"
   ],
@@ -6913,25 +6991,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/fresnel.js~fresnel#centerbias",
-    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
-    "src/viewer/scene/materials/Fresnel.js~Fresnel#centerBias",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/fresnel.js~fresnel#centerbias",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerBias",
     "src/viewer/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
-    "src/viewer/scene/materials/fresnel.js~fresnel#centercolor",
-    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerColor",
-    "src/viewer/scene/materials/Fresnel.js~Fresnel#centerColor",
+    "src/viewer/scene/materials/fresnel.js~fresnel#centerbias",
+    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
+    "src/viewer/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
     "src/viewer/scene/materials/fresnel.js~fresnel#centercolor",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerColor",
+    "src/viewer/scene/materials/Fresnel.js~Fresnel#centerColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/fresnel.js~fresnel#centercolor",
+    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerColor",
     "src/viewer/scene/materials/Fresnel.js~Fresnel#centerColor",
     "member"
   ],
@@ -6949,25 +7027,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/fresnel.js~fresnel#edgebias",
-    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeBias",
-    "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeBias",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/fresnel.js~fresnel#edgebias",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeBias",
     "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeBias",
     "member"
   ],
   [
-    "src/viewer/scene/materials/fresnel.js~fresnel#edgecolor",
-    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeColor",
-    "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeColor",
+    "src/viewer/scene/materials/fresnel.js~fresnel#edgebias",
+    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeBias",
+    "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeBias",
     "member"
   ],
   [
     "src/viewer/scene/materials/fresnel.js~fresnel#edgecolor",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeColor",
+    "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/fresnel.js~fresnel#edgecolor",
+    "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeColor",
     "src/viewer/scene/materials/Fresnel.js~Fresnel#edgeColor",
     "member"
   ],
@@ -6997,25 +7075,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#alpha",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-alpha",
-    "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#alpha",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#alpha",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-alpha",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#alpha",
     "member"
   ],
   [
-    "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#ambient",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient",
-    "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#ambient",
+    "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#alpha",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-alpha",
+    "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#alpha",
     "member"
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#ambient",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-ambient",
+    "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#ambient",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#ambient",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#ambient",
     "member"
   ],
@@ -7057,13 +7135,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
@@ -7093,13 +7171,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-pointSize",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-pointSize",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
     "member"
   ],
   [
     "src/viewer/scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
-    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-pointSize",
+    "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-pointSize",
     "src/viewer/scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
     "member"
   ],
@@ -7159,13 +7237,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMode",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMode",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
@@ -7255,13 +7333,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#metallic",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallic",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
     "member"
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#metallic",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallic",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
     "member"
   ],
@@ -7291,13 +7369,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-pointSize",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-pointSize",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
     "member"
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-pointSize",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-pointSize",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
     "member"
   ],
@@ -7321,13 +7399,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-specularF0",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-specularF0",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
     "member"
   ],
   [
     "src/viewer/scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
-    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-specularF0",
+    "class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-specularF0",
     "src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
     "member"
   ],
@@ -7387,13 +7465,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
@@ -7429,13 +7507,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#diffuse",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-diffuse",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuse",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
     "member"
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#diffuse",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuse",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-diffuse",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
     "member"
   ],
@@ -7477,25 +7555,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#frontface",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-frontface",
-    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#frontface",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#frontface",
     "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-frontface",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#frontface",
     "member"
   ],
   [
-    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#linewidth",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth",
-    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
+    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#frontface",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-frontface",
+    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#frontface",
     "member"
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#linewidth",
     "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-lineWidth",
+    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#linewidth",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
     "member"
   ],
@@ -7513,13 +7591,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
@@ -7549,25 +7627,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#shininess",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess",
-    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
-    "member"
-  ],
-  [
-    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#shininess",
     "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-shininess",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
-    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#specular",
-    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular",
-    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#shininess",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess",
+    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#specular",
     "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular",
+    "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/phongmaterial.js~phongmaterial#specular",
+    "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#specular",
     "member"
   ],
@@ -7591,13 +7669,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#alpha",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alpha",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alpha",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#alpha",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alpha",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alpha",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
     "member"
   ],
@@ -7621,13 +7699,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#alphamode",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMode",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaMode",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#alphamode",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaMode",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMode",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
     "member"
   ],
@@ -7657,13 +7735,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#diffuse",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuse",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-diffuse",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#diffuse",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-diffuse",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuse",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
     "member"
   ],
@@ -7693,13 +7771,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#frontface",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-frontface",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-frontface",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#frontface",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-frontface",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-frontface",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
     "member"
   ],
@@ -7723,13 +7801,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#linewidth",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-lineWidth",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-lineWidth",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#linewidth",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-lineWidth",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-lineWidth",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
     "member"
   ],
@@ -7747,13 +7825,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
@@ -7771,13 +7849,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
   [
     "src/viewer/scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
+    "class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
     "src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
@@ -7825,13 +7903,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#image",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-image",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-image",
     "src/viewer/scene/materials/Texture.js~Texture#image",
     "member"
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#image",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-image",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-image",
     "src/viewer/scene/materials/Texture.js~Texture#image",
     "member"
   ],
@@ -7861,13 +7939,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#scale",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-scale",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-scale",
     "src/viewer/scene/materials/Texture.js~Texture#scale",
     "member"
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#scale",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-scale",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-scale",
     "src/viewer/scene/materials/Texture.js~Texture#scale",
     "member"
   ],
@@ -7885,13 +7963,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#translate",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-translate",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-translate",
     "src/viewer/scene/materials/Texture.js~Texture#translate",
     "member"
   ],
   [
     "src/viewer/scene/materials/texture.js~texture#translate",
-    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-translate",
+    "class/src/viewer/scene/materials/Texture.js~Texture.html#instance-set-translate",
     "src/viewer/scene/materials/Texture.js~Texture#translate",
     "member"
   ],
@@ -8017,25 +8095,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#castsshadow",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-castsShadow",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/mesh/mesh.js~mesh#castsshadow",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-castsShadow",
     "src/viewer/scene/mesh/Mesh.js~Mesh#castsShadow",
     "member"
   ],
   [
-    "src/viewer/scene/mesh/mesh.js~mesh#clippable",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-clippable",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#clippable",
+    "src/viewer/scene/mesh/mesh.js~mesh#castsshadow",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-castsShadow",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#castsShadow",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#clippable",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-clippable",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#clippable",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-clippable",
     "src/viewer/scene/mesh/Mesh.js~Mesh#clippable",
     "member"
   ],
@@ -8095,13 +8173,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#edges",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-edges",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-edges",
     "src/viewer/scene/mesh/Mesh.js~Mesh#edges",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#edges",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-edges",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-edges",
     "src/viewer/scene/mesh/Mesh.js~Mesh#edges",
     "member"
   ],
@@ -8125,13 +8203,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#highlighted",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
     "src/viewer/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#highlighted",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
     "src/viewer/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
@@ -8173,13 +8251,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#layer",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-layer",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-layer",
     "src/viewer/scene/mesh/Mesh.js~Mesh#layer",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#layer",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-layer",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-layer",
     "src/viewer/scene/mesh/Mesh.js~Mesh#layer",
     "member"
   ],
@@ -8191,13 +8269,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#matrix",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-matrix",
     "src/viewer/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#matrix",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-matrix",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
     "src/viewer/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
@@ -8209,13 +8287,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#opacity",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
     "src/viewer/scene/mesh/Mesh.js~Mesh#opacity",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#opacity",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
     "src/viewer/scene/mesh/Mesh.js~Mesh#opacity",
     "member"
   ],
@@ -8227,20 +8305,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#pickable",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-pickable",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/mesh/mesh.js~mesh#pickable",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-pickable",
     "src/viewer/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
-    "src/viewer/scene/mesh/mesh.js~mesh#position",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-position",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#position",
+    "src/viewer/scene/mesh/mesh.js~mesh#pickable",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-pickable",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
@@ -8250,14 +8322,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/mesh/mesh.js~mesh#quaternion",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-quaternion",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#quaternion",
+    "src/viewer/scene/mesh/mesh.js~mesh#position",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-position",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#position",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#quaternion",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-quaternion",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#quaternion",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#quaternion",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-quaternion",
     "src/viewer/scene/mesh/Mesh.js~Mesh#quaternion",
     "member"
   ],
@@ -8323,25 +8401,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#scale",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-scale",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/mesh/mesh.js~mesh#scale",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-scale",
     "src/viewer/scene/mesh/Mesh.js~Mesh#scale",
     "member"
   ],
   [
-    "src/viewer/scene/mesh/mesh.js~mesh#selected",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-selected",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#selected",
+    "src/viewer/scene/mesh/mesh.js~mesh#scale",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-scale",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#scale",
     "member"
   ],
   [
     "src/viewer/scene/mesh/mesh.js~mesh#selected",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-selected",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#selected",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-selected",
     "src/viewer/scene/mesh/Mesh.js~Mesh#selected",
     "member"
   ],
@@ -8539,13 +8617,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/metriqs/metriqs.js~metrics#origin",
-    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-get-origin",
+    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-set-origin",
     "src/viewer/scene/metriqs/Metriqs.js~Metrics#origin",
     "member"
   ],
   [
     "src/viewer/scene/metriqs/metriqs.js~metrics#origin",
-    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-set-origin",
+    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-get-origin",
     "src/viewer/scene/metriqs/Metriqs.js~Metrics#origin",
     "member"
   ],
@@ -8569,13 +8647,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/metriqs/metriqs.js~metrics#units",
-    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-get-units",
+    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-set-units",
     "src/viewer/scene/metriqs/Metriqs.js~Metrics#units",
     "member"
   ],
   [
     "src/viewer/scene/metriqs/metriqs.js~metrics#units",
-    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-set-units",
+    "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html#instance-get-units",
     "src/viewer/scene/metriqs/Metriqs.js~Metrics#units",
     "member"
   ],
@@ -8611,13 +8689,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#castsshadow",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-castsShadow",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-castsShadow",
     "src/viewer/scene/nodes/Node.js~Node#castsShadow",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#castsshadow",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-castsShadow",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-castsShadow",
     "src/viewer/scene/nodes/Node.js~Node#castsShadow",
     "member"
   ],
@@ -8641,25 +8719,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#collidable",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-collidable",
-    "src/viewer/scene/nodes/Node.js~Node#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/nodes/node.js~node#collidable",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-collidable",
     "src/viewer/scene/nodes/Node.js~Node#collidable",
     "member"
   ],
   [
-    "src/viewer/scene/nodes/node.js~node#colorize",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-colorize",
-    "src/viewer/scene/nodes/Node.js~Node#colorize",
+    "src/viewer/scene/nodes/node.js~node#collidable",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-collidable",
+    "src/viewer/scene/nodes/Node.js~Node#collidable",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#colorize",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-colorize",
+    "src/viewer/scene/nodes/Node.js~Node#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#colorize",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-colorize",
     "src/viewer/scene/nodes/Node.js~Node#colorize",
     "member"
   ],
@@ -8671,13 +8749,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#culled",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-culled",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-culled",
     "src/viewer/scene/nodes/Node.js~Node#culled",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#culled",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-culled",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-culled",
     "src/viewer/scene/nodes/Node.js~Node#culled",
     "member"
   ],
@@ -8689,13 +8767,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#edges",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-edges",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-edges",
     "src/viewer/scene/nodes/Node.js~Node#edges",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#edges",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-edges",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-edges",
     "src/viewer/scene/nodes/Node.js~Node#edges",
     "member"
   ],
@@ -8797,13 +8875,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#position",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-position",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-position",
     "src/viewer/scene/nodes/Node.js~Node#position",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#position",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-position",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-position",
     "src/viewer/scene/nodes/Node.js~Node#position",
     "member"
   ],
@@ -8821,13 +8899,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#receivesshadow",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-receivesShadow",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-receivesShadow",
     "src/viewer/scene/nodes/Node.js~Node#receivesShadow",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#receivesshadow",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-receivesShadow",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-receivesShadow",
     "src/viewer/scene/nodes/Node.js~Node#receivesShadow",
     "member"
   ],
@@ -8875,13 +8953,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#rotation",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-rotation",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-rotation",
     "src/viewer/scene/nodes/Node.js~Node#rotation",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#rotation",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-rotation",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-rotation",
     "src/viewer/scene/nodes/Node.js~Node#rotation",
     "member"
   ],
@@ -8893,25 +8971,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#scale",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-scale",
-    "src/viewer/scene/nodes/Node.js~Node#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/nodes/node.js~node#scale",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-scale",
     "src/viewer/scene/nodes/Node.js~Node#scale",
     "member"
   ],
   [
-    "src/viewer/scene/nodes/node.js~node#selected",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-selected",
-    "src/viewer/scene/nodes/Node.js~Node#selected",
+    "src/viewer/scene/nodes/node.js~node#scale",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-scale",
+    "src/viewer/scene/nodes/Node.js~Node#scale",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#selected",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-selected",
+    "src/viewer/scene/nodes/Node.js~Node#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#selected",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-selected",
     "src/viewer/scene/nodes/Node.js~Node#selected",
     "member"
   ],
@@ -8941,13 +9019,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#visible",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-visible",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-visible",
     "src/viewer/scene/nodes/Node.js~Node#visible",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#visible",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-visible",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-visible",
     "src/viewer/scene/nodes/Node.js~Node#visible",
     "member"
   ],
@@ -8959,13 +9037,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/nodes/node.js~node#xrayed",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-xrayed",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-xrayed",
     "src/viewer/scene/nodes/Node.js~Node#xrayed",
     "member"
   ],
   [
     "src/viewer/scene/nodes/node.js~node#xrayed",
-    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-xrayed",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-xrayed",
     "src/viewer/scene/nodes/Node.js~Node#xrayed",
     "member"
   ],
@@ -9025,20 +9103,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
-    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1",
-    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
-    "member"
-  ],
-  [
-    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
     "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1",
     "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
     "member"
   ],
   [
-    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
-    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2",
-    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
+    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
+    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1",
+    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
     "member"
   ],
   [
@@ -9048,14 +9120,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
-    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3",
-    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
+    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
+    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2",
+    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
     "member"
   ],
   [
     "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
     "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v3",
+    "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
+    "member"
+  ],
+  [
+    "src/viewer/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
+    "class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3",
     "src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
     "member"
   ],
@@ -9115,13 +9193,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/paths/curve.js~curve#t",
-    "class/src/viewer/scene/paths/Curve.js~Curve.html#instance-get-t",
+    "class/src/viewer/scene/paths/Curve.js~Curve.html#instance-set-t",
     "src/viewer/scene/paths/Curve.js~Curve#t",
     "member"
   ],
   [
     "src/viewer/scene/paths/curve.js~curve#t",
-    "class/src/viewer/scene/paths/Curve.js~Curve.html#instance-set-t",
+    "class/src/viewer/scene/paths/Curve.js~Curve.html#instance-get-t",
     "src/viewer/scene/paths/Curve.js~Curve#t",
     "member"
   ],
@@ -9229,13 +9307,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#t",
-    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-t",
+    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-t",
     "src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#t",
     "member"
   ],
   [
     "src/viewer/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#t",
-    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-t",
+    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-t",
     "src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#t",
     "member"
   ],
@@ -9253,13 +9331,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v1",
-    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v1",
+    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-v1",
     "src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v1",
     "member"
   ],
   [
     "src/viewer/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v1",
-    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-v1",
+    "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v1",
     "src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v1",
     "member"
   ],
@@ -9307,25 +9385,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/paths/splinecurve.js~splinecurve#points",
-    "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-points",
-    "src/viewer/scene/paths/SplineCurve.js~SplineCurve#points",
-    "member"
-  ],
-  [
-    "src/viewer/scene/paths/splinecurve.js~splinecurve#points",
     "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-points",
     "src/viewer/scene/paths/SplineCurve.js~SplineCurve#points",
     "member"
   ],
   [
-    "src/viewer/scene/paths/splinecurve.js~splinecurve#t",
-    "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t",
-    "src/viewer/scene/paths/SplineCurve.js~SplineCurve#t",
+    "src/viewer/scene/paths/splinecurve.js~splinecurve#points",
+    "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-points",
+    "src/viewer/scene/paths/SplineCurve.js~SplineCurve#points",
     "member"
   ],
   [
     "src/viewer/scene/paths/splinecurve.js~splinecurve#t",
     "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-t",
+    "src/viewer/scene/paths/SplineCurve.js~SplineCurve#t",
+    "member"
+  ],
+  [
+    "src/viewer/scene/paths/splinecurve.js~splinecurve#t",
+    "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t",
     "src/viewer/scene/paths/SplineCurve.js~SplineCurve#t",
     "member"
   ],
@@ -9349,13 +9427,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/postfx/sao.js~sao#blur",
-    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blur",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blur",
     "src/viewer/scene/postfx/SAO.js~SAO#blur",
     "member"
   ],
   [
     "src/viewer/scene/postfx/sao.js~sao#blur",
-    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blur",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blur",
     "src/viewer/scene/postfx/SAO.js~SAO#blur",
     "member"
   ],
@@ -9403,25 +9481,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/postfx/sao.js~sao#minresolution",
-    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-minResolution",
-    "src/viewer/scene/postfx/SAO.js~SAO#minResolution",
-    "member"
-  ],
-  [
-    "src/viewer/scene/postfx/sao.js~sao#minresolution",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-minResolution",
     "src/viewer/scene/postfx/SAO.js~SAO#minResolution",
     "member"
   ],
   [
-    "src/viewer/scene/postfx/sao.js~sao#scale",
-    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale",
-    "src/viewer/scene/postfx/SAO.js~SAO#scale",
+    "src/viewer/scene/postfx/sao.js~sao#minresolution",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-minResolution",
+    "src/viewer/scene/postfx/SAO.js~SAO#minResolution",
     "member"
   ],
   [
     "src/viewer/scene/postfx/sao.js~sao#scale",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-scale",
+    "src/viewer/scene/postfx/SAO.js~SAO#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#scale",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale",
     "src/viewer/scene/postfx/SAO.js~SAO#scale",
     "member"
   ],
@@ -9535,20 +9613,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#gammafactor",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaFactor",
-    "src/viewer/scene/scene/Scene.js~Scene#gammaFactor",
-    "member"
-  ],
-  [
-    "src/viewer/scene/scene/scene.js~scene#gammafactor",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-gammaFactor",
     "src/viewer/scene/scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
-    "src/viewer/scene/scene/scene.js~scene#gammainput",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaInput",
-    "src/viewer/scene/scene/Scene.js~Scene#gammaInput",
+    "src/viewer/scene/scene/scene.js~scene#gammafactor",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaFactor",
+    "src/viewer/scene/scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
@@ -9558,14 +9630,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/scene/scene.js~scene#gammaoutput",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-gammaOutput",
-    "src/viewer/scene/scene/Scene.js~Scene#gammaOutput",
+    "src/viewer/scene/scene/scene.js~scene#gammainput",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaInput",
+    "src/viewer/scene/scene/Scene.js~Scene#gammaInput",
     "member"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#gammaoutput",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaOutput",
+    "src/viewer/scene/scene/Scene.js~Scene#gammaOutput",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#gammaoutput",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-gammaOutput",
     "src/viewer/scene/scene/Scene.js~Scene#gammaOutput",
     "member"
   ],
@@ -9829,25 +9907,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#ticksperocclusiontest",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-ticksPerOcclusionTest",
-    "src/viewer/scene/scene/Scene.js~Scene#ticksPerOcclusionTest",
-    "member"
-  ],
-  [
-    "src/viewer/scene/scene/scene.js~scene#ticksperocclusiontest",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerOcclusionTest",
     "src/viewer/scene/scene/Scene.js~Scene#ticksPerOcclusionTest",
     "member"
   ],
   [
-    "src/viewer/scene/scene/scene.js~scene#ticksperrender",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-ticksPerRender",
-    "src/viewer/scene/scene/Scene.js~Scene#ticksPerRender",
+    "src/viewer/scene/scene/scene.js~scene#ticksperocclusiontest",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-ticksPerOcclusionTest",
+    "src/viewer/scene/scene/Scene.js~Scene#ticksPerOcclusionTest",
     "member"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#ticksperrender",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerRender",
+    "src/viewer/scene/scene/Scene.js~Scene#ticksPerRender",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#ticksperrender",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-ticksPerRender",
     "src/viewer/scene/scene/Scene.js~Scene#ticksPerRender",
     "member"
   ],
@@ -9937,13 +10015,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#pos",
-    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-pos",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
     "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
     "member"
   ],
   [
     "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#pos",
-    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-pos",
     "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
     "member"
   ],
@@ -9973,13 +10051,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/skybox/skybox.js~skybox#size",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
+    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
     "src/viewer/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
   [
     "src/viewer/scene/skybox/skybox.js~skybox#size",
-    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
+    "class/src/viewer/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
     "src/viewer/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
@@ -10027,13 +10105,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/viewport/viewport.js~viewport#boundary",
-    "class/src/viewer/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
+    "class/src/viewer/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary",
     "src/viewer/scene/viewport/Viewport.js~Viewport#boundary",
     "member"
   ],
   [
     "src/viewer/scene/viewport/viewport.js~viewport#boundary",
-    "class/src/viewer/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary",
+    "class/src/viewer/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
     "src/viewer/scene/viewport/Viewport.js~Viewport#boundary",
     "member"
   ],

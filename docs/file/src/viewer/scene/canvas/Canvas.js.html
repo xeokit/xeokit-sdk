@@ -134,8 +134,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/canvas/Canvas.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Canvas2Image} from &quot;../libs/canvas2image.js&quot;;
-import {core} from &quot;../core.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {core} from &quot;../core.js&quot;;
 import {math} from &apos;../math/math.js&apos;;
 import {stats} from &apos;../stats.js&apos;;
 import {Component} from &apos;../Component.js&apos;;
@@ -502,28 +501,9 @@ class Canvas extends Component {
      * @returns {*}
      * @private
      */
-    _getSnapshot(params) {
-        params = params || {};
-        const width = params.width || this.canvas.width;
-        const height = params.height || this.canvas.height;
-        const format = params.format || &quot;jpeg&quot;;
-        let image;
-        switch (format) {
-            case &quot;jpeg&quot;:
-                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
-                break;
-            case &quot;png&quot;:
-                image = Canvas2Image.saveAsPNG(this.canvas, true, width, height);
-                break;
-            case &quot;bmp&quot;:
-                image = Canvas2Image.saveAsBMP(this.canvas, true, width, height);
-                break;
-            default:
-                this.error(&quot;Unsupported snapshot format: &apos;&quot; + format
-                    + &quot;&apos; - supported types are &apos;jpeg&apos;, &apos;bmp&apos; and &apos;png&apos; - defaulting to &apos;jpeg&apos;&quot;);
-                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
-        }
-        return image.src;
+    _getSnapshot(params={}) {
+        const imageDataURI = this.scene._renderer.readImage(params);
+        return imageDataURI;
     }
 
     /**

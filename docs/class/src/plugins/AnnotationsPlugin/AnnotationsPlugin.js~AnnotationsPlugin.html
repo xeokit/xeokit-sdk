@@ -134,13 +134,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber356">@xeokit/xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber375">@xeokit/xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber356">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber375">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -449,6 +449,19 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
      }
 });</code>
 </code></pre>
+<p>Note that when the Annotation is occludable, there is potential for the <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldPos">Annotation#worldPos</a></span> to become
+visually embedded within the surface of its Entity when viewed from a distance. This happens as a result of limited
+GPU accuracy GPU accuracy, especially when the near and far view-space clipping planes, specified by <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-near">Perspective#near</a></span>
+and <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-far">Perspective#far</a></span>, or <span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-near">Ortho#near</a></span> and <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-far">Perspective#far</a></span>, are far away from each other.</p>
+<p>To prevent this, we can offset Annotations from their Entity surfaces by an amount that we set
+on <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-set-surfaceOffset">AnnotationsPlugin#surfaceOffset</a></span>:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">annotations.surfaceOffset = 0.3; // Default value</code>
+</code></pre>
+<p>Annotations subsequently created with <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span> using a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> will then
+be offset by that amount.</p>
+<p>Another thing we can do to prevent this unwanted occlusion is keep the distance between the view-space clipping
+planes to a minimum, which improves the accuracy of the Annotation occlusion test. In general, a good default
+value for <code>Perspective#far</code> and <code>Ortho#far</code> is around <code>2.000</code>.</p>
 </div>
   
 
@@ -523,6 +536,67 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
         
         
         <div data-ice="description"><p>The <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>s created by <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>, each mapped to its <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">Annotation#id</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-set-surfaceOffset">surfaceOffset</a></span></span><span class="code" data-ice="signature">(surfaceOffset: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the amount by which each <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is offset from the surface of its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, when we
+create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> to <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-get-surfaceOffset">surfaceOffset</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the amount by which an <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is offset from the surface of its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> when
+created by <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>, when we
+create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> to <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>.</p>
 </div>
       </div>
     </td>
@@ -914,7 +988,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber368">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber389">source</a></span></span>
     </span>
   </h3>
 
@@ -985,6 +1059,15 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
       <td data-ice="description"><p>Map of default values to insert into the HTML templates for the marker and label.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.surfaceOffset</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.3</li></ul></td>
+      <td data-ice="description"><p>The amount by which each <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is offset from the surface of
+its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> when we create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> to <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1022,7 +1105,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber381">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber402">source</a></span></span>
     </span>
   </h3>
 
@@ -1054,6 +1137,113 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-surfaceOffset">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">surfaceOffset</span><span class="code" data-ice="signature">(surfaceOffset: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber428">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the amount by which each <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is offset from the surface of its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, when we
+create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> to <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>.</p>
+<p>See the class comments for more info.</p>
+<p>This is <code>0.3</code> by default.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-surfaceOffset">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">surfaceOffset</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber444">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the amount by which an <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is offset from the surface of its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> when
+created by <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>, when we
+create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> to <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span>.</p>
+<p>This is <code>0.3</code> by default.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The surface offset.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -1069,7 +1259,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber556">source</a></span></span>
     </span>
   </h3>
 
@@ -1113,7 +1303,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber420">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber473">source</a></span></span>
     </span>
   </h3>
 
@@ -1306,7 +1496,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber568">source</a></span></span>
     </span>
   </h3>
 
@@ -1351,7 +1541,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber544">source</a></span></span>
     </span>
   </h3>
 

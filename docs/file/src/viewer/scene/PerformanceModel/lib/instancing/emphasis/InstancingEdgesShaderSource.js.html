@@ -183,10 +183,10 @@ function buildVertex(scene) {
 
     src.push(&quot;bool transparent  = (color.a &lt; 1.0);&quot;); // Color comes from EdgeMaterial.edgeColor, so is not quantized
 
-    src.push(`
-     if (!visible || !edges ||
-        (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (transparent || xrayed)) ||
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp;  (!transparent || xrayed || highlighted || selected)) ||
+    src.push(`if (
+    !visible ||
+    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (!edges || transparent || xrayed)) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp;  (!edges || !transparent || xrayed || highlighted || selected)) ||
     (renderPass == ${RENDER_PASSES.XRAYED} &amp;&amp; (!xrayed || highlighted || selected)) ||
     (renderPass == ${RENDER_PASSES.HIGHLIGHTED} &amp;&amp; !highlighted) ||
     (renderPass == ${RENDER_PASSES.SELECTED} &amp;&amp; !selected)) {`);
