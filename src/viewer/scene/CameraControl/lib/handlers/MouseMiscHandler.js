@@ -35,8 +35,8 @@ class MouseMiscHandler {
 
         const canvas = this._scene.canvas.canvas;
 
-        canvas.addEventListener("mousemove", this._mouseMoveHandler);
-        canvas.addEventListener("mouseenter", this._mouseEnterHandler);
+        canvas.removeEventListener("mousemove", this._mouseMoveHandler);
+        canvas.removeEventListener("mouseenter", this._mouseEnterHandler);
         canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
     }

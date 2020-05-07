@@ -12,7 +12,6 @@ class CameraUpdater {
     constructor(scene, controllers, configs, states, updates) {
 
         this._scene = scene;
-        const input = scene.input;
         const camera = scene.camera;
         const pivotController = controllers.pivotController;
 
@@ -28,10 +27,11 @@ class CameraUpdater {
 
             const deltaTimeMilliSecs = e.deltaTime;
             const deltaTimeSecs = deltaTimeMilliSecs / 1000;
+            const panSpeed = deltaTimeSecs * 1.0;
             const dollySpeed = deltaTimeSecs * configs.dollyRate;
 
             //----------------------------------------------------------------------------------------------------------
-            // Handle scheduled orbit
+            // Rotation
             //----------------------------------------------------------------------------------------------------------
 
             if (Math.abs(updates.rotateDeltaX) < EPSILON) {
@@ -75,7 +75,7 @@ class CameraUpdater {
             }
 
             //----------------------------------------------------------------------------------------------------------
-            // Handle scheduled panning
+            // Panning
             //----------------------------------------------------------------------------------------------------------
 
             if (Math.abs(updates.panDeltaX) < EPSILON) {
@@ -99,8 +99,7 @@ class CameraUpdater {
                 vec[1] = updates.panDeltaY;
                 vec[2] = updates.panDeltaZ;
 
-                // math.normalizeVec3(vec);
-                math.mulVec3Scalar(vec, dollySpeed, vec2);
+                math.mulVec3Scalar(vec, panSpeed, vec2);
 
                 let verticalEye;
                 let verticalLook;
@@ -116,7 +115,6 @@ class CameraUpdater {
                         verticalLook = camera.look[2];
                     }
 
-                    //      camera.pan([updates.panDeltaX * f, updates.panDeltaY * f, updates.panDeltaZ * f]);
                     camera.pan(vec2);
                     let eye = camera.eye;
                     let look = camera.look;
@@ -148,7 +146,7 @@ class CameraUpdater {
             updates.panDeltaZ *= configs.dollyInertia;
 
             //----------------------------------------------------------------------------------------------------------
-            // Handle scheduled dollying
+            // Dollying
             //----------------------------------------------------------------------------------------------------------
 
             if (Math.abs(updates.dollyDelta) < EPSILON) {

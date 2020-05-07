@@ -66,7 +66,7 @@ class KeyboardPanRotateDollyHandler {
                 const upArrowKey = keyDown[input.KEY_UP_ARROW];
                 const downArrowKey = keyDown[input.KEY_DOWN_ARROW];
 
-                const orbitRate = elapsed * configs.keyboardOrbitRate * .05;
+                const orbitRate = elapsed * configs.keyboardRotationRate * .05;
 
                 if (leftArrowKey || rightArrowKey || upArrowKey || downArrowKey) {
 
@@ -141,7 +141,7 @@ class KeyboardPanRotateDollyHandler {
             let panUpKey;
             let panDownKey;
 
-            const panRate = (keyDown[input.KEY_ALT] ? 0.2 : 0.8) * configs.keyboardPanRate; // ALT for slower pan rate
+            const panRate = (keyDown[input.KEY_ALT] ? 0.2 : 0.8) * configs.keyboardPanRate * 5.0; // ALT for slower pan rate
 
             if (configs.keyboardLayout === 'azerty') {
 
@@ -196,7 +196,11 @@ class KeyboardPanRotateDollyHandler {
     }
 
     destroy() {
+
         this._scene.off(this._onTick);
+
+        document.removeEventListener("keydown", this._documentKeyDownHandler);
+        document.removeEventListener("keyup", this._documentKeyUpHandler);
     }
 }
 

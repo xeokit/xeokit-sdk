@@ -160,6 +160,10 @@
         this.doublePickFlyTo = cameraControl.doublePickFlyTo;
         this.panRightClick = cameraControl.panRightClick;
         this.dollyRate = cameraControl.dollyRate;
+        this.mousePanRate = cameraControl.mousePanRate;
+        this.keyboardPanRate = cameraControl.keyboardPanRate;
+        this.mouseRotationRate = cameraControl.mouseRotationRate;
+        this.keyboardRotationRate = cameraControl.keyboardRotationRate;
         this.rotationInertia = cameraControl.rotationInertia;
         this.dollyInertia = cameraControl.dollyInertia;
     }();
@@ -172,6 +176,10 @@
         cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
         cameraControl.panRightClick = cameraControlParams.panRightClick;
         cameraControl.dollyRate = cameraControlParams.dollyRate;
+        cameraControl.mousePanRate = cameraControlParams.mousePanRate;
+        cameraControl.keyboardPanRate = cameraControlParams.keyboardPanRate;
+        cameraControl.mouseRotationRate = cameraControlParams.mouseRotationRate;
+        cameraControl.keyboardRotationRate = cameraControlParams.keyboardRotationRate;
         cameraControl.rotationInertia = cameraControlParams.rotationInertia;
         cameraControl.dollyInertia = cameraControlParams.dollyInertia;
         requestAnimationFrame(update);
@@ -179,7 +187,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false});
+    const gui = new dat.GUI({autoPlace: false, width: 300});
 
     const cameraControlFolder = gui.addFolder('cameraControl');
 
@@ -190,6 +198,10 @@
     cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
     cameraControlFolder.add(cameraControlParams, 'panRightClick');
     cameraControlFolder.add(cameraControlParams, 'dollyRate', 0, 30);
+    cameraControlFolder.add(cameraControlParams, 'mousePanRate', 0, 2);
+    cameraControlFolder.add(cameraControlParams, 'keyboardPanRate', 0, 2);
+    cameraControlFolder.add(cameraControlParams, 'mouseRotationRate', 0, 2);
+    cameraControlFolder.add(cameraControlParams, 'keyboardRotationRate', 0, 2);
     cameraControlFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
     cameraControlFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
 

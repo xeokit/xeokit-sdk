@@ -430,13 +430,16 @@ class CameraControl extends Component {
 
             mousePanRate: 1.0,
             keyboardPanRate: 1.0,
-            keyboardOrbitRate: 1.0,
+
+            keyboardRotationRate: 1.0,
+            mouseRotationRate: 1.0,
 
             touchRotateRate: 0.3,
             touchPanRate: 0.2,
             touchZoomRate: 0.2,
 
             dollyRate: 10,
+            keyboardDollyRate: 10,
 
             navMode: "orbit",
             planView: false,
@@ -527,6 +530,10 @@ class CameraControl extends Component {
         this.pivoting = cfg.pivoting;
         this.dollyToPointer = cfg.dollyToPointer;
         this.rotationInertia = cfg.rotationInertia;
+        this.mousePanRate = cfg.mousePanRate;
+        this.keyboardPanRate = cfg.keyboardPanRate;
+        this.keyboardRotationRate = cfg.keyboardRotationRate;
+        this.mouseRotationRate = cfg.mouseRotationRate;
         this.dollyInertia = cfg.dollyInertia;
         this.pointerEnabled = true;
         this.dollyRate = cfg.dollyRate;
@@ -944,10 +951,100 @@ class CameraControl extends Component {
     get rotationInertia() {
         return this._configs.rotationInertia;
     }
+    
+    /**
+     * Sets the current mouse pan rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @param {Number} mousePanRate The new mouse pan rate.
+     */
+    set mousePanRate(mousePanRate) {
+        this._configs.mousePanRate = mousePanRate || 1.0;
+    }
+    
+    /**
+     * Returns the current mouse pan rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @returns {Number} The current mouse pan rate.
+     */
+    get mousePanRate() {
+        return this._configs.mousePanRate;
+    }
 
+    /**
+     * Sets the current keyboard pan rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @param {Number} keyboardPanRate The new keyboard pan rate.
+     */
+    set keyboardPanRate(keyboardPanRate) {
+        this._configs.keyboardPanRate = keyboardPanRate || 1.0;
+    }
+
+    /**
+     * Returns the current keyboard pan rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @returns {Number} The current keyboard pan rate.
+     */
+    get keyboardPanRate() {
+        return this._configs.keyboardPanRate;
+    }
+
+    /**
+     * Sets the current keyboard rotation rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @param {Number} keyboardRotationRate The new keyboard rotation rate.
+     */
+    set keyboardRotationRate(keyboardRotationRate) {
+        this._configs.keyboardRotationRate = keyboardRotationRate || 1.0;
+    }
+
+    /**
+     * Returns the current keyboard rotation rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @returns {Number} The current keyboard rotation rate.
+     */
+    get keyboardRotationRate() {
+        return this._configs.keyboardRotationRate;
+    }
+    
+    /**
+     * Sets the current mouse rotation rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @param {Number} mouseRotationRate The new mouse rotation rate.
+     */
+    set mouseRotationRate(mouseRotationRate) {
+        this._configs.mouseRotationRate = mouseRotationRate || 1.0;
+    }
+
+    /**
+     * Returns the current mouse rotation rate.
+     *
+     * This is ````1.0```` by default.
+     *
+     * @returns {Number} The current mouse rotation rate.
+     */
+    get mouseRotationRate() {
+        return this._configs.mouseRotationRate;
+    }
+    
     /**
      * Sets the current dolly rate.
      *
+     * This ````10.0```` by default.
+     * 
      * @param {Number} dollyRate The new dolly speed.
      */
     set dollyRate(dollyRate) {
@@ -956,6 +1053,8 @@ class CameraControl extends Component {
 
     /**
      * Returns the current dolly rate.
+     * 
+     * This ````10.0```` by default.
      *
      * @returns {Number} The current dolly speed.
      */

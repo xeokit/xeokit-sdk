@@ -209,13 +209,13 @@ class MousePanRotateDollyHandler {
                     const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
                     const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += ((configs.mousePanRate * 30.0 * xPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaY += ((configs.mousePanRate * 30.0 * yPanDelta) * targetDistance / canvasHeight);
 
                 } else {
 
-                    updates.panDeltaX += configs.mousePanRate * camera.ortho.scale * (xPanDelta / canvasHeight);
-                    updates.panDeltaY += configs.mousePanRate * camera.ortho.scale * (yPanDelta / canvasHeight);
+                    updates.panDeltaX += configs.mousePanRate * 10 * camera.ortho.scale * (xPanDelta / canvasHeight);
+                    updates.panDeltaY += configs.mousePanRate * 10 * camera.ortho.scale * (yPanDelta / canvasHeight);
                 }
 
             } else {
@@ -223,8 +223,8 @@ class MousePanRotateDollyHandler {
                 if (!configs.planView) {
 
                     const sweep = configs.firstPerson ? 180 : 180;
-                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep;
-                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep;
+                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep * configs.mouseRotationRate;
+                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep * configs.mouseRotationRate;
                 }
             }
 
@@ -322,11 +322,13 @@ class MousePanRotateDollyHandler {
 
         const canvas = this._scene.canvas.canvas;
 
-        canvas.addEventListener("mouseenter", this._mouseEnterHandler);
-        canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
+        document.removeEventListener("keydown", this._documentKeyDownHandler);
+        document.removeEventListener("keyup", this._documentKeyUpHandler);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
-        canvas.removeEventListener("mouseup", this._mouseUpHandler);
         canvas.removeEventListener("mousemove", this._mouseMoveHandler);
+        canvas.removeEventListener("mouseup", this._mouseUpHandler);
+        canvas.removeEventListener("mouseenter", this._mouseEnterHandler);
+        canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
         canvas.removeEventListener("wheel", this._mouseWheelHandler);
     }
 }
