@@ -352,6 +352,25 @@ const tempVec3c = math.vec3();
  *      }
  * });
  * ````
+ *
+ * Note that when the Annotation is occludable, there is potential for the {@link Annotation#worldPos} to become
+ * visually embedded within the surface of its Entity when viewed from a distance. This happens as a result of limited
+ * GPU accuracy GPU accuracy, especially when the near and far view-space clipping planes, specified by {@link Perspective#near}
+ * and {@link Perspective#far}, or {@link Ortho#near} and {@link Perspective#far}, are far away from each other.
+ *
+ * To prevent this, we can offset Annotations from their Entity surfaces by an amount that we set
+ * on {@link AnnotationsPlugin#surfaceOffset}:
+ *
+ * ````javascript
+ * annotations.surfaceOffset = 0.3; // Default value
+ * ````
+ *
+ * Annotations subsequently created with {@link AnnotationsPlugin#createAnnotation} using a {@link PickResult} will then
+ * be offset by that amount.
+ *
+ * Another thing we can do to prevent this unwanted occlusion is keep the distance between the view-space clipping
+ * planes to a minimum, which improves the accuracy of the Annotation occlusion test. In general, a good default
+ * value for ````Perspective#far```` and ````Ortho#far```` is around ````2.000````.
  */
 class AnnotationsPlugin extends Plugin {
 
@@ -363,7 +382,9 @@ class AnnotationsPlugin extends Plugin {
      * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````<div></div>````. Ignored on {@link Annotation}s configured with a ````markerElementId````.
      * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````<div></div>````.  Ignored on {@link Annotation}s configured with a ````labelElementId````.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
-     * @param  {{String:(String|Number)}} [cfg.values={}] Map of default values to insert into the HTML templates for the marker and label.
+     * @param {{String:(String|Number)}} [cfg.values={}] Map of default values to insert into the HTML templates for the marker and label.
+     * @param {Number}  [cfg.surfaceOffset=0.3] The amount by which each {@link Annotation} is offset from the surface of
+     * its {@link Entity} when we create the Annotation by supplying a {@link PickResult} to {@link AnnotationsPlugin#createAnnotation}.
      */
     constructor(viewer, cfg) {
 
@@ -379,6 +400,8 @@ class AnnotationsPlugin extends Plugin {
          * @type {{String:Annotation}}
          */
         this.annotations = {};
+
+        this.surfaceOffset = cfg.surfaceOffset;
     }
 
     /**
@@ -390,6 +413,36 @@ class AnnotationsPlugin extends Plugin {
                 this.clear();
                 break;
         }
+    }
+
+    /**
+     * Sets the amount by which each {@link Annotation} is offset from the surface of its {@link Entity}, when we
+     * create the Annotation by supplying a {@link PickResult} to {@link AnnotationsPlugin#createAnnotation}.
+     *
+     * See the class comments for more info.
+     *
+     * This is ````0.3```` by default.
+     *
+     * @param {Number} surfaceOffset The surface offset.
+     */
+    set surfaceOffset(surfaceOffset) {
+        if (surfaceOffset === undefined || surfaceOffset === null) {
+            surfaceOffset = 0.3;
+        }
+        this._surfaceOffset = surfaceOffset;
+    }
+
+    /**
+     * Gets the amount by which an {@link Annotation} is offset from the surface of its {@link Entity} when
+     * created by {@link AnnotationsPlugin#createAnnotation}, when we
+     * create the Annotation by supplying a {@link PickResult} to {@link AnnotationsPlugin#createAnnotation}.
+     *
+     * This is ````0.3```` by default.
+     *
+     * @returns {Number} The surface offset.
+     */
+    get surfaceOffset() {
+        return this._surfaceOffset;
     }
 
     /**
@@ -431,7 +484,7 @@ class AnnotationsPlugin extends Plugin {
                 this.error("Param 'pickResult' does not have both worldPos and worldNormal");
             } else {
                 const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a);
-                const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, 0.2, tempVec3b);
+                const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, this._surfaceOffset, tempVec3b);
                 const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c);
                 worldPos = offsetWorldPos;
                 entity = pickResult.entity;

@@ -154,7 +154,20 @@
             glyph: "X",
             title: "Untitled",
             description: "No description"
-        }
+        },
+
+        // Amount to offset each Annotation from its Entity surface (0.3 is the default value).
+        // This is useful when the Annotation is occludable, which is when it is hidden when occluded
+        // by other objects. When occludable, there is potential for the Annotation#worldPos to become
+        // visually embedded within the surface of its Entity when viewed from a distance. This happens
+        // as a result of limited GPU accuracy GPU accuracy, especially when the near and far view-space clipping planes,
+        // specified by Perspective#near and Perspective#far, or Ortho#near and Perspective#far, are far away from each other.
+        //
+        // Offsetting the Annotation may ensure that it does become visually embedded within its Entity. We may also
+        // prevent this by keeping the distance between the view-space clipping planes to a minimum. In general, a good
+        // default value for Perspective#far and Ortho#far is around ````2.000````.
+
+        surfaceOffset: 0.3
     });
 
     annotations.on("markerClicked", (annotation) => {
