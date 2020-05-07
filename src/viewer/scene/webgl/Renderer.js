@@ -1105,7 +1105,7 @@ const Renderer = function (scene, options) {
     };
 
     /**
-     * Read pixels from the renderer's frameCtx buffer. Performs a force-render first
+     * Read pixels from the renderer's current output. Performs a force-render first.
      * @param pixels
      * @param colors
      * @param len
@@ -1131,6 +1131,21 @@ const Renderer = function (scene, options) {
         }
         readPixelBuffer.unbind();
         imageDirty = true;
+    };
+
+    /**
+     * Read a snapshot of image data from the renderer's current output. Performs a force-render first.
+     * @private
+     * @returns {String} The image data URI.
+     */
+    this.readImage = function (params) {
+        readPixelBuffer.bind();
+        readPixelBuffer.clear();
+        this.render({force: true, opaqueOnly: false});
+        const imageDataURI = readPixelBuffer.readImage(params);
+        readPixelBuffer.unbind();
+        imageDirty = true;
+        return imageDataURI;
     };
 
     /**

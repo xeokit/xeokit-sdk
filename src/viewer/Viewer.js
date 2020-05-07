@@ -258,7 +258,7 @@ class Viewer {
      * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
      * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
-     * @returns {String} String-encoded image data.
+     * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
         this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
@@ -280,7 +280,7 @@ class Viewer {
 
         this.scene.render(true);
 
-        const imageData = this.scene.canvas._getSnapshot(params);
+        const imageDataURI = this.scene.canvas._getSnapshot(params);
 
         if (resize) {
             canvas.style.width = saveCssWidth;
@@ -293,7 +293,7 @@ class Viewer {
 
         this.sendToPlugins("snapshotFinished");
 
-        return imageData;
+        return imageDataURI;
     }
 
     /** Destroys this Viewer.

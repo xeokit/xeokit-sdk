@@ -1,3 +1,5 @@
+import {Canvas2Image} from "../libs/canvas2image.js";
+
 /**
  * @desc Represents a WebGL render buffer.
  * @private
@@ -143,6 +145,83 @@ class RenderBuffer {
         return pix;
     }
 
+    readImage(params) {
+
+        const gl = this.gl;
+        const imageDataCache = this._getImageDataCache();
+        const pixelData = imageDataCache.pixelData;
+        const canvas = imageDataCache.canvas;
+        const imageData = imageDataCache.imageData;
+        const context = imageDataCache.context;
+
+        gl.readPixels(0, 0, this.buffer.width, this.buffer.height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
+
+        imageData.data.set(pixelData);
+        context.putImageData(imageData, 0, 0);
+
+        const imageWidth = params.width || canvas.width;
+        const imageHeight = params.height || canvas.height;
+        const format = params.format || "jpeg";
+        const flipy = true; // Account for WebGL texture flipping
+
+        let image;
+
+        switch (format) {
+            case "jpeg":
+                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
+                break;
+            case "png":
+                image = Canvas2Image.saveAsPNG(canvas, true, imageWidth, imageHeight, flipy);
+                break;
+            case "bmp":
+                image = Canvas2Image.saveAsBMP(canvas, true, imageWidth, imageHeight, flipy);
+                break;
+            default:
+                console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
+                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
+        }
+
+        return image.src;
+    }
+
+    _getImageDataCache() {
+
+        const bufferWidth = this.buffer.width;
+        const bufferHeight = this.buffer.height;
+
+        let imageDataCache = this._imageDataCache;
+
+        if (imageDataCache) {
+            if (imageDataCache.width !== bufferWidth || imageDataCache.height !== bufferHeight) {
+                this._imageDataCache = null;
+                imageDataCache = null;
+            }
+        }
+
+        if (!imageDataCache) {
+
+            const canvas = document.createElement('canvas');
+            canvas.width = bufferWidth;
+            canvas.height = bufferHeight;
+
+            const context = canvas.getContext('2d');
+            const imageData = context.createImageData(bufferWidth, bufferHeight);
+
+            imageDataCache = {
+                pixelData: new Uint8Array(bufferWidth * bufferHeight * 4),
+                canvas: canvas,
+                context: context,
+                imageData: imageData,
+                width: bufferWidth,
+                height: bufferHeight
+            };
+
+            this._imageDataCache = imageDataCache;
+        }
+
+        return imageDataCache;
+    }
+
     unbind() {
         const gl = this.gl;
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -180,6 +259,7 @@ class RenderBuffer {
             this.buffer = null;
             this.bound = false;
         }
+        this._imageDataCache = null;
     }
 }
 

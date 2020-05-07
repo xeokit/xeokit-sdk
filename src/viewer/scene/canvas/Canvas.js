@@ -1,4 +1,3 @@
-import {Canvas2Image} from "../libs/canvas2image.js";
 import {core} from "../core.js";
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
@@ -366,28 +365,9 @@ class Canvas extends Component {
      * @returns {*}
      * @private
      */
-    _getSnapshot(params) {
-        params = params || {};
-        const width = params.width || this.canvas.width;
-        const height = params.height || this.canvas.height;
-        const format = params.format || "jpeg";
-        let image;
-        switch (format) {
-            case "jpeg":
-                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
-                break;
-            case "png":
-                image = Canvas2Image.saveAsPNG(this.canvas, true, width, height);
-                break;
-            case "bmp":
-                image = Canvas2Image.saveAsBMP(this.canvas, true, width, height);
-                break;
-            default:
-                this.error("Unsupported snapshot format: '" + format
-                    + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
-                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
-        }
-        return image.src;
+    _getSnapshot(params={}) {
+        const imageDataURI = this.scene._renderer.readImage(params);
+        return imageDataURI;
     }
 
     /**

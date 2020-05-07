@@ -2,6 +2,9 @@
  * Canvas2Image v0.1
  * Copyright (c) 2008 Jacob Seidelin, cupboy@gmail.com
  * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ *
+ * Modified by @xeolabs to permit vertical flipping, so that snapshot can be taken from WebGL frame buffers,
+ * which vertically flip image data as part of the way that WebGL renders textures.
  */
 
 /**
@@ -9,7 +12,8 @@
  */
 const Canvas2Image = (function () {
     // check if we have canvas support
-    const oCanvas = document.createElement("canvas"), sc = String.fromCharCode, strDownloadMime = "image/octet-stream", bReplaceDownloadMime = false;
+    const oCanvas = document.createElement("canvas"), sc = String.fromCharCode, strDownloadMime = "image/octet-stream",
+        bReplaceDownloadMime = false;
 
     // no canvas, bail out.
     if (!oCanvas.getContext) {
@@ -23,7 +27,8 @@ const Canvas2Image = (function () {
         }
     }
 
-    const bHasImageData = !!(oCanvas.getContext("2d").getImageData), bHasDataURL = !!(oCanvas.toDataURL), bHasBase64 = !!(window.btoa);
+    const bHasImageData = !!(oCanvas.getContext("2d").getImageData), bHasDataURL = !!(oCanvas.toDataURL),
+        bHasBase64 = !!(window.btoa);
 
     // ok, we're good
     const readCanvasData = function (oCanvas) {
@@ -143,7 +148,7 @@ const Canvas2Image = (function () {
         return oImgElement;
     };
 
-    const scaleCanvas = function (oCanvas, iWidth, iHeight) {
+    const scaleCanvas = function (oCanvas, iWidth, iHeight, flipy) {
         if (iWidth && iHeight) {
             const oSaveCanvas = document.createElement("canvas");
             oSaveCanvas.width = iWidth;
@@ -151,16 +156,27 @@ const Canvas2Image = (function () {
             oSaveCanvas.style.width = iWidth + "px";
             oSaveCanvas.style.height = iHeight + "px";
             const oSaveCtx = oSaveCanvas.getContext("2d");
-            oSaveCtx.drawImage(oCanvas, 0, 0, oCanvas.width, oCanvas.height, 0, 0, iWidth, iHeight);
+            if (flipy) {
+                oSaveCtx.save();
+                oSaveCtx.scale(1.0, -1.0);
+                oSaveCtx.imageSmoothingEnabled = true;
+                oSaveCtx.drawImage(oCanvas, 0, 0, oCanvas.width, oCanvas.height, 0, 0, iWidth, -iHeight);
+                oSaveCtx.restore();
+            } else {
+                oSaveCtx.imageSmoothingEnabled = true;
+                oSaveCtx.drawImage(oCanvas, 0, 0, oCanvas.width, oCanvas.height, 0, 0, iWidth, iHeight);
+            }
             return oSaveCanvas;
         }
         return oCanvas;
     };
 
     return {
-        saveAsPNG: function (oCanvas, bReturnImg, iWidth, iHeight) {
+        saveAsPNG: function (oCanvas, bReturnImg, iWidth, iHeight, flipy) {
             if (!bHasDataURL) return false;
-            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/png", strData = oScaledCanvas.toDataURL(strMime);
+            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight, flipy);
+            const strMime = "image/png";
+            const strData = oScaledCanvas.toDataURL(strMime);
             if (bReturnImg) {
                 return makeImageObject(strData);
             } else {
@@ -169,9 +185,11 @@ const Canvas2Image = (function () {
             return true;
         },
 
-        saveAsJPEG: function (oCanvas, bReturnImg, iWidth, iHeight) {
+        saveAsJPEG: function (oCanvas, bReturnImg, iWidth, iHeight, flipy) {
             if (!bHasDataURL) return false;
-            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/jpeg", strData = oScaledCanvas.toDataURL(strMime);
+            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight, flipy);
+            const strMime = "image/jpeg";
+            const strData = oScaledCanvas.toDataURL(strMime);
             // check if browser actually supports jpeg by looking for the mime type in the data uri. if not, return false
             if (strData.indexOf(strMime) != 5) return false;
             if (bReturnImg) {
@@ -182,9 +200,11 @@ const Canvas2Image = (function () {
             return true;
         },
 
-        saveAsBMP: function (oCanvas, bReturnImg, iWidth, iHeight) {
+        saveAsBMP: function (oCanvas, bReturnImg, iWidth, iHeight, flipy) {
             if (!(bHasDataURL && bHasImageData && bHasBase64)) return false;
-            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/bmp", oData = readCanvasData(oScaledCanvas), strImgData = createBMP(oData);
+            const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight, flipy);
+            const strMime = "image/bmp";
+            const oData = readCanvasData(oScaledCanvas), strImgData = createBMP(oData);
             if (bReturnImg) {
                 return makeImageObject(makeDataURI(strImgData, strMime));
             } else {
