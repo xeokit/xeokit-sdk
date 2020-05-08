@@ -782,17 +782,6 @@ class StoreyViewsPlugin extends Plugin {
         return (imagePos[0] >= 0 && imagePos[0] < storeyMap.width && imagePos[1] >= 0 && imagePos[1] <= storeyMap.height);
     }
 
-    // /**
-    //  * Converts 2D position within a StoreyMap image to a 3D World-space position.
-    //  *
-    //  * @param {StoreyMap} storeyMap The StoreyMap.
-    //  * @param {Number[]} imagePos 2D pixel position within the bounds of {@link StoreyMap#imageData}.
-    //  * @param {Number[]} worldPos 3D World-space position within the storey.
-    //  */
-    // storeyMapToWorldPos(storeyMap, imagePos, worldPos) {
-    //
-    // }
-
     /**
      * Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.
      *
