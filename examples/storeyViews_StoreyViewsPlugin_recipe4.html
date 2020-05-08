@@ -88,7 +88,7 @@
     viewer.camera.perspective.fov = 55;
     viewer.camera.orbitPitch(20);
 
-    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.dollyToPointer = true;
     viewer.cameraControl.planView = true;
 
     viewer.scene.highlightMaterial.fill = false;
@@ -164,8 +164,13 @@
             const metaObject = viewer.metaScene.metaObjects[entity.id];
 
             if (canStandOnTypes[metaObject.type]) {
+
                 worldPos.set(pickResult.worldPos);
-                worldPos[1] += 7.5;
+
+                // Set camera vertical position at the mid point
+                // of the storey's vertical extents
+                const storey = storeyViewsPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"];
+                worldPos[1] = (storey.aabb[1] + storey.aabb[4]) / 2;
 
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
@@ -175,7 +180,7 @@
                     duration: 1.5
                 }, () => {
                     viewer.cameraControl.planView = false;
-                    viewer.cameraControl.firstPerson = true;
+                    viewer.cameraControl.navMode="firstPerson";
                     viewer.cameraControl.pivoting = false;
                 });
             }

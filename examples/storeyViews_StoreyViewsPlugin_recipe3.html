@@ -108,7 +108,7 @@
     viewer.camera.up = [0.10, 0.98, -0.14];
     viewer.camera.orbitYaw(180);
 
-    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.dollyToPointer = true;
     viewer.cameraControl.pivoting = true;
 
     viewer.scene.highlightMaterial.fill = false;
@@ -230,8 +230,13 @@
                 });
 
                 if (pickResult) {
+
                     worldPos.set(pickResult.worldPos);
-                    worldPos[1] += 7.5;
+
+                    // Set camera vertical position at the mid point
+                    // of the storey's vertical extents
+                    const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
+                    worldPos[1] = (storey.aabb[1] + storey.aabb[4]) / 2;
 
                     viewer.cameraFlight.flyTo({
                         eye: worldPos,
@@ -240,7 +245,7 @@
                         projection: "perspective",
                         duration: 1.5
                     }, () => {
-                        viewer.cameraControl.firstPerson = true;
+                        viewer.cameraControl.navMode="firstPerson";
                         viewer.cameraControl.pivoting = false;
                     });
                 } else {

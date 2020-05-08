@@ -105,7 +105,7 @@
 
     viewer.camera.orbitPitch(20);
 
-    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.dollyToPointer = true;
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
@@ -223,7 +223,7 @@
                     look: math.addVec3(worldPos, viewer.camera.worldForward, []),
                     duration: 1.5
                 }, () => {
-                    viewer.cameraControl.firstPerson = true;
+                    viewer.cameraControl.navMode="firstPerson";
                 });
             }
         };

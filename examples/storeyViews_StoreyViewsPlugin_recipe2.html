@@ -247,9 +247,14 @@
                 pickSurface: true
             });
             if (pickResult) {
-                const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
+
                 worldPos.set(pickResult.worldPos);
+
+                // Set camera vertical position at the mid point
+                // of the storey's vertical extents
+                const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
                 worldPos[1] = (storey.aabb[1] + storey.aabb[4]) / 2;
+
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
                     up: viewer.camera.worldUp,
