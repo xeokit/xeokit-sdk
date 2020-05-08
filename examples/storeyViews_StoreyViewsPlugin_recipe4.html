@@ -167,10 +167,14 @@
 
                 worldPos.set(pickResult.worldPos);
 
-                // Set camera vertical position at the mid point
-                // of the storey's vertical extents
+                // Set camera vertical position at the mid point of the storey's vertical
+                // extents - note how this is adapts to whichever of the X, Y or Z axis is
+                // designated the World's "up" axis
+
+                const camera = viewer.scene.camera;
+                const idx = camera.xUp ? 0 : (camera.yUp ? 1 : 2); // Find the right axis for "up"
                 const storey = storeyViewsPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"];
-                worldPos[1] = (storey.aabb[1] + storey.aabb[4]) / 2;
+                worldPos[idx] = (storey.aabb[idx] + storey.aabb[3 + idx]) / 2;
 
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
@@ -180,7 +184,7 @@
                     duration: 1.5
                 }, () => {
                     viewer.cameraControl.planView = false;
-                    viewer.cameraControl.navMode="firstPerson";
+                    viewer.cameraControl.navMode = "firstPerson";
                     viewer.cameraControl.pivoting = false;
                 });
             }
@@ -210,7 +214,7 @@
         });
         if (hit) {
 
-            viewer.scene.canvas.canvas.style.cursor="pointer";
+            viewer.scene.canvas.canvas.style.cursor = "pointer";
 
             if (!lastEntity || hit.entity.id !== lastEntity.id) {
                 if (lastEntity) {
@@ -221,7 +225,7 @@
             }
         } else {
 
-            viewer.scene.canvas.canvas.style.cursor="default";
+            viewer.scene.canvas.canvas.style.cursor = "default";
 
             if (lastEntity) {
                 lastEntity.highlighted = false;

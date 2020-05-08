@@ -233,10 +233,14 @@
 
                     worldPos.set(pickResult.worldPos);
 
-                    // Set camera vertical position at the mid point
-                    // of the storey's vertical extents
+                    // Set camera vertical position at the mid point of the storey's vertical
+                    // extents - note how this is adapts to whichever of the X, Y or Z axis is
+                    // designated the World's "up" axis
+
+                    const camera = viewer.scene.camera;
+                    const idx = camera.xUp ? 0 : (camera.yUp ? 1 : 2); // Find the right axis for "up"
                     const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
-                    worldPos[1] = (storey.aabb[1] + storey.aabb[4]) / 2;
+                    worldPos[idx] = (storey.aabb[idx] + storey.aabb[3 + idx]) / 2;
 
                     viewer.cameraFlight.flyTo({
                         eye: worldPos,
