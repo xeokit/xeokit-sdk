@@ -1,6 +1,6 @@
 {
-  "coverage": "44.04%",
-  "expectCount": 4355,
+  "coverage": "44.02%",
+  "expectCount": 4357,
   "actualCount": 1918,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -134,11 +134,11 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        489,
-        493,
-        501,
-        505,
-        330
+        535,
+        539,
+        547,
+        551,
+        376
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -1135,14 +1135,16 @@
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePanRotateDollyHandler.js": {
-      "expectCount": 6,
+      "expectCount": 8,
       "actualCount": 1,
       "undocumentLines": [
-        11,
-        13,
-        26,
-        317,
-        321
+        6,
+        8,
+        33,
+        35,
+        48,
+        348,
+        352
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePickHandler.js": {

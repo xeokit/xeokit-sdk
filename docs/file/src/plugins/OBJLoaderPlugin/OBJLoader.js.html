@@ -166,7 +166,7 @@ class OBJLoader  {
                 spinner.processes--;
 
                 core.scheduleTask(function () {
-                    modelNode.fire(&quot;loaded&quot;, true);
+                    modelNode.fire(&quot;loaded&quot;, true, false);
                 });
             });
         });
@@ -192,7 +192,7 @@ class OBJLoader  {
         }
         createMeshes(modelNode, state);
         modelNode.src = null;
-        modelNode.fire(&quot;loaded&quot;, true, true);
+        modelNode.fire(&quot;loaded&quot;, true, false);
     }
 }
 

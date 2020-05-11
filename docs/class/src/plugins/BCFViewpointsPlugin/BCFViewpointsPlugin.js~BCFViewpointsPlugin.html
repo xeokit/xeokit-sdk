@@ -134,13 +134,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber128">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber170">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber128">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber170">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -252,6 +252,33 @@ Entity&apos;s surface.</p>
      rayCast: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point (default)
 });</code>
 </code></pre>
+<h2 id="dealing-with-loaded-models-that-are-not-in-the-viewpoint">Dealing With Loaded Models That Are Not in the Viewpoint</h2><p>If, for example, we load model &quot;duplex&quot;, hide some objects, then save a BCF viewpoint with
+<code>BCFViewpointsPlugin</code>, then load another model, &quot;schependomlaan&quot;, then load the viewpoint again, then
+sometimes all of the objects in model &quot;schependomlaan&quot; become visible, along with the visible objects in the
+viewpoint, which belong to model &quot;duplex&quot;.</p>
+<p>The reason is that, when saving a BCF viewpoint, BCF logic works like the following pseudo code:</p>
+<pre><code><code class="source-code prettyprint">If numVisibleObjects &lt; numInvisibleObjects
+     save IDs of visible objects in BCF
+     exceptions = &quot;visible objects&quot;
+else
+     save IDS of invisible objects in BCF
+     exceptions = &quot;invisible objects&quot;</code>
+</code></pre><p>When loading the viewpoint again:</p>
+<pre><code><code class="source-code prettyprint">If exceptions = &quot;visible objects&quot;
+     hide all objects
+     show visible objects in BCF
+else
+     show all objects
+     hide invisible objects in BCF</code>
+</code></pre><p>When the exception is &quot;visible objects&quot;, loading the viewpoint shows all the objects in the first, which includes
+objects in &quot;schependomlaan&quot;, which can be confusing, because those were not even loaded when we first
+saved the viewpoint..</p>
+<p>To solve this, we can supply a <code>defaultInvisible</code> option to {@link }BCFViewpointsPlugin#getViewpoint}, which
+will force the plugin to save the IDs of all visible objects while making invisible objects the exception.</p>
+<p>That way, when we load the viewpoint again, after loading model &quot;schependomlaan&quot;, the plugin will hide all objects
+in the scene first (which will include objects belonging to model &quot;schependomlaan&quot;), then make the objects in the
+viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
+<p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultVisible">Run an example</a>]</p>
 </div>
   
 
@@ -717,7 +744,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber180">source</a></span></span>
     </span>
   </h3>
 
@@ -810,7 +837,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -870,7 +897,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -933,7 +960,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber484">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber530">source</a></span></span>
     </span>
   </h3>
 
@@ -977,7 +1004,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -1036,6 +1063,17 @@ direction vector. Therefore, we save <code>camera_direction</code> as the vector
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Indicates whether the snapshot should be included in the viewpoint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.defaultInvisible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When <code>true</code>, will save the default visibility of all objects
+as <code>false</code>. This means that when we load the viewpoint again, and there are additional models loaded that
+were not saved in the viewpoint, those models will be hidden when we load the viewpoint, and that only the
+objects in the viewpoint will be visible.</p>
 </td>
     </tr>
 </tbody>
@@ -1157,7 +1195,7 @@ const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber358">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 

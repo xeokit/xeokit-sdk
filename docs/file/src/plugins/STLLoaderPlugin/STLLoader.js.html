@@ -153,7 +153,7 @@ class STLLoader {
         load(plugin, modelNode, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
-                    modelNode.fire(&quot;loaded&quot;, true, true);
+                    modelNode.fire(&quot;loaded&quot;, true, false);
                 });
                 if (ok) {
                     ok();

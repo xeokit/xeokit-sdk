@@ -229,7 +229,7 @@ class XML3DLoader {
                 if (ok) {
                     ok();
                 }
-                modelNode.fire(&quot;loaded&quot;, true, true);
+                modelNode.fire(&quot;loaded&quot;, true, false);
             },
             function (msg) {
                 spinner.processes--;

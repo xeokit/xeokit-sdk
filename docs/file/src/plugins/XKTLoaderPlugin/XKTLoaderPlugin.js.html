@@ -786,7 +786,7 @@ class XKTLoaderPlugin extends Plugin {
 
         performanceModel.scene.once(&quot;tick&quot;, () =&gt; {
             performanceModel.scene.fire(&quot;modelLoaded&quot;, performanceModel.id); // FIXME: Assumes listeners know order of these two events
-            performanceModel.fire(&quot;loaded&quot;, true, true);
+            performanceModel.fire(&quot;loaded&quot;, true, false); // Don&apos;t forget the event, for late subscribers
         });
     }
 }

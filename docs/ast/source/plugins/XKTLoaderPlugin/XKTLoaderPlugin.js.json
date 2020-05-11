@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 27128,
+  "end": 27177,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 27128,
+    "end": 27177,
     "loc": {
       "start": {
         "line": 1,
@@ -1630,7 +1630,7 @@
       {
         "type": "Identifier",
         "start": 13026,
-        "end": 27101,
+        "end": 27150,
         "loc": {
           "start": {
             "line": 326,
@@ -1679,7 +1679,7 @@
         "body": {
           "type": "ClassBody",
           "start": 13063,
-          "end": 27101,
+          "end": 27150,
           "loc": {
             "start": {
               "line": 326,
@@ -12926,7 +12926,7 @@
             {
               "type": "ClassMethod",
               "start": 25821,
-              "end": 27099,
+              "end": 27148,
               "loc": {
                 "start": {
                   "line": 624,
@@ -13034,7 +13034,7 @@
               "body": {
                 "type": "BlockStatement",
                 "start": 25881,
-                "end": 27099,
+                "end": 27148,
                 "loc": {
                   "start": {
                     "line": 624,
@@ -15311,7 +15311,7 @@
                   {
                     "type": "ExpressionStatement",
                     "start": 26845,
-                    "end": 27093,
+                    "end": 27142,
                     "loc": {
                       "start": {
                         "line": 651,
@@ -15325,7 +15325,7 @@
                     "expression": {
                       "type": "CallExpression",
                       "start": 26845,
-                      "end": 27092,
+                      "end": 27141,
                       "loc": {
                         "start": {
                           "line": 651,
@@ -15443,7 +15443,7 @@
                         {
                           "type": "ArrowFunctionExpression",
                           "start": 26881,
-                          "end": 27091,
+                          "end": 27140,
                           "loc": {
                             "start": {
                               "line": 651,
@@ -15462,7 +15462,7 @@
                           "body": {
                             "type": "BlockStatement",
                             "start": 26887,
-                            "end": 27091,
+                            "end": 27140,
                             "loc": {
                               "start": {
                                 "line": 651,
@@ -15680,7 +15680,7 @@
                               {
                                 "type": "ExpressionStatement",
                                 "start": 27037,
-                                "end": 27081,
+                                "end": 27082,
                                 "loc": {
                                   "start": {
                                     "line": 653,
@@ -15688,13 +15688,13 @@
                                   },
                                   "end": {
                                     "line": 653,
-                                    "column": 56
+                                    "column": 57
                                   }
                                 },
                                 "expression": {
                                   "type": "CallExpression",
                                   "start": 27037,
-                                  "end": 27080,
+                                  "end": 27081,
                                   "loc": {
                                     "start": {
                                       "line": 653,
@@ -15702,7 +15702,7 @@
                                     },
                                     "end": {
                                       "line": 653,
-                                      "column": 55
+                                      "column": 56
                                     }
                                   },
                                   "callee": {
@@ -15797,7 +15797,7 @@
                                     {
                                       "type": "BooleanLiteral",
                                       "start": 27075,
-                                      "end": 27079,
+                                      "end": 27080,
                                       "loc": {
                                         "start": {
                                           "line": 653,
@@ -15805,10 +15805,10 @@
                                         },
                                         "end": {
                                           "line": 653,
-                                          "column": 54
+                                          "column": 55
                                         }
                                       },
-                                      "value": true
+                                      "value": false
                                     }
                                   ],
                                   "leadingComments": null
@@ -15830,11 +15830,47 @@
                                       }
                                     }
                                   }
+                                ],
+                                "trailingComments": [
+                                  {
+                                    "type": "CommentLine",
+                                    "value": " Don't forget the event, for late subscribers",
+                                    "start": 27083,
+                                    "end": 27130,
+                                    "loc": {
+                                      "start": {
+                                        "line": 653,
+                                        "column": 58
+                                      },
+                                      "end": {
+                                        "line": 653,
+                                        "column": 105
+                                      }
+                                    }
+                                  }
                                 ]
                               }
                             ],
                             "directives": []
-                          }
+                          },
+                          "trailingComments": [
+                            {
+                              "type": "CommentLine",
+                              "value": " Don't forget the event, for late subscribers",
+                              "start": 27083,
+                              "end": 27130,
+                              "loc": {
+                                "start": {
+                                  "line": 653,
+                                  "column": 58
+                                },
+                                "end": {
+                                  "line": 653,
+                                  "column": 105
+                                }
+                              }
+                            }
+                          ]
                         }
                       ]
                     }
@@ -15851,8 +15887,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 27103,
-        "end": 27127,
+        "start": 27152,
+        "end": 27176,
         "loc": {
           "start": {
             "line": 658,
@@ -15867,8 +15903,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 27111,
-            "end": 27126,
+            "start": 27160,
+            "end": 27175,
             "loc": {
               "start": {
                 "line": 658,
@@ -15881,8 +15917,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 27111,
-              "end": 27126,
+              "start": 27160,
+              "end": 27175,
               "loc": {
                 "start": {
                   "line": 658,
@@ -15898,8 +15934,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 27111,
-              "end": 27126,
+              "start": 27160,
+              "end": 27175,
               "loc": {
                 "start": {
                   "line": 658,
@@ -15919,8 +15955,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 27103,
-        "end": 27127,
+        "start": 27152,
+        "end": 27176,
         "loc": {
           "start": {
             "line": 658,
@@ -15934,7 +15970,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 13026,
-          "end": 27101,
+          "end": 27150,
           "loc": {
             "start": {
               "line": 326,
@@ -15983,7 +16019,7 @@
           "body": {
             "type": "ClassBody",
             "start": 13063,
-            "end": 27101,
+            "end": 27150,
             "loc": {
               "start": {
                 "line": 326,
@@ -27230,7 +27266,7 @@
               {
                 "type": "ClassMethod",
                 "start": 25821,
-                "end": 27099,
+                "end": 27148,
                 "loc": {
                   "start": {
                     "line": 624,
@@ -27338,7 +27374,7 @@
                 "body": {
                   "type": "BlockStatement",
                   "start": 25881,
-                  "end": 27099,
+                  "end": 27148,
                   "loc": {
                     "start": {
                       "line": 624,
@@ -29615,7 +29651,7 @@
                     {
                       "type": "ExpressionStatement",
                       "start": 26845,
-                      "end": 27093,
+                      "end": 27142,
                       "loc": {
                         "start": {
                           "line": 651,
@@ -29629,7 +29665,7 @@
                       "expression": {
                         "type": "CallExpression",
                         "start": 26845,
-                        "end": 27092,
+                        "end": 27141,
                         "loc": {
                           "start": {
                             "line": 651,
@@ -29747,7 +29783,7 @@
                           {
                             "type": "ArrowFunctionExpression",
                             "start": 26881,
-                            "end": 27091,
+                            "end": 27140,
                             "loc": {
                               "start": {
                                 "line": 651,
@@ -29766,7 +29802,7 @@
                             "body": {
                               "type": "BlockStatement",
                               "start": 26887,
-                              "end": 27091,
+                              "end": 27140,
                               "loc": {
                                 "start": {
                                   "line": 651,
@@ -29984,7 +30020,7 @@
                                 {
                                   "type": "ExpressionStatement",
                                   "start": 27037,
-                                  "end": 27081,
+                                  "end": 27082,
                                   "loc": {
                                     "start": {
                                       "line": 653,
@@ -29992,13 +30028,13 @@
                                     },
                                     "end": {
                                       "line": 653,
-                                      "column": 56
+                                      "column": 57
                                     }
                                   },
                                   "expression": {
                                     "type": "CallExpression",
                                     "start": 27037,
-                                    "end": 27080,
+                                    "end": 27081,
                                     "loc": {
                                       "start": {
                                         "line": 653,
@@ -30006,7 +30042,7 @@
                                       },
                                       "end": {
                                         "line": 653,
-                                        "column": 55
+                                        "column": 56
                                       }
                                     },
                                     "callee": {
@@ -30101,7 +30137,7 @@
                                       {
                                         "type": "BooleanLiteral",
                                         "start": 27075,
-                                        "end": 27079,
+                                        "end": 27080,
                                         "loc": {
                                           "start": {
                                             "line": 653,
@@ -30109,10 +30145,10 @@
                                           },
                                           "end": {
                                             "line": 653,
-                                            "column": 54
+                                            "column": 55
                                           }
                                         },
-                                        "value": true
+                                        "value": false
                                       }
                                     ],
                                     "leadingComments": null
@@ -30134,11 +30170,47 @@
                                         }
                                       }
                                     }
+                                  ],
+                                  "trailingComments": [
+                                    {
+                                      "type": "CommentLine",
+                                      "value": " Don't forget the event, for late subscribers",
+                                      "start": 27083,
+                                      "end": 27130,
+                                      "loc": {
+                                        "start": {
+                                          "line": 653,
+                                          "column": 58
+                                        },
+                                        "end": {
+                                          "line": 653,
+                                          "column": 105
+                                        }
+                                      }
+                                    }
                                   ]
                                 }
                               ],
                               "directives": []
-                            }
+                            },
+                            "trailingComments": [
+                              {
+                                "type": "CommentLine",
+                                "value": " Don't forget the event, for late subscribers",
+                                "start": 27083,
+                                "end": 27130,
+                                "loc": {
+                                  "start": {
+                                    "line": 653,
+                                    "column": 58
+                                  },
+                                  "end": {
+                                    "line": 653,
+                                    "column": 105
+                                  }
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
@@ -30447,6 +30519,22 @@
         "end": {
           "line": 652,
           "column": 135
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Don't forget the event, for late subscribers",
+      "start": 27083,
+      "end": 27130,
+      "loc": {
+        "start": {
+          "line": 653,
+          "column": 58
+        },
+        "end": {
+          "line": 653,
+          "column": 105
         }
       }
     }
@@ -61558,8 +61646,8 @@
     },
     {
       "type": {
-        "label": "true",
-        "keyword": "true",
+        "label": "false",
+        "keyword": "false",
         "beforeExpr": false,
         "startsExpr": true,
         "rightAssociative": false,
@@ -61570,9 +61658,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "true",
+      "value": "false",
       "start": 27075,
-      "end": 27079,
+      "end": 27080,
       "loc": {
         "start": {
           "line": 653,
@@ -61580,7 +61668,7 @@
         },
         "end": {
           "line": 653,
-          "column": 54
+          "column": 55
         }
       }
     },
@@ -61595,32 +61683,6 @@
         "prefix": false,
         "postfix": false,
         "binop": null
-      },
-      "start": 27079,
-      "end": 27080,
-      "loc": {
-        "start": {
-          "line": 653,
-          "column": 54
-        },
-        "end": {
-          "line": 653,
-          "column": 55
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
       },
       "start": 27080,
       "end": 27081,
@@ -61637,6 +61699,48 @@
     },
     {
       "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 27081,
+      "end": 27082,
+      "loc": {
+        "start": {
+          "line": 653,
+          "column": 56
+        },
+        "end": {
+          "line": 653,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Don't forget the event, for late subscribers",
+      "start": 27083,
+      "end": 27130,
+      "loc": {
+        "start": {
+          "line": 653,
+          "column": 58
+        },
+        "end": {
+          "line": 653,
+          "column": 105
+        }
+      }
+    },
+    {
+      "type": {
         "label": "}",
         "beforeExpr": false,
         "startsExpr": false,
@@ -61647,8 +61751,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27090,
-      "end": 27091,
+      "start": 27139,
+      "end": 27140,
       "loc": {
         "start": {
           "line": 654,
@@ -61672,8 +61776,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27091,
-      "end": 27092,
+      "start": 27140,
+      "end": 27141,
       "loc": {
         "start": {
           "line": 654,
@@ -61698,8 +61802,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 27092,
-      "end": 27093,
+      "start": 27141,
+      "end": 27142,
       "loc": {
         "start": {
           "line": 654,
@@ -61723,8 +61827,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27098,
-      "end": 27099,
+      "start": 27147,
+      "end": 27148,
       "loc": {
         "start": {
           "line": 655,
@@ -61748,8 +61852,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27100,
-      "end": 27101,
+      "start": 27149,
+      "end": 27150,
       "loc": {
         "start": {
           "line": 656,
@@ -61776,8 +61880,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 27103,
-      "end": 27109,
+      "start": 27152,
+      "end": 27158,
       "loc": {
         "start": {
           "line": 658,
@@ -61801,8 +61905,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27110,
-      "end": 27111,
+      "start": 27159,
+      "end": 27160,
       "loc": {
         "start": {
           "line": 658,
@@ -61827,8 +61931,8 @@
         "binop": null
       },
       "value": "XKTLoaderPlugin",
-      "start": 27111,
-      "end": 27126,
+      "start": 27160,
+      "end": 27175,
       "loc": {
         "start": {
           "line": 658,
@@ -61852,8 +61956,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 27126,
-      "end": 27127,
+      "start": 27175,
+      "end": 27176,
       "loc": {
         "start": {
           "line": 658,
@@ -61878,8 +61982,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 27128,
-      "end": 27128,
+      "start": 27177,
+      "end": 27177,
       "loc": {
         "start": {
           "line": 659,

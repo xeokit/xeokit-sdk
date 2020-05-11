@@ -495,36 +495,6 @@ new Mesh(viewer.scene, {
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the 2D scaling vector that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
-<p>Default value is <code>[1, 1]</code>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -565,13 +535,14 @@ new Mesh(viewer.scene, {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-src">src</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets path to the image file this Texture from, if any.</p>
+        <div data-ice="description"><p>Gets the 2D scaling vector that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+<p>Default value is <code>[1, 1]</code>.</p>
 </div>
       </div>
     </td>
@@ -623,14 +594,13 @@ new Mesh(viewer.scene, {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-translate">translate</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-src">src</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
-<p>Default value is <code>[0, 0]</code>.</p>
+        <div data-ice="description"><p>Gets path to the image file this Texture from, if any.</p>
 </div>
       </div>
     </td>
@@ -660,6 +630,36 @@ new Mesh(viewer.scene, {
         
         
         <div data-ice="description"><p>Sets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+<p>Default value is <code>[0, 0]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html#instance-get-translate">translate</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
 <p>Default value is <code>[0, 0]</code>.</p>
 </div>
       </div>
@@ -1854,51 +1854,6 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-scale">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber367">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the 2D scaling vector that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
-<p>Default value is <code>[1, 1]</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-scale">
     <span class="access" data-ice="access">public</span>
     
@@ -1944,26 +1899,26 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-src">
+  <h3 data-ice="anchor" id="instance-get-scale">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">src</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets path to the image file this Texture from, if any.</p>
-<p>Returns null if not set.</p>
+  <div data-ice="description"><p>Gets the 2D scaling vector that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+<p>Default value is <code>[1, 1]</code>.</p>
 </div>
 
   
@@ -2034,26 +1989,26 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-translate">
+  <h3 data-ice="anchor" id="instance-get-src">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">translate</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">src</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber343">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
-<p>Default value is <code>[0, 0]</code>.</p>
+  <div data-ice="description"><p>Gets path to the image file this Texture from, if any.</p>
+<p>Returns null if not set.</p>
 </div>
 
   
@@ -2098,6 +2053,51 @@ average of those two values.</p>
   
   
   <div data-ice="description"><p>Sets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+<p>Default value is <code>[0, 0]</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-translate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">translate</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber343">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the 2D translation vector added to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
 <p>Default value is <code>[0, 0]</code>.</p>
 </div>
 
