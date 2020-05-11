@@ -27,7 +27,7 @@ class GLTFQualityLoader {
                 spinner.processes--;
                 core.scheduleTask(function () {
                     modelNode.scene.fire("modelLoaded", modelNode.id); // FIXME: Assumes listeners know order of these two events
-                    modelNode.fire("loaded", true, true);
+                    modelNode.fire("loaded", true, false);
                 });
                 if (ok) {
                     ok();
@@ -50,7 +50,7 @@ class GLTFQualityLoader {
         parseGLTF(plugin, gltf, "", options, modelNode, function () {
                 spinner.processes--;
                 modelNode.scene.fire("modelLoaded", modelNode.id); // FIXME: Assumes listeners know order of these two events
-                modelNode.fire("loaded", true, true);
+                modelNode.fire("loaded", true, false);
                 if (ok) {
                     ok();
                 }

@@ -133,7 +133,7 @@ class CubeTexture extends Component {
                          * @event loaded
                          * @param value {HTML Image} The value of the {@link CubeTexture/src} property
                          */
-                        self.fire("loaded", self._src);
+                        self.fire("loaded", self._src, false);
                     }
                 };
             })();

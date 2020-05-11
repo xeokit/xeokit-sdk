@@ -387,7 +387,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         scene.canvas.spinner.processes--;
                         viewer.scene._registerModel(performanceModel);
                         performanceModel.finalize();
-                        performanceModel.fire("loaded");
+                        performanceModel.fire("loaded", true, false);
                     }
                 });
 

@@ -93,7 +93,7 @@ class XML3DLoader {
                 if (ok) {
                     ok();
                 }
-                modelNode.fire("loaded", true, true);
+                modelNode.fire("loaded", true, false);
             },
             function (msg) {
                 spinner.processes--;

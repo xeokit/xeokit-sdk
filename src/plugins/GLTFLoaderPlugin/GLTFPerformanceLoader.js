@@ -17,7 +17,7 @@ class GLTFPerformanceLoader {
         loadGLTF(plugin, performanceModel, src, options, function () {
                 core.scheduleTask(function () {
                     performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-                    performanceModel.fire("loaded", true, true);
+                    performanceModel.fire("loaded", true, false);
                 });
                 if (ok) {
                     ok();
@@ -36,7 +36,7 @@ class GLTFPerformanceLoader {
         options = options || {};
         parseGLTF(plugin, gltf, "", options, performanceModel, function () {
                 performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-                performanceModel.fire("loaded", true, true);
+                performanceModel.fire("loaded", true, false);
                 if (ok) {
                     ok();
                 }
