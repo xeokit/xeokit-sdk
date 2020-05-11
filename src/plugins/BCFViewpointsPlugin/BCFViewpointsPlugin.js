@@ -163,7 +163,7 @@ const tempVec3 = math.vec3();
  * in the scene first (which will include objects belonging to model "schependomlaan"), then make the objects in the
  * viewpoint visible (which will only be those of object "duplex").
  *
- * [[Run an example that shows this option](http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultVisible)]
+ * [[Run an example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultVisible)]
  *
  * @class BCFViewpointsPlugin
  */
