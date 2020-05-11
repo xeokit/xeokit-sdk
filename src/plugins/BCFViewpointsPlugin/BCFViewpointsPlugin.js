@@ -156,7 +156,7 @@ const tempVec3 = math.vec3();
  * objects in "schependomlaan", which can be confusing, because those were not even loaded when we first
  * saved the viewpoint..
  *
- * To solve this, we can supply a ````defaultInvisible```` option to {@link }BCFViewpointsPlugin#getViewpoint}, which
+ * To solve this, we can supply a ````defaultInvisible```` option to {@link BCFViewpointsPlugin#getViewpoint}, which
  * will force the plugin to save the IDs of all visible objects while making invisible objects the exception.
  *
  * That way, when we load the viewpoint again, after loading model "schependomlaan", the plugin will hide all objects
