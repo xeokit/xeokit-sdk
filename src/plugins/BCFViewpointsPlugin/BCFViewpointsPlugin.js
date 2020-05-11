@@ -123,6 +123,48 @@ const tempVec3 = math.vec3();
  * });
  * ````
  *
+ * ## Dealing With Loaded Models That Are Not in the Viewpoint
+ *
+ * If, for example, we load model "duplex", hide some objects, then save a BCF viewpoint with
+ * ````BCFViewpointsPlugin````, then load another model, "schependomlaan", then load the viewpoint again, then
+ * sometimes all of the objects in model "schependomlaan" become visible, along with the visible objects in the
+ * viewpoint, which belong to model "duplex".
+ *
+ * The reason is that, when saving a BCF viewpoint, BCF logic works like the following pseudo code:
+ *
+ * ````
+ * If numVisibleObjects < numInvisibleObjects
+ *      save IDs of visible objects in BCF
+ *      exceptions = "visible objects"
+ * else
+ *      save IDS of invisible objects in BCF
+ *      exceptions = "invisible objects"
+ * ````
+ *
+ * When loading the viewpoint again:
+ *
+ * ````
+ * If exceptions = "visible objects"
+ *      hide all objects
+ *      show visible objects in BCF
+ * else
+ *      show all objects
+ *      hide invisible objects in BCF
+ * ````
+ *
+ * When the exception is "visible objects", loading the viewpoint shows all the objects in the first, which includes
+ * objects in "schependomlaan", which can be confusing, because those were not even loaded when we first
+ * saved the viewpoint..
+ *
+ * To solve this, we can supply a ````defaultInvisible```` option to {@link }BCFViewpointsPlugin#getViewpoint}, which
+ * will force the plugin to save the IDs of all visible objects while making invisible objects the exception.
+ *
+ * That way, when we load the viewpoint again, after loading model "schependomlaan", the plugin will hide all objects
+ * in the scene first (which will include objects belonging to model "schependomlaan"), then make the objects in the
+ * viewpoint visible (which will only be those of object "duplex").
+ *
+ * [[Run an example that shows this option](http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultVisible)]
+ *
  * @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {
@@ -165,6 +207,10 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.openingsVisible=false] Indicates whether ````IfcOpening```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.spaceBoundariesVisible=false] Indicates whether the boundaries of ````IfcSpace```` types should be visible in the viewpoint.
      * @param {Boolean} [options.snapshot=true] Indicates whether the snapshot should be included in the viewpoint.
+     * @param {Boolean} [options.defaultInvisible=true] When ````true````, will save the default visibility of all objects
+     * as ````false````. This means that when we load the viewpoint again, and there are additional models loaded that
+     * were not saved in the viewpoint, those models will be hidden when we load the viewpoint, and that only the
+     * objects in the viewpoint will be visible.
      * @returns {*} BCF JSON viewpoint object
      * @example
      *
@@ -307,7 +353,7 @@ class BCFViewpointsPlugin extends Plugin {
         const invisibleObjectIds = objectIds.filter(id => !visibleObjects[id]);
         const selectedObjectIds = scene.selectedObjectIds;
 
-        if (visibleObjectIds.length < invisibleObjectIds.length) {
+        if (options.defaultInvisible || visibleObjectIds.length < invisibleObjectIds.length) {
             bcfViewpoint.components.visibility.exceptions = visibleObjectIds.map(el => this._objectIdToComponent(el));
             bcfViewpoint.components.visibility.default_visibility = false;
         } else {
