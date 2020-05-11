@@ -422,7 +422,6 @@ class Canvas extends Component {
         // Memory leak avoidance
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
         this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);
-        this.canvas = null;
         this.gl = null;
         super.destroy();
     }
