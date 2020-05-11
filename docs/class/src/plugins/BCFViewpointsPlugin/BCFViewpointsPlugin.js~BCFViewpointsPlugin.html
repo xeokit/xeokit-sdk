@@ -273,7 +273,7 @@ else
 </code></pre><p>When the exception is &quot;visible objects&quot;, loading the viewpoint shows all the objects in the first, which includes
 objects in &quot;schependomlaan&quot;, which can be confusing, because those were not even loaded when we first
 saved the viewpoint..</p>
-<p>To solve this, we can supply a <code>defaultInvisible</code> option to {@link }BCFViewpointsPlugin#getViewpoint}, which
+<p>To solve this, we can supply a <code>defaultInvisible</code> option to <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>, which
 will force the plugin to save the IDs of all visible objects while making invisible objects the exception.</p>
 <p>That way, when we load the viewpoint again, after loading model &quot;schependomlaan&quot;, the plugin will hide all objects
 in the scene first (which will include objects belonging to model &quot;schependomlaan&quot;), then make the objects in the
