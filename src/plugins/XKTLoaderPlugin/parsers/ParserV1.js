@@ -96,7 +96,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                 continue;
             }
 
-            const props = options.objectDefaults ? options.objectDefaults[metaObject.type || "DEFAULT"] : null;
+            const props = options.objectDefaults ? options.objectDefaults[metaObject.type] || options.objectDefaults["DEFAULT"] : null;
 
             if (props) {
                 if (props.visible === false) {
