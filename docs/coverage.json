@@ -1,7 +1,7 @@
 {
-  "coverage": "44.02%",
-  "expectCount": 4357,
-  "actualCount": 1918,
+  "coverage": "44.01%",
+  "expectCount": 4364,
+  "actualCount": 1921,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -635,7 +635,7 @@
         1133,
         1241,
         1246,
-        1270
+        1268
       ]
     },
     "src/plugins/SectionPlanesPlugin/Overview.js": {
@@ -977,10 +977,12 @@
       "undocumentLines": []
     },
     "src/viewer/Viewer.js": {
-      "expectCount": 23,
-      "actualCount": 22,
+      "expectCount": 26,
+      "actualCount": 23,
       "undocumentLines": [
-        122
+        122,
+        249,
+        252
       ]
     },
     "src/viewer/metadata/IFCObjectDefaults.js": {
@@ -1010,28 +1012,30 @@
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
-      "expectCount": 52,
-      "actualCount": 44,
+      "expectCount": 54,
+      "actualCount": 46,
       "undocumentLines": [
-        423,
-        465,
-        482,
-        495,
-        507,
-        519,
-        631,
-        1130
+        438,
+        480,
+        497,
+        510,
+        522,
+        534,
+        646,
+        1193
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
-      "expectCount": 6,
+      "expectCount": 8,
       "actualCount": 1,
       "undocumentLines": [
         3,
-        12,
+        4,
+        5,
         14,
-        18,
-        236
+        16,
+        24,
+        303
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1059,7 +1063,7 @@
         51,
         58,
         65,
-        137
+        130
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PickController.js": {
@@ -1119,19 +1123,19 @@
         6,
         8,
         45,
-        195,
-        198
+        198,
+        201
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MouseMiscHandler.js": {
       "expectCount": 6,
       "actualCount": 1,
       "undocumentLines": [
-        45,
+        55,
         6,
         8,
-        31,
-        34
+        40,
+        43
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePanRotateDollyHandler.js": {
@@ -1142,9 +1146,9 @@
         8,
         33,
         35,
-        48,
-        348,
-        352
+        45,
+        335,
+        339
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePickHandler.js": {
@@ -1166,8 +1170,8 @@
       "undocumentLines": [
         8,
         10,
-        157,
-        160
+        193,
+        196
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/TouchPickHandler.js": {

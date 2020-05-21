@@ -90,7 +90,7 @@ class KeyboardPanRotateDollyHandler {
             }
 
 
-            const elapsed = e.deltaTime;
+            const elapsedSecs = (e.deltaTime / 1000.0);
 
             //-------------------------------------------------------------------------------------------------
             // Keyboard rotation
@@ -103,11 +103,11 @@ class KeyboardPanRotateDollyHandler {
                 const upArrowKey = keyDown[input.KEY_UP_ARROW];
                 const downArrowKey = keyDown[input.KEY_DOWN_ARROW];
 
-                const orbitRate = elapsed * configs.keyboardOrbitRate * .05;
+                const orbitRate = elapsedSecs * configs.keyboardRotationRate;
 
                 if (leftArrowKey || rightArrowKey || upArrowKey || downArrowKey) {
 
-                    if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                    if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                         controllers.pivotController.startPivot();
                     }
                     if (rightArrowKey) {
@@ -144,7 +144,7 @@ class KeyboardPanRotateDollyHandler {
                         updates.rotateDeltaY -= orbitRate;
                     }
 
-                    if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                    if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                         controllers.pivotController.startPivot();
                     }
                 }
@@ -160,13 +160,13 @@ class KeyboardPanRotateDollyHandler {
                 const subtractKey = keyDown[input.KEY_SUBTRACT];
 
                 if (addKey || subtractKey) {
-                    if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                    if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                         controllers.pivotController.startPivot();
                     }
                     if (subtractKey) {
-                        updates.dollyDelta = +1;
+                        updates.dollyDelta = +10;
                     } else if (addKey) {
-                        updates.dollyDelta = -1;
+                        updates.dollyDelta = -10;
                     }
                 }
             }
@@ -178,7 +178,7 @@ class KeyboardPanRotateDollyHandler {
             let panUpKey;
             let panDownKey;
 
-            const panRate = (keyDown[input.KEY_ALT] ? 0.2 : 0.8) * configs.keyboardPanRate; // ALT for slower pan rate
+            const panRate = (keyDown[input.KEY_ALT] ? 0.3 : 1.0) * elapsedSecs * configs.keyboardPanRate; // ALT for slower pan rate
 
             if (configs.keyboardLayout === &apos;azerty&apos;) {
 
@@ -201,29 +201,29 @@ class KeyboardPanRotateDollyHandler {
 
             if (panForwardKey || panBackKey || panLeftKey || panRightKey || panUpKey || panDownKey) {
 
-                if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                     controllers.pivotController.startPivot();
                 }
 
                 if (panDownKey) {
-                    updates.panDeltaY = panRate;
+                    updates.panDeltaY += panRate;
 
                 } else if (panUpKey) {
-                    updates.panDeltaY = -panRate;
+                    updates.panDeltaY += -panRate;
                 }
 
                 if (panRightKey) {
-                    updates.panDeltaX = -panRate;
+                    updates.panDeltaX += -panRate;
 
                 } else if (panLeftKey) {
-                    updates.panDeltaX = panRate;
+                    updates.panDeltaX += panRate;
                 }
 
                 if (panBackKey) {
-                    updates.panDeltaZ = panRate;
+                    updates.panDeltaZ += panRate;
 
                 } else if (panForwardKey) {
-                    updates.panDeltaZ = -panRate;
+                    updates.panDeltaZ += -panRate;
                 }
             }
         });
@@ -233,7 +233,11 @@ class KeyboardPanRotateDollyHandler {
     }
 
     destroy() {
+
         this._scene.off(this._onTick);
+
+        document.removeEventListener(&quot;keydown&quot;, this._documentKeyDownHandler);
+        document.removeEventListener(&quot;keyup&quot;, this._documentKeyUpHandler);
     }
 }
 

@@ -338,7 +338,7 @@ class CameraControl extends Component {
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
         this.pointerEnabled = true;
-        this.dollyRate = cfg.dollyRate;
+        this.keyboardDollyRate = cfg.keyboardDollyRate;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -660,17 +660,17 @@ class CameraControl extends Component {
 
     /**
      * sets the current dolly speed. This is the number of units the camera moves per second while moving forwards or backwards.
-     * @param {Number} dollyRate The new dolly speed.
+     * @param {Number} keyboardDollyRate The new dolly speed.
      */
-    set dollyRate(dollyRate) {
-        this._dollyRate = dollyRate || 1.0;
+    set keyboardDollyRate(keyboardDollyRate) {
+        this._dollyRate = keyboardDollyRate || 1.0;
     }
 
     /**
      * Returns the current dolly speed.
      * @returns {Number} The current dolly speed.
      */
-    get dollyRate() {
+    get keyboardDollyRate() {
         return this._dollyRate;
     }
 
@@ -697,7 +697,7 @@ class CameraControl extends Component {
         const canvas = this.scene.canvas.canvas;
         let over = false;
         const mouseOrbitRate = 0.4;
-        const mousePanRate = 0.4;
+        const dragPanRate = 0.4;
         const mouseZoomRate = 0.8;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
@@ -1328,8 +1328,8 @@ class CameraControl extends Component {
 
                         // Panning
                         if (shiftDown || (!self._panRightClick &amp;&amp; mouseDownMiddle) || (self._panRightClick &amp;&amp; mouseDownRight)) {
-                            panVx = xDelta * mousePanRate;
-                            panVy = yDelta * mousePanRate;
+                            panVx = xDelta * dragPanRate;
+                            panVy = yDelta * dragPanRate;
                         }
 
                     } else {

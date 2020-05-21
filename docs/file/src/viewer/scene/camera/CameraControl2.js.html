@@ -672,7 +672,7 @@ class CameraControl extends Component {
         let over = false;
         let mouseOrbitRateX = 15;
         let mouseOrbitRateY = 15;
-        const mousePanRate = 0.02;
+        const dragPanRate = 0.02;
         const mouseZoomRate = 1.0;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
@@ -1281,8 +1281,8 @@ class CameraControl extends Component {
 
                         // Panning
                         if (shiftDown || (self.panRightClick &amp;&amp; mouseDownRight)) {
-                            panVx = xDelta * mousePanRate;
-                            panVy = yDelta * mousePanRate;
+                            panVx = xDelta * dragPanRate;
+                            panVy = yDelta * dragPanRate;
                         }
 
                     } else {

@@ -151,7 +151,7 @@ class MousePickHandler {
             states.mouseDownCursorX = states.mouseCanvasPos[0];
             states.mouseDownCursorY = states.mouseCanvasPos[1];
 
-            if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+            if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
 
                 pickController.pickCursorPos = states.mouseCanvasPos;
                 pickController.schedulePickSurface = true;
@@ -236,7 +236,7 @@ class MousePickHandler {
 
                             cameraControl.fire(&quot;pickedSurface&quot;, pickController.pickResult, true);
 
-                            if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                            if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                                 controllers.pivotController.startPivot(pickController.pickResult.worldPos);
                                 controllers.pivotController.showPivot();
                             }
@@ -273,7 +273,7 @@ class MousePickHandler {
 
                         flyCameraTo(pickController.pickResult);
 
-                        if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                        if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
 
                             const pickedEntityAABB = pickController.pickResult.entity.aabb;
                             const pickedEntityCenterPos = math.getAABB3Center(pickedEntityAABB);
@@ -290,7 +290,7 @@ class MousePickHandler {
 
                         flyCameraTo();
 
-                        if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+                        if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
 
                             const sceneAABB = scene.aabb;
                             const sceneCenterPos = math.getAABB3Center(sceneAABB);
@@ -317,9 +317,9 @@ class MousePickHandler {
 
     destroy() {
         const canvas = this._scene.canvas.canvas;
-        canvas.addEventListener(&quot;mousemove&quot;, this._canvasMouseMoveHandler);
-        canvas.addEventListener(&quot;mousedown&quot;, this._canvasMouseDownHandler);
-        canvas.addEventListener(&quot;mouseup&quot;, this._canvasMouseUpHandler);
+        canvas.removeEventListener(&quot;mousemove&quot;, this._canvasMouseMoveHandler);
+        canvas.removeEventListener(&quot;mousedown&quot;, this._canvasMouseDownHandler);
+        canvas.removeEventListener(&quot;mouseup&quot;, this._canvasMouseUpHandler);
         if (this._timeout) {
             window.clearTimeout(this._timeout);
             this._timeout = null;

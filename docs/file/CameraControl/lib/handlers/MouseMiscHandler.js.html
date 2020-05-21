@@ -46,6 +46,8 @@ class MouseMiscHandler {
 
         const canvas = this._scene.canvas.canvas;
 
+        let down = false;
+
         canvas.addEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler = () =&gt; {
             states.mouseover = true;
         });
@@ -53,6 +55,7 @@ class MouseMiscHandler {
         canvas.addEventListener(&quot;mouseleave&quot;, this._mouseLeaveHandler = () =&gt; {
             states.mouseover = false;
             canvas.style.cursor = &quot;default&quot;;
+        down = false;
         });
 
         canvas.addEventListener(&quot;mousemove&quot;, this._mouseMoveHandler = (e) =&gt; {
@@ -60,8 +63,19 @@ class MouseMiscHandler {
         });
 
         canvas.addEventListener(&quot;mousedown&quot;, this._mouseDownHandler = (e) =&gt; {
+            if (!(configs.active &amp;&amp; configs.pointerEnabled)) {
+                return;
+            }
+            down = true;
             getCanvasPosFromEvent(e, states.mouseCanvasPos);
             states.mouseover = true;
+        });
+
+        canvas.addEventListener(&quot;mouseup&quot;, this._mouseUpHandler = (e) =&gt; {
+            if (!(configs.active &amp;&amp; configs.pointerEnabled)) {
+                return;
+            }
+            down = false;
         });
     }
 
@@ -72,10 +86,11 @@ class MouseMiscHandler {
 
         const canvas = this._scene.canvas.canvas;
 
-        canvas.addEventListener(&quot;mousemove&quot;, this._mouseMoveHandler);
-        canvas.addEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler);
+        canvas.removeEventListener(&quot;mousemove&quot;, this._mouseMoveHandler);
+        canvas.removeEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler);
         canvas.removeEventListener(&quot;mouseleave&quot;, this._mouseLeaveHandler);
         canvas.removeEventListener(&quot;mousedown&quot;, this._mouseDownHandler);
+        canvas.removeEventListener(&quot;mouseup&quot;, this._mouseUpHandler);
     }
 }
 

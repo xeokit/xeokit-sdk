@@ -118,7 +118,8 @@ class PickController {
             this.pickResult = this._scene.pick({
                 pickSurface: true,
                 pickSurfaceNormal: true,
-                canvasPos: this.pickCursorPos
+                canvasPos: this.pickCursorPos,
+                pickTransparent: false
             });
         } else { // schedulePickEntity == true
             this.pickResult = this._scene.pick({

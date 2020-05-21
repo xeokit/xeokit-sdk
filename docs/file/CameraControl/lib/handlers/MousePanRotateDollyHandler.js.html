@@ -40,6 +40,28 @@
  */
 import {math} from &quot;../../../math/math.js&quot;;
 
+const canvasPos = math.vec2();
+
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
+
 /**
  * @private
  */
@@ -58,8 +80,6 @@ class MousePanRotateDollyHandler {
         let lastYDown = 0;
         let xRotateDelta = 0;
         let yRotateDelta = 0;
-        let xPanDelta = 0;
-        let yPanDelta = 0;
         this._down = false;
 
         let mouseDownLeft;
@@ -113,8 +133,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -139,8 +157,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -160,8 +176,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -181,8 +195,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -207,6 +219,9 @@ class MousePanRotateDollyHandler {
                     break;
             }
         });
+
+        var lastPanX = null;
+        var lastPanY = null;
 
         canvas.addEventListener(&quot;mousemove&quot;, this._mouseMoveHandler = (e) =&gt; {
 
@@ -236,35 +251,33 @@ class MousePanRotateDollyHandler {
 
             if (panning) {
 
-                xPanDelta = (x - lastX);
-                yPanDelta = (y - lastY);
+                const xPanDelta = (x - lastX);
+                const yPanDelta = (y - lastY);
 
                 const camera = scene.camera;
 
+                // We use only canvasHeight here so that aspect ratio does not distort speed
+
                 if (camera.projection === &quot;perspective&quot;) {
 
-                    const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
-                    const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+                    const depth = Math.abs(mouseDownPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
+                    const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight);
+                    updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight);
 
                 } else {
 
-                    const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
-                    const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
-
-                    updates.panDeltaX += ((configs.mousePanRate * 3.0 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((configs.mousePanRate * 3.0 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
+                    updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
                 }
 
             } else {
 
                 if (!configs.planView) {
 
-                    const sweep = configs.firstPerson ? 180 : 180;
-                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep;
-                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep;
+                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
+                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * configs.dragRotationRate;
                 }
             }
 
@@ -285,6 +298,15 @@ class MousePanRotateDollyHandler {
                     break;
                 case 3: // Right button
                     mouseDownRight = false;
+                    getCanvasPosFromEvent(e, canvasPos);
+                    const x = canvasPos[0];
+                    const y = canvasPos[1];
+                    if (Math.abs(x - lastXDown) &lt; 3 &amp;&amp; Math.abs(y - lastYDown) &lt; 3) {
+                        controllers.cameraControl.fire(&quot;rightClick&quot;, { // For context menus
+                            canvasPos: canvasPos,
+                            event: e
+                        }, true);
+                    }
                     break;
                 default:
                     break;
@@ -292,8 +314,6 @@ class MousePanRotateDollyHandler {
             canvas.style.removeProperty(&quot;cursor&quot;);
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             this._down = false;
         });
@@ -304,8 +324,6 @@ class MousePanRotateDollyHandler {
             }
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             this._down = false;
         });
@@ -318,8 +336,6 @@ class MousePanRotateDollyHandler {
 
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             updates.panDeltaX = 0;
             updates.panDeltaY = 0;
@@ -329,8 +345,6 @@ class MousePanRotateDollyHandler {
             this._down = false;
         });
 
-        let lastWheelTime = null;
-
         canvas.addEventListener(&quot;wheel&quot;, this._mouseWheelHandler = (e) =&gt; {
             if (!(configs.active &amp;&amp; configs.pointerEnabled)) {
                 return;
@@ -339,17 +353,8 @@ class MousePanRotateDollyHandler {
             if (delta === 0) {
                 return;
             }
-            const timeNow = performance.now();
-            let timeDiff = (lastWheelTime !== null) ? (timeNow - lastWheelTime) : 60;
-            if (timeDiff &gt; 60) {
-                timeDiff = 60;
-            } else if (timeDiff &lt; 1) {
-                timeDiff = 1;
-            }
-            timeDiff = ((60 - timeDiff) * 0.4) + 1;
-            lastWheelTime = timeNow;
             const d = delta / Math.abs(delta);
-            updates.dollyDelta = -d * timeDiff;
+            updates.dollyDelta = -d * 5.0;
             e.preventDefault();
         });
     }
@@ -362,11 +367,13 @@ class MousePanRotateDollyHandler {
 
         const canvas = this._scene.canvas.canvas;
 
-        canvas.addEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler);
-        canvas.removeEventListener(&quot;mouseleave&quot;, this._mouseLeaveHandler);
+        document.removeEventListener(&quot;keydown&quot;, this._documentKeyDownHandler);
+        document.removeEventListener(&quot;keyup&quot;, this._documentKeyUpHandler);
         canvas.removeEventListener(&quot;mousedown&quot;, this._mouseDownHandler);
-        canvas.removeEventListener(&quot;mouseup&quot;, this._mouseUpHandler);
         canvas.removeEventListener(&quot;mousemove&quot;, this._mouseMoveHandler);
+        canvas.removeEventListener(&quot;mouseup&quot;, this._mouseUpHandler);
+        canvas.removeEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler);
+        canvas.removeEventListener(&quot;mouseleave&quot;, this._mouseLeaveHandler);
         canvas.removeEventListener(&quot;wheel&quot;, this._mouseWheelHandler);
     }
 }

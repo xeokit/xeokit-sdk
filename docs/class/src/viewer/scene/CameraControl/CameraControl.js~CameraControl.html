@@ -134,13 +134,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CameraControl} from &apos;<span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber407">@xeokit/xeokit-sdk/src/viewer/scene/CameraControl/CameraControl.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CameraControl} from &apos;<span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber422">@xeokit/xeokit-sdk/src/viewer/scene/CameraControl/CameraControl.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber407">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber422">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -160,91 +160,86 @@
 
   
   
-  <div class="description" data-ice="description"><p>Controls the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> with keyboard, mouse and touch input, and fires events when we
-hover, click or tap <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
-<h2 id="contents">Contents</h2><ul>
+  <div class="description" data-ice="description"><p>Controls the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> with user input, and fires events when the user interacts with pickable <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+<h1 id="contents">Contents</h1><ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#examples">Examples</a></li>
 <li><a href="#orbit-mode">Orbit Mode</a><ul>
-<li><a href="#pivoting-in-orbit-mode"><strong>Pivoting in Orbit Mode</strong></a></li>
-<li><a href="#--showing-the-pivot-position--"><strong>Showing the Pivot Position</strong></a></li>
-<li><a href="#--axis-aligned-views-in-orbit-mode--"><strong>Axis-Aligned Views in Orbit Mode</strong></a></li>
-<li><a href="#--view-fitting-entitys-in-orbit-mode--"><strong>View-Fitting Entitys in Orbit Mode</strong></a></li>
+<li><a href="#--following-the-pointer-in-orbit-mode--">Following the Pointer in Orbit Mode</a></li>
+<li><a href="#--showing-the-pivot-position--">Showing the Pivot Position</a></li>
+<li><a href="#--axis-aligned-views-in-orbit-mode--">Axis-Aligned Views in Orbit Mode</a></li>
+<li><a href="#--view-fitting-entitys-in-orbit-mode--">View-Fitting Entitys in Orbit Mode</a></li>
 </ul>
 </li>
 <li><a href="#first-person-mode">First-Person Mode</a><ul>
-<li><a href="#--dollying-to-the-mouse-pointer-in-first-person-mode--"><strong>Dollying to the Mouse Pointer in First-Person Mode</strong></a></li>
-<li><a href="#--constraining-vertical-position-in-first-person-mode--"><strong>Constraining Vertical Position in First-Person Mode</strong></a></li>
-<li><a href="#--axis-aligned-views-in-first-person-mode--"><strong>Axis-Aligned Views in First-Person Mode</strong></a></li>
-<li><a href="#--view-fitting-entitys-in-first-person-mode--"><strong>View-Fitting Entitys in First-Person Mode</strong></a></li>
+<li><a href="#--following-the-pointer-in-first-person-mode--">Following the Pointer in First-Person Mode</a></li>
+<li><a href="#--constraining-vertical-position-in-first-person-mode--">Constraining Vertical Position in First-Person Mode</a></li>
+<li><a href="#--axis-aligned-views-in-first-person-mode--">Axis-Aligned Views in First-Person Mode</a></li>
+<li><a href="#--view-fitting-entitys-in-first-person-mode--">View-Fitting Entitys in First-Person Mode</a></li>
 </ul>
 </li>
 <li><a href="#plan-view-mode">Plan-View Mode</a><ul>
-<li><a href="#--dollying-to-the-mouse-pointer-in-plan-view-mode--"><strong>Dollying to the Mouse Pointer in Plan-View Mode</strong></a></li>
-<li><a href="#--axis-aligned-views-in-plan-view-mode--"><strong>Axis-Aligned Views in Plan-View Mode</strong></a></li>
+<li><a href="#--following-the-pointer-in-plan-view-mode--">Following the Pointer in Plan-View Mode</a></li>
+<li><a href="#--axis-aligned-views-in-plan-view-mode--">Axis-Aligned Views in Plan-View Mode</a></li>
 </ul>
 </li>
-<li><a href="#picking-events">Picking Events</a><ul>
-<li><a href="#---hover---"><strong>&quot;hover&quot;</strong></a></li>
-<li><a href="#---hoveroff---"><strong>&quot;hoverOff&quot;</strong></a></li>
-<li><a href="#---hoverenter---"><strong>&quot;hoverEnter&quot;</strong></a></li>
-<li><a href="#---hoverout---"><strong>&quot;hoverOut&quot;</strong></a></li>
-<li><a href="#---picked---"><strong>&quot;picked&quot;</strong></a></li>
-<li><a href="#---pickedsurface---"><strong>&quot;pickedSurface&quot;</strong></a></li>
-<li><a href="#---pickednothing---"><strong>&quot;pickedNothing&quot;</strong></a></li>
-<li><a href="#---doublepicked---"><strong>&quot;doublePicked&quot;</strong></a></li>
-<li><a href="#---doublepickedsurface---"><strong>&quot;doublePickedSurface&quot;</strong></a></li>
-<li><a href="#---doublepickednothing---"><strong>&quot;doublePickedNothing&quot;</strong></a>
-<br></li>
-</ul>
-</li>
-</ul>
-<h2 id="overview">Overview</h2><ul>
-<li>Each <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has a CameraControl, located at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraControl">Viewer#cameraControl</a></span>.</li>
-<li>CameraControl supports three navigation modes:<ul>
-<li><strong>Orbit mode</strong> orbits the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position about the point-of-interest. In this mode, we also have the option to orbit an
-arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
-and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.</li>
-<li><strong>First-person mode</strong> orbits the point-of-interest about the eye position. Dollying can either move the eye and
-point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
-to pivot in first-person mode.</li>
-<li><strong>Plan-view mode</strong> is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
-mode, CameraControl prevents us from rotating and pivoting the Camera, which keeps the Camera in correct axis alignment
-for our plan view.</li>
-</ul>
-</li>
-<li>CameraControl also fires &quot;pick&quot; events when we hover, click or tap on <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.
-<br></li>
-</ul>
-<h2 id="examples">Examples</h2><ul>
-<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit">Orbit mode example</a></li>
-<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson">First-person mode example</a></li>
-<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView">Plan-view mode example</a>
-<br></li>
-</ul>
-<h2 id="orbit-mode">Orbit Mode</h2><ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit">Run orbit mode example</a>]
+<li><a href="#cameracontrol-events">CameraControl Events</a><ul>
+<li><a href="#---hover---">&quot;hover&quot;</a></li>
+<li><a href="#---hoveroff---">&quot;hoverOff&quot;</a></li>
+<li><a href="#---hoverenter---">&quot;hoverEnter&quot;</a></li>
+<li><a href="#---hoverout---">&quot;hoverOut&quot;</a></li>
+<li><a href="#---picked---">&quot;picked&quot;</a></li>
+<li><a href="#---pickedsurface---">&quot;pickedSurface&quot;</a></li>
+<li><a href="#---pickednothing---">&quot;pickedNothing&quot;</a></li>
+<li><a href="#---doublepicked---">&quot;doublePicked&quot;</a></li>
+<li><a href="#---doublepickedsurface---">&quot;doublePickedSurface&quot;</a></li>
+<li><a href="#---doublepickednothing---">&quot;doublePickedNothing&quot;</a></li>
+<li><a href="#---mouserightclick---">&quot;mouseRightClick&quot;</a>
 <br><br></li>
 </ul>
-<p>In orbit mode, we are rotating about a point-of-interest.</p>
-<p>To enable orbit navigation mode:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;orbit&quot;; // Default</code>
+</li>
+</ul>
+<h1 id="overview">Overview</h1><ul>
+<li>Each <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has a <code>CameraControl</code>, located at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraControl">Viewer#cameraControl</a></span>.</li>
+<li><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> selects the navigation mode:<ul>
+<li><code>&quot;orbit&quot;</code> rotates the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position about the target.</li>
+<li><code>&quot;firstPerson&quot;</code> rotates the World about the Camera position.</li>
+<li><code>&quot;planView&quot;</code> never rotates, but still allows to pan and dolly, typically for an axis-aligned view.</li>
+</ul>
+</li>
+<li><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> makes the Camera follow the mouse or touch pointer.</li>
+<li><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-constrainVertical">CameraControl#constrainVertical</a></span> locks the Camera to its current height when in first-person mode.</li>
+<li><code>CameraControl</code> fires pick events when we hover, click or tap on an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.
+<br><br></li>
+</ul>
+<h1 id="examples">Examples</h1><p>Use these examples to get a feel for how <code>CameraControl</code> works, and how to tune its various configurations:</p>
+<ul>
+<li><a href="/examples/#CameraControl_orbit_Duplex">Orbit Navigation - Duplex Model</a></li>
+<li><a href="/examples/#CameraControl_orbit_HolterTower">Orbit Navigation - Holter Tower Model</a></li>
+<li><a href="/examples/#CameraControl_firstPerson_Duplex">First-Person Navigation - Duplex Model</a></li>
+<li><a href="/examples/#CameraControl_firstPerson_HolterTower">First-Person Navigation - Holter Tower Model</a></li>
+<li><a href="/examples/#CameraControl_planView_Schependomlaan">Plan-view Navigation - Schependomlaan Model</a>
+<br><br></li>
+</ul>
+<h1 id="orbit-mode">Orbit Mode</h1><p>In orbit mode, <code>CameraControl</code> orbits the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> about the target.</p>
+<p>To enable orbit mode:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;orbit&quot;;</code>
 </code></pre>
-<p>We can then orbit by:</p>
+<p>Then orbit by:</p>
 <ul>
 <li>left-dragging the mouse,</li>
 <li>tap-dragging the touch pad, and</li>
-<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.</li>
+<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.
+<br><br></li>
 </ul>
-<p><br>
-We can dolly forwards and backwards by:</p>
+<p>Dolly forwards and backwards by:</p>
 <ul>
 <li>spinning the mouse wheel,</li>
 <li>pinching on the touch pad, and</li>
-<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.</li>
+<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.
+<br><br></li>
 </ul>
-<p><br>
-We can pan horizontally and vertically by:</p>
+<p>Pan horizontally and vertically by:</p>
 <ul>
 <li>right-dragging the mouse,</li>
 <li>left-dragging the mouse with the SHIFT key down,</li>
@@ -253,19 +248,16 @@ We can pan horizontally and vertically by:</p>
 <li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
 <br><br></li>
 </ul>
-<h3 id="-strong-pivoting-in-orbit-mode--strong-"><strong>Pivoting in Orbit Mode</strong></h3><p>In orbit mode, setting <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> <code>true</code> will cause CameraControl to always pivot
-our eye position and point-of-interest about the current pivot position, and dolly our eye position and
-point-of-interest towards and away from the pivot position.</p>
-<p>We can set the current pivot position by left-clicking, or tapping, on the surface of an Entity.</p>
-<p>Lets ensure that we&apos;re in orbit mode, then enable pivoting:</p>
+<h2 id="following-the-pointer-in-orbit-mode">Following the Pointer in Orbit Mode</h2><p>When <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is <code>true</code>in orbiting mode, the mouse or touch pointer will dynamically
+indicate the target that the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> will orbit, as well as dolly to and from.</p>
+<p>Lets ensure that we&apos;re in orbit mode, then enable the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to follow the pointer:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;orbit&quot;;
-cameraControl.pivoting = true;</code>
+cameraControl.followPointer = true;</code>
 </code></pre>
-<p>If we now left-click or tap an Entity, we&apos;ll pivot about that position. If we then left-click-drag or tap-drag
-empty space, we&apos;ll continue to pivot the position we set earlier.</p>
-<h3 id="-strong-showing-the-pivot-position--strong-"><strong>Showing the Pivot Position</strong></h3><p>We can configure <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivotElement">CameraControl#pivotElement</a></span> with an HTML element to indicate the current
-pivot position. The indicator will appear momentarily each time we move the Camera while in orbit mode with
-pivoting enabled.</p>
+<p>When the pointer is over empty space, the target will remain on the last object that the pointer was over.</p>
+<h2 id="showing-the-pivot-position">Showing the Pivot Position</h2><p>We can configure <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivotElement">CameraControl#pivotElement</a></span> with an HTML element to indicate the current
+pivot position. The indicator will appear momentarily each time we move the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> while in orbit mode with
+<span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> set <code>true</code>.</p>
 <p>First we&apos;ll define some CSS to style our pivot indicator as a black dot with a white border:</p>
 <pre><code class="lang-css"><code class="source-code prettyprint">.camera-pivot-marker {
      color: #ffffff;
@@ -281,162 +273,167 @@ pivoting enabled.</p>
      pointer-events: none;
 }</code>
 </code></pre>
-<p>Then we&apos;ll attach our pivot indicator&apos;s HTML element to the CameraControl:</p>
+<p>Then we&apos;ll attach our pivot indicator&apos;s HTML element to the <code>CameraControl</code>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const pivotElement = document.createRange().createContextualFragment(&quot;&lt;div class=&apos;camera-pivot-marker&apos;&gt;&lt;/div&gt;&quot;).firstChild;
 
 document.body.appendChild(pivotElement);
 
 cameraControl.pivotElement = pivotElement;</code>
 </code></pre>
-<h3 id="-strong-axis-aligned-views-in-orbit-mode--strong-"><strong>Axis-Aligned Views in Orbit Mode</strong></h3><p>In orbit mode, we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the
-six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.</p>
-<h3 id="-strong-view-fitting-entitys-in-orbit-mode--strong-"><strong>View-Fitting Entitys in Orbit Mode</strong></h3><p>In orbit mode and <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can double-click or
+<h2 id="axis-aligned-views-in-orbit-mode">Axis-Aligned Views in Orbit Mode</h2><p>In orbit mode, we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the
+six World-space axis. Pressing one of these keys will fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to the corresponding axis-aligned view.</p>
+<h2 id="view-fitting-entitys-in-orbit-mode">View-Fitting Entitys in Orbit Mode</h2><p>When <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can left-double-click or
 double-tap (ie. &quot;double-pick&quot;) an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> to fit it to view. This will cause the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-to fly to that Entity. Our point-of-interest then becomes the center of that Entity. If we are currently pivoting,
+to fly to that Entity. Our target then becomes the center of that Entity. If we are currently pivoting,
 then our pivot position is then also set to the Entity center.</p>
 <p>Disable that behaviour by setting <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> <code>false</code>.</p>
-<h2 id="first-person-mode">First-Person Mode</h2><ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson">Run first-person mode example</a>]
-<br><br></li>
-</ul>
-<p>First-person model allows us to roam freely around our <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
-<p>To enable first-person navigation mode:</p>
+<h1 id="first-person-mode">First-Person Mode</h1><p>In first-person mode, <code>CameraControl</code> rotates the World about the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position.</p>
+<p>To enable first-person mode:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;firstPerson&quot;;</code>
 </code></pre>
-<p>We can then rotate our point-of-interest about our eye position by:</p>
+<p>Then rotate by:</p>
 <ul>
 <li>left-dragging the mouse,</li>
 <li>tap-dragging the touch pad,</li>
-<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.</li>
+<li>pressing arrow keys, or <code>Q</code> and <code>E</code> on a QWERTY keyboard, or <code>A</code> and <code>E</code> on an AZERTY keyboard.
+<br><br></li>
 </ul>
-<p><br>
-We can dolly forwards and backwards by:</p>
+<p>Dolly forwards and backwards by:</p>
 <ul>
 <li>spinning the mouse wheel,</li>
 <li>pinching on the touch pad, and</li>
-<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.</li>
-</ul>
-<p><br>
-We can pan horizontally and vertically by:</p>
-<ul>
-<li>right-dragging the mouse,</li>
-<li>left-dragging the mouse with the SHIFT key down,</li>
-<li>tap-dragging the touch pad with SHIFT down,</li>
-<li>pressing the <code>A</code>, <code>D</code>, <code>Z</code> and <code>X</code> keys on a QWERTY keyboard, and</li>
-<li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
+<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code>S</code> for AZERTY.
 <br><br></li>
 </ul>
-<h3 id="-strong-dollying-to-the-mouse-pointer-in-first-person-mode--strong-"><strong>Dollying to the Mouse Pointer in First-Person Mode</strong></h3><p>To cause dollying to move our eye position and point-of-interest towards and away from the current mouse position:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.dollyToPointer = true;</code>
+<p>Pan left, right, up and down by:</p>
+<ul>
+<li>left-dragging or right-dragging the mouse, and</li>
+<li>tap-dragging the touch pad with SHIFT down.</li>
+</ul>
+<p>Pan forwards, backwards, left, right, up and down by pressing the <code>WSADZX</code> keys on a QWERTY keyboard,
+or <code>WSQDWX</code> keys on an AZERTY keyboard.
+<br><br></p>
+<h2 id="following-the-pointer-in-first-person-mode">Following the Pointer in First-Person Mode</h2><p>When <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is <code>true</code> in first-person mode, the mouse or touch pointer will dynamically
+indicate the target to which the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> will dolly to and from. In first-person mode, however, the World will always rotate
+about the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position.</p>
+<p>Lets ensure that we&apos;re in first-person mode, then enable the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to follow the pointer:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;firstPerson&quot;;
+cameraControl.followPointer = true;</code>
 </code></pre>
-<h3 id="-strong-constraining-vertical-position-in-first-person-mode--strong-"><strong>Constraining Vertical Position in First-Person Mode</strong></h3><p>To prevent the Camera from changing it&apos;s vertical position in first-person mode, which is useful for walk-through
-navigation:</p>
+<p>When the pointer is over empty space, the target will remain the last object that the pointer was over.</p>
+<h2 id="constraining-vertical-position-in-first-person-mode">Constraining Vertical Position in First-Person Mode</h2><p>In first-person mode, we can lock the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to its current position on the vertical World axis, which is useful for walk-through navigation:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.constrainVertical = true;</code>
 </code></pre>
-<h3 id="-strong-axis-aligned-views-in-first-person-mode--strong-"><strong>Axis-Aligned Views in First-Person Mode</strong></h3><p>As in orbit mode, in first-person mode we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of
-the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+<h2 id="axis-aligned-views-in-first-person-mode">Axis-Aligned Views in First-Person Mode</h2><p>In first-person mode we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of
+the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the six World-space axis. Pressing one of these keys will fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to the
 corresponding axis-aligned view.</p>
-<p>If we are currently pivoting, then our pivot position is then set to the Scene center.</p>
-<h3 id="-strong-view-fitting-entitys-in-first-person-mode--strong-"><strong>View-Fitting Entitys in First-Person Mode</strong></h3><p>As in orbit mode, when in first-person mode and <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can double-click
+<h2 id="view-fitting-entitys-in-first-person-mode">View-Fitting Entitys in First-Person Mode</h2><p>As in orbit mode, when in first-person mode and <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> is <code>true</code>, we can double-click
 or double-tap an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> (ie. &quot;double-picking&quot;) to fit it in view. This will cause the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to
-that Entity. Our point-of-interest then becomes the center of that Entity.</p>
+that Entity. Our target then becomes the center of that Entity.</p>
 <p>Disable that behaviour by setting <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">CameraControl#doublePickFlyTo</a></span> <code>false</code>.</p>
-<h2 id="plan-view-mode">Plan-View Mode</h2><ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView">Run plan-view mode example</a>]
-<br><br></li>
-</ul>
-<p>Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
-mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.</p>
-<p>To enable plan-view navigation mode:</p>
+<h1 id="plan-view-mode">Plan-View Mode</h1><p>In plan-view mode, <code>CameraControl</code> pans and rotates the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>, without rotating it.</p>
+<p>To enable plan-view mode:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;planView&quot;;</code>
 </code></pre>
-<p>In plan-view mode, we cannot orbit, rotate or pivot the Camera.</p>
-<p>We can dolly forwards and backwards by:</p>
+<p>Dolly forwards and backwards by:</p>
 <ul>
 <li>spinning the mouse wheel,</li>
 <li>pinching on the touch pad, and</li>
-<li>pressing the <code>+</code> and <code>-</code> keys, or <code>W</code> and <code>S</code> on a QWERTY keyboard, or <code>Z</code> and <code></code>S&apos; for AZERTY.</li>
+<li>pressing the <code>+</code> and <code>-</code> keys.</li>
 </ul>
 <p><br>
-We can pan horizontally and vertically by:</p>
+Pan left, right, up and down by:</p>
 <ul>
-<li>left-dragging or right-dragging the mouse,</li>
-<li>tap-dragging the touch pad with SHIFT down,</li>
-<li>pressing the <code>A</code>, <code>D</code>, <code>Z`</code> and <code>X</code> keys on a QWERTY keyboard, and</li>
-<li>pressing the <code>Q</code>, <code>D</code>, <code>W</code> and <code>X</code> keys on an AZERTY keyboard,
-<br><br></li>
+<li>left-dragging or right-dragging the mouse, and</li>
+<li>tap-dragging the touch pad with SHIFT down.</li>
 </ul>
-<h3 id="-strong-dollying-to-the-mouse-pointer-in-plan-view-mode--strong-"><strong>Dollying to the Mouse Pointer in Plan-View Mode</strong></h3><p>As in orbit and first-person modes, we can cause dollying to move our eye position and point-of-interest towards
-and away from the current mouse position:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.dollyToPointer = true;</code>
+<p>Pan forwards, backwards, left, right, up and down by pressing the <code>WSADZX</code> keys on a QWERTY keyboard,
+or <code>WSQDWX</code> keys on an AZERTY keyboard.
+<br><br></p>
+<h2 id="following-the-pointer-in-plan-view-mode">Following the Pointer in Plan-View Mode</h2><p>When <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is <code>true</code> in plan-view mode, the mouse or touch pointer will dynamically
+indicate the target to which the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> will dolly to and from.  In plan-view mode, however, the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> cannot rotate.</p>
+<p>Lets ensure that we&apos;re in plan-view mode, then enable the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to follow the pointer:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.navMode = &quot;planView&quot;;
+cameraControl.followPointer = true;</code>
 </code></pre>
-<h3 id="-strong-axis-aligned-views-in-plan-view-mode--strong-"><strong>Axis-Aligned Views in Plan-View Mode</strong></h3><p>As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of
-the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+<p>When the pointer is over empty space, the target will remain the last object that the pointer was over.</p>
+<h2 id="axis-aligned-views-in-plan-view-mode">Axis-Aligned Views in Plan-View Mode</h2><p>As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at the center of
+the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along each of the six World-space axis. Pressing one of these keys will fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to the
 corresponding axis-aligned view.</p>
-<h2 id="picking-events">Picking Events</h2><p>We can use CameraControl to get events whenever we pick <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
-<p>The following subsections describe the pick-related events fired by CameraControl.</p>
-<h3 id="-strong--quot-hover-quot---strong-"><strong>&quot;hover&quot;</strong></h3><p>Pointer hovers over an Entity.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hover&quot;, (e) =&gt; {
+<h1 id="cameracontrol-events">CameraControl Events</h1><p><code>CameraControl</code> fires events as we interact with <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s using mouse or touch input.</p>
+<p>The following examples demonstrate how to subscribe to those events.</p>
+<p>The first example shows how to save a handle to a subscription, which we can later use to unsubscribe.</p>
+<h2 id="-quot-hover-quot-">&quot;hover&quot;</h2><p>Event fired when the pointer moves while hovering over an Entity.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const onHover = cameraControl.on(&quot;hover&quot;, (e) =&gt; {
      const entity = e.entity; // Entity
      const canvasPos = e.canvasPos; // 2D canvas position
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-hoveroff-quot---strong-"><strong>&quot;hoverOff&quot;</strong></h3><p>Pointer hovers over no Entitys.</p>
+<p>To unsubscribe from the event:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.off(onHover);</code>
+</code></pre>
+<h2 id="-quot-hoveroff-quot-">&quot;hoverOff&quot;</h2><p>Event fired when the pointer moves while hovering over empty space.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverOff&quot;, (e) =&gt; {
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-hoverenter-quot---strong-"><strong>&quot;hoverEnter&quot;</strong></h3><p>Pointer begins hovering over an Entity.</p>
+<h2 id="-quot-hoverenter-quot-">&quot;hoverEnter&quot;</h2><p>Event fired when the pointer moves onto an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverEnter&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-hoverout-quot---strong-"><strong>&quot;hoverOut&quot;</strong></h3><p>Pointer stops hovering over an Entity.</p>
+<h2 id="-quot-hoverout-quot-">&quot;hoverOut&quot;</h2><p>Event fired when the pointer moves off an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;hoverOut&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-picked-quot---strong-"><strong>&quot;picked&quot;</strong></h3><p>Mouse click or touch-tap on an Entity.</p>
+<h2 id="-quot-picked-quot-">&quot;picked&quot;</h2><p>Event fired when we left-click or tap on an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;picked&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-pickedsurface-quot---strong-"><strong>&quot;pickedSurface&quot;</strong></h3><p>Mouse click or touch-tap on the surface of an Entity.</p>
+<h2 id="-quot-pickedsurface-quot-">&quot;pickedSurface&quot;</h2><p>Event fired when we left-click or tap on the surface of an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;picked&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
      const worldPos = e.worldPos; // 3D World-space position
      const viewPos = e.viewPos; // 3D View-space position
      const worldNormal = e.worldNormal; // 3D World-space normal vector
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-pickednothing-quot---strong-"><strong>&quot;pickedNothing&quot;</strong></h3><p>Mouse click or touch-tap on no Entitys.</p>
+<h2 id="-quot-pickednothing-quot-">&quot;pickedNothing&quot;</h2><p>Event fired when we left-click or tap on empty space.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;pickedNothing&quot;, (e) =&gt; {
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-doublepicked-quot---strong-"><strong>&quot;doublePicked&quot;</strong></h3><p>Mouse double-click or double-touch-tap on an Entity.</p>
+<h2 id="-quot-doublepicked-quot-">&quot;doublePicked&quot;</h2><p>Event fired wwhen we left-double-click or double-tap on an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePicked&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-doublepickedsurface-quot---strong-"><strong>&quot;doublePickedSurface&quot;</strong></h3><p>Mouse double-click or double-touch-tap on the surface of an Entity.</p>
+<h2 id="-quot-doublepickedsurface-quot-">&quot;doublePickedSurface&quot;</h2><p>Event fired when we left-double-click or double-tap on the surface of an Entity.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePickedSurface&quot;, (e) =&gt; {
      const entity = e.entity;
      const canvasPos = e.canvasPos;
      const worldPos = e.worldPos;
      const viewPos = e.viewPos;
      const worldNormal = e.worldNormal;
-})</code>
+});</code>
 </code></pre>
-<h3 id="-strong--quot-doublepickednothing-quot---strong-"><strong>&quot;doublePickedNothing&quot;</strong></h3><p>Mouse double-click or double-touch-tap on no Entitys.</p>
+<h2 id="-quot-doublepickednothing-quot-">&quot;doublePickedNothing&quot;</h2><p>Wvent fired when we left-double-click or double-tap on empty space.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;doublePickedNothing&quot;, (e) =&gt; {
      const canvasPos = e.canvasPos;
-})</code>
+});</code>
+</code></pre>
+<h2 id="-quot-mouserightclick-quot-">&quot;mouseRightClick&quot;</h2><p>Event fired when we right-click on the canvas.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;rightClicked&quot;, (e) =&gt; {
+     const event = e.event; // Mouse event
+     const canvasPos = e.canvasPos;
+});</code>
 </code></pre>
 </div>
   
@@ -477,7 +474,7 @@ corresponding axis-aligned view.</p>
       <div>
         
         
-        <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
+        <div data-ice="description"><p> Sets if this <code>CameraControl</code> is active or not.</p>
 </div>
       </div>
     </td>
@@ -506,7 +503,7 @@ corresponding axis-aligned view.</p>
       <div>
         
         
-        <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
+        <div data-ice="description"><p>Gets if this <code>CameraControl</code> is active or not.</p>
 </div>
       </div>
     </td>
@@ -535,7 +532,7 @@ corresponding axis-aligned view.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether this CameraControl is in constrainVertical mode.</p>
+        <div data-ice="description"><p>Sets whether to vertically constrain the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position for first-person navigation.</p>
 </div>
       </div>
     </td>
@@ -564,7 +561,7 @@ corresponding axis-aligned view.</p>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether this CameraControl is in constrainVertical mode.</p>
+        <div data-ice="description"><p>Gets whether to vertically constrain the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position for first-person navigation.</p>
 </div>
       </div>
     </td>
@@ -587,13 +584,13 @@ corresponding axis-aligned view.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyInertia">dollyInertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyInertia">dollyInertia</a></span></span><span class="code" data-ice="signature">(dollyInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish dollying it.</p>
+        <div data-ice="description"><p>Sets the dolly inertia factor.</p>
 </div>
       </div>
     </td>
@@ -645,73 +642,13 @@ corresponding axis-aligned view.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the current dolly rate.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyRate">dollyRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Returns the current dolly rate.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">dollyToPointer</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
         
         
-        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-</div>
       </div>
     </td>
     <td>
@@ -733,15 +670,13 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyToPointer">dollyToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyToPointer">dollyToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
+        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
         
         
-        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-</div>
       </div>
     </td>
     <td>
@@ -821,13 +756,71 @@ towards or away from the mouse pointer position.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dragRotationRate">dragRotationRate</a></span></span><span class="code" data-ice="signature">(dragRotationRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the current drag rotation rate.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dragRotationRate">dragRotationRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the current drag rotation rate.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
         
-        <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+        <div data-ice="description"><p>Sets whether this <code>CameraControl</code> is in first-person mode.</p>
 </div>
       </div>
     </td>
@@ -856,7 +849,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
         
-        <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
+        <div data-ice="description"><p>Gets whether this <code>CameraControl</code> is in first-person mode.</p>
 </div>
       </div>
     </td>
@@ -879,13 +872,158 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardLayout">keyboardLayout</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">followPointer</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Selects the keyboard layout.</p>
+        <div data-ice="description"><p>Sets whether the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> follows the mouse or touch pointer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-followPointer">followPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> follows the mouse or touch pointer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardDollyRate">keyboardDollyRate</a></span></span><span class="code" data-ice="signature">(keyboardDollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second with keyboard input.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyboardDollyRate">keyboardDollyRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second with keyboard input.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardLayout">keyboardLayout</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the keyboard layout.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyboardLayout">keyboardLayout</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the keyboard layout.</p>
 </div>
       </div>
     </td>
@@ -914,7 +1052,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the current keyboard pan rate.</p>
+        <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> pans each second with keyboard input.</p>
 </div>
       </div>
     </td>
@@ -943,7 +1081,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Returns the current keyboard pan rate.</p>
+        <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> pans each second with keyboard input.</p>
 </div>
       </div>
     </td>
@@ -972,7 +1110,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the current keyboard rotation rate.</p>
+        <div data-ice="description"><p>Sets how many degrees per second the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> rotates/orbits with keyboard input.</p>
 </div>
       </div>
     </td>
@@ -1001,7 +1139,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Returns the current keyboard rotation rate.</p>
+        <div data-ice="description"><p>Sets how many degrees per second the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> rotates/orbits with keyboard input.</p>
 </div>
       </div>
     </td>
@@ -1024,13 +1162,13 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-mousePanRate">mousePanRate</a></span></span><span class="code" data-ice="signature">(mousePanRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-mouseWheelDollyRate">mouseWheelDollyRate</a></span></span><span class="code" data-ice="signature">(mouseWheelDollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the current mouse pan rate.</p>
+        <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second while the mouse wheel is spinning.</p>
 </div>
       </div>
     </td>
@@ -1053,71 +1191,13 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-mousePanRate">mousePanRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-mouseWheelDollyRate">mouseWheelDollyRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Returns the current mouse pan rate.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-mouseRotationRate">mouseRotationRate</a></span></span><span class="code" data-ice="signature">(mouseRotationRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the current mouse rotation rate.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-mouseRotationRate">mouseRotationRate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Returns the current mouse rotation rate.</p>
+        <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second while the mouse wheel is spinning.</p>
 </div>
       </div>
     </td>
@@ -1176,6 +1256,64 @@ towards or away from the mouse pointer position.</p>
         
         
         <div data-ice="description"><p>Gets the current navigation mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-panInertia">panInertia</a></span></span><span class="code" data-ice="signature">(panInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the pan inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-panInertia">panInertia</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the pan inertia factor.</p>
 </div>
       </div>
     </td>
@@ -1262,9 +1400,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
         
-        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -1292,9 +1428,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
         
-        <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -1322,7 +1456,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is true.</p>
+        <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is true.</p>
 </div>
       </div>
     </td>
@@ -1351,7 +1485,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the current World-space 3D pivot position.</p>
+        <div data-ice="description"><p>Sets the current World-space 3D target position.</p>
 </div>
       </div>
     </td>
@@ -1403,71 +1537,13 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether orbit mode currently pivots the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> about an arbitrary user-settable pivot position.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets whether orbit mode currently pivots the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> about an arbitrary user-settable pivot position.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-planView">planView</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
         
-        <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
+        <div data-ice="description"><p>Sets whether this <code>CameraControl</code> is in plan-view mode.</p>
 </div>
       </div>
     </td>
@@ -1496,7 +1572,7 @@ towards or away from the mouse pointer position.</p>
       <div>
         <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
         
-        <div data-ice="description"><p>Gets whether this CameraControl is in plan-view mode.</p>
+        <div data-ice="description"><p>Gets whether this <code>CameraControl</code> is in plan-view mode.</p>
 </div>
       </div>
     </td>
@@ -1577,13 +1653,13 @@ towards or away from the mouse pointer position.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-rotationInertia">rotationInertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-rotationInertia">rotationInertia</a></span></span><span class="code" data-ice="signature">(rotationInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish rotating it.</p>
+        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> keeps moving after you finish rotating it.</p>
 </div>
       </div>
     </td>
@@ -2144,16 +2220,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber577">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
-<p>When inactive, the CameraControl will not react to input.</p>
-<p>Default value is <code>true</code>.</p>
+  <div data-ice="description"><p> Sets if this <code>CameraControl</code> is active or not.</p>
+<p>When inactive, the <code>CameraControl</code> will not react to input.</p>
+<p>Default is <code>true</code>.</p>
 </div>
 
   
@@ -2190,16 +2266,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber575">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber590">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
-<p>When inactive, the CameraControl will not react to input.</p>
-<p>Default value is <code>true</code>.</p>
+  <div data-ice="description"><p>Gets if this <code>CameraControl</code> is active or not.</p>
+<p>When inactive, the <code>CameraControl</code> will not react to input.</p>
+<p>Default is <code>true</code>.</p>
 </div>
 
   
@@ -2213,7 +2289,7 @@ towards or away from the mouse pointer position.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if this CameraControl is active.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if this <code>CameraControl</code> is active.</p>
 </td>
         </tr>
       </tbody>
@@ -2249,18 +2325,17 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber858">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber859">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether this CameraControl is in constrainVertical mode.</p>
-<p>When set <code>true</code>, this constrains <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> movement to the horizontal X-Z plane. When doing a walkthrough,
-this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+  <div data-ice="description"><p>Sets whether to vertically constrain the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position for first-person navigation.</p>
+<p>When set <code>true</code>, this constrains <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to its current vertical position.</p>
 <p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;firstPerson&quot;</code>.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -2304,11 +2379,10 @@ this is useful to allow us to look upwards or downwards as we move, while keepin
   
   
   
-  <div data-ice="description"><p>Gets whether this CameraControl is in constrainVertical mode.</p>
-<p>When set <code>true</code>, this constrains <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> movement to the horizontal X-Z plane. When doing a walkthrough,
-this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+  <div data-ice="description"><p>Gets whether to vertically constrain the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position for first-person navigation.</p>
+<p>When set <code>true</code>, this constrains <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to its current vertical position.</p>
 <p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;firstPerson&quot;</code>.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -2322,7 +2396,7 @@ this is useful to allow us to look upwards or downwards as we move, while keepin
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when in constrainVertical mode.</p>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> when Camera is vertically constrained.</p>
 </td>
         </tr>
       </tbody>
@@ -2354,24 +2428,26 @@ this is useful to allow us to look upwards or downwards as we move, while keepin
     
     
     
-    <span class="code" data-ice="name">dollyInertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">dollyInertia</span><span class="code" data-ice="signature">(dollyInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1079">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1103">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish dollying it.</p>
-<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
-while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
-<p>You may choose an dollyInertia of zero when you want be able to precisely position or rotate the Camera,
-without interference from inertia. Zero inertia can also mean that less frames are rendered while
-you are positioning the Camera.</p>
-<p>Default value is <code>0.5</code>.</p>
+  <div data-ice="description"><p>Sets the dolly inertia factor.</p>
+<p>This factor configures how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> keeps moving after you finish dollying it</p>
+<p>This factor is a value in range <code>[0..1]</code>. A value of <code>0.0</code> causes dollying to immediately stop,
+<code>0.5</code> causes dollying to decay 50% on each animation frame, while <code>1.0</code> causes no decay, which allows dollying
+to continue until further input stops it.</p>
+<p>You might set <code>dollyInertia</code> to zero when you want be able to precisely position or rotate the Camera,
+without interference from inertia. This also means that xeokit renders less frames while dollying the Camera,
+which can improve rendering performance.</p>
+<p>Default is <code>0.75</code>.</p>
 </div>
 
   
@@ -2408,7 +2484,7 @@ you are positioning the Camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1090">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1114">source</a></span></span>
     </span>
   </h3>
 
@@ -2416,7 +2492,7 @@ you are positioning the Camera.</p>
   
   
   <div data-ice="description"><p>Gets the dolly inertia factor.</p>
-<p>Default value is <code>0.5</code>.</p>
+<p>Default is <code>0.75</code>.</p>
 </div>
 
   
@@ -2430,110 +2506,7 @@ you are positioning the Camera.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The dolly inertia factor.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dollyRate">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">(dollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1050">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the current dolly rate.</p>
-<p>This <code>10.0</code> by default.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dollyRate">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">dollyRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1061">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Returns the current dolly rate.</p>
-<p>This <code>10.0</code> by default.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The current dolly speed.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The current dolly inertia factor.</p>
 </td>
         </tr>
       </tbody>
@@ -2569,17 +2542,14 @@ you are positioning the Camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber720">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber739">source</a></span></span>
     </span>
   </h3>
 
   
+  <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
   
   
-  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-<p>Default value is <code>false</code>.</p>
-</div>
 
   
 
@@ -2611,21 +2581,18 @@ towards or away from the mouse pointer position.</p>
     
     
     
-    <span class="code" data-ice="name">dollyToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">dollyToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber732">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber747">source</a></span></span>
     </span>
   </h3>
 
   
+  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
   
   
-  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-<p>Default value is <code>false</code>.</p>
-</div>
 
   
 
@@ -2682,7 +2649,7 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Sets whether double-picking an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -2727,7 +2694,7 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Gets whether double-picking an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -2766,6 +2733,115 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dragRotationRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dragRotationRate</span><span class="code" data-ice="signature">(dragRotationRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1025">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the current drag rotation rate.</p>
+<p>This configures how many degrees the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> rotates/orbits for a full sweep of the canvas by mouse or touch dragging.</p>
+<p>For example, a value of <code>360.0</code> indicates that the <code>Camera</code> rotates/orbits <code>360.0</code> degrees horizontally
+when we sweep the entire width of the canvas.</p>
+<p><code>CameraControl</code> makes vertical rotation half as sensitive as horizontal rotation, so that we don&apos;t tend to
+flip upside-down. Therefore, a value of <code>360.0</code> rotates/orbits the <code>Camera</code> through <code>180.0</code> degrees
+vertically when we sweep the entire height of the canvas.</p>
+<p>Default is <code>360.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dragRotationRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dragRotationRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1036">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the current drag rotation rate.</p>
+<p>Default is <code>360.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current drag rotation rate.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-firstPerson">
     <span class="access" data-ice="access">public</span>
     
@@ -2777,16 +2853,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber821">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
   
-  <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+  <div data-ice="description"><p>Sets whether this <code>CameraControl</code> is in first-person mode.</p>
 <p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> rotates about <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 <p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
 </div>
 
@@ -2824,16 +2900,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber841">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber843">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
   
-  <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
+  <div data-ice="description"><p>Gets whether this <code>CameraControl</code> is in first-person mode.</p>
 <p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> rotates about <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 <p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
 </div>
 
@@ -2873,31 +2949,30 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-keyboardLayout">
+  <h3 data-ice="anchor" id="instance-set-followPointer">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">keyboardLayout</span>
+    <span class="code" data-ice="name">followPointer</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber690">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Selects the keyboard layout.</p>
-<p>Options are:</p>
-<ul>
-<li>&quot;qwerty&quot;</li>
-<li>&quot;azerty&quot;</li>
-</ul>
-<p>Default is &quot;qwerty&quot;.</p>
+  <div data-ice="description"><p>Sets whether the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> follows the mouse or touch pointer.</p>
+<p>In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.</p>
+<p>In fly-to mode, the Camera will dolly to and from the pointer, however the World will always rotate about the Camera position.</p>
+<p>In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.</p>
+<p>Default is <code>false</code>.</p>
+<p>See class comments for more info.</p>
 </div>
 
   
@@ -2906,6 +2981,283 @@ towards or away from the mouse pointer position.</p>
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-followPointer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">followPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber709">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> follows the mouse or touch pointer.</p>
+<p>In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.</p>
+<p>In fly-to mode, the Camera will dolly to and from the pointer, however the World will always rotate about the Camera position.</p>
+<p>In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.</p>
+<p>Default is <code>false</code>.</p>
+<p>See class comments for more info.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if the Camera follows the pointer.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-keyboardDollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">keyboardDollyRate</span><span class="code" data-ice="signature">(keyboardDollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1048">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second with keyboard input.</p>
+<p>Default is <code>10.0</code>, to dolly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> <code>10.0</code> World-space units per second while we hold down
+the <code>+</code> and <code>-</code> keys.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-keyboardDollyRate">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">keyboardDollyRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1059">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second with keyboard input.</p>
+<p>Default is <code>10.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current keyboard dolly rate.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-keyboardLayout">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">keyboardLayout</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1160">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the keyboard layout.</p>
+<p>Supported layouts are:</p>
+<ul>
+<li><code>&quot;qwerty&quot;</code> (default)</li>
+<li><code>&quot;azerty&quot;</code></li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-keyboardLayout">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">keyboardLayout</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1179">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the keyboard layout.</p>
+<p>Supported layouts are:</p>
+<ul>
+<li><code>&quot;qwerty&quot;</code> (default)</li>
+<li><code>&quot;azerty&quot;</code></li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current keyboard layout.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2934,15 +3286,21 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber984">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber970">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the current keyboard pan rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> pans each second with keyboard input.</p>
+<p>Default is <code>5.0</code>, to pan the Camera <code>5.0</code> World-space units every second that
+a panning key is depressed. See the <code>CameraControl</code> class documentation for which keys control
+panning.</p>
+<p>Panning direction is aligned to our Camera&apos;s orientation. When we pan horizontally, we pan
+to our left and right, when we pan vertically, we pan upwards and downwards, and when we pan forwards
+and backwards, we pan along the direction the Camera is pointing.</p>
+<p>Unlike dollying when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">followPointer</a></span> is <code>true</code>, panning does not follow the pointer.</p>
 </div>
 
   
@@ -2979,15 +3337,15 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber995">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber981">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Returns the current keyboard pan rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> pans each second with keyboard input.</p>
+<p>Default is <code>5.0</code>.</p>
 </div>
 
   
@@ -3037,15 +3395,17 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1006">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber994">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the current keyboard rotation rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Sets how many degrees per second the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> rotates/orbits with keyboard input.</p>
+<p>Default is <code>90.0</code>, to rotate/orbit the Camera <code>90.0</code> degrees every second that
+a rotation key is depressed. See the <code>CameraControl</code> class documentation for which keys control
+rotation/orbit.</p>
 </div>
 
   
@@ -3082,15 +3442,15 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1017">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1005">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Returns the current keyboard rotation rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Sets how many degrees per second the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> rotates/orbits with keyboard input.</p>
+<p>Default is <code>90.0</code>.</p>
 </div>
 
   
@@ -3129,26 +3489,27 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-mousePanRate">
+  <h3 data-ice="anchor" id="instance-set-mouseWheelDollyRate">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">mousePanRate</span><span class="code" data-ice="signature">(mousePanRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">mouseWheelDollyRate</span><span class="code" data-ice="signature">(mouseWheelDollyRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber962">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1071">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the current mouse pan rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Sets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second while the mouse wheel is spinning.</p>
+<p>Default is <code>10.0</code>, to dolly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> <code>10.0</code> World-space units per second as we spin
+the mouse wheel.</p>
 </div>
 
   
@@ -3174,26 +3535,26 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-mousePanRate">
+  <h3 data-ice="anchor" id="instance-get-mouseWheelDollyRate">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">mousePanRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">mouseWheelDollyRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber973">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1082">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Returns the current mouse pan rate.</p>
-<p>This is <code>1.0</code> by default.</p>
+  <div data-ice="description"><p>Gets how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> dollys each second while the mouse wheel is spinning.</p>
+<p>Default is <code>10.0</code>.</p>
 </div>
 
   
@@ -3207,110 +3568,7 @@ towards or away from the mouse pointer position.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The current mouse pan rate.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-mouseRotationRate">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">mouseRotationRate</span><span class="code" data-ice="signature">(mouseRotationRate: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1028">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the current mouse rotation rate.</p>
-<p>This is <code>1.0</code> by default.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-mouseRotationRate">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">mouseRotationRate</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1039">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Returns the current mouse rotation rate.</p>
-<p>This is <code>1.0</code> by default.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The current mouse rotation rate.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The current mouseWheel dolly rate.</p>
 </td>
         </tr>
       </tbody>
@@ -3346,7 +3604,7 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber592">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber607">source</a></span></span>
     </span>
   </h3>
 
@@ -3356,7 +3614,7 @@ towards or away from the mouse pointer position.</p>
   <div data-ice="description"><p>Sets the current navigation mode.</p>
 <p>Accepted values are:</p>
 <ul>
-<li>&quot;orbit&quot; - rotation orbits about the current point-of-interest or pivot point,</li>
+<li>&quot;orbit&quot; - rotation orbits about the current target or pivot point,</li>
 <li>&quot;firstPerson&quot; - rotation is about the current eye position,</li>
 <li>&quot;planView&quot; - rotation is disabled.</li>
 </ul>
@@ -3397,7 +3655,7 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber612">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber627">source</a></span></span>
     </span>
   </h3>
 
@@ -3443,6 +3701,116 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-panInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">panInertia</span><span class="code" data-ice="signature">(panInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1135">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the pan inertia factor.</p>
+<p>This factor configures how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> keeps moving after you finish panning it</p>
+<p>This factor is a value in range <code>[0..1]</code>. A value of <code>0.0</code> causes panning to immediately stop,
+<code>0.5</code> causes panning to decay 50% on each animation frame, while <code>1.0</code> causes no decay, which allows panning
+to continue until further input stops it.</p>
+<p>You might set <code>panInertia</code> to zero when you want be able to precisely position or rotate the Camera,
+without interference from inertia. This also means that xeokit renders less frames while panning the Camera,
+wich can improve rendering performance.</p>
+<p>Default is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-panInertia">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">panInertia</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1146">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the pan inertia factor.</p>
+<p>Default is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current pan inertia factor.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-panRightClick">
     <span class="access" data-ice="access">public</span>
     
@@ -3462,7 +3830,7 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Sets whether either right-clicking (true) or middle-clicking (false) pans the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</p>
-<p>Default value is <code>true</code>.</p>
+<p>Default is <code>true</code>.</p>
 </div>
 
   
@@ -3507,7 +3875,7 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Gets whether right-clicking pans the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</p>
-<p>Default value is <code>true</code>.</p>
+<p>Default is <code>true</code>.</p>
 </div>
 
   
@@ -3557,18 +3925,14 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber747">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber756">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
   
-  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-<p>Default value is <code>false</code>.</p>
-<p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">CameraControl#dollyToPointer</a></span> instead.</p>
-</div>
+  
 
   
 
@@ -3604,18 +3968,14 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber763">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber765">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
   
-  <div data-ice="description"><p>Sets whether dollying in first-person or plan-view modes will zoom the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>
-towards or away from the mouse pointer position.</p>
-<p>Default value is <code>false</code>.</p>
-<p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyToPointer">CameraControl#dollyToPointer</a></span> instead.</p>
-</div>
+  
 
   
 
@@ -3664,14 +4024,14 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber549">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber564">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is true.</p>
+  <div data-ice="description"><p>Sets the HTMl element to represent the pivot point when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is true.</p>
 <p>See class comments for an example.</p>
 </div>
 
@@ -3709,15 +4069,15 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber697">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber720">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the current World-space 3D pivot position.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is <code>true</code>.</p>
+  <div data-ice="description"><p>Sets the current World-space 3D target position.</p>
+<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is <code>true</code>.</p>
 </div>
 
   
@@ -3754,7 +4114,7 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber708">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber731">source</a></span></span>
     </span>
   </h3>
 
@@ -3762,7 +4122,7 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Gets the current World-space 3D pivot position.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-pivoting">CameraControl#pivoting</a></span> is <code>true</code>.</p>
+<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-followPointer">CameraControl#followPointer</a></span> is <code>true</code>.</p>
 </div>
 
   
@@ -3801,113 +4161,6 @@ towards or away from the mouse pointer position.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-pivoting">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber671">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether orbit mode currently pivots the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> about an arbitrary user-settable pivot position.</p>
-<p>Default value is <code>false</code>.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;orbit&quot;</code>.</p>
-<p>See class comments for more info.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-pivoting">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber686">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether orbit mode currently pivots the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> about an arbitrary user-settable pivot position.</p>
-<p>Default value is <code>false</code>.</p>
-<p>Only applies when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;orbit&quot;</code>.</p>
-<p>See class comments for more info.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> to enable pivoting.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-planView">
     <span class="access" data-ice="access">public</span>
     
@@ -3919,16 +4172,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber780">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber782">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this set was deprecated.</div>
   
-  <div data-ice="description"><p>Sets whether this CameraControl is in plan-view mode.</p>
+  <div data-ice="description"><p>Sets whether this <code>CameraControl</code> is in plan-view mode.</p>
 <p>When in plan-view mode, rotation is disabled.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 <p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
 </div>
 
@@ -3966,16 +4219,16 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber802">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber804">source</a></span></span>
     </span>
   </h3>
 
   
   <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
   
-  <div data-ice="description"><p>Gets whether this CameraControl is in plan-view mode.</p>
+  <div data-ice="description"><p>Gets whether this <code>CameraControl</code> is in plan-view mode.</p>
 <p>When in plan-view mode, rotation is disabled.</p>
-<p>Default value is <code>false</code>.</p>
+<p>Default is <code>false</code>.</p>
 <p>Deprecated - use <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> instead.</p>
 </div>
 
@@ -4026,7 +4279,7 @@ towards or away from the mouse pointer position.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber626">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber641">source</a></span></span>
     </span>
   </h3>
 
@@ -4034,8 +4287,8 @@ towards or away from the mouse pointer position.</p>
   
   
   <div data-ice="description"><p>Sets whether mouse and touch input is enabled.</p>
-<p>Default value is <code>true</code>.</p>
-<p>Disabling mouse and touch input on CameraControl is useful when we want to temporarily use mouse or
+<p>Default is <code>true</code>.</p>
+<p>Disabling mouse and touch input on <code>CameraControl</code> is useful when we want to temporarily use mouse or
 touch input to interact with some other 3D control, without disturbing the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</p>
 </div>
 
@@ -4073,7 +4326,7 @@ touch input to interact with some other 3D control, without disturbing the <span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber671">source</a></span></span>
     </span>
   </h3>
 
@@ -4081,8 +4334,8 @@ touch input to interact with some other 3D control, without disturbing the <span
   
   
   <div data-ice="description"><p>Gets whether mouse and touch input is enabled.</p>
-<p>Default value is <code>true</code>.</p>
-<p>Disabling mouse and touch input on CameraControl is desirable when we want to temporarily use mouse or
+<p>Default is <code>true</code>.</p>
+<p>Disabling mouse and touch input on <code>CameraControl</code> is desirable when we want to temporarily use mouse or
 touch input to interact with some other 3D control, without interfering with the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</p>
 </div>
 
@@ -4129,7 +4382,7 @@ touch input to interact with some other 3D control, without interfering with the
     
     
     
-    <span class="code" data-ice="name">rotationInertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">rotationInertia</span><span class="code" data-ice="signature">(rotationInertia: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
@@ -4140,13 +4393,13 @@ touch input to interact with some other 3D control, without interfering with the
   
   
   
-  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the Camera keeps moving after you finish rotating it.</p>
+  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> keeps moving after you finish rotating it.</p>
 <p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
 while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of rotation.</p>
 <p>You may choose an inertia of zero when you want be able to precisely rotate the Camera,
 without interference from inertia. Zero inertia can also mean that less frames are rendered while
 you are rotating the Camera.</p>
-<p>Default value is <code>0.5</code>.</p>
+<p>Default is <code>0.5</code>.</p>
 <p>Does not apply when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;planView&quot;</code>, which disallows rotation.</p>
 </div>
 
@@ -4192,7 +4445,7 @@ you are rotating the Camera.</p>
   
   
   <div data-ice="description"><p>Gets the rotation inertia factor.</p>
-<p>Default value is <code>0.5</code>.</p>
+<p>Default is <code>0.5</code>.</p>
 <p>Does not apply when <span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-navMode">CameraControl#navMode</a></span> is <code>&quot;planView&quot;</code>, which disallows rotation.</p>
 </div>
 

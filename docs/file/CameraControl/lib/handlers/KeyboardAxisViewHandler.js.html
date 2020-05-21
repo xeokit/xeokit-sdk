@@ -81,11 +81,9 @@ class KeyboardAxisViewHandler {
             const aabb = scene.aabb;
             const diag = math.getAABB3Diag(aabb);
 
-            center[0] = aabb[0] + aabb[3] / 2.0;
-            center[1] = aabb[1] + aabb[4] / 2.0;
-            center[2] = aabb[2] + aabb[5] / 2.0;
+            math.getAABB3Center(aabb, center);
 
-            const dist = Math.abs((diag) / Math.tan(controllers.cameraFlight.fitFOV / 2));
+            const dist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
 
             switch (keyCode) {
 
@@ -129,20 +127,20 @@ class KeyboardAxisViewHandler {
                     return;
             }
 
-            if ((!configs.firstPerson) &amp;&amp; configs.pivoting) {
+            if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                 controllers.pivotController.startPivot(center);
             }
 
             if (controllers.cameraFlight.duration &gt; 0) {
                 controllers.cameraFlight.flyTo(tempCameraTarget, () =&gt; {
-                    if (controllers.pivotController.getPivoting() &amp;&amp; configs.pivoting) {
+                    if (controllers.pivotController.getPivoting() &amp;&amp; configs.followPointer) {
                         controllers.pivotController.showPivot();
                     }
                 });
 
             } else {
                 controllers.cameraFlight.jumpTo(tempCameraTarget);
-                if (controllers.pivotController.getPivoting() &amp;&amp; configs.pivoting) {
+                if (controllers.pivotController.getPivoting() &amp;&amp; configs.followPointer) {
                     controllers.pivotController.showPivot();
                 }
             }
