@@ -114,7 +114,7 @@ class MousePickHandler {
             states.mouseDownCursorX = states.mouseCanvasPos[0];
             states.mouseDownCursorY = states.mouseCanvasPos[1];
 
-            if ((!configs.firstPerson) && configs.pivoting) {
+            if ((!configs.firstPerson) && configs.followPointer) {
 
                 pickController.pickCursorPos = states.mouseCanvasPos;
                 pickController.schedulePickSurface = true;
@@ -199,7 +199,7 @@ class MousePickHandler {
 
                             cameraControl.fire("pickedSurface", pickController.pickResult, true);
 
-                            if ((!configs.firstPerson) && configs.pivoting) {
+                            if ((!configs.firstPerson) && configs.followPointer) {
                                 controllers.pivotController.startPivot(pickController.pickResult.worldPos);
                                 controllers.pivotController.showPivot();
                             }
@@ -236,7 +236,7 @@ class MousePickHandler {
 
                         flyCameraTo(pickController.pickResult);
 
-                        if ((!configs.firstPerson) && configs.pivoting) {
+                        if ((!configs.firstPerson) && configs.followPointer) {
 
                             const pickedEntityAABB = pickController.pickResult.entity.aabb;
                             const pickedEntityCenterPos = math.getAABB3Center(pickedEntityAABB);
@@ -253,7 +253,7 @@ class MousePickHandler {
 
                         flyCameraTo();
 
-                        if ((!configs.firstPerson) && configs.pivoting) {
+                        if ((!configs.firstPerson) && configs.followPointer) {
 
                             const sceneAABB = scene.aabb;
                             const sceneCenterPos = math.getAABB3Center(sceneAABB);

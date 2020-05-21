@@ -3,27 +3,13 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-    <title>CameraControl Plan View Mode</title>
+    <title>CameraControl First Person Mode</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
 
         #myCanvas {
             background: lightblue;
-        }
-
-        .camera-pivot-marker {
-            color: #ffffff;
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            border-radius: 15px;
-            border: 2px solid #ebebeb;
-            background: black;
-            visibility: hidden;
-            box-shadow: 5px 5px 15px 1px #000000;
-            z-index: 10000;
-            pointer-events: none;
         }
 
         #my-gui-container {
@@ -44,11 +30,15 @@
 
 <div id="info">
     <h1><a target="_other"
-           href="./../docs/class/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> - Plan View Mode
-    </h1><br>
+           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> -
+        First-Person Mode</h1><br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/316">Model source</a>
         </li>
     </ul>
 </div>
@@ -72,7 +62,7 @@
     import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    // Create a Viewer, arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -85,24 +75,12 @@
     const cameraFlight = viewer.cameraFlight;
     const camera = scene.camera;
 
-    cameraControl.navMode = "planView";
-    cameraControl.dollyToPointer = true;
+    cameraControl.navMode = "firstPerson";
+    cameraControl.followPointer = true;
 
-    viewer.camera.eye =  [4.31, 24.56, 6.59];
-    viewer.camera.look = [4.31, -29.30, 6.5];
-    viewer.camera.up = [0, 0, 1];
-
-    camera.perspective.near = 0.1;
-    camera.perspective.far = 5000.0;
-
-    camera.ortho.near = 0.1;
-    camera.ortho.far = 5000.0;
-
-    camera.projection = "perspective";
-
-    scene.highlightMaterial.fill = true;
-    scene.highlightMaterial.fillAlpha = 0.3;
-    scene.highlightMaterial.edgeColor = [1, 1, 0];
+    viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
+    viewer.scene.camera.look = [42.45, 49.62, -43.59];
+    viewer.scene.camera.up = [0.05, 0.95, 0.15];
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -112,12 +90,12 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "./models/xkt/HolterTower/HolterTower.xkt",
+        metaModelSrc: "./metaModels/HolterTower/HolterTower.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
-    model.on("loaded", ()=> { // This synchronizes camera.ortho.scale to the model boundary
+    model.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
         cameraFlight.flyTo(model);
     });
 
@@ -155,49 +133,81 @@
         this.active = cameraControl.active;
         this.keyboardLayout = cameraControl.keyboardLayout;
         this.ortho = camera.projection === "ortho";
-        this.dollyToPointer = cameraControl.dollyToPointer;
+        this.followPointer = cameraControl.followPointer;
+        this.constrainVertical = cameraControl.constrainVertical;
         this.doublePickFlyTo = cameraControl.doublePickFlyTo;
         this.panRightClick = cameraControl.panRightClick;
-        this.dollyRate = cameraControl.dollyRate;
+
+        this.dragRotationRate = cameraControl.dragRotationRate;
+        this.keyboardRotationRate = cameraControl.keyboardRotationRate;
         this.rotationInertia = cameraControl.rotationInertia;
+
+        this.keyboardPanRate = cameraControl.keyboardPanRate;
+        this.panInertia = cameraControl.panInertia;
+
+        this.keyboardDollyRate = cameraControl.keyboardDollyRate;
+        this.mouseWheelDollyRate = cameraControl.mouseWheelDollyRate;
         this.dollyInertia = cameraControl.dollyInertia;
     }();
 
     const update = () => {
+
         cameraControl.active = cameraControlParams.active;
         cameraControl.keyboardLayout = cameraControlParams.keyboardLayout;
         camera.projection = cameraControlParams.ortho ? "ortho" : "perspective";
-        cameraControl.dollyToPointer = cameraControlParams.dollyToPointer;
+        cameraControl.followPointer = cameraControlParams.followPointer;
+        cameraControl.constrainVertical = cameraControlParams.constrainVertical;
         cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
         cameraControl.panRightClick = cameraControlParams.panRightClick;
-        cameraControl.dollyRate = cameraControlParams.dollyRate;
+
+        cameraControl.dragRotationRate = cameraControlParams.dragRotationRate;
+        cameraControl.keyboardRotationRate = cameraControlParams.keyboardRotationRate;
         cameraControl.rotationInertia = cameraControlParams.rotationInertia;
+
+        cameraControl.keyboardPanRate = cameraControlParams.keyboardPanRate;
+        cameraControl.panInertia = cameraControlParams.panInertia;
+
+        cameraControl.keyboardDollyRate = cameraControlParams.keyboardDollyRate;
+        cameraControl.mouseWheelDollyRate = cameraControlParams.mouseWheelDollyRate;
         cameraControl.dollyInertia = cameraControlParams.dollyInertia;
+
         requestAnimationFrame(update);
     };
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false});
+    const gui = new dat.GUI({autoPlace: false, width: 300});
 
     const cameraControlFolder = gui.addFolder('cameraControl');
-
     cameraControlFolder.add(cameraControlParams, 'active');
     cameraControlFolder.add(cameraControlParams, 'keyboardLayout', ["qwerty", "azerty"]);
     cameraControlFolder.add(cameraControlParams, 'ortho');
-    cameraControlFolder.add(cameraControlParams, 'dollyToPointer');
+    cameraControlFolder.add(cameraControlParams, 'followPointer');
+    cameraControlFolder.add(cameraControlParams, 'constrainVertical');
     cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
     cameraControlFolder.add(cameraControlParams, 'panRightClick');
-    cameraControlFolder.add(cameraControlParams, 'dollyRate', 0, 30);
-    cameraControlFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
-    cameraControlFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
-
     cameraControlFolder.open();
+
+    const rotationFolder = gui.addFolder('Rotation');
+    rotationFolder.add(cameraControlParams, 'dragRotationRate', 0, 720);
+    rotationFolder.add(cameraControlParams, 'keyboardRotationRate', 0, 360);
+    rotationFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
+    rotationFolder.open();
+
+    const panningFolder = gui.addFolder('Panning');
+    panningFolder.add(cameraControlParams, 'keyboardPanRate', 0, 50);
+    panningFolder.add(cameraControlParams, 'panInertia', 0, 1);
+    panningFolder.open();
+
+    const dollyFolder = gui.addFolder('Dolly');
+    dollyFolder.add(cameraControlParams, 'keyboardDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
+    dollyFolder.open();
 
     const customContainer = document.getElementById('my-gui-container');
     customContainer.appendChild(gui.domElement);
 
-    window.camera = camera;
 
 </script>
 </html>

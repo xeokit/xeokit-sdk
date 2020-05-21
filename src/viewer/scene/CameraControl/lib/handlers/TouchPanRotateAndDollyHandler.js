@@ -62,7 +62,7 @@ class TouchPanRotateAndDollyHandler {
                 tapStartPos[0] = touches[0].pageX;
                 tapStartPos[1] = touches[0].pageY;
 
-                if (configs.pivoting) {
+                if (configs.followPointer) {
 
 
 
@@ -106,6 +106,14 @@ class TouchPanRotateAndDollyHandler {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
+
+            // Scaling drag-rotate to canvas boundary
+
+            const canvasBoundary = scene.canvas.boundary;
+            const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
+            const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
+            const sweep = configs.firstPerson ? 180 : 180;
+
             const touches = event.touches;
 
             if (numTouches === 1) {
@@ -113,12 +121,13 @@ class TouchPanRotateAndDollyHandler {
                 const touch0 = touches[0];
 
                 if (checkMode(MODE_ROTATE)) {
-                    const deltaX = touch0.pageX - lastTouches[0][0];
-                    const deltaY = touch0.pageY - lastTouches[0][1];
-                    const rotateDeltaX = deltaX * configs.touchRotateRate;
-                    const rotateDeltaY = deltaY * configs.touchRotateRate;
-                    updates.rotateDeltaX += rotateDeltaY;
-                    updates.rotateDeltaY += -rotateDeltaX;
+
+                    //-----------------------------------------------------------------------------------------------
+                    // Drag rotation
+                    //-----------------------------------------------------------------------------------------------
+
+                    updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * sweep * configs.dragRotationRate;
+                    updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * sweep * configs.dragRotationRate;
                 }
 
             } else if (numTouches === 2) {
@@ -132,15 +141,42 @@ class TouchPanRotateAndDollyHandler {
                 const panning = math.dotVec2(touch0Vec, touch1Vec) > 0;
 
                 if (panning && checkMode(MODE_PAN)) {
+
                     math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
-                    updates.panDeltaX += touch0Vec[0] * configs.touchPanRate;
-                    updates.panDeltaY += touch0Vec[1] * configs.touchPanRate;
+
+                    const xPanDelta = touch0Vec[0];
+                    const yPanDelta = touch0Vec[1];
+
+                    const camera = scene.camera;
+
+                    // We use only canvasHeight here so that aspect ratio does not distort speed
+
+                    if (camera.projection === "perspective") {
+
+                        //----------------------------
+                        // TODO: Pick on first touch
+                        //----------------------------
+
+                        const touchPicked = false;
+                        const pickedWorldPos = [0,0,0];
+
+                        const depth = Math.abs(touchPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
+                        const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+
+                        updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight);
+                        updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight);
+
+                    } else {
+
+                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
+                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
+                    }
                 }
 
                 if (!panning && checkMode(MODE_ZOOM)) {
                     const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                     const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
-                    updates.dollyDelta = (d2 - d1) * configs.touchZoomRate;
+                    updates.dollyDelta = (d2 - d1);
                 }
             }
 

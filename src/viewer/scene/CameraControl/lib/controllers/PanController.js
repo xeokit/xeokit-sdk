@@ -3,7 +3,7 @@ import {math} from "../../../math/math.js";
 const screenPos = math.vec4();
 const viewPos = math.vec4();
 const worldPos = math.vec4();
-const eyeCursorVec = math.vec3();
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -62,7 +62,7 @@ class PanController {
         return this._sceneDiagSize;
     }
 
-    _unproject(canvasPos, z, viewPos, worldPos) {
+    _unproject(canvasPos, screenZ, viewPos, worldPos) {
         const canvas = this._scene.canvas.canvas;
         const inverseProjMat = this._getInverseProjectMat();
         const inverseViewMat = this._getInverseViewMat();
@@ -70,7 +70,7 @@ class PanController {
         const halfCanvasHeight = canvas.offsetHeight / 2.0;
         screenPos[0] = (canvasPos[0] - halfCanvasWidth) / halfCanvasWidth;
         screenPos[1] = (canvasPos[1] - halfCanvasHeight) / halfCanvasHeight;
-        screenPos[2] = z;
+        screenPos[2] = screenZ;
         screenPos[3] = 1.0;
         math.mulMat4v4(inverseProjMat, screenPos, viewPos);
         math.mulVec3Scalar(viewPos, 1.0 / viewPos[3]); // Normalize homogeneous coord
@@ -82,54 +82,47 @@ class PanController {
     /**
      * Pans the Camera towards the given 2D canvas coordinates.
      * @param canvasPos
-     * @param factor
+     * @param dollyDist
      */
-    panToCanvasPos(canvasPos, factor) {
-
-        const camera = this._scene.camera;
-        const lastHoverDistance = 0;
+    dollyToCanvasPos(canvasPos, dollyDist) {
 
         // Get last two columns of projection matrix
         const transposedProjectMat = this._getTransposedProjectMat();
         const Pt3 = transposedProjectMat.subarray(8, 12);
         const Pt4 = transposedProjectMat.subarray(12);
-        const D = [0, 0, -(lastHoverDistance || this._getSceneDiagSize()), 1];
-        const Z = math.dotVec4(D, Pt3) / math.dotVec4(D, Pt4);
+        const D = [0, 0, -this._getSceneDiagSize(), 1];
+        const screenZ = math.dotVec4(D, Pt3) / math.dotVec4(D, Pt4);
 
-        this._unproject(canvasPos, Z, viewPos, worldPos);
+        this._unproject(canvasPos, screenZ, viewPos, worldPos);
 
-        math.subVec3(worldPos, camera.eye, eyeCursorVec);
-        math.normalizeVec3(eyeCursorVec);
-
-        const px = eyeCursorVec[0] * factor;
-        const py = eyeCursorVec[1] * factor;
-        const pz = eyeCursorVec[2] * factor;
-
-        const eye = camera.eye;
-        const look = camera.look;
-
-        camera.eye = [eye[0] + px, eye[1] + py, eye[2] + pz];
-        camera.look = [look[0] + px, look[1] + py, look[2] + pz];
+        this.dollyToWorldPos(worldPos, dollyDist);
     }
 
     /**
      * Pans the camera towards the given 3D World-space coordinates.
      * @param worldPos
-     * @param factor
+     * @param dollyDist
      */
-    panToWorldPos(worldPos, factor) {
+    dollyToWorldPos(worldPos, dollyDist) {
+        
         const camera = this._scene.camera;
-        math.subVec3(worldPos, camera.eye, eyeCursorVec);
-        const dist = math.lenVec3(eyeCursorVec);
-        if (dist < factor) {
+        const eyeToWorldPosVec = math.subVec3(worldPos, camera.eye, tempVec3a);
+        
+        const dist = math.lenVec3(eyeToWorldPosVec);
+        
+        if (dist < dollyDist) {
             return;
         }
-        math.normalizeVec3(eyeCursorVec);
-        const px = eyeCursorVec[0] * factor;
-        const py = eyeCursorVec[1] * factor;
-        const pz = eyeCursorVec[2] * factor;
+        
+        math.normalizeVec3(eyeToWorldPosVec);
+        
+        const px = eyeToWorldPosVec[0] * dollyDist;
+        const py = eyeToWorldPosVec[1] * dollyDist;
+        const pz = eyeToWorldPosVec[2] * dollyDist;
+        
         const eye = camera.eye;
         const look = camera.look;
+        
         camera.eye = [eye[0] + px, eye[1] + py, eye[2] + pz];
         camera.look = [look[0] + px, look[1] + py, look[2] + pz];
     }

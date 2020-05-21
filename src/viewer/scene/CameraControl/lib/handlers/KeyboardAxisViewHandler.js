@@ -90,20 +90,20 @@ class KeyboardAxisViewHandler {
                     return;
             }
 
-            if ((!configs.firstPerson) && configs.pivoting) {
+            if ((!configs.firstPerson) && configs.followPointer) {
                 controllers.pivotController.startPivot(center);
             }
 
             if (controllers.cameraFlight.duration > 0) {
                 controllers.cameraFlight.flyTo(tempCameraTarget, () => {
-                    if (controllers.pivotController.getPivoting() && configs.pivoting) {
+                    if (controllers.pivotController.getPivoting() && configs.followPointer) {
                         controllers.pivotController.showPivot();
                     }
                 });
 
             } else {
                 controllers.cameraFlight.jumpTo(tempCameraTarget);
-                if (controllers.pivotController.getPivoting() && configs.pivoting) {
+                if (controllers.pivotController.getPivoting() && configs.followPointer) {
                     controllers.pivotController.showPivot();
                 }
             }

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <title>CameraControl First Person Mode</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 150px;
+            right: 20px;
+            z-index: 10;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1><a target="_other"
+           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> -
+        First-Person Mode</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+        </li>
+    </ul>
+</div>
+
+
+<div id="my-gui-container"></div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+    const camera = scene.camera;
+
+    cameraControl.navMode = "firstPerson";
+    cameraControl.followPointer = true;
+
+    viewer.camera.eye = [-8.23, 10.67, 35.26];
+    viewer.camera.look = [4.39, 3.72, 8.89];
+    viewer.camera.up = [0.10, 0.97, -0.20];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with grid
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 300,
+            divisions: 60
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [0, -1.6, 0],
+        collidable: false
+    });
+
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with Camera configs
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControlParams = new function () {
+
+        this.active = cameraControl.active;
+        this.keyboardLayout = cameraControl.keyboardLayout;
+        this.ortho = camera.projection === "ortho";
+        this.followPointer = cameraControl.followPointer;
+        this.constrainVertical = cameraControl.constrainVertical;
+        this.doublePickFlyTo = cameraControl.doublePickFlyTo;
+        this.panRightClick = cameraControl.panRightClick;
+
+        this.dragRotationRate = cameraControl.dragRotationRate;
+        this.keyboardRotationRate = cameraControl.keyboardRotationRate;
+        this.rotationInertia = cameraControl.rotationInertia;
+
+        this.keyboardPanRate = cameraControl.keyboardPanRate;
+        this.panInertia = cameraControl.panInertia;
+
+        this.keyboardDollyRate = cameraControl.keyboardDollyRate;
+        this.mouseWheelDollyRate = cameraControl.mouseWheelDollyRate;
+        this.dollyInertia = cameraControl.dollyInertia;
+    }();
+
+    const update = () => {
+
+        cameraControl.active = cameraControlParams.active;
+        cameraControl.keyboardLayout = cameraControlParams.keyboardLayout;
+        camera.projection = cameraControlParams.ortho ? "ortho" : "perspective";
+        cameraControl.followPointer = cameraControlParams.followPointer;
+        cameraControl.constrainVertical = cameraControlParams.constrainVertical;
+        cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
+        cameraControl.panRightClick = cameraControlParams.panRightClick;
+
+        cameraControl.dragRotationRate = cameraControlParams.dragRotationRate;
+        cameraControl.keyboardRotationRate = cameraControlParams.keyboardRotationRate;
+        cameraControl.rotationInertia = cameraControlParams.rotationInertia;
+
+        cameraControl.keyboardPanRate = cameraControlParams.keyboardPanRate;
+        cameraControl.panInertia = cameraControlParams.panInertia;
+
+        cameraControl.keyboardDollyRate = cameraControlParams.keyboardDollyRate;
+        cameraControl.mouseWheelDollyRate = cameraControlParams.mouseWheelDollyRate;
+        cameraControl.dollyInertia = cameraControlParams.dollyInertia;
+
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false, width: 300});
+
+    const cameraControlFolder = gui.addFolder('cameraControl');
+    cameraControlFolder.add(cameraControlParams, 'active');
+    cameraControlFolder.add(cameraControlParams, 'keyboardLayout', ["qwerty", "azerty"]);
+    cameraControlFolder.add(cameraControlParams, 'ortho');
+    cameraControlFolder.add(cameraControlParams, 'followPointer');
+    cameraControlFolder.add(cameraControlParams, 'constrainVertical');
+    cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
+    cameraControlFolder.add(cameraControlParams, 'panRightClick');
+    cameraControlFolder.open();
+
+    const rotationFolder = gui.addFolder('Rotation');
+    rotationFolder.add(cameraControlParams, 'dragRotationRate', 0, 720);
+    rotationFolder.add(cameraControlParams, 'keyboardRotationRate', 0, 360);
+    rotationFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
+    rotationFolder.open();
+
+    const panningFolder = gui.addFolder('Panning');
+    panningFolder.add(cameraControlParams, 'keyboardPanRate', 0, 50);
+    panningFolder.add(cameraControlParams, 'panInertia', 0, 1);
+    panningFolder.open();
+
+    const dollyFolder = gui.addFolder('Dolly');
+    dollyFolder.add(cameraControlParams, 'keyboardDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
+    dollyFolder.open();
+
+    const customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
+
+</script>
+</html>

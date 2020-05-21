@@ -35,7 +35,6 @@ class MousePanRotateDollyHandler {
         this._scene = scene;
 
         const pickController = controllers.pickController;
-        const pivotController = controllers.pivotController;
 
         let lastX;
         let lastY;
@@ -43,8 +42,6 @@ class MousePanRotateDollyHandler {
         let lastYDown = 0;
         let xRotateDelta = 0;
         let yRotateDelta = 0;
-        let xPanDelta = 0;
-        let yPanDelta = 0;
         this._down = false;
 
         let mouseDownLeft;
@@ -98,8 +95,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -124,8 +119,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -145,8 +138,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -166,8 +157,6 @@ class MousePanRotateDollyHandler {
 
                         xRotateDelta = 0;
                         yRotateDelta = 0;
-                        xPanDelta = 0;
-                        yPanDelta = 0;
 
                         lastX = states.mouseCanvasPos[0];
                         lastY = states.mouseCanvasPos[1];
@@ -221,32 +210,33 @@ class MousePanRotateDollyHandler {
 
             if (panning) {
 
-                xPanDelta = (x - lastX);
-                yPanDelta = (y - lastY);
+                const xPanDelta = (x - lastX);
+                const yPanDelta = (y - lastY);
 
                 const camera = scene.camera;
 
+                // We use only canvasHeight here so that aspect ratio does not distort speed
+
                 if (camera.projection === "perspective") {
 
-                    const eyeLookDist = mouseDownPicked ? Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, []))) : scene.camera.eyeLookDist;
-                    const targetDistance = eyeLookDist * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+                    const depth = Math.abs(mouseDownPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
+                    const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                    updates.panDeltaX += ((configs.mousePanRate * 30.0 * xPanDelta) * targetDistance / canvasHeight);
-                    updates.panDeltaY += ((configs.mousePanRate * 30.0 * yPanDelta) * targetDistance / canvasHeight);
+                    updates.panDeltaX += (1.5 * xPanDelta * targetDistance / canvasHeight);
+                    updates.panDeltaY += (1.5 * yPanDelta * targetDistance / canvasHeight);
 
                 } else {
 
-                    updates.panDeltaX += configs.mousePanRate * 10 * camera.ortho.scale * (xPanDelta / canvasHeight);
-                    updates.panDeltaY += configs.mousePanRate * 10 * camera.ortho.scale * (yPanDelta / canvasHeight);
+                    updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
+                    updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
                 }
 
             } else {
 
-                if (!configs.planView) {
+                if (!configs.planView) { // No rotating in plan-view mode
 
-                    const sweep = configs.firstPerson ? 180 : 180;
-                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * sweep * configs.mouseRotationRate;
-                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * sweep * configs.mouseRotationRate;
+                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
+                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
                 }
             }
 
@@ -283,8 +273,6 @@ class MousePanRotateDollyHandler {
             canvas.style.removeProperty("cursor");
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             this._down = false;
         });
@@ -295,8 +283,6 @@ class MousePanRotateDollyHandler {
             }
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             this._down = false;
         });
@@ -309,8 +295,6 @@ class MousePanRotateDollyHandler {
 
             xRotateDelta = 0;
             yRotateDelta = 0;
-            xPanDelta = 0;
-            yPanDelta = 0;
 
             updates.panDeltaX = 0;
             updates.panDeltaY = 0;
@@ -320,27 +304,30 @@ class MousePanRotateDollyHandler {
             this._down = false;
         });
 
-        let lastWheelTime = null;
+        const maxElapsed = 1/20;
+        const minElapsed = 1/60;
+
+        let secsNowLast = null;
 
         canvas.addEventListener("wheel", this._mouseWheelHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
+            const secsNow = performance.now() / 1000.0;
+            var secsElapsed = (secsNowLast !== null) ? (secsNow - secsNowLast) : 0;
+            secsNowLast = secsNow;
+            if (secsElapsed > maxElapsed) {
+                secsElapsed = maxElapsed;
+            }
+            if (secsElapsed < minElapsed) {
+                secsElapsed = minElapsed;
+            }
             const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
             if (delta === 0) {
                 return;
             }
-            const timeNow = performance.now();
-            let timeDiff = (lastWheelTime !== null) ? (timeNow - lastWheelTime) : 60;
-            if (timeDiff > 60) {
-                timeDiff = 60;
-            } else if (timeDiff < 1) {
-                timeDiff = 1;
-            }
-            timeDiff = ((60 - timeDiff) * 0.4) + 1;
-            lastWheelTime = timeNow;
-            const d = delta / Math.abs(delta);
-            updates.dollyDelta = -d * timeDiff;
+            const normalizedDelta = delta / Math.abs(delta);
+            updates.dollyDelta += -normalizedDelta * secsElapsed * configs.mouseWheelDollyRate;
             e.preventDefault();
         });
     }

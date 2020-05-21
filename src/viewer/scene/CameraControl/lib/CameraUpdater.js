@@ -1,6 +1,8 @@
 import {math} from "../../math/math.js";
 
+const SCALE_DOLLY_EACH_FRAME = 5; // Recalculate dolly speed for eye->target distance on each Nth frame
 const EPSILON = 0.001;
+const tempVec3 = math.vec3();
 
 /**
  * Handles camera updates on each "tick" that were scheduled by the various controllers.
@@ -14,6 +16,10 @@ class CameraUpdater {
         this._scene = scene;
         const camera = scene.camera;
         const pivotController = controllers.pivotController;
+        const panController = controllers.panController;
+
+        let countDown = SCALE_DOLLY_EACH_FRAME; // Decrements on each tick
+        let dollyDistFactor = 1.0; // Calculated when countDown is zero
 
         this._onTick = scene.on("tick", (e) => {
 
@@ -26,12 +32,21 @@ class CameraUpdater {
             let cursorType = "default";
 
             const deltaTimeMilliSecs = e.deltaTime;
-            const deltaTimeSecs = deltaTimeMilliSecs / 1000;
-            const panSpeed = deltaTimeSecs * 1.0;
-            const dollySpeed = deltaTimeSecs * configs.dollyRate;
+            const deltaTimeSecs = deltaTimeMilliSecs / 100;
+
+            //const dollySpeed = deltaTimeSecs * configs.keyboardDollyRate;
+
 
             //----------------------------------------------------------------------------------------------------------
-            // Rotation
+            // Dolly decay
+            //------------------------------------------------------------------------------------  ----------------------
+
+            if (Math.abs(updates.dollyDelta) < EPSILON) {
+                updates.dollyDelta = 0;
+            }
+
+            //----------------------------------------------------------------------------------------------------------
+            // Rotation decay
             //----------------------------------------------------------------------------------------------------------
 
             if (Math.abs(updates.rotateDeltaX) < EPSILON) {
@@ -42,9 +57,60 @@ class CameraUpdater {
                 updates.rotateDeltaY = 0;
             }
 
+            //----------------------------------------------------------------------------------------------------------
+            // Dolly speed eye->look scaling
+            //
+            // If pointer is over an object, then dolly speed is proportional to the distance to that object.
+            //
+            // If pointer is not over an object, then dolly speed is proportional to the distance to the last
+            // object the pointer was over. This is so that we can dolly to structures that may have gaps through
+            // which empty background shows, that the pointer may inadvertently be over. In these cases, we don't
+            // want dolly speed wildly varying depending on how accurately the user avoids the gaps with the pointer.
+            //----------------------------------------------------------------------------------------------------------
+
+            if (configs.firstPerson && (!configs.followPointer)) {
+
+
+            } else if (--countDown <= 0) {
+
+                countDown = SCALE_DOLLY_EACH_FRAME;
+
+                if (updates.dollyDelta !== 0) {
+
+                    if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
+
+                        const pickResult = this._scene.pick({
+                            pickSurface: true,
+                            pickSurfaceNormal: false,
+                            canvasPos: states.mouseCanvasPos
+                        });
+
+                        if (pickResult && pickResult.worldPos) {
+                            const worldPos = pickResult.worldPos;
+                            pivotController.setPivotPos(worldPos);
+                            pivotController.hidePivot();
+                        }
+                    }
+
+                    const dist = Math.abs(math.lenVec3(math.subVec3(pivotController.getPivotPos(), scene.camera.eye, tempVec3)));
+
+                    dollyDistFactor = dist / 50;
+
+                    if (dollyDistFactor < 0.01) {
+                        dollyDistFactor = 0.01;
+                    }
+                }
+            }
+
+            const dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
+
+            //----------------------------------------------------------------------------------------------------------
+            // Rotation
+            //----------------------------------------------------------------------------------------------------------
+
             if (updates.rotateDeltaY !== 0 || updates.rotateDeltaX !== 0) {
 
-                if (pivotController.getPivoting() && configs.pivoting) {
+                if (pivotController.getPivoting() && configs.followPointer) {
                     pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
                     pivotController.showPivot();
 
@@ -71,7 +137,6 @@ class CameraUpdater {
                 updates.rotateDeltaY *= configs.rotationInertia;
 
                 cursorType = "grabbing";
-
             }
 
             //----------------------------------------------------------------------------------------------------------
@@ -92,18 +157,21 @@ class CameraUpdater {
 
             if (updates.panDeltaX !== 0 || updates.panDeltaY !== 0 || updates.panDeltaZ !== 0) {
 
+                if (pivotController.getPivoting() && configs.followPointer) {
+                    pivotController.showPivot();
+                }
+
                 const vec = math.vec3();
-                const vec2 = math.vec3();
 
                 vec[0] = updates.panDeltaX;
                 vec[1] = updates.panDeltaY;
                 vec[2] = updates.panDeltaZ;
 
-                math.mulVec3Scalar(vec, panSpeed, vec2);
-
                 let verticalEye;
                 let verticalLook;
+
                 if (configs.constrainVertical) {
+
                     if (camera.xUp) {
                         verticalEye = camera.eye[0];
                         verticalLook = camera.look[0];
@@ -115,9 +183,11 @@ class CameraUpdater {
                         verticalLook = camera.look[2];
                     }
 
-                    camera.pan(vec2);
-                    let eye = camera.eye;
-                    let look = camera.look;
+                    camera.pan(vec);
+
+                    const eye = camera.eye;
+                    const look = camera.look;
+
                     if (camera.xUp) {
                         eye[0] = verticalEye;
                         look[0] = verticalLook;
@@ -128,34 +198,28 @@ class CameraUpdater {
                         eye[2] = verticalEye;
                         look[2] = verticalLook;
                     }
+
                     camera.eye = eye;
                     camera.look = look;
+
                 } else {
-                    if (controllers.pivotController.getPivoting() && configs.pivoting) {
-                        controllers.pivotController.showPivot();
-                    }
-                    camera.pan(vec2);
-                    // camera.pan([updates.panDeltaX * f, updates.panDeltaY * f, updates.panDeltaZ * f]);
+                    camera.pan(vec);
                 }
 
                 cursorType = "grabbing";
             }
 
-            updates.panDeltaX *= configs.dollyInertia;
-            updates.panDeltaY *= configs.dollyInertia;
-            updates.panDeltaZ *= configs.dollyInertia;
+            updates.panDeltaX *= configs.panInertia;
+            updates.panDeltaY *= configs.panInertia;
+            updates.panDeltaZ *= configs.panInertia;
 
             //----------------------------------------------------------------------------------------------------------
             // Dollying
             //----------------------------------------------------------------------------------------------------------
 
-            if (Math.abs(updates.dollyDelta) < EPSILON) {
-                updates.dollyDelta = 0;
-            }
+            if (dollyDeltaForDist !== 0) {
 
-            if (updates.dollyDelta !== 0) {
-
-                if (updates.dollyDelta < 0) {
+                if (dollyDeltaForDist < 0) {
                     cursorType = "zoom-in";
                 } else {
                     cursorType = "zoom-out";
@@ -179,10 +243,10 @@ class CameraUpdater {
                         }
                     }
 
-                    if (updates.inputFromMouse && configs.dollyToPointer) { // Using mouse input
-                        controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
+                    if (updates.inputFromMouse && configs.followPointer) { // Using mouse input
+                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
                     } else {
-                        camera.pan([0, 0, updates.dollyDelta * dollySpeed]);
+                        camera.pan([0, 0, dollyDeltaForDist]);
                     }
 
                     if (configs.constrainVertical) {
@@ -204,34 +268,37 @@ class CameraUpdater {
 
                 } else if (configs.planView) {
 
-                    if (updates.inputFromMouse && configs.dollyToPointer) {
-                        controllers.panController.panToCanvasPos(states.mouseCanvasPos, -updates.dollyDelta * dollySpeed);
+                    if (updates.inputFromMouse && configs.followPointer) {
+
+                        // Pan-to-canvas pos works better for ortho
+
+                        if (dollyDeltaForDist > 0) {
+                            camera.pan([0, 0, dollyDeltaForDist]);
+                        } else {
+                            panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
+                        }
                     } else {
-                        camera.pan([0, 0, updates.dollyDelta * dollySpeed]);
+                        camera.pan([0, 0, dollyDeltaForDist]);
                     }
 
                 } else { // Orbiting
 
-                    if (configs.pivoting) {
-                        controllers.panController.panToWorldPos(controllers.pivotController.getPivotPos(), -updates.dollyDelta * dollySpeed); // FIXME: What about when pivotPos undefined?
-
+                    if (configs.followPointer) {
+                        panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist); // FIXME: What about when pivotPos undefined?
                     } else {
-                        camera.zoom(updates.dollyDelta * dollySpeed);
+                        camera.zoom(dollyDeltaForDist);
                     }
                 }
 
-                camera.ortho.scale = camera.ortho.scale + updates.dollyDelta;
+                camera.ortho.scale = camera.ortho.scale + (.5 * dollyDeltaForDist);
 
                 updates.dollyDelta *= configs.dollyInertia;
-
-                if (pivotController.getPivoting() && configs.pivoting) {
-                    pivotController.showPivot();
-                }
             }
 
             document.body.style.cursor = cursorType;
         });
     }
+
 
     destroy() {
         this._scene.off(this._onTick);

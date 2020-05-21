@@ -14,90 +14,85 @@ import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDol
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
- * @desc Controls the {@link Camera} with keyboard, mouse and touch input, and fires events when we
- * hover, click or tap {@link Entity}s.
+ * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
  *
- * ## Contents
+ * # Contents
  *
- * - [Overview](#overview)
- * - [Examples](#examples)
- * - [Orbit Mode](#orbit-mode)
- *      * [**Pivoting in Orbit Mode**](#pivoting-in-orbit-mode)
- *      * [**Showing the Pivot Position**](#--showing-the-pivot-position--)
- *      * [**Axis-Aligned Views in Orbit Mode**](#--axis-aligned-views-in-orbit-mode--)
- *      * [**View-Fitting Entitys in Orbit Mode**](#--view-fitting-entitys-in-orbit-mode--)
- * - [First-Person Mode](#first-person-mode)
- *      * [**Dollying to the Mouse Pointer in First-Person Mode**](#--dollying-to-the-mouse-pointer-in-first-person-mode--)
- *      * [**Constraining Vertical Position in First-Person Mode**](#--constraining-vertical-position-in-first-person-mode--)
- *      * [**Axis-Aligned Views in First-Person Mode**](#--axis-aligned-views-in-first-person-mode--)
- *      * [**View-Fitting Entitys in First-Person Mode**](#--view-fitting-entitys-in-first-person-mode--)
- * - [Plan-View Mode](#plan-view-mode)
- *      * [**Dollying to the Mouse Pointer in Plan-View Mode**](#--dollying-to-the-mouse-pointer-in-plan-view-mode--)
- *      * [**Axis-Aligned Views in Plan-View Mode**](#--axis-aligned-views-in-plan-view-mode--)
- * - [Picking Events](#picking-events)
- *      * [**"hover"**](#---hover---)
- *      * [**"hoverOff"**](#---hoveroff---)
- *      * [**"hoverEnter"**](#---hoverenter---)
- *      * [**"hoverOut"**](#---hoverout---)
- *      * [**"picked"**](#---picked---)
- *      * [**"pickedSurface"**](#---pickedsurface---)
- *      * [**"pickedNothing"**](#---pickednothing---)
- *      * [**"doublePicked"**](#---doublepicked---)
- *      * [**"doublePickedSurface"**](#---doublepickedsurface---)
- *      * [**"doublePickedNothing"**](#---doublepickednothing---)
- * <br>
- *
- * ## Overview
- *
- * * Each {@link Viewer} has a CameraControl, located at {@link Viewer#cameraControl}.
- * * CameraControl supports three navigation modes:
- *      * **Orbit mode** orbits the {@link Camera} position about the point-of-interest. In this mode, we also have the option to orbit an
- * arbitrary, pickable pivot position. Dollying in orbit mode can either vary the distance between the eye
- * and the point-of-interest, or move the eye and point-of-interest towards or away from the pivot position.
- *      * **First-person mode** orbits the point-of-interest about the eye position. Dollying can either move the eye and
- * point-of-interest forwards or backwards, or towards and away from the mouse pointer. There is no option
- * to pivot in first-person mode.
- *      * **Plan-view mode** is typically used when the Camera is axis-aligned, and often when using orthographic projection. In this
- * mode, CameraControl prevents us from rotating and pivoting the Camera, which keeps the Camera in correct axis alignment
- * for our plan view.
- * * CameraControl also fires "pick" events when we hover, click or tap on {@link Entity}s.
- * <br>
- *
- * ## Examples
- *
- * * [Orbit mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)
- * * [First-person mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)
- * * [Plan-view mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)
- * <br>
- *
- * ## Orbit Mode
- *
- * * [[Run orbit mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit)]
+ * * [Overview](#overview)
+ * * [Examples](#examples)
+ * * [Orbit Mode](#orbit-mode)
+ *      + [Following the Pointer in Orbit Mode](#--following-the-pointer-in-orbit-mode--)
+ *      + [Showing the Pivot Position](#--showing-the-pivot-position--)
+ *      + [Axis-Aligned Views in Orbit Mode](#--axis-aligned-views-in-orbit-mode--)
+ *      + [View-Fitting Entitys in Orbit Mode](#--view-fitting-entitys-in-orbit-mode--)
+ * * [First-Person Mode](#first-person-mode)
+ *      + [Following the Pointer in First-Person Mode](#--following-the-pointer-in-first-person-mode--)
+ *      + [Constraining Vertical Position in First-Person Mode](#--constraining-vertical-position-in-first-person-mode--)
+ *      + [Axis-Aligned Views in First-Person Mode](#--axis-aligned-views-in-first-person-mode--)
+ *      + [View-Fitting Entitys in First-Person Mode](#--view-fitting-entitys-in-first-person-mode--)
+ * * [Plan-View Mode](#plan-view-mode)
+ *      + [Following the Pointer in Plan-View Mode](#--following-the-pointer-in-plan-view-mode--)
+ *      + [Axis-Aligned Views in Plan-View Mode](#--axis-aligned-views-in-plan-view-mode--)
+ * * [CameraControl Events](#cameracontrol-events)
+ *      + ["hover"](#---hover---)
+ *      + ["hoverOff"](#---hoveroff---)
+ *      + ["hoverEnter"](#---hoverenter---)
+ *      + ["hoverOut"](#---hoverout---)
+ *      + ["picked"](#---picked---)
+ *      + ["pickedSurface"](#---pickedsurface---)
+ *      + ["pickedNothing"](#---pickednothing---)
+ *      + ["doublePicked"](#---doublepicked---)
+ *      + ["doublePickedSurface"](#---doublepickedsurface---)
+ *      + ["doublePickedNothing"](#---doublepickednothing---)
+ *      + ["mouseRightClick"](#---mouserightclick---)
  * <br><br>
  *
- * In orbit mode, we are rotating about a point-of-interest.
+ * # Overview
  *
- * To enable orbit navigation mode:
+ * * Each {@link Viewer} has a ````CameraControl````, located at {@link Viewer#cameraControl}.
+ * * {@link CameraControl#navMode} selects the navigation mode:
+ *      * ````"orbit"```` rotates the {@link Camera} position about the target.
+ *      * ````"firstPerson"```` rotates the World about the Camera position.
+ *      * ````"planView"```` never rotates, but still allows to pan and dolly, typically for an axis-aligned view.
+ * * {@link CameraControl#followPointer} makes the Camera follow the mouse or touch pointer.
+ * * {@link CameraControl#constrainVertical} locks the Camera to its current height when in first-person mode.
+ * * ````CameraControl```` fires pick events when we hover, click or tap on an {@link Entity}.
+ * <br><br>
+ *
+ * # Examples
+ *
+ * * [Orbit Navigation - Duplex Model](/examples/#CameraControl_orbit_Duplex)
+ * * [Orbit Navigation - Holter Tower Model](/examples/#CameraControl_orbit_HolterTower)
+ * * [First-Person Navigation - Duplex Model](/examples/#CameraControl_firstPerson_Duplex)
+ * * [First-Person Navigation - Holter Tower Model](/examples/#CameraControl_firstPerson_HolterTower)
+ * * [Plan-view Navigation - Schependomlaan Model](/examples/#CameraControl_planView_Schependomlaan)
+ * <br><br>
+ *
+ * # Orbit Mode
+ *
+ * In orbit mode, ````CameraControl```` orbits the {@link Camera} about the target.
+ *
+ * To enable orbit mode:
  *
  * ````javascript
- * cameraControl.navMode = "orbit"; // Default
+ * cameraControl.navMode = "orbit";
  * ````
  *
- * We can then orbit by:
+ * Then orbit by:
  *
  * * left-dragging the mouse,
  * * tap-dragging the touch pad, and
  * * pressing arrow keys, or ````Q```` and ````E```` on a QWERTY keyboard, or ````A```` and ````E```` on an AZERTY keyboard.
+ * <br><br>
  *
- * <br>
- * We can dolly forwards and backwards by:
+ * Dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
  * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S```` for AZERTY.
+ * <br><br>
  *
- * <br>
- * We can pan horizontally and vertically by:
+ * Pan horizontally and vertically by:
  *
  * * right-dragging the mouse,
  * * left-dragging the mouse with the SHIFT key down,
@@ -106,29 +101,25 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
  * <br><br>
  *
- * ### **Pivoting in Orbit Mode**
+ * ## Following the Pointer in Orbit Mode
  *
- * In orbit mode, setting {@link CameraControl#pivoting} ````true```` will cause CameraControl to always pivot
- * our eye position and point-of-interest about the current pivot position, and dolly our eye position and
- * point-of-interest towards and away from the pivot position.
+ * When {@link CameraControl#followPointer} is ````true````in orbiting mode, the mouse or touch pointer will dynamically
+ * indicate the target that the {@link Camera} will orbit, as well as dolly to and from.
  *
- * We can set the current pivot position by left-clicking, or tapping, on the surface of an Entity.
- *
- * Lets ensure that we're in orbit mode, then enable pivoting:
+ * Lets ensure that we're in orbit mode, then enable the {@link Camera} to follow the pointer:
  *
  * ````javascript
  * cameraControl.navMode = "orbit";
- * cameraControl.pivoting = true;
+ * cameraControl.followPointer = true;
  * ````
  *
- * If we now left-click or tap an Entity, we'll pivot about that position. If we then left-click-drag or tap-drag
- * empty space, we'll continue to pivot the position we set earlier.
+ * When the pointer is over empty space, the target will remain on the last object that the pointer was over.
  *
- * ### **Showing the Pivot Position**
+ * ## Showing the Pivot Position
  *
  * We can configure {@link CameraControl#pivotElement} with an HTML element to indicate the current
- * pivot position. The indicator will appear momentarily each time we move the Camera while in orbit mode with
- * pivoting enabled.
+ * pivot position. The indicator will appear momentarily each time we move the {@link Camera} while in orbit mode with
+ * {@link CameraControl#followPointer} set ````true````.
  *
  * First we'll define some CSS to style our pivot indicator as a black dot with a white border:
  *
@@ -148,7 +139,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * }
  * ````
  *
- * Then we'll attach our pivot indicator's HTML element to the CameraControl:
+ * Then we'll attach our pivot indicator's HTML element to the ````CameraControl````:
  *
  * ````javascript
  * const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
@@ -157,197 +148,208 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * cameraControl.pivotElement = pivotElement;
  * ````
- * ### **Axis-Aligned Views in Orbit Mode**
+ *
+ * ## Axis-Aligned Views in Orbit Mode
  *
  * In orbit mode, we can use keys 1-6 to position the {@link Camera} to look at the center of the {@link Scene} from along each of the
- * six World-space axis. Pressing one of these keys will fly the Camera to the corresponding axis-aligned view.
+ * six World-space axis. Pressing one of these keys will fly the {@link Camera} to the corresponding axis-aligned view.
  *
- * ### **View-Fitting Entitys in Orbit Mode**
+ * ## View-Fitting Entitys in Orbit Mode
  *
- * In orbit mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click or
+ * When {@link CameraControl#doublePickFlyTo} is ````true````, we can left-double-click or
  * double-tap (ie. "double-pick") an {@link Entity} to fit it to view. This will cause the {@link Camera}
- * to fly to that Entity. Our point-of-interest then becomes the center of that Entity. If we are currently pivoting,
+ * to fly to that Entity. Our target then becomes the center of that Entity. If we are currently pivoting,
  * then our pivot position is then also set to the Entity center.
  *
  * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
  *
- * ## First-Person Mode
+ * # First-Person Mode
  *
- * * [[Run first-person mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson)]
- * <br><br>
+ * In first-person mode, ````CameraControl```` rotates the World about the {@link Camera} position.
  *
- * First-person model allows us to roam freely around our {@link Scene}.
- *
- * To enable first-person navigation mode:
+ * To enable first-person mode:
  *
  * ````javascript
  * cameraControl.navMode = "firstPerson";
  * ````
  *
- * We can then rotate our point-of-interest about our eye position by:
+ * Then rotate by:
  *
  * * left-dragging the mouse,
  * * tap-dragging the touch pad,
  * * pressing arrow keys, or ````Q```` and ````E```` on a QWERTY keyboard, or ````A```` and ````E```` on an AZERTY keyboard.
+ * <br><br>
  *
- * <br>
- * We can dolly forwards and backwards by:
+ * Dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
  * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S```` for AZERTY.
- *
- * <br>
- * We can pan horizontally and vertically by:
- *
- * * right-dragging the mouse,
- * * left-dragging the mouse with the SHIFT key down,
- * * tap-dragging the touch pad with SHIFT down,
- * * pressing the ````A````, ````D````, ````Z```` and ````X```` keys on a QWERTY keyboard, and
- * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
  * <br><br>
  *
- * ### **Dollying to the Mouse Pointer in First-Person Mode**
+ * Pan left, right, up and down by:
  *
- * To cause dollying to move our eye position and point-of-interest towards and away from the current mouse position:
+ * * left-dragging or right-dragging the mouse, and
+ * * tap-dragging the touch pad with SHIFT down.
+ *
+ * Pan forwards, backwards, left, right, up and down by pressing the ````WSADZX```` keys on a QWERTY keyboard,
+ * or ````WSQDWX```` keys on an AZERTY keyboard.
+ * <br><br>
+ *
+ * ## Following the Pointer in First-Person Mode
+ *
+ * When {@link CameraControl#followPointer} is ````true```` in first-person mode, the mouse or touch pointer will dynamically
+ * indicate the target to which the {@link Camera} will dolly to and from. In first-person mode, however, the World will always rotate
+ * about the {@link Camera} position.
+ *
+ * Lets ensure that we're in first-person mode, then enable the {@link Camera} to follow the pointer:
  *
  * ````javascript
- * cameraControl.dollyToPointer = true;
+ * cameraControl.navMode = "firstPerson";
+ * cameraControl.followPointer = true;
  * ````
  *
- * ### **Constraining Vertical Position in First-Person Mode**
+ * When the pointer is over empty space, the target will remain the last object that the pointer was over.
  *
- * To prevent the Camera from changing it's vertical position in first-person mode, which is useful for walk-through
- * navigation:
+ * ## Constraining Vertical Position in First-Person Mode
+ *
+ * In first-person mode, we can lock the {@link Camera} to its current position on the vertical World axis, which is useful for walk-through navigation:
  *
  * ````javascript
  * cameraControl.constrainVertical = true;
  * ````
  *
- * ### **Axis-Aligned Views in First-Person Mode**
+ * ## Axis-Aligned Views in First-Person Mode
  *
- * As in orbit mode, in first-person mode we can use keys 1-6 to position the {@link Camera} to look at the center of
- * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+ * In first-person mode we can use keys 1-6 to position the {@link Camera} to look at the center of
+ * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the {@link Camera} to the
  * corresponding axis-aligned view.
  *
- * If we are currently pivoting, then our pivot position is then set to the Scene center.
- *
- * ### **View-Fitting Entitys in First-Person Mode**
+ * ## View-Fitting Entitys in First-Person Mode
  *
  * As in orbit mode, when in first-person mode and {@link CameraControl#doublePickFlyTo} is ````true````, we can double-click
  * or double-tap an {@link Entity} (ie. "double-picking") to fit it in view. This will cause the {@link Camera} to fly to
- * that Entity. Our point-of-interest then becomes the center of that Entity.
+ * that Entity. Our target then becomes the center of that Entity.
  *
  * Disable that behaviour by setting {@link CameraControl#doublePickFlyTo} ````false````.
  *
- * ## Plan-View Mode
+ * # Plan-View Mode
  *
- * * [[Run plan-view mode example](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView)]
- * <br><br>
+ * In plan-view mode, ````CameraControl```` pans and rotates the {@link Camera}, without rotating it.
  *
- * Plan view navigation mode is typically used when the Camera is axis-aligned and using orthographic projection. In this
- * mode, we are unable to rotate and pivot the Camera, which keeps the Camera in correct axis alignment for our plan view.
- *
- * To enable plan-view navigation mode:
+ * To enable plan-view mode:
  *
  * ````javascript
  * cameraControl.navMode = "planView";
  * ````
- * In plan-view mode, we cannot orbit, rotate or pivot the Camera.
  *
- * We can dolly forwards and backwards by:
+ * Dolly forwards and backwards by:
  *
  * * spinning the mouse wheel,
  * * pinching on the touch pad, and
- * * pressing the ````+```` and ````-```` keys, or ````W```` and ````S```` on a QWERTY keyboard, or ````Z```` and ````S' for AZERTY.
+ * * pressing the ````+```` and ````-```` keys.
  *
  * <br>
- * We can pan horizontally and vertically by:
+ * Pan left, right, up and down by:
  *
- * * left-dragging or right-dragging the mouse,
- * * tap-dragging the touch pad with SHIFT down,
- * * pressing the ````A````, ````D````, ```Z```` and ````X```` keys on a QWERTY keyboard, and
- * * pressing the ````Q````, ````D````, ````W```` and ````X```` keys on an AZERTY keyboard,
+ * * left-dragging or right-dragging the mouse, and
+ * * tap-dragging the touch pad with SHIFT down.
+ *
+ * Pan forwards, backwards, left, right, up and down by pressing the ````WSADZX```` keys on a QWERTY keyboard,
+ * or ````WSQDWX```` keys on an AZERTY keyboard.
  * <br><br>
  *
- * ### **Dollying to the Mouse Pointer in Plan-View Mode**
+ * ## Following the Pointer in Plan-View Mode
  *
- * As in orbit and first-person modes, we can cause dollying to move our eye position and point-of-interest towards
- * and away from the current mouse position:
+ * When {@link CameraControl#followPointer} is ````true```` in plan-view mode, the mouse or touch pointer will dynamically
+ * indicate the target to which the {@link Camera} will dolly to and from.  In plan-view mode, however, the {@link Camera} cannot rotate.
+ *
+ * Lets ensure that we're in plan-view mode, then enable the {@link Camera} to follow the pointer:
  *
  * ````javascript
- * cameraControl.dollyToPointer = true;
+ * cameraControl.navMode = "planView";
+ * cameraControl.followPointer = true;
  * ````
  *
- * ### **Axis-Aligned Views in Plan-View Mode**
+ * When the pointer is over empty space, the target will remain the last object that the pointer was over.
+ *
+ * ## Axis-Aligned Views in Plan-View Mode
  *
  * As in orbit and first-person modes, in plan-view mode we can use keys 1-6 to position the {@link Camera} to look at the center of
- * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the Camera to the
+ * the {@link Scene} from along each of the six World-space axis. Pressing one of these keys will fly the {@link Camera} to the
  * corresponding axis-aligned view.
  *
- * ## Picking Events
+ * # CameraControl Events
  *
- * We can use CameraControl to get events whenever we pick {@link Entity}s.
+ * ````CameraControl```` fires events as we interact with {@link Entity}s using mouse or touch input.
  *
- * The following subsections describe the pick-related events fired by CameraControl.
+ * The following examples demonstrate how to subscribe to those events.
  *
- * ### **"hover"**
+ * The first example shows how to save a handle to a subscription, which we can later use to unsubscribe.
  *
- * Pointer hovers over an Entity.
+ * ## "hover"
+ *
+ * Event fired when the pointer moves while hovering over an Entity.
  *
  * ````javascript
- * cameraControl.on("hover", (e) => {
+ * const onHover = cameraControl.on("hover", (e) => {
  *      const entity = e.entity; // Entity
  *      const canvasPos = e.canvasPos; // 2D canvas position
- * })
+ * });
  * ````
  *
- * ### **"hoverOff"**
+ * To unsubscribe from the event:
  *
- * Pointer hovers over no Entitys.
+ * ````javascript
+ * cameraControl.off(onHover);
+ * ````
+ *
+ * ## "hoverOff"
+ *
+ * Event fired when the pointer moves while hovering over empty space.
  *
  * ````javascript
  * cameraControl.on("hoverOff", (e) => {
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"hoverEnter"**
+ * ## "hoverEnter"
  *
- * Pointer begins hovering over an Entity.
+ * Event fired when the pointer moves onto an Entity.
  *
  * ````javascript
  * cameraControl.on("hoverEnter", (e) => {
  *      const entity = e.entity;
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"hoverOut"**
+ * ## "hoverOut"
  *
- * Pointer stops hovering over an Entity.
+ * Event fired when the pointer moves off an Entity.
  *
  * ````javascript
  * cameraControl.on("hoverOut", (e) => {
  *      const entity = e.entity;
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"picked"**
+ * ## "picked"
  *
- * Mouse click or touch-tap on an Entity.
+ * Event fired when we left-click or tap on an Entity.
  *
  * ````javascript
  * cameraControl.on("picked", (e) => {
  *      const entity = e.entity;
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"pickedSurface"**
+ * ## "pickedSurface"
  *
- * Mouse click or touch-tap on the surface of an Entity.
+ * Event fired when we left-click or tap on the surface of an Entity.
  *
  * ````javascript
  * cameraControl.on("picked", (e) => {
@@ -356,33 +358,33 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *      const worldPos = e.worldPos; // 3D World-space position
  *      const viewPos = e.viewPos; // 3D View-space position
  *      const worldNormal = e.worldNormal; // 3D World-space normal vector
- * })
+ * });
  * ````
  *
- * ### **"pickedNothing"**
+ * ## "pickedNothing"
  *
- * Mouse click or touch-tap on no Entitys.
+ * Event fired when we left-click or tap on empty space.
  *
  * ````javascript
  * cameraControl.on("pickedNothing", (e) => {
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"doublePicked"**
+ * ## "doublePicked"
  *
- * Mouse double-click or double-touch-tap on an Entity.
+ * Event fired wwhen we left-double-click or double-tap on an Entity.
  *
  * ````javascript
  * cameraControl.on("doublePicked", (e) => {
  *      const entity = e.entity;
  *      const canvasPos = e.canvasPos;
- * })
+ * });
  * ````
  *
- * ### **"doublePickedSurface"**
+ * ## "doublePickedSurface"
  *
- * Mouse double-click or double-touch-tap on the surface of an Entity.
+ * Event fired when we left-double-click or double-tap on the surface of an Entity.
  *
  * ````javascript
  * cameraControl.on("doublePickedSurface", (e) => {
@@ -391,17 +393,28 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *      const worldPos = e.worldPos;
  *      const viewPos = e.viewPos;
  *      const worldNormal = e.worldNormal;
- * })
+ * });
  * ````
  *
- * ### **"doublePickedNothing"**
+ * ## "doublePickedNothing"
  *
- * Mouse double-click or double-touch-tap on no Entitys.
+ * Wvent fired when we left-double-click or double-tap on empty space.
  *
  * ````javascript
  * cameraControl.on("doublePickedNothing", (e) => {
  *      const canvasPos = e.canvasPos;
- * })
+ * });
+ * ````
+ *
+ * ## "mouseRightClick"
+ *
+ * Event fired when we right-click on the canvas.
+ *
+ * ````javascript
+ * cameraControl.on("rightClicked", (e) => {
+ *      const event = e.event; // Mouse event
+ *      const canvasPos = e.canvasPos;
+ * });
  * ````
  */
 class CameraControl extends Component {
@@ -422,42 +435,42 @@ class CameraControl extends Component {
 
         this._configs = {
 
-            active: true,
+            // Private
 
             tapInterval: 150, // Millisecs
             doubleTapInterval: 325, // Millisecs
             tapDistanceThreshold: 4, // Pixels
 
-            mousePanRate: 1.0,
-            keyboardPanRate: 1.0,
+            // General
 
-            keyboardRotationRate: 1.0,
-            mouseRotationRate: 1.0,
-
-            touchRotateRate: 0.3,
-            touchPanRate: 0.2,
-            touchZoomRate: 0.2,
-
-            dollyRate: 10,
-            keyboardDollyRate: 10,
-
+            active: true,
+            keyboardLayout: "qwerty",
             navMode: "orbit",
             planView: false,
             firstPerson: false,
-            constrainVertical: false,
-
+            followPointer: false,
             doublePickFlyTo: true,
             panRightClick: true,
-
-            pivoting: false,
-            dollyToPointer: false,
-
-            rotationInertia: 0,
-            dollyInertia: 0,
-
+            showPivot: false,
             pointerEnabled: true,
+            constrainVertical: false,
 
-            keyboardLayout: "qwerty"
+            // Rotation
+
+            dragRotationRate: 360.0,
+            keyboardRotationRate: 90.0,
+            rotationInertia: 0.5,
+
+            // Panning
+
+            keyboardPanRate: 1.0,
+            panInertia: 0.5,
+
+            // Dollying
+
+            keyboardDollyRate: 10,
+            mouseWheelDollyRate: 10,
+            dollyInertia: 0.75
         };
 
         // Current runtime state of the CameraControl
@@ -527,20 +540,20 @@ class CameraControl extends Component {
         this.doublePickFlyTo = cfg.doublePickFlyTo;
         this.panRightClick = cfg.panRightClick;
         this.active = cfg.active;
-        this.pivoting = cfg.pivoting;
-        this.dollyToPointer = cfg.dollyToPointer;
+        this.followPointer = cfg.followPointer;
         this.rotationInertia = cfg.rotationInertia;
-        this.mousePanRate = cfg.mousePanRate;
         this.keyboardPanRate = cfg.keyboardPanRate;
         this.keyboardRotationRate = cfg.keyboardRotationRate;
-        this.mouseRotationRate = cfg.mouseRotationRate;
+        this.dragRotationRate = cfg.dragRotationRate;
         this.dollyInertia = cfg.dollyInertia;
+        this.panInertia = cfg.panInertia;
         this.pointerEnabled = true;
-        this.dollyRate = cfg.dollyRate;
+        this.keyboardDollyRate = cfg.keyboardDollyRate;
+        this.mouseWheelDollyRate = cfg.mouseWheelDollyRate;
     }
 
     /**
-     * Sets the HTMl element to represent the pivot point when {@link CameraControl#pivoting} is true.
+     * Sets the HTMl element to represent the pivot point when {@link CameraControl#followPointer} is true.
      *
      * See class comments for an example.
      *
@@ -551,26 +564,26 @@ class CameraControl extends Component {
     }
 
     /**
-     *  Sets if this CameraControl is active or not.
+     *  Sets if this ````CameraControl```` is active or not.
      *
-     * When inactive, the CameraControl will not react to input.
+     * When inactive, the ````CameraControl```` will not react to input.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
-     * @param {Boolean} value Set ````true```` to activate this CameraControl.
+     * @param {Boolean} value Set ````true```` to activate this ````CameraControl````.
      */
     set active(value) {
         this._configs.active = value !== false;
     }
 
     /**
-     * Gets if this CameraControl is active or not.
+     * Gets if this ````CameraControl```` is active or not.
      *
-     * When inactive, the CameraControl will not react to input.
+     * When inactive, the ````CameraControl```` will not react to input.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
-     * @returns {Boolean} Returns ````true```` if this CameraControl is active.
+     * @returns {Boolean} Returns ````true```` if this ````CameraControl```` is active.
      */
     get active() {
         return this._configs.active;
@@ -581,7 +594,7 @@ class CameraControl extends Component {
      *
      * Accepted values are:
      *
-     * * "orbit" - rotation orbits about the current point-of-interest or pivot point,
+     * * "orbit" - rotation orbits about the current target or pivot point,
      * * "firstPerson" - rotation is about the current eye position,
      * * "planView" - rotation is disabled.
      *
@@ -616,9 +629,9 @@ class CameraControl extends Component {
     /**
      * Sets whether mouse and touch input is enabled.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
-     * Disabling mouse and touch input on CameraControl is useful when we want to temporarily use mouse or
+     * Disabling mouse and touch input on ````CameraControl```` is useful when we want to temporarily use mouse or
      * touch input to interact with some other 3D control, without disturbing the {@link Camera}.
      *
      * @param {Boolean} value Set ````true```` to enable mouse and touch input.
@@ -646,9 +659,9 @@ class CameraControl extends Component {
     /**
      * Gets whether mouse and touch input is enabled.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
-     * Disabling mouse and touch input on CameraControl is desirable when we want to temporarily use mouse or
+     * Disabling mouse and touch input on ````CameraControl```` is desirable when we want to temporarily use mouse or
      * touch input to interact with some other 3D control, without interfering with the {@link Camera}.
      *
      * @returns {Boolean} Returns ````true```` if mouse and touch input is enabled.
@@ -658,41 +671,49 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether orbit mode currently pivots the {@link Camera} about an arbitrary user-settable pivot position.
+     * Sets whether the {@link Camera} follows the mouse or touch pointer.
      *
-     * Default value is ````false````.
+     * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
-     * Only applies when {@link CameraControl#navMode} is ````"orbit"````.
+     * In fly-to mode, the Camera will dolly to and from the pointer, however the World will always rotate about the Camera position.
      *
-     * See class comments for more info.
+     * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
      *
-     * @param {Boolean} value Set ````true```` to enable pivoting.
-     */
-    set pivoting(value) {
-        this._configs.pivoting = !!value;
-    }
-
-    /**
-     * Gets whether orbit mode currently pivots the {@link Camera} about an arbitrary user-settable pivot position.
-     *
-     * Default value is ````false````.
-     *
-     * Only applies when {@link CameraControl#navMode} is ````"orbit"````.
+     * Default is ````false````.
      *
      * See class comments for more info.
      *
-     * @returns {Boolean} Returns ````true```` to enable pivoting.
+     * @param {Boolean} value Set ````true```` to enable the Camera to follow the pointer.
      */
-    get pivoting() {
-        return this._configs.pivoting;
+    set followPointer(value) {
+        this._configs.followPointer = value !== false;
     }
 
     /**
-     * Sets the current World-space 3D pivot position.
+     * Sets whether the {@link Camera} follows the mouse or touch pointer.
      *
-     * Only applies when {@link CameraControl#pivoting} is ````true````.
+     * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
-     * @param {Number[]} worldPos The new World-space 3D pivot position.
+     * In fly-to mode, the Camera will dolly to and from the pointer, however the World will always rotate about the Camera position.
+     *
+     * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
+     *
+     * Default is ````false````.
+     *
+     * See class comments for more info.
+     *
+     * @returns {Boolean} Returns ````true```` if the Camera follows the pointer.
+     */
+    get followPointer() {
+        return this._configs.followPointer;
+    }
+
+    /**
+     * Sets the current World-space 3D target position.
+     *
+     * Only applies when {@link CameraControl#followPointer} is ````true````.
+     *
+     * @param {Number[]} worldPos The new World-space 3D target position.
      */
     set pivotPos(worldPos) {
         this._controllers.pivotController.setPivotPos(worldPos);
@@ -701,7 +722,7 @@ class CameraControl extends Component {
     /**
      * Gets the current World-space 3D pivot position.
      *
-     * Only applies when {@link CameraControl#pivoting} is ````true````.
+     * Only applies when {@link CameraControl#followPointer} is ````true````.
      *
      * @return {Number[]} worldPos The current World-space 3D pivot position.
      */
@@ -710,37 +731,23 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
-     * towards or away from the mouse pointer position.
-     *
-     * Default value is ````false````.
-     *
+     * @deprecated
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set dollyToPointer(value) {
-        this._configs.dollyToPointer = !!value;
+        this.warn("dollyToPointer is deprecated");
     }
 
     /**
-     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
-     * towards or away from the mouse pointer position.
-     *
-     * Default value is ````false````.
-     *
+     * @deprecated
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get dollyToPointer() {
-        return this._configs.dollyToPointer;
+        this.warn("dollyToPointer is deprecated");
+        return true;
     }
 
     /**
-     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
-     * towards or away from the mouse pointer position.
-     *
-     * Default value is ````false````.
-     *
-     * Deprecated - use {@link CameraControl#dollyToPointer} instead.
-     *
      * @deprecated
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
@@ -750,13 +757,6 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether dollying in first-person or plan-view modes will zoom the {@link Camera}
-     * towards or away from the mouse pointer position.
-     *
-     * Default value is ````false````.
-     *
-     * Deprecated - use {@link CameraControl#dollyToPointer} instead.
-     *
      * @deprecated
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
@@ -766,11 +766,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether this CameraControl is in plan-view mode.
+     * Sets whether this ````CameraControl```` is in plan-view mode.
      *
      * When in plan-view mode, rotation is disabled.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * Deprecated - use {@link CameraControl#navMode} instead.
      *
@@ -788,11 +788,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether this CameraControl is in plan-view mode.
+     * Gets whether this ````CameraControl```` is in plan-view mode.
      *
      * When in plan-view mode, rotation is disabled.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * Deprecated - use {@link CameraControl#navMode} instead.
      *
@@ -805,11 +805,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether this CameraControl is in first-person mode.
+     * Sets whether this ````CameraControl```` is in first-person mode.
      *
      * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * Deprecated - use {@link CameraControl#navMode} instead.
      *
@@ -827,11 +827,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether this CameraControl is in first-person mode.
+     * Gets whether this ````CameraControl```` is in first-person mode.
      *
      * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * Deprecated - use {@link CameraControl#navMode} instead.
      *
@@ -844,32 +844,30 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether this CameraControl is in constrainVertical mode.
+     * Sets whether to vertically constrain the {@link Camera} position for first-person navigation.
      *
-     * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
-     * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
+     * When set ````true````, this constrains {@link Camera#eye} to its current vertical position.
      *
      * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
-     * @param {Boolean} value Set ````true```` to enable constrainVertical mode.
+     * @param {Boolean} value Set ````true```` to vertically constrain the Camera.
      */
     set constrainVertical(value) {
         this._configs.constrainVertical = !!value;
     }
 
     /**
-     * Gets whether this CameraControl is in constrainVertical mode.
+     * Gets whether to vertically constrain the {@link Camera} position for first-person navigation.
      *
-     * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
-     * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
+     * When set ````true````, this constrains {@link Camera#eye} to its current vertical position.
      *
      * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
-     * @returns {Boolean} Returns ````true```` when in constrainVertical mode.
+     * @returns {Boolean} ````true```` when Camera is vertically constrained.
      */
     get constrainVertical() {
         return this._configs.constrainVertical;
@@ -878,7 +876,7 @@ class CameraControl extends Component {
     /**
      * Sets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * @param {Boolean} value Set ````true```` to enable double-pick-fly-to mode.
      */
@@ -889,7 +887,7 @@ class CameraControl extends Component {
     /**
      * Gets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
-     * Default value is ````false````.
+     * Default is ````false````.
      *
      * @returns {Boolean} Returns ````true```` when double-pick-fly-to mode is enabled.
      */
@@ -900,7 +898,7 @@ class CameraControl extends Component {
     /**
      * Sets whether either right-clicking (true) or middle-clicking (false) pans the {@link Camera}.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
      * @param {Boolean} value Set ````false```` to disable pan on right-click.
      */
@@ -911,7 +909,7 @@ class CameraControl extends Component {
     /**
      * Gets whether right-clicking pans the {@link Camera}.
      *
-     * Default value is ````true````.
+     * Default is ````true````.
      *
      * @returns {Boolean} Returns ````false```` when pan on right-click is disabled.
      */
@@ -920,7 +918,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets a factor in range ````[0..1]```` indicating how much the Camera keeps moving after you finish rotating it.
+     * Sets a factor in range ````[0..1]```` indicating how much the {@link Camera} keeps moving after you finish rotating it.
      *
      * A value of ````0.0```` causes it to immediately stop, ````0.5```` causes its movement to decay 50% on each tick,
      * while ````1.0```` causes no decay, allowing it continue moving, by the current rate of rotation.
@@ -929,20 +927,20 @@ class CameraControl extends Component {
      * without interference from inertia. Zero inertia can also mean that less frames are rendered while
      * you are rotating the Camera.
      *
-     * Default value is ````0.5````.
+     * Default is ````0.5````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
-     * @param {Number} value New inertial factor.
+     * @param {Number} rotationInertia New inertial factor.
      */
-    set rotationInertia(value) {
-        this._configs.rotationInertia = value === undefined ? 0.5 : value;
+    set rotationInertia(rotationInertia) {
+        this._configs.rotationInertia = (rotationInertia !== undefined && rotationInertia !== null) ? rotationInertia : 0.5;
     }
 
     /**
      * Gets the rotation inertia factor.
      *
-     * Default value is ````0.5````.
+     * Default is ````0.5````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
@@ -951,44 +949,30 @@ class CameraControl extends Component {
     get rotationInertia() {
         return this._configs.rotationInertia;
     }
-    
-    /**
-     * Sets the current mouse pan rate.
-     *
-     * This is ````1.0```` by default.
-     *
-     * @param {Number} mousePanRate The new mouse pan rate.
-     */
-    set mousePanRate(mousePanRate) {
-        this._configs.mousePanRate = mousePanRate || 1.0;
-    }
-    
-    /**
-     * Returns the current mouse pan rate.
-     *
-     * This is ````1.0```` by default.
-     *
-     * @returns {Number} The current mouse pan rate.
-     */
-    get mousePanRate() {
-        return this._configs.mousePanRate;
-    }
 
     /**
-     * Sets the current keyboard pan rate.
+     * Sets how much the {@link Camera} pans each second with keyboard input.
      *
-     * This is ````1.0```` by default.
+     * Default is ````5.0````, to pan the Camera ````5.0```` World-space units every second that
+     * a panning key is depressed. See the ````CameraControl```` class documentation for which keys control
+     * panning.
+     *
+     * Panning direction is aligned to our Camera's orientation. When we pan horizontally, we pan
+     * to our left and right, when we pan vertically, we pan upwards and downwards, and when we pan forwards
+     * and backwards, we pan along the direction the Camera is pointing.
+     *
+     * Unlike dollying when {@link followPointer} is ````true````, panning does not follow the pointer.
      *
      * @param {Number} keyboardPanRate The new keyboard pan rate.
      */
     set keyboardPanRate(keyboardPanRate) {
-        this._configs.keyboardPanRate = keyboardPanRate || 1.0;
+        this._configs.keyboardPanRate = (keyboardPanRate !== null && keyboardPanRate !== undefined) ? keyboardPanRate : 5.0;
     }
 
     /**
-     * Returns the current keyboard pan rate.
+     * Gets how much the {@link Camera} pans each second with keyboard input.
      *
-     * This is ````1.0```` by default.
+     * Default is ````5.0````.
      *
      * @returns {Number} The current keyboard pan rate.
      */
@@ -997,109 +981,179 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets the current keyboard rotation rate.
+     * Sets how many degrees per second the {@link Camera} rotates/orbits with keyboard input.
      *
-     * This is ````1.0```` by default.
+     * Default is ````90.0````, to rotate/orbit the Camera ````90.0```` degrees every second that
+     * a rotation key is depressed. See the ````CameraControl```` class documentation for which keys control
+     * rotation/orbit.
      *
      * @param {Number} keyboardRotationRate The new keyboard rotation rate.
      */
     set keyboardRotationRate(keyboardRotationRate) {
-        this._configs.keyboardRotationRate = keyboardRotationRate || 1.0;
+        this._configs.keyboardRotationRate = (keyboardRotationRate !== null && keyboardRotationRate !== undefined) ? keyboardRotationRate : 90.0;
     }
 
     /**
-     * Returns the current keyboard rotation rate.
+     * Sets how many degrees per second the {@link Camera} rotates/orbits with keyboard input.
      *
-     * This is ````1.0```` by default.
+     * Default is ````90.0````.
      *
      * @returns {Number} The current keyboard rotation rate.
      */
     get keyboardRotationRate() {
         return this._configs.keyboardRotationRate;
     }
-    
+
     /**
-     * Sets the current mouse rotation rate.
+     * Sets the current drag rotation rate.
      *
-     * This is ````1.0```` by default.
+     * This configures how many degrees the {@link Camera} rotates/orbits for a full sweep of the canvas by mouse or touch dragging.
      *
-     * @param {Number} mouseRotationRate The new mouse rotation rate.
+     * For example, a value of ````360.0```` indicates that the ````Camera```` rotates/orbits ````360.0```` degrees horizontally
+     * when we sweep the entire width of the canvas.
+     *
+     * ````CameraControl```` makes vertical rotation half as sensitive as horizontal rotation, so that we don't tend to
+     * flip upside-down. Therefore, a value of ````360.0```` rotates/orbits the ````Camera```` through ````180.0```` degrees
+     * vertically when we sweep the entire height of the canvas.
+     *
+     * Default is ````360.0````.
+     *
+     * @param {Number} dragRotationRate The new drag rotation rate.
      */
-    set mouseRotationRate(mouseRotationRate) {
-        this._configs.mouseRotationRate = mouseRotationRate || 1.0;
+    set dragRotationRate(dragRotationRate) {
+        this._configs.dragRotationRate = (dragRotationRate !== null && dragRotationRate !== undefined) ? dragRotationRate : 360.0;
     }
 
     /**
-     * Returns the current mouse rotation rate.
+     * Gets the current drag rotation rate.
      *
-     * This is ````1.0```` by default.
+     * Default is ````360.0````.
      *
-     * @returns {Number} The current mouse rotation rate.
+     * @returns {Number} The current drag rotation rate.
      */
-    get mouseRotationRate() {
-        return this._configs.mouseRotationRate;
-    }
-    
-    /**
-     * Sets the current dolly rate.
-     *
-     * This ````10.0```` by default.
-     * 
-     * @param {Number} dollyRate The new dolly speed.
-     */
-    set dollyRate(dollyRate) {
-        this._configs.dollyRate = dollyRate || 10.0;
+    get dragRotationRate() {
+        return this._configs.dragRotationRate;
     }
 
     /**
-     * Returns the current dolly rate.
-     * 
-     * This ````10.0```` by default.
+     * Sets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * @returns {Number} The current dolly speed.
+     * Default is ````20.0````, to dolly the {@link Camera} ````20.0```` World-space units per second while we hold down
+     * the ````+```` and ````-```` keys.
+     *
+     * @param {Number} keyboardDollyRate The new keyboard dolly rate.
      */
-    get dollyRate() {
-        return this._configs.dollyRate;
+    set keyboardDollyRate(keyboardDollyRate) {
+        this._configs.keyboardDollyRate = (keyboardDollyRate !== null && keyboardDollyRate !== undefined) ? keyboardDollyRate : 20.0;
     }
 
     /**
-     * Sets a factor in range ````[0..1]```` indicating how much the Camera keeps moving after you finish dollying it.
+     * Gets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * A value of ````0.0```` causes it to immediately stop, ````0.5```` causes its movement to decay 50% on each tick,
-     * while ````1.0```` causes no decay, allowing it continue moving, by the current rate of pan or rotation.
+     * Default is ````20.0````.
      *
-     * You may choose an dollyInertia of zero when you want be able to precisely position or rotate the Camera,
-     * without interference from inertia. Zero inertia can also mean that less frames are rendered while
-     * you are positioning the Camera.
-     *
-     * Default value is ````0.5````.
-     *
-     * @param {Number} value New dolly inertia factor.
+     * @returns {Number} The current keyboard dolly rate.
      */
-    set dollyInertia(value) {
-        this._configs.dollyInertia = value === undefined ? 0.5 : value;
+    get keyboardDollyRate() {
+        return this._configs.keyboardDollyRate;
+    }
+
+    /**
+     * Sets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
+     *
+     * Default is ````20.0````, to dolly the {@link Camera} ````20.0```` World-space units per second as we spin
+     * the mouse wheel.
+     *
+     * @param {Number} mouseWheelDollyRate The new mouse wheel dolly rate.
+     */
+    set mouseWheelDollyRate(mouseWheelDollyRate) {
+        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null && mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 20.0;
+    }
+
+    /**
+     * Gets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
+     *
+     * Default is ````20.0````.
+     *
+     * @returns {Number} The current mouseWheel dolly rate.
+     */
+    get mouseWheelDollyRate() {
+        return this._configs.mouseWheelDollyRate;
+    }
+
+    /**
+     * Sets the dolly inertia factor.
+     *
+     * This factor configures how much the {@link Camera} keeps moving after you finish dollying it
+     *
+     * This factor is a value in range ````[0..1]````. A value of ````0.0```` causes dollying to immediately stop,
+     * ````0.5```` causes dollying to decay 50% on each animation frame, while ````1.0```` causes no decay, which allows dollying
+     * to continue until further input stops it.
+     *
+     * You might set ````dollyInertia```` to zero when you want be able to precisely position or rotate the Camera,
+     * without interference from inertia. This also means that xeokit renders less frames while dollying the Camera,
+     * which can improve rendering performance.
+     *
+     * Default is ````0.75````.
+     *
+     * @param {Number} dollyInertia New dolly inertia factor.
+     */
+    set dollyInertia(dollyInertia) {
+        this._configs.dollyInertia = (dollyInertia !== undefined && dollyInertia !== null) ? dollyInertia : 0.75;
     }
 
     /**
      * Gets the dolly inertia factor.
      *
-     * Default value is ````0.5````.
+     * Default is ````0.75````.
      *
-     * @returns {Number} The dolly inertia factor.
+     * @returns {Number} The current dolly inertia factor.
      */
     get dollyInertia() {
         return this._configs.dollyInertia;
     }
 
     /**
-     * Selects the keyboard layout.
+     * Sets the pan inertia factor.
      *
-     * Options are:
+     * This factor configures how much the {@link Camera} keeps moving after you finish panning it
      *
-     * * "qwerty"
-     * * "azerty"
+     * This factor is a value in range ````[0..1]````. A value of ````0.0```` causes panning to immediately stop,
+     * ````0.5```` causes panning to decay 50% on each animation frame, while ````1.0```` causes no decay, which allows panning
+     * to continue until further input stops it.
      *
-     * Default is "qwerty".
+     * You might set ````panInertia```` to zero when you want be able to precisely position or rotate the Camera,
+     * without interference from inertia. This also means that xeokit renders less frames while panning the Camera,
+     * wich can improve rendering performance.
+     *
+     * Default is ````0.5````.
+     *
+     * @param {Number} panInertia New pan inertia factor.
+     */
+    set panInertia(panInertia) {
+        this._configs.panInertia = (panInertia !== undefined && panInertia !== null) ? panInertia : 0.5;
+    }
+
+    /**
+     * Gets the pan inertia factor.
+     *
+     * Default is ````0.5````.
+     *
+     * @returns {Number} The current pan inertia factor.
+     */
+    get panInertia() {
+        return this._configs.panInertia;
+    }
+
+    /**
+     * Sets the keyboard layout.
+     *
+     * Supported layouts are:
+     *
+     * * ````"qwerty"```` (default)
+     * * ````"azerty"````
+     *
+     * @param {String} value Selects the keyboard layout.
      */
     set keyboardLayout(value) {
         value = value || "qwerty";
@@ -1111,14 +1165,21 @@ class CameraControl extends Component {
     }
 
     /**
-     * @private
+     * Gets the keyboard layout.
+     *
+     * Supported layouts are:
+     *
+     * * ````"qwerty"```` (default)
+     * * ````"azerty"````
+     *
+     * @returns {String} The current keyboard layout.
      */
     get keyboardLayout() {
         return this._configs.keyboardLayout;
     }
 
     /**
-     * Destroys this CameraControl.
+     * Destroys this ````CameraControl````.
      * @private
      */
     destroy() {

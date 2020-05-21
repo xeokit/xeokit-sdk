@@ -99,8 +99,7 @@
     const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
 
-    cameraControl.dollyToPointer = true;
-    cameraControl.pivoting = true;
+    cameraControl.followPointer = true;
     cameraControl.pivotElement = pivotElement;
 
     //----------------------------------------------------------------------------------------------------------------------
