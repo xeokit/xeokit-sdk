@@ -1038,19 +1038,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * Default is ````20.0````, to dolly the {@link Camera} ````20.0```` World-space units per second while we hold down
+     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second while we hold down
      * the ````+```` and ````-```` keys.
      *
      * @param {Number} keyboardDollyRate The new keyboard dolly rate.
      */
     set keyboardDollyRate(keyboardDollyRate) {
-        this._configs.keyboardDollyRate = (keyboardDollyRate !== null && keyboardDollyRate !== undefined) ? keyboardDollyRate : 20.0;
+        this._configs.keyboardDollyRate = (keyboardDollyRate !== null && keyboardDollyRate !== undefined) ? keyboardDollyRate : 15.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * Default is ````20.0````.
+     * Default is ````15.0````.
      *
      * @returns {Number} The current keyboard dolly rate.
      */
@@ -1061,19 +1061,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````20.0````, to dolly the {@link Camera} ````20.0```` World-space units per second as we spin
+     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second as we spin
      * the mouse wheel.
      *
      * @param {Number} mouseWheelDollyRate The new mouse wheel dolly rate.
      */
     set mouseWheelDollyRate(mouseWheelDollyRate) {
-        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null && mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 20.0;
+        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null && mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 15.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````20.0````.
+     * Default is ````15.0````.
      *
      * @returns {Number} The current mouseWheel dolly rate.
      */
