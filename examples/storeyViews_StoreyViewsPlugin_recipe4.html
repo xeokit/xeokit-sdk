@@ -88,8 +88,8 @@
     viewer.camera.perspective.fov = 55;
     viewer.camera.orbitPitch(20);
 
-    viewer.cameraControl.dollyToPointer = true;
-    viewer.cameraControl.planView = true;
+    viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.navMode = "planView";
 
     viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
@@ -138,7 +138,7 @@
     model.on("loaded", () => {
 
         // Make all doors transparent
-        viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
+        viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.2);
 
         storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
             hideOthers: true,
@@ -183,20 +183,17 @@
                     projection: "perspective",
                     duration: 1.5
                 }, () => {
-                    viewer.cameraControl.planView = false;
                     viewer.cameraControl.navMode = "firstPerson";
-                    viewer.cameraControl.pivoting = false;
                 });
             }
         });
 
         viewer.cameraControl.on("pickedNothing", (pickResult) => {
-
             storeyViewsPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
                 projection: "ortho",
                 duration: 1.5,
                 done: () => {
-                    viewer.cameraControl.planView = true;
+                    viewer.cameraControl.navMode = "planView";
                 }
             });
         });

@@ -159,11 +159,12 @@
         transparent: true
     });
 
+    viewer.cameraControl.followPointer = true;
+
     const cameraControl = viewer.cameraControl;
     const scene = viewer.scene;
     const cameraFlight = viewer.cameraFlight;
 
-    cameraControl.dollyToPointer = true;
     cameraControl.doublePickFlyTo = true;
     cameraFlight.duration = 1.0;
     cameraFlight.fitFOV = 25;
