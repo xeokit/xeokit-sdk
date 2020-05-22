@@ -686,7 +686,7 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable the Camera to follow the pointer.
      */
     set followPointer(value) {
-        this._configs.followPointer = value !== false;
+        this._configs.followPointer = !!value;
     }
 
     /**
@@ -735,7 +735,8 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set dollyToPointer(value) {
-        this.warn("dollyToPointer is deprecated");
+        this.warn("dollyToPointer property is deprecated - replaced with followPointer");
+        this.followPointer = value;
     }
 
     /**
@@ -743,8 +744,8 @@ class CameraControl extends Component {
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get dollyToPointer() {
-        this.warn("dollyToPointer is deprecated");
-        return true;
+        this.warn("dollyToPointer property is deprecated - replaced with followPointer");
+        return this.followPointer = value;
     }
 
     /**
@@ -752,8 +753,7 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set panToPointer(value) {
-        this.warn("panToPointer is deprecated - use dollyToPointer instead");
-        this.dollyToPointer = value;
+        this.warn("panToPointer property is deprecated - replaced with followPointer");
     }
 
     /**
@@ -761,8 +761,8 @@ class CameraControl extends Component {
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get panToPointer() {
-        this.warn("panToPointer is deprecated - use dollyToPointer instead");
-        return this.dollyToPointer;
+        this.warn("panToPointer property is deprecated - replaced with followPointer");
+        return false;
     }
 
     /**
@@ -784,7 +784,7 @@ class CameraControl extends Component {
             this._controllers.pivotController.hidePivot();
             this._controllers.pivotController.endPivot();
         }
-        this.warn("planView property is deprecated - use navMode instead");
+        this.warn("planView property is deprecated - replaced with navMode");
     }
 
     /**
@@ -800,7 +800,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get planView() {
-        this.warn("planView property is deprecated - use navMode instead");
+        this.warn("planView property is deprecated - replaced with navMode");
         return this._configs.planView;
     }
 
@@ -817,7 +817,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     set firstPerson(value) {
-        this.warn("firstPerson property is deprecated - use navMode instead");
+        this.warn("firstPerson property is deprecated - replaced with navMode");
         this._configs.firstPerson = !!value;
         this._configs.planView = false;
         if (this._configs.firstPerson) {
@@ -839,7 +839,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get firstPerson() {
-        this.warn("firstPerson property is deprecated - use navMode instead");
+        this.warn("firstPerson property is deprecated - replaced with navMode");
         return this._configs.firstPerson;
     }
 
