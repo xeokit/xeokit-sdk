@@ -1015,14 +1015,14 @@
       "expectCount": 54,
       "actualCount": 46,
       "undocumentLines": [
-        438,
-        480,
-        497,
-        510,
-        522,
-        534,
-        646,
-        1193
+        436,
+        478,
+        495,
+        508,
+        520,
+        532,
+        644,
+        1191
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {

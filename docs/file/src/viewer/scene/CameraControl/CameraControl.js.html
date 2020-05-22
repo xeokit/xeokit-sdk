@@ -197,13 +197,11 @@ import {TouchPickHandler} from &quot;./lib/handlers/TouchPickHandler.js&quot;;
  *
  * # Examples
  *
- * Use these examples to get a feel for how ````CameraControl```` works, and how to tune its various configurations:
- *
- * * [Orbit Navigation - Duplex Model](/examples/#CameraControl_orbit_Duplex)
- * * [Orbit Navigation - Holter Tower Model](/examples/#CameraControl_orbit_HolterTower)
- * * [First-Person Navigation - Duplex Model](/examples/#CameraControl_firstPerson_Duplex)
- * * [First-Person Navigation - Holter Tower Model](/examples/#CameraControl_firstPerson_HolterTower)
- * * [Plan-view Navigation - Schependomlaan Model](/examples/#CameraControl_planView_Schependomlaan)
+ * * [Orbit Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_Duplex)
+ * * [Orbit Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_HolterTower)
+ * * [First-Person Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_Duplex)
+ * * [First-Person Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_HolterTower)
+ * * [Plan-view Navigation - Schependomlaan Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView_Schependomlaan)
  * &lt;br&gt;&lt;br&gt;
  *
  * # Orbit Mode
@@ -824,7 +822,7 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable the Camera to follow the pointer.
      */
     set followPointer(value) {
-        this._configs.followPointer = value !== false;
+        this._configs.followPointer = !!value;
     }
 
     /**
@@ -873,7 +871,8 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set dollyToPointer(value) {
-        this.warn(&quot;dollyToPointer is deprecated&quot;);
+        this.warn(&quot;dollyToPointer property is deprecated - replaced with followPointer&quot;);
+        this.followPointer = value;
     }
 
     /**
@@ -881,8 +880,8 @@ class CameraControl extends Component {
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get dollyToPointer() {
-        this.warn(&quot;dollyToPointer is deprecated&quot;);
-        return true;
+        this.warn(&quot;dollyToPointer property is deprecated - replaced with followPointer&quot;);
+        return this.followPointer = value;
     }
 
     /**
@@ -890,8 +889,7 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to enable dolly-to-pointer behaviour.
      */
     set panToPointer(value) {
-        this.warn(&quot;panToPointer is deprecated - use dollyToPointer instead&quot;);
-        this.dollyToPointer = value;
+        this.warn(&quot;panToPointer property is deprecated - replaced with followPointer&quot;);
     }
 
     /**
@@ -899,8 +897,8 @@ class CameraControl extends Component {
      * @returns {Boolean} Returns ````true```` if dolly-to-pointer behaviour is enabled.
      */
     get panToPointer() {
-        this.warn(&quot;panToPointer is deprecated - use dollyToPointer instead&quot;);
-        return this.dollyToPointer;
+        this.warn(&quot;panToPointer property is deprecated - replaced with followPointer&quot;);
+        return false;
     }
 
     /**
@@ -922,7 +920,7 @@ class CameraControl extends Component {
             this._controllers.pivotController.hidePivot();
             this._controllers.pivotController.endPivot();
         }
-        this.warn(&quot;planView property is deprecated - use navMode instead&quot;);
+        this.warn(&quot;planView property is deprecated - replaced with navMode&quot;);
     }
 
     /**
@@ -938,7 +936,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get planView() {
-        this.warn(&quot;planView property is deprecated - use navMode instead&quot;);
+        this.warn(&quot;planView property is deprecated - replaced with navMode&quot;);
         return this._configs.planView;
     }
 
@@ -955,7 +953,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     set firstPerson(value) {
-        this.warn(&quot;firstPerson property is deprecated - use navMode instead&quot;);
+        this.warn(&quot;firstPerson property is deprecated - replaced with navMode&quot;);
         this._configs.firstPerson = !!value;
         this._configs.planView = false;
         if (this._configs.firstPerson) {
@@ -977,7 +975,7 @@ class CameraControl extends Component {
      * @deprecated
      */
     get firstPerson() {
-        this.warn(&quot;firstPerson property is deprecated - use navMode instead&quot;);
+        this.warn(&quot;firstPerson property is deprecated - replaced with navMode&quot;);
         return this._configs.firstPerson;
     }
 
@@ -1176,19 +1174,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * Default is ````10.0````, to dolly the {@link Camera} ````10.0```` World-space units per second while we hold down
+     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second while we hold down
      * the ````+```` and ````-```` keys.
      *
      * @param {Number} keyboardDollyRate The new keyboard dolly rate.
      */
     set keyboardDollyRate(keyboardDollyRate) {
-        this._configs.keyboardDollyRate = (keyboardDollyRate !== null &amp;&amp; keyboardDollyRate !== undefined) ? keyboardDollyRate : 10.0;
+        this._configs.keyboardDollyRate = (keyboardDollyRate !== null &amp;&amp; keyboardDollyRate !== undefined) ? keyboardDollyRate : 15.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second with keyboard input.
      *
-     * Default is ````10.0````.
+     * Default is ````15.0````.
      *
      * @returns {Number} The current keyboard dolly rate.
      */
@@ -1199,19 +1197,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````10.0````, to dolly the {@link Camera} ````10.0```` World-space units per second as we spin
+     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second as we spin
      * the mouse wheel.
      *
      * @param {Number} mouseWheelDollyRate The new mouse wheel dolly rate.
      */
     set mouseWheelDollyRate(mouseWheelDollyRate) {
-        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null &amp;&amp; mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 10.0;
+        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null &amp;&amp; mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 15.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````10.0````.
+     * Default is ````15.0````.
      *
      * @returns {Number} The current mouseWheel dolly rate.
      */
