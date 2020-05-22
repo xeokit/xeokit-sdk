@@ -94,7 +94,15 @@ class CameraUpdater {
 
                     const dist = Math.abs(math.lenVec3(math.subVec3(pivotController.getPivotPos(), scene.camera.eye, tempVec3)));
 
-                    dollyDistFactor = dist / 50;
+                    //--------------------------------------------------------------------------------------------------
+                    // TODO: Quantify this magic number
+                    //
+                    // A low value makes dolly rate change fast and jerkier, slow down rapidly as we get close to objects,
+                    // speed up more as we are far away from objects, and able to easily punch through objects we are
+                    // close to. A high value makes dolly rate change slower and smoother, and less noticeable.
+                    //--------------------------------------------------------------------------------------------------
+
+                    dollyDistFactor = dist / 35;
 
                     if (dollyDistFactor < 0.01) {
                         dollyDistFactor = 0.01;
