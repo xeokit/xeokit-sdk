@@ -1256,8 +1256,6 @@ class Control {
         canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
         canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
         canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
-        canvas.removeEventListener("mouseenter", this._canvasMouseEnterListener);
-        canvas.removeEventListener("mouseleave", this._canvasMouseLeaveListener);
         canvas.removeEventListener("wheel", this._canvasWheelListener);
 
         camera.off(this._onCameraViewMatrix);
