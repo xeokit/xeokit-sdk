@@ -2,9 +2,6 @@ import {core} from "./core.js";
 import {utils} from './utils.js';
 import {Map} from "./utils/Map.js";
 
-const idRegex = RegExp('(_[0-9]*)');
-
-
 /**
  * @desc Base class for all xeokit components.
  *
