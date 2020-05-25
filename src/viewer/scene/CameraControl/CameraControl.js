@@ -1084,7 +1084,7 @@ class CameraControl extends Component {
     /**
      * Sets the dolly inertia factor.
      *
-     * This factor configures how much the {@link Camera} keeps moving after you finish dollying it
+     * This factor configures how much the {@link Camera} keeps moving after you finish dollying it.
      *
      * This factor is a value in range ````[0..1]````. A value of ````0.0```` causes dollying to immediately stop,
      * ````0.5```` causes dollying to decay 50% on each animation frame, while ````1.0```` causes no decay, which allows dollying
@@ -1116,7 +1116,7 @@ class CameraControl extends Component {
     /**
      * Sets the pan inertia factor.
      *
-     * This factor configures how much the {@link Camera} keeps moving after you finish panning it
+     * This factor configures how much the {@link Camera} keeps moving after you finish panning it.
      *
      * This factor is a value in range ````[0..1]````. A value of ````0.0```` causes panning to immediately stop,
      * ````0.5```` causes panning to decay 50% on each animation frame, while ````1.0```` causes no decay, which allows panning
