@@ -4,10 +4,6 @@ import {Map} from "./utils/Map.js";
 
 const idRegex = RegExp('(_[0-9]*)');
 
-console.log(idRegex.test("_9"));
-console.log(idRegex.test("_d"));
-console.log(idRegex.test("_02"));
-console.log(idRegex.test("_02d"));
 
 /**
  * @desc Base class for all xeokit components.
