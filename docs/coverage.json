@@ -1,7 +1,7 @@
 {
-  "coverage": "44.01%",
-  "expectCount": 4364,
-  "actualCount": 1921,
+  "coverage": "44.03%",
+  "expectCount": 4360,
+  "actualCount": 1920,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -977,12 +977,10 @@
       "undocumentLines": []
     },
     "src/viewer/Viewer.js": {
-      "expectCount": 26,
-      "actualCount": 23,
+      "expectCount": 23,
+      "actualCount": 22,
       "undocumentLines": [
-        122,
-        249,
-        252
+        122
       ]
     },
     "src/viewer/metadata/IFCObjectDefaults.js": {
@@ -1035,7 +1033,7 @@
         14,
         16,
         24,
-        303
+        311
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1185,28 +1183,27 @@
       ]
     },
     "src/viewer/scene/Component.js": {
-      "expectCount": 45,
+      "expectCount": 44,
       "actualCount": 26,
       "undocumentLines": [
-        5,
-        150,
-        177,
-        178,
-        181,
+        143,
+        170,
+        171,
+        174,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
         212,
         213,
-        214,
-        215,
-        216,
-        217,
-        218,
         219,
-        220,
-        226,
-        458,
-        733,
-        758,
-        785
+        451,
+        726,
+        751,
+        778
       ]
     },
     "src/viewer/scene/Entity.js": {

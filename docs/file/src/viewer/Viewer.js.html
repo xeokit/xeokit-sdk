@@ -379,17 +379,6 @@ class Viewer {
     }
 
     /**
-     *
-     */
-    set offscreenMode(offscreenMode) {
-        this._offscreenMode = offscreenMode;
-    }
-
-    get offscreenMode() {
-        return this._offscreenMode;
-    }
-
-    /**
      * Returns a snapshot of this Viewer&apos;s canvas as a Base64-encoded image.
      *
      * #### Usage:
@@ -427,7 +416,7 @@ class Viewer {
 
         this.scene.render(true);
 
-        const imageDataURI = this.scene.canvas._getSnapshot(params, this._offscreenMode);
+        const imageDataURI = this.scene.canvas._getSnapshot(params);
 
         if (resize) {
             canvas.style.width = saveCssWidth;

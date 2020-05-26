@@ -3156,18 +3156,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/viewer.js~viewer#offscreenmode",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-set-offscreenMode",
-    "src/viewer/Viewer.js~Viewer#offscreenMode",
-    "member"
-  ],
-  [
-    "src/viewer/viewer.js~viewer#offscreenmode",
-    "class/src/viewer/Viewer.js~Viewer.html#instance-get-offscreenMode",
-    "src/viewer/Viewer.js~Viewer#offscreenMode",
-    "member"
-  ],
-  [
     "src/viewer/viewer.js~viewer#on",
     "class/src/viewer/Viewer.js~Viewer.html#instance-method-on",
     "src/viewer/Viewer.js~Viewer#on",
