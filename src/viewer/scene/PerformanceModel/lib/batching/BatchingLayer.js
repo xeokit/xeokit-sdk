@@ -367,7 +367,7 @@ class BatchingLayer {
         }
         if (buffer.lenColors > 0) {
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.slice(0, buffer.Colors), buffer.lenColors, 4, gl.DYNAMIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.slice(0, buffer.lenColors), buffer.lenColors, 4, gl.DYNAMIC_DRAW, normalized);
         }
         if (buffer.lenFlags > 0) {
             let normalized = true;
