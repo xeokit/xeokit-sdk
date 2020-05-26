@@ -106,7 +106,7 @@ class BatchingLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return (!this._finalized && this._buffer.lenPositions + lenPositions) < (this._buffer.maxVerts * 3);
+        return (!this._finalized && this._buffer.lenPositions + lenPositions) < (this._buffer.maxVerts);
     }
 
     /**
