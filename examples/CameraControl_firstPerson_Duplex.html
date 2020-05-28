@@ -148,6 +148,9 @@
         this.keyboardDollyRate = cameraControl.keyboardDollyRate;
         this.mouseWheelDollyRate = cameraControl.mouseWheelDollyRate;
         this.dollyInertia = cameraControl.dollyInertia;
+        this.dollyProximityThreshold = cameraControl.dollyProximityThreshold;
+        this.dollyMinSpeed = cameraControl.dollyMinSpeed;
+
     }();
 
     const update = () => {
@@ -170,6 +173,8 @@
         cameraControl.keyboardDollyRate = cameraControlParams.keyboardDollyRate;
         cameraControl.mouseWheelDollyRate = cameraControlParams.mouseWheelDollyRate;
         cameraControl.dollyInertia = cameraControlParams.dollyInertia;
+        cameraControl.dollyProximityThreshold = cameraControlParams.dollyProximityThreshold;
+        cameraControl.dollyMinSpeed = cameraControlParams.dollyMinSpeed;
 
         requestAnimationFrame(update);
     };
@@ -203,11 +208,12 @@
     dollyFolder.add(cameraControlParams, 'keyboardDollyRate', 0, 30);
     dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 30);
     dollyFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
+    dollyFolder.add(cameraControlParams, 'dollyProximityThreshold', 0, 150);
+    dollyFolder.add(cameraControlParams, 'dollyMinSpeed', 0.01, 1.0);
     dollyFolder.open();
 
     const customContainer = document.getElementById('my-gui-container');
     customContainer.appendChild(gui.domElement);
-
 
 </script>
 </html>

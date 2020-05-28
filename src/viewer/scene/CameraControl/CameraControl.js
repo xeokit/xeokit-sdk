@@ -470,7 +470,9 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 10,
-            dollyInertia: 0.75
+            dollyInertia: 0.75,
+            dollyProximityThreshold: 30.0,
+            dollyMinSpeed: 1.0
         };
 
         // Current runtime state of the CameraControl
@@ -546,6 +548,8 @@ class CameraControl extends Component {
         this.keyboardRotationRate = cfg.keyboardRotationRate;
         this.dragRotationRate = cfg.dragRotationRate;
         this.dollyInertia = cfg.dollyInertia;
+        this.dollyProximityThreshold = cfg.dollyProximityThreshold;
+        this.dollyMinSpeed = cfg.dollyMinSpeed;
         this.panInertia = cfg.panInertia;
         this.pointerEnabled = true;
         this.keyboardDollyRate = cfg.keyboardDollyRate;
@@ -1111,6 +1115,50 @@ class CameraControl extends Component {
      */
     get dollyInertia() {
         return this._configs.dollyInertia;
+    }
+
+    /**
+     * Sets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.
+     *
+     * Default is ````35.0````.
+     *
+     * @param {Number} dollyProximityThreshold New dolly proximity threshold.
+     */
+    set dollyProximityThreshold(dollyProximityThreshold) {
+        this._configs.dollyProximityThreshold = (dollyProximityThreshold !== undefined && dollyProximityThreshold !== null) ? dollyProximityThreshold : 35.0;
+    }
+
+    /**
+     * Gets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.
+     *
+     * Default is ````35.0````.
+     *
+     * @returns {Number} The current dolly proximity threshold.
+     */
+    get dollyProximityThreshold() {
+        return this._configs.dollyProximityThreshold;
+    }
+
+    /**
+     * Sets the minimum dolly speed.
+     *
+     * Default is ````0.05````.
+     *
+     * @param {Number} dollyMinSpeed New dolly minimum speed.
+     */
+    set dollyMinSpeed(dollyMinSpeed) {
+        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined && dollyMinSpeed !== null) ? dollyMinSpeed : 0.05;
+    }
+
+    /**
+     * Gets the minimum dolly speed.
+     *
+     * Default is ````0.05````.
+     *
+     * @returns {Number} The current minimum dolly speed.
+     */
+    get dollyMinSpeed() {
+        return this._configs.dollyMinSpeed;
     }
 
     /**
