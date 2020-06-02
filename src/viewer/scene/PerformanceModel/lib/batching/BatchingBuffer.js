@@ -3,6 +3,7 @@ import {WEBGL_INFO} from "../../../webglInfo.js";
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const SLICING = true;
 const MAX_VERTS = SLICING ? (bigIndicesSupported ? 5000000 : 65530) : 5000000;
+const MAX_INDICES = MAX_VERTS * 3; // Rough rule-of-thumb
 
 /**
  * @private
@@ -11,6 +12,7 @@ class BatchingBuffer {
     constructor() {
         this.slicing = SLICING;
         this.maxVerts = MAX_VERTS;
+        this.maxIndices = MAX_INDICES;
         this.positions = new Float32Array(MAX_VERTS * 3); // Uncompressed
         this.colors = new Uint8Array(MAX_VERTS * 4); // Compressed
         this.quantizedPositions = new Uint16Array(MAX_VERTS * 3); // Compressed
@@ -18,8 +20,8 @@ class BatchingBuffer {
         this.pickColors = new Uint8Array(MAX_VERTS * 4); // Compressed
         this.flags = new Uint8Array(MAX_VERTS * 4);
         this.flags2 = new Uint8Array(MAX_VERTS * 4);
-        this.indices = bigIndicesSupported ? new Uint32Array(MAX_VERTS) : new Uint16Array(MAX_VERTS);
-        this.edgeIndices = bigIndicesSupported ? new Uint32Array(MAX_VERTS) : new Uint16Array(MAX_VERTS);
+        this.indices = bigIndicesSupported ? new Uint32Array(MAX_INDICES) : new Uint16Array(MAX_INDICES);
+        this.edgeIndices = bigIndicesSupported ? new Uint32Array(MAX_INDICES) : new Uint16Array(MAX_INDICES);
         this.lenPositions = 0;
         this.lenColors = 0;
         this.lenNormals = 0;
