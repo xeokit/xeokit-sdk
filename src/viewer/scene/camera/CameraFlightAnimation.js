@@ -657,6 +657,14 @@ class CameraFlightAnimation extends Component {
     get trail() {
         return this._trail;
     }
+
+    /**
+     * @private
+     */
+    destroy() {
+        this.stop();
+        super.destroy();
+    }
 }
 
 export {CameraFlightAnimation};
