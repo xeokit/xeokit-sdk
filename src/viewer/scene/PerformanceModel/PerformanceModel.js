@@ -735,6 +735,15 @@ class PerformanceModel extends Component {
         return this._backfaces;
     }
 
+    /**
+     * Gets the list of {@link Entity}s within this PerformanceModel.
+     *
+     * @returns {Entity[]}
+     */
+    get entityList() {
+        return this._nodeList;
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Entity members
     //------------------------------------------------------------------------------------------------------------------
