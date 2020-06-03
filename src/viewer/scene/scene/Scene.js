@@ -331,6 +331,7 @@ class Scene extends Component {
     }
 
     /**
+     * @private
      * @constructor
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
@@ -348,6 +349,7 @@ class Scene extends Component {
         }
 
         const transparent = (!!cfg.transparent);
+        const alphaDepthMask = (!!cfg.alphaDepthMask);
 
         this._aabbDirty = true;
 
@@ -553,7 +555,8 @@ class Scene extends Component {
         });
 
         this._renderer = new Renderer(this, {
-            transparent: transparent
+            transparent: transparent,
+            alphaDepthMask: alphaDepthMask
         });
 
         this._sectionPlanesState = new (function () {
@@ -907,6 +910,7 @@ class Scene extends Component {
     _sectionPlaneDestroyed(sectionPlane) {
         delete this.sectionPlanes[sectionPlane.id];
         this.scene._sectionPlanesState.removeSectionPlane(sectionPlane._state);
+        this.scene.fire("sectionPlaneDestroyed", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
     }
 
