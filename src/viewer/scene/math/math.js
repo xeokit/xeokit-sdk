@@ -2038,6 +2038,20 @@ const math = {
 
     })(),
 
+    /** @private */
+    getColMat4(mat, c) {
+        const i = c * 4;
+        return [mat[i], mat[i + 1], mat[i + 2], mat[i + 3]];
+    },
+
+    /** @private */
+    setRowMat4(mat, r, v) {
+        mat[r] = v[0];
+        mat[r + 4] = v[1];
+        mat[r + 8] = v[2];
+        mat[r + 12] = v[3];
+    },
+
     /**
      * Returns a 4x4 'lookat' viewing transform matrix.
      * @method lookAtMat4v
@@ -3174,6 +3188,20 @@ const math = {
 
         return p2;
     },
+
+    /** Returns true if the first AABB contains the second AABB.
+     * @param aabb1
+     * @param aabb2
+     * @returns {boolean}
+     */
+    containsAABB3: function (aabb1, aabb2) {
+        const result = (
+            aabb1[0] <= aabb2[0] && aabb2[3] <= aabb1[3] &&
+            aabb1[1] <= aabb2[1] && aabb2[4] <= aabb1[4] &&
+            aabb1[2] <= aabb2[2] && aabb2[5] <= aabb1[5]);
+        return result;
+    },
+
 
     /**
      * Gets the diagonal size of an AABB3 given as minima and maxima.
