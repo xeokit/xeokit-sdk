@@ -29,7 +29,8 @@ function buildVertex(scene) {
     src.push("void main(void) {");
     src.push("bool visible   = (float(flags.x) > 0.0);");
     src.push("bool pickable  = (float(flags2.z) > 0.0);");
-    src.push("if ((!pickInvisible && !visible) || !pickable) {");
+    src.push("bool culled    = (float(flags2.w) > 0.0);");
+    src.push("if (culled || (!pickInvisible && !visible) || !pickable) {");
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
@@ -37,6 +38,7 @@ function buildVertex(scene) {
     src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");
+        src.push("  vFlags2 = flags2;");
     }
     src.push("  vViewPosition = viewPosition;");
     src.push("  gl_Position = projMatrix * viewPosition;");

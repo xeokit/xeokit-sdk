@@ -177,8 +177,15 @@ class PerformanceMesh {
     /**
      * @private
      */
-    _setPickable(flags) {
-        this._layer.setPickable(this._portionId, flags);
+    _setPickable(flags2) {
+        this._layer.setPickable(this._portionId, flags2);
+    }
+
+    /**
+     * @private
+     */
+    _setCulled(flags2) {
+        this._layer.setCulled(this._portionId, flags2);
     }
 
     /** @private */

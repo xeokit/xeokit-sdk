@@ -22,8 +22,8 @@ class PerformanceNode {
          * @type {Scene}
          * @final
          */
-         this.scene = model.scene;
-        
+        this.scene = model.scene;
+
         /**
          * The PerformanceModel that contains this PerformanceNode.
          * @property model
@@ -314,7 +314,19 @@ class PerformanceNode {
      *
      * @type {Boolean}
      */
-    set culled(culled) { // TODO
+    set culled(culled) {
+        if (!!(this._flags & RENDER_FLAGS.CULLED) === culled) {
+            return; // Redundant update
+        }
+        if (culled) {
+            this._flags = this._flags | RENDER_FLAGS.CULLED;
+        } else {
+            this._flags = this._flags & ~RENDER_FLAGS.CULLED;
+        }
+        for (var i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._setCulled(this._flags);
+        }
+        this.model.glRedraw();
     }
 
     /**
@@ -324,8 +336,8 @@ class PerformanceNode {
      *
      * @type {Boolean}
      */
-    get culled() { // TODO
-        return false;
+    get culled() {
+        return this._getFlag(RENDER_FLAGS.CULLED);
     }
 
     /**

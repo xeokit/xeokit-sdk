@@ -14,9 +14,7 @@ function buildVertex(scene) {
     src.push("attribute vec3 position;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-    if (clipping) {
-        src.push("attribute vec4 flags2;");
-    }
+    src.push("attribute vec4 flags2;");
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
     src.push("attribute vec4 modelMatrixCol1;");
     src.push("attribute vec4 modelMatrixCol2;");
@@ -31,7 +29,8 @@ function buildVertex(scene) {
     src.push("void main(void) {");
     src.push("bool visible   = (float(flags.x) > 0.0);");
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
-    src.push(`if (!visible || transparent) {`);                // Non-pickable meshes cannot be occluders
+    src.push("bool culled  = (float(flags2.w) > 0.0);");
+    src.push(`if (culled || !visible || transparent) {`);                // Non-pickable meshes cannot be occluders
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");  // Cull vertex
     src.push("} else {");
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");

@@ -35,7 +35,8 @@ function buildVertex(scene) {
     src.push("void main(void) {");
     src.push("bool visible   = (float(flags.x) > 0.0);");
     src.push("bool pickable  = (float(flags2.z) > 0.0);");
-    src.push(`if ((!pickInvisible && !visible) || !pickable) {`);
+    src.push("bool culled    = (float(flags2.w) > 0.0);");
+    src.push(`if ( culled || (!pickInvisible && !visible) || !pickable) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
 
@@ -49,7 +50,7 @@ function buildVertex(scene) {
     src.push("  vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);");
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");
-        src.push("vFlags2 = flags2;");
+        src.push("  vFlags2 = flags2;");
     }
     src.push("  gl_Position = projMatrix * viewPosition;");
     src.push("}");

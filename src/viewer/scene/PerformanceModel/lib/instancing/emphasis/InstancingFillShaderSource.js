@@ -27,9 +27,7 @@ function buildVertex(scene) {
 
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
-    if (clipping) {
-        src.push("attribute vec4 flags2;");
-    }
+    src.push("attribute vec4 flags2;");
 
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
     src.push("attribute vec4 modelMatrixCol1;");
@@ -52,11 +50,12 @@ function buildVertex(scene) {
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
+    src.push("bool culled       = (float(flags2.w) > 0.0);");
 
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EmphasisMaterial.fillColor, so is not quantized
 
-    src.push(`if
-    (!visible ||
+    src.push(`if (
+    culled || !visible ||
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 

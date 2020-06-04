@@ -139,6 +139,7 @@ class InstancingLayer {
         this._numSelectedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
+        this._numCulledLayerPortions = 0;
 
         /** @private */
         this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
@@ -195,6 +196,7 @@ class InstancingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        var culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
 
         this._flags.push(visible);
         this._flags.push(xrayed);
@@ -204,7 +206,7 @@ class InstancingLayer {
         this._flags2.push(clippable);
         this._flags2.push(edges);
         this._flags2.push(pickable);
-        this._flags2.push(0); // Unused
+        this._flags2.push(culled);
 
         if (visible) {
             this._numVisibleLayerPortions++;
@@ -229,6 +231,10 @@ class InstancingLayer {
         if (pickable) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
+        }
+        if (culled) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
         }
 
         const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
@@ -386,6 +392,10 @@ class InstancingLayer {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
         }
+        if (flags & RENDER_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        }
         this._setFlags(portionId, flags);
         this._setFlags2(portionId, flags);
     }
@@ -487,6 +497,20 @@ class InstancingLayer {
         this._setFlags2(portionId, flags);
     }
 
+    setCulled(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        } else {
+            this._numCulledLayerPortions--;
+            this.model.numCulledLayerPortions--;
+        }
+        this._setFlags2(portionId, flags);
+    }
+
     setColor(portionId, color, setOpacity = false) { // RGBA color is normalized as ints
         if (!this._finalized) {
             throw "Not finalized";
@@ -560,16 +584,18 @@ class InstancingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        var culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
         tempUint8Vec4[0] = clippable;
         tempUint8Vec4[1] = edges;
         tempUint8Vec4[2] = pickable;
+        tempUint8Vec4[3] = culled;
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (frameCtx.withSAO) {
@@ -584,7 +610,7 @@ class InstancingLayer {
     }
 
     drawNormalEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -593,7 +619,7 @@ class InstancingLayer {
     }
 
     drawNormalFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._instancingRenderers.drawRenderer) {
@@ -602,7 +628,7 @@ class InstancingLayer {
     }
 
     drawNormalTransparentEdges(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -613,7 +639,7 @@ class InstancingLayer {
     //--  Post effects support -----------------------------------------------------------------------------------------
 
     drawDepth(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._instancingRenderers.depthRenderer) {
@@ -622,7 +648,7 @@ class InstancingLayer {
     }
 
     drawNormals(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._instancingRenderers.normalsRenderer) {
@@ -633,7 +659,7 @@ class InstancingLayer {
     //-- XRAYED--------------------------------------------------------------------------------------------------------
 
     drawXRayedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -642,7 +668,7 @@ class InstancingLayer {
     }
 
     drawXRayedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -651,7 +677,7 @@ class InstancingLayer {
     }
 
     drawXRayedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -660,7 +686,7 @@ class InstancingLayer {
     }
 
     drawXRayedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -671,7 +697,7 @@ class InstancingLayer {
     //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -680,7 +706,7 @@ class InstancingLayer {
     }
 
     drawHighlightedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -689,7 +715,7 @@ class InstancingLayer {
     }
 
     drawHighlightedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -698,7 +724,7 @@ class InstancingLayer {
     }
 
     drawHighlightedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -709,7 +735,7 @@ class InstancingLayer {
     //-- SELECTED ------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -718,7 +744,7 @@ class InstancingLayer {
     }
 
     drawSelectedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -727,7 +753,7 @@ class InstancingLayer {
     }
 
     drawSelectedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
@@ -736,7 +762,7 @@ class InstancingLayer {
     }
 
     drawSelectedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
@@ -747,7 +773,7 @@ class InstancingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.pickMeshRenderer) {
@@ -756,7 +782,7 @@ class InstancingLayer {
     }
 
     drawPickDepths(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.pickDepthRenderer) {
@@ -765,7 +791,7 @@ class InstancingLayer {
     }
 
     drawPickNormals(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.pickNormalsRenderer) {
@@ -776,7 +802,7 @@ class InstancingLayer {
     //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
 
     drawOcclusion(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.occlusionRenderer) {
