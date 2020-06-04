@@ -407,9 +407,9 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
      * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````true````.
      * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
+     * @param {Boolean} [options.reverseClippingplanes] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      */
     setViewpoint(bcfViewpoint, options = {}) {
-
         if (!bcfViewpoint) {
             return;
         }
@@ -421,15 +421,24 @@ class BCFViewpointsPlugin extends Plugin {
         const immediate = (options.immediate !== false);
         const reset = (options.reset !== false);
         const realWorldOffset = scene.realWorldOffset;
+        const reverseClippingplanes = (options.reverseClippingplanes === true);
 
         scene.clearSectionPlanes();
 
         if (bcfViewpoint.clipping_planes) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
-                new SectionPlane(scene, {
-                    pos: xyzObjectToArray(e.location, tempVec3),
-                    dir: xyzObjectToArray(e.direction, tempVec3)
-                });
+                let pos = xyzObjectToArray(e.location, tempVec3);
+                let dir = xyzObjectToArray(e.direction, tempVec3);
+
+                if (reverseClippingplanes) {
+                    dir[2] = -dir[2];
+                }
+
+                if (camera.yUp) {
+                    pos = ZToY(pos);
+                    dir = ZToY(dir);
+                }
+                new SectionPlane(scene, {pos, dir});
             });
         }
 
