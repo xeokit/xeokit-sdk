@@ -218,7 +218,7 @@ class BCFViewpointsPlugin extends Plugin {
      * as ````false````. This means that when we load the viewpoint again, and there are additional models loaded that
      * were not saved in the viewpoint, those models will be hidden when we load the viewpoint, and that only the
      * objects in the viewpoint will be visible.
-     * @param {Boolean} [options.reverseClippingplanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
+     * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      * @returns {*} BCF JSON viewpoint object
      * @example
      *
@@ -292,7 +292,7 @@ class BCFViewpointsPlugin extends Plugin {
         const scene = this.viewer.scene;
         const camera = scene.camera;
         const realWorldOffset = scene.realWorldOffset;
-        const reverseClippingplanes = (options.reverseClippingplanes === true);
+        const reverseClippingPlanes = (options.reverseClippingPlanes === true);
         let bcfViewpoint = {};
 
         // Camera
@@ -340,7 +340,7 @@ class BCFViewpointsPlugin extends Plugin {
                 let location = sectionPlane.pos;
 
                 let direction;
-                if (reverseClippingplanes) {
+                if (reverseClippingPlanes) {
                     direction = math.negateVec3(sectionPlane.dir, math.vec3());
                 } else {
                     direction = sectionPlane.dir;
@@ -423,7 +423,7 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.immediate=true] When ````true```` (default), immediately set camera position.
      * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````false````.
      * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
-     * @param {Boolean} [options.reverseClippingplanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
+     * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      */
     setViewpoint(bcfViewpoint, options = {}) {
         if (!bcfViewpoint) {
@@ -437,7 +437,7 @@ class BCFViewpointsPlugin extends Plugin {
         const immediate = (options.immediate !== false);
         const reset = (options.reset !== false);
         const realWorldOffset = scene.realWorldOffset;
-        const reverseClippingplanes = (options.reverseClippingplanes === true);
+        const reverseClippingPlanes = (options.reverseClippingPlanes === true);
 
         scene.clearSectionPlanes();
 
@@ -446,7 +446,7 @@ class BCFViewpointsPlugin extends Plugin {
                 let pos = xyzObjectToArray(e.location, tempVec3);
                 let dir = xyzObjectToArray(e.direction, tempVec3);
 
-                if (reverseClippingplanes) {
+                if (reverseClippingPlanes) {
                     math.negateVec3(dir);
                 }
 
