@@ -218,6 +218,7 @@ class BCFViewpointsPlugin extends Plugin {
      * as ````false````. This means that when we load the viewpoint again, and there are additional models loaded that
      * were not saved in the viewpoint, those models will be hidden when we load the viewpoint, and that only the
      * objects in the viewpoint will be visible.
+     * @param {Boolean} [options.reverseClippingplanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      * @returns {*} BCF JSON viewpoint object
      * @example
      *
@@ -291,7 +292,7 @@ class BCFViewpointsPlugin extends Plugin {
         const scene = this.viewer.scene;
         const camera = scene.camera;
         const realWorldOffset = scene.realWorldOffset;
-
+        const reverseClippingplanes = (options.reverseClippingplanes === true);
         let bcfViewpoint = {};
 
         // Camera
@@ -335,10 +336,25 @@ class BCFViewpointsPlugin extends Plugin {
         for (let id in sectionPlanes) {
             if (sectionPlanes.hasOwnProperty(id)) {
                 let sectionPlane = sectionPlanes[id];
-                bcfViewpoint.clipping_planes.push({
-                    location: xyzArrayToObject(sectionPlane.pos),
-                    direction: xyzArrayToObject(sectionPlane.dir)
-                });
+
+                let location = sectionPlane.pos;
+
+                let direction;
+                if (reverseClippingplanes) {
+                    direction = math.negateVec3(sectionPlane.dir, math.vec3());
+                } else {
+                    direction = sectionPlane.dir;
+                }
+
+                if (camera.yUp) {
+                    // BCF is Z up
+                    location = YToZ(location);
+                    direction = YToZ(direction);
+                }
+
+                location = xyzArrayToObject(sectionPlane.pos);
+                direction = xyzArrayToObject(direction);
+                bcfViewpoint.clipping_planes.push({location, direction});
             }
         }
 
@@ -404,10 +420,10 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {*} [options] Options for setting the viewpoint.
      * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
-     * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
-     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````true````.
+     * @param {Boolean} [options.immediate=true] When ````true```` (default), immediately set camera position.
+     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````false````.
      * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
-     * @param {Boolean} [options.reverseClippingplanes] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
+     * @param {Boolean} [options.reverseClippingplanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      */
     setViewpoint(bcfViewpoint, options = {}) {
         if (!bcfViewpoint) {
@@ -431,7 +447,7 @@ class BCFViewpointsPlugin extends Plugin {
                 let dir = xyzObjectToArray(e.direction, tempVec3);
 
                 if (reverseClippingplanes) {
-                    dir[2] = -dir[2];
+                    math.negateVec3(dir);
                 }
 
                 if (camera.yUp) {
@@ -568,4 +584,4 @@ function ZToY(vec) {
     return new Float64Array([vec[0], vec[2], -vec[1]]);
 }
 
-export {BCFViewpointsPlugin}
+export {BCFViewpointsPlugin};
