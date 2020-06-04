@@ -1152,74 +1152,74 @@ class PerformanceModel extends Component {
 
         renderFlags.normalFillOpaque = true;
 
-        // if (this.numXRayedLayerPortions > 0) {
-        //     const xrayMaterial = this.scene.xrayMaterial._state;
-        //     if (xrayMaterial.fill) {
-        //         if (xrayMaterial.fillAlpha < 1.0) {
-        //             renderFlags.xrayedFillTransparent = true;
-        //         } else {
-        //             renderFlags.xrayedFillOpaque = true;
-        //         }
-        //     }
-        //     if (xrayMaterial.edges) {
-        //         if (xrayMaterial.edgeAlpha < 1.0) {
-        //             renderFlags.xrayedEdgesTransparent = true;
-        //         } else {
-        //             renderFlags.xrayedEdgesOpaque = true;
-        //         }
-        //     }
-        // }
-        //
-        // if (this.numEdgesLayerPortions > 0) {
-        //     const edgeMaterial = this.scene.edgeMaterial._state;
-        //     if (edgeMaterial.edges) {
-        //         if (edgeMaterial.alpha < 1.0) {
-        //             renderFlags.normalEdgesTransparent = true;
-        //         } else {
-        //             renderFlags.normalEdgesOpaque = true;
-        //         }
-        //     }
-        // }
-        //
-        // if (this.numTransparentLayerPortions > 0) {
-        //     renderFlags.normalFillTransparent = true;
-        // }
-        //
-        // if (this.numSelectedLayerPortions > 0) {
-        //     const selectedMaterial = this.scene.selectedMaterial._state;
-        //     if (selectedMaterial.fill) {
-        //         if (selectedMaterial.fillAlpha < 1.0) {
-        //             renderFlags.selectedFillTransparent = true;
-        //         } else {
-        //             renderFlags.selectedFillOpaque = true;
-        //         }
-        //     }
-        //     if (selectedMaterial.edges) {
-        //         if (selectedMaterial.edgeAlpha < 1.0) {
-        //             renderFlags.selectedEdgesTransparent = true;
-        //         } else {
-        //             renderFlags.selectedEdgesOpaque = true;
-        //         }
-        //     }
-        // }
-        //
-        // if (this.numHighlightedLayerPortions > 0) {
-        //     const highlightMaterial = this.scene.highlightMaterial._state;
-        //     if (highlightMaterial.fill) {
-        //         if (highlightMaterial.fillAlpha < 1.0) {
-        //             renderFlags.highlightedFillTransparent = true;
-        //         } else {
-        //             renderFlags.highlightedFillOpaque = true;
-        //         }
-        //     }
-        //     if (highlightMaterial.edges) {
-        //         if (highlightMaterial.edgeAlpha < 1.0) {
-        //             renderFlags.highlightedEdgesTransparent = true;
-        //         } else {
-        //             renderFlags.highlightedEdgesOpaque = true;
-        //         }
-        //     }
-        // }
+        if (this.numXRayedLayerPortions > 0) {
+            const xrayMaterial = this.scene.xrayMaterial._state;
+            if (xrayMaterial.fill) {
+                if (xrayMaterial.fillAlpha < 1.0) {
+                    renderFlags.xrayedFillTransparent = true;
+                } else {
+                    renderFlags.xrayedFillOpaque = true;
+                }
+            }
+            if (xrayMaterial.edges) {
+                if (xrayMaterial.edgeAlpha < 1.0) {
+                    renderFlags.xrayedEdgesTransparent = true;
+                } else {
+                    renderFlags.xrayedEdgesOpaque = true;
+                }
+            }
+        }
+
+        if (this.numEdgesLayerPortions > 0) {
+            const edgeMaterial = this.scene.edgeMaterial._state;
+            if (edgeMaterial.edges) {
+                if (edgeMaterial.alpha < 1.0) {
+                    renderFlags.normalEdgesTransparent = true;
+                } else {
+                    renderFlags.normalEdgesOpaque = true;
+                }
+            }
+        }
+
+        if (this.numTransparentLayerPortions > 0) {
+            renderFlags.normalFillTransparent = true;
+        }
+
+        if (this.numSelectedLayerPortions > 0) {
+            const selectedMaterial = this.scene.selectedMaterial._state;
+            if (selectedMaterial.fill) {
+                if (selectedMaterial.fillAlpha < 1.0) {
+                    renderFlags.selectedFillTransparent = true;
+                } else {
+                    renderFlags.selectedFillOpaque = true;
+                }
+            }
+            if (selectedMaterial.edges) {
+                if (selectedMaterial.edgeAlpha < 1.0) {
+                    renderFlags.selectedEdgesTransparent = true;
+                } else {
+                    renderFlags.selectedEdgesOpaque = true;
+                }
+            }
+        }
+
+        if (this.numHighlightedLayerPortions > 0) {
+            const highlightMaterial = this.scene.highlightMaterial._state;
+            if (highlightMaterial.fill) {
+                if (highlightMaterial.fillAlpha < 1.0) {
+                    renderFlags.highlightedFillTransparent = true;
+                } else {
+                    renderFlags.highlightedFillOpaque = true;
+                }
+            }
+            if (highlightMaterial.edges) {
+                if (highlightMaterial.edgeAlpha < 1.0) {
+                    renderFlags.highlightedEdgesTransparent = true;
+                } else {
+                    renderFlags.highlightedEdgesOpaque = true;
+                }
+            }
+        }
     }
 
     /**
