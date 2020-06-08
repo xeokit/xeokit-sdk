@@ -8,13 +8,41 @@ const MAX_KD_TREE_DEPTH = 8; // Increase if greater precision needed
 const kdTreeDimLength = new Float32Array(3);
 
 /**
- * {@link Viewer} plugin that accelerates rendering performance by making xeokit's
- * renderer skip {@link Entity}s that fall outside the current view.
+ * {@link Viewer} plugin that performs frustum culling to accelerate rendering performance.
  *
- * * Automatically organizes {@link Entity}s within a bounding volume hierarchy, implemented as a kd-tree.
- * * Periodically searches the kd-tree using a frustum generated from the {@link Camera}.
- * * Entities that fall outside the frustum are then **culled**; while Entitys are culled, xeokit will not draw them.
- * * Only works for static Entitys - does not work for dynamically transformed Entitys.
+ * For each {@link Entity} that represents an object in the {@link Viewer}, ````ViewCullPlugin````
+ * will automatically mark it *culled* whenever it falls outside our current view.
+ *
+ * When culled, an ````Entity```` is not processed by xeokit's renderer.
+ *
+ * Internally, ````ViewCullPlugin```` organizes {@link Entity}s in
+ * a [bounding volume hierarchy](https://en.wikipedia.org/wiki/Bounding_volume_hierarchy), implemented as
+ * a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree).
+ *
+ * On each {@link Scene} "tick" event, ````ViewCullPlugin```` searches the kd-tree using a frustum generated from
+ * the {@link Camera}, marking each ````Entity```` **culled*** if it falls outside the frustum.
+ *
+ * Use ````ViewCullPlugin```` by simply adding it to your ````Viewer````:
+ *
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *    canvasId: "myCanvas",
+ *    transparent: true
+ * });
+ *
+ * const viewCullPlugin = new ViewCullPlugin(viewer, {
+ *    maxTreeDepth: 20
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *   id: "myModel",
+ *   src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+ *   metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json"
+ * });
+ * ````
  */
 class ViewCullPlugin extends Plugin {
 
