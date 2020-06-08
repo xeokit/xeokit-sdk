@@ -783,22 +783,18 @@
 
     var lastEntity = null;
 
-    viewer.scene.input.on("mousemove", function (coords) {
+    viewer.cameraControl.on("hover", function (pickResult) {
 
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
+        if (pickResult) {
 
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+            if (!lastEntity || pickResult.entity.id !== lastEntity.id) {
 
                 if (lastEntity) {
                     lastEntity.highlighted = false;
                 }
 
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
+                lastEntity = pickResult.entity;
+                pickResult.entity.highlighted = true;
             }
         } else {
 
