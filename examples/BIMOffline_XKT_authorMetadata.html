@@ -41,6 +41,9 @@
             Model creation date: <span id="modelCreatedAt"></span>
         </li>
         <li>
+            Model creation app: <span id="modelCreatingApplication"></span>
+        </li>
+        <li>
             Model schema: <span id="modelSchema"></span>
         </li>
         <li>
@@ -72,19 +75,9 @@
 
     viewer.cameraControl.followPointer = true;
 
-    viewer.camera.eye = [-3.933, 2.855, 27.018];
-    viewer.camera.look = [4.400, 3.724, 8.899];
-    viewer.camera.up = [-0.018, 0.999, 0.039];
-
-    viewer.cameraFlight.fitFOV = 15;
-
-    viewer.scene.xrayMaterial.fillAlpha = 0.1;
-    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
-    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
-    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
-
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+    viewer.scene.camera.eye = [10.45, 17.38, -98.31];
+    viewer.scene.camera.look = [43.09, 0.5, -26.76];
+    viewer.scene.camera.up = [0.06, 0.96, 0.16];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load model and metadata
@@ -94,8 +87,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
@@ -110,6 +103,7 @@
         if (metaModel) {
             document.getElementById("modelAuthor").innerHTML = metaModel.author || "Unknown";
             document.getElementById("modelCreatedAt").innerHTML = metaModel.createdAt || "Unknown";
+            document.getElementById("modelCreatingApplication").innerHTML = metaModel.creatingApplication || "Unknown";
             document.getElementById("modelSchema").innerHTML = metaModel.schema || "Unknown";
         }
     });
