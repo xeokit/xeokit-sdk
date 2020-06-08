@@ -194,7 +194,7 @@
 <li><a href="#---doublepicked---">&quot;doublePicked&quot;</a></li>
 <li><a href="#---doublepickedsurface---">&quot;doublePickedSurface&quot;</a></li>
 <li><a href="#---doublepickednothing---">&quot;doublePickedNothing&quot;</a></li>
-<li><a href="#---mouserightclick---">&quot;mouseRightClick&quot;</a>
+<li><a href="#---rightclick---">&quot;rightClick&quot;</a>
 <br><br></li>
 </ul>
 </li>
@@ -428,8 +428,8 @@ corresponding axis-aligned view.</p>
      const canvasPos = e.canvasPos;
 });</code>
 </code></pre>
-<h2 id="-quot-mouserightclick-quot-">&quot;mouseRightClick&quot;</h2><p>Event fired when we right-click on the canvas.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;rightClicked&quot;, (e) =&gt; {
+<h2 id="-quot-rightclick-quot-">&quot;rightClick&quot;</h2><p>Event fired when we right-click on the canvas.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">cameraControl.on(&quot;rightClick&quot;, (e) =&gt; {
      const event = e.event; // Mouse event
      const canvasPos = e.canvasPos;
 });</code>
@@ -619,6 +619,122 @@ corresponding axis-aligned view.</p>
         
         
         <div data-ice="description"><p>Gets the dolly inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyMinSpeed">dollyMinSpeed</a></span></span><span class="code" data-ice="signature">(dollyMinSpeed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the minimum dolly speed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyMinSpeed">dollyMinSpeed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the minimum dolly speed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyProximityThreshold">dollyProximityThreshold</a></span></span><span class="code" data-ice="signature">(dollyProximityThreshold: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyProximityThreshold">dollyProximityThreshold</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.</p>
 </div>
       </div>
     </td>
@@ -2219,7 +2335,7 @@ corresponding axis-aligned view.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber575">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber579">source</a></span></span>
     </span>
   </h3>
 
@@ -2265,7 +2381,7 @@ corresponding axis-aligned view.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber588">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber592">source</a></span></span>
     </span>
   </h3>
 
@@ -2324,7 +2440,7 @@ corresponding axis-aligned view.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber857">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber861">source</a></span></span>
     </span>
   </h3>
 
@@ -2371,7 +2487,7 @@ corresponding axis-aligned view.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber872">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber876">source</a></span></span>
     </span>
   </h3>
 
@@ -2431,7 +2547,7 @@ corresponding axis-aligned view.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1105">source</a></span></span>
     </span>
   </h3>
 
@@ -2483,7 +2599,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1116">source</a></span></span>
     </span>
   </h3>
 
@@ -2530,6 +2646,212 @@ which can improve rendering performance.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyMinSpeed">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyMinSpeed</span><span class="code" data-ice="signature">(dollyMinSpeed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1149">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the minimum dolly speed.</p>
+<p>Default is <code>0.05</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyMinSpeed">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyMinSpeed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1160">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the minimum dolly speed.</p>
+<p>Default is <code>0.05</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current minimum dolly speed.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dollyProximityThreshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyProximityThreshold</span><span class="code" data-ice="signature">(dollyProximityThreshold: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1127">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.</p>
+<p>Default is <code>35.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dollyProximityThreshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dollyProximityThreshold</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1138">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the proximity to the closest object below which dolly speed decreases, and above which dolly speed increases.</p>
+<p>Default is <code>35.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current dolly proximity threshold.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-dollyToPointer">
     <span class="access" data-ice="access">public</span>
     
@@ -2541,7 +2863,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber737">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber741">source</a></span></span>
     </span>
   </h3>
 
@@ -2584,7 +2906,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber746">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber750">source</a></span></span>
     </span>
   </h3>
 
@@ -2640,7 +2962,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber883">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber887">source</a></span></span>
     </span>
   </h3>
 
@@ -2685,7 +3007,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber894">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber898">source</a></span></span>
     </span>
   </h3>
 
@@ -2743,7 +3065,7 @@ which can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1023">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1027">source</a></span></span>
     </span>
   </h3>
 
@@ -2794,7 +3116,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1034">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1038">source</a></span></span>
     </span>
   </h3>
 
@@ -2852,7 +3174,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber823">source</a></span></span>
     </span>
   </h3>
 
@@ -2899,7 +3221,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber841">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber845">source</a></span></span>
     </span>
   </h3>
 
@@ -2959,7 +3281,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber688">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber692">source</a></span></span>
     </span>
   </h3>
 
@@ -3008,7 +3330,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber707">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber711">source</a></span></span>
     </span>
   </h3>
 
@@ -3070,7 +3392,7 @@ vertically when we sweep the entire height of the canvas.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1046">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1050">source</a></span></span>
     </span>
   </h3>
 
@@ -3116,7 +3438,7 @@ the <code>+</code> and <code>-</code> keys.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1057">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1061">source</a></span></span>
     </span>
   </h3>
 
@@ -3174,7 +3496,7 @@ the <code>+</code> and <code>-</code> keys.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1206">source</a></span></span>
     </span>
   </h3>
 
@@ -3223,7 +3545,7 @@ the <code>+</code> and <code>-</code> keys.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1177">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1225">source</a></span></span>
     </span>
   </h3>
 
@@ -3285,7 +3607,7 @@ the <code>+</code> and <code>-</code> keys.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber968">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber972">source</a></span></span>
     </span>
   </h3>
 
@@ -3336,7 +3658,7 @@ and backwards, we pan along the direction the Camera is pointing.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber979">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber983">source</a></span></span>
     </span>
   </h3>
 
@@ -3394,7 +3716,7 @@ and backwards, we pan along the direction the Camera is pointing.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber992">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber996">source</a></span></span>
     </span>
   </h3>
 
@@ -3441,7 +3763,7 @@ rotation/orbit.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1003">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1007">source</a></span></span>
     </span>
   </h3>
 
@@ -3499,7 +3821,7 @@ rotation/orbit.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1069">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1073">source</a></span></span>
     </span>
   </h3>
 
@@ -3545,7 +3867,7 @@ the mouse wheel.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1080">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1084">source</a></span></span>
     </span>
   </h3>
 
@@ -3603,7 +3925,7 @@ the mouse wheel.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber605">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber609">source</a></span></span>
     </span>
   </h3>
 
@@ -3654,7 +3976,7 @@ the mouse wheel.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber625">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber629">source</a></span></span>
     </span>
   </h3>
 
@@ -3711,7 +4033,7 @@ the mouse wheel.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1181">source</a></span></span>
     </span>
   </h3>
 
@@ -3763,7 +4085,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1144">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber1192">source</a></span></span>
     </span>
   </h3>
 
@@ -3821,7 +4143,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber905">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber909">source</a></span></span>
     </span>
   </h3>
 
@@ -3866,7 +4188,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber916">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber920">source</a></span></span>
     </span>
   </h3>
 
@@ -3924,7 +4246,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber755">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber759">source</a></span></span>
     </span>
   </h3>
 
@@ -3967,7 +4289,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber763">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber767">source</a></span></span>
     </span>
   </h3>
 
@@ -4023,7 +4345,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
@@ -4068,7 +4390,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber718">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber722">source</a></span></span>
     </span>
   </h3>
 
@@ -4113,7 +4435,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber729">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber733">source</a></span></span>
     </span>
   </h3>
 
@@ -4171,7 +4493,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber780">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber784">source</a></span></span>
     </span>
   </h3>
 
@@ -4218,7 +4540,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber802">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber806">source</a></span></span>
     </span>
   </h3>
 
@@ -4278,7 +4600,7 @@ wich can improve rendering performance.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber639">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber643">source</a></span></span>
     </span>
   </h3>
 
@@ -4325,7 +4647,7 @@ touch input to interact with some other 3D control, without disturbing the <span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber669">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber673">source</a></span></span>
     </span>
   </h3>
 
@@ -4385,7 +4707,7 @@ touch input to interact with some other 3D control, without interfering with the
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber936">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber940">source</a></span></span>
     </span>
   </h3>
 
@@ -4436,7 +4758,7 @@ you are rotating the Camera.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber949">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/CameraControl/CameraControl.js.html#lineNumber953">source</a></span></span>
     </span>
   </h3>
 

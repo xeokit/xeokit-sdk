@@ -3180,6 +3180,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#author",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-author",
+    "src/viewer/metadata/MetaModel.js~MetaModel#author",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#createdat",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-createdAt",
+    "src/viewer/metadata/MetaModel.js~MetaModel#createdAt",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#creatingapplication",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-creatingApplication",
+    "src/viewer/metadata/MetaModel.js~MetaModel#creatingApplication",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#getjson",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-method-getJSON",
     "src/viewer/metadata/MetaModel.js~MetaModel#getJSON",
@@ -3213,6 +3231,12 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/metamodel.js~metamodel#rootmetaobject",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-rootMetaObject",
     "src/viewer/metadata/MetaModel.js~MetaModel#rootMetaObject",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#schema",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-schema",
+    "src/viewer/metadata/MetaModel.js~MetaModel#schema",
     "member"
   ],
   [
@@ -3423,6 +3447,30 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyinertia",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyInertia",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyminspeed",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyMinSpeed",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyMinSpeed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyminspeed",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyMinSpeed",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyMinSpeed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyproximitythreshold",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyProximityThreshold",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyProximityThreshold",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyproximitythreshold",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyProximityThreshold",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyProximityThreshold",
     "member"
   ],
   [
@@ -4173,6 +4221,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#edges",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#entitylist",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-entityList",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#entityList",
     "member"
   ],
   [
@@ -9604,12 +9658,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-components",
     "src/viewer/scene/scene/Scene.js~Scene#components",
     "member"
-  ],
-  [
-    "src/viewer/scene/scene/scene.js~scene#constructor",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-constructor-constructor",
-    "src/viewer/scene/scene/Scene.js~Scene#constructor",
-    "method"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#destroy",

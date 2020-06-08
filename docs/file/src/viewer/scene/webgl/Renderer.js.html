@@ -158,6 +158,7 @@ const Renderer = function (scene, options) {
     const canvas = scene.canvas.canvas;
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);
+    const alphaDepthMask = options.alphaDepthMask;
 
     const pickIDs = new Map({});
 
@@ -732,20 +733,15 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            const transparentDepthMask = true;
             if (xrayedFillTransparentBinLen &gt; 0 || xrayEdgesTransparentBinLen &gt; 0 || normalFillTransparentBinLen &gt; 0) {
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
 
-                if (canvasTransparent) {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                }
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
                 frameCtx.backfaces = false;
-                if (transparentDepthMask) {
+                if (!alphaDepthMask) {
                     gl.depthMask(false);
                 }
                 if (xrayEdgesTransparentBinLen &gt; 0) {
@@ -771,7 +767,9 @@ const Renderer = function (scene, options) {
                     }
                 }
                 gl.disable(gl.BLEND);
-                gl.depthMask(true);
+                if (!alphaDepthMask) {
+                    gl.depthMask(true);
+                }
             }
 
             if (highlightedFillOpaqueBinLen &gt; 0 || highlightedEdgesOpaqueBinLen &gt; 0) {

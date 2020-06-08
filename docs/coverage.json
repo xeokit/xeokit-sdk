@@ -1,7 +1,7 @@
 {
-  "coverage": "44.03%",
-  "expectCount": 4360,
-  "actualCount": 1920,
+  "coverage": "44.14%",
+  "expectCount": 4372,
+  "actualCount": 1930,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 21,
@@ -134,11 +134,11 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        542,
-        546,
-        554,
-        558,
-        383
+        567,
+        571,
+        579,
+        583,
+        399
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -567,18 +567,18 @@
         228,
         241,
         246,
-        491,
-        500,
-        542,
-        565,
-        588,
-        611,
-        632,
-        670,
-        671,
-        672,
+        494,
+        503,
+        545,
+        568,
+        591,
+        614,
+        635,
         673,
-        674
+        674,
+        675,
+        676,
+        677
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
@@ -980,7 +980,7 @@
       "expectCount": 23,
       "actualCount": 22,
       "undocumentLines": [
-        122
+        124
       ]
     },
     "src/viewer/metadata/IFCObjectDefaults.js": {
@@ -989,10 +989,10 @@
       "undocumentLines": []
     },
     "src/viewer/metadata/MetaModel.js": {
-      "expectCount": 8,
-      "actualCount": 7,
+      "expectCount": 12,
+      "actualCount": 11,
       "undocumentLines": [
-        66
+        109
       ]
     },
     "src/viewer/metadata/MetaObject.js": {
@@ -1006,21 +1006,21 @@
       "expectCount": 18,
       "actualCount": 17,
       "undocumentLines": [
-        297
+        301
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
-      "expectCount": 54,
-      "actualCount": 46,
+      "expectCount": 58,
+      "actualCount": 50,
       "undocumentLines": [
         436,
-        478,
-        495,
-        508,
-        520,
-        532,
-        644,
-        1191
+        480,
+        497,
+        510,
+        522,
+        534,
+        648,
+        1239
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
@@ -1033,7 +1033,7 @@
         14,
         16,
         24,
-        311
+        299
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1212,8 +1212,8 @@
       "undocumentLines": []
     },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {
-      "expectCount": 134,
-      "actualCount": 93,
+      "expectCount": 135,
+      "actualCount": 94,
       "undocumentLines": [
         13,
         15,
@@ -1247,15 +1247,15 @@
         174,
         179,
         723,
-        801,
-        826,
-        849,
-        872,
-        895,
-        920,
-        944,
-        969,
-        993
+        810,
+        835,
+        858,
+        881,
+        904,
+        929,
+        953,
+        978,
+        1002
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js": {
@@ -1287,13 +1287,13 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/BatchingBuffer.js": {
-      "expectCount": 26,
+      "expectCount": 28,
       "actualCount": 3,
       "undocumentLines": [
         3,
         4,
         5,
-        11,
+        6,
         12,
         13,
         14,
@@ -1312,7 +1312,9 @@
         27,
         28,
         29,
-        33
+        30,
+        31,
+        35
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/BatchingLayer.js": {
@@ -1325,11 +1327,11 @@
         14,
         15,
         16,
-        862,
-        891,
-        938,
-        955,
-        973,
+        864,
+        893,
+        940,
+        957,
+        975,
         31,
         32,
         33,
@@ -1348,41 +1350,41 @@
         94,
         95,
         96,
-        403,
-        432,
-        446,
-        460,
-        474,
-        488,
-        502,
-        509,
-        515,
-        529,
-        562,
-        585,
-        608,
-        623,
-        632,
-        641,
-        652,
-        661,
-        672,
-        681,
-        690,
-        699,
-        710,
-        719,
-        728,
-        737,
-        748,
-        757,
-        766,
-        775,
-        786,
-        795,
-        804,
-        815,
-        824
+        405,
+        434,
+        448,
+        462,
+        476,
+        490,
+        504,
+        511,
+        517,
+        531,
+        564,
+        587,
+        610,
+        625,
+        634,
+        643,
+        654,
+        663,
+        674,
+        683,
+        692,
+        701,
+        712,
+        721,
+        730,
+        739,
+        750,
+        759,
+        768,
+        777,
+        788,
+        797,
+        806,
+        817,
+        826
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/BatchingLayerScratchMemory.js": {
@@ -2304,8 +2306,8 @@
       ]
     },
     "src/viewer/scene/camera/CameraFlightAnimation.js": {
-      "expectCount": 50,
-      "actualCount": 15,
+      "expectCount": 51,
+      "actualCount": 16,
       "undocumentLines": [
         6,
         7,
@@ -3323,60 +3325,60 @@
       "undocumentLines": [
         21,
         25,
-        352,
-        393,
-        405,
-        419,
-        433,
-        447,
-        461,
-        469,
-        470,
+        354,
+        395,
+        407,
+        421,
+        435,
+        449,
+        463,
         471,
         472,
         473,
         474,
+        475,
         476,
-        477,
+        478,
         479,
-        555,
-        559,
-        601,
-        763,
-        769,
-        807,
-        821,
-        857,
-        882,
-        889,
-        895,
-        901,
-        907,
-        913,
-        919,
-        925,
-        931,
-        936,
-        941,
-        947,
-        953,
-        975,
-        994,
-        1013,
-        1032,
-        1043,
-        1057,
-        1149,
-        1158,
-        1169,
-        1334,
-        1366,
-        1398,
-        1425,
-        1659,
-        1681,
-        1740,
-        2180
+        481,
+        557,
+        562,
+        604,
+        766,
+        772,
+        810,
+        824,
+        860,
+        885,
+        892,
+        898,
+        904,
+        910,
+        917,
+        923,
+        929,
+        935,
+        940,
+        945,
+        951,
+        957,
+        979,
+        998,
+        1017,
+        1036,
+        1047,
+        1061,
+        1153,
+        1162,
+        1173,
+        1338,
+        1370,
+        1402,
+        1429,
+        1663,
+        1685,
+        1744,
+        2184
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
