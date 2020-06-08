@@ -44,7 +44,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *      + ["doublePicked"](#---doublepicked---)
  *      + ["doublePickedSurface"](#---doublepickedsurface---)
  *      + ["doublePickedNothing"](#---doublepickednothing---)
- *      + ["mouseRightClick"](#---mouserightclick---)
+ *      + ["rightClick"](#---rightclick---)
  * <br><br>
  *
  * # Overview
@@ -406,12 +406,12 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * });
  * ````
  *
- * ## "mouseRightClick"
+ * ## "rightClick"
  *
  * Event fired when we right-click on the canvas.
  *
  * ````javascript
- * cameraControl.on("rightClicked", (e) => {
+ * cameraControl.on("rightClick", (e) => {
  *      const event = e.event; // Mouse event
  *      const canvasPos = e.canvasPos;
  * });
