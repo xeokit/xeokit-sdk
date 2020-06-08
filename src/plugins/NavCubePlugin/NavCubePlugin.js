@@ -315,6 +315,9 @@ class NavCubePlugin extends Plugin {
             });
 
             self._navCubeCanvas.addEventListener("mousedown", self._onMouseDown = function (e) {
+                if (e.which !== 1) {
+                    return;
+                }
                 downX = e.x;
                 downY = e.y;
                 lastX = e.clientX;
