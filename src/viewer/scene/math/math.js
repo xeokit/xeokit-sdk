@@ -199,6 +199,24 @@ const math = {
     },
 
     /**
+     * Negates a three-element vector.
+     * @method negateVec3
+     * @static
+     * @param {Array(Number)} v Vector to negate
+     * @param  {Array(Number)} [dest] Destination vector
+     * @return {Array(Number)} dest if specified, v otherwise
+     */
+    negateVec3(v, dest) {
+        if (!dest) {
+            dest = v;
+        }
+        dest[0] = -v[0];
+        dest[1] = -v[1];
+        dest[2] = -v[2];
+        return dest;
+    },
+
+    /**
      * Negates a four-element vector.
      * @method negateVec4
      * @static
