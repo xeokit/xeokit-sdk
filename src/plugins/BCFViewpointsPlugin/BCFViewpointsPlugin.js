@@ -494,11 +494,31 @@ class BCFViewpointsPlugin extends Plugin {
                 }
             }
 
+
             if (bcfViewpoint.components.selection) {
                 scene.setObjectsSelected(scene.selectedObjectIds, false);
                 Object.keys(scene.models).forEach(() => {
                     bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
                 });
+            }
+
+            if (bcfViewpoint.components.coloring) {
+                bcfViewpoint.components.coloring.forEach(coloring => {
+                    let uuids = coloring.components.map(component => component.ifc_guid);
+                    let color = coloring.color;
+                    if (color.length === 8) {
+                        // There is an alpha color
+                        let alpha = parseInt(color.substring(0, 2), 16) / 256;
+                        color = color.substring(2);
+                        scene.setObjectsOpacity(uuids, alpha);
+                    }
+                    let colorArray = [
+                        parseInt(color.substring(0, 2), 16),
+                        parseInt(color.substring(2, 4), 16),
+                        parseInt(color.substring(4, 6), 16)
+                    ]
+                    scene.setObjectsColorized(uuids, colorArray);
+                })
             }
         }
 
