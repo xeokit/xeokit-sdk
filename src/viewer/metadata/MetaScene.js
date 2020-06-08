@@ -121,6 +121,9 @@ class MetaScene {
         const projectId = metaModelData.projectId || "none";
         const revisionId = metaModelData.revisionId || "none";
         const newObjects = metaModelData.metaObjects;
+        const author = metaModelData.author;
+        const createdAt = metaModelData.createdAt;
+        const schema = metaModelData.schema;
 
         var includeTypes;
         // if (options.includeTypes) {
@@ -138,7 +141,7 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, id, projectId, revisionId, null);
+        const metaModel = new MetaModel(this, id, projectId, revisionId, author, createdAt, schema, null);
 
         this.metaModels[id] = metaModel;
 

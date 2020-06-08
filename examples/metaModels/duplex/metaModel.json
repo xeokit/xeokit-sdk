@@ -1,6 +1,9 @@
 {
   "projectId": "myProject",
   "revisionId": "myRevision",
+  "author": "",
+  "createdAt": "2020-01-23T12:04:21.018+00:00",
+  "schema": "IFC2x3",
   "metaObjects": [
     {
       "extid": "4d17bb41e71e3cf5e23e102752fc0ee0",
