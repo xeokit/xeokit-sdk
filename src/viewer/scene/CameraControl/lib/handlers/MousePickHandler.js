@@ -115,6 +115,12 @@ class MousePickHandler {
                 return;
             }
 
+            const leftButtonDown = (e.which === 1);
+
+            if (!leftButtonDown) {
+                return;
+            }
+
             states.mouseDownClientX = e.clientX;
             states.mouseDownClientY = e.clientY;
             states.mouseDownCursorX = states.mouseCanvasPos[0];
@@ -146,6 +152,12 @@ class MousePickHandler {
         canvas.addEventListener('mouseup', this._canvasMouseUpHandler = (e) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
+                return;
+            }
+
+            const leftButtonDown = (e.which === 1);
+
+            if (!leftButtonDown) {
                 return;
             }
 
