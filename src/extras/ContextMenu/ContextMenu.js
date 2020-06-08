@@ -246,8 +246,10 @@ class ContextMenu {
                         if (!self._context) {
                             return;
                         }
-                        doAction(self._context);
-                        self.hide();
+                        if (item._enabled !== false) {
+                            doAction(self._context);
+                            self.hide();
+                        }
                         event.preventDefault();
                     };
                 })());
@@ -355,6 +357,7 @@ class ContextMenu {
                     } else {
                         item._itemElement.classList.remove("disabled");
                     }
+                    item._enabled = enabled;
                 }
             }
         }
