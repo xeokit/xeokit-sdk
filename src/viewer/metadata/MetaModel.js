@@ -18,7 +18,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, author, createdAt, schema, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, rootMetaObject) {
 
         /**
          * Globally-unique ID.
@@ -68,6 +68,16 @@ class MetaModel {
          * @type {String}
          */
         this.createdAt = createdAt;
+
+        /**
+         * The application that created the model, if available.
+         *
+         * Will be undefined if not available.
+         *
+         * @property creatingApplication
+         * @type {String}
+         */
+        this.creatingApplication = creatingApplication;
 
         /**
          * The model schema version, if available.
