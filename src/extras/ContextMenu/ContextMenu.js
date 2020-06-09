@@ -82,7 +82,8 @@ const idMap = new Map();
  *             }
  *          }
  *       ]
- *    });
+ *    ]
+ * });
  * ````
  *
  * Next, we'll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
@@ -121,6 +122,46 @@ const idMap = new Map();
  *
  * Note how we only show the ContextMenu if it's enabled. We can use that mechanism to switch between multiple
  * ContextMenu instances depending on what we clicked.
+ *
+ * ## Dynamic Item Titles
+ *
+ * To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
+ * ````getTitle()```` callback. The callback will fire each time you show ContextMenu, which will dynamically
+ * set the item title text.
+ *
+ * In the example below, we'll create a simple ContextMenu that allows us to toggle the selection of an object
+ * via its first item, which changes text depending on whether we are selecting or deselecting the object.
+ *
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles)]
+ *
+ * ````javascript
+ * const canvasContextMenu = new ContextMenu({
+ *
+ *    enabled: true,
+ *
+ *    items: [
+ *       [
+ *          {
+ *              getTitle: (context) => {
+ *                  return (!context.entity.selected) ? "Select" : "Undo Select";
+ *              },
+ *              doAction: function (context) {
+ *                  context.entity.selected = !context.entity.selected;
+ *              }
+ *          },
+ *          {
+ *              title: "Clear Selection",
+ *              getEnabled: function (context) {
+ *                  return (context.viewer.scene.numSelectedObjects > 0);
+ *              },
+ *              doAction: function (context) {
+ *                  context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+ *              }
+ *          }
+ *       ]
+ *    ]
+ * });
+ * ````
  */
 class ContextMenu {
 
@@ -209,8 +250,8 @@ class ContextMenu {
     _buildActionLinks2(itemsGroup, html, ctx) {
         for (let i = 0, len = itemsGroup.length; i < len; i++) {
             const item = itemsGroup[i];
-            if (!item.title) {
-                console.error("ContextMenu item without title - will not include in ContextMenu");
+            if (!item.title && !item.getTitle) {
+                console.error("ContextMenu item without title or getTitle() - will not include in ContextMenu");
                 continue;
             }
             if ((!item.doAction) && (!item.callback)) {
@@ -222,7 +263,7 @@ class ContextMenu {
                 continue;
             }
             const itemId = "xeokit-context-menu-" + this._id + "-" + ctx.id++;
-            const actionTitle = item.title;
+            const actionTitle = item.title || "";
             html.push('<li id="' + itemId + '" class="xeokit-context-menu-item" style="' + ((ctx.groupIdx === ctx.groupLen - 1) || ((i < len - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') + '">' + actionTitle + '</li>');
             item._itemId = itemId;
         }
@@ -325,6 +366,7 @@ class ContextMenu {
             return;
         }
         this._enableItems();
+        this._updateDynamicItemTitles(this._items);
         this._menuElement.style.display = 'block';
         const menuHeight = this._menuElement.offsetHeight;
         const menuWidth = this._menuElement.offsetWidth;
@@ -336,6 +378,22 @@ class ContextMenu {
         }
         this._menuElement.style.left = pageX + 'px';
         this._menuElement.style.top = pageY + 'px';
+    }
+
+    _updateDynamicItemTitles(items) {
+        for (let i = 0, len = items.length; i < len; i++) {
+            const item = items[i];
+            if (utils.isArray(item)) {
+                this._updateDynamicItemTitles(item);
+            } else {
+                item._itemElement = document.getElementById(item._itemId);
+                if (!item._itemElement) {
+                    console.error("ContextMenu item element not found: " + item._itemId);
+                    continue;
+                }
+                item._itemElement.innerText = item.getTitle ? (item.getTitle(this._context) || item.title || "") : (item.title || "");
+            }
+        }
     }
 
     _enableItems() {
