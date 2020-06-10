@@ -296,7 +296,6 @@ class BCFViewpointsPlugin extends Plugin {
         let bcfViewpoint = {};
 
         // Camera
-
         let lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
         let eye = camera.eye;
         let up = camera.up;
@@ -351,8 +350,9 @@ class BCFViewpointsPlugin extends Plugin {
                     location = YToZ(location);
                     direction = YToZ(direction);
                 }
+                math.addVec3(location, realWorldOffset);
 
-                location = xyzArrayToObject(sectionPlane.pos);
+                location = xyzArrayToObject(location);
                 direction = xyzArrayToObject(direction);
                 bcfViewpoint.clipping_planes.push({location, direction});
             }
@@ -370,31 +370,49 @@ class BCFViewpointsPlugin extends Plugin {
             }
         };
 
+        const opacityObjectIds = new Set(scene.opacityObjectIds);
+        const xrayedObjectIds = new Set(scene.xrayedObjectIds);
+        const colorizedObjectIds = new Set(scene.colorizedObjectIds);
+
+        const coloring = Object.values(scene.objects)
+            .filter(object => opacityObjectIds.has(object.id) || colorizedObjectIds.has(object.id) || xrayedObjectIds.has(object.id))
+            .reduce((coloring, object) => {
+                let color = colorizeToRGB(object.colorize);
+                let alpha;
+
+                if (object.xrayed) {
+                    if (scene.xrayMaterial.fillAlpha === 0.0 && scene.xrayMaterial.edgeAlpha !== 0.0) {
+                        // BCF can't deal with edges. If xRay is implemented only with edges, set an arbitrary opacity
+                        alpha = 0.1;
+                    } else {
+                        alpha = scene.xrayMaterial.fillAlpha;
+                    }
+                    alpha = Math.round(alpha * 255).toString(16).padStart(2, "0");
+                    color = alpha + color;
+                } else if (opacityObjectIds.has(object.id)) {
+                    alpha = Math.round(object.opacity * 255).toString(16).padStart(2, "0");
+                    color = alpha + color;
+                }
+
+                if (!coloring[color]) {
+                    coloring[color] = [];
+                }
+                coloring[color].push({
+                    ifc_guid: object.id,
+                    originating_system: this.originatingSystem
+                });
+                return coloring;
+            }, {});
+
+        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
+
+        bcfViewpoint.components.coloring = coloringArray;
+
         const objectIds = scene.objectIds;
         const visibleObjects = scene.visibleObjects;
         const visibleObjectIds = scene.visibleObjectIds;
         const invisibleObjectIds = objectIds.filter(id => !visibleObjects[id]);
         const selectedObjectIds = scene.selectedObjectIds;
-
-        const coloring = Object.values(scene.colorizedObjects).reduce((coloring, object) => {
-            let color = colorizeToRGB(object.colorize);
-            if (object.opacity !== 1) {
-                const alpha = Math.round(object.opacity * 255).toString(16).padStart(2, "0");
-                color = alpha + color;
-            }
-            if (!coloring[color]) {
-                coloring[color] = [];
-            }
-            coloring[color].push({
-                ifc_guid: object.id,
-                originating_system: this.originatingSystem
-            });
-            return coloring;
-        }, {});
-
-        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
-
-        bcfViewpoint.components.coloring = coloringArray;
 
         if (options.defaultInvisible || visibleObjectIds.length < invisibleObjectIds.length) {
             bcfViewpoint.components.visibility.exceptions = visibleObjectIds.map(el => this._objectIdToComponent(el));
@@ -469,6 +487,7 @@ class BCFViewpointsPlugin extends Plugin {
                 if (reverseClippingPlanes) {
                     math.negateVec3(dir);
                 }
+                math.subVec3(pos, realWorldOffset);
 
                 if (camera.yUp) {
                     pos = ZToY(pos);
@@ -566,7 +585,7 @@ class BCFViewpointsPlugin extends Plugin {
                 projection = "ortho";
             }
 
-            math.subVec4(eye, realWorldOffset);
+            math.subVec3(eye, realWorldOffset);
 
             if (camera.yUp) {
                 eye = ZToY(eye);
