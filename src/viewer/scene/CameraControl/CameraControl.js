@@ -1232,6 +1232,7 @@ class CameraControl extends Component {
      */
     destroy() {
         this._destroyHandlers();
+        this._destroyControllers();
         this._cameraUpdater.destroy();
         super.destroy();
     }
@@ -1241,6 +1242,15 @@ class CameraControl extends Component {
             const handler = this._handlers[i];
             if (handler.destroy) {
                 handler.destroy();
+            }
+        }
+    }
+
+    _destroyControllers() {
+        for (let i = 0, len = this._controllers.length; i < len; i++) {
+            const controller = this._controllers[i];
+            if (controller.destroy) {
+                controller.destroy();
             }
         }
     }

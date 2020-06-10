@@ -25,15 +25,15 @@ class PivotController {
         this._pivotCanvasPos = math.vec2();
         this._cameraDirty = true;
 
-        this._scene.camera.on("viewMatrix", () => {
+        this._onViewMatrix = this._scene.camera.on("viewMatrix", () => {
             this._cameraDirty = true;
         });
 
-        this._scene.camera.on("projMatrix", () => {
+      this._onProjMatrix =   this._scene.camera.on("projMatrix", () => {
             this._cameraDirty = true;
         });
 
-        this._scene.on("tick", () => {
+       this._onTick =  this._scene.on("tick", () => {
             this.updatePivotElement();
         });
     }
@@ -237,6 +237,12 @@ class PivotController {
      */
     endPivot() {
         this._pivoting = false;
+    }
+
+    destroy() {
+        this._scene.camera.off(this._onViewMatrix);
+        this._scene.camera.off(this._onProjMatrix);
+        this._scene.off(this._onTick);
     }
 }
 
