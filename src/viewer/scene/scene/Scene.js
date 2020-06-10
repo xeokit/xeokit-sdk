@@ -462,6 +462,20 @@ class Scene extends Component {
         this.colorizedObjects = {};
         this._numColorizedObjects = 0;
 
+        /**
+         * Map of {@link Entity}s that represent objects whose opacity was updated.
+         *
+         * An Entity represents an object if {@link Entity#isObject} is ````true````.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
+         * @property opacityObjects
+         * @final
+         * @type {{String:Object}}
+         */
+        this.opacityObjects = {};
+        this._numOpacityObjects = 0;
+
         // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
 
         /**
@@ -474,6 +488,7 @@ class Scene extends Component {
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
         this._colorizedObjectIds = null;
+        this._opacityObjectIds = null;
 
         this._collidables = {}; // Components that contribute to the Scene AABB
         this._compilables = {}; // Components that require shader compilation
@@ -1044,6 +1059,17 @@ class Scene extends Component {
         this._colorizedObjectIds = null; // Lazy regenerate
     }
 
+    _objectOpacityUpdated(entity, opacityUpdated) {
+        if (opacityUpdated) {
+            this.opacityObjects[entity.id] = entity;
+            this._numOpacityObjects++;
+        } else {
+            delete this.opacityObjects[entity.id];
+            this._numOpacityObjects--;
+        }
+        this._opacityObjectIds = null; // Lazy regenerate
+    }
+
     _webglContextLost() {
         //  this.loading++;
         this.canvas.spinner.processes++;
@@ -1315,6 +1341,18 @@ class Scene extends Component {
             this._colorizedObjectIds = Object.keys(this.colorizedObjects);
         }
         return this._colorizedObjectIds;
+    }
+
+    /**
+     * Gets the IDs of the {@link Entity}s in {@link Scene#opacityObjects}.
+     *
+     * @type {String[]}
+     */
+    get opacityObjectIds() {
+        if (!this._opacityObjectIds) {
+            this._opacityObjectIds = Object.keys(this.opacityObjects);
+        }
+        return this._opacityObjectIds;
     }
 
     /**
@@ -2221,6 +2259,7 @@ class Scene extends Component {
         this.highlightedObjects = null;
         this.selectedObjects = null;
         this.colorizedObjects = null;
+        this.opacityObjects = null;
         this.sectionPlanes = null;
         this.lights = null;
         this.lightMaps = null;

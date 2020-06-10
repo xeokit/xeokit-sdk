@@ -477,18 +477,26 @@ class PerformanceNode {
         if (this.meshes.length === 0) {
             return;
         }
-        if (opacity < 0) {
-            opacity = 0;
-        } else if (opacity > 1) {
-            opacity = 1;
+        const opacityUpdated = (opacity !== null && opacity !== undefined);
+        if (opacityUpdated) {
+            if (opacity < 0) {
+                opacity = 0;
+            } else if (opacity > 1) {
+                opacity = 1;
+            }
+            opacity = Math.floor(opacity * 255.0); // Quantize
+            var lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
+            if (lastOpacity === opacity) {
+                return;
+            }
+        } else {
+            opacity = 255.0;
         }
-        opacity = Math.floor(opacity * 255.0); // Quantize
-        var lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
-        if (lastOpacity === opacity) {
-            return;
-        }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setOpacity(opacity);
+        }
+        if (this._isObject) {
+            this.scene._objectOpacityUpdated(this, opacityUpdated);
         }
         this.model.glRedraw();
     }
@@ -596,6 +604,10 @@ class PerformanceNode {
             if (this._isObject) {
                 const colorized = false;
                 this.scene._objectColorizeUpdated(this, colorized);
+            }
+            if (this._isObject) {
+                const opacityUpdated = false;
+                this.scene._objectOpacityUpdated(this, opacityUpdated);
             }
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {

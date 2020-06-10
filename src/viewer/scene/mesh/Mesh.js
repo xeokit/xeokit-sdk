@@ -1316,7 +1316,9 @@ class Mesh extends Component {
             colorize[1] = 1;
             colorize[2] = 1;
         }
-        colorize[3] = opacity !== null && opacity !== undefined ? opacity : 1.0;
+        const opacityUpdated = (opacity !== null && opacity !== undefined);
+        colorize[3] = opacityUpdated ? opacity : 1.0;
+        this.scene._objectOpacityUpdated(this, opacityUpdated);
         this.glRedraw();
     }
 
@@ -1756,6 +1758,8 @@ class Mesh extends Component {
             }
             const colorized = false;
             this.scene._objectColorizeUpdated(this, colorized);
+            const opacityUpdated = false;
+            this.scene._objectOpacityUpdated(this, opacityUpdated);
         }
         if (this._isModel) {
             this.scene._deregisterModel(this);
