@@ -379,7 +379,7 @@ class BCFViewpointsPlugin extends Plugin {
         const coloring = Object.values(scene.colorizedObjects).reduce((coloring, object) => {
             let color = colorizeToRGB(object.colorize);
             if (object.opacity !== 1) {
-                const alpha = Math.round(object.opacity * 255).toString(16);
+                const alpha = Math.round(object.opacity * 255).toString(16).padStart(2, "0");
                 color = alpha + color;
             }
             if (!coloring[color]) {
