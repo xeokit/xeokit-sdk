@@ -296,7 +296,6 @@ class BCFViewpointsPlugin extends Plugin {
         let bcfViewpoint = {};
 
         // Camera
-
         let lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
         let eye = camera.eye;
         let up = camera.up;
@@ -351,8 +350,9 @@ class BCFViewpointsPlugin extends Plugin {
                     location = YToZ(location);
                     direction = YToZ(direction);
                 }
+                math.addVec3(location, realWorldOffset);
 
-                location = xyzArrayToObject(sectionPlane.pos);
+                location = xyzArrayToObject(location);
                 direction = xyzArrayToObject(direction);
                 bcfViewpoint.clipping_planes.push({location, direction});
             }
@@ -449,6 +449,7 @@ class BCFViewpointsPlugin extends Plugin {
                 if (reverseClippingPlanes) {
                     math.negateVec3(dir);
                 }
+                math.subVec3(pos, realWorldOffset);
 
                 if (camera.yUp) {
                     pos = ZToY(pos);
@@ -546,7 +547,7 @@ class BCFViewpointsPlugin extends Plugin {
                 projection = "ortho";
             }
 
-            math.subVec4(eye, realWorldOffset);
+            math.subVec3(eye, realWorldOffset);
 
             if (camera.yUp) {
                 eye = ZToY(eye);
