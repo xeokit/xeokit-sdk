@@ -376,6 +376,26 @@ class BCFViewpointsPlugin extends Plugin {
         const invisibleObjectIds = objectIds.filter(id => !visibleObjects[id]);
         const selectedObjectIds = scene.selectedObjectIds;
 
+        const coloring = Object.values(scene.colorizedObjects).reduce((coloring, object) => {
+            let color = colorizeToRGB(object.colorize);
+            if (object.opacity !== 1) {
+                const alpha = Math.round(object.opacity * 255).toString(16);
+                color = alpha + color;
+            }
+            if (!coloring[color]) {
+                coloring[color] = [];
+            }
+            coloring[color].push({
+                ifc_guid: object.id,
+                originating_system: this.originatingSystem
+            });
+            return coloring;
+        }, {});
+
+        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
+
+        bcfViewpoint.components.coloring = coloringArray;
+
         if (options.defaultInvisible || visibleObjectIds.length < invisibleObjectIds.length) {
             bcfViewpoint.components.visibility.exceptions = visibleObjectIds.map(el => this._objectIdToComponent(el));
             bcfViewpoint.components.visibility.default_visibility = false;
@@ -602,6 +622,14 @@ function YToZ(vec) {
 
 function ZToY(vec) {
     return new Float64Array([vec[0], vec[2], -vec[1]]);
+}
+
+function colorizeToRGB(color) {
+    let rgb = "";
+    rgb += Math.round(color[0] * 255).toString(16).padStart(2, "0");
+    rgb += Math.round(color[1] * 255).toString(16).padStart(2, "0");
+    rgb += Math.round(color[2] * 255).toString(16).padStart(2, "0");
+    return rgb;
 }
 
 export {BCFViewpointsPlugin};
