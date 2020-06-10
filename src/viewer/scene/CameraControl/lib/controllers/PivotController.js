@@ -207,7 +207,6 @@ class PivotController {
             this._pivotElement.style.visibility = "visible";
             this._shown = true;
             this._hideTimeout = window.setTimeout(() => {
-                console.log("timeout");
                 this.hidePivot();
             }, 1000);
         }
