@@ -1,8 +1,7 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const SLICING = true;
-const MAX_VERTS = SLICING ? (bigIndicesSupported ? 5000000 : 65530) : 5000000;
+const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
 const MAX_INDICES = MAX_VERTS * 3; // Rough rule-of-thumb
 
 /**
@@ -10,42 +9,18 @@ const MAX_INDICES = MAX_VERTS * 3; // Rough rule-of-thumb
  */
 class BatchingBuffer {
     constructor() {
-        this.slicing = SLICING;
         this.maxVerts = MAX_VERTS;
         this.maxIndices = MAX_INDICES;
-        this.positions = new Float32Array(MAX_VERTS * 3); // Uncompressed
-        this.colors = new Uint8Array(MAX_VERTS * 4); // Compressed
-        this.quantizedPositions = new Uint16Array(MAX_VERTS * 3); // Compressed
-        this.normals = new Int8Array(MAX_VERTS * 3); // Compressed
-        this.pickColors = new Uint8Array(MAX_VERTS * 4); // Compressed
-        this.flags = new Uint8Array(MAX_VERTS * 4);
-        this.flags2 = new Uint8Array(MAX_VERTS * 4);
-        this.indices = bigIndicesSupported ? new Uint32Array(MAX_INDICES) : new Uint16Array(MAX_INDICES);
-        this.edgeIndices = bigIndicesSupported ? new Uint32Array(MAX_INDICES) : new Uint16Array(MAX_INDICES);
-        this.lenPositions = 0;
-        this.lenColors = 0;
-        this.lenNormals = 0;
-        this.lenPickColors = 0;
-        this.lenFlags = 0;
-        this.lenIndices = 0;
-        this.lenEdgeIndices = 0;
+        this.positions = []; // Uncompressed
+        this.colors = []; // Compressed
+        this.quantizedPositions = []; // Compressed
+        this.normals = []; // Compressed
+        this.pickColors = []; // Compressed
+        this.flags = [];
+        this.flags2 = [];
+        this.indices = [];
+        this.edgeIndices = [];
     }
 }
 
-const freeBuffers = [];
-
-/**
- * @private
- */
-function getBatchingBuffer() {
-    return freeBuffers.length > 0 ? freeBuffers.pop() : new BatchingBuffer();
-}
-
-/**
- * @private
- */
-function putBatchingBuffer(buffer) {
-    freeBuffers.push(buffer);
-}
-
-export {getBatchingBuffer, putBatchingBuffer};
+export {BatchingBuffer};

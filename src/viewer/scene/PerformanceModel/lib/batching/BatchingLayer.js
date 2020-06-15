@@ -7,6 +7,7 @@ import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
 import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 import {getBatchingRenderers} from "./BatchingRenderers.js";
+import {BatchingBuffer} from "./BatchingBuffer.js";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
@@ -30,7 +31,7 @@ class BatchingLayer {
     constructor(model, cfg) {
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
-        this._buffer = cfg.buffer;
+        this._buffer = new BatchingBuffer();
         this._scratchMemory = cfg.scratchMemory;
         var primitiveName = cfg.primitive || "triangles";
         var primitive;
@@ -85,9 +86,7 @@ class BatchingLayer {
         this._numHighlightedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
-
-        //this.pickObjectBaseIndex = cfg.pickObjectBaseIndex;
-
+;
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
 
@@ -107,8 +106,7 @@ class BatchingLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._buffer.lenPositions + lenPositions) < (this._buffer.maxVerts * 3)
-            && (this._buffer.lenIndices + lenIndices) < (this._buffer.maxIndices));
+        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3) && (this._buffer.indices.length + lenIndices) < (this._buffer.maxIndices));
     }
 
     /**
@@ -137,15 +135,16 @@ class BatchingLayer {
         }
 
         const buffer = this._buffer;
-        const positionsIndex = buffer.lenPositions;
+        const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
         const numVerts = positions.length / 3;
         const lenPositions = positions.length;
 
         if (this._preCompressed) {
 
-            buffer.positions.set(positions, buffer.lenPositions);
-            buffer.lenPositions += lenPositions;
+            for (let i = 0, len = positions.length; i < len; i++) {
+                buffer.positions.push(positions[i]);
+            }
 
             const bounds = geometryCompressionUtils.getPositionsBounds(positions);
 
@@ -167,11 +166,15 @@ class BatchingLayer {
 
         } else {
 
-            buffer.positions.set(positions, buffer.lenPositions);
+            const positionsBase = positions.length;
+
+            for (let i = 0, len = positions.length; i < len; i++) {
+                buffer.positions.push(positions[i]);
+            }
 
             if (meshMatrix) {
 
-                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
 
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
@@ -195,7 +198,7 @@ class BatchingLayer {
 
             } else {
 
-                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
 
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
@@ -211,20 +214,19 @@ class BatchingLayer {
                     }
                 }
             }
-
-            buffer.lenPositions += lenPositions;
         }
 
         if (normals) {
 
             if (this._preCompressed) {
 
-                buffer.normals.set(normals, buffer.lenNormals);
-                buffer.lenNormals += normals.length;
+                for (let i = 0, len = normals.length; i < len; i++) {
+                    buffer.normals.push(normals[i]);
+                }
 
             } else {
 
-                var modelNormalMatrix = tempMat4;
+                const modelNormalMatrix = tempMat4;
 
                 if (meshMatrix) {
                     math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn't matter
@@ -233,13 +235,16 @@ class BatchingLayer {
                     math.identityMat4(modelNormalMatrix, modelNormalMatrix);
                 }
 
-                buffer.lenNormals = transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.lenNormals);
+                for (let i = 0, len = normals.length; i < len; i++) {
+                    buffer.normals.push(normals[i]);
+                }
+
+                transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
             }
         }
 
         if (flags !== undefined) {
 
-            const lenFlags = (numVerts * 4);
             const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
             const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
             const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
@@ -248,16 +253,16 @@ class BatchingLayer {
             const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
             const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
 
-            for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i < len; i += 4) {
-                buffer.flags[i + 0] = visible;
-                buffer.flags[i + 1] = xrayed;
-                buffer.flags[i + 2] = highlighted;
-                buffer.flags[i + 3] = selected;
-                buffer.flags2[i + 0] = clippable;
-                buffer.flags2[i + 1] = edges;
-                buffer.flags2[i + 2] = pickable;
+            for (let i = 0; i < numVerts; i++) {
+                buffer.flags.push(visible);
+                buffer.flags.push(xrayed);
+                buffer.flags.push(highlighted);
+                buffer.flags.push(selected);
+                buffer.flags2.push(clippable);
+                buffer.flags2.push(edges);
+                buffer.flags2.push(pickable);
+                buffer.flags2.push(0); // Padding
             }
-            buffer.lenFlags += lenFlags;
             if (visible) {
                 this._numVisibleLayerPortions++;
                 this.model.numVisibleLayerPortions++;
@@ -284,7 +289,6 @@ class BatchingLayer {
             }
         }
         if (color) {
-            const lenColors = (numVerts * 4);
 
             const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
@@ -292,42 +296,40 @@ class BatchingLayer {
 
             const a = opacity;
 
-            for (var i = buffer.lenColors, len = buffer.lenColors + lenColors; i < len; i += 4) {
-                buffer.colors[i + 0] = r;
-                buffer.colors[i + 1] = g;
-                buffer.colors[i + 2] = b;
-                buffer.colors[i + 3] = opacity;
+            for (let i = 0; i < numVerts; i++) {
+                buffer.colors.push(r);
+                buffer.colors.push(g);
+                buffer.colors.push(b);
+                buffer.colors.push(opacity);
             }
-            buffer.lenColors += lenColors;
             if (a < 255) {
                 this._numTransparentLayerPortions++;
                 this.model.numTransparentLayerPortions++;
             }
         }
         if (indices) {
-            for (var i = 0, len = indices.length; i < len; i++) {
-                buffer.indices[buffer.lenIndices + i] = indices[i] + vertsIndex;
+            for (let i = 0, len = indices.length; i < len; i++) {
+                buffer.indices.push(indices[i] + vertsIndex);
             }
-            buffer.lenIndices += indices.length;
         }
         if (edgeIndices) {
-            for (var i = 0, len = edgeIndices.length; i < len; i++) {
-                buffer.edgeIndices[buffer.lenEdgeIndices + i] = edgeIndices[i] + vertsIndex;
+            for (let i = 0, len = edgeIndices.length; i < len; i++) {
+                buffer.edgeIndices.push(edgeIndices[i] + vertsIndex);
             }
-            buffer.lenEdgeIndices += edgeIndices.length;
         }
         {
+            const pickColorsBase = buffer.pickColors.length;
             const lenPickColors = numVerts * 4;
-            for (var i = buffer.lenPickColors, len = buffer.lenPickColors + lenPickColors; i < len; i += 4) {
-                buffer.pickColors[i + 0] = pickColor[0];
-                buffer.pickColors[i + 1] = pickColor[1];
-                buffer.pickColors[i + 2] = pickColor[2];
-                buffer.pickColors[i + 3] = pickColor[3];
+            for (let i = pickColorsBase, len = pickColorsBase + lenPickColors; i < len; i += 4) {
+                buffer.pickColors.push(pickColor[0]);
+                buffer.pickColors.push(pickColor[1]);
+                buffer.pickColors.push(pickColor[2]);
+                buffer.pickColors.push(pickColor[3]);
             }
-            buffer.lenPickColors += lenPickColors;
         }
 
-        var portionId = this._portions.length / 2;
+        const portionId = this._portions.length / 2;
+
         this._portions.push(vertsIndex);
         this._portions.push(numVerts);
 
@@ -343,7 +345,7 @@ class BatchingLayer {
      */
     finalize() {
         if (this._finalized) {
-            this.error("Already finalized");
+            this.model.error("Already finalized");
             return;
         }
 
@@ -353,47 +355,50 @@ class BatchingLayer {
 
         if (this._preCompressed) {
             state.positionsDecodeMatrix = this._positionsDecodeMatrix;
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            const positions = new Uint16Array(buffer.positions);
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
         } else {
-            quantizePositions(buffer.positions, buffer.lenPositions, this._modelAABB, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
+            const positions = new Float32Array(buffer.positions);
+            const quantizedPositions = new Int16Array(positions.length);
+            quantizePositions(positions, buffer.positions.length, this._modelAABB, quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
-            if (buffer.lenPositions > 0) {
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            if (buffer.positions.length > 0) {
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }
 
-        if (buffer.lenNormals > 0) {
+        if (buffer.normals.length > 0) {
+            const normals = new Int8Array(buffer.normals);
             let normalized = true; // For oct encoded UInts
             //let normalized = false; // For scaled
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals.slice(0, buffer.lenNormals), buffer.lenNormals, 3, gl.STATIC_DRAW, normalized);
+            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
         }
-        if (buffer.lenColors > 0) {
+        if (buffer.colors.length > 0) {
+            const colors = new Uint8Array(buffer.colors);
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.slice(0, buffer.lenColors), buffer.lenColors, 4, gl.DYNAMIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
-        if (buffer.lenFlags > 0) {
+        if (buffer.flags.length > 0) {
+            const flags = new Uint8Array(buffer.flags);
+            const flags2 = new Uint8Array(buffer.flags2);
             let normalized = true;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
-            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.DYNAMIC_DRAW, normalized);
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, buffer.flags.length, 4, gl.DYNAMIC_DRAW, normalized);
+            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags2, buffer.flags.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
-        if (buffer.lenPickColors > 0) {
+        if (buffer.pickColors.length > 0) {
+            const pickColors = new Uint8Array(buffer.pickColors);
             let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.pickColors.slice(0, buffer.lenPickColors), buffer.lenPickColors, 4, gl.STATIC_DRAW, normalized);
+            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
-        if (buffer.lenIndices > 0) {
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices.slice(0, buffer.lenIndices), buffer.lenIndices, 1, gl.STATIC_DRAW);
+        const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
+        if (buffer.indices.length > 0) {
+            const indices = bigIndicesSupported ? new Uint32Array(buffer.indices) : new Uint16Array(buffer.indices);
+            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
         }
-        if (buffer.lenEdgeIndices > 0) {
-            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.slice(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
+        if (buffer.edgeIndices.length > 0) {
+            const edgeIndices = bigIndicesSupported ? new Uint32Array(buffer.edgeIndices) : new Uint16Array(buffer.edgeIndices);
+            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
         }
-
-        buffer.lenPositions = 0;
-        buffer.lenColors = 0;
-        buffer.lenNormals = 0;
-        buffer.lenFlags = 0;
-        buffer.lenPickColors = 0;
-        buffer.lenIndices = 0;
-        buffer.lenEdgeIndices = 0;
 
         this._buffer = null;
         this._finalized = true;
