@@ -179,6 +179,7 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
+        this._shown = false;
         document.addEventListener("mousedown", (event) => {
             if (!event.target.classList.contains("xeokit-context-menu-item")) {
                 this.hide();
@@ -378,6 +379,16 @@ class ContextMenu {
         }
         this._menuElement.style.left = pageX + 'px';
         this._menuElement.style.top = pageY + 'px';
+        this._shown = true;
+    }
+
+    /**
+     * Gets whether this context menu is currently shown or not.
+     *
+     * @returns {Boolean} Whether this context menu is shown.
+     */
+    get shown() {
+        return this._shown;
     }
 
     _updateDynamicItemTitles(items) {
