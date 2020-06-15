@@ -249,7 +249,7 @@ class Viewer {
      *
      * Switches rendering to a hidden snapshot canvas.
      *
-     * Exit snapshot mode using {@link Viewer#finishSnapshot}.
+     * Exit snapshot mode using {@link Viewer#endSnapshot}.
      */
     beginSnapshot() {
         if (this._snapshotBegun) {
@@ -318,7 +318,7 @@ class Viewer {
         this.sendToPlugins("snapshotFinished");
 
         if (needFinishSnapshot) {
-            this.finishSnapshot();
+            this.endSnapshot();
         }
 
         return imageDataURI;
@@ -330,11 +330,11 @@ class Viewer {
      * Switches rendering back to the main canvas.
      *
      */
-    finishSnapshot() {
+    endSnapshot() {
         if (!this._snapshotBegun) {
             return;
         }
-        this.scene._renderer.finishSnapshot();
+        this.scene._renderer.endSnapshot();
         this.scene._renderer.render({force: true});
         this._snapshotBegun = false;
     }

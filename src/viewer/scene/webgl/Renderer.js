@@ -181,12 +181,10 @@ const Renderer = function (scene, options) {
     this.render = function (params) {
         params = params || {};
         updateDrawlist();
-        if (!snapshotBound) {
-            if (imageDirty || params.force) {
-                draw(params);
-                stats.frame.frameCount++;
-                imageDirty = false;
-            }
+        if (imageDirty || params.force) {
+            draw(params);
+            stats.frame.frameCount++;
+            imageDirty = false;
         }
     };
 
@@ -1140,7 +1138,7 @@ const Renderer = function (scene, options) {
      *
      * Switches rendering to a hidden snapshot canvas.
      *
-     * Exit snapshot mode using finishSnapshot().
+     * Exit snapshot mode using endSnapshot().
      */
     this.beginSnapshot = function () {
         snapshotBuffer.bind();
@@ -1176,7 +1174,7 @@ const Renderer = function (scene, options) {
      *
      * Switches rendering back to the main canvas.
      */
-    this.finishSnapshot = function () {
+    this.endSnapshot = function () {
         if (!snapshotBound) {
             return;
         }

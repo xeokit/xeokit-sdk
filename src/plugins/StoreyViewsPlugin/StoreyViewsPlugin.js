@@ -629,7 +629,7 @@ class StoreyViewsPlugin extends Plugin {
         this._objectsMemento.restoreObjects(scene);
         this._cameraMemento.restoreCamera(scene);
 
-        viewer.finishSnapshot();
+        viewer.endSnapshot();
 
         return new StoreyMap(storeyId, src, format, width, height, padding);
     }
