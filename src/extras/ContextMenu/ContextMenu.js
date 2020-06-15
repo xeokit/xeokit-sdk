@@ -440,6 +440,7 @@ class ContextMenu {
             return;
         }
         this._menuElement.style.display = 'none';
+        this._shown = false;
     }
 
     /**
