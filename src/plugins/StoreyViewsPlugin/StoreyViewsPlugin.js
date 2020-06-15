@@ -611,14 +611,14 @@ class StoreyViewsPlugin extends Plugin {
         this._objectsMemento.saveObjects(scene);
         this._cameraMemento.saveCamera(scene);
 
+        viewer.beginSnapshot();
+
         this.showStoreyObjects(storeyId, utils.apply(options, {
             useObjectStates: true,
             hideOthers: true
         }));
 
         this._arrangeStoreyMapCamera(storey);
-
-        //scene.render(true); // Force-render a frame
 
         const src = viewer.getSnapshot({
             width: width,
@@ -628,6 +628,8 @@ class StoreyViewsPlugin extends Plugin {
 
         this._objectsMemento.restoreObjects(scene);
         this._cameraMemento.restoreCamera(scene);
+
+        viewer.endSnapshot();
 
         return new StoreyMap(storeyId, src, format, width, height, padding);
     }

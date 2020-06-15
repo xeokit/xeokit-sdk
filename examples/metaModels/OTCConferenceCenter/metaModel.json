@@ -1,6 +1,10 @@
 {
   "id": "ADSK CONF 2",
   "projectId": "3lMSBJ1J9AUQZulZKiGsht",
+  "author": "",
+  "createdAt": "2016-01-24T17:43:58",
+  "schema": "IFC4",
+  "creatingApplication": "20150702_1515(x64) - Exporter 15.5.0.0 - Alternate UI 15.5.0.0",
   "metaObjects": [
     {
       "id": "3lMSBJ1J9AUQZulZKiGsht",

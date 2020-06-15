@@ -648,6 +648,10 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].opacity = opacity;
         }
+        if (this._isObject) {
+            const opacityUpdated = (opacity !== null && opacity !== undefined);
+            this.scene._objectOpacityUpdated(this, opacityUpdated);
+        }
     }
 
     /**
@@ -1252,6 +1256,10 @@ class Node extends Component {
             if (this._isObject) {
                 const colorized = false;
                 this.scene._objectColorizeUpdated(this, colorized);
+            }
+            if (this._isObject) {
+                const opacityUpdated = (opacity !== null && opacity !== undefined);
+                this.scene._objectOpacityUpdated(this, opacityUpdated);
             }
         }
         if (this._isModel) {

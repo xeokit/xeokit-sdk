@@ -18,7 +18,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, rootMetaObject) {
 
         /**
          * Globally-unique ID.
@@ -40,11 +40,54 @@ class MetaModel {
         this.projectId = projectId;
 
         /**
-         * The revision ID
+         * The revision ID, if available.
+         *
+         * Will be undefined if not available.
+         *
          * @property revisionId
          * @type {String|Number}
          */
         this.revisionId = revisionId;
+
+        /**
+         * The model author, if available.
+         *
+         * Will be undefined if not available.
+         *
+         * @property author
+         * @type {String}
+         */
+        this.author = author;
+
+        /**
+         * The date the model was created, if available.
+         *
+         * Will be undefined if not available.
+         *
+         * @property createdAt
+         * @type {String}
+         */
+        this.createdAt = createdAt;
+
+        /**
+         * The application that created the model, if available.
+         *
+         * Will be undefined if not available.
+         *
+         * @property creatingApplication
+         * @type {String}
+         */
+        this.creatingApplication = creatingApplication;
+
+        /**
+         * The model schema version, if available.
+         *
+         * Will be undefined if not available.
+         *
+         * @property schema
+         * @type {String}
+         */
+        this.schema = schema;
 
         /**
          * Metadata on the {@link Scene}.

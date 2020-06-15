@@ -965,7 +965,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber537">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber562">source</a></span></span>
     </span>
   </h3>
 
@@ -1009,7 +1009,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber291">source</a></span></span>
     </span>
   </h3>
 
@@ -1079,6 +1079,14 @@ direction vector. Therefore, we save <code>camera_direction</code> as the vector
 as <code>false</code>. This means that when we load the viewpoint again, and there are additional models loaded that
 were not saved in the viewpoint, those models will be hidden when we load the viewpoint, and that only the
 objects in the viewpoint will be visible.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.reverseClippingPlanes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When <code>true</code>, clipping planes are reversed (<a href="https://github.com/buildingSMART/BCF-XML/issues/193">https://github.com/buildingSMART/BCF-XML/issues/193</a>)</p>
 </td>
     </tr>
 </tbody>
@@ -1200,7 +1208,7 @@ const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber428">source</a></span></span>
     </span>
   </h3>
 
@@ -1253,7 +1261,8 @@ point of surface intersection with a ray fired from the BCF <code>camera_view_po
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.immediate</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
       <td data-ice="description"><p>When <code>true</code> (default), immediately set camera position.</p>
 </td>
     </tr>
@@ -1261,7 +1270,7 @@ point of surface intersection with a ray fired from the BCF <code>camera_view_po
       <td data-ice="name" class="code" data-depth="1">options.duration</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Flight duration in seconds.  Overrides <span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">CameraFlightAnimation#duration</a></span>. Only applies when <code>immediate</code> is <code>true</code>.</p>
+      <td data-ice="description"><p>Flight duration in seconds.  Overrides <span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">CameraFlightAnimation#duration</a></span>. Only applies when <code>immediate</code> is <code>false</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1270,6 +1279,14 @@ point of surface intersection with a ray fired from the BCF <code>camera_view_po
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>When <code>true</code> (default), set <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> <code>false</code> on all scene objects.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.reverseClippingPlanes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When <code>true</code>, clipping planes are reversed (<a href="https://github.com/buildingSMART/BCF-XML/issues/193">https://github.com/buildingSMART/BCF-XML/issues/193</a>)</p>
 </td>
     </tr>
 </tbody>

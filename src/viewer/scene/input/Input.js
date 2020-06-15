@@ -1036,10 +1036,6 @@ class Input extends Component {
                 this.keyDown[e.keyCode] = true;
                 this.fire("keydown", e.keyCode, true);
             }
-
-            if (this.mouseover) {
-                e.preventDefault();
-            }
         }, false);
 
         document.addEventListener("keyup", this._keyUpListener = (e) => {
