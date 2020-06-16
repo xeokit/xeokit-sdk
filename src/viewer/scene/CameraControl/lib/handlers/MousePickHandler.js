@@ -17,7 +17,8 @@ class MousePickHandler {
         this._timeout = null;
         this._lastPickedEntityId = null;
 
-        let down = false;
+        let leftDown = false;
+        let rightDown = false;
 
         const canvas = this._scene.canvas.canvas;
 
@@ -50,7 +51,7 @@ class MousePickHandler {
                 return;
             }
 
-            if (down) {
+            if (leftDown || rightDown) {
                 return;
             }
 
@@ -59,7 +60,7 @@ class MousePickHandler {
             const hoverOffSubs = cameraControl.hasSubs("hoverOff");
             const hoverSurfaceSubs = cameraControl.hasSubs("hoverSurface");
 
-            if (hoverSubs || hoverOutSubs  || hoverOffSubs || hoverSurfaceSubs) {
+            if (hoverSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs) {
 
                 pickController.pickCursorPos = states.mouseCanvasPos;
                 pickController.schedulePickEntity = true;
@@ -111,8 +112,12 @@ class MousePickHandler {
 
         canvas.addEventListener('mousedown', this._canvasMouseDownHandler = (e) => {
 
-            if (!(configs.active && configs.pointerEnabled)) {
-                return;
+            if (e.which === 1) {
+                leftDown = true;
+            }
+
+            if (e.which === 3) {
+                rightDown = true;
             }
 
             const leftButtonDown = (e.which === 1);
@@ -120,6 +125,12 @@ class MousePickHandler {
             if (!leftButtonDown) {
                 return;
             }
+
+            if (!(configs.active && configs.pointerEnabled)) {
+                return;
+            }
+
+            // Left mouse button down to start pivoting
 
             states.mouseDownClientX = e.clientX;
             states.mouseDownClientY = e.clientY;
@@ -141,12 +152,17 @@ class MousePickHandler {
                     }
                 }
             }
-
-            down = true;
         });
 
         document.addEventListener('mouseup', this._documentMouseUpHandler = (e) => {
-            down = false;
+
+            if (e.which === 1) {
+                leftDown = false;
+            }
+
+            if (e.which === 3) {
+                rightDown = false;
+            }
         });
 
         canvas.addEventListener('mouseup', this._canvasMouseUpHandler = (e) => {
@@ -155,11 +171,13 @@ class MousePickHandler {
                 return;
             }
 
-            const leftButtonDown = (e.which === 1);
+            const leftButtonUp = (e.which === 1);
 
-            if (!leftButtonDown) {
+            if (!leftButtonUp) {
                 return;
             }
+
+            // Left mouse button up to possibly pick or double-pick
 
             pivotController.hidePivot();
 
@@ -271,6 +289,7 @@ class MousePickHandler {
                             controllers.pivotController.showPivot();
                         }
                     }
+
                 } else {
 
                     cameraControl.fire("doublePickedNothing", true);
@@ -308,8 +327,8 @@ class MousePickHandler {
         const canvas = this._scene.canvas.canvas;
         canvas.removeEventListener("mousemove", this._canvasMouseMoveHandler);
         canvas.removeEventListener("mousedown", this._canvasMouseDownHandler);
-        canvas.removeEventListener("mouseup", this._canvasMouseUpHandler);
         document.removeEventListener("mouseup", this._documentMouseUpHandler);
+        canvas.removeEventListener("mouseup", this._canvasMouseUpHandler);
         if (this._timeout) {
             window.clearTimeout(this._timeout);
             this._timeout = null;
