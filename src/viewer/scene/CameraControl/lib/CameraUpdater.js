@@ -1,6 +1,6 @@
 import {math} from "../../math/math.js";
 
-const SCALE_DOLLY_EACH_FRAME = 5; // Recalculate dolly speed for eye->target distance on each Nth frame
+const SCALE_DOLLY_EACH_FRAME = 2; // Recalculate dolly speed for eye->target distance on each Nth frame
 const EPSILON = 0.001;
 const tempVec3 = math.vec3();
 
