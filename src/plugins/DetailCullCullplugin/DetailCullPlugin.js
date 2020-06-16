@@ -4,12 +4,40 @@ import {getObjectCullStates} from "../lib/culling/ObjectCullStates.js";
 
 /**
  * {@link Viewer} plugin that performs visibility culling to accelerate rendering of its {@link Scene}.
+*
+ * For each {@link Entity} that represents an object in the {@link Viewer}, ````DetailCullPlugin````
+ * will automatically mark it *culled* whenever it falls outside our current view.
  *
- * ## Overview
+ * When culled, an ````Entity```` is not processed by xeokit's renderer.
+ *
+ * Use ````DetailCullPlugin```` by simply adding it to your ````Viewer````:
  *
  *
- * ## Usage
-
+ * ````javascript
+ * const viewer = new Viewer({
+ *    canvasId: "myCanvas",
+ *    transparent: true
+ * });
+ *
+ * const detailCullPlugin = new DetailCullPlugin(viewer, {
+ *
+ *    delay: 150, // Millisecs
+ *
+ *    cullSmallerThan: 20,
+ *    cullMoreTrianglesThan: 300,
+ *
+ *    cullTypes: ["IfcFlowController"],
+ *    dontCullTypes: ["IfcSlab", "IfcWindow"]
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *   id: "myModel",
+ *   src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+ *   metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json"
+ * });
+ * ````
  */
 class DetailCullPlugin extends Plugin {
 
@@ -182,7 +210,7 @@ class DetailCullPlugin extends Plugin {
     }
 
     /**
-     * Gets the minimum object size for detail culling.
+     * Gets the maximum object size for detail culling.
      *
      * @returns {Number} The minimum object size for detail culling.
      */
