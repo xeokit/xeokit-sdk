@@ -244,7 +244,7 @@ class MousePanRotateDollyHandler {
             lastY = y;
         });
 
-        canvas.addEventListener("mouseup", this._mouseUpHandler = (e) => {
+        document.addEventListener("mouseup", this._documentMouseUpHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
@@ -257,6 +257,21 @@ class MousePanRotateDollyHandler {
                     break;
                 case 3: // Right button
                     mouseDownRight = false;
+                    break;
+                default:
+                    break;
+            }
+            xRotateDelta = 0;
+            yRotateDelta = 0;
+            this._down = false;
+        });
+
+        canvas.addEventListener("mouseup", this._mouseUpHandler = (e) => {
+            if (!(configs.active && configs.pointerEnabled)) {
+                return;
+            }
+            switch (e.which) {
+                case 3: // Right button
                     getCanvasPosFromEvent(e, canvasPos);
                     const x = canvasPos[0];
                     const y = canvasPos[1];
@@ -271,10 +286,6 @@ class MousePanRotateDollyHandler {
                     break;
             }
             canvas.style.removeProperty("cursor");
-            xRotateDelta = 0;
-            yRotateDelta = 0;
-
-            this._down = false;
         });
 
         canvas.addEventListener("mouseenter", this._mouseEnterHandler = () => {
@@ -344,6 +355,7 @@ class MousePanRotateDollyHandler {
         document.removeEventListener("keyup", this._documentKeyUpHandler);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
         canvas.removeEventListener("mousemove", this._mouseMoveHandler);
+        document.removeEventListener("mouseup", this._documentMouseUpHandler);
         canvas.removeEventListener("mouseup", this._mouseUpHandler);
         canvas.removeEventListener("mouseenter", this._mouseEnterHandler);
         canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
