@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.43
+
+June 16, 2020
+
+* CameraControl 
+    * Don't fire "hover" events while right mouse button down [#335](https://github.com/xeokit/xeokit-sdk/issues/335),  [````6accb69````](https://github.com/xeokit/xeokit-sdk/commit/6accb69cd8ff19d2c157e27e3e33fdd704e60481) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.3.42
 
 June 15, 2020
