@@ -207,6 +207,9 @@ class InstancingPickDepthRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
 
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+
         state.indicesBuf.bind();
 
         instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
@@ -221,6 +224,7 @@ class InstancingPickDepthRenderer {
         if (this._aFlags2) { // Won&apos;t be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
     }
 
     _allocate() {
@@ -248,6 +252,7 @@ class InstancingPickDepthRenderer {
             });
         }
         this._aPosition = program.getAttribute(&quot;position&quot;);
+        this._aOffset = program.getAttribute(&quot;offset&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
         this._aFlags2 = program.getAttribute(&quot;flags2&quot;);
         this._aModelMatrixCol0 = program.getAttribute(&quot;modelMatrixCol0&quot;);

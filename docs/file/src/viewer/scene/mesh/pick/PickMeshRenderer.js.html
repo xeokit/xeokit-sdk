@@ -232,6 +232,7 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
+    gl.uniform3fv(this._uOffset, mesh._state.offset);
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
@@ -286,6 +287,7 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._aPosition = program.getAttribute(&quot;position&quot;);
     this._uClippable = program.getLocation(&quot;clippable&quot;);
     this._uPickColor = program.getLocation(&quot;pickColor&quot;);
+    this._uOffset = program.getLocation(&quot;offset&quot;);
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

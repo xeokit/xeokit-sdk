@@ -93,6 +93,7 @@ function buildVertexLambert(mesh) {
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform vec4 colorize;");
+    src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -184,9 +185,11 @@ function buildVertexLambert(mesh) {
             src.push("billboard(modelViewNormalMatrix);");
         }
         src.push("worldPosition = modelMatrix2 * localPosition;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
     } else {
         src.push("worldPosition = modelMatrix2 * localPosition;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
     }
     if (geometryState.normalsBuf) {

@@ -448,6 +448,35 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-beginSnapshot">beginSnapshot</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enter snapshot mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-destroy">destroy</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
@@ -455,6 +484,35 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
         
         
         <div data-ice="description"><p>Destroys this Viewer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-endSnapshot">endSnapshot</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Exists snapshot mode.</p>
 </div>
       </div>
     </td>
@@ -541,7 +599,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
       <div>
         
         
-        <div data-ice="description"><p>Returns a snapshot of this Viewer&apos;s canvas as a Base64-encoded image.</p>
+        <div data-ice="description"><p>Gets a snapshot of this Viewer&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> as a Base64-encoded image.</p>
 <h4 id="usage-">Usage:</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">const imageData = viewer.getSnapshot({
    width: 500,
    height: 500,
@@ -1294,6 +1352,52 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-beginSnapshot">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">beginSnapshot</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber254">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enter snapshot mode.</p>
+<p>Switches rendering to a hidden snapshot canvas.</p>
+<p>Exit snapshot mode using <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-endSnapshot">Viewer#endSnapshot</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-destroy">
     <span class="access" data-ice="access">public</span>
     
@@ -1305,7 +1409,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -1313,6 +1417,51 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
   
   
   <div data-ice="description"><p>Destroys this Viewer.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-endSnapshot">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">endSnapshot</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber333">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Exists snapshot mode.</p>
+<p>Switches rendering back to the main canvas.</p>
 </div>
 
   
@@ -1478,14 +1627,14 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber280">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Returns a snapshot of this Viewer&apos;s canvas as a Base64-encoded image.</p>
+  <div data-ice="description"><p>Gets a snapshot of this Viewer&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> as a Base64-encoded image.</p>
 <h4 id="usage-">Usage:</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">const imageData = viewer.getSnapshot({
    width: 500,
    height: 500,

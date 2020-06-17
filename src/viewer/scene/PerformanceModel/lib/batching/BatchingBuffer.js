@@ -18,6 +18,7 @@ class BatchingBuffer {
         this.pickColors = []; // Compressed
         this.flags = [];
         this.flags2 = [];
+        this.offsets = [];
         this.indices = [];
         this.edgeIndices = [];
     }

@@ -96,16 +96,36 @@ class BatchingRenderers {
     }
 
     _destroy() {
-        this.drawRenderer.destroy();
-        this.drawRendererWithSAO.destroy();
-        this.depthRenderer.destroy();
-        this.normalsRenderer.destroy();
-        this.fillRenderer.destroy();
-        this.edgesRenderer.destroy();
-        this.pickMeshRenderer.destroy();
-        this.pickDepthRenderer.destroy();
-        this.pickNormalsRenderer.destroy();
-        this.occlusionRenderer.destroy();
+        if (this.drawRenderer) {
+            this.drawRenderer.destroy();
+        }
+        if (this.drawRendererWithSAO) {
+            this.drawRendererWithSAO.destroy();
+        }
+        if (this.depthRenderer) {
+            this.depthRenderer.destroy();
+        }
+        if (this.normalsRenderer) {
+            this.normalsRenderer.destroy();
+        }
+        if (this.fillRenderer) {
+            this.fillRenderer.destroy();
+        }
+        if (this.edgesRenderer) {
+            this.edgesRenderer.destroy();
+        }
+        if (this.pickMeshRenderer) {
+            this.pickMeshRenderer.destroy();
+        }
+        if (this.pickDepthRenderer) {
+            this.pickDepthRenderer.destroy();
+        }
+        if (this.pickNormalsRenderer) {
+            this.pickNormalsRenderer.destroy();
+        }
+        if (this.occlusionRenderer) {
+            this.occlusionRenderer.destroy();
+        }
     }
 }
 

@@ -172,6 +172,7 @@ class BatchingPickMeshRenderer {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
@@ -209,6 +210,7 @@ class BatchingPickMeshRenderer {
             });
         }
         this._aPosition = program.getAttribute(&quot;position&quot;);
+        this._aOffset = program.getAttribute(&quot;offset&quot;);
         this._aPickColor = program.getAttribute(&quot;pickColor&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
         this._aFlags2 = program.getAttribute(&quot;flags2&quot;);

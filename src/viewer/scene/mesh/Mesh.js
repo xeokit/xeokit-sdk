@@ -185,7 +185,8 @@ class Mesh extends Component {
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.offset=[0,0,0]] World-space 3D translation offset. Translates the Mesh in World space, after modelling transforms.
      * @param {Boolean} [cfg.visible=true] Indicates if the Mesh is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Mesh is initially culled from view.
      * @param {Boolean} [cfg.pickable=true] Indicates if the Mesh is initially pickable.
@@ -229,7 +230,8 @@ class Mesh extends Component {
             colorize: null,
             pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
-            pickHash: ""
+            pickHash: "",
+            offset: math.vec3()
         });
 
         this._drawRenderer = null;
@@ -303,6 +305,7 @@ class Mesh extends Component {
         this.layer = cfg.layer;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
+        this.offset = cfg.offset;
 
         if (cfg.parentId) {
             const parentNode = this.scene.components[cfg.parentId];
@@ -531,9 +534,16 @@ class Mesh extends Component {
         return hash.join("");
     }
 
-    _buildAABB(worldMatrix, boundary) {
+    _buildAABB(worldMatrix, aabb) {
         math.transformOBB3(worldMatrix, this._geometry.obb, obb);
-        math.OBB3ToAABB3(obb, boundary);
+        math.OBB3ToAABB3(obb, aabb);
+        const offset = this._state.offset;
+        aabb[0] += offset[0];
+        aabb[1] += offset[1];
+        aabb[2] += offset[2];
+        aabb[3] += offset[0];
+        aabb[4] += offset[1];
+        aabb[5] += offset[2];
     }
 
     /**
@@ -1398,6 +1408,34 @@ class Mesh extends Component {
         return this._state.billboard;
     }
 
+    /**
+     * Sets the Mesh's 3D World-space offset.
+     *
+     * The offset dynamically translates the Mesh in World-space.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
+     *
+     * @type {Number[]}
+     */
+    set offset(value) {
+        this._state.offset.set(value || [0, 0, 0]);
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get offset() {
+        return this._state.offset;
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Drawable members
     //------------------------------------------------------------------------------------------------------------------
@@ -1756,10 +1794,9 @@ class Mesh extends Component {
             if (this._highlighted) {
                 this.scene._objectHighlightedUpdated(this, false);
             }
-            const colorized = false;
-            this.scene._objectColorizeUpdated(this, colorized);
-            const opacityUpdated = false;
-            this.scene._objectOpacityUpdated(this, opacityUpdated);
+            this.scene._objectColorizeUpdated(this, false);
+            this.scene._objectOpacityUpdated(this, false);
+            this.scene._objectOffsetUpdated(this, false);
         }
         if (this._isModel) {
             this.scene._deregisterModel(this);

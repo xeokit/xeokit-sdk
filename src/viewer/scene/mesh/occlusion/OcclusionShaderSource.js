@@ -24,6 +24,7 @@ function buildVertex(mesh) {
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
+    src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -61,6 +62,7 @@ function buildVertex(mesh) {
         src.push("billboard(viewMatrix2);");
     }
     src.push("   vec4 worldPosition = modelMatrix2 * localPosition;");
+    src.push("   worldPosition.xyz = worldPosition.xyz + offset;");
     src.push("   vec4 viewPosition = viewMatrix2 * worldPosition;");
     if (clipping) {
         src.push("   vWorldPosition = worldPosition;");

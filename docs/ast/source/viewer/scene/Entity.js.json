@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 9724,
+  "end": 10304,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 431,
+      "line": 456,
       "column": 16
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 9724,
+    "end": 10304,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 431,
+        "line": 456,
         "column": 16
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 1516,
-        "end": 9706,
+        "end": 10286,
         "loc": {
           "start": {
             "line": 36,
             "column": 0
           },
           "end": {
-            "line": 429,
+            "line": 454,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 1529,
-          "end": 9706,
+          "end": 10286,
           "loc": {
             "start": {
               "line": 36,
               "column": 13
             },
             "end": {
-              "line": 429,
+              "line": 454,
               "column": 1
             }
           },
@@ -3555,16 +3555,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
                   "start": 9641,
-                  "end": 9681,
+                  "end": 10015,
                   "loc": {
                     "start": {
                       "line": 423,
                       "column": 4
                     },
                     "end": {
-                      "line": 425,
+                      "line": 434,
                       "column": 7
                     }
                   }
@@ -3573,15 +3573,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 9686,
-              "end": 9704,
+              "start": 10020,
+              "end": 10046,
               "loc": {
                 "start": {
-                  "line": 426,
+                  "line": 435,
                   "column": 4
                 },
                 "end": {
-                  "line": 428,
+                  "line": 436,
                   "column": 5
                 }
               },
@@ -3589,15 +3589,223 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 9686,
-                "end": 9693,
+                "start": 10024,
+                "end": 10030,
                 "loc": {
                   "start": {
-                    "line": 426,
+                    "line": 435,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 435,
+                    "column": 14
+                  },
+                  "identifierName": "offset"
+                },
+                "name": "offset"
+              },
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 10031,
+                  "end": 10037,
+                  "loc": {
+                    "start": {
+                      "line": 435,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 435,
+                      "column": 21
+                    },
+                    "identifierName": "offset"
+                  },
+                  "name": "offset"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 10039,
+                "end": 10046,
+                "loc": {
+                  "start": {
+                    "line": 435,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 436,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
+                  "start": 9641,
+                  "end": 10015,
+                  "loc": {
+                    "start": {
+                      "line": 423,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 434,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+                  "start": 10052,
+                  "end": 10190,
+                  "loc": {
+                    "start": {
+                      "line": 438,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 444,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 10195,
+              "end": 10215,
+              "loc": {
+                "start": {
+                  "line": 445,
+                  "column": 4
+                },
+                "end": {
+                  "line": 446,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 10199,
+                "end": 10205,
+                "loc": {
+                  "start": {
+                    "line": 445,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 445,
+                    "column": 14
+                  },
+                  "identifierName": "offset"
+                },
+                "name": "offset"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 10208,
+                "end": 10215,
+                "loc": {
+                  "start": {
+                    "line": 445,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 446,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+                  "start": 10052,
+                  "end": 10190,
+                  "loc": {
+                    "start": {
+                      "line": 438,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 444,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "start": 10221,
+                  "end": 10261,
+                  "loc": {
+                    "start": {
+                      "line": 448,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 450,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 10266,
+              "end": 10284,
+              "loc": {
+                "start": {
+                  "line": 451,
+                  "column": 4
+                },
+                "end": {
+                  "line": 453,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 10266,
+                "end": 10273,
+                "loc": {
+                  "start": {
+                    "line": 451,
                     "column": 4
                   },
                   "end": {
-                    "line": 426,
+                    "line": 451,
                     "column": 11
                   },
                   "identifierName": "destroy"
@@ -3613,15 +3821,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 9696,
-                "end": 9704,
+                "start": 10276,
+                "end": 10284,
                 "loc": {
                   "start": {
-                    "line": 426,
+                    "line": 451,
                     "column": 14
                   },
                   "end": {
-                    "line": 428,
+                    "line": 453,
                     "column": 5
                   }
                 },
@@ -3632,15 +3840,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Destroys this Entity.\n     ",
-                  "start": 9641,
-                  "end": 9681,
+                  "start": 10221,
+                  "end": 10261,
                   "loc": {
                     "start": {
-                      "line": 423,
+                      "line": 448,
                       "column": 4
                     },
                     "end": {
-                      "line": 425,
+                      "line": 450,
                       "column": 7
                     }
                   }
@@ -3655,15 +3863,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9708,
-        "end": 9724,
+        "start": 10288,
+        "end": 10304,
         "loc": {
           "start": {
-            "line": 431,
+            "line": 456,
             "column": 0
           },
           "end": {
-            "line": 431,
+            "line": 456,
             "column": 16
           }
         },
@@ -3671,29 +3879,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 9716,
-            "end": 9722,
+            "start": 10296,
+            "end": 10302,
             "loc": {
               "start": {
-                "line": 431,
+                "line": 456,
                 "column": 8
               },
               "end": {
-                "line": 431,
+                "line": 456,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 9716,
-              "end": 9722,
+              "start": 10296,
+              "end": 10302,
               "loc": {
                 "start": {
-                  "line": 431,
+                  "line": 456,
                   "column": 8
                 },
                 "end": {
-                  "line": 431,
+                  "line": 456,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -3702,15 +3910,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 9716,
-              "end": 9722,
+              "start": 10296,
+              "end": 10302,
               "loc": {
                 "start": {
-                  "line": 431,
+                  "line": 456,
                   "column": 8
                 },
                 "end": {
-                  "line": 431,
+                  "line": 456,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -3723,29 +3931,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9708,
-        "end": 9724,
+        "start": 10288,
+        "end": 10304,
         "loc": {
           "start": {
-            "line": 431,
+            "line": 456,
             "column": 0
           },
           "end": {
-            "line": 431,
+            "line": 456,
             "column": 16
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 1516,
-          "end": 9706,
+          "end": 10286,
           "loc": {
             "start": {
               "line": 36,
               "column": 0
             },
             "end": {
-              "line": 429,
+              "line": 454,
               "column": 1
             }
           },
@@ -3771,14 +3979,14 @@
           "body": {
             "type": "ClassBody",
             "start": 1529,
-            "end": 9706,
+            "end": 10286,
             "loc": {
               "start": {
                 "line": 36,
                 "column": 13
               },
               "end": {
-                "line": 429,
+                "line": 454,
                 "column": 1
               }
             },
@@ -7262,16 +7470,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
                     "start": 9641,
-                    "end": 9681,
+                    "end": 10015,
                     "loc": {
                       "start": {
                         "line": 423,
                         "column": 4
                       },
                       "end": {
-                        "line": 425,
+                        "line": 434,
                         "column": 7
                       }
                     }
@@ -7280,15 +7488,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 9686,
-                "end": 9704,
+                "start": 10020,
+                "end": 10046,
                 "loc": {
                   "start": {
-                    "line": 426,
+                    "line": 435,
                     "column": 4
                   },
                   "end": {
-                    "line": 428,
+                    "line": 436,
                     "column": 5
                   }
                 },
@@ -7296,15 +7504,223 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 9686,
-                  "end": 9693,
+                  "start": 10024,
+                  "end": 10030,
                   "loc": {
                     "start": {
-                      "line": 426,
+                      "line": 435,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 435,
+                      "column": 14
+                    },
+                    "identifierName": "offset"
+                  },
+                  "name": "offset"
+                },
+                "kind": "set",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 10031,
+                    "end": 10037,
+                    "loc": {
+                      "start": {
+                        "line": 435,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 435,
+                        "column": 21
+                      },
+                      "identifierName": "offset"
+                    },
+                    "name": "offset"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 10039,
+                  "end": 10046,
+                  "loc": {
+                    "start": {
+                      "line": 435,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 436,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
+                    "start": 9641,
+                    "end": 10015,
+                    "loc": {
+                      "start": {
+                        "line": 423,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 434,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+                    "start": 10052,
+                    "end": 10190,
+                    "loc": {
+                      "start": {
+                        "line": 438,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 444,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 10195,
+                "end": 10215,
+                "loc": {
+                  "start": {
+                    "line": 445,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 446,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 10199,
+                  "end": 10205,
+                  "loc": {
+                    "start": {
+                      "line": 445,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 445,
+                      "column": 14
+                    },
+                    "identifierName": "offset"
+                  },
+                  "name": "offset"
+                },
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 10208,
+                  "end": 10215,
+                  "loc": {
+                    "start": {
+                      "line": 445,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 446,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+                    "start": 10052,
+                    "end": 10190,
+                    "loc": {
+                      "start": {
+                        "line": 438,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 444,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "start": 10221,
+                    "end": 10261,
+                    "loc": {
+                      "start": {
+                        "line": 448,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 450,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 10266,
+                "end": 10284,
+                "loc": {
+                  "start": {
+                    "line": 451,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 453,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 10266,
+                  "end": 10273,
+                  "loc": {
+                    "start": {
+                      "line": 451,
                       "column": 4
                     },
                     "end": {
-                      "line": 426,
+                      "line": 451,
                       "column": 11
                     },
                     "identifierName": "destroy"
@@ -7320,15 +7736,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 9696,
-                  "end": 9704,
+                  "start": 10276,
+                  "end": 10284,
                   "loc": {
                     "start": {
-                      "line": 426,
+                      "line": 451,
                       "column": 14
                     },
                     "end": {
-                      "line": 428,
+                      "line": 453,
                       "column": 5
                     }
                   },
@@ -7339,15 +7755,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this Entity.\n     ",
-                    "start": 9641,
-                    "end": 9681,
+                    "start": 10221,
+                    "end": 10261,
                     "loc": {
                       "start": {
-                        "line": 423,
+                        "line": 448,
                         "column": 4
                       },
                       "end": {
-                        "line": 425,
+                        "line": 450,
                         "column": 7
                       }
                     }
@@ -7947,16 +8363,48 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
       "start": 9641,
-      "end": 9681,
+      "end": 10015,
       "loc": {
         "start": {
           "line": 423,
           "column": 4
         },
         "end": {
-          "line": 425,
+          "line": 434,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+      "start": 10052,
+      "end": 10190,
+      "loc": {
+        "start": {
+          "line": 438,
+          "column": 4
+        },
+        "end": {
+          "line": 444,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 10221,
+      "end": 10261,
+      "loc": {
+        "start": {
+          "line": 448,
+          "column": 4
+        },
+        "end": {
+          "line": 450,
           "column": 7
         }
       }
@@ -14192,16 +14640,378 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Sets the Entity's 3D World-space offset.\n     *\n     * The offset dynamically translates the Entity in World-space, which  is useful for creating\n     * effects like exploding parts assemblies etc.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * Provide a null or undefined value to reset to the default value.\n     *\n     * @type {Number[]}\n     ",
       "start": 9641,
-      "end": 9681,
+      "end": 10015,
       "loc": {
         "start": {
           "line": 423,
           "column": 4
         },
         "end": {
-          "line": 425,
+          "line": 434,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "set",
+      "start": 10020,
+      "end": 10023,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 4
+        },
+        "end": {
+          "line": 435,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "offset",
+      "start": 10024,
+      "end": 10030,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 8
+        },
+        "end": {
+          "line": 435,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10030,
+      "end": 10031,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 14
+        },
+        "end": {
+          "line": 435,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "offset",
+      "start": 10031,
+      "end": 10037,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 15
+        },
+        "end": {
+          "line": 435,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10037,
+      "end": 10038,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 21
+        },
+        "end": {
+          "line": 435,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10039,
+      "end": 10040,
+      "loc": {
+        "start": {
+          "line": 435,
+          "column": 23
+        },
+        "end": {
+          "line": 435,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10045,
+      "end": 10046,
+      "loc": {
+        "start": {
+          "line": 436,
+          "column": 4
+        },
+        "end": {
+          "line": 436,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Gets the Entity's 3D World-space offset.\n     *\n     * Default value is ````[0,0,0]````.\n     *\n     * @type {Number[]}\n     ",
+      "start": 10052,
+      "end": 10190,
+      "loc": {
+        "start": {
+          "line": 438,
+          "column": 4
+        },
+        "end": {
+          "line": 444,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 10195,
+      "end": 10198,
+      "loc": {
+        "start": {
+          "line": 445,
+          "column": 4
+        },
+        "end": {
+          "line": 445,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "offset",
+      "start": 10199,
+      "end": 10205,
+      "loc": {
+        "start": {
+          "line": 445,
+          "column": 8
+        },
+        "end": {
+          "line": 445,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10205,
+      "end": 10206,
+      "loc": {
+        "start": {
+          "line": 445,
+          "column": 14
+        },
+        "end": {
+          "line": 445,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10206,
+      "end": 10207,
+      "loc": {
+        "start": {
+          "line": 445,
+          "column": 15
+        },
+        "end": {
+          "line": 445,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10208,
+      "end": 10209,
+      "loc": {
+        "start": {
+          "line": 445,
+          "column": 17
+        },
+        "end": {
+          "line": 445,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10214,
+      "end": 10215,
+      "loc": {
+        "start": {
+          "line": 446,
+          "column": 4
+        },
+        "end": {
+          "line": 446,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 10221,
+      "end": 10261,
+      "loc": {
+        "start": {
+          "line": 448,
+          "column": 4
+        },
+        "end": {
+          "line": 450,
           "column": 7
         }
       }
@@ -14219,15 +15029,15 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 9686,
-      "end": 9693,
+      "start": 10266,
+      "end": 10273,
       "loc": {
         "start": {
-          "line": 426,
+          "line": 451,
           "column": 4
         },
         "end": {
-          "line": 426,
+          "line": 451,
           "column": 11
         }
       }
@@ -14244,15 +15054,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9693,
-      "end": 9694,
+      "start": 10273,
+      "end": 10274,
       "loc": {
         "start": {
-          "line": 426,
+          "line": 451,
           "column": 11
         },
         "end": {
-          "line": 426,
+          "line": 451,
           "column": 12
         }
       }
@@ -14269,15 +15079,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9694,
-      "end": 9695,
+      "start": 10274,
+      "end": 10275,
       "loc": {
         "start": {
-          "line": 426,
+          "line": 451,
           "column": 12
         },
         "end": {
-          "line": 426,
+          "line": 451,
           "column": 13
         }
       }
@@ -14294,15 +15104,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9696,
-      "end": 9697,
+      "start": 10276,
+      "end": 10277,
       "loc": {
         "start": {
-          "line": 426,
+          "line": 451,
           "column": 14
         },
         "end": {
-          "line": 426,
+          "line": 451,
           "column": 15
         }
       }
@@ -14319,15 +15129,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9703,
-      "end": 9704,
+      "start": 10283,
+      "end": 10284,
       "loc": {
         "start": {
-          "line": 428,
+          "line": 453,
           "column": 4
         },
         "end": {
-          "line": 428,
+          "line": 453,
           "column": 5
         }
       }
@@ -14344,15 +15154,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9705,
-      "end": 9706,
+      "start": 10285,
+      "end": 10286,
       "loc": {
         "start": {
-          "line": 429,
+          "line": 454,
           "column": 0
         },
         "end": {
-          "line": 429,
+          "line": 454,
           "column": 1
         }
       }
@@ -14372,15 +15182,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 9708,
-      "end": 9714,
+      "start": 10288,
+      "end": 10294,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 0
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 6
         }
       }
@@ -14397,15 +15207,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9715,
-      "end": 9716,
+      "start": 10295,
+      "end": 10296,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 7
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 8
         }
       }
@@ -14423,15 +15233,15 @@
         "binop": null
       },
       "value": "Entity",
-      "start": 9716,
-      "end": 9722,
+      "start": 10296,
+      "end": 10302,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 8
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 14
         }
       }
@@ -14448,15 +15258,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9722,
-      "end": 9723,
+      "start": 10302,
+      "end": 10303,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 14
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 15
         }
       }
@@ -14474,15 +15284,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9723,
-      "end": 9724,
+      "start": 10303,
+      "end": 10304,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 15
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 16
         }
       }
@@ -14500,15 +15310,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9724,
-      "end": 9724,
+      "start": 10304,
+      "end": 10304,
       "loc": {
         "start": {
-          "line": 431,
+          "line": 456,
           "column": 16
         },
         "end": {
-          "line": 431,
+          "line": 456,
           "column": 16
         }
       }

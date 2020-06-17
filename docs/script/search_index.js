@@ -948,6 +948,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/extras/contextmenu/contextmenu.js~contextmenu#shown",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-shown",
+    "src/extras/ContextMenu/ContextMenu.js~ContextMenu#shown",
+    "member"
+  ],
+  [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js",
     "file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js",
@@ -3078,6 +3084,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/viewer.js~viewer#beginsnapshot",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-beginSnapshot",
+    "src/viewer/Viewer.js~Viewer#beginSnapshot",
+    "method"
+  ],
+  [
     "src/viewer/viewer.js~viewer#camera",
     "class/src/viewer/Viewer.js~Viewer.html#instance-member-camera",
     "src/viewer/Viewer.js~Viewer#camera",
@@ -3105,6 +3117,12 @@ window.esdocSearchIndex = [
     "src/viewer/viewer.js~viewer#destroy",
     "class/src/viewer/Viewer.js~Viewer.html#instance-method-destroy",
     "src/viewer/Viewer.js~Viewer#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#endsnapshot",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-endSnapshot",
+    "src/viewer/Viewer.js~Viewer#endSnapshot",
     "method"
   ],
   [
@@ -4005,6 +4023,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/entity.js~entity#numtriangles",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-numTriangles",
     "src/viewer/scene/Entity.js~Entity#numTriangles",
+    "member"
+  ],
+  [
+    "src/viewer/scene/entity.js~entity#offset",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-set-offset",
+    "src/viewer/scene/Entity.js~Entity#offset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/entity.js~entity#offset",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-offset",
+    "src/viewer/scene/Entity.js~Entity#offset",
     "member"
   ],
   [
@@ -8358,6 +8388,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/mesh/mesh.js~mesh#offset",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-offset",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#offset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#offset",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-offset",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#offset",
+    "member"
+  ],
+  [
     "src/viewer/scene/mesh/mesh.js~mesh#opacity",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
     "src/viewer/scene/mesh/Mesh.js~Mesh#opacity",
@@ -8907,6 +8949,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/nodes/node.js~node#numtriangles",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-numTriangles",
     "src/viewer/scene/nodes/Node.js~Node#numTriangles",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#offset",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-offset",
+    "src/viewer/scene/nodes/Node.js~Node#offset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#offset",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-offset",
+    "src/viewer/scene/nodes/Node.js~Node#offset",
     "member"
   ],
   [
@@ -9840,6 +9894,30 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#offsetobjectids",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-offsetObjectIds",
+    "src/viewer/scene/scene/Scene.js~Scene#offsetObjectIds",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#offsetobjects",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-offsetObjects",
+    "src/viewer/scene/scene/Scene.js~Scene#offsetObjects",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#opacityobjectids",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-opacityObjectIds",
+    "src/viewer/scene/scene/Scene.js~Scene#opacityObjectIds",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#opacityobjects",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-opacityObjects",
+    "src/viewer/scene/scene/Scene.js~Scene#opacityObjects",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#passes",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-passes",
     "src/viewer/scene/scene/Scene.js~Scene#passes",
@@ -9933,6 +10011,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#setobjectshighlighted",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-setObjectsHighlighted",
     "src/viewer/scene/scene/Scene.js~Scene#setObjectsHighlighted",
+    "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#setobjectsoffset",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-setObjectsOffset",
+    "src/viewer/scene/scene/Scene.js~Scene#setObjectsOffset",
     "method"
   ],
   [
