@@ -2,26 +2,33 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.5
+
+June 17, 2020
+
+* Entity
+    * Dynamically movable Entity types. [#208](https://github.com/xeokit/xeokit-sdk/issues/208), [#535](https://github.com/xeokit/xeokit-sdk/pull/353) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.3.43
 
 June 16, 2020
 
 * CameraControl 
-    * Don't fire "hover" events while right mouse button down [#335](https://github.com/xeokit/xeokit-sdk/issues/335),  [````6accb69````](https://github.com/xeokit/xeokit-sdk/commit/6accb69cd8ff19d2c157e27e3e33fdd704e60481) ([**@xeolabs**](https://github.com/xeolabs))
+    * Don't fire "hover" events while right mouse button down. [#335](https://github.com/xeokit/xeokit-sdk/issues/335),  [````6accb69````](https://github.com/xeokit/xeokit-sdk/commit/6accb69cd8ff19d2c157e27e3e33fdd704e60481) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.3.42
 
 June 15, 2020
 
 * XKTLoaderPlugin 
-    * Concurrent model loading [#347](https://github.com/xeokit/xeokit-sdk/issues/347), [#348](https://github.com/xeokit/xeokit-sdk/pull/348) ([**@xeolabs**](https://github.com/xeolabs))
+    * Concurrent model loading. [#347](https://github.com/xeokit/xeokit-sdk/issues/347), [#348](https://github.com/xeokit/xeokit-sdk/pull/348) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.3.41
 
 June 15, 2020
 
 * StoreyViewsPlugin 
-    * Fix flickering glitch with ````createStoreyMap()```` [#303](https://github.com/xeokit/xeokit-sdk/issues/303), [````e4d6236````](https://github.com/xeokit/xeokit-sdk/commit/e4d6236b54f160de5a3c0b7a0b5752bc68c243a2) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix flickering glitch with ````createStoreyMap()````. [#303](https://github.com/xeokit/xeokit-sdk/issues/303), [````e4d6236````](https://github.com/xeokit/xeokit-sdk/commit/e4d6236b54f160de5a3c0b7a0b5752bc68c243a2) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.3.4
 
