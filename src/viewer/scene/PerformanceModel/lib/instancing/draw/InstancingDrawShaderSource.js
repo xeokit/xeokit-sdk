@@ -30,6 +30,7 @@ function buildVertex(scene) {
         src.push("attribute vec4 flags2;");
     }
 
+    src.push("attribute vec3 offset;");
 
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
     src.push("attribute vec4 modelMatrixCol1;");
@@ -99,8 +100,8 @@ function buildVertex(scene) {
     src.push("} else {");
 
     src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-
     src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+    src.push("worldPosition.xyz = worldPosition.xyz + offset;");
 
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 

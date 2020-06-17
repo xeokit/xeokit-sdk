@@ -23,6 +23,7 @@ function buildVertex(scene) {
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
+    src.push("attribute vec3 offset;");
     src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
@@ -72,7 +73,6 @@ function buildVertex(scene) {
 
     src.push("void main(void) {");
 
-
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
@@ -92,7 +92,8 @@ function buildVertex(scene) {
 
     src.push("} else {");
 
-    src.push("vec4 worldPosition = (positionsDecodeMatrix * vec4(position, 1.0)); ");
+    src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+    src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
     src.push("vec4 worldNormal =  vec4(octDecode(normal.xy), 0.0); ");

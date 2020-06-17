@@ -40,6 +40,7 @@ class BatchingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aNormal) {
             this._aNormal.bindArrayBuffer(state.normalsBuf);
         }
@@ -82,6 +83,7 @@ class BatchingPickNormalsRenderer {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");

@@ -135,6 +135,13 @@ class PerformanceMesh {
     /**
      * @private
      */
+    _setOffset(offset) {
+        this._layer.setOffset(this._portionId, offset);
+    }
+
+    /**
+     * @private
+     */
     _setHighlighted(flags) {
         this._layer.setHighlighted(this._portionId, flags);
     }

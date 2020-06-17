@@ -85,12 +85,16 @@ class InstancingEdgesRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
 
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+
         state.edgeIndicesBuf.bind();
         instanceExt.drawElementsInstancedANGLE(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
 
         if (this._aFlags) {
             instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
@@ -127,6 +131,7 @@ class InstancingEdgesRenderer {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
