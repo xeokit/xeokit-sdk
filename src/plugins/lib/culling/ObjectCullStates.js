@@ -114,7 +114,7 @@ class ObjectCullStates {
     }
 
     /**
-     * Number of objects in {@link ObjectCullState#objects},
+     * Number of objects in {@link ObjectCullStates#objects},
      *
      * Updated whenever ````Scene```` fires a ````modelLoaded```` event.
      *
@@ -168,7 +168,7 @@ class ObjectCullStates {
     }
 
     /**
-     * Destroys this VizCullPlugin.
+     * Destroys this ObjectCullStAtes.
      */
     destroy() {
         this._clear();
