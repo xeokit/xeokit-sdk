@@ -218,7 +218,8 @@ const idMap = new Map();
  *             }
  *          }
  *       ]
- *    });
+ *    ]
+ * });
  * ````
  *
  * Next, we&apos;ll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
@@ -257,6 +258,46 @@ const idMap = new Map();
  *
  * Note how we only show the ContextMenu if it&apos;s enabled. We can use that mechanism to switch between multiple
  * ContextMenu instances depending on what we clicked.
+ *
+ * ## Dynamic Item Titles
+ *
+ * To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
+ * ````getTitle()```` callback. The callback will fire each time you show ContextMenu, which will dynamically
+ * set the item title text.
+ *
+ * In the example below, we&apos;ll create a simple ContextMenu that allows us to toggle the selection of an object
+ * via its first item, which changes text depending on whether we are selecting or deselecting the object.
+ *
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles)]
+ *
+ * ````javascript
+ * const canvasContextMenu = new ContextMenu({
+ *
+ *    enabled: true,
+ *
+ *    items: [
+ *       [
+ *          {
+ *              getTitle: (context) =&gt; {
+ *                  return (!context.entity.selected) ? &quot;Select&quot; : &quot;Undo Select&quot;;
+ *              },
+ *              doAction: function (context) {
+ *                  context.entity.selected = !context.entity.selected;
+ *              }
+ *          },
+ *          {
+ *              title: &quot;Clear Selection&quot;,
+ *              getEnabled: function (context) {
+ *                  return (context.viewer.scene.numSelectedObjects &gt; 0);
+ *              },
+ *              doAction: function (context) {
+ *                  context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+ *              }
+ *          }
+ *       ]
+ *    ]
+ * });
+ * ````
  */
 class ContextMenu {
 
@@ -274,6 +315,7 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
+        this._shown = false;
         document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
             if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
                 this.hide();
@@ -345,8 +387,8 @@ class ContextMenu {
     _buildActionLinks2(itemsGroup, html, ctx) {
         for (let i = 0, len = itemsGroup.length; i &lt; len; i++) {
             const item = itemsGroup[i];
-            if (!item.title) {
-                console.error(&quot;ContextMenu item without title - will not include in ContextMenu&quot;);
+            if (!item.title &amp;&amp; !item.getTitle) {
+                console.error(&quot;ContextMenu item without title or getTitle() - will not include in ContextMenu&quot;);
                 continue;
             }
             if ((!item.doAction) &amp;&amp; (!item.callback)) {
@@ -358,7 +400,7 @@ class ContextMenu {
                 continue;
             }
             const itemId = &quot;xeokit-context-menu-&quot; + this._id + &quot;-&quot; + ctx.id++;
-            const actionTitle = item.title;
+            const actionTitle = item.title || &quot;&quot;;
             html.push(&apos;&lt;li id=&quot;&apos; + itemId + &apos;&quot; class=&quot;xeokit-context-menu-item&quot; style=&quot;&apos; + ((ctx.groupIdx === ctx.groupLen - 1) || ((i &lt; len - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
             item._itemId = itemId;
         }
@@ -382,8 +424,10 @@ class ContextMenu {
                         if (!self._context) {
                             return;
                         }
-                        doAction(self._context);
-                        self.hide();
+                        if (item._enabled !== false) {
+                            doAction(self._context);
+                            self.hide();
+                        }
                         event.preventDefault();
                     };
                 })());
@@ -459,6 +503,7 @@ class ContextMenu {
             return;
         }
         this._enableItems();
+        this._updateDynamicItemTitles(this._items);
         this._menuElement.style.display = &apos;block&apos;;
         const menuHeight = this._menuElement.offsetHeight;
         const menuWidth = this._menuElement.offsetWidth;
@@ -470,6 +515,32 @@ class ContextMenu {
         }
         this._menuElement.style.left = pageX + &apos;px&apos;;
         this._menuElement.style.top = pageY + &apos;px&apos;;
+        this._shown = true;
+    }
+
+    /**
+     * Gets whether this context menu is currently shown or not.
+     *
+     * @returns {Boolean} Whether this context menu is shown.
+     */
+    get shown() {
+        return this._shown;
+    }
+
+    _updateDynamicItemTitles(items) {
+        for (let i = 0, len = items.length; i &lt; len; i++) {
+            const item = items[i];
+            if (utils.isArray(item)) {
+                this._updateDynamicItemTitles(item);
+            } else {
+                item._itemElement = document.getElementById(item._itemId);
+                if (!item._itemElement) {
+                    console.error(&quot;ContextMenu item element not found: &quot; + item._itemId);
+                    continue;
+                }
+                item._itemElement.innerText = item.getTitle ? (item.getTitle(this._context) || item.title || &quot;&quot;) : (item.title || &quot;&quot;);
+            }
+        }
     }
 
     _enableItems() {
@@ -491,6 +562,7 @@ class ContextMenu {
                     } else {
                         item._itemElement.classList.remove(&quot;disabled&quot;);
                     }
+                    item._enabled = enabled;
                 }
             }
         }
@@ -504,6 +576,7 @@ class ContextMenu {
             return;
         }
         this._menuElement.style.display = &apos;none&apos;;
+        this._shown = false;
     }
 
     /**

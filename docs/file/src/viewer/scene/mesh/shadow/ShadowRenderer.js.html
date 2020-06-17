@@ -253,6 +253,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
+    gl.uniform3fv(this._uOffset, mesh._state.offset);
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
@@ -318,6 +319,7 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     }
     this._aPosition = program.getAttribute(&quot;position&quot;);
     this._uClippable = program.getLocation(&quot;clippable&quot;);
+    this._uOffset = program.getLocation(&quot;offset&quot;);
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

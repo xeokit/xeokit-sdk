@@ -151,6 +151,7 @@ function buildVertex(scene) {
     src.push(&quot;// Batched geometry picking vertex shader&quot;);
 
     src.push(&quot;attribute vec3 position;&quot;);
+    src.push(&quot;attribute vec3 offset;&quot;);
     src.push(&quot;attribute vec4 flags;&quot;);
     src.push(&quot;attribute vec4 flags2;&quot;);
 
@@ -174,7 +175,8 @@ function buildVertex(scene) {
     src.push(&quot;  if ((!pickInvisible &amp;&amp; !visible) || !pickable) {&quot;);
     src.push(&quot;      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex
     src.push(&quot;  } else {&quot;);
-    src.push(&quot;      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;); // Batched positions are baked in World-space
+    src.push(&quot;      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+    src.push(&quot;      worldPosition.xyz = worldPosition.xyz + offset;&quot;);
     src.push(&quot;      vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
     src.push(&quot;      vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);&quot;);
     if (clipping) {

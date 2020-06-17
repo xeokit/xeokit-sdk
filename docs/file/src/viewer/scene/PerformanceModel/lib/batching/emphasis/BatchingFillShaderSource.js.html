@@ -166,6 +166,7 @@ function buildVertex(scene) {
     src.push(&quot;uniform int renderPass;&quot;);
 
     src.push(&quot;attribute vec3 position;&quot;);
+    src.push(&quot;attribute vec3 offset;&quot;);
     src.push(&quot;attribute vec4 flags;&quot;);
     src.push(&quot;attribute vec4 flags2;&quot;);
     src.push(&quot;uniform mat4 viewMatrix;&quot;);
@@ -198,7 +199,8 @@ function buildVertex(scene) {
     src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex
     src.push(&quot;} else {&quot;);
 
-    src.push(&quot;vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+    src.push(&quot;      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+    src.push(&quot;      worldPosition.xyz = worldPosition.xyz + offset;&quot;);
     src.push(&quot;vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
     if (clipping) {
         src.push(&quot;vWorldPosition = worldPosition;&quot;);
