@@ -476,6 +476,20 @@ class Scene extends Component {
         this.opacityObjects = {};
         this._numOpacityObjects = 0;
 
+        /**
+         * Map of {@link Entity}s that represent objects whose {@link Entity#offset}s were updated.
+         *
+         * An Entity represents an object if {@link Entity#isObject} is ````true````.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
+         * @property offsetObjects
+         * @final
+         * @type {{String:Object}}
+         */
+        this.offsetObjects = {};
+        this._numOffsetObjects = 0;
+
         // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
 
         /**
@@ -489,6 +503,7 @@ class Scene extends Component {
         this._selectedObjectIds = null;
         this._colorizedObjectIds = null;
         this._opacityObjectIds = null;
+        this._offsetObjectIds = null;
 
         this._collidables = {}; // Components that contribute to the Scene AABB
         this._compilables = {}; // Components that require shader compilation
@@ -1070,6 +1085,17 @@ class Scene extends Component {
         this._opacityObjectIds = null; // Lazy regenerate
     }
 
+    _objectOffsetUpdated(entity, offset) {
+        if (!offset || offset[0] === 0 && offset[1] === 0 && offset[2] === 0) {
+            this.offsetObjects[entity.id] = entity;
+            this._numOffsetObjects++;
+        } else {
+            delete this.offsetObjects[entity.id];
+            this._numOffsetObjects--;
+        }
+        this._offsetObjectIds = null; // Lazy regenerate
+    }
+
     _webglContextLost() {
         //  this.loading++;
         this.canvas.spinner.processes++;
@@ -1353,6 +1379,18 @@ class Scene extends Component {
             this._opacityObjectIds = Object.keys(this.opacityObjects);
         }
         return this._opacityObjectIds;
+    }
+
+    /**
+     * Gets the IDs of the {@link Entity}s in {@link Scene#offsetObjects}.
+     *
+     * @type {String[]}
+     */
+    get offsetObjectIds() {
+        if (!this._offsetObjectIds) {
+            this._offsetObjectIds = Object.keys(this.offsetObjects);
+        }
+        return this._offsetObjectIds;
     }
 
     /**
@@ -2216,6 +2254,20 @@ class Scene extends Component {
             const changed = (entity.pickable !== pickable);
             entity.pickable = pickable;
             return changed;
+        });
+    }
+
+    /**
+     * Batch-updates {@link Entity#offset} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Number[]} [offset] 3D offset vector.
+     */
+    setObjectsOffset(ids, offset) {
+        this._withEntities(ids, this.objects, entity => {
+            entity.offset = offset;
         });
     }
 

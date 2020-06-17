@@ -43,6 +43,7 @@ class BatchingDrawRenderer {
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
         gl.uniform1i(this._uRenderPass, renderPass);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aNormal) {
             this._aNormal.bindArrayBuffer(state.normalsBuf);
         }
@@ -118,6 +119,7 @@ class BatchingDrawRenderer {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");

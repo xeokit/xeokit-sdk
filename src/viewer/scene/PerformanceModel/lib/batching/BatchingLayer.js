@@ -68,8 +68,9 @@ class BatchingLayer {
             primitiveName: primitiveName,
             primitive: primitive,
             positionsBuf: null,
+            offsetsBuf: null,
             normalsBuf: null,
-            colorsbuf: null,
+            colorsBuf: null,
             flagsBuf: null,
             flags2Buf: null,
             indicesBuf: null,
@@ -335,6 +336,12 @@ class BatchingLayer {
             }
         }
 
+        for (let i = 0; i < numVerts; i++) {
+            buffer.offsets.push(0);
+            buffer.offsets.push(0);
+            buffer.offsets.push(0);
+        }
+
         const portionId = this._portions.length / 2;
 
         this._portions.push(vertsIndex);
@@ -397,6 +404,7 @@ class BatchingLayer {
             let normalized = false;
             state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
+        state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(buffer.offsets), buffer.positions.length, 3, gl.DYNAMIC_DRAW);
         const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
         if (buffer.indices.length > 0) {
             const indices = bigIndicesSupported ? new Uint32Array(buffer.indices) : new Uint16Array(buffer.indices);
@@ -637,6 +645,27 @@ class BatchingLayer {
         this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
     }
 
+    setOffset(portionId, offset) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        const portionsIdx = portionId * 2;
+        const vertexBase = this._portions[portionsIdx];
+        const numVerts = this._portions[portionsIdx + 1];
+        const firstOffset = vertexBase * 3;
+        const lenOffsets = numVerts * 3;
+        const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
+        const x = offset[0];
+        const y = offset[1];
+        const z = offset[2];
+        for (let i = 0; i < lenOffsets; i += 3) {
+            tempArray[i + 0] = x;
+            tempArray[i + 1] = y;
+            tempArray[i + 2] = z;
+        }
+        this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+    }
+
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
@@ -681,7 +710,7 @@ class BatchingLayer {
         }
     }
 
-    //-- SPost effects supprt------------------------------------------------------------------------------------------------
+    //-- Post effects support------------------------------------------------------------------------------------------------
 
     drawDepth(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
@@ -860,6 +889,10 @@ class BatchingLayer {
         if (state.positionsBuf) {
             state.positionsBuf.destroy();
             state.positionsBuf = null;
+        }
+        if (state.offsetsBuf) {
+            state.offsetsBuf.destroy();
+            state.offsetssBuf = null;
         }
         if (state.normalsBuf) {
             state.normalsBuf.destroy();

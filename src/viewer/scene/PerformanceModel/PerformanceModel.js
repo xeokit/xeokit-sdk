@@ -64,6 +64,7 @@ class PerformanceModel extends Component {
         super(owner, cfg);
 
         this._aabb = math.collapseAABB3();
+        this._aabbDirty = false;
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
         this._lastDecodeMatrix = null;
@@ -777,7 +778,19 @@ class PerformanceModel extends Component {
      * @type {Number[]}
      */
     get aabb() {
+        if (this._aabbDirty) {
+            this._rebuildAABB();
+        }
         return this._aabb;
+    }
+
+    _rebuildAABB() {
+        math.collapseAABB3(this._aabb);
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            const node = this._nodeList[i];
+            math.expandAABB3(this._aabb, node.aabb);
+        }
+        this._aabbDirty = false;
     }
 
     /**

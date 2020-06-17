@@ -91,6 +91,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
+    gl.uniform3fv(this._uOffset, meshState.offset);
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
@@ -180,6 +181,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._aNormal = program.getAttribute("normal");
     this._uClippable = program.getLocation("clippable");
     this._uGammaFactor = program.getLocation("gammaFactor");
+    this._uOffset = program.getLocation("offset");
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

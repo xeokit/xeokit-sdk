@@ -525,6 +525,8 @@ DrawRenderer.prototype.drawMesh = function (frame, mesh) {
         }
     }
 
+    gl.uniform3fv(this._uOffset, meshState.offset);
+
     // Bind VBOs
 
     if (geometryState.id !== this._lastGeometryId) {
@@ -557,11 +559,6 @@ DrawRenderer.prototype.drawMesh = function (frame, mesh) {
         if (geometryState.indicesBuf) {
             geometryState.indicesBuf.bind();
             frame.bindArray++;
-            // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            // frame.drawElements++;
-        } else if (geometryState.positions) {
-            // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
-            //  frame.drawArrays++;
         }
         this._lastGeometryId = geometryState.id;
     }
@@ -837,6 +834,7 @@ DrawRenderer.prototype._allocate = function (mesh) {
 
     this._uClippable = program.getLocation("clippable");
     this._uColorize = program.getLocation("colorize");
+    this._uOffset = program.getLocation("offset");
 
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;

@@ -43,6 +43,7 @@ Frustum.INSIDE = 0;
 Frustum.INTERSECT = 1;
 Frustum.OUTSIDE = 2;
 
+/** @private */
 function setFrustum(frustum, viewMat, projMat) {
 
     const m = math.mulMat4(projMat, viewMat, tempMat4a);
@@ -72,6 +73,7 @@ function setFrustum(frustum, viewMat, projMat) {
     frustum.planes[5].set(m3 + m2, m7 + m6, m11 + m10, m15 + m14);
 }
 
+/** @private */
 function frustumIntersectsAABB3(frustum, aabb) {
 
     let ret = Frustum.INSIDE;

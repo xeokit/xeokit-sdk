@@ -51,6 +51,10 @@ class InstancingNormalsRenderer {
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aNormal.bindArrayBuffer(state.normalsBuf);
+
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+
         this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
@@ -74,6 +78,7 @@ class InstancingNormalsRenderer {
         if (this._aFlags2) { // Won't be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
     }
 
     _allocate() {
@@ -108,6 +113,7 @@ class InstancingNormalsRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");

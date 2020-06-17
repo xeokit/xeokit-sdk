@@ -37,6 +37,7 @@ class BatchingNormalsRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         this._aNormal.bindArrayBuffer(state.normalsBuf);
         this._aColor.bindArrayBuffer(state.colorsBuf);// Needed for masking out transparent entities using alpha channel
         this._aFlags.bindArrayBuffer(state.flagsBuf);
@@ -72,6 +73,7 @@ class BatchingNormalsRenderer {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");

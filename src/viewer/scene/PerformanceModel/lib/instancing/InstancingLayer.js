@@ -16,9 +16,10 @@ const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
 const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
 const compressedNormals = new Int8Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
-const tempVec3a = math.vec4([0, 0, 0, 1]);
-const tempVec3b = math.vec4([0, 0, 0, 1]);
-const tempVec3c = math.vec4([0, 0, 0, 1]);
+const tempVec3a = math.vec3();
+const tempVec4a = math.vec4([0, 0, 0, 1]);
+const tempVec4b = math.vec4([0, 0, 0, 1]);
+const tempVec4c = math.vec4([0, 0, 0, 1]);
 
 /**
  * @private
@@ -149,6 +150,7 @@ class InstancingLayer {
         this._flags2 = [];
         this._colors = [];
         this._pickColors = [];
+        this._offsets = [];
 
         // Modeling matrix per instance, array for each column
         this._modelMatrixCol0 = [];
@@ -250,6 +252,10 @@ class InstancingLayer {
         this._colors.push(b);
         this._colors.push(opacity);
 
+        this._offsets.push(0);
+        this._offsets.push(0);
+        this._offsets.push(0);
+
         this._modelMatrixCol0.push(meshMatrix[0]);
         this._modelMatrixCol0.push(meshMatrix[4]);
         this._modelMatrixCol0.push(meshMatrix[8]);
@@ -298,15 +304,15 @@ class InstancingLayer {
         var obb = this._state.obb;
         var lenPositions = obb.length;
         for (var i = 0; i < lenPositions; i += 4) {
-            tempVec3a[0] = obb[i + 0];
-            tempVec3a[1] = obb[i + 1];
-            tempVec3a[2] = obb[i + 2];
-            math.transformPoint4(meshMatrix, tempVec3a, tempVec3b);
+            tempVec4a[0] = obb[i + 0];
+            tempVec4a[1] = obb[i + 1];
+            tempVec4a[2] = obb[i + 2];
+            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
             if (worldMatrix) {
-                math.transformPoint4(worldMatrix, tempVec3b, tempVec3c);
-                math.expandAABB3Point3(worldAABB, tempVec3c);
+                math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
+                math.expandAABB3Point3(worldAABB, tempVec4c);
             } else {
-                math.expandAABB3Point3(worldAABB, tempVec3b);
+                math.expandAABB3Point3(worldAABB, tempVec4b);
             }
         }
 
@@ -337,6 +343,11 @@ class InstancingLayer {
             this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._flags = [];
             this._flags2 = [];
+        }
+        if (this._offsets.length > 0) {
+            let normalized = false;
+            this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, normalized);
+            this._offsets = []; // Release memory
         }
         if (this._modelMatrixCol0.length > 0) {
 
@@ -592,6 +603,16 @@ class InstancingLayer {
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
+    setOffset(portionId, offset) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        tempVec3a[0] = offset[0];
+        tempVec3a[1] = offset[1];
+        tempVec3a[2] = offset[2];
+        this._state.offsetsBuf.setData(tempVec3a, portionId * 3, 3);
+    }
+
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
@@ -831,6 +852,10 @@ class InstancingLayer {
         if (state.flags2Buf) {
             state.flags2Buf.destroy();
             state.flags2Buf = null;
+        }
+        if (state.offsetsBuf) {
+            state.offsetsBuf.destroy();
+            state.offsetsBuf = null;
         }
         if (state.modelMatrixCol0Buf) {
             state.modelMatrixCol0Buf.destroy();

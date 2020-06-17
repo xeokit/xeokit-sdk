@@ -421,6 +421,33 @@ class Entity {
     }
 
     /**
+     * Sets the Entity's 3D World-space offset.
+     *
+     * The offset dynamically translates the Entity in World-space, which  is useful for creating
+     * effects like exploding parts assemblies etc.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
+     *
+     * @abstract
+     * @type {Number[]}
+     */
+    set offset(offset) {
+    }
+
+    /**
+     * Gets the Entity's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @abstract
+     * @type {Number[]}
+     */
+    get offset() {
+    }
+
+    /**
      * Destroys this Entity.
      */
     destroy() {

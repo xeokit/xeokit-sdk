@@ -1,4 +1,5 @@
 import {RENDER_FLAGS} from './renderFlags.js';
+import {math} from "../../math/math.js";
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
 const tempIntRGB = new Uint16Array([0, 0, 0]);
@@ -58,6 +59,9 @@ class PerformanceNode {
 
         this._flags = flags;
         this._aabb = aabb;
+        this._offsetAABB = math.AABB3(aabb);
+
+        this._offset = math.vec3();
 
         if (this._isObject) {
             model.scene._registerObject(this);
@@ -106,7 +110,7 @@ class PerformanceNode {
      * @type {Number[]}
      */
     get aabb() {
-        return this._aabb;
+        return this._offsetAABB;
     }
 
     /**
@@ -434,7 +438,7 @@ class PerformanceNode {
     }
 
     /**
-     * Gets the PerformanceNode's RGB colorize color, multiplies by the PerformanceNode's rendered fragment colors.
+     * Sets the PerformanceNode's RGB colorize color.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -461,7 +465,7 @@ class PerformanceNode {
     }
 
     /**
-     * Gets the PerformanceNode's RGB colorize color, multiplies by the PerformanceNode's rendered fragment colors.
+     * Gets the PerformanceNode's RGB colorize color.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -526,6 +530,53 @@ class PerformanceNode {
         } else {
             return 1.0;
         }
+    }
+
+    /**
+     * Sets the PerformanceNode's 3D World-space offset.
+     *
+     * The offset dynamically translates the PerformanceNode in World-space.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
+     *
+     * @type {Number[]}
+     */
+    set offset(offset) {
+        if (offset) {
+            this._offset[0] = offset[0];
+            this._offset[1] = offset[1];
+            this._offset[2] = offset[2];
+        } else {
+            this._offset[0] = 0;
+            this._offset[1] = 0;
+            this._offset[2] = 0;
+        }
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._setOffset(this._offset);
+        }
+        this._offsetAABB[0] = this._aabb[0] + this._offset[0];
+        this._offsetAABB[1] = this._aabb[1] + this._offset[1];
+        this._offsetAABB[2] = this._aabb[2] + this._offset[2];
+        this._offsetAABB[3] = this._aabb[3] + this._offset[0];
+        this._offsetAABB[4] = this._aabb[4] + this._offset[1];
+        this._offsetAABB[5] = this._aabb[5] + this._offset[2];
+        this.scene._aabbDirty = true;
+        this.scene._objectOffsetUpdated(this, offset);
+        this.model._aabbDirty = true;
+        this.model.glRedraw();
+    }
+
+    /**
+     * Gets the PerformanceNode's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get offset() {
+        return this._offset;
     }
 
     /**
@@ -613,14 +664,9 @@ class PerformanceNode {
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
             }
-            if (this._isObject) {
-                const colorized = false;
-                this.scene._objectColorizeUpdated(this, colorized);
-            }
-            if (this._isObject) {
-                const opacityUpdated = false;
-                this.scene._objectOpacityUpdated(this, opacityUpdated);
-            }
+            this.scene._objectColorizeUpdated(this, false);
+            this.scene._objectOpacityUpdated(this, false);
+            this.scene._objectOffsetUpdated(this, false);
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();

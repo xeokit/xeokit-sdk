@@ -8,10 +8,10 @@ const MAX_KD_TREE_DEPTH = 8; // Increase if greater precision needed
 const kdTreeDimLength = new Float32Array(3);
 
 /**
- * {@link Viewer} plugin that performs frustum culling to accelerate rendering performance.
+ * {@link Viewer} plugin that performs view frustum culling to accelerate rendering performance.
  *
- * For each {@link Entity} that represents an object in the {@link Viewer}, ````ViewCullPlugin````
- * will automatically mark it *culled* whenever it falls outside our current view.
+ * For each {@link Entity} that represents an object, ````ViewCullPlugin```` will automatically
+ * set {@link Entity#culled}````false```` whenever it falls outside our field of view.
  *
  * When culled, an ````Entity```` is not processed by xeokit's renderer.
  *
@@ -38,9 +38,9 @@ const kdTreeDimLength = new Float32Array(3);
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * const model = xktLoader.load({
- *   id: "myModel",
- *   src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *   metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json"
+ *      id: "myModel",
+ *      src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+ *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json"
  * });
  * ````
  */

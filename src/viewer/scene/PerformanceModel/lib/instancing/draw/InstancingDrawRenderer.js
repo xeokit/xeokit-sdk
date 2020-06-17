@@ -69,7 +69,6 @@ class InstancingDrawRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 1);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-
         this._aNormal.bindArrayBuffer(state.normalsBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
@@ -82,6 +81,10 @@ class InstancingDrawRenderer {
             this._aFlags2.bindArrayBuffer(state.flags2Buf);
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
+
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+
         state.indicesBuf.bind();
 
         instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
@@ -97,6 +100,7 @@ class InstancingDrawRenderer {
         if (this._aFlags2) { // Won't be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
+          instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
     }
 
     _allocate() {
@@ -172,6 +176,7 @@ class InstancingDrawRenderer {
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+        this._aOffset = program.getAttribute("offset");
 
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");

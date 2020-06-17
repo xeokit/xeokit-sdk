@@ -43,6 +43,7 @@ class BatchingFillRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
@@ -97,6 +98,7 @@ class BatchingFillRenderer {
             });
         }
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
     }

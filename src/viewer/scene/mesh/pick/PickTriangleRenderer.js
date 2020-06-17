@@ -120,6 +120,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
+    gl.uniform3fv(this._uOffset, mesh._state.offset);
     if (this._uPositionsDecodeMatrix) {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
@@ -157,6 +158,7 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._aPosition = program.getAttribute("position");
     this._aColor = program.getAttribute("color");
     this._uClippable = program.getLocation("clippable");
+    this._uOffset = program.getLocation("offset");
 };
 
 export {PickTriangleRenderer};
