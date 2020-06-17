@@ -20,7 +20,7 @@ const kdTreeDimLength = new Float32Array(3);
  * a [kd-tree](https://en.wikipedia.org/wiki/K-d_tree).
  *
  * On each {@link Scene} "tick" event, ````ViewCullPlugin```` searches the kd-tree using a frustum generated from
- * the {@link Camera}, marking each ````Entity```` **culled*** if it falls outside the frustum.
+ * the {@link Camera}, marking each ````Entity```` **culled** if it falls outside the frustum.
  *
  * Use ````ViewCullPlugin```` by simply adding it to your ````Viewer````:
  *
