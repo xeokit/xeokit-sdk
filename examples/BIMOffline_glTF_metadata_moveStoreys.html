@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XKTLoaderPlugin - Configuring initial View using IFC Metadata</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>XKTLoaderPlugin - Configuring initial View using IFC Metadata</h1>
+    <br>
+    <p>Loads an .xkt IFC model and JSON IFC metadata from the file system, then uses the metadata to reveal each building storey.</p><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
+            - xeokit Viewer
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak the x-ray material and  SAO
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const sao = scene.sao;
+    const camera = scene.camera;
+
+    camera.eye = [-26.07, 52.94, 35.13];
+    camera.look = [-6.81, -9.43, 7.75];
+    camera.up = [0.50, 0.47, -0.72];
+
+    camera.perspective.near = 0.1;
+    camera.perspective.far = 5000.0;
+
+    scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
+    scene.xrayMaterial.edgeColor = [0.0, 0.0, 0.0];
+    scene.xrayMaterial.fillAlpha = 0.1;
+    scene.xrayMaterial.edgeAlpha = 0.4;
+
+    sao.enabled = true; // Only works if supported (see above)
+    sao.intensity = 0.15;
+    sao.bias = 0.5;
+    sao.scale = 1000.0;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+
+    cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 600,
+            divisions: 100
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [0, -1.6, 0],
+        collidable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load building model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    // 2
+    const model = gltfLoader.load({                                     // Creates a Node representing the model
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",     // Creates a MetaModel (see below)
+        edges: true,
+        performance: false
+    });
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, slide each building storey out and lay it on the ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", function () {
+
+        setTimeout(() => {
+
+            const t1 = performance.now();
+            document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+
+            moveObject("0u4wgLe6n0ABVaiXyikbkA", [-25, -3, 0]);
+            moveObject("0wPqxf9KX0nPDjgzD8mXwD", [-25, -6, 25]);
+            moveObject("2Hyat1fsPEGfyYPyim12A1", [0, -9, 25]);
+            moveObject("0oaSdYqubDuuJF4k9AqHjC", [0, -12, -25]);
+
+        }, 500);
+    });
+
+    function moveObject(objectId, dir, done) {
+
+        const metaObject = viewer.metaScene.metaObjects[objectId];
+        if (!metaObject) {
+            return;
+        }
+
+        const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);
+        const dmax = math.lenVec3(dir);
+        let d = 0;
+
+        const onTick = scene.on("tick", () => {
+            d += 0.75;
+            if (d > dmax) {
+                scene.off(onTick);
+                if (done) {
+                    done();
+                }
+                return;
+            }
+            scene.setObjectsOffset(objectIds, math.mulVec3Scalar(dir, (d / dmax), []));
+        });
+    }
+
+</script>
+</html>
