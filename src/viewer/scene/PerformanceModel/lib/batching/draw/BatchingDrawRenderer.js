@@ -43,7 +43,6 @@ class BatchingDrawRenderer {
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
         gl.uniform1i(this._uRenderPass, renderPass);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aNormal) {
             this._aNormal.bindArrayBuffer(state.normalsBuf);
         }
@@ -55,6 +54,9 @@ class BatchingDrawRenderer {
         }
         if (this._aFlags2) {
             this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        }
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
         state.indicesBuf.bind();
         gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);

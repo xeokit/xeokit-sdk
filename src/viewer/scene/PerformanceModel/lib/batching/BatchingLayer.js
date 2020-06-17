@@ -11,9 +11,9 @@ import {BatchingBuffer} from "./BatchingBuffer.js";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
-const tempVec3a = math.vec4([0, 0, 0, 1]);
-const tempVec3b = math.vec4([0, 0, 0, 1]);
-const tempVec3c = math.vec4([0, 0, 0, 1]);
+const tempVec4a = math.vec4([0, 0, 0, 1]);
+const tempVec4b = math.vec4([0, 0, 0, 1]);
+const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempOBB3 = math.OBB3();
 
 /**
@@ -87,6 +87,7 @@ class BatchingLayer {
         this._numHighlightedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
+        this._numCulledLayerPortions = 0;
 
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
@@ -167,7 +168,7 @@ class BatchingLayer {
 
         } else {
 
-            const positionsBase = positions.length;
+            const positionsBase = buffer.positions.length;
 
             for (let i = 0, len = positions.length; i < len; i++) {
                 buffer.positions.push(positions[i]);
@@ -177,23 +178,23 @@ class BatchingLayer {
 
                 for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
 
-                    tempVec3a[0] = buffer.positions[i + 0];
-                    tempVec3a[1] = buffer.positions[i + 1];
-                    tempVec3a[2] = buffer.positions[i + 2];
+                    tempVec4a[0] = buffer.positions[i + 0];
+                    tempVec4a[1] = buffer.positions[i + 1];
+                    tempVec4a[2] = buffer.positions[i + 2];
 
-                    math.transformPoint4(meshMatrix, tempVec3a, tempVec3b);
+                    math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
 
-                    buffer.positions[i + 0] = tempVec3b[0];
-                    buffer.positions[i + 1] = tempVec3b[1];
-                    buffer.positions[i + 2] = tempVec3b[2];
+                    buffer.positions[i + 0] = tempVec4b[0];
+                    buffer.positions[i + 1] = tempVec4b[1];
+                    buffer.positions[i + 2] = tempVec4b[2];
 
-                    math.expandAABB3Point3(this._modelAABB, tempVec3b);
+                    math.expandAABB3Point3(this._modelAABB, tempVec4b);
 
                     if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec3b, tempVec3c);
-                        math.expandAABB3Point3(worldAABB, tempVec3c);
+                        math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
+                        math.expandAABB3Point3(worldAABB, tempVec4c);
                     } else {
-                        math.expandAABB3Point3(worldAABB, tempVec3b);
+                        math.expandAABB3Point3(worldAABB, tempVec4b);
                     }
                 }
 
@@ -201,17 +202,17 @@ class BatchingLayer {
 
                 for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
 
-                    tempVec3a[0] = buffer.positions[i + 0];
-                    tempVec3a[1] = buffer.positions[i + 1];
-                    tempVec3a[2] = buffer.positions[i + 2];
+                    tempVec4a[0] = buffer.positions[i + 0];
+                    tempVec4a[1] = buffer.positions[i + 1];
+                    tempVec4a[2] = buffer.positions[i + 2];
 
-                    math.expandAABB3Point3(this._modelAABB, tempVec3a);
+                    math.expandAABB3Point3(this._modelAABB, tempVec4a);
 
                     if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec3a, tempVec3b);
-                        math.expandAABB3Point3(worldAABB, tempVec3b);
+                        math.transformPoint4(worldMatrix, tempVec4a, tempVec4b);
+                        math.expandAABB3Point3(worldAABB, tempVec4b);
                     } else {
-                        math.expandAABB3Point3(worldAABB, tempVec3a);
+                        math.expandAABB3Point3(worldAABB, tempVec4a);
                     }
                 }
             }
@@ -236,10 +237,6 @@ class BatchingLayer {
                     math.identityMat4(modelNormalMatrix, modelNormalMatrix);
                 }
 
-                for (let i = 0, len = normals.length; i < len; i++) {
-                    buffer.normals.push(normals[i]);
-                }
-
                 transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
             }
         }
@@ -253,6 +250,7 @@ class BatchingLayer {
             const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
             const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
             const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+            const culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
 
             for (let i = 0; i < numVerts; i++) {
                 buffer.flags.push(visible);
@@ -262,7 +260,7 @@ class BatchingLayer {
                 buffer.flags2.push(clippable);
                 buffer.flags2.push(edges);
                 buffer.flags2.push(pickable);
-                buffer.flags2.push(0); // Padding
+                buffer.flags2.push(culled);
             }
             if (visible) {
                 this._numVisibleLayerPortions++;
@@ -288,7 +286,12 @@ class BatchingLayer {
                 this._numPickableLayerPortions++;
                 this.model.numPickableLayerPortions++;
             }
+            if (culled) {
+                this._numCulledLayerPortions++;
+                this.model.numCulledLayerPortions++;
+            }
         }
+
         if (color) {
 
             const r = color[0]; // Color is pre-quantized by PerformanceModel
@@ -360,16 +363,15 @@ class BatchingLayer {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
-        if (this._preCompressed) {
-            state.positionsDecodeMatrix = this._positionsDecodeMatrix;
-            const positions = new Uint16Array(buffer.positions);
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
-        } else {
-            const positions = new Float32Array(buffer.positions);
-            const quantizedPositions = new Int16Array(positions.length);
-            quantizePositions(positions, buffer.positions.length, this._modelAABB, quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
-
-            if (buffer.positions.length > 0) {
+        if (buffer.positions.length > 0) {
+            if (this._preCompressed) {
+                state.positionsDecodeMatrix = this._positionsDecodeMatrix;
+                const positions = new Uint16Array(buffer.positions);
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
+            } else {
+                const positions = new Float32Array(buffer.positions);
+                const quantizedPositions = new Int16Array(positions.length);
+                quantizePositions(positions, buffer.positions.length, this._modelAABB, quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }
@@ -380,11 +382,13 @@ class BatchingLayer {
             //let normalized = false; // For scaled
             state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
         }
+
         if (buffer.colors.length > 0) {
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
             state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
+
         if (buffer.flags.length > 0) {
             const flags = new Uint8Array(buffer.flags);
             const flags2 = new Uint8Array(buffer.flags2);
@@ -392,13 +396,20 @@ class BatchingLayer {
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, buffer.flags.length, 4, gl.DYNAMIC_DRAW, normalized);
             state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags2, buffer.flags.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
+
         if (buffer.pickColors.length > 0) {
             const pickColors = new Uint8Array(buffer.pickColors);
             let normalized = false;
             state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
-        state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(buffer.offsets), buffer.positions.length, 3, gl.DYNAMIC_DRAW);
+
+        if (buffer.offsets.length > 0) {
+            const offsets = new Float32Array(buffer.offsets);
+            state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
+        }
+
         const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
+
         if (buffer.indices.length > 0) {
             const indices = bigIndicesSupported ? new Uint32Array(buffer.indices) : new Uint16Array(buffer.indices);
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
@@ -439,6 +450,10 @@ class BatchingLayer {
         if (flags & RENDER_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
         }
         this._setFlags(portionId, flags);
         this._setFlags2(portionId, flags);
@@ -517,6 +532,20 @@ class BatchingLayer {
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        this._setFlags2(portionId, flags);
+    }
+
+    setCulled(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        } else {
+            this._numCulledLayerPortions--;
+            this.model.numCulledLayerPortions--;
         }
         this._setFlags2(portionId, flags);
     }
@@ -609,12 +638,13 @@ class BatchingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        var culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
         const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
         for (var i = 0; i < lenFlags; i += 4) {
             tempArray[i + 0] = clippable;
             tempArray[i + 1] = edges;
             tempArray[i + 2] = pickable;
-            tempArray[i + 3] = false; // Padding
+            tempArray[i + 3] = culled;
         }
         this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
     }
@@ -643,7 +673,7 @@ class BatchingLayer {
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (frameCtx.withSAO) {
@@ -658,7 +688,7 @@ class BatchingLayer {
     }
 
     drawNormalEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -667,7 +697,7 @@ class BatchingLayer {
     }
 
     drawNormalFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._batchingRenderers.drawRenderer) {
@@ -676,7 +706,7 @@ class BatchingLayer {
     }
 
     drawNormalTransparentEdges(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -687,7 +717,7 @@ class BatchingLayer {
     //-- Post effects support------------------------------------------------------------------------------------------------
 
     drawDepth(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._batchingRenderers.depthRenderer) {
@@ -696,7 +726,7 @@ class BatchingLayer {
     }
 
     drawNormals(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._batchingRenderers.normalsRenderer) {
@@ -707,7 +737,7 @@ class BatchingLayer {
     //-- XRAYED--------------------------------------------------------------------------------------------------------
 
     drawXRayedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -716,7 +746,7 @@ class BatchingLayer {
     }
 
     drawXRayedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -725,7 +755,7 @@ class BatchingLayer {
     }
 
     drawXRayedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -734,7 +764,7 @@ class BatchingLayer {
     }
 
     drawXRayedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -745,7 +775,7 @@ class BatchingLayer {
     //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -754,7 +784,7 @@ class BatchingLayer {
     }
 
     drawHighlightedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -763,7 +793,7 @@ class BatchingLayer {
     }
 
     drawHighlightedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -772,7 +802,7 @@ class BatchingLayer {
     }
 
     drawHighlightedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -783,7 +813,7 @@ class BatchingLayer {
     //-- SELECTED ------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -792,7 +822,7 @@ class BatchingLayer {
     }
 
     drawSelectedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -801,7 +831,7 @@ class BatchingLayer {
     }
 
     drawSelectedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.fillRenderer) {
@@ -810,7 +840,7 @@ class BatchingLayer {
     }
 
     drawSelectedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
@@ -821,7 +851,7 @@ class BatchingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.pickMeshRenderer) {
@@ -830,7 +860,7 @@ class BatchingLayer {
     }
 
     drawPickDepths(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.pickDepthRenderer) {
@@ -839,7 +869,7 @@ class BatchingLayer {
     }
 
     drawPickNormals(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.pickNormalsRenderer) {
@@ -850,7 +880,7 @@ class BatchingLayer {
     //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
 
     drawOcclusion(frameCtx) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.occlusionRenderer) {
@@ -866,7 +896,7 @@ class BatchingLayer {
         }
         if (state.offsetsBuf) {
             state.offsetsBuf.destroy();
-            state.offsetssBuf = null;
+            state.offsetsBuf = null;
         }
         if (state.normalsBuf) {
             state.normalsBuf.destroy();

@@ -42,6 +42,7 @@ function buildVertex(scene) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
+
     src.push("void main(void) {");
 
     src.push("bool visible      = (float(flags.x) > 0.0);");
@@ -49,11 +50,12 @@ function buildVertex(scene) {
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
     src.push("bool clippable    = (float(flags2.x) > 0.0);");
+    src.push("bool culled       = (float(flags2.w) > 0.0);");
 
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EmphasisMaterial.fillColor, so is not quantized
 
     src.push(`if (
-    !visible || 
+    culled || !visible ||
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 

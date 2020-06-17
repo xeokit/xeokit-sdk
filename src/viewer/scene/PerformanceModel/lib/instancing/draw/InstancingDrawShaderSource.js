@@ -25,10 +25,7 @@ function buildVertex(scene) {
     src.push("attribute vec2 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-
-    if (clipping) {
-        src.push("attribute vec4 flags2;");
-    }
+    src.push("attribute vec4 flags2;");
 
     src.push("attribute vec3 offset;");
 
@@ -85,11 +82,11 @@ function buildVertex(scene) {
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
-
+    src.push("bool culled       = (float(flags2.w) > 0.0);");
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
     src.push(`if 
-    (!visible || 
+    (culled || !visible || 
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 

@@ -123,6 +123,11 @@ class PerformanceModel extends Component {
          */
         this.numPickableLayerPortions = 0;
 
+        /**
+         * @private
+         */
+        this.numCulledLayerPortions = 0;
+
         /** @private */
         this.numEntities = 0;
 
@@ -638,6 +643,9 @@ class PerformanceModel extends Component {
         if (this._pickable && cfg.pickable !== false) {
             flags = flags | RENDER_FLAGS.PICKABLE;
         }
+        if (this._culled && cfg.culled !== false) {
+            flags = flags | RENDER_FLAGS.CULLED;
+        }
         if (this._clippable && cfg.clippable !== false) {
             flags = flags | RENDER_FLAGS.CLIPPABLE;
         }
@@ -700,7 +708,6 @@ class PerformanceModel extends Component {
         this.scene._aabbDirty = true;
     }
 
-
     //------------------------------------------------------------------------------------------------------------------
     // PerformanceModel members
     //------------------------------------------------------------------------------------------------------------------
@@ -727,15 +734,6 @@ class PerformanceModel extends Component {
      */
     get backfaces() {
         return this._backfaces;
-    }
-
-    /**
-     * Gets the list of {@link Entity}s within this PerformanceModel.
-     *
-     * @returns {Entity[]}
-     */
-    get entityList() {
-        return this._nodeList;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -932,7 +930,10 @@ class PerformanceModel extends Component {
      */
     set culled(culled) {
         culled = !!culled;
-        this._culled = culled; // Whole PerformanceModel is culled
+        this._culled = culled;
+        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].culled = culled;
+        }
         this.glRedraw();
     }
 
@@ -1148,6 +1149,10 @@ class PerformanceModel extends Component {
         renderFlags.reset();
 
         if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+
+        if (this.numCulledLayerPortions === this.numPortions) {
             return;
         }
 

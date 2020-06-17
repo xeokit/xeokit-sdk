@@ -11,11 +11,10 @@ class BatchingBuffer {
     constructor() {
         this.maxVerts = MAX_VERTS;
         this.maxIndices = MAX_INDICES;
-        this.positions = []; // Uncompressed
-        this.colors = []; // Compressed
-        this.quantizedPositions = []; // Compressed
-        this.normals = []; // Compressed
-        this.pickColors = []; // Compressed
+        this.positions = [];
+        this.colors = [];
+        this.normals = [];
+        this.pickColors = [];
         this.flags = [];
         this.flags2 = [];
         this.offsets = [];

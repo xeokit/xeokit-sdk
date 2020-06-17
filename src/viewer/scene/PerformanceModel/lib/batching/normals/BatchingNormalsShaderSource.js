@@ -17,9 +17,7 @@ function buildVertex(scene) {
     src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-    if (clipping) {
-        src.push("attribute vec4 flags2;");
-    }
+    src.push("attribute vec4 flags2;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 viewNormalMatrix;");
@@ -40,7 +38,8 @@ function buildVertex(scene) {
     src.push("  bool visible        = (float(flags.x) > 0.0);");
     src.push("  bool xrayed         = (float(flags.y) > 0.0);");
     src.push("  bool transparent    = ((float(color.a) / 255.0) < 1.0);");
-    src.push(`  if (!visible || transparent || xrayed) {`);
+    src.push("  bool culled         = (float(flags2.w) > 0.0);");
+    src.push(`  if (culled || !visible || transparent || xrayed) {`);
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
     src.push("  } else {");
     src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
