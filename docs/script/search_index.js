@@ -504,6 +504,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin",
+    "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html",
+    "<span>ViewCullPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ViewCullPlugin/ViewCullPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/viewer.js~viewer",
     "class/src/viewer/Viewer.js~Viewer.html",
     "<span>Viewer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/Viewer.js</span>",
@@ -585,6 +591,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/instancing/instancingrenderers.js~getinstancingrenderers",
     "function/index.html#static-function-getInstancingRenderers",
     "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/instancing/InstancingRenderers.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/culling/objectcullstates.js~getobjectcullstates",
+    "function/index.html#static-function-getObjectCullStates",
+    "<span>getObjectCullStates</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/culling/ObjectCullStates.js</span>",
     "function"
   ],
   [
@@ -2820,6 +2832,42 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/viewcullplugin/frustum.js",
+    "file/src/plugins/ViewCullPlugin/Frustum.js.html",
+    "src/plugins/ViewCullPlugin/Frustum.js",
+    "file"
+  ],
+  [
+    "src/plugins/viewcullplugin/viewcullplugin.js",
+    "file/src/plugins/ViewCullPlugin/ViewCullPlugin.js.html",
+    "src/plugins/ViewCullPlugin/ViewCullPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin#constructor",
+    "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html#instance-constructor-constructor",
+    "src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin#destroy",
+    "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html#instance-method-destroy",
+    "src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin#enabled",
+    "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html#instance-set-enabled",
+    "src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin#enabled",
+    "member"
+  ],
+  [
+    "src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin#enabled",
+    "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html#instance-get-enabled",
+    "src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin#enabled",
+    "member"
+  ],
+  [
     "src/plugins/xktloaderplugin/xktdefaultdatasource.js",
     "file/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js.html",
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js",
@@ -2998,6 +3046,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-member-supportedSchemas",
     "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#supportedSchemas",
     "member"
+  ],
+  [
+    "src/plugins/lib/culling/objectcullstates.js",
+    "file/src/plugins/lib/culling/ObjectCullStates.js.html",
+    "src/plugins/lib/culling/ObjectCullStates.js",
+    "file"
   ],
   [
     "src/plugins/lib/html/dot.js",
@@ -4251,12 +4305,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#edges",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#entitylist",
-    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-entityList",
-    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#entityList",
     "member"
   ],
   [

@@ -55,9 +55,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -258,6 +260,11 @@ class PerformanceModel extends Component {
          * @private
          */
         this.numPickableLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numCulledLayerPortions = 0;
 
         /** @private */
         this.numEntities = 0;
@@ -774,6 +781,9 @@ class PerformanceModel extends Component {
         if (this._pickable &amp;&amp; cfg.pickable !== false) {
             flags = flags | RENDER_FLAGS.PICKABLE;
         }
+        if (this._culled &amp;&amp; cfg.culled !== false) {
+            flags = flags | RENDER_FLAGS.CULLED;
+        }
         if (this._clippable &amp;&amp; cfg.clippable !== false) {
             flags = flags | RENDER_FLAGS.CLIPPABLE;
         }
@@ -836,7 +846,6 @@ class PerformanceModel extends Component {
         this.scene._aabbDirty = true;
     }
 
-
     //------------------------------------------------------------------------------------------------------------------
     // PerformanceModel members
     //------------------------------------------------------------------------------------------------------------------
@@ -863,15 +872,6 @@ class PerformanceModel extends Component {
      */
     get backfaces() {
         return this._backfaces;
-    }
-
-    /**
-     * Gets the list of {@link Entity}s within this PerformanceModel.
-     *
-     * @returns {Entity[]}
-     */
-    get entityList() {
-        return this._nodeList;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1068,7 +1068,10 @@ class PerformanceModel extends Component {
      */
     set culled(culled) {
         culled = !!culled;
-        this._culled = culled; // Whole PerformanceModel is culled
+        this._culled = culled;
+        for (var i = 0, len = this._nodeList.length; i &lt; len; i++) {
+            this._nodeList[i].culled = culled;
+        }
         this.glRedraw();
     }
 
@@ -1284,6 +1287,10 @@ class PerformanceModel extends Component {
         renderFlags.reset();
 
         if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+
+        if (this.numCulledLayerPortions === this.numPortions) {
             return;
         }
 
