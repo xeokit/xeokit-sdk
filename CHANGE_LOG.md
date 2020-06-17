@@ -6,7 +6,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 June 18, 2020
 
-* Entity
+* ViewCullPlugin
     * View Culling. [#322](https://github.com/xeokit/xeokit-sdk/issues/322), [#555](https://github.com/xeokit/xeokit-sdk/pull/355) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.3.5
