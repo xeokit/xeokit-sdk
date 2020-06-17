@@ -17,34 +17,34 @@
 
 <body>
 <canvas id="myCanvas"></canvas>
-<!--<div id="info">-->
-<!--    <h1>XKTLoaderPlugin - Configuring initial View using IFC Metadata</h1>-->
-<!--    <br>-->
-<!--    <p>Loads an .xkt IFC model and JSON IFC metadata from the file system, then uses the metadata to reveal each building storey.</p><br>-->
-<!--    <ul>-->
-<!--        <li>-->
-<!--            <div id="time">Loading JavaScript modules...</div>-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>-->
-<!--            - xeokit Viewer-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>-->
-<!--            - Loads model and IFC data from file system-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</div>-->
+<div id="info">
+    <h1>XKTLoaderPlugin - Configuring initial View using IFC Metadata</h1>
+    <br>
+    <p>Loads an .xkt IFC model and JSON IFC metadata from the file system, then uses the metadata to reveal each building storey.</p><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
+            - xeokit Viewer
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>
+        </li>
+    </ul>
+</div>
 </body>
 <script type="module">
 
@@ -128,7 +128,7 @@
 
     const t0 = performance.now();
 
-  //  document.getElementById("time").innerHTML = "Loading model...";
+    document.getElementById("time").innerHTML = "Loading model...";
 
     //------------------------------------------------------------------------------------------------------------------
     // When model loaded, slide each building storey out and lay it on the ground plane
@@ -139,7 +139,7 @@
         setTimeout(() => {
 
             const t1 = performance.now();
-       //     document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+            document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
 
             moveObject("0u4wgLe6n0ABVaiXyikbkA", [-25, -3, 0]);
             moveObject("0wPqxf9KX0nPDjgzD8mXwD", [-25, -6, 25]);
