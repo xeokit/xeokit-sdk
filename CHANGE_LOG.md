@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.51
+
+June 18, 2020
+
+* Entity
+    * View Culling. [#322](https://github.com/xeokit/xeokit-sdk/issues/322), [#555](https://github.com/xeokit/xeokit-sdk/pull/355) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.3.5
 
 June 17, 2020
