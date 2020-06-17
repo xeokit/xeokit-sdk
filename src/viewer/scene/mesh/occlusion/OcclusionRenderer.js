@@ -101,6 +101,9 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
+
+    gl.uniform3fv(this._uOffset, mesh._state.offset);
+
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
@@ -147,6 +150,7 @@ OcclusionRenderer.prototype._allocate = function (mesh) {
     }
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
+    this._uOffset = program.getLocation("offset");
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

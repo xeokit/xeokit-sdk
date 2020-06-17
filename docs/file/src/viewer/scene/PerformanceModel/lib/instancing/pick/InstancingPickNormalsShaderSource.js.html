@@ -148,6 +148,7 @@ function buildVertex(scene) {
     const src = [];
     src.push(&quot;// Instancing geometry normals vertex shader&quot;);
     src.push(&quot;attribute vec3 position;&quot;);
+    src.push(&quot;attribute vec3 offset;&quot;);
     src.push(&quot;attribute vec2 normal;&quot;);
     src.push(&quot;attribute vec4 flags;&quot;);
     src.push(&quot;attribute vec4 flags2;&quot;);
@@ -181,6 +182,7 @@ function buildVertex(scene) {
     src.push(&quot;} else {&quot;);
     src.push(&quot;  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
     src.push(&quot;  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);&quot;);
+    src.push(&quot;  worldPosition.xyz = worldPosition.xyz + offset;&quot;);
     src.push(&quot;  vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
     src.push(&quot;  vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); &quot;);
     src.push(&quot;  vec3 worldNormal = vec3(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2));&quot;);

@@ -521,7 +521,13 @@ class PerformanceNode {
     }
 
     /**
-     * Sets the PerformanceNode's 3D offset.
+     * Sets the PerformanceNode's 3D World-space offset.
+     *
+     * The offset dynamically translates the PerformanceNode in World-space.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
      *
      * @type {Number[]}
      */
@@ -551,7 +557,9 @@ class PerformanceNode {
     }
 
     /**
-     * Gets the PerformanceNode's 3D offset.
+     * Gets the PerformanceNode's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
      *
      * @type {Number[]}
      */
@@ -644,14 +652,9 @@ class PerformanceNode {
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
             }
-            if (this._isObject) {
-                const colorized = false;
-                this.scene._objectColorizeUpdated(this, colorized);
-            }
-            if (this._isObject) {
-                const opacityUpdated = false;
-                this.scene._objectOpacityUpdated(this, opacityUpdated);
-            }
+            this.scene._objectColorizeUpdated(this, false);
+            this.scene._objectOpacityUpdated(this, false);
+            this.scene._objectOffsetUpdated(this, false);
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();

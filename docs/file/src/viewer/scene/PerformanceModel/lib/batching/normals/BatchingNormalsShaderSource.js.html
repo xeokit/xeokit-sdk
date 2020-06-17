@@ -149,6 +149,7 @@ function buildVertex(scene) {
     const src = [];
     src.push(&quot;// Batched geometry normals vertex shader&quot;);
     src.push(&quot;attribute vec3 position;&quot;);
+    src.push(&quot;attribute vec3 offset;&quot;);
     src.push(&quot;attribute vec3 normal;&quot;);
     src.push(&quot;attribute vec4 color;&quot;);
     src.push(&quot;attribute vec4 flags;&quot;);
@@ -178,7 +179,8 @@ function buildVertex(scene) {
     src.push(`  if (!visible || transparent || xrayed) {`);
     src.push(&quot;      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;);
     src.push(&quot;  } else {&quot;);
-    src.push(&quot;      vec4 worldPosition  = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+    src.push(&quot;      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+    src.push(&quot;      worldPosition.xyz = worldPosition.xyz + offset;&quot;);
     src.push(&quot;      vec4 viewPosition   = viewMatrix * worldPosition; &quot;);
     src.push(&quot;      vec4 worldNormal    = vec4(octDecode(normal.xy), 0.0); &quot;);
     src.push(&quot;      vec3 viewNormal     = normalize((viewNormalMatrix * worldNormal).xyz);&quot;);

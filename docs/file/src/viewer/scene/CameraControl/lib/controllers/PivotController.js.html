@@ -161,15 +161,15 @@ class PivotController {
         this._pivotCanvasPos = math.vec2();
         this._cameraDirty = true;
 
-        this._scene.camera.on(&quot;viewMatrix&quot;, () =&gt; {
+        this._onViewMatrix = this._scene.camera.on(&quot;viewMatrix&quot;, () =&gt; {
             this._cameraDirty = true;
         });
 
-        this._scene.camera.on(&quot;projMatrix&quot;, () =&gt; {
+      this._onProjMatrix =   this._scene.camera.on(&quot;projMatrix&quot;, () =&gt; {
             this._cameraDirty = true;
         });
 
-        this._scene.on(&quot;tick&quot;, () =&gt; {
+       this._onTick =  this._scene.on(&quot;tick&quot;, () =&gt; {
             this.updatePivotElement();
         });
     }
@@ -343,7 +343,6 @@ class PivotController {
             this._pivotElement.style.visibility = &quot;visible&quot;;
             this._shown = true;
             this._hideTimeout = window.setTimeout(() =&gt; {
-                console.log(&quot;timeout&quot;);
                 this.hidePivot();
             }, 1000);
         }
@@ -374,10 +373,17 @@ class PivotController {
     endPivot() {
         this._pivoting = false;
     }
+
+    destroy() {
+        this._scene.camera.off(this._onViewMatrix);
+        this._scene.camera.off(this._onProjMatrix);
+        this._scene.off(this._onTick);
+    }
 }
 
 
-export {PivotController};</code></pre>
+export {PivotController};
+</code></pre>
 
 </div>
 

@@ -161,6 +161,7 @@ function buildVertex(mesh) {
     src.push(&quot;uniform mat4 modelMatrix;&quot;);
     src.push(&quot;uniform mat4 viewMatrix;&quot;);
     src.push(&quot;uniform mat4 projMatrix;&quot;);
+    src.push(&quot;uniform vec3 offset;&quot;);
     if (clipping) {
         src.push(&quot;uniform bool clippable;&quot;);
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
@@ -175,6 +176,7 @@ function buildVertex(mesh) {
         src.push(&quot;localPosition = positionsDecodeMatrix * localPosition;&quot;);
     }
     src.push(&quot;   vec4 worldPosition = modelMatrix * localPosition; &quot;);
+    src.push(&quot;   worldPosition.xyz = worldPosition.xyz + offset;&quot;);
     src.push(&quot;   vec4 viewPosition = viewMatrix * worldPosition;&quot;);
     if (clipping) {
         src.push(&quot;   vWorldPosition = worldPosition;&quot;);

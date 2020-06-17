@@ -248,7 +248,6 @@ class TouchPanRotateAndDollyHandler {
             const canvasBoundary = scene.canvas.boundary;
             const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
             const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
-            const sweep = configs.firstPerson ? 180 : 180;
 
             const touches = event.touches;
 
@@ -262,8 +261,8 @@ class TouchPanRotateAndDollyHandler {
                     // Drag rotation
                     //-----------------------------------------------------------------------------------------------
 
-                    updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * sweep * configs.dragRotationRate;
-                    updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * sweep * configs.dragRotationRate;
+                    updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
+                    updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
                 }
 
             } else if (numTouches === 2) {
@@ -312,7 +311,7 @@ class TouchPanRotateAndDollyHandler {
                 if (!panning &amp;&amp; checkMode(MODE_ZOOM)) {
                     const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                     const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
-                    updates.dollyDelta = (d2 - d1);
+                    updates.dollyDelta = (d2 - d1) * 0.05;
                 }
             }
 

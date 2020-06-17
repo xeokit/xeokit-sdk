@@ -114,6 +114,8 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
 
+    gl.uniform3fv(this._uOffset, meshState.offset);
+
     // Bind VBOs
     let indicesBuf;
     if (geometryState.primitive === gl.TRIANGLES) {
@@ -164,6 +166,7 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
     this._uGammaFactor = program.getLocation("gammaFactor");
+    this._uOffset = program.getLocation("offset");
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

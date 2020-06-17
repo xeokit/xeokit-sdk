@@ -175,10 +175,10 @@
                 }
               },
               "extra": {
-                "rawValue": 5,
-                "raw": "5"
+                "rawValue": 2,
+                "raw": "2"
               },
-              "value": 5
+              "value": 2
             }
           }
         ],
@@ -37752,7 +37752,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": 5,
+      "value": 2,
       "start": 73,
       "end": 74,
       "loc": {

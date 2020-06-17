@@ -380,7 +380,7 @@ class MousePanRotateDollyHandler {
             lastY = y;
         });
 
-        canvas.addEventListener(&quot;mouseup&quot;, this._mouseUpHandler = (e) =&gt; {
+        document.addEventListener(&quot;mouseup&quot;, this._documentMouseUpHandler = (e) =&gt; {
             if (!(configs.active &amp;&amp; configs.pointerEnabled)) {
                 return;
             }
@@ -393,6 +393,21 @@ class MousePanRotateDollyHandler {
                     break;
                 case 3: // Right button
                     mouseDownRight = false;
+                    break;
+                default:
+                    break;
+            }
+            xRotateDelta = 0;
+            yRotateDelta = 0;
+            this._down = false;
+        });
+
+        canvas.addEventListener(&quot;mouseup&quot;, this._mouseUpHandler = (e) =&gt; {
+            if (!(configs.active &amp;&amp; configs.pointerEnabled)) {
+                return;
+            }
+            switch (e.which) {
+                case 3: // Right button
                     getCanvasPosFromEvent(e, canvasPos);
                     const x = canvasPos[0];
                     const y = canvasPos[1];
@@ -407,10 +422,6 @@ class MousePanRotateDollyHandler {
                     break;
             }
             canvas.style.removeProperty(&quot;cursor&quot;);
-            xRotateDelta = 0;
-            yRotateDelta = 0;
-
-            this._down = false;
         });
 
         canvas.addEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler = () =&gt; {
@@ -480,6 +491,7 @@ class MousePanRotateDollyHandler {
         document.removeEventListener(&quot;keyup&quot;, this._documentKeyUpHandler);
         canvas.removeEventListener(&quot;mousedown&quot;, this._mouseDownHandler);
         canvas.removeEventListener(&quot;mousemove&quot;, this._mouseMoveHandler);
+        document.removeEventListener(&quot;mouseup&quot;, this._documentMouseUpHandler);
         canvas.removeEventListener(&quot;mouseup&quot;, this._mouseUpHandler);
         canvas.removeEventListener(&quot;mouseenter&quot;, this._mouseEnterHandler);
         canvas.removeEventListener(&quot;mouseleave&quot;, this._mouseLeaveHandler);

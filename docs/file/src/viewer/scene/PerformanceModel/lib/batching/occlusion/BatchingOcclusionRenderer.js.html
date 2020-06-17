@@ -174,6 +174,7 @@ class BatchingOcclusionRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aColor) {
             this._aColor.bindArrayBuffer(state.colorsBuf);
         }
@@ -208,6 +209,7 @@ class BatchingOcclusionRenderer {
             });
         }
         this._aPosition = program.getAttribute(&quot;position&quot;);
+        this._aOffset = program.getAttribute(&quot;offset&quot;);
         this._aColor = program.getAttribute(&quot;color&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
         this._aFlags2 = program.getAttribute(&quot;flags2&quot;);

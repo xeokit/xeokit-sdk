@@ -134,13 +134,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber125">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber166">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber125">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber166">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -226,7 +226,8 @@ we&apos;ll use the context object to provide the callbacks with the Entity that 
             }
          }
       ]
-   });</code>
+   ]
+});</code>
 </code></pre>
 <p>Next, we&apos;ll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
 on the canvas, we&apos;ll attempt to pick the Entity at those mouse coordinates. If we succeed, we&apos;ll feed the
@@ -259,6 +260,39 @@ and ignore our attempt to show it.</p>
 </code></pre>
 <p>Note how we only show the ContextMenu if it&apos;s enabled. We can use that mechanism to switch between multiple
 ContextMenu instances depending on what we clicked.</p>
+<h2 id="dynamic-item-titles">Dynamic Item Titles</h2><p>To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
+<code>getTitle()</code> callback. The callback will fire each time you show ContextMenu, which will dynamically
+set the item title text.</p>
+<p>In the example below, we&apos;ll create a simple ContextMenu that allows us to toggle the selection of an object
+via its first item, which changes text depending on whether we are selecting or deselecting the object.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles">Run an example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const canvasContextMenu = new ContextMenu({
+
+   enabled: true,
+
+   items: [
+      [
+         {
+             getTitle: (context) =&gt; {
+                 return (!context.entity.selected) ? &quot;Select&quot; : &quot;Undo Select&quot;;
+             },
+             doAction: function (context) {
+                 context.entity.selected = !context.entity.selected;
+             }
+         },
+         {
+             title: &quot;Clear Selection&quot;,
+             getEnabled: function (context) {
+                 return (context.viewer.scene.numSelectedObjects &gt; 0);
+             },
+             doAction: function (context) {
+                 context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+             }
+         }
+      ]
+   ]
+});</code>
+</code></pre>
 </div>
   
 
@@ -489,6 +523,35 @@ ContextMenu instances depending on what we clicked.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-shown">shown</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether this context menu is currently shown or not.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -605,7 +668,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber135">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber176">source</a></span></span>
     </span>
   </h3>
 
@@ -691,7 +754,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -737,7 +800,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber301">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber345">source</a></span></span>
     </span>
   </h3>
 
@@ -781,7 +844,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber309">source</a></span></span>
     </span>
   </h3>
 
@@ -826,7 +889,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber323">source</a></span></span>
     </span>
   </h3>
 
@@ -871,7 +934,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber163">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
@@ -917,7 +980,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -949,6 +1012,63 @@ ContextMenu instances depending on what we clicked.</p>
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-shown">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">shown</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber390">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether this context menu is currently shown or not.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Whether this context menu is shown.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -964,7 +1084,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber449">source</a></span></span>
     </span>
   </h3>
 
@@ -1008,7 +1128,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber366">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber438">source</a></span></span>
     </span>
   </h3>
 
@@ -1052,7 +1172,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
