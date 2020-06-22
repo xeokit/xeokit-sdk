@@ -233,7 +233,7 @@ class MousePanRotateDollyHandler {
 
             } else {
 
-                if (!configs.planView) { // No rotating in plan-view mode
+                if (!configs.planView && !(!configs.rotateRightClick && mouseDownRight)) { // No rotating in plan-view mode + right click check
 
                     updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
                     updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
