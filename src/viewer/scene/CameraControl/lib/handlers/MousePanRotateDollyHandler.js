@@ -36,8 +36,8 @@ class MousePanRotateDollyHandler {
 
         const pickController = controllers.pickController;
 
-        let lastX;
-        let lastY;
+        let lastX = 0;
+        let lastY = 0;
         let lastXDown = 0;
         let lastYDown = 0;
         let xRotateDelta = 0;
