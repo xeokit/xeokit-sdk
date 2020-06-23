@@ -170,7 +170,7 @@ class ObjectCullStates {
     /**
      * Destroys this ObjectCullStAtes.
      */
-    destroy() {
+    _destroy() {
         this._clear();
         this._scene.off(this._onModelLoaded);
         this._scene.off(this._onTick);
