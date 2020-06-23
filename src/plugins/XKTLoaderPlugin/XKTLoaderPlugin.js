@@ -601,6 +601,10 @@ class XKTLoaderPlugin extends Plugin {
             }
         }
 
+        performanceModel.once("destroyed", () => {
+            this.viewer.metaScene.destroyMetaModel(modelId);
+        });
+
         return performanceModel;
     }
 
