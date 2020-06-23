@@ -568,6 +568,10 @@ class XKTLoaderPlugin extends Plugin {
                 } else {
                     this._parseModel(params.xkt, params, options, performanceModel);
                 }
+
+                performanceModel.once("destroyed", () => {
+                    this.viewer.metaScene.destroyMetaModel(performanceModel.id);
+                });
             };
 
             if (params.metaModelSrc) {
