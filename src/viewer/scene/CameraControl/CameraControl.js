@@ -464,6 +464,7 @@ class CameraControl extends Component {
             // Panning
 
             keyboardPanRate: 1.0,
+            touchPanRate: 1.0,
             panInertia: 0.5,
 
             // Dollying
@@ -545,6 +546,7 @@ class CameraControl extends Component {
         this.followPointer = cfg.followPointer;
         this.rotationInertia = cfg.rotationInertia;
         this.keyboardPanRate = cfg.keyboardPanRate;
+        this.touchPanRate = cfg.touchPanRate;
         this.keyboardRotationRate = cfg.keyboardRotationRate;
         this.dragRotationRate = cfg.dragRotationRate;
         this.dollyInertia = cfg.dollyInertia;
@@ -971,6 +973,27 @@ class CameraControl extends Component {
      */
     set keyboardPanRate(keyboardPanRate) {
         this._configs.keyboardPanRate = (keyboardPanRate !== null && keyboardPanRate !== undefined) ? keyboardPanRate : 5.0;
+    }
+
+
+    /**
+     * Sets how fast the camera pans on touch panning
+     *
+     * @param {Number} touchPanRate The new touch pan rate.
+     */
+    set touchPanRate(touchPanRate) {
+        this._configs.touchPanRate = (touchPanRate !== null && touchPanRate !== undefined) ? touchPanRate : 1.0;
+    }
+
+     /**
+     * Gets how fast the {@link Camera} pans on touch panning
+     *
+     * Default is ````1.0````.
+     *
+     * @returns {Number} The current touch pan rate.
+     */
+    get touchPanRate() {
+        return this._configs.touchPanRate;
     }
 
     /**
