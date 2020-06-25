@@ -162,13 +162,13 @@ class TouchPanRotateAndDollyHandler {
                         const depth = Math.abs(touchPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
                         const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                        updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight);
-                        updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight);
+                        updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
+                        updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
 
                     } else {
 
-                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
-                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
+                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight) * configs.touchPanRate;
+                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight) * configs.touchPanRate;
                     }
                 }
 
