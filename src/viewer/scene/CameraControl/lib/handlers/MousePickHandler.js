@@ -213,7 +213,9 @@ class MousePickHandler {
                             cameraControl.fire("pickedSurface", pickController.pickResult, true);
                         }
                     } else {
-                        cameraControl.fire("pickedNothing", {}, true);
+                        cameraControl.fire("pickedNothing", {
+                            canvasPos: states.mouseCanvasPos
+                        }, true);
                     }
                 }
 
@@ -249,7 +251,9 @@ class MousePickHandler {
                             }
                         }
                     } else {
-                        cameraControl.fire("pickedNothing", {}, true);
+                        cameraControl.fire("pickedNothing", {
+                            canvasPos: states.mouseCanvasPos
+                        }, true);
                     }
 
                     this._clicks = 0;
@@ -292,7 +296,9 @@ class MousePickHandler {
 
                 } else {
 
-                    cameraControl.fire("doublePickedNothing", true);
+                    cameraControl.fire("doublePickedNothing", {
+                        canvasPos: states.mouseCanvasPos
+                    }, true);
 
                     if (configs.doublePickFlyTo) {
 
