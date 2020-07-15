@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ImagePlane - Ground Plane using a Google Maps Satellite Imag</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: #c3d4f7;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>ImagePlane - Ground Plane using a Google Maps Satellite Image</h1>
+    <br>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a> - Creates ground plane
+        </li>
+        <li>
+            <a
+                href="https://www.google.com/maps/@51.8418686,5.8362295,186m/data=!3m1!1e3">Satellite image</a> from Google Maps
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module" id="source">
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-8.31, 42.21, 54.30];
+    viewer.camera.look = [-0.86, 15.40, 14.90];
+    viewer.camera.up = [0.10, 0.83, -0.54];
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights with three custom world-space DirLights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 0.9],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new AmbientLight(viewer.scene, {
+        color: [0.9, 0.9, 1.0],
+        intensity: 0.8
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load Schependomlaan model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer, {
+        objectDefaults: { // <<----- Only override color of IfcSpace elements, keep other original IFC colors
+            IfcSpace: {
+                visible: false,
+                pickable: false,
+                opacity: 0.2
+            },
+            IfcWindow: {
+                pickable: false,
+                opacity: 0.5
+            }
+        }
+    });
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        rotation: [0, 22, 0],
+        position: [-8, 0, 15],
+        scale: [1.1, 1.1, 1.1]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an ImagePlane to represent the ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new ImagePlane(viewer.scene, {
+        src: "./images/schependomlaanGoogleSatMap.png",
+        size: 190,
+        position: [0, -1, 0],
+        rotation: [0, 0, 0], // X, Y and Z
+        opacity: 1.0,
+        collidable: false,
+        gridVisible: true
+    });
+
+</script>
+</html>
