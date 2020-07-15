@@ -603,8 +603,13 @@ const Renderer = function (scene, options) {
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
 
-                gl.blendEquation(gl.FUNC_ADD);
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                if (canvasTransparent) {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
 
                 frameCtx.backfaces = false;
                 if (!alphaDepthMask) {
