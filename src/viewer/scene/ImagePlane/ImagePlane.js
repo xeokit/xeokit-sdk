@@ -71,7 +71,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * In the next example, we'll use an ````ImagePlane```` to embed a plan view in a cross section created by {@link SectionPlanesPlugin}.
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_withSectionPlane)
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_withSectionPlane)]
  *
