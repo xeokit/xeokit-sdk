@@ -55,7 +55,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *  });
  *
  * new ImagePlane(viewer.scene, {
- *      src: "./images/schependomlaanGoogleSatMap.png", // Google satellite image
+ *      src: "./images/schependomlaanSatMap.png",       // Google satellite image
  *      visible: true,                                  // Show the ImagePlane
  *      gridVisible: true,                              // Show the grid - grid is only visible when ImagePlane is also visible
  *      size: 190,                                      // Size of ImagePlane's longest edge
