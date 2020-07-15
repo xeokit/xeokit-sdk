@@ -15,15 +15,22 @@ const zeroVec = math.vec3([0, 0, 1]);
 const tempQuat = math.vec4([0, 0, 0, 1]);
 
 /**
- *  @desc A plane-shaped 3D object containing an image.
+ *  @desc A plane-shaped 3D object containing a bitmap image.
  *
- * Use ````ImagePlane```` components to embed images into cross-sections and ground planes.
+ * Use ````ImagePlane```` to embed bitmap images in your scenes.
  *
- * # Usage
+ * As shown in the examples below, ````ImagePlane```` is useful for creating ground planes from satellite maps and embedding 2D plan
+ * view images in cross-section slicing planes.
  *
- * ## Example 1: Creating a Ground Plane Image
+ * <br>
  *
- * In the example below, we'll use an ````ImagePlane```` to create a ground plane containing a satellite image from Google Maps.
+ * # Example 1: Create a ground plane from a satellite image
+ *
+ * In our first example, we'll load the Schependomlaan model, then use
+ * an ````ImagePlane```` to create a ground plane, which will contain
+ * a satellite image sourced from Google Maps.
+ *
+ * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanGoogleSatMapMed.png">
  *
  * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
  *
@@ -57,7 +64,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *  });
  *
  * new ImagePlane(viewer.scene, {
- *      src: "./images/schependomlaanSatMap.png",       // Google satellite image
+ *      src: "./images/schependomlaanSatMap.png",       // Google satellite image; accepted file types are PNG and JPEG
  *      visible: true,                                  // Show the ImagePlane
  *      gridVisible: true,                              // Show the grid - grid is only visible when ImagePlane is also visible
  *      size: 190,                                      // Size of ImagePlane's longest edge
@@ -68,10 +75,14 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *      clippable: true                                 // ImagePlane can be clipped by SectionPlanes
  * });
  * ````
+ *<br>
  *
- * ## Example 2: Embedding an Image in a Section Plane
+ * # Example 2: Embed an image in a cross-section plane
  *
- * In the next example, we'll use an ````ImagePlane```` to embed a plan view image in a cross section created by {@link SectionPlanesPlugin}.
+ * In our second example, we'll load the Schependomlaan model again, then slice it in half with
+ * a {@link SectionPlanesPlugin}, then use an ````ImagePlane```` to embed a 2D plan view image in the slicing plane.
+ *
+ * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanPlanViewMed.png">
  *
  * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_withSectionPlane)
  *
@@ -112,7 +123,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * });
  *
  * const imagePlane = new ImagePlane(viewer.scene, {
- *     src: "./images/schependomlaanPlanView.png",  // Plan view image
+ *     src: "./images/schependomlaanPlanView.png",  // Plan view image; accepted file types are PNG and JPEG
  *     visible: true,
  *     gridVisible: true,
  *     size: 23.95,
@@ -120,7 +131,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *     dir: sectionPlane.dir,
  *     collidable: false,
  *     opacity: 0.75,
- *     clippable: false // Don't allow ImagePlane to be clipped by the SectionPlane
+ *     clippable: false                             // Don't allow ImagePlane to be clipped by the SectionPlane
  * });
  * ````
  */
@@ -142,7 +153,7 @@ class ImagePlane extends Component {
      * @param {Boolean} [cfg.collidable=true] Indicates if the ````ImagePlane```` is initially included in boundary calculations.
      * @param {Boolean} [cfg.clippable=true] Indicates if the ````ImagePlane```` is initially clippable.
      * @param {Number} [cfg.opacity=1.0] ````ImagePlane````'s initial opacity factor, multiplies by the rendered fragment alpha.
-     * @param {String} [cfg.src] URL of image.
+     * @param {String} [cfg.src] URL of image. Accepted file types are PNG and JPEG.
      * @param {HTMLImageElement} [cfg.image] An ````HTMLImageElement```` to source the image from. Overrides ````src````.
      */
     constructor(owner, cfg = {}) {
@@ -302,6 +313,8 @@ class ImagePlane extends Component {
 
     /**
      * Sets an image file path that the ````ImagePlane````'s image is sourced from.
+     *
+     * Accepted file types are PNG and JPEG.
      *
      * Sets {@link Texture#image} null.
      *
