@@ -1,5 +1,4 @@
 import {Component} from '../Component.js';
-import {RenderState} from '../webgl/RenderState.js';
 import {Node} from "../nodes/Node.js";
 import {Mesh} from "../mesh/Mesh.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
@@ -16,9 +15,11 @@ const zeroVec = math.vec3([0, 0, 1]);
 const tempQuat = math.vec4([0, 0, 0, 1]);
 
 /**
- *  @desc A plane-shaped 3D object containg an image.
+ *  @desc A plane-shaped 3D object containing an image.
  *
- * ## Usage
+ * Use ````ImagePlane```` components to embed images into cross-sections and ground planes.
+ *
+ * # Example 1
  *
  * In the example below, we'll use an ````ImagePlane```` to create a ground plane containing a satellite image from Google Maps.
  *
@@ -30,8 +31,6 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
  * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
- * import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",
@@ -65,6 +64,61 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *      opacity: 1.0,                                   // Fully opaque
  *      collidable: false,                              // ImagePlane does not contribute to Scene boundary
  *      clippable: true                                 // ImagePlane can be clipped by SectionPlanes
+ * });
+ * ````
+ *
+ * # Example 2
+ *
+ * In the next example, we'll use an ````ImagePlane```` to embed a plan view in a cross section created by {@link SectionPlanesPlugin}.
+ *
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
+ *
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_withSectionPlane)]
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+ * import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-9.11, 20.01, 5.13];
+ * viewer.camera.look = [9.07, 0.77, -9.78];
+ * viewer.camera.up = [0.47, 0.76, -0.38];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const sectionPlanes = new SectionPlanesPlugin(viewer, {
+ *     overviewVisible: false
+ * });
+ *
+ * model = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+ *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     edges: true,
+ * });
+ *
+ * const sectionPlane = sectionPlanes.createSectionPlane({
+ *     id: "mySectionPlane",
+ *     pos: [10.95, 1.95, -10.35],
+ *     dir: [0.0, -1.0, 0.0]
+ * });
+ *
+ * const imagePlane = new ImagePlane(viewer.scene, {
+ *     src: "./images/schependomlaanPlanView.png",  // Plan view image
+ *     visible: true,
+ *     gridVisible: true,
+ *     size: 23.95,
+ *     position: sectionPlane.pos,
+ *     dir: sectionPlane.dir,
+ *     collidable: false,
+ *     opacity: 0.75,
+ *     clippable: false // Don't allow ImagePlane to be clipped by the SectionPlane
  * });
  * ````
  */
