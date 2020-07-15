@@ -19,7 +19,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * Use ````ImagePlane```` components to embed images into cross-sections and ground planes.
  *
- * # Example 1
+ * # Usage
+ *
+ * ## Example 1: Creating a Ground Plane Image
  *
  * In the example below, we'll use an ````ImagePlane```` to create a ground plane containing a satellite image from Google Maps.
  *
@@ -67,9 +69,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * });
  * ````
  *
- * # Example 2
+ * ## Example 2: Embedding an Image in a Section Plane
  *
- * In the next example, we'll use an ````ImagePlane```` to embed a plan view in a cross section created by {@link SectionPlanesPlugin}.
+ * In the next example, we'll use an ````ImagePlane```` to embed a plan view image in a cross section created by {@link SectionPlanesPlugin}.
  *
  * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_withSectionPlane)
  *
