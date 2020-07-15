@@ -1,7 +1,7 @@
 {
-  "coverage": "43.67%",
-  "expectCount": 4492,
-  "actualCount": 1962,
+  "coverage": "43.87%",
+  "expectCount": 4536,
+  "actualCount": 1990,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 24,
@@ -863,8 +863,8 @@
         414,
         442,
         471,
-        607,
-        624
+        611,
+        628
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -1083,18 +1083,18 @@
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
-      "expectCount": 59,
-      "actualCount": 50,
+      "expectCount": 61,
+      "actualCount": 52,
       "undocumentLines": [
         436,
-        480,
-        497,
-        510,
-        522,
-        534,
-        648,
-        1240,
-        1249
+        481,
+        498,
+        511,
+        523,
+        535,
+        650,
+        1263,
+        1272
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
@@ -1236,8 +1236,8 @@
         16,
         17,
         18,
-        317,
-        326
+        323,
+        332
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js": {
@@ -1289,9 +1289,31 @@
       "actualCount": 38,
       "undocumentLines": []
     },
+    "src/viewer/scene/ImagePlane/ImagePlane.js": {
+      "expectCount": 41,
+      "actualCount": 25,
+      "undocumentLines": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        150,
+        151,
+        152,
+        153,
+        154,
+        156,
+        158,
+        179,
+        193,
+        204,
+        523
+      ]
+    },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {
-      "expectCount": 136,
-      "actualCount": 94,
+      "expectCount": 137,
+      "actualCount": 95,
       "undocumentLines": [
         12,
         14,
@@ -1325,16 +1347,16 @@
         178,
         183,
         724,
-        787,
-        814,
-        839,
-        862,
-        885,
-        908,
-        933,
-        960,
-        985,
-        1009
+        796,
+        823,
+        848,
+        871,
+        894,
+        917,
+        942,
+        969,
+        994,
+        1018
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js": {
@@ -1583,7 +1605,7 @@
       "actualCount": 1,
       "undocumentLines": [
         12,
-        148
+        149
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingEdgesRenderer.js": {
@@ -2064,7 +2086,7 @@
       "actualCount": 1,
       "undocumentLines": [
         11,
-        155
+        156
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingEdgesRenderer.js": {
