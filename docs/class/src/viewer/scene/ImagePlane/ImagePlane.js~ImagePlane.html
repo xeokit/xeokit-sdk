@@ -137,13 +137,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ImagePlane} from &apos;<span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber138">@xeokit/xeokit-sdk/src/viewer/scene/ImagePlane/ImagePlane.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ImagePlane} from &apos;<span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber140">@xeokit/xeokit-sdk/src/viewer/scene/ImagePlane/ImagePlane.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber138">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber140">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -209,7 +209,8 @@ new ImagePlane(viewer.scene, {
      rotation: [0, 0, 0],                            // Euler angles for X, Y and Z
      opacity: 1.0,                                   // Fully opaque
      collidable: false,                              // ImagePlane does not contribute to Scene boundary
-     clippable: true                                 // ImagePlane can be clipped by SectionPlanes
+     clippable: true,                                // ImagePlane can be clipped by SectionPlanes
+     pickable: true                                  // Allow the ground plane to be picked
 });</code>
 </code></pre>
 <p><br></p>
@@ -260,8 +261,9 @@ const imagePlane = new ImagePlane(viewer.scene, {
     dir: sectionPlane.dir,
     collidable: false,
     opacity: 0.75,
-    clippable: false                             // Don&apos;t allow ImagePlane to be clipped by the SectionPlane
-});</code>
+    clippable: false,                            // Don&apos;t allow ImagePlane to be clipped by the SectionPlane
+    pickable: false                              // Don&apos;t allow ImagePlane to be picked
+ });</code>
 </code></pre>
 </div>
   
@@ -661,6 +663,64 @@ const imagePlane = new ImagePlane(viewer.scene, {
         
         <div data-ice="description"><p>Gets this <code>ImagePlane</code>&apos;s opacity factor.</p>
 <p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-pickable">pickable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if this <code>ImagePlane</code> is pickable.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-pickable">pickable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if this <code>ImagePlane</code>  is pickable.</p>
 </div>
       </div>
     </td>
@@ -1518,7 +1578,7 @@ const imagePlane = new ImagePlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber162">source</a></span></span>
     </span>
   </h3>
 
@@ -1625,6 +1685,14 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.pickable</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Indicates if the <code>ImagePlane</code> is initially pickable.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.opacity</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1683,7 +1751,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber494">source</a></span></span>
     </span>
   </h3>
 
@@ -1729,7 +1797,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber504">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber507">source</a></span></span>
     </span>
   </h3>
 
@@ -1775,7 +1843,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -1820,7 +1888,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -1865,7 +1933,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber428">source</a></span></span>
     </span>
   </h3>
 
@@ -1910,7 +1978,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber455">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1967,7 +2035,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
@@ -2013,7 +2081,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber281">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -2071,7 +2139,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber296">source</a></span></span>
     </span>
   </h3>
 
@@ -2116,7 +2184,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber310">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -2161,7 +2229,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -2206,7 +2274,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber526">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber551">source</a></span></span>
     </span>
   </h3>
 
@@ -2215,6 +2283,96 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
   
   <div data-ice="description"><p>Gets this <code>ImagePlane</code>&apos;s opacity factor.</p>
 <p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pickable">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pickable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber518">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if this <code>ImagePlane</code> is pickable.</p>
+<p>Default is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-pickable">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">pickable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber529">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if this <code>ImagePlane</code>  is pickable.</p>
+<p>Default is <code>true</code>.</p>
 </div>
 
   
@@ -2251,7 +2409,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber356">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber360">source</a></span></span>
     </span>
   </h3>
 
@@ -2296,7 +2454,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,7 +2512,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -2399,7 +2557,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber387">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 
@@ -2456,7 +2614,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber405">source</a></span></span>
     </span>
   </h3>
 
@@ -2503,7 +2661,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -2548,7 +2706,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber327">source</a></span></span>
     </span>
   </h3>
 
@@ -2594,7 +2752,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -2639,7 +2797,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -2684,7 +2842,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -2745,7 +2903,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber533">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber558">source</a></span></span>
     </span>
   </h3>
 

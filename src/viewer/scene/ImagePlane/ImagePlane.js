@@ -72,7 +72,8 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *      rotation: [0, 0, 0],                            // Euler angles for X, Y and Z
  *      opacity: 1.0,                                   // Fully opaque
  *      collidable: false,                              // ImagePlane does not contribute to Scene boundary
- *      clippable: true                                 // ImagePlane can be clipped by SectionPlanes
+ *      clippable: true,                                // ImagePlane can be clipped by SectionPlanes
+ *      pickable: true                                  // Allow the ground plane to be picked
  * });
  * ````
  *<br>
@@ -131,8 +132,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *     dir: sectionPlane.dir,
  *     collidable: false,
  *     opacity: 0.75,
- *     clippable: false                             // Don't allow ImagePlane to be clipped by the SectionPlane
- * });
+ *     clippable: false,                            // Don't allow ImagePlane to be clipped by the SectionPlane
+ *     pickable: false                              // Don't allow ImagePlane to be picked
+ *  });
  * ````
  */
 class ImagePlane extends Component {
@@ -152,6 +154,7 @@ class ImagePlane extends Component {
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Modelling transform matrix for the ````ImagePlane````. Overrides the ````position````, ````size```, ````rotation```` and ````dir```` parameters.
      * @param {Boolean} [cfg.collidable=true] Indicates if the ````ImagePlane```` is initially included in boundary calculations.
      * @param {Boolean} [cfg.clippable=true] Indicates if the ````ImagePlane```` is initially clippable.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the ````ImagePlane```` is initially pickable.
      * @param {Number} [cfg.opacity=1.0] ````ImagePlane````'s initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {String} [cfg.src] URL of image. Accepted file types are PNG and JPEG.
      * @param {HTMLImageElement} [cfg.image] An ````HTMLImageElement```` to source the image from. Overrides ````src````.
@@ -224,6 +227,7 @@ class ImagePlane extends Component {
         this.size = cfg.size;
         this.collidable = cfg.collidable;
         this.clippable = cfg.clippable;
+        this.pickable = cfg.pickable;
         this.opacity = cfg.opacity;
 
         if (cfg.image) {
@@ -464,7 +468,7 @@ class ImagePlane extends Component {
      * @type {Boolean}
      */
     set collidable(value) {
-        this._node.collidable = value;
+        this._node.collidable = (value !== false);
     }
 
     /**
@@ -478,7 +482,6 @@ class ImagePlane extends Component {
         return this._node.collidable;
     }
 
-
     /**
      * Sets if this ````ImagePlane```` is clippable.
      *
@@ -489,7 +492,7 @@ class ImagePlane extends Component {
      * @type {Boolean}
      */
     set clippable(value) {
-        this._node.clippable = value;
+        this._node.clippable = (value !== false);
     }
 
     /**
@@ -503,6 +506,28 @@ class ImagePlane extends Component {
      */
     get clippable() {
         return this._node.clippable;
+    }
+
+    /**
+     * Sets if this ````ImagePlane```` is pickable.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set pickable(value) {
+        this._node.pickable = (value !== false);
+    }
+
+    /**
+     * Gets if this ````ImagePlane````  is pickable.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return this._node.pickable;
     }
 
     /**

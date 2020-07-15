@@ -4284,6 +4284,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#pickable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-pickable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#pickable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-pickable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#pickable",
+    "member"
+  ],
+  [
     "src/viewer/scene/imageplane/imageplane.js~imageplane#position",
     "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-position",
     "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#position",

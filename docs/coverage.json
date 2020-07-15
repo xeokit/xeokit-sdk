@@ -1,7 +1,7 @@
 {
-  "coverage": "43.87%",
-  "expectCount": 4536,
-  "actualCount": 1990,
+  "coverage": "43.89%",
+  "expectCount": 4538,
+  "actualCount": 1992,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 24,
@@ -1290,25 +1290,25 @@
       "undocumentLines": []
     },
     "src/viewer/scene/ImagePlane/ImagePlane.js": {
-      "expectCount": 41,
-      "actualCount": 25,
+      "expectCount": 43,
+      "actualCount": 27,
       "undocumentLines": [
         11,
         12,
         13,
         14,
         15,
-        163,
-        164,
-        165,
         166,
         167,
+        168,
         169,
-        171,
-        192,
-        206,
-        217,
-        538
+        170,
+        172,
+        174,
+        195,
+        209,
+        220,
+        563
       ]
     },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {
