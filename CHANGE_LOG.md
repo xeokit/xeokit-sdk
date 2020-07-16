@@ -2,9 +2,40 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.6
+
+July 16, 2020
+
+* ImagePlane
+    * Embed images in section planes and ground planes. [#378](https://github.com/xeokit/xeokit-sdk/issues/378) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+    * Fix doublePickedNothing event arguments. [#365](https://github.com/xeokit/xeokit-sdk/issues/365) ([**@xeolabs**](https://github.com/xeolabs))
+* Annotation
+    * Create example of creating annotation at center of clicked object. [#374](https://github.com/xeokit/xeokit-sdk/issues/374) ([**@xeolabs**](https://github.com/xeolabs))
+* buildPlaneGeometry()
+    * Flip buildPlaneGeometry() UVs horizontally.  [7c8bfe5](https://github.com/xeokit/xeokit-sdk/commit/7c8bfe51e336e6a424d6a9fbf04272cd2fc4e580) ([**@xeolabs**](https://github.com/xeolabs))
+* Mesh
+    * Fix Mesh emissive mapping.  [#379](https://github.com/xeokit/xeokit-sdk/issues/379) ([**@xeolabs**](https://github.com/xeolabs))
+* Canvas
+    * Fix blend alpha function for non-transparent canvas.  [#381](https://github.com/xeokit/xeokit-sdk/issues/381) ([**@xeolabs**](https://github.com/xeolabs))
+    
+# 1.3.53
+
+July 4, 2020
+
+* PerformanceModel
+    * Fix PerformanceModel for uncompressed mesh/geometry positions. [#370](https://github.com/xeokit/xeokit-sdk/issues/370) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl 
+    * Add pan rate config for touch. [#363](https://github.com/xeokit/xeokit-sdk/issues/363) ([**@juho-ylikyla**](https://github.com/juho-ylikyla))
+    * Fix "Not initializing lastX and lastY leads to NaN". [#357](https://github.com/xeokit/xeokit-sdk/pull/357) ([**@Kurtil**](https://github.com/Kurtil))
+* ViewCullPlugin
+    * Fix ViewCullPlugin: fix ObjectCullStates memory leak. [#322](https://github.com/xeokit/xeokit-sdk/issues/322) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin
+    * Fix XKTLoaderPlugin: MetaModel not destroyed with PerformanceModel. [#360](https://github.com/xeokit/xeokit-sdk/issues/360) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.3.52
 
-June 18, 2020
+June 14, 2020
 
 * PerformanceModel
     * Restore missing PerformanceModel#entityList. [#320](https://github.com/xeokit/xeokit-sdk/issues/320) ([**@xeolabs**](https://github.com/xeolabs))
