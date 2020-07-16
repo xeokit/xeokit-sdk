@@ -11,7 +11,7 @@ import {math} from "../math/math.js";
 const tempVec3 = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
-const zeroVec = math.vec3([0, 0, 1]);
+const zeroVec = math.vec3([0, -1, 0]);
 const tempQuat = math.vec4([0, 0, 0, 1]);
 
 /**
@@ -427,26 +427,26 @@ class ImagePlane extends Component {
 
         this._dir.set(dir || [0, 0, -1]);
 
-        // if (dir) {
-        //
-        //     const origin = this.scene.center;
-        //     const negDir = [-this._dir[0], -this._dir[1], -this._dir[2]];
-        //
-        //     math.subVec3(origin, this.position, tempVec3);
-        //
-        //     const dist = -math.dotVec3(negDir, tempVec3);
-        //
-        //     math.normalizeVec3(negDir);
-        //     math.mulVec3Scalar(negDir, dist, tempVec3b);
-        //     math.vec3PairToQuaternion(zeroVec, dir, tempQuat);
-        //
-        //     // tempVec3c[0] = tempVec3b[0] * 0.1;
-        //     // tempVec3c[1] = tempVec3b[1] * 0.1;
-        //     // tempVec3c[2] = tempVec3b[2] * 0.1;
-        //
-        //     this._node.quaternion = tempQuat;
-        //     // this._mesh.position = tempVec3c;
-        // }
+        if (dir) {
+
+            const origin = this.scene.center;
+            const negDir = [-this._dir[0], -this._dir[1], -this._dir[2]];
+
+            math.subVec3(origin, this.position, tempVec3);
+
+            const dist = -math.dotVec3(negDir, tempVec3);
+
+            math.normalizeVec3(negDir);
+            math.mulVec3Scalar(negDir, dist, tempVec3b);
+            math.vec3PairToQuaternion(zeroVec, dir, tempQuat);
+
+            // tempVec3c[0] = tempVec3b[0] * 0.1;
+            // tempVec3c[1] = tempVec3b[1] * 0.1;
+            // tempVec3c[2] = tempVec3b[2] * 0.1;
+
+            this._node.quaternion = tempQuat;
+            // this._mesh.position = tempVec3c;
+        }
     }
 
     /**
