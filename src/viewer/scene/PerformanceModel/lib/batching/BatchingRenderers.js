@@ -7,6 +7,7 @@ import {BatchingPickNormalsRenderer} from "./pick/BatchingPickNormalsRenderer.js
 import {BatchingOcclusionRenderer} from "./occlusion/BatchingOcclusionRenderer.js";
 import {BatchingDepthRenderer} from "./depth/BatchingDepthRenderer.js";
 import {BatchingNormalsRenderer} from "./normals/BatchingNormalsRenderer.js";
+import {BatchingShadowRenderer} from "./shadow/BatchingShadowRenderer.js";
 
 /**
  * @private
@@ -58,6 +59,10 @@ class BatchingRenderers {
             this.occlusionRenderer.destroy();
             this.occlusionRenderer = null;
         }
+        if (this.shadowRenderer && (!this.shadowRenderer.getValid())) {
+            this.shadowRenderer.destroy();
+            this.shadowRenderer = null;
+        }
         this._createRenderers();
     }
 
@@ -93,6 +98,9 @@ class BatchingRenderers {
         if (!this.normalsRenderer) {
             this.normalsRenderer = new BatchingNormalsRenderer(this._scene);
         }
+        if (!this.shadowRenderer) {
+            this.shadowRenderer = new BatchingShadowRenderer(this._scene);
+        }
     }
 
     _destroy() {
@@ -125,6 +133,9 @@ class BatchingRenderers {
         }
         if (this.occlusionRenderer) {
             this.occlusionRenderer.destroy();
+        }
+        if (this.shadowRenderer) {
+            this.shadowRenderer.destroy();
         }
     }
 }

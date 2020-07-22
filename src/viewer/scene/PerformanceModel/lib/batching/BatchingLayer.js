@@ -888,6 +888,17 @@ class BatchingLayer {
         }
     }
 
+    //---- SHADOWS -----------------------------------------------------------------------------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._batchingRenderers.shadowRenderer) {
+            this._batchingRenderers.shadowRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     destroy() {
         const state = this._state;
         if (state.positionsBuf) {

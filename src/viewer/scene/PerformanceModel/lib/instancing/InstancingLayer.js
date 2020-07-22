@@ -831,6 +831,17 @@ class InstancingLayer {
         }
     }
 
+    //---- SHADOWS -----------------------------------------------------------------------------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.shadowRenderer) {
+            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     destroy() {
         const state = this._state;
         if (state.positionsBuf) {
