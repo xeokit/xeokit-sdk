@@ -21,29 +21,6 @@ class TouchPanRotateAndDollyHandler {
         const touch0Vec = new Float32Array(2);
         const touch1Vec = new Float32Array(2);
 
-        const MODE_CHANGE_TIMEOUT = 50;
-        const MODE_NONE = 0;
-        const MODE_ROTATE = 1;
-        const MODE_PAN = 1 << 1;
-        const MODE_ZOOM = 1 << 2;
-
-        let currentMode = MODE_NONE;
-        let transitionTime = Date.now();
-
-        const checkMode = (mode) => {
-            const currentTime = Date.now();
-            if (currentMode === MODE_NONE) {
-                currentMode = mode;
-                return true;
-            }
-            if (currentMode === mode) {
-                return currentTime - transitionTime > MODE_CHANGE_TIMEOUT;
-            }
-            currentMode = mode;
-            transitionTime = currentTime;
-            return false;
-        };
-
         const canvas = this._scene.canvas.canvas;
 
         canvas.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
@@ -80,7 +57,7 @@ class TouchPanRotateAndDollyHandler {
                         pivotController.showPivot();
                     }
                 }
-                
+
             } else {
                 tapStartTime = -1;
             }
@@ -94,7 +71,6 @@ class TouchPanRotateAndDollyHandler {
                 lastTouches[i][1] = touches[i].pageY;
             }
 
-            currentMode = MODE_NONE;
             numTouches = touches.length;
 
             event.stopPropagation();
@@ -102,11 +78,9 @@ class TouchPanRotateAndDollyHandler {
         }, {passive: true});
 
         canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
-
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-
             // Scaling drag-rotate to canvas boundary
 
             const canvasBoundary = scene.canvas.boundary;
@@ -115,22 +89,24 @@ class TouchPanRotateAndDollyHandler {
 
             const touches = event.touches;
 
-            if (numTouches === 1) {
+            if (event.touches.length !== numTouches) {
+                // Two fingers were pressed, then one of them is removed
+                // We don't want to rotate in this case (weird behavior)
+                return;
+            }
 
+            if (numTouches === 1) {
                 const touch0 = touches[0];
 
-                if (checkMode(MODE_ROTATE)) {
 
-                    //-----------------------------------------------------------------------------------------------
-                    // Drag rotation
-                    //-----------------------------------------------------------------------------------------------
+                //-----------------------------------------------------------------------------------------------
+                // Drag rotation
+                //-----------------------------------------------------------------------------------------------
 
-                    updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
-                    updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
-                }
+                updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
+                updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
 
             } else if (numTouches === 2) {
-
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
@@ -139,8 +115,7 @@ class TouchPanRotateAndDollyHandler {
 
                 const panning = math.dotVec2(touch0Vec, touch1Vec) > 0;
 
-                if (panning && checkMode(MODE_PAN)) {
-
+                if (panning) {
                     math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
 
                     const xPanDelta = touch0Vec[0];
@@ -157,7 +132,7 @@ class TouchPanRotateAndDollyHandler {
                         //----------------------------
 
                         const touchPicked = false;
-                        const pickedWorldPos = [0,0,0];
+                        const pickedWorldPos = [0, 0, 0];
 
                         const depth = Math.abs(touchPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
                         const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
@@ -172,10 +147,10 @@ class TouchPanRotateAndDollyHandler {
                     }
                 }
 
-                if (!panning && checkMode(MODE_ZOOM)) {
+                else {
                     const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                     const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
-                    updates.dollyDelta = (d2 - d1) * 0.05;
+                    updates.dollyDelta = (d2 - d1) * configs.touchDollyRate;
                 }
             }
 
@@ -190,7 +165,7 @@ class TouchPanRotateAndDollyHandler {
     }
 
     reset() {
-     }
+    }
 
     destroy() {
 
