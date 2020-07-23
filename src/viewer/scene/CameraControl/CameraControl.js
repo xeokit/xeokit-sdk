@@ -471,7 +471,7 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 10,
-            touchDoolyRate: 0.05,
+            touchDollyRate: 0.05,
             dollyInertia: 0.75,
             dollyProximityThreshold: 30.0,
             dollyMinSpeed: 1.0
