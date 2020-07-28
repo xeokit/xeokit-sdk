@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ContextMenu with sub-menus</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* ContextMenu */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        .xeokit-context-menu {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            display: none;
+            z-index: 300000;
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid black;
+            border-radius: 6px;
+            padding: 0;
+            width: 200px;
+        }
+
+        .xeokit-context-menu ul {
+            list-style: none;
+            margin-left: 0;
+            padding: 0;
+        }
+
+        .xeokit-context-menu ul li {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            color: black;
+            border-bottom: 1px solid gray;
+            background: rgba(255, 255, 255, 0.46);
+            cursor: pointer;
+            width: calc(100% - 30px);
+        }
+
+        .xeokit-context-menu ul li:hover {
+            background: black;
+            color: white;
+            font-weight: bold;
+        }
+
+        .xeokit-context-menu ul li span {
+            display: inline-block;
+        }
+
+        .xeokit-context-menu .disabled {
+            display: inline-block;
+            color: gray;
+            cursor: default;
+            font-weight: normal;
+        }
+
+        .xeokit-context-menu .disabled:hover {
+            color: gray;
+            cursor: default;
+            background: #eeeeee;
+            font-weight: normal;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>ContextMenu with sub-menus</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a>
+            - HTML context menu
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    viewer.scene.xrayMaterial.fill = true;
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.3;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+
+    viewer.scene.highlightMaterial.fill = true;
+    viewer.scene.highlightMaterial.edges = true;
+    viewer.scene.highlightMaterial.fillAlpha = 0.1;
+    viewer.scene.highlightMaterial.edgeAlpha = 0.1;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create ContextMenu for right-click on an Entity
+    //------------------------------------------------------------------------------------------------------------------
+
+    const objectContextMenu = new ContextMenu({
+
+        items: [ // First level items
+            [
+
+
+                // Per-object emphasis effects
+
+                {
+                    getTitle: (context) => {
+                        return "Effects";
+                    },
+
+                    doAction: function (context) {
+                        // Does nothing
+                    },
+
+                    items: [ // Sub-items
+                        [
+                            // Show/hide object
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.visible) ? "Show" : "Hide";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.visible = !context.entity.visible;
+                                }
+                            },
+
+                            //Select/deselect object
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.selected) ? "Select" : "Undo Select";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.selected = !context.entity.selected;
+                                }
+                            },
+
+                            // Highlight/unhighlight object
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.highlighted = !context.entity.highlighted;
+                                }
+                            }
+                        ]
+                    ]
+                },
+
+                // Per-object emphasis effects
+
+                {
+                    getTitle: (context) => {
+                        return "ddd";
+                    },
+
+                    doAction: function (context) {
+                        // Does nothing
+                    },
+
+                    items: [ // Sub-items
+                        [
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.visible) ? "Show" : "Hide";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.visible = !context.entity.visible;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.selected) ? "Select" : "Undo Select";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.selected = !context.entity.selected;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
+                                },
+
+                                doAction: function (context) {
+                                    context.entity.highlighted = !context.entity.highlighted;
+                                }
+                            }
+                        ]
+                    ]
+                },
+
+// Camera navigation
+
+                {
+                    getTitle: (context) => {
+                        return "Camera";
+                    },
+
+                    doAction: function (context) {
+
+                    },
+
+                    items: [ // Second level items
+                        [
+                            {
+                                getTitle: (context) => {
+                                    return "Fit to View";
+                                },
+
+                                doAction: function (context) {
+
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return "Hide";
+                                },
+
+                                doAction: function (context) {
+
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ]
+        ],
+        enabled: true
+    });
+
+    viewer.cameraControl.on("rightClick", (e) => {
+
+        const hit = viewer.scene.pick({
+            canvasPos: e.canvasPos
+        });
+
+        if (hit && hit.entity.isObject) {
+
+            objectContextMenu.context = { // Must set context before showing menu
+                viewer: viewer,
+                entity: hit.entity
+            };
+
+            objectContextMenu.show(e.event.pageX, e.event.pageY);
+        }
+
+        e.event.preventDefault();
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        excludeUnclassifiedObjects: false
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+    });
+
+    window.menu = objectContextMenu;
+
+</script>
+</html>
