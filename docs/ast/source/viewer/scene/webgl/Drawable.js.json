@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 7839,
+  "end": 8022,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 289,
+      "line": 298,
       "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 7839,
+    "end": 8022,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 289,
+        "line": 298,
         "column": 18
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 7819,
+        "end": 8002,
         "loc": {
           "start": {
             "line": 8,
             "column": 0
           },
           "end": {
-            "line": 287,
+            "line": 296,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 7819,
+          "end": 8002,
           "loc": {
             "start": {
               "line": 8,
               "column": 15
             },
             "end": {
-              "line": 287,
+              "line": 296,
               "column": 1
             }
           },
@@ -2980,7 +2980,9 @@
                   }
                 },
                 "body": [],
-                "directives": []
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
               },
               "leadingComments": [
                 {
@@ -2999,6 +3001,118 @@
                     }
                   }
                 }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 7823,
+                  "end": 7967,
+                  "loc": {
+                    "start": {
+                      "line": 288,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 293,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 7972,
+              "end": 8000,
+              "loc": {
+                "start": {
+                  "line": 294,
+                  "column": 4
+                },
+                "end": {
+                  "line": 295,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 7972,
+                "end": 7982,
+                "loc": {
+                  "start": {
+                    "line": 294,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 294,
+                    "column": 14
+                  },
+                  "identifierName": "drawShadow"
+                },
+                "name": "drawShadow",
+                "leadingComments": null
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 7983,
+                  "end": 7991,
+                  "loc": {
+                    "start": {
+                      "line": 294,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 294,
+                      "column": 23
+                    },
+                    "identifierName": "frameCtx"
+                  },
+                  "name": "frameCtx"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 7993,
+                "end": 8000,
+                "loc": {
+                  "start": {
+                    "line": 294,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 295,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 7823,
+                  "end": 7967,
+                  "loc": {
+                    "start": {
+                      "line": 288,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 293,
+                      "column": 7
+                    }
+                  }
+                }
               ]
             }
           ]
@@ -3009,15 +3123,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7821,
-        "end": 7839,
+        "start": 8004,
+        "end": 8022,
         "loc": {
           "start": {
-            "line": 289,
+            "line": 298,
             "column": 0
           },
           "end": {
-            "line": 289,
+            "line": 298,
             "column": 18
           }
         },
@@ -3025,29 +3139,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 7829,
-            "end": 7837,
+            "start": 8012,
+            "end": 8020,
             "loc": {
               "start": {
-                "line": 289,
+                "line": 298,
                 "column": 8
               },
               "end": {
-                "line": 289,
+                "line": 298,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 7829,
-              "end": 7837,
+              "start": 8012,
+              "end": 8020,
               "loc": {
                 "start": {
-                  "line": 289,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 298,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -3056,15 +3170,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 7829,
-              "end": 7837,
+              "start": 8012,
+              "end": 8020,
               "loc": {
                 "start": {
-                  "line": 289,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 298,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -3077,29 +3191,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7821,
-        "end": 7839,
+        "start": 8004,
+        "end": 8022,
         "loc": {
           "start": {
-            "line": 289,
+            "line": 298,
             "column": 0
           },
           "end": {
-            "line": 289,
+            "line": 298,
             "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 7819,
+          "end": 8002,
           "loc": {
             "start": {
               "line": 8,
               "column": 0
             },
             "end": {
-              "line": 287,
+              "line": 296,
               "column": 1
             }
           },
@@ -3125,14 +3239,14 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 7819,
+            "end": 8002,
             "loc": {
               "start": {
                 "line": 8,
                 "column": 15
               },
               "end": {
-                "line": 287,
+                "line": 296,
                 "column": 1
               }
             },
@@ -6041,7 +6155,9 @@
                     }
                   },
                   "body": [],
-                  "directives": []
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
                 },
                 "leadingComments": [
                   {
@@ -6056,6 +6172,118 @@
                       },
                       "end": {
                         "line": 284,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 7823,
+                    "end": 7967,
+                    "loc": {
+                      "start": {
+                        "line": 288,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 293,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 7972,
+                "end": 8000,
+                "loc": {
+                  "start": {
+                    "line": 294,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 295,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 7972,
+                  "end": 7982,
+                  "loc": {
+                    "start": {
+                      "line": 294,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 294,
+                      "column": 14
+                    },
+                    "identifierName": "drawShadow"
+                  },
+                  "name": "drawShadow",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 7983,
+                    "end": 7991,
+                    "loc": {
+                      "start": {
+                        "line": 294,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 294,
+                        "column": 23
+                      },
+                      "identifierName": "frameCtx"
+                    },
+                    "name": "frameCtx"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 7993,
+                  "end": 8000,
+                  "loc": {
+                    "start": {
+                      "line": 294,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 295,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 7823,
+                    "end": 7967,
+                    "loc": {
+                      "start": {
+                        "line": 288,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 293,
                         "column": 7
                       }
                     }
@@ -6601,6 +6829,22 @@
         },
         "end": {
           "line": 284,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 7823,
+      "end": 7967,
+      "loc": {
+        "start": {
+          "line": 288,
+          "column": 4
+        },
+        "end": {
+          "line": 293,
           "column": 7
         }
       }
@@ -11051,6 +11295,149 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 7823,
+      "end": 7967,
+      "loc": {
+        "start": {
+          "line": 288,
+          "column": 4
+        },
+        "end": {
+          "line": 293,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "drawShadow",
+      "start": 7972,
+      "end": 7982,
+      "loc": {
+        "start": {
+          "line": 294,
+          "column": 4
+        },
+        "end": {
+          "line": 294,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7982,
+      "end": 7983,
+      "loc": {
+        "start": {
+          "line": 294,
+          "column": 14
+        },
+        "end": {
+          "line": 294,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "frameCtx",
+      "start": 7983,
+      "end": 7991,
+      "loc": {
+        "start": {
+          "line": 294,
+          "column": 15
+        },
+        "end": {
+          "line": 294,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7991,
+      "end": 7992,
+      "loc": {
+        "start": {
+          "line": 294,
+          "column": 23
+        },
+        "end": {
+          "line": 294,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7993,
+      "end": 7994,
+      "loc": {
+        "start": {
+          "line": 294,
+          "column": 25
+        },
+        "end": {
+          "line": 294,
+          "column": 26
+        }
+      }
+    },
+    {
       "type": {
         "label": "}",
         "beforeExpr": false,
@@ -11062,15 +11449,40 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7818,
-      "end": 7819,
+      "start": 7999,
+      "end": 8000,
       "loc": {
         "start": {
-          "line": 287,
+          "line": 295,
+          "column": 4
+        },
+        "end": {
+          "line": 295,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 8001,
+      "end": 8002,
+      "loc": {
+        "start": {
+          "line": 296,
           "column": 0
         },
         "end": {
-          "line": 287,
+          "line": 296,
           "column": 1
         }
       }
@@ -11090,15 +11502,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 7821,
-      "end": 7827,
+      "start": 8004,
+      "end": 8010,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 0
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 6
         }
       }
@@ -11115,15 +11527,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7828,
-      "end": 7829,
+      "start": 8011,
+      "end": 8012,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 7
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 8
         }
       }
@@ -11141,15 +11553,15 @@
         "binop": null
       },
       "value": "Drawable",
-      "start": 7829,
-      "end": 7837,
+      "start": 8012,
+      "end": 8020,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 8
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 16
         }
       }
@@ -11166,15 +11578,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7837,
-      "end": 7838,
+      "start": 8020,
+      "end": 8021,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 16
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 17
         }
       }
@@ -11192,15 +11604,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7838,
-      "end": 7839,
+      "start": 8021,
+      "end": 8022,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 17
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 18
         }
       }
@@ -11218,15 +11630,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7839,
-      "end": 7839,
+      "start": 8022,
+      "end": 8022,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 298,
           "column": 18
         },
         "end": {
-          "line": 289,
+          "line": 298,
           "column": 18
         }
       }

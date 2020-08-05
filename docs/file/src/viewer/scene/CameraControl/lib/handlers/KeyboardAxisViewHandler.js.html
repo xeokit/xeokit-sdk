@@ -39,6 +39,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -159,8 +161,7 @@ class KeyboardAxisViewHandler {
     constructor(scene, controllers, configs, states, updates) {
 
         this._scene = scene;
-        const input = scene.input;
-
+        const cameraControl = controllers.cameraControl;
         const camera = scene.camera;
 
         document.addEventListener(&quot;keydown&quot;, this._documentKeyDownHandler = (e) =&gt; {
@@ -173,10 +174,14 @@ class KeyboardAxisViewHandler {
                 return;
             }
 
-            const keyCode = e.keyCode;
+            const axisViewRight = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_RIGHT);
+            const axisViewBack = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_BACK);
+            const axisViewLeft = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_LEFT);
+            const axisViewFront = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_FRONT);
+            const axisViewTop = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_TOP);
+            const axisViewBottom = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_BOTTOM);
 
-            if (keyCode !== input.KEY_NUM_1 &amp;&amp; keyCode !== input.KEY_NUM_2 &amp;&amp; keyCode !== input.KEY_NUM_3 &amp;&amp;
-                keyCode !== input.KEY_NUM_4 &amp;&amp; keyCode !== input.KEY_NUM_5 &amp;&amp; keyCode !== input.KEY_NUM_6) {
+            if ((!axisViewRight) &amp;&amp; (!axisViewBack) &amp;&amp; (!axisViewLeft) &amp;&amp; (!axisViewFront) &amp;&amp; (!axisViewTop) &amp;&amp; (!axisViewBottom)) {
                 return;
             }
 
@@ -187,46 +192,41 @@ class KeyboardAxisViewHandler {
 
             const dist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
 
-            switch (keyCode) {
+            if (axisViewRight) {
 
-                case input.KEY_NUM_1: // Right
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_2: // Back
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+            } else if (axisViewBack) {
 
-                case input.KEY_NUM_3: // Left
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_4: // Front
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+            } else if (axisViewLeft) {
 
-                case input.KEY_NUM_5: // Top
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_6: // Bottom
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
-                    break;
+            } else if (axisViewFront) {
 
-                default:
-                    return;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
+
+            } else if (axisViewTop) {
+
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
+
+            } else if (axisViewBottom) {
+
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
             }
 
             if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {

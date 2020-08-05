@@ -39,6 +39,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -262,55 +264,68 @@ class DirLight extends Light {
 
         super(owner, cfg);
 
-        const self = this;
-
         this._shadowRenderBuf = null;
         this._shadowViewMatrix = null;
         this._shadowProjMatrix = null;
         this._shadowViewMatrixDirty = true;
         this._shadowProjMatrixDirty = true;
 
+        const camera = this.scene.camera;
+        const canvas = this.scene.canvas;
+
+        this._onCameraViewMatrix = camera.on(&quot;viewMatrix&quot;, () =&gt; {
+            this._shadowViewMatrixDirty = true;
+        });
+
+        this._onCameraProjMatrix = camera.on(&quot;projMatrix&quot;, () =&gt; {
+            this._shadowProjMatrixDirty = true;
+        });
+
+        this._onCanvasBoundary = canvas.on(&quot;boundary&quot;, () =&gt; {
+            this._shadowProjMatrixDirty = true;
+        });
+
         this._state = new RenderState({
+
             type: &quot;dir&quot;,
             dir: math.vec3([1.0, 1.0, 1.0]),
             color: math.vec3([0.7, 0.7, 0.8]),
             intensity: 1.0,
             space: cfg.space || &quot;view&quot;,
             castsShadow: false,
-            shadowDirty: true,
 
-            getShadowViewMatrix: (function () {
-                const look = math.vec3();
-                const up = math.vec3([0, 1, 0]);
-                return function () {
-                    if (self._shadowViewMatrixDirty) {
-                        if (!self._shadowViewMatrix) {
-                            self._shadowViewMatrix = math.identityMat4();
-                        }
-                        const dir = self._state.dir;
-                        math.lookAtMat4v([-dir[0], -dir[1], -dir[2]], [0, 0, 0], up, self._shadowViewMatrix);
-                        self._shadowViewMatrixDirty = false;
+            getShadowViewMatrix: () =&gt; {
+                if (this._shadowViewMatrixDirty) {
+                    if (!this._shadowViewMatrix) {
+                        this._shadowViewMatrix = math.identityMat4();
                     }
-                    return self._shadowViewMatrix;
-                };
-            })(),
-
-            getShadowProjMatrix: function () {
-                if (self._shadowProjMatrixDirty) { // TODO: Set when canvas resizes
-                    if (!self._shadowProjMatrix) {
-                        self._shadowProjMatrix = math.identityMat4();
-                    }
-                    math.orthoMat4c(-10, 10, -10, 10, 0, 500.0, self._shadowProjMatrix);
-                    self._shadowProjMatrixDirty = false;
+                    const camera = this.scene.camera;
+                    const dir = this._state.dir;
+                    const look = camera.look;
+                    const eye = [look[0] - dir[0], look[1] - dir[1], look[2] - dir[2]];
+                    const up = [0, 1, 0];
+                    math.lookAtMat4v(eye, look, up, this._shadowViewMatrix);
+                    this._shadowViewMatrixDirty = false;
                 }
-                return self._shadowProjMatrix;
+                return this._shadowViewMatrix;
             },
 
-            getShadowRenderBuf: function () {
-                if (!self._shadowRenderBuf) {
-                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]});
+            getShadowProjMatrix: () =&gt; {
+                if (this._shadowProjMatrixDirty) { // TODO: Set when canvas resizes
+                    if (!this._shadowProjMatrix) {
+                        this._shadowProjMatrix = math.identityMat4();
+                    }
+                    math.orthoMat4c(-40, 40, -40, 40, -40.0, 80, this._shadowProjMatrix);  // left, right, bottom, top, near, far, dest
+                    this._shadowProjMatrixDirty = false;
                 }
-                return self._shadowRenderBuf;
+                return this._shadowProjMatrix;
+            },
+
+            getShadowRenderBuf: () =&gt; {
+                if (!this._shadowRenderBuf) {
+                    this._shadowRenderBuf = new RenderBuffer(this.scene.canvas.canvas, this.scene.canvas.gl, {size: [1024, 1024]}); // Super old mobile devices have a limit of 1024x1024 textures
+                }
+                return this._shadowRenderBuf;
             }
         });
 
@@ -318,6 +333,7 @@ class DirLight extends Light {
         this.color = cfg.color;
         this.intensity = cfg.intensity;
         this.castsShadow = cfg.castsShadow;
+
         this.scene._lightCreated(this);
     }
 
@@ -424,6 +440,13 @@ class DirLight extends Light {
      * Destroys this DirLight.
      */
     destroy() {
+
+        const camera = this.scene.camera;
+        const canvas = this.scene.canvas;
+        camera.off(this._onCameraViewMatrix);
+        camera.off(this._onCameraProjMatrix);
+        canvas.off(this._onCanvasBoundary);
+
         super.destroy();
         this._state.destroy();
         if (this._shadowRenderBuf) {
