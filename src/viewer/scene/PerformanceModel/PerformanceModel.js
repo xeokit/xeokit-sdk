@@ -1089,7 +1089,12 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    set castsShadow(castsShadow) { // TODO
+    set castsShadow(castsShadow) {
+        castsShadow = (castsShadow !== false);
+        if (castsShadow !== this._castsShadow) {
+            this._castsShadow = castsShadow;
+            this.glRedraw();
+        }
     }
 
     /**
@@ -1097,8 +1102,8 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    get castsShadow() { // TODO
-        return false;
+    get castsShadow() {
+        return this._castsShadow;
     }
 
     /**
@@ -1106,7 +1111,12 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    set receivesShadow(receivesShadow) { // TODO
+    set receivesShadow(receivesShadow) {
+        receivesShadow = (receivesShadow !== false);
+        if (receivesShadow !== this._receivesShadow) {
+            this._receivesShadow = receivesShadow;
+            this.glRedraw();
+        }
     }
 
     /**
@@ -1114,8 +1124,8 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    get receivesShadow() { // TODO
-        return false;
+    get receivesShadow() {
+        return this._receivesShadow;
     }
 
     /**
@@ -1515,6 +1525,27 @@ class PerformanceModel extends Component {
         }
         for (var i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].drawOcclusion(frameCtx);
+        }
+    }
+
+    /**
+     * @private
+     */
+    drawShadow(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
+            this._layerList[i].drawShadow(frameCtx);
         }
     }
 

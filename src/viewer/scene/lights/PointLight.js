@@ -135,31 +135,45 @@ class PointLight extends Light {
         this._shadowViewMatrixDirty = true;
         this._shadowProjMatrixDirty = true;
 
+        const camera = this.scene.camera;
+        const canvas = this.scene.canvas;
+
+        this._onCameraViewMatrix = camera.on("viewMatrix", () => {
+            this._shadowViewMatrixDirty = true;
+        });
+
+        this._onCameraProjMatrix = camera.on("projMatrix", () => {
+            this._shadowProjMatrixDirty = true;
+        });
+
+        this._onCanvasBoundary = canvas.on("boundary", () => {
+            this._shadowProjMatrixDirty = true;
+        });
+
         this._state = new RenderState({
+
             type: "point",
             pos: math.vec3([1.0, 1.0, 1.0]),
             color: math.vec3([0.7, 0.7, 0.8]),
             intensity: 1.0, attenuation: [0.0, 0.0, 0.0],
             space: cfg.space || "view",
             castsShadow: false,
-            shadowDirty: true,
 
-            getShadowViewMatrix: (function () {
-                const look = math.vec3([0, 0, 0]);
-                const up = math.vec3([0, 1, 0]);
-                return function () {
-                    if (self._shadowViewMatrixDirty) {
-                        if (!self._shadowViewMatrix) {
-                            self._shadowViewMatrix = math.identityMat4();
-                        }
-                        math.lookAtMat4v(self._state.pos, look, up, self._shadowViewMatrix);
-                        self._shadowViewMatrixDirty = false;
+            getShadowViewMatrix: () => {
+                if (self._shadowViewMatrixDirty) {
+                    if (!self._shadowViewMatrix) {
+                        self._shadowViewMatrix = math.identityMat4();
                     }
-                    return self._shadowViewMatrix;
-                };
-            })(),
+                    const eye = self._state.pos;
+                    const look = camera.look;
+                    const up = camera.up;
+                    math.lookAtMat4v(eye, look, up, self._shadowViewMatrix);
+                    self._shadowViewMatrixDirty = false;
+                }
+                return self._shadowViewMatrix;
+            },
 
-            getShadowProjMatrix: function () {
+            getShadowProjMatrix: () => {
                 if (self._shadowProjMatrixDirty) { // TODO: Set when canvas resizes
                     if (!self._shadowProjMatrix) {
                         self._shadowProjMatrix = math.identityMat4();
@@ -171,9 +185,9 @@ class PointLight extends Light {
                 return self._shadowProjMatrix;
             },
 
-            getShadowRenderBuf: function () {
+            getShadowRenderBuf: () => {
                 if (!self._shadowRenderBuf) {
-                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]});
+                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]}); // Super old mobile devices have a limit of 1024x1024 textures
                 }
                 return self._shadowRenderBuf;
             }
@@ -195,7 +209,7 @@ class PointLight extends Light {
      *
      * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
      *
-     * Default value is ````[0.0, 0.0, 0.0]````.
+     * Default value is ````[1.0, 1.0, 1.0]````.
      *
      * @param {Number[]} pos The position.
      */
@@ -210,7 +224,7 @@ class PointLight extends Light {
      *
      * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
      *
-     * Default value is ````[0.0, 0.0, 0.0]````.
+     * Default value is ````[1.0, 1.0, 1.0]````.
      *
      * @returns {Number[]} The position.
      */
@@ -366,12 +380,21 @@ class PointLight extends Light {
      * Destroys this PointLight.
      */
     destroy() {
+
+        const camera = this.scene.camera;
+        const canvas = this.scene.canvas;
+        camera.off(this._onCameraViewMatrix);
+        camera.off(this._onCameraProjMatrix);
+        canvas.off(this._onCanvasBoundary);
+
         super.destroy();
+
         this._state.destroy();
         if (this._shadowRenderBuf) {
             this._shadowRenderBuf.destroy();
         }
         this.scene._lightDestroyed(this);
+        this.glRedraw();
     }
 }
 

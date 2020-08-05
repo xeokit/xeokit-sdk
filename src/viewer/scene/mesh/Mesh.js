@@ -13,6 +13,7 @@ import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
 import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
+import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
@@ -372,7 +373,7 @@ class Mesh extends Component {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-            // this._shadowRenderer = ShadowRenderer.get(this);
+           // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
@@ -876,7 +877,6 @@ class Mesh extends Component {
         }
     }
 
-
     //------------------------------------------------------------------------------------------------------------------
     // Entity members
     //------------------------------------------------------------------------------------------------------------------
@@ -1238,14 +1238,13 @@ class Mesh extends Component {
      * @type {Boolean}
      */
     set receivesShadow(value) {
-        this._state.receivesShadow = false; // Disables shadows for now
-        // value = value !== false;
-        // if (value === this._state.receivesShadow) {
-        //     return;
-        // }
-        // this._state.receivesShadow = value;
-        // this._state.hash = value ? "/mod/rs;" : "/mod;";
-        // this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
+        value = value !== false;
+        if (value === this._state.receivesShadow) {
+            return;
+        }
+        this._state.receivesShadow = value;
+        this._state.hash = value ? "/mod/rs;" : "/mod;";
+        this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
     }
 
     /**
@@ -1733,6 +1732,13 @@ class Mesh extends Component {
     drawOcclusion(frameCtx) {
         if (this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
             this._occlusionRenderer.drawMesh(frameCtx, this);
+        }
+    }
+
+    /** @private  */
+    drawShadow(frameCtx) {
+        if (this._shadowRenderer || (this._shadowRenderer = ShadowRenderer.get(this))) {
+            this._shadowRenderer.drawMesh(frameCtx, this);
         }
     }
 

@@ -56,6 +56,8 @@ const Renderer = function (scene, options) {
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
 
+    const renderFlags = new RenderFlags();
+
     this.needStateSort = function () {
         stateSortDirty = true;
     };
@@ -230,18 +232,125 @@ const Renderer = function (scene, options) {
         }
     }
 
+    function draw(params) {
+
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
+            gl.getExtension("OES_element_index_uint");
+        }
+
+        const sao = scene.sao;
+
+        if (sao.possible) {
+            drawSAOBuffers(params);
+        }
+
+
+            drawShadowMaps();
+
+        drawColor(params);
+    }
+
+    function drawSAOBuffers(params) {
+
+        const sao = scene.sao;
+
+        // Render depth buffer
+
+        saoDepthBuffer.bind();
+        saoDepthBuffer.clear();
+        drawDepth(params);
+        saoDepthBuffer.unbind();
+
+        // Render occlusion buffer
+
+        occlusionBuffer1.bind();
+        occlusionBuffer1.clear();
+        saoOcclusionRenderer.render(saoDepthBuffer.getTexture(), null);
+        occlusionBuffer1.unbind();
+
+        if (sao.blur) {
+
+            // Horizontally blur occlusion buffer 1 into occlusion buffer 2
+
+            occlusionBuffer2.bind();
+            occlusionBuffer2.clear();
+            saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
+            occlusionBuffer2.unbind();
+
+            // Vertically blur occlusion buffer 2 back into occlusion buffer 1
+
+            occlusionBuffer1.bind();
+            occlusionBuffer1.clear();
+            saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
+            occlusionBuffer1.unbind();
+        }
+    }
+
+    function drawDepth(params) {
+
+        frameCtx.reset();
+        frameCtx.pass = params.pass;
+
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.frontFace(gl.CCW);
+        gl.enable(gl.CULL_FACE);
+        gl.depthMask(true);
+
+        if (params.clear !== false) {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+        }
+
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
+
+                for (let i = 0, len = drawableList.length; i < len; i++) {
+
+                    const drawable = drawableList[i];
+
+                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
+                        continue;
+                    }
+
+                    drawable.getRenderFlags(renderFlags);
+
+                    if (renderFlags.normalFillOpaque) {
+                        drawable.drawDepth(frameCtx);
+                    }
+                }
+            }
+        }
+
+        // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+        // for (let ii = 0; ii < numVertexAttribs; ii++) {
+        //     gl.disableVertexAttribArray(ii);
+        // }
+
+    }
+
     function drawShadowMaps() {
-        var lights = scene._lightsState.lights;
-        var light;
-        var i;
-        var len;
-        for (i = 0, len = lights.length; i < len; i++) {
-            light = lights[i];
+
+        let lights = scene._lightsState.lights;
+
+        for (let i = 0, len = lights.length; i < len; i++) {
+            const light = lights[i];
             if (!light.castsShadow) {
                 continue;
             }
             drawShadowMap(light);
         }
+
+        // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+        // for (let ii = 0; ii < numVertexAttribs; ii++) {
+        //     gl.disableVertexAttribArray(ii);
+        // }
+        //
+        shadowsDirty = false;
     }
 
     function drawShadowMap(light) {
@@ -252,19 +361,18 @@ const Renderer = function (scene, options) {
             return;
         }
 
-        const renderBuf = light.getShadowRenderBuf();
+        const shadowRenderBuf = light.getShadowRenderBuf();
 
-        if (!renderBuf) {
+        if (!shadowRenderBuf) {
             return;
         }
 
-        renderBuf.bind();
+        shadowRenderBuf.bind();
 
         frameCtx.reset();
+
         frameCtx.backfaces = true;
         frameCtx.frontface = true;
-        frameCtx.drawElements = 0;
-        frameCtx.useProgram = -1;
         frameCtx.shadowViewMatrix = light.getShadowViewMatrix();
         frameCtx.shadowProjMatrix = light.getShadowProjMatrix();
 
@@ -273,122 +381,35 @@ const Renderer = function (scene, options) {
         gl.clearColor(0, 0, 0, 1);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);
+
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        let i;
-        let drawable;
+        for (let type in drawableTypeInfo) {
 
-        for (i = 0; i < drawableListSortedLen; i++) {
-            drawable = drawableListSorted[i];
-            if (!drawable.visible || !drawable.castsShadow) {
-                continue; // For now, culled drawables still cast shadows because they are just out of view
-            }
-            // if (drawable._material._state.alpha === 0) {
-            //     continue;
-            // }
-            //    drawable.drawShadow(frameCtx, light);
-        }
+            if (drawableTypeInfo.hasOwnProperty(type)) {
 
-        renderBuf.unbind();
-    }
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
 
-    const draw = function (params) {
+                for (let i = 0, len = drawableList.length; i < len; i++) {
 
-        const sao = scene.sao;
+                    const drawable = drawableList[i];
 
-        if (sao.possible) {
+                    if (drawable.visible === false || !drawable.castsShadow || !drawable.drawShadow) {
+                        continue;
+                    }
 
+                    drawable.getRenderFlags(renderFlags);
 
-            // Render depth buffer
-
-            saoDepthBuffer.bind();
-            saoDepthBuffer.clear();
-            drawDepth(params);
-            saoDepthBuffer.unbind();
-
-            // Render occlusion buffer
-
-            occlusionBuffer1.bind();
-            occlusionBuffer1.clear();
-            saoOcclusionRenderer.render(saoDepthBuffer.getTexture(), null);
-            occlusionBuffer1.unbind();
-
-            if (sao.blur) {
-
-                // Horizontally blur occlusion buffer 1 into occlusion buffer 2
-
-                occlusionBuffer2.bind();
-                occlusionBuffer2.clear();
-                saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
-                occlusionBuffer2.unbind();
-
-                // Vertically blur occlusion buffer 2 back into occlusion buffer 1
-
-                occlusionBuffer1.bind();
-                occlusionBuffer1.clear();
-                saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
-                occlusionBuffer1.unbind();
-            }
-        }
-
-        drawColor(params);
-    };
-
-    const drawDepth = (function () {
-
-        const renderFlags = new RenderFlags();
-
-        return function (params) {
-
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
-                gl.getExtension("OES_element_index_uint");
-            }
-
-            frameCtx.reset();
-            frameCtx.pass = params.pass;
-
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-            gl.clearColor(0, 0, 0, 0);
-            gl.enable(gl.DEPTH_TEST);
-            gl.frontFace(gl.CCW);
-            gl.enable(gl.CULL_FACE);
-            gl.depthMask(true);
-
-            if (params.clear !== false) {
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
-            }
-
-            for (var type in drawableTypeInfo) {
-                if (drawableTypeInfo.hasOwnProperty(type)) {
-
-                    const drawableInfo = drawableTypeInfo[type];
-                    const drawableList = drawableInfo.drawableList;
-
-                    for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                        const drawable = drawableList[i];
-
-                        if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
-                            continue;
-                        }
-
-                        drawable.getRenderFlags(renderFlags);
-
-                        if (renderFlags.normalFillOpaque) {
-                            drawable.drawDepth(frameCtx);
-                        }
+                    if (renderFlags.normalFillOpaque) { // Transparent objects don't cast shadows (yet)
+                        drawable.drawShadow(frameCtx);
                     }
                 }
             }
+        }
 
-            // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
-            // for (let ii = 0; ii < numVertexAttribs; ii++) {
-            //     gl.disableVertexAttribArray(ii);
-            // }
-
-        };
-    })();
+        shadowRenderBuf.unbind();
+    }
 
     const drawColor = (function () { // Draws the drawables in drawableListSorted
 
@@ -412,13 +433,7 @@ const Renderer = function (scene, options) {
         const selectedFillTransparentBin = [];
         const selectedEdgesTransparentBin = [];
 
-        const renderFlags = new RenderFlags();
-
         return function (params) {
-
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
-                gl.getExtension("OES_element_index_uint");
-            }
 
             const ambientColor = scene._lightsState.getAmbientColor();
 

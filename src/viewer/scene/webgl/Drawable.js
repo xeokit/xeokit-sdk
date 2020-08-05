@@ -284,6 +284,15 @@ class Drawable {
      */
     drawOcclusion(frameCtx) {
     }
+
+    /**
+     * Renders depths to a shadow map buffer..
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawShadow(frameCtx) {
+    }
 }
 
 export {Drawable};

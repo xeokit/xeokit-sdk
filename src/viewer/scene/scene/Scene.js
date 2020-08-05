@@ -1208,6 +1208,7 @@ class Scene extends Component {
                 this._compilables[id].compile();
             }
         }
+        this._renderer.shadowsDirty();
         this.fire("compile", this, true);
     }
 

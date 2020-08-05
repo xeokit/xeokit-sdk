@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <title>CameraControl Custom Keyboard Mapping</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+
+<div id="info">
+    <h1><a target="_other"
+           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> -
+        Custom Keyboard Mapping</h1>
+    <br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+    const camera = scene.camera;
+
+    viewer.camera.eye = [-8.23, 10.67, 35.26];
+    viewer.camera.look = [4.39, 3.72, 8.89];
+    viewer.camera.up = [0.10, 0.97, -0.20];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure the CameraControl, binding some specific keys to CameraControl actions
+    //------------------------------------------------------------------------------------------------------------------
+
+    const input = scene.input;
+
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    const keyMap = {};
+
+    keyMap[cameraControl.PAN_LEFT] = [input.KEY_A];
+    keyMap[cameraControl.PAN_RIGHT] = [input.KEY_D];
+    keyMap[cameraControl.PAN_UP] = [input.KEY_Z];
+    keyMap[cameraControl.PAN_DOWN] = [input.KEY_X];
+    keyMap[cameraControl.DOLLY_FORWARDS] = [input.KEY_W, input.KEY_ADD];
+    keyMap[cameraControl.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+    keyMap[cameraControl.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+    keyMap[cameraControl.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+    keyMap[cameraControl.ROTATE_Y_POS] = [input.KEY_LEFT_ARROW];
+    keyMap[cameraControl.ROTATE_Y_NEG] = [input.KEY_RIGHT_ARROW];
+    keyMap[cameraControl.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+    keyMap[cameraControl.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+    keyMap[cameraControl.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+    keyMap[cameraControl.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+    keyMap[cameraControl.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+    keyMap[cameraControl.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
+
+    cameraControl.keyMap = keyMap;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with grid
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 300,
+            divisions: 60
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [0, -1.6, 0],
+        collidable: false
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+    });
+
+</script>
+</html>
