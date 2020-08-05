@@ -12,6 +12,7 @@ import {CameraUpdater} from "./lib/CameraUpdater.js";
 import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
+import {utils} from "../utils.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -439,29 +440,33 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * keyMap[cameraControl.PAN_RIGHT] = [input.KEY_D];
  * keyMap[cameraControl.PAN_UP] = [input.KEY_Z];
  * keyMap[cameraControl.PAN_DOWN] = [input.KEY_X];
- * keyMap[cameraControl.PAN_BACKWARDS] = [input.KEY_S];
- * keyMap[cameraControl.PAN_FORWARDS] = [input.KEY_Z];
- * keyMap[cameraControl.DOLLY_FORWARDS] = [input.KEY_ADD];
- * keyMap[cameraControl.DOLLY_BACKWARDS] = [input.KEY_SUBTRACT];
- * keyMap[cameraControl.AXIS_VIEW_RIGHT] = [input.KEY_1];
- * keyMap[cameraControl.AXIS_VIEW_BACK] = [input.KEY_1];
- * keyMap[cameraControl.AXIS_VIEW_LEFT] = [input.KEY_1];
- * keyMap[cameraControl.AXIS_VIEW_FRONT] = [input.KEY_1];
- * keyMap[cameraControl.AXIS_VIEW_TOP] = [input.KEY_1];
- * keyMap[cameraControl.AXIS_VIEW_BOTTOM] = [input.KEY_1];
+ * keyMap[cameraControl.DOLLY_FORWARDS] = [input.KEY_W, input.KEY_ADD];
+ * keyMap[cameraControl.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+ * keyMap[cameraControl.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+ * keyMap[cameraControl.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+ * keyMap[cameraControl.ROTATE_Y_POS] = [input.KEY_LEFT_ARROW];
+ * keyMap[cameraControl.ROTATE_Y_NEG] = [input.KEY_RIGHT_ARROW];
+ * keyMap[cameraControl.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+ * keyMap[cameraControl.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+ * keyMap[cameraControl.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+ * keyMap[cameraControl.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+ * keyMap[cameraControl.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+ * keyMap[cameraControl.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
  *
  * cameraControl.keyMap = keyMap;
  * ````
  *
- * We can also just configure default bindings for a given keyboard layout, like this:
+ * We can also just configure default bindings for a specified keyboard layout, like this:
  *
  * ````javascript
  * cameraControl.keyMap = "qwerty";
  * ````
  *
- * Then {@link CameraControl#keyMap} will internally get set to a default key map for QWERTY layout.
+ * Then, ````CameraControl```` will internally set {@link CameraControl#keyMap} to the default key map for the QWERTY
+ * layout (which is the same set of mappings we set in the previous example). In other words, if we subsequently
+ * read {@link CameraControl#keyMap}, it will now be a key map, instead of the "qwerty" string value we set it to.
  *
- * Supported layouts so far are:
+ * Supported layouts are, so far:
  *
  * * ````"qwerty"````
  * * ````"azerty"````
@@ -602,7 +607,7 @@ class CameraControl extends Component {
          */
         this.AXIS_VIEW_BOTTOM = 17;
 
-        this._keyMap = {};
+        this._keyMap = {}; // Maps key codes to the above actions
 
         this.scene.canvas.canvas.oncontextmenu = (e) => {
             e.preventDefault();
@@ -713,8 +718,10 @@ class CameraControl extends Component {
 
         // Set initial user configurations
 
-        this.planView = cfg.planView;
         this.navMode = cfg.navMode;
+        if (cfg.planView) {
+            this.planView = cfg.planView;
+        }
         this.constrainVertical = cfg.constrainVertical;
         if (cfg.keyboardLayout) {
             this.keyboardLayout = cfg.keyboardLayout; // Deprecated
@@ -740,57 +747,72 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets custom mappings of keys to {@link CameraControl} actions.
+     * Sets custom mappings of keys to ````CameraControl```` actions.
      *
      * See class docs for usage.
      *
-     * @param {{Number:Number}|String} keyMap New key mappings.
+     * @param {{Number:Number}|String} value Either a set of new key mappings, or a string to select a keyboard layout,
+     * which causes ````CameraControl```` to use the default key mappings for that layout.
      */
-    set keyMap(keyMap) {
-        keyMap = keyMap || "qwerty";
-        if (utils.isString(keyMap)) {
-            switch (keyMap) {
-                case "azerty":
-                    keyMap[this.PAN_LEFT] = [input.KEY_A];
-                    keyMap[this.PAN_RIGHT] = [input.KEY_D];
-                    keyMap[this.PAN_UP] = [input.KEY_Z];
-                    keyMap[this.PAN_DOWN] = [input.KEY_X];
-                    keyMap[this.PAN_BACKWARDS] = [input.KEY_S];
-                    keyMap[this.PAN_FORWARDS] = [input.KEY_Z];
-                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_ADD];
-                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_SUBTRACT];
-                    keyMap[this.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
-                    keyMap[this.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
-                    keyMap[this.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
-                    keyMap[this.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
-                    keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
-                    keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
-                    this._keyMapAreDefaults = true;
-                    break;
-                case "qwerty":
+    set keyMap(value) {
+        value = value || "qwerty";
+        if (utils.isString(value)) {
+            const input = this.scene.input;
+            const keyMap = {};
+
+            switch (value) {
+
                 default:
+                    this.error("Unsupported value for 'keyMap': " + value + " defaulting to 'qwerty'");
+                // Intentional fall-through to "qwerty"
+                case "qwerty":
                     keyMap[this.PAN_LEFT] = [input.KEY_A];
                     keyMap[this.PAN_RIGHT] = [input.KEY_D];
                     keyMap[this.PAN_UP] = [input.KEY_Z];
                     keyMap[this.PAN_DOWN] = [input.KEY_X];
-                    keyMap[this.PAN_BACKWARDS] = [input.KEY_S];
-                    keyMap[this.PAN_FORWARDS] = [input.KEY_Z];
-                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_ADD];
-                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_SUBTRACT];
+                    keyMap[this.PAN_BACKWARDS] = [];
+                    keyMap[this.PAN_FORWARDS] = [];
+                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_W, input.KEY_ADD];
+                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+                    keyMap[this.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+                    keyMap[this.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+                    keyMap[this.ROTATE_Y_POS] = [input.KEY_Q, input.KEY_LEFT_ARROW];
+                    keyMap[this.ROTATE_Y_NEG] = [input.KEY_E, input.KEY_RIGHT_ARROW];
                     keyMap[this.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
                     keyMap[this.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
                     keyMap[this.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
                     keyMap[this.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
                     keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
                     keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
-                    this._keyMapAreDefaults = true;
+                    break;
+
+                case "azerty":
+                    keyMap[this.PAN_LEFT] = [input.KEY_Q];
+                    keyMap[this.PAN_RIGHT] = [input.KEY_D];
+                    keyMap[this.PAN_UP] = [input.KEY_W];
+                    keyMap[this.PAN_DOWN] = [input.KEY_X];
+                    keyMap[this.PAN_BACKWARDS] = [];
+                    keyMap[this.PAN_FORWARDS] = [];
+                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_Z, input.KEY_ADD];
+                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+                    keyMap[this.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+                    keyMap[this.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+                    keyMap[this.ROTATE_Y_POS] = [input.KEY_A, input.KEY_LEFT_ARROW];
+                    keyMap[this.ROTATE_Y_NEG] = [input.KEY_E, input.KEY_RIGHT_ARROW];
+                    keyMap[this.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+                    keyMap[this.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+                    keyMap[this.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+                    keyMap[this.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+                    keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+                    keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
                     break;
             }
-            this._keyMapAreDefaults = true;
+
+            this._keyMap = keyMap;
         } else {
-            this._keyMapAreDefaults = false;
+            const keyMap = value;
+            this._keyMap = keyMap;
         }
-        this._keyMap = keyMap;
     }
 
     /**
@@ -1495,6 +1517,7 @@ class CameraControl extends Component {
      * @param {String} value Selects the keyboard layout.
      */
     set keyboardLayout(value) {
+        this.warn("keyboardLayout property is deprecated - use keyMap property instead");
         value = value || "qwerty";
         if (value !== "qwerty" && value !== "azerty") {
             this.error("Unsupported value for keyboardLayout - defaulting to 'qwerty'");
