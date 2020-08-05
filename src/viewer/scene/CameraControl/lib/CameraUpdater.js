@@ -29,8 +29,6 @@ class CameraUpdater {
 
             let cursorType = "default";
 
-            const deltaTimeMilliSecs = e.deltaTime;
-
             //----------------------------------------------------------------------------------------------------------
             // Dolly decay
             //------------------------------------------------------------------------------------  ----------------------
@@ -274,7 +272,7 @@ class CameraUpdater {
                             panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
                         }
                     } else {
-                        camera.pan([0, 0, dollyDeltaForDist]);
+                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
                     }
 
                 } else { // Orbiting
