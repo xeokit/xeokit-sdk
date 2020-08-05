@@ -4,15 +4,18 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.3.7
 
-August 5, 2020
+Unreleased
 
 * CameraControl 
     * Customizable CameraControl key mappings. [#395](https://github.com/xeokit/xeokit-sdk/pull/395) ([**@xeolabs**](https://github.com/xeolabs))
     * Add CameraControl#touchDollyRate and simplify touch code. [#392](https://github.com/xeokit/xeokit-sdk/pull/392) ([**@amoki**](https://github.com/amoki))
-    * Prevent CameraControl touch rotation in plan view mode. [#396](https://github.com/xeokit/xeokit-sdk/pull/396) ([**@amoki**](https://github.com/amoki))
+    * Prevent CameraControl touch rotation in plan view mode. [#396](https://github.com/xeokit/xeokit-sdk/pull/396) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix CameraControl followPointer for pinch-dollying on touch devices. [#397](https://github.com/xeokit/xeokit-sdk/issues/397) ([**@xeolabs**](https://github.com/xeolabs))
+    * CameraControl one-finger panning in planView mode on touch devices. [#398](https://github.com/xeokit/xeokit-sdk/issues/398) ([**@xeolabs**](https://github.com/xeolabs))
 * GLTFLoaderPlugin
     * Fix edgeThreshold config for GLTFLoaderPlugin and PerformanceModel. [#385](https://github.com/xeokit/xeokit-sdk/issues/385) ([**@xeolabs**](https://github.com/xeolabs))
-       
+* Entity
+    * Fix broken emphasis fill effect. [#394](https://github.com/xeokit/xeokit-sdk/issues/394) ([**@xeolabs**](https://github.com/xeolabs))       
    
 # 1.3.6
 
