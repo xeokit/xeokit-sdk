@@ -653,6 +653,7 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 10,
+            touchDollyRate: 0.05,
             dollyInertia: 0.75,
             dollyProximityThreshold: 30.0,
             dollyMinSpeed: 1.0
@@ -737,6 +738,7 @@ class CameraControl extends Component {
         this.touchPanRate = cfg.touchPanRate;
         this.keyboardRotationRate = cfg.keyboardRotationRate;
         this.dragRotationRate = cfg.dragRotationRate;
+        this.touchDollyRate = cfg.touchDollyRate;
         this.dollyInertia = cfg.dollyInertia;
         this.dollyProximityThreshold = cfg.dollyProximityThreshold;
         this.dollyMinSpeed = cfg.dollyMinSpeed;
@@ -1372,6 +1374,28 @@ class CameraControl extends Component {
      */
     get keyboardDollyRate() {
         return this._configs.keyboardDollyRate;
+    }
+
+    /**
+     * Sets how much the {@link Camera} dollys with touch input.
+     *
+     * Default is ````0.05````
+     *
+     * @param {Number} touchDollyRate The new touch dolly rate.
+     */
+    set touchDollyRate(touchDollyRate) {
+        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.05;
+    }
+
+    /**
+     * Gets how much the {@link Camera} dollys each second with touch input.
+     *
+     * Default is ````0.05````.
+     *
+     * @returns {Number} The current touch dolly rate.
+     */
+    get touchDollyRate() {
+        return this._configs.touchDollyRate;
     }
 
     /**
