@@ -1541,7 +1541,7 @@ class CameraControl extends Component {
      * @param {String} value Selects the keyboard layout.
      */
     set keyboardLayout(value) {
-        this.warn("keyboardLayout property is deprecated - use keyMap property instead");
+        // this.warn("keyboardLayout property is deprecated - use keyMap property instead");
         value = value || "qwerty";
         if (value !== "qwerty" && value !== "azerty") {
             this.error("Unsupported value for keyboardLayout - defaulting to 'qwerty'");
