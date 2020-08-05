@@ -56,7 +56,6 @@ class InstancingFillRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
@@ -65,6 +64,9 @@ class InstancingFillRenderer {
             this._aFlags2.bindArrayBuffer(state.flags2Buf, gl.UNSIGNED_BYTE, true);
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
+
+        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
 
         state.indicesBuf.bind();
 
