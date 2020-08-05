@@ -41,20 +41,20 @@ class TouchPanRotateAndDollyHandler {
 
                 if (configs.followPointer) {
 
-
-
                     pickController.pickCursorPos = tapStartPos;
                     pickController.schedulePickSurface = true;
                     pickController.update();
 
-                    if (pickController.picked && pickController.pickedSurface && pickController.pickResult) {
+                    if (!configs.planView) {
+                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult) {
 
-                        pivotController.startPivot(pickController.pickResult.worldPos);
-                        pivotController.showPivot();
+                            pivotController.startPivot(pickController.pickResult.worldPos);
+                            pivotController.showPivot();
 
-                    } else {
-                        pivotController.startPivot(); // Continue to use last pivot point
-                        pivotController.showPivot();
+                        } else {
+                            pivotController.startPivot(); // Continue to use last pivot point
+                            pivotController.showPivot();
+                        }
                     }
                 }
 
@@ -98,13 +98,15 @@ class TouchPanRotateAndDollyHandler {
             if (numTouches === 1) {
                 const touch0 = touches[0];
 
-
                 //-----------------------------------------------------------------------------------------------
                 // Drag rotation
                 //-----------------------------------------------------------------------------------------------
 
-                updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
-                updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
+                if (!configs.planView) { // No rotating in plan-view mode
+
+                    updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
+                    updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
+                }
 
             } else if (numTouches === 2) {
                 const touch0 = touches[0];
