@@ -102,8 +102,35 @@ class TouchPanRotateAndDollyHandler {
                 // Drag rotation
                 //-----------------------------------------------------------------------------------------------
 
-                if (!configs.planView) { // No rotating in plan-view mode
+                if (configs.planView) { // No rotating in plan-view mode
 
+                    math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
+
+                    const xPanDelta = touch0Vec[0];
+                    const yPanDelta = touch0Vec[1];
+
+                    const camera = scene.camera;
+
+                    // We use only canvasHeight here so that aspect ratio does not distort speed
+
+                    if (camera.projection === "perspective") {
+
+                        const touchPicked = false;
+                        const pickedWorldPos = [0, 0, 0];
+
+                        const depth = Math.abs(touchPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
+                        const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+
+                        updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
+                        updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
+
+                    } else {
+
+                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight) * configs.touchPanRate;
+                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight) * configs.touchPanRate;
+                    }
+
+                } else {
                     updates.rotateDeltaY -= ((touch0.pageX - lastTouches[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
                     updates.rotateDeltaX += ((touch0.pageY - lastTouches[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
                 }
