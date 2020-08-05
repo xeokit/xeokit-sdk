@@ -112,9 +112,9 @@ class KeyboardPanRotateDollyHandler {
                         controllers.pivotController.startPivot();
                     }
                     if (dollyForwards) {
-                        updates.dollyDelta += dollyDelta;
-                    } else if (dollyBackwards) {
                         updates.dollyDelta -= dollyDelta;
+                    } else if (dollyBackwards) {
+                        updates.dollyDelta += dollyDelta;
                     }
                 }
             }
