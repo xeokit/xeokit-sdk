@@ -426,7 +426,7 @@ import {utils} from "../utils.js";
  *
  * We can customize````CameraControl```` key bindings as shown below.
  *
- * in this example, we'll just set the default bindings for a QWERTY keyboard.
+ * In this example, we'll just set the default bindings for a QWERTY keyboard.
  *
  * ````javascript
  * const input = myViewer.scene.input;
