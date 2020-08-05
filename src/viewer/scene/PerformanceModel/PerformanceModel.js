@@ -8,6 +8,7 @@ import {getBatchingLayerScratchMemory} from "./lib/batching/BatchingLayerScratch
 import {BatchingLayer} from './lib/batching/BatchingLayer.js';
 import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
+import {utils} from "../../../viewer/scene/utils.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -58,6 +59,7 @@ class PerformanceModel extends Component {
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Boolean} [cfg.backfaces=false] Indicates if backfaces are visible.
+     * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      */
     constructor(owner, cfg = {}) {
 
@@ -133,6 +135,8 @@ class PerformanceModel extends Component {
 
         /** @private */
         this._numTriangles = 0;
+
+        this._edgeThreshold = cfg.edgeThreshold || 10;
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -339,7 +343,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} cfg.normals Flat array of normal vectors.
      * @param {Number[]} cfg.indices Array of triangle indices.
-     * @param {Number[]} cfg.edgeIndices Array of edge line indices.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      */
     createGeometry(cfg) {
@@ -356,7 +360,7 @@ class PerformanceModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        const instancingLayer = new InstancingLayer(this, cfg);
+        const instancingLayer = new InstancingLayer(this, utils.apply({edgeThreshold: this._edgeThreshold}, cfg));
         this._instancingLayers[geometryId] = instancingLayer;
         this._layerList.push(instancingLayer);
         this.numGeometries++;
@@ -394,7 +398,9 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
+     * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
+     * constructor. This parameter is ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -541,7 +547,7 @@ class PerformanceModel extends Component {
             layer = this._currentBatchingLayer;
 
             if (!edgeIndices && indices) {
-                edgeIndices = buildEdgeIndices(positions, indices, null, 10);
+                edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
             }
 
             let meshMatrix;
