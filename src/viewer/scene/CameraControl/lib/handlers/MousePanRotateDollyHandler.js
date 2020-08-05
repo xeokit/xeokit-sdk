@@ -96,12 +96,12 @@ class MousePanRotateDollyHandler {
                         xRotateDelta = 0;
                         yRotateDelta = 0;
 
-                        lastX = states.mouseCanvasPos[0];
-                        lastY = states.mouseCanvasPos[1];
-                        lastXDown = states.mouseCanvasPos[0];
-                        lastYDown = states.mouseCanvasPos[1];
+                        lastX = states.pointerCanvasPos[0];
+                        lastY = states.pointerCanvasPos[1];
+                        lastXDown = states.pointerCanvasPos[0];
+                        lastYDown = states.pointerCanvasPos[1];
 
-                        pickController.pickCursorPos = states.mouseCanvasPos;
+                        pickController.pickCursorPos = states.pointerCanvasPos;
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
@@ -120,10 +120,10 @@ class MousePanRotateDollyHandler {
                         xRotateDelta = 0;
                         yRotateDelta = 0;
 
-                        lastX = states.mouseCanvasPos[0];
-                        lastY = states.mouseCanvasPos[1];
-                        lastXDown = states.mouseCanvasPos[0];
-                        lastYDown = states.mouseCanvasPos[1];
+                        lastX = states.pointerCanvasPos[0];
+                        lastY = states.pointerCanvasPos[1];
+                        lastXDown = states.pointerCanvasPos[0];
+                        lastYDown = states.pointerCanvasPos[1];
                     }
 
                     break;
@@ -139,10 +139,10 @@ class MousePanRotateDollyHandler {
                         xRotateDelta = 0;
                         yRotateDelta = 0;
 
-                        lastX = states.mouseCanvasPos[0];
-                        lastY = states.mouseCanvasPos[1];
-                        lastXDown = states.mouseCanvasPos[0];
-                        lastYDown = states.mouseCanvasPos[1];
+                        lastX = states.pointerCanvasPos[0];
+                        lastY = states.pointerCanvasPos[1];
+                        lastXDown = states.pointerCanvasPos[0];
+                        lastYDown = states.pointerCanvasPos[1];
                     }
 
                     break;
@@ -158,12 +158,12 @@ class MousePanRotateDollyHandler {
                         xRotateDelta = 0;
                         yRotateDelta = 0;
 
-                        lastX = states.mouseCanvasPos[0];
-                        lastY = states.mouseCanvasPos[1];
-                        lastXDown = states.mouseCanvasPos[0];
-                        lastYDown = states.mouseCanvasPos[1];
+                        lastX = states.pointerCanvasPos[0];
+                        lastY = states.pointerCanvasPos[1];
+                        lastXDown = states.pointerCanvasPos[0];
+                        lastYDown = states.pointerCanvasPos[1];
 
-                        pickController.pickCursorPos = states.mouseCanvasPos;
+                        pickController.pickCursorPos = states.pointerCanvasPos;
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
@@ -203,8 +203,8 @@ class MousePanRotateDollyHandler {
             const canvasBoundary = scene.canvas.boundary;
             const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
             const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
-            const x = states.mouseCanvasPos[0];
-            const y = states.mouseCanvasPos[1];
+            const x = states.pointerCanvasPos[0];
+            const y = states.pointerCanvasPos[1];
 
             const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
 

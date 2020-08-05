@@ -74,7 +74,7 @@ class CameraUpdater {
                         const pickResult = this._scene.pick({
                             pickSurface: true,
                             pickSurfaceNormal: false,
-                            canvasPos: states.mouseCanvasPos
+                            canvasPos: states.pointerCanvasPos
                         });
 
                         if (pickResult && pickResult.worldPos) {
@@ -238,7 +238,7 @@ class CameraUpdater {
                     }
 
                     if (updates.inputFromMouse && configs.followPointer) { // Using mouse input
-                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
                     }
@@ -272,7 +272,7 @@ class CameraUpdater {
                             panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
                         }
                     } else {
-                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     }
 
                 } else { // Orbiting

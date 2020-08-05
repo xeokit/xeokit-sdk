@@ -109,6 +109,7 @@ class TouchPanRotateAndDollyHandler {
                 }
 
             } else if (numTouches === 2) {
+
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
@@ -118,6 +119,7 @@ class TouchPanRotateAndDollyHandler {
                 const panning = math.dotVec2(touch0Vec, touch1Vec) > 0;
 
                 if (panning) {
+
                     math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
 
                     const xPanDelta = touch0Vec[0];
@@ -147,12 +149,18 @@ class TouchPanRotateAndDollyHandler {
                         updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight) * configs.touchPanRate;
                         updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight) * configs.touchPanRate;
                     }
-                }
 
-                else {
+                } else {
+
+                    // Dollying
+
                     const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                     const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
+
                     updates.dollyDelta = (d2 - d1) * configs.touchDollyRate;
+
+                    states.pointerCanvasPos[0] = ((touch1.pageX + touch0.pageX) / 2);
+                    states.pointerCanvasPos[1] = ((touch1.pageY + touch0.pageY) / 2);
                 }
             }
 

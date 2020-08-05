@@ -662,7 +662,7 @@ class CameraControl extends Component {
         // Current runtime state of the CameraControl
 
         this._states = {
-            mouseCanvasPos: new Float32Array(2),
+            pointerCanvasPos: new Float32Array(2),
             mouseover: false,
             inputFromMouse: false, // TODO: Is this needed?
             mouseDownClientX: 0,

@@ -62,7 +62,7 @@ class MousePickHandler {
 
             if (hoverSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs) {
 
-                pickController.pickCursorPos = states.mouseCanvasPos;
+                pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickEntity = true;
                 pickController.schedulePickSurface = hoverSurfaceSubs;
 
@@ -134,12 +134,12 @@ class MousePickHandler {
 
             states.mouseDownClientX = e.clientX;
             states.mouseDownClientY = e.clientY;
-            states.mouseDownCursorX = states.mouseCanvasPos[0];
-            states.mouseDownCursorY = states.mouseCanvasPos[1];
+            states.mouseDownCursorX = states.pointerCanvasPos[0];
+            states.mouseDownCursorY = states.pointerCanvasPos[1];
 
             if ((!configs.firstPerson) && configs.followPointer) {
 
-                pickController.pickCursorPos = states.mouseCanvasPos;
+                pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickSurface = true;
 
                 pickController.update();
@@ -201,7 +201,7 @@ class MousePickHandler {
 
                 if (pickedSubs || pickedNothingSubs || pickedSurfaceSubs) {
 
-                    pickController.pickCursorPos = states.mouseCanvasPos;
+                    pickController.pickCursorPos = states.pointerCanvasPos;
                     pickController.schedulePickSurface = pickedSurfaceSubs;
                     pickController.update();
 
@@ -214,7 +214,7 @@ class MousePickHandler {
                         }
                     } else {
                         cameraControl.fire("pickedNothing", {
-                            canvasPos: states.mouseCanvasPos
+                            canvasPos: states.pointerCanvasPos
                         }, true);
                     }
                 }
@@ -228,11 +228,11 @@ class MousePickHandler {
 
             if (this._clicks === 1) { // First click
 
-                const mouseCanvasPos = states.mouseCanvasPos.slice();
+                const pointerCanvasPos = states.pointerCanvasPos.slice();
 
                 this._timeout = setTimeout(() => {
 
-                    pickController.pickCursorPos = mouseCanvasPos;
+                    pickController.pickCursorPos = pointerCanvasPos;
                     pickController.schedulePickEntity = configs.doublePickFlyTo;
                     pickController.schedulePickSurface = pickedSurfaceSubs;
                     pickController.update();
@@ -252,7 +252,7 @@ class MousePickHandler {
                         }
                     } else {
                         cameraControl.fire("pickedNothing", {
-                            canvasPos: states.mouseCanvasPos
+                            canvasPos: states.pointerCanvasPos
                         }, true);
                     }
 
@@ -267,7 +267,7 @@ class MousePickHandler {
                     this._timeout = null;
                 }
 
-                pickController.pickCursorPos = states.mouseCanvasPos;
+                pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickEntity = configs.doublePickFlyTo;
                 pickController.schedulePickSurface = pickController.schedulePickEntity && doublePickedSurfaceSubs;
                 pickController.update();
@@ -297,7 +297,7 @@ class MousePickHandler {
                 } else {
 
                     cameraControl.fire("doublePickedNothing", {
-                        canvasPos: states.mouseCanvasPos
+                        canvasPos: states.pointerCanvasPos
                     }, true);
 
                     if (configs.doublePickFlyTo) {

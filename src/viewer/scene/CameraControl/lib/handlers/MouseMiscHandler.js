@@ -19,14 +19,14 @@ class MouseMiscHandler {
         });
 
         canvas.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
-            getCanvasPosFromEvent(e, states.mouseCanvasPos);
+            getCanvasPosFromEvent(e, states.pointerCanvasPos);
         });
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-            getCanvasPosFromEvent(e, states.mouseCanvasPos);
+            getCanvasPosFromEvent(e, states.pointerCanvasPos);
             states.mouseover = true;
         });
 
