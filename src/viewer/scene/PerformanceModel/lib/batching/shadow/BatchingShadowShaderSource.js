@@ -27,7 +27,7 @@ function buildVertex(scene) {
     src.push("void main(void) {");
     src.push("  bool visible        = (float(flags.x) > 0.0);");
     src.push("  bool transparent    = ((float(color.a) / 255.0) < 1.0);");
-    src.push(`  if (!visible || transparent) {`);
+    src.push("  if (!visible || transparent) {");
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
     src.push("  } else {");
     src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
@@ -70,7 +70,7 @@ function buildFragment(scene) {
     src.push("vec4 encodeFloat( const in float v ) {");
     src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
     src.push("  const vec4 bitMask = vec4(0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);");
-    src.push("  vec4 comp = fract(depth * bitShift);");
+    src.push("  vec4 comp = fract(v * bitShift);");
     src.push("  comp -= comp.xxyz * bitMask;");
     src.push("  return comp;");
     src.push("}");
