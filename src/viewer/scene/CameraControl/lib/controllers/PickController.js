@@ -144,7 +144,7 @@ class PickController {
             return;
         }
 
-        if (this.picked && this.pickResult) {
+        if (this.picked && this.pickResult && this.pickResult.entity) {
 
             const pickedEntityId = this.pickResult.entity.id;
 
