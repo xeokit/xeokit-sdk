@@ -36,9 +36,9 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     function processMessage(stream) {
         var messageType = stream.readByte();
         if (messageType === 0) {
-        	if (!readStart(stream)) {
-				return false;
-        	}
+            if (!readStart(stream)) {
+                return false;
+            }
         } else if (messageType === 6) {
             readEnd(stream);
         } else {
@@ -56,11 +56,11 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             var topicId = stream.readLong();
             var type = stream.readLong();
             if (type == 0) {
-            	while (processMessage(stream)) {
+                while (processMessage(stream)) {
 
-            	}
+                }
             } else if (type == 1) {
-            	// End of stream
+                // End of stream
             }
             data = todo.shift();
         }
@@ -227,7 +227,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             performanceModelBuilder.error("Unimplemented protocol version");
             return false;
         } else {
-        	currentState.version = protocolVersion;
+            currentState.version = protocolVersion;
         }
         if (protocolVersion > 15) {
             o.multiplierToMm = data.readFloat();
@@ -301,12 +301,13 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 
             var colors = null;
 
-            if (numColors > 0) {
+            if (!gotColor && numColors > 0) {
                 colors = stream.readFloatArray(numColors);
                 color[0] = colors[0];
                 color[1] = colors[1];
                 color[2] = colors[2];
                 color[3] = colors[3];
+                gotColor = true;
             }
 
             if (!gotColor) {
@@ -438,18 +439,18 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             let ifcType = stream.readUTF8();
             var numColors = stream.readInt();
 
-            // if (numColors > 0) {
-            //     colors = stream.readFloatArray(numColors);
-            //     color[0] = colors[0];
-            //     color[1] = colors[1];
-            //     color[2] = colors[2];
-            //     color[3] = colors[3];
-            // } else {
-            color[0] = 1.0;
-            color[1] = 1.0;
-            color[2] = 1.0;
-            color[3] = 1.0;
-            //}
+            if (false /* FIXME */ && numColors > 0) {
+                colors = stream.readFloatArray(numColors);
+                color[0] = colors[0];
+                color[1] = colors[1];
+                color[2] = colors[2];
+                color[3] = colors[3];
+            } else {
+                color[0] = 1.0;
+                color[1] = 1.0;
+                color[2] = 1.0;
+                color[3] = 1.0;
+            }
 
             let meshColor = color;
             let meshOpacity = color[3];
@@ -560,85 +561,85 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 
             //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
         } else if (geometryType === 3) {
-			var reused = stream.readInt();
-			var type = stream.readUTF8();
-			stream.align8();
-			var hasTransparency = stream.readLong() == 1;
-			var coreIds = [];
-			var geometryDataOid = stream.readLong();
-			var nrParts = stream.readInt();
+            var reused = stream.readInt();
+            var type = stream.readUTF8();
+            stream.align8();
+            var hasTransparency = stream.readLong() == 1;
+            var coreIds = [];
+            var geometryDataOid = stream.readLong();
+            var nrParts = stream.readInt();
 
-			for (var i=0; i<nrParts; i++) {
-				var partId = stream.readLong();
-				var coreId = geometryDataOid + "_" + i;
-				coreIds.push(coreId);
-				var nrIndices = stream.readInt();
-				//o.stats.nrPrimitives += nrIndices / 3;
-				var indices = stream.readShortArray(nrIndices);
-				stream.align4();
-				var b = stream.readIstream;
-				var rgba;
-				if (b === 1) {
-					rgba = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
-				}
-				stream.align4();
-				var nrVertices = stream.readInt();
-				//o.stats.nrVertices += nrVertices;
-				var vertices = stream.readFloatArray(nrVertices);
-				var nrNormals = stream.readInt();
-				//o.stats.nrNormals += nrNormals;
-				var normals = stream.readFloatArray(nrNormals);
-				var nrColors = stream.readInt();
-				//o.stats.nrColors += nrColors;
-				var colors = stream.readFloatArray(nrColors);
-				
-				var geometry = {
-					type: "geometry",
-					//primitive: o.type
-				};
-				
-				if (rgba) {
-					// Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
-					geometry.colors = new Array(nrVertices * 4);
-					for (var j=0; j<nrVertices; j++) {
-						geometry.colors[j * 4 + 0] = rgba.r;
-						geometry.colors[j * 4 + 1] = rgba.g;
-						geometry.colors[j * 4 + 2] = rgba.b;
-						geometry.colors[j * 4 + 3] = rgba.a;
-					}
-				}
-				
-				geometry.coreId = coreId;
-				
-				/*if (o.type == "lines") {
-					geometry.indices = o.convertToLines(indices);
-				} else {
-					geometry.indices = indices;
-				}*/
-				geometry.positions = vertices;
-				geometry.normals = normals;
-				
-				if (colors != null && colors.length > 0) {
-					geometry.colors = colors;
-				}
-				//o.library.add("node", geometry);
-			}
-			stream.align8();
-			//o.loadedGeometry[geometryDataOid] = coreIds;
-			/*if (o.dataToInfo[geometryDataOid] != null) {
-				o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
-					var node = o.viewer.scene.findNode(geometryInfoId);
-					if (node != null && node.nodes[0] != null) {
-						coreIds.forEach(function(coreId){
-							node.nodes[0].addNode({
-								type: "geometry",
-								coreId: coreId
-							});
-						});
-					}
-				});
-				delete o.dataToInfo[geometryDataOid];
-			}*/
+            for (var i = 0; i < nrParts; i++) {
+                var partId = stream.readLong();
+                var coreId = geometryDataOid + "_" + i;
+                coreIds.push(coreId);
+                var nrIndices = stream.readInt();
+                //o.stats.nrPrimitives += nrIndices / 3;
+                var indices = stream.readShortArray(nrIndices);
+                stream.align4();
+                var b = stream.readIstream;
+                var rgba;
+                if (b === 1) {
+                    rgba = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
+                }
+                stream.align4();
+                var nrVertices = stream.readInt();
+                //o.stats.nrVertices += nrVertices;
+                var vertices = stream.readFloatArray(nrVertices);
+                var nrNormals = stream.readInt();
+                //o.stats.nrNormals += nrNormals;
+                var normals = stream.readFloatArray(nrNormals);
+                var nrColors = stream.readInt();
+                //o.stats.nrColors += nrColors;
+                var colors = stream.readFloatArray(nrColors);
+
+                var geometry = {
+                    type: "geometry",
+                    //primitive: o.type
+                };
+
+                if (rgba) {
+                    // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+                    geometry.colors = new Array(nrVertices * 4);
+                    for (var j = 0; j < nrVertices; j++) {
+                        geometry.colors[j * 4 + 0] = rgba.r;
+                        geometry.colors[j * 4 + 1] = rgba.g;
+                        geometry.colors[j * 4 + 2] = rgba.b;
+                        geometry.colors[j * 4 + 3] = rgba.a;
+                    }
+                }
+
+                geometry.coreId = coreId;
+
+                /*if (o.type == "lines") {
+                    geometry.indices = o.convertToLines(indices);
+                } else {
+                    geometry.indices = indices;
+                }*/
+                geometry.positions = vertices;
+                geometry.normals = normals;
+
+                if (colors != null && colors.length > 0) {
+                    geometry.colors = colors;
+                }
+                //o.library.add("node", geometry);
+            }
+            stream.align8();
+            //o.loadedGeometry[geometryDataOid] = coreIds;
+            /*if (o.dataToInfo[geometryDataOid] != null) {
+                o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
+                    var node = o.viewer.scene.findNode(geometryInfoId);
+                    if (node != null && node.nodes[0] != null) {
+                        coreIds.forEach(function(coreId){
+                            node.nodes[0].addNode({
+                                type: "geometry",
+                                coreId: coreId
+                            });
+                        });
+                    }
+                });
+                delete o.dataToInfo[geometryDataOid];
+            }*/
 
         } else if (geometryType === 7) {
             //  this.processPreparedBuffer(stream, true);
