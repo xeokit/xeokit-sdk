@@ -93,10 +93,19 @@
         transparent: true
     });
 
-    const cameraControl = viewer.cameraControl;
     const scene = viewer.scene;
     const cameraFlight = viewer.cameraFlight;
     const camera = scene.camera;
+
+    viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
+    viewer.scene.camera.look = [42.45, 49.62, -43.59];
+    viewer.scene.camera.up = [0.05, 0.95, 0.15];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Customize CameraControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControl = viewer.cameraControl;
 
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
@@ -105,9 +114,13 @@
     document.body.appendChild(pivotElement);
     cameraControl.pivotElement = pivotElement;
 
-    viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
-    viewer.scene.camera.look = [42.45, 49.62, -43.59];
-    viewer.scene.camera.up = [0.05, 0.95, 0.15];
+    cameraControl.on("picked", (e) => {
+        console.log("picked");
+    });
+
+    cameraControl.on("doublePicked", (e) => {
+        console.log("doublePicked");
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
