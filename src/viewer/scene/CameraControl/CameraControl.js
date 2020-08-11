@@ -672,7 +672,7 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: new Float32Array(2),
             tapStartTime: -1,
-            lastTapTime: -1,
+            lastTapTime: -1
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event

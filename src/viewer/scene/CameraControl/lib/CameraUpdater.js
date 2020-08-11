@@ -15,6 +15,7 @@ class CameraUpdater {
 
         this._scene = scene;
         const camera = scene.camera;
+        const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
         const panController = controllers.panController;
 
@@ -71,14 +72,13 @@ class CameraUpdater {
 
                     if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
 
-                        const pickResult = this._scene.pick({
-                            pickSurface: true,
-                            pickSurfaceNormal: false,
-                            canvasPos: states.pointerCanvasPos
-                        });
+                        pickController.pickCursorPos = states.pointerCanvasPos;
+                        pickController.schedulePickSurface = true;
 
-                        if (pickResult && pickResult.worldPos) {
-                            const worldPos = pickResult.worldPos;
+                        pickController.update();
+
+                        if (pickController.pickResult && pickController.pickResult.worldPos) {
+                            const worldPos = pickController.pickResult.worldPos;
                             pivotController.setPivotPos(worldPos);
                             pivotController.hidePivot();
                         } else {
@@ -288,6 +288,8 @@ class CameraUpdater {
 
                 updates.dollyDelta *= configs.dollyInertia;
             }
+
+            pickController.fireEvents();
 
             document.body.style.cursor = cursorType;
         });
