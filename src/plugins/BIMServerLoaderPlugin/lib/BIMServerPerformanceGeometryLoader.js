@@ -1,4 +1,5 @@
 import {DataInputStreamReader} from "./DataInputStreamReader.js";
+import {math as utils} from "../../../viewer/scene/math/math.js";
 
 /**
  *
@@ -355,8 +356,10 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            performanceModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
-                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+                            const meshId = utils.createUUID();
+
+                            performanceModelBuilder.createMeshInstancingGeometry(meshId, geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, meshId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -396,8 +399,11 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            performanceModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
-                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+
+                            const meshId = utils.createUUID();
+
+                            performanceModelBuilder.createMeshSpecifyingGeometry(meshId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, meshId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -500,8 +506,10 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                 // MULTI-USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
 
-                performanceModelBuilder.createMeshInstancingGeometry(geometryId, matrix, meshColor, meshOpacity);
-                performanceModelBuilder.createEntity(oid, geometryId, ifcType);
+                const meshId = utils.createUUID();
+
+                performanceModelBuilder.createMeshInstancingGeometry(meshId, geometryId, matrix, meshColor, meshOpacity);
+                performanceModelBuilder.createEntity(oid, meshId, ifcType);
 
             } else {
 

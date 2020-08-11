@@ -325,8 +325,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createMeshInstancingGeometry: function (geometryDataId, matrix, color, opacity) {
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
+                    createMeshInstancingGeometry: function (meshId, geometryDataId, matrix, color, opacity) {
                         const geometryId = `${modelId}.${geometryDataId}`;
                         performanceModel.createMesh({
                             id: meshId,
@@ -337,8 +336,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createMeshSpecifyingGeometry: function (geometryDataId, positions, normals, indices, matrix, color, opacity) {
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
+                    createMeshSpecifyingGeometry: function (meshId, positions, normals, indices, matrix, color, opacity) {
                         performanceModel.createMesh({
                             id: meshId,
                             primitive: "triangles",
@@ -351,9 +349,8 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createEntity(id, geometryDataId, ifcType) { // Pass in color to set transparency
+                    createEntity(id, meshId, ifcType) { // Pass in color to set transparency
                         id = oidToGuid[id];
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
                         if (scene.objects[id]) {
                             self.error(`Can't create object - object with id ${id} already exists`);
                             return;
