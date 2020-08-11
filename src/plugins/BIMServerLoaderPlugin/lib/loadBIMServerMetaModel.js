@@ -9,7 +9,7 @@ function loadBIMServerMetaModel(viewer, modelId, poid, roid, schema, bimServerCl
 
     return new Promise(function (resolve, reject) {
 
-        if (schema == "ifc2x3tc1") {
+        if (schema === "ifc2x3tc1") {
             var query = {
                 defines: {
                     Representation: {
@@ -99,7 +99,7 @@ function loadBIMServerMetaModel(viewer, modelId, poid, roid, schema, bimServerCl
                     }
                 ]
             };
-        } else if (schema == "ifc4") {
+        } else if (schema === "ifc4") {
             var query = {
                 defines: {
                     Representation: {
@@ -294,4 +294,4 @@ function loadBIMServerMetaModel(viewer, modelId, poid, roid, schema, bimServerCl
     });
 }
 
-export {loadBIMServerMetaModel};
+export { loadBIMServerMetaModel };

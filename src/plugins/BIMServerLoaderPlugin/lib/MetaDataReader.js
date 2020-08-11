@@ -147,7 +147,7 @@ function MetaDataRenderer(args) {
                 }
             }
             if (typeof(v) !== 'undefined') {
-                r = s.addRow();
+                const r = s.addRow();
                 r.setName(k);
                 r.setValue(v);
             }
@@ -207,9 +207,9 @@ function MetaDataRenderer(args) {
             renderAttributes(o);
 
             o.getIsDefinedBy(function (isDefinedBy) {
-                if (isDefinedBy.getType() == "IfcRelDefinesByProperties") {
+                if (isDefinedBy.getType() === "IfcRelDefinesByProperties") {
                     isDefinedBy.getRelatingPropertyDefinition(function (pset) {
-                        if (pset.getType() == "IfcPropertySet") {
+                        if (pset.getType() === "IfcPropertySet") {
                             renderPSet(pset);
                         }
                     });
