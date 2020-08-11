@@ -384,7 +384,10 @@ class BIMServerLoaderPlugin extends Plugin {
                         scene.canvas.spinner.processes--;
                         viewer.scene._registerModel(performanceModel);
                         performanceModel.finalize();
-                        performanceModel.fire("loaded", true, false);
+                        performanceModel.scene.once("tick", () => {
+                            performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                            performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+                        });
                     }
                 });
 
