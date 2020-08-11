@@ -127,6 +127,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         fieldsToInclude.push("colorsQuantized");
 
         var newQuery = {
+            doublebuffer: false,
             type: "GeometryInfo",
             oids: oids,
             include: {
@@ -258,7 +259,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         // protocol version assumed to be 16
         //---------------------------------------------------------------------------------
 
-        const color = new Float32Array([1, 1, 1, 1]);
+        let color = new Float32Array([1, 1, 1, 1]);
 
         if (geometryType === 1) {
 
@@ -568,8 +569,9 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 				var indices = stream.readShortArray(nrIndices);
 				stream.align4();
 				var b = stream.readIstream;
-				if (b == 1) {
-					color = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
+				var rgba;
+				if (b === 1) {
+					rgba = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
 				}
 				stream.align4();
 				var nrVertices = stream.readInt();
@@ -587,14 +589,14 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 					//primitive: o.type
 				};
 				
-				if (color != null) {
+				if (rgba) {
 					// Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
 					geometry.colors = new Array(nrVertices * 4);
 					for (var j=0; j<nrVertices; j++) {
-						geometry.colors[j * 4 + 0] = color.r;
-						geometry.colors[j * 4 + 1] = color.g;
-						geometry.colors[j * 4 + 2] = color.b;
-						geometry.colors[j * 4 + 3] = color.a;
+						geometry.colors[j * 4 + 0] = rgba.r;
+						geometry.colors[j * 4 + 1] = rgba.g;
+						geometry.colors[j * 4 + 2] = rgba.b;
+						geometry.colors[j * 4 + 3] = rgba.a;
 					}
 				}
 				

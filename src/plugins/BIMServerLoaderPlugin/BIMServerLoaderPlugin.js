@@ -9,7 +9,7 @@ import {utils} from "../../viewer/scene/utils.js";
 /**
  * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org).
  *
- * Tested with BIMServer v1.5.120 and IFC schema ifc2x3tc1.
+ * Tested with BIMServer v1.5.182 and IFC schema ifc2x3tc1.
  *
  * * For each model loaded, creates a tree of {@link Entity}s within its {@link Viewer}'s {@link Scene}, with the root {@link Entity} representing the model and sub-{@link Entity}s representing objects within the model.
  * * The root {@link Entity} will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
@@ -28,7 +28,7 @@ import {utils} from "../../viewer/scene/utils.js";
  * we can issue RPC calls to the BIMServer Service Interface. The BIMServerLoaderPlugin makes RPC calls through that
  * to download the model and it's IFC metadata.
  *
- * Note that BIMServerLoaderPlugin works with BIMServer V1.5.120 or later.
+ * Note that BIMServerLoaderPlugin works with BIMServer V1.5.182 or later.
  *
  * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
  *
@@ -111,7 +111,7 @@ import {utils} from "../../viewer/scene/utils.js";
  *     });
  * });
  * ````
- * @class BIMServerLoaderPluginOLD
+ * @class BIMServerLoaderPlugin
  */
 class BIMServerLoaderPlugin extends Plugin {
 
