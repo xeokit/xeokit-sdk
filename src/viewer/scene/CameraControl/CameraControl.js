@@ -11,7 +11,6 @@ import {KeyboardPanRotateDollyHandler} from "./lib/handlers/KeyboardPanRotateDol
 import {CameraUpdater} from "./lib/CameraUpdater.js";
 import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
-import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 import {utils} from "../utils.js";
 
 /**
@@ -673,7 +672,7 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: new Float32Array(2),
             tapStartTime: -1,
-            lastTapTime: -1,
+            lastTapTime: -1
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event
@@ -709,7 +708,6 @@ class CameraControl extends Component {
             new MousePanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardAxisViewHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new MousePickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
-            new TouchPickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];
 
