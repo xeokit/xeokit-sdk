@@ -6,6 +6,8 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+* BIMServerLoaderPlugin
+    * Support BIMServer 1.5.182. [#287](https://github.com/xeokit/xeokit-sdk/issues/287) ([**@dimone-kun**](https://github.com/dimone-kun))
 * CameraControl 
     * Picking optimizations and fixes. [#404](https://github.com/xeokit/xeokit-sdk/pull/404) ([**@xeolabs**](https://github.com/xeolabs))
 * Entity
