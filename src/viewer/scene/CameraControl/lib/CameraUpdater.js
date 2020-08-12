@@ -50,6 +50,11 @@ class CameraUpdater {
                 updates.rotateDeltaY = 0;
             }
 
+
+            if (updates.rotateDeltaX !== 0 || updates.rotateDeltaY !== 0) {
+                updates.dollyDelta = 0;
+            }
+
             //----------------------------------------------------------------------------------------------------------
             // Dolly speed eye->look scaling
             //
