@@ -1,6 +1,6 @@
 import {math} from "../../math/math.js";
 
-const SCALE_DOLLY_EACH_FRAME = 5; // Recalculate dolly speed for eye->target distance on each Nth frame
+const SCALE_DOLLY_EACH_FRAME = 1; // Recalculate dolly speed for eye->target distance on each Nth frame
 const EPSILON = 0.001;
 const tempVec3 = math.vec3();
 
@@ -49,7 +49,6 @@ class CameraUpdater {
             if (Math.abs(updates.rotateDeltaY) < EPSILON) {
                 updates.rotateDeltaY = 0;
             }
-
 
             if (updates.rotateDeltaX !== 0 || updates.rotateDeltaY !== 0) {
                 updates.dollyDelta = 0;
