@@ -11,6 +11,7 @@ Unreleased
 * CameraControl 
     * Picking optimizations and fixes. [#404](https://github.com/xeokit/xeokit-sdk/pull/404) ([**@xeolabs**](https://github.com/xeolabs))
     * Fix CameraControl dolly/rotate interference. [#349](https://github.com/xeokit/xeokit-sdk/issues/349) ([**@xeolabs**](https://github.com/xeolabs))
+    * Set CameraControl rotationInertia zero by default. [#411](https://github.com/xeokit/xeokit-sdk/issues/411) ([**@xeolabs**](https://github.com/xeolabs))
 * Entity
     * Fix Rendering glitch on Chrome/FF/Android. [#402](https://github.com/xeokit/xeokit-sdk/issues/402) ([**@xeolabs**](https://github.com/xeolabs))       
     * Fix shading breakage for Phong, metallic and specular materials. [#410](https://github.com/xeokit/xeokit-sdk/issues/410) ([**@xeolabs**](https://github.com/xeolabs))
