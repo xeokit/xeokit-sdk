@@ -640,7 +640,7 @@ class CameraControl extends Component {
 
             dragRotationRate: 360.0,
             keyboardRotationRate: 90.0,
-            rotationInertia: 0.5,
+            rotationInertia: 0.0,
 
             // Panning
 
@@ -1222,20 +1222,20 @@ class CameraControl extends Component {
      * without interference from inertia. Zero inertia can also mean that less frames are rendered while
      * you are rotating the Camera.
      *
-     * Default is ````0.5````.
+     * Default is ````0.0````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
      * @param {Number} rotationInertia New inertial factor.
      */
     set rotationInertia(rotationInertia) {
-        this._configs.rotationInertia = (rotationInertia !== undefined && rotationInertia !== null) ? rotationInertia : 0.5;
+        this._configs.rotationInertia = (rotationInertia !== undefined && rotationInertia !== null) ? rotationInertia : 0.0;
     }
 
     /**
      * Gets the rotation inertia factor.
      *
-     * Default is ````0.5````.
+     * Default is ````0.0````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
