@@ -3,11 +3,45 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BIMServerLoaderPlugin - Loading a model from a given BIMServer</title>
+    <title>BIMServerLoaderPlugin - Loading a model from your BIMServer</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
     <script src="libs/perfect-scrollbar.min.js"></script>
 
     <style>
+
+        #info2 {
+            position: absolute;
+            top: 0;
+            float: right;
+            right: 0;
+            padding: 10px;
+            height: auto;
+            text-align: left;
+            background: RGBA(0, 0, 0, 0.4);
+            max-width: 340px;
+            color: white;
+        }
+
+        #info2 form {
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        #info2 input {
+            margin-bottom: 3px;
+            padding: 10px;
+            width: 90%;
+            border: 1px solid #CCC
+        }
+
+        #info2 button {
+            padding: 10px
+        }
+
+        #info2 label {
+            cursor: pointer
+        }
+
 
         #myCanvas {
             background: #ffffff;
@@ -166,27 +200,19 @@
 
 <div id="treeViewContainer"></div>
 
-<div id="info">
-    <h1>BIMServerPlugin - Loading an IFC Model from a given BIMServer</h1>
-    <ul>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view of model structure
-        </li>
-        <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
-        </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">User
-                Guide</a>
-        </li>
-    </ul>
+<div id="info2">
+    <h1><a target="_other"
+           href="./../docs/class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
+        - Loading an IFC Model from your BIMServer</h1>
+    <br>
+    <p>Please enter credentials for your BIMServer instance, then click Load Model.</p>
+    <form id='load-form' action="" method='post' onsubmit="loadModel(); return false;">
+        <input type="text" id="bimServerAddress" placeholder="BIMServer address" required>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="password" placeholder="Password" required>
+        <input type="text" id="poid" placeholder="Project ID" required>
+        <button type='submit' id="loadModel">Load My Model</button>
+    </form>
 </div>
 </body>
 
@@ -202,20 +228,6 @@
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
     import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
     import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
-    import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-
-    //------------------------------------------------------------------------------------------------------------------
-    // BIMServer parameters for this example
-    //------------------------------------------------------------------------------------------------------------------
-
-    //const bimServerAddress = "BIMServer.systhema.nl";
-    const bimServerAddress = "http://localhost:8082";
-
-    const username = "kevin.flynn@en.com";
-    const password = "secretPassword";
-
-    const poid = 196609;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer,
@@ -237,8 +249,8 @@
     viewer.scene.xrayMaterial.edgeAlpha = 0.4;
     viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
 
-    viewer.scene.highlightMaterial.edges = false;
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edges = true;
+    viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
@@ -310,34 +322,6 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Use a SectionPlanesPlugin to create a section plane wherever we click on an object
-    //------------------------------------------------------------------------------------------------------------------
-
-    const sectionPlanes = new SectionPlanesPlugin(viewer, {});
-
-    var i = 1;
-
-    viewer.scene.input.on("mouseclicked", (coords) => {
-
-        var pickResult = viewer.scene.pick({
-            canvasPos: coords,
-            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-        });
-
-        if (pickResult) {
-
-            const sectionPlane = sectionPlanes.createSectionPlane({
-                pos: pickResult.worldPos,
-                dir: math.mulVec3Scalar(pickResult.worldNormal, -1)
-            });
-
-            sectionPlanes.showControl(sectionPlane.id);
-
-            i++;
-        }
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
     // Mouse over objects to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
@@ -389,95 +373,6 @@
                 }
             }
         }
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a BIMServerClient
-    //------------------------------------------------------------------------------------------------------------------
-
-    const bimServerClient = new BimServerClient(bimServerAddress);
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Add a BIMServerLoaderPlugin to the Viewer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
-        bimServerClient: bimServerClient,
-
-        objectDefaults: { // <<----- Only override color of IfcSpace elements, keep other original IFC colors
-
-            IfcSpace: {
-                visible: false,
-                pickable: false,
-                opacity: 0.2
-            },
-
-            IfcWindow: {
-                opacity: 0.5
-            }
-        }
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Initialize the BIMServerClient
-    //------------------------------------------------------------------------------------------------------------------
-
-    bimServerClient.init(() => {
-
-        //--------------------------------------------------------------------------------------------------------------
-        // Login to the BIMServerClient
-        //--------------------------------------------------------------------------------------------------------------
-
-        bimServerClient.login(username, password, () => {
-
-            //----------------------------------------------------------------------------------------------------------
-            // Login to BIMServer
-            //----------------------------------------------------------------------------------------------------------
-
-            bimServerClient.call("ServiceInterface", "getProjectByPoid", {
-                poid: poid
-            }, (project) => {
-
-                //------------------------------------------------------------------------------------------------------
-                // Load the latest revision of the project using the BIMServerLoaderPlugin.
-                // The BIMServerLoaderPlugin uses the BIMServerClient to load the model and IFC metadata.
-                //------------------------------------------------------------------------------------------------------
-
-                // Load the latest revision of the project
-                // Use whatever IFC schema that's for
-
-                const roid = project.lastRevisionId;
-                const schema = project.schema;
-
-                const model = bimServerLoader.load({
-
-                    id: "myModel",                  // Assigned to Entity#id, and Entity#isModel will also be set true
-
-                    poid: poid,
-                    roid: roid,
-                    schema: schema,
-
-                    //  scale: [0.001, 0.001, 0.001],   // Assigned to Entity#scale, since model boundary exceeds view volume
-                    rotation: [-90, 0, 0],          // Assigned to Entity#rotation, since model "up" is +Z
-                    edges: true
-                });
-
-                //------------------------------------------------------------------------------------------------------
-                // When model loaded, fit model to view
-                //------------------------------------------------------------------------------------------------------
-
-                model.on("loaded", function () {
-                    viewer.cameraFlight.jumpTo(model);
-
-                }, function (error) {
-                    console.log(error);
-                });
-
-            }, function (error) {
-                console.log(error);
-            });
-        });
-
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -963,6 +858,102 @@
         }
         e.event.preventDefault();
     });
+
+
+
+
+    const loadForm = document.getElementById("load-form");
+
+    loadForm.onsubmit =  function(e) {
+
+        const bimServerAddressElement = document.getElementById("bimServerAddress");
+        const usernameElement = document.getElementById("username");
+        const passwordElement = document.getElementById("password");
+        const poidElement = document.getElementById("poid");
+
+        const bimServerAddress = bimServerAddressElement.innerText || "http://localhost:8082";
+        const username = usernameElement.innerText || "kevin.flynn@en.com";
+        const password = passwordElement.innerText || "secretPassword";
+        const poid = parseInt(poidElement.innerText || 327681);
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Create a BIMServerClient
+        //------------------------------------------------------------------------------------------------------------------
+
+        const bimServerClient = new BimServerClient(bimServerAddress);
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Add a BIMServerLoaderPlugin to the Viewer
+        //------------------------------------------------------------------------------------------------------------------
+
+        const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
+            bimServerClient: bimServerClient
+        });
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Initialize the BIMServerClient
+        //------------------------------------------------------------------------------------------------------------------
+
+        bimServerClient.init(() => {
+
+            //--------------------------------------------------------------------------------------------------------------
+            // Login to the BIMServerClient
+            //--------------------------------------------------------------------------------------------------------------
+
+            bimServerClient.login(username, password, () => {
+
+                //----------------------------------------------------------------------------------------------------------
+                // Login to BIMServer
+                //----------------------------------------------------------------------------------------------------------
+
+                bimServerClient.call("ServiceInterface", "getProjectByPoid", {
+                    poid: poid
+                }, (project) => {
+
+                    //------------------------------------------------------------------------------------------------------
+                    // Load the latest revision of the project using the BIMServerLoaderPlugin.
+                    // The BIMServerLoaderPlugin uses the BIMServerClient to load the model and IFC metadata.
+                    //------------------------------------------------------------------------------------------------------
+
+                    // Load the latest revision of the project
+                    // Use whatever IFC schema that's for
+
+                    const roid = project.lastRevisionId;
+                    const schema = project.schema;
+
+                    const model = bimServerLoader.load({
+
+                        id: "myModel",                  // Assigned to Entity#id, and Entity#isModel will also be set true
+
+                        poid: poid,
+                        roid: roid,
+                        schema: schema,
+
+                        //  scale: [0.001, 0.001, 0.001],   // Assigned to Entity#scale, since model boundary exceeds view volume
+                        rotation: [-90, 0, 0],          // Assigned to Entity#rotation, since model "up" is +Z
+                        edges: true
+                    });
+
+                    //------------------------------------------------------------------------------------------------------
+                    // When model loaded, fit model to view
+                    //------------------------------------------------------------------------------------------------------
+
+                    model.on("loaded", function () {
+                        viewer.cameraFlight.jumpTo(model);
+
+                    }, function (error) {
+                        console.log(error);
+                    });
+
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+        });
+
+        e.preventDefault();
+    };
 
 </script>
 
