@@ -12,6 +12,8 @@ class KeyboardPanRotateDollyHandler {
 
         const canvas = scene.canvas.canvas;
 
+        const pickController = controllers.pickController;
+
         document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -116,6 +118,9 @@ class KeyboardPanRotateDollyHandler {
                     } else if (dollyBackwards) {
                         updates.dollyDelta += dollyDelta;
                     }
+                    pickController.pickCursorPos = states.pointerCanvasPos;
+                    pickController.schedulePickSurface = true;
+                    pickController.update();
                 }
             }
 
