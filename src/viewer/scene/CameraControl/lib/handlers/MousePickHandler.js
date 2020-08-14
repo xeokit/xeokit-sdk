@@ -202,6 +202,7 @@ class MousePickHandler {
                 if (pickedSubs || pickedNothingSubs || pickedSurfaceSubs) {
 
                     pickController.pickCursorPos = states.pointerCanvasPos;
+                    pickController.schedulePickEntity = true;
                     pickController.schedulePickSurface = pickedSurfaceSubs;
                     pickController.update();
 
