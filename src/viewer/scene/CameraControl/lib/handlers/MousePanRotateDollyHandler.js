@@ -339,6 +339,10 @@ class MousePanRotateDollyHandler {
             }
             const normalizedDelta = delta / Math.abs(delta);
             updates.dollyDelta += -normalizedDelta * secsElapsed * configs.mouseWheelDollyRate;
+            pickController.pickCursorPos = states.pointerCanvasPos;
+            pickController.schedulePickSurface = true;
+            pickController.update();
+
             e.preventDefault();
         });
     }

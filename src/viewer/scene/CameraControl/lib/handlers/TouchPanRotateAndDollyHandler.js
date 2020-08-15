@@ -23,6 +23,13 @@ class TouchPanRotateAndDollyHandler {
 
         const canvas = this._scene.canvas.canvas;
 
+        let waitForTick = false;
+
+        this._onTick = scene.on("tick", () => {
+            waitForTick = false;
+        });
+
+
         canvas.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
@@ -62,6 +69,16 @@ class TouchPanRotateAndDollyHandler {
                 tapStartTime = -1;
             }
 
+            if (touches.length === 2) {
+                const touch0 = touches[0];
+                const touch1 = touches[1];
+                const currentMiddleTouch = math.geometricMeanVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
+
+                pickController.pickCursorPos = currentMiddleTouch;
+                pickController.schedulePickSurface = true;
+                pickController.update();
+            }
+
             while (lastTouches.length < touches.length) {
                 lastTouches.push(new Float32Array(2));
             }
@@ -81,6 +98,11 @@ class TouchPanRotateAndDollyHandler {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
+            if (waitForTick) {
+                // Limit changes detection to one per frame
+                return;
+            }
+            waitForTick = true;
             // Scaling drag-rotate to canvas boundary
 
             const canvasBoundary = scene.canvas.boundary;
@@ -140,62 +162,52 @@ class TouchPanRotateAndDollyHandler {
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
-                math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
-                math.subVec2([touch1.pageX, touch1.pageY], lastTouches[1], touch1Vec);
+                const lastMiddleTouch = math.geometricMeanVec2(lastTouches[0], lastTouches[1]);
+                const currentMiddleTouch = math.geometricMeanVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
 
-                const panning = math.dotVec2(touch0Vec, touch1Vec) > 0;
+                const touchDelta = new Float32Array(2);
 
-                if (panning) {
+                math.subVec2(lastMiddleTouch, currentMiddleTouch, touchDelta);
 
-                    math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
 
-                    const xPanDelta = touch0Vec[0];
-                    const yPanDelta = touch0Vec[1];
+                // PANNING
+                const xPanDelta = touchDelta[0];
+                const yPanDelta = touchDelta[1];
 
-                    const camera = scene.camera;
+                const camera = scene.camera;
 
-                    // We use only canvasHeight here so that aspect ratio does not distort speed
+                // We use only canvasHeight here so that aspect ratio does not distort speed
 
-                    if (camera.projection === "perspective") {
+                if (camera.projection === "perspective") {
+                    const pickedWorldPos = pickController.pickResult ? pickController.pickResult.worldPos : scene.center;
 
-                        //----------------------------
-                        // TODO: Pick on first touch
-                        //----------------------------
+                    const depth = Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])));
+                    const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                        const touchPicked = false;
-                        const pickedWorldPos = [0, 0, 0];
-
-                        const depth = Math.abs(touchPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
-                        const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
-
-                        updates.panDeltaX += (xPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
-                        updates.panDeltaY += (yPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
-
-                    } else {
-
-                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight) * configs.touchPanRate;
-                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight) * configs.touchPanRate;
-                    }
+                    updates.panDeltaX -= (xPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
+                    updates.panDeltaY -= (yPanDelta * targetDistance / canvasHeight) * configs.touchPanRate;
 
                 } else {
 
-                    // Dollying
-
-                    const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
-                    const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
-
-                    updates.dollyDelta = (d2 - d1) * configs.touchDollyRate;
-
-                    states.pointerCanvasPos[0] = ((touch1.pageX + touch0.pageX) / 2);
-                    states.pointerCanvasPos[1] = ((touch1.pageY + touch0.pageY) / 2);
+                    updates.panDeltaX -= 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight) * configs.touchPanRate;
+                    updates.panDeltaY -= 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight) * configs.touchPanRate;
                 }
+
+                // Dollying
+                states.skipNextPick = true;
+
+                const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
+                const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
+
+                updates.dollyDelta = (d2 - d1) * configs.touchDollyRate;
+
+                states.pointerCanvasPos = currentMiddleTouch;
             }
 
             for (let i = 0; i < numTouches; ++i) {
                 lastTouches[i][0] = touches[i].pageX;
                 lastTouches[i][1] = touches[i].pageY;
             }
-
             event.stopPropagation();
 
         }, {passive: true});
@@ -205,11 +217,10 @@ class TouchPanRotateAndDollyHandler {
     }
 
     destroy() {
-
         const canvas = this._scene.canvas.canvas;
-
         canvas.removeEventListener("touchstart", this._canvasTouchStartHandler);
         canvas.removeEventListener("touchmove", this._canvasTouchMoveHandler);
+        this._scene.off(this._onTick);
     }
 }
 
