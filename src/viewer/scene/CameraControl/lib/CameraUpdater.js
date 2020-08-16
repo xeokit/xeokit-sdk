@@ -73,14 +73,7 @@ class CameraUpdater {
                 countDown = SCALE_DOLLY_EACH_FRAME;
 
                 if (updates.dollyDelta !== 0) {
-
                     if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
-
-                        pickController.pickCursorPos = states.pointerCanvasPos;
-                        pickController.schedulePickSurface = true;
-
-                        pickController.update();
-
                         if (pickController.pickResult && pickController.pickResult.worldPos) {
                             const worldPos = pickController.pickResult.worldPos;
                             pivotController.setPivotPos(worldPos);
