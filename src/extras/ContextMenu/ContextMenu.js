@@ -12,11 +12,9 @@ const idMap = new Map();
 class Menu {
     constructor(id) {
         this.id = id;
-        this.parentItem = null;
         this.groups = [];
         this.menuElement = null;
         this.shown = false;
-        this.mouseOver = 0;
     }
 }
 
@@ -39,7 +37,6 @@ class Item {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
-        this.parentMenu = null;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -268,7 +265,7 @@ class ContextMenu {
      * Creates a context menu.
      *
      * @param {Object} [cfg] Context menu configuration.
-     * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
+     * @param {Object[]} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this context menu is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      */
@@ -670,16 +667,20 @@ class ContextMenu {
                         if (itemSubMenu) {
 
                             // Item with sub-menu
-                            // Hovering the item shows sub-menu
-                            // Menu remains shown while mouse is over item or sub-menu
+                            // Hovering item shows the sub-menu, hiding other sub-menus first
 
                             item.itemElement.addEventListener("mouseenter", (function () {
+
                                 const _item = item;
+
                                 return function (event) {
+
                                     event.preventDefault();
+
                                     if (_item.enabled === false) {
                                         return;
                                     }
+
                                     if (!_item.subMenu) {
                                         return;
                                     }
@@ -693,34 +694,18 @@ class ContextMenu {
                                     const itemElement = _item.itemElement;
                                     const rect = itemElement.getBoundingClientRect();
 
-                                    subMenu.mouseOver++;
-                                    //console.log("mouseenter " + _item.id);
-
-                                    if (self._shownSubMenu) {
+                                    if (self._shownSubMenu) { // Only one sub-menu shown at a time
                                         self._hideMenu(self._shownSubMenu.id);
                                         self._shownSubMenu = null;
                                     }
+
+                                    // TODO: Position sub-menu on the left if no room on right
 
                                     self._showMenu(subMenu.id, rect.right - 5, rect.top);
 
                                     self._shownSubMenu = subMenu;
                                 };
-                            })());
 
-                            item.itemElement.addEventListener("mouseleave", (function () {
-                                const _item = item;
-                                return function (event) {
-                                    event.preventDefault();
-                                    if (_item.enabled === false) {
-                                        return;
-                                    }
-                                    if (!_item.subMenu) {
-                                        return;
-                                    }
-                                    console.log("mouseleave " + _item.id);
-                                    const subMenu = item.subMenu;
-                                    subMenu.mouseOver--;
-                                };
                             })());
 
                         } else {
