@@ -80,6 +80,8 @@
 
 <div id="info">
     <h1>ContextMenu with sub-menus</h1><br>
+    <p>Right-click an object to show the context menu.</p>
+    <br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -96,7 +98,7 @@
         </li>
         <li>
             <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
         </li>
     </ul>
 </div>
@@ -122,9 +124,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
     viewer.scene.xrayMaterial.fill = true;
     viewer.scene.xrayMaterial.fillAlpha = 0.1;
@@ -139,14 +141,13 @@
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create ContextMenu for right-click on an Entity
+    // Create a multi-level ContextMenu for right-click on an Entity
     //------------------------------------------------------------------------------------------------------------------
 
     const objectContextMenu = new ContextMenu({
 
         items: [ // First level items
             [
-
 
                 // Per-object emphasis effects
 
@@ -197,51 +198,7 @@
                     ]
                 },
 
-                // Per-object emphasis effects
-
-                {
-                    getTitle: (context) => {
-                        return "ddd";
-                    },
-
-                    doAction: function (context) {
-                        // Does nothing
-                    },
-
-                    items: [ // Sub-items
-                        [
-                            {
-                                getTitle: (context) => {
-                                    return (!context.entity.visible) ? "Show" : "Hide";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.visible = !context.entity.visible;
-                                }
-                            },
-                            {
-                                getTitle: (context) => {
-                                    return (!context.entity.selected) ? "Select" : "Undo Select";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.selected = !context.entity.selected;
-                                }
-                            },
-                            {
-                                getTitle: (context) => {
-                                    return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.highlighted = !context.entity.highlighted;
-                                }
-                            }
-                        ]
-                    ]
-                },
-
-// Camera navigation
+                // Camera navigation
 
                 {
                     getTitle: (context) => {
@@ -260,16 +217,16 @@
                                 },
 
                                 doAction: function (context) {
-
+                                    context.viewer.cameraFlight.flyTo(context.entity);
                                 }
                             },
                             {
                                 getTitle: (context) => {
-                                    return "Hide";
+                                    return "Fit all to View";
                                 },
 
                                 doAction: function (context) {
-
+                                    context.viewer.cameraFlight.flyTo(context.viewer.scene);
                                 }
                             }
                         ]
@@ -307,8 +264,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "./models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true,
         excludeUnclassifiedObjects: false
     });
