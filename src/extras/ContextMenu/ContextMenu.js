@@ -4,6 +4,9 @@ const idMap = new Map();
 
 /**
  * Represents the state of a menu.
+ *
+ * Menus contain groups, which contain items, and each item can be either a menu option or a sub-group.
+ *
  * @private
  */
 class Menu {
@@ -52,17 +55,18 @@ class Item {
  *
  * ## Overview
  *
- * * Attach to anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
+ * * A pure JavaScript, multi-level context menu
  * * Configure custom items
- * * Allows to dynamically enable or disable items
- * * Configure custom style with custom CSS (see examples above)
+ * * Dynamically labeled items
+ * * Dynamically enable/disable items
+ * * Style with custom CSS
  *
  * ## Usage
  *
  * In the example below we'll create a ContextMenu that pops up whenever we right-click on an {@link Entity} within
  * our {@link Scene}.
  *
- * First, we'll create the ContextMenu, configuring it with a list of menu items.
+ * First, we'll create the ````ContextMenu````, configuring it with a list of menu items.
  *
  * Each item has:
  *
@@ -76,10 +80,10 @@ class Item {
  *
  *
  * Note how the ````doAction()```` and ````getEnabled()```` callbacks accept a ````context````
- * object. That must be set on the ContextMenu before we're able to we show it. The context object can be anything. In this example,
+ * object. That must be set on the ````ContextMenu```` before we're able to we show it. The context object can be anything. In this example,
  * we'll use the context object to provide the callbacks with the Entity that we right-clicked.
  *
- * We'll also initially enable the ContextMenu.
+ * We'll also initially enable the ````ContextMenu````.
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom)]
  *
@@ -126,14 +130,14 @@ class Item {
  * });
  * ````
  *
- * Next, we'll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
+ * Next, we'll make the ````ContextMenu```` appear whenever we right-click on an Entity. Whenever we right-click
  * on the canvas, we'll attempt to pick the Entity at those mouse coordinates. If we succeed, we'll feed the
- * Entity into ContextMenu via the context object, then show the ContextMenu.
+ * Entity into ````ContextMenu```` via the context object, then show the ````ContextMenu````.
  *
- * From there, each ContextMenu item's ````getEnabled()```` callback will be invoked (if provided), to determine if the item should
+ * From there, each ````ContextMenu```` item's ````getEnabled()```` callback will be invoked (if provided), to determine if the item should
  * be enabled. If we click an item, its ````doAction()```` callback will be invoked with our context object.
  *
- * Remember that we must set the context on our ContextMenu before we show it, otherwise it will log an error to the console,
+ * Remember that we must set the context on our ````ContextMenu```` before we show it, otherwise it will log an error to the console,
  * and ignore our attempt to show it.
  *
  * ````javascript*
@@ -160,16 +164,16 @@ class Item {
  * });
  * ````
  *
- * Note how we only show the ContextMenu if it's enabled. We can use that mechanism to switch between multiple
- * ContextMenu instances depending on what we clicked.
+ * Note how we only show the ````ContextMenu```` if it's enabled. We can use that mechanism to switch between multiple
+ * ````ContextMenu```` instances depending on what we clicked.
  *
  * ## Dynamic Item Titles
  *
- * To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
- * ````getTitle()```` callback. The callback will fire each time you show ContextMenu, which will dynamically
+ * To make an item dynamically regenerate its title text whenever we show the ````ContextMenu````, provide its title with a
+ * ````getTitle()```` callback. The callback will fire each time you show ````ContextMenu````, which will dynamically
  * set the item title text.
  *
- * In the example below, we'll create a simple ContextMenu that allows us to toggle the selection of an object
+ * In the example below, we'll create a simple ````ContextMenu```` that allows us to toggle the selection of an object
  * via its first item, which changes text depending on whether we are selecting or deselecting the object.
  *
  * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles)]
@@ -207,7 +211,7 @@ class Item {
  *
  * Each menu item can optionally have a sub-menu, which will appear when we hover over the item.
  *
- * In the example below, we'll create a much simpler ContextMenu that has only one item, called "Effects", which
+ * In the example below, we'll create a much simpler ````ContextMenu```` that has only one item, called "Effects", which
  * will open a cascading sub-menu whenever we hover over that item.
  *
  * Note that our "Effects" item has no ````doAction```` callback, because an item with a sub-menu performs no
@@ -277,10 +281,12 @@ class ContextMenu {
         this._itemsCfg = [];    // Items as given as configs
 
         this._rootMenu = null;  // The root Menu in the tree
-        this._menuList = [];    // List of Menus
-        this._menuMap = {};     // Menus mapped to their IDs
-        this._itemList = [];    // List of Items
-        this._itemMap = {};     // Items mapped to their IDs
+        this._menuList = [];    // List of all Menus
+        this._menuMap = {};     // All Menus mapped to their IDs
+        this._itemList = [];    // List of all Items
+        this._itemMap = {};     // All Items mapped to their IDs
+
+        this._shownSubMenu = null; // The sub-menu that is currently shown; only one sub-menu may be shown at a time
 
         this._shown = false;    // True when the ContextMenu is visible
 
@@ -317,7 +323,7 @@ class ContextMenu {
 
         this._parseItems(itemsCfg);
 
-        this._createView();
+        this._createUI();
     }
 
     /**
@@ -332,7 +338,7 @@ class ContextMenu {
     /**
      * Sets whether this context menu is enabled.
      *
-     * Hides the menu when disabling.
+     * While this is ````false````, the context menu is hidden and {@link ContextMenu#show} does nothing.
      *
      * @type {Boolean}
      */
@@ -354,7 +360,7 @@ class ContextMenu {
     /**
      * Gets whether this context menu is enabled.
      *
-     * {@link ContextMenu#show} does nothing while this is ````false````.
+     * While this is ````false````, the context menu is hidden and {@link ContextMenu#show} does nothing.
      *
      * @type {Boolean}
      */
@@ -367,7 +373,7 @@ class ContextMenu {
      *
      * The context can be any object that you need to be provides to the callbacks configured on {@link ContextMenu#items}.
      *
-     * This must be set before calling {@link ContextMenu#show}.
+     * The context must be set before calling {@link ContextMenu#show}.
      *
      * @type {Object}
      */
@@ -386,8 +392,6 @@ class ContextMenu {
 
     /**
      * Shows this context menu at the given page coordinates.
-     *
-     * Also calls the ````getEnabled()```` callback on the menu items, where supplied, to enable or disable them. See the class documentation for more info.
      *
      * Does nothing when {@link ContextMenu#enabled} is ````false````.
      *
@@ -538,11 +542,11 @@ class ContextMenu {
         this._rootMenu = visitItems(itemsCfg);
     }
 
-    _createView() { // Builds DOM elements from menu data
+    _createUI() { // Builds DOM elements for the entire menu tree
 
         const visitMenu = (menu) => {
 
-            this._createMenuView(menu);
+            this._createMenuUI(menu);
 
             const groups = menu.groups;
 
@@ -566,11 +570,7 @@ class ContextMenu {
         visitMenu(this._rootMenu);
     }
 
-    _createMenuView(menu) { // Builds DOM elements for a menu
-
-        //-----------------------------------------------------------------
-        // Build menu DOM elements
-        //-----------------------------------------------------------------
+    _createMenuUI(menu) { // Builds DOM elements for a menu
 
         const groups = menu.groups;
         const html = [];
@@ -640,25 +640,11 @@ class ContextMenu {
             e.preventDefault();
         };
 
-        //-----------------------------------------------------------------
         // Bind event handlers
-        //-----------------------------------------------------------------
 
         const self = this;
 
-        menu.menuElement.addEventListener("mouseenter", function (event) {
-            event.preventDefault();
-            menu.mouseOver++;
-            console.log("mouseenter");
-        });
-
-        menu.menuElement.addEventListener("mouseleave", function (event) {
-            event.preventDefault();
-            menu.mouseOver--;
-            if (menu.mouseOver === 0) {
-                self._hideMenu(menu.id);
-            }
-        });
+        this._shownSubMenu = null;
 
         if (groups) {
 
@@ -697,13 +683,27 @@ class ContextMenu {
                                     if (!_item.subMenu) {
                                         return;
                                     }
+
+                                    const subMenu = _item.subMenu;
+
+                                    if (self._shownSubMenu && self._shownSubMenu.id === subMenu.id) {
+                                        return;
+                                    }
+
                                     const itemElement = _item.itemElement;
                                     const rect = itemElement.getBoundingClientRect();
-                                    const subMenu = item.subMenu;
+
                                     subMenu.mouseOver++;
                                     //console.log("mouseenter " + _item.id);
-                                    self._showMenu(subMenu.id, rect.right-5, rect.top);
 
+                                    if (self._shownSubMenu) {
+                                        self._hideMenu(self._shownSubMenu.id);
+                                        self._shownSubMenu = null;
+                                    }
+
+                                    self._showMenu(subMenu.id, rect.right - 5, rect.top);
+
+                                    self._shownSubMenu = subMenu;
                                 };
                             })());
 
@@ -720,11 +720,6 @@ class ContextMenu {
                                     console.log("mouseleave " + _item.id);
                                     const subMenu = item.subMenu;
                                     subMenu.mouseOver--;
-                                    if (subMenu.mouseOver === 0) {
-                                        self._hideMenu(subMenu.id);
-                                    }
-                                    //..
-
                                 };
                             })());
 
@@ -863,6 +858,7 @@ class ContextMenu {
             const menu = this._menuList[i];
             this._hideMenu(menu.id);
         }
+        this._shownSubMenu = null;
     }
 
     _showMenuElement(menuElement, pageX, pageY) { // Shows the given menu element, at the specified page coordinates
