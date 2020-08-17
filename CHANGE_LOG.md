@@ -2,9 +2,77 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.9
+
+Unreleased
+
+* CameraControl 
+    * Improve CameraControl touch dolly/pan. [#415](https://github.com/xeokit/xeokit-sdk/pull/415) ([**@amoki**](https://github.com/amoki))
+       
+# 1.3.8
+
+August 14, 2020
+
+* BIMServerLoaderPlugin
+    * Support BIMServer 1.5.182. [#287](https://github.com/xeokit/xeokit-sdk/issues/287) ([**@dimone-kun**](https://github.com/dimone-kun))
+* CameraControl 
+    * Picking optimizations and fixes. [#404](https://github.com/xeokit/xeokit-sdk/pull/404) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix CameraControl dolly/rotate interference. [#349](https://github.com/xeokit/xeokit-sdk/issues/349) ([**@xeolabs**](https://github.com/xeolabs))
+    * Set CameraControl rotationInertia zero by default. [#411](https://github.com/xeokit/xeokit-sdk/issues/411) ([**@xeolabs**](https://github.com/xeolabs))
+    *  Fix CameraControl "picked" event. [#412](https://github.com/xeokit/xeokit-sdk/issues/412) ([**@xeolabs**](https://github.com/xeolabs))
+* Entity
+    * Fix Rendering glitch on Chrome/FF/Android. [#402](https://github.com/xeokit/xeokit-sdk/issues/402) ([**@xeolabs**](https://github.com/xeolabs))       
+    * Fix shading breakage for Phong, metallic and specular materials. [#410](https://github.com/xeokit/xeokit-sdk/issues/410) ([**@xeolabs**](https://github.com/xeolabs))
+       
+# 1.3.7
+
+August 7, 2020
+
+* CameraControl 
+    * Customizable CameraControl key mappings. [#395](https://github.com/xeokit/xeokit-sdk/pull/395) ([**@xeolabs**](https://github.com/xeolabs))
+    * Add CameraControl#touchDollyRate and simplify touch code. [#392](https://github.com/xeokit/xeokit-sdk/pull/392) ([**@amoki**](https://github.com/amoki))
+    * Prevent CameraControl touch rotation in plan view mode. [#396](https://github.com/xeokit/xeokit-sdk/pull/396) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix CameraControl followPointer for pinch-dollying on touch devices. [#397](https://github.com/xeokit/xeokit-sdk/issues/397) ([**@xeolabs**](https://github.com/xeolabs))
+    * CameraControl one-finger panning in planView mode on touch devices. [#398](https://github.com/xeokit/xeokit-sdk/issues/398) ([**@xeolabs**](https://github.com/xeolabs))
+* GLTFLoaderPlugin
+    * Fix edgeThreshold config for GLTFLoaderPlugin and PerformanceModel. [#385](https://github.com/xeokit/xeokit-sdk/issues/385) ([**@xeolabs**](https://github.com/xeolabs))
+* Entity
+    * Fix broken emphasis fill effect. [#394](https://github.com/xeokit/xeokit-sdk/issues/394) ([**@xeolabs**](https://github.com/xeolabs))       
+   
+# 1.3.6
+
+July 16, 2020
+
+* ImagePlane
+    * Embed images in section planes and ground planes. [#378](https://github.com/xeokit/xeokit-sdk/issues/378) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+    * Fix doublePickedNothing event arguments. [#365](https://github.com/xeokit/xeokit-sdk/issues/365) ([**@xeolabs**](https://github.com/xeolabs))
+* Annotation
+    * Create example of creating annotation at center of clicked object. [#374](https://github.com/xeokit/xeokit-sdk/issues/374) ([**@xeolabs**](https://github.com/xeolabs))
+* buildPlaneGeometry()
+    * Flip buildPlaneGeometry() UVs horizontally.  [7c8bfe5](https://github.com/xeokit/xeokit-sdk/commit/7c8bfe51e336e6a424d6a9fbf04272cd2fc4e580) ([**@xeolabs**](https://github.com/xeolabs))
+* Mesh
+    * Fix Mesh emissive mapping.  [#379](https://github.com/xeokit/xeokit-sdk/issues/379) ([**@xeolabs**](https://github.com/xeolabs))
+* Canvas
+    * Fix blend alpha function for non-transparent canvas.  [#381](https://github.com/xeokit/xeokit-sdk/issues/381) ([**@xeolabs**](https://github.com/xeolabs))
+    
+# 1.3.53
+
+July 4, 2020
+
+* PerformanceModel
+    * Fix PerformanceModel for uncompressed mesh/geometry positions. [#370](https://github.com/xeokit/xeokit-sdk/issues/370) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl 
+    * Add pan rate config for touch. [#363](https://github.com/xeokit/xeokit-sdk/issues/363) ([**@juho-ylikyla**](https://github.com/juho-ylikyla))
+    * Fix "Not initializing lastX and lastY leads to NaN". [#357](https://github.com/xeokit/xeokit-sdk/pull/357) ([**@Kurtil**](https://github.com/Kurtil))
+* ViewCullPlugin
+    * Fix ViewCullPlugin: fix ObjectCullStates memory leak. [#322](https://github.com/xeokit/xeokit-sdk/issues/322) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin
+    * Fix XKTLoaderPlugin: MetaModel not destroyed with PerformanceModel. [#360](https://github.com/xeokit/xeokit-sdk/issues/360) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.3.52
 
-June 18, 2020
+June 14, 2020
 
 * PerformanceModel
     * Restore missing PerformanceModel#entityList. [#320](https://github.com/xeokit/xeokit-sdk/issues/320) ([**@xeolabs**](https://github.com/xeolabs))

@@ -198,7 +198,6 @@ class InstancingDrawRenderer {
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const lights = lightsState.lights;
-
         let light;
         program.bind();
         const camera = scene.camera;

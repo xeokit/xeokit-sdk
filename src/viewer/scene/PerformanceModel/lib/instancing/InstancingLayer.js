@@ -34,6 +34,7 @@ class InstancingLayer {
      * @param cfg.normals Flat float normals array.
      * @param cfg.indices Flat int indices array.
      * @param cfg.edgeIndices Flat int edges indices array.
+     * @param cfg.edgeThreshold
      */
     constructor(model, cfg) {
         this._instancingRenderers = getInstancingRenderers(model.scene);
@@ -124,7 +125,7 @@ class InstancingLayer {
 
         var edgeIndices = cfg.edgeIndices;
         if (!edgeIndices) {
-            edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 10);
+            edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
         }
 
         stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
@@ -828,6 +829,17 @@ class InstancingLayer {
         }
         if (this._instancingRenderers.occlusionRenderer) {
             this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    //---- SHADOWS -----------------------------------------------------------------------------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.shadowRenderer) {
+            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this);
         }
     }
 

@@ -807,7 +807,7 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [0.3, 0.3, 0.3],
+            color: [1.0, 1.0, 1.0],
             intensity: 0.7
         });
 
@@ -1208,6 +1208,7 @@ class Scene extends Component {
                 this._compilables[id].compile();
             }
         }
+        this._renderer.shadowsDirty();
         this.fire("compile", this, true);
     }
 

@@ -6,14 +6,6 @@ import {ifc4} from './ifc4.js';
 import Model from './model.js';
 import {translations} from './translations_en.js';
 
-//var XMLHttpRequest = require('node-http-xhr');
-
-export { default as BimServerApiPromise } from './bimserverapipromise.js';
-export { default as BimServerApiWebSocket } from './bimserverapiwebsocket.js';
-export { default as Model } from './model.js';
-
-//import XMLHttpRequest from 'xhr2';
-
 // Where does this come frome? The API crashes on the absence of this
 // member function?
 String.prototype.firstUpper = function () {
@@ -43,7 +35,7 @@ export default class BimServerClient {
 
 		// Base URL of the BIMserver
 		this.baseUrl = baseUrl;
-		if (this.baseUrl.substring(this.baseUrl.length - 1) == "/") {
+		if (this.baseUrl.substring(this.baseUrl.length - 1) === "/") {
 			this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
 		}
 
@@ -99,7 +91,7 @@ export default class BimServerClient {
 	}
 
 	init(callback) {
-		var promise = new Promise((resolve, reject) => {
+		const promise = new Promise((resolve, reject) => {
 			this.call("AdminInterface", "getServerInfo", {}, (serverInfo) => {
 				this.version = serverInfo.version;
 				//const versionString = this.version.major + "." + this.version.minor + "." + this.version.revision;
@@ -204,7 +196,7 @@ export default class BimServerClient {
 	
 	processNotification(message) {
 		if (message instanceof ArrayBuffer) {
-			if (message == null || message.byteLength == 0) {
+			if (message === null || message.byteLength === 0) {
 				return;
 			}
 			const view = new DataView(message, 0, 8);

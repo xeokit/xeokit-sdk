@@ -20,8 +20,7 @@ class KeyboardAxisViewHandler {
     constructor(scene, controllers, configs, states, updates) {
 
         this._scene = scene;
-        const input = scene.input;
-
+        const cameraControl = controllers.cameraControl;
         const camera = scene.camera;
 
         document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
@@ -34,10 +33,14 @@ class KeyboardAxisViewHandler {
                 return;
             }
 
-            const keyCode = e.keyCode;
+            const axisViewRight = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_RIGHT);
+            const axisViewBack = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_BACK);
+            const axisViewLeft = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_LEFT);
+            const axisViewFront = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_FRONT);
+            const axisViewTop = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_TOP);
+            const axisViewBottom = cameraControl._isKeyDownForAction(cameraControl.AXIS_VIEW_BOTTOM);
 
-            if (keyCode !== input.KEY_NUM_1 && keyCode !== input.KEY_NUM_2 && keyCode !== input.KEY_NUM_3 &&
-                keyCode !== input.KEY_NUM_4 && keyCode !== input.KEY_NUM_5 && keyCode !== input.KEY_NUM_6) {
+            if ((!axisViewRight) && (!axisViewBack) && (!axisViewLeft) && (!axisViewFront) && (!axisViewTop) && (!axisViewBottom)) {
                 return;
             }
 
@@ -48,46 +51,41 @@ class KeyboardAxisViewHandler {
 
             const dist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
 
-            switch (keyCode) {
+            if (axisViewRight) {
 
-                case input.KEY_NUM_1: // Right
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_2: // Back
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+            } else if (axisViewBack) {
 
-                case input.KEY_NUM_3: // Left
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_4: // Front
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(camera.worldUp);
-                    break;
+            } else if (axisViewLeft) {
 
-                case input.KEY_NUM_5: // Top
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
-                    break;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
 
-                case input.KEY_NUM_6: // Bottom
-                    tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
-                    tempCameraTarget.look.set(center);
-                    tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
-                    break;
+            } else if (axisViewFront) {
 
-                default:
-                    return;
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(camera.worldUp);
+
+            } else if (axisViewTop) {
+
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
+
+            } else if (axisViewBottom) {
+
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.look.set(center);
+                tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
             }
 
             if ((!configs.firstPerson) && configs.followPointer) {

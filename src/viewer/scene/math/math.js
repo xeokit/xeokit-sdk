@@ -371,6 +371,24 @@ const math = {
     },
 
     /**
+     * Get the geometric mean of the vectors.
+     * @method geometricMeanVec2
+     * @static
+     * @param {...Array(Number)} vectors Vec2 to mean
+     * @return {Array(Number)} The geometric mean vec2
+     */
+    geometricMeanVec2(...vectors) {
+        const geometricMean = new Float32Array(vectors[0]);
+        for (let i = 1; i < vectors.length; i++) {
+            geometricMean[0] += vectors[i][0];
+            geometricMean[1] += vectors[i][1];
+        }
+        geometricMean[0] /= vectors.length;
+        geometricMean[1] /= vectors.length;
+        return geometricMean;
+    },
+
+    /**
      * Subtracts a scalar value from each element of a four-element vector.
      * @method subVec4Scalar
      * @static

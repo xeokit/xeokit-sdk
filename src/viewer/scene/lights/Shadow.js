@@ -73,11 +73,14 @@ class Shadow extends Component {
     }
 
     constructor(owner, cfg={}) {
+
         super(owner, cfg);
+
         this._state = {
             resolution: math.vec3([1000, 1000]),
             intensity: 1.0
         };
+
         this.resolution = cfg.resolution;
         this.intensity = cfg.intensity;
     }
@@ -98,13 +101,6 @@ class Shadow extends Component {
         this._state.resolution.set(value || [1000.0, 1000.0]);
 
         this.glRedraw();
-
-        /**
-         Fired whenever this Shadow's  {@link Shadow/resolution} property changes.
-         @event resolution
-         @param value The property's new value
-         */
-        this.fire("resolution", this._state.resolution);
     }
 
     get resolution() {
@@ -127,13 +123,6 @@ class Shadow extends Component {
         this._state.intensity = value;
 
         this.glRedraw();
-
-        /**
-         * Fired whenever this Shadow's  {@link Shadow/intensity} property changes.
-         * @event intensity
-         * @param value The property's new value
-         */
-        this.fire("intensity", this._state.intensity);
     }
 
     get intensity() {
