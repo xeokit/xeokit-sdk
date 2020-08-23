@@ -249,6 +249,19 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     /**
+     * Inverts the direction of {@link SectionPlane#dir} on every existing SectionPlane.
+     *
+     * Inverts all SectionPlanes, including those that were not created with SectionPlanesPlugin.
+     */
+    flipSectionPlanes() {
+        var sectionPlanes = this.viewer.scene.sectionPlanes;
+        for (let id in sectionPlanes) {
+            const sectionPlane = sectionPlanes[id];
+            sectionPlane.flipDir();
+        }
+    }
+
+    /**
      * Shows the 3D editing gizmo for a {@link SectionPlane}.
      *
      * @param {String} id ID of the {@link SectionPlane}.
@@ -306,7 +319,7 @@ class SectionPlanesPlugin extends Plugin {
         }
         this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
-        
+
         if (id === this._shownControlId) {
             this._shownControlId = null;
         }

@@ -19,7 +19,7 @@ import {RenderState} from '../webgl/RenderState.js';
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {SectionPlane} from "../src/sectionPlane/SectionPlane.js";
- * 
+ *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  * });
@@ -171,6 +171,17 @@ class SectionPlane extends Component {
      */
     get dir() {
         return this._state.dir;
+    }
+
+    /**
+     * Inverts the direction of {@link SectionPlane#dir}.
+     */
+    flipDir() {
+        const dir = this._state.dir;
+        dir[0] *= -1.0;
+        dir[1] *= -1.0;
+        dir[2] *= -1.0;
+        this.glRedraw();
     }
 
     /**
