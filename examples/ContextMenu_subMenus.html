@@ -71,6 +71,62 @@
             font-weight: normal;
         }
 
+        .xeokit-context-submenu {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            display: none;
+            z-index: 300000;
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid black;
+            border-radius: 6px;
+            padding: 0;
+            width: 200px;
+        }
+
+        .xeokit-context-submenu ul {
+            list-style: none;
+            margin-left: 0;
+            padding: 0;
+        }
+
+        .xeokit-context-submenu ul li {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            color: black;
+            border-bottom: 1px solid gray;
+            background: rgba(255, 255, 255, 0.46);
+            cursor: pointer;
+            width: calc(100% - 30px);
+        }
+
+        .xeokit-context-submenu ul li:hover {
+            background: black;
+            color: white;
+            font-weight: bold;
+        }
+
+        .xeokit-context-submenu ul li span {
+            display: inline-block;
+        }
+
+        .xeokit-context-submenu .disabled {
+            display: inline-block;
+            color: gray;
+            cursor: default;
+            font-weight: normal;
+        }
+
+        .xeokit-context-submenu .disabled:hover {
+            color: gray;
+            cursor: default;
+            background: #eeeeee;
+            font-weight: normal;
+        }
+
+
     </style>
 
 </head>
@@ -144,13 +200,31 @@
 
     const objectContextMenu = new ContextMenu({
 
-        items: [ // First level items
-            [
+        items: [
 
+            [
+                {
+
+                    getTitle: (context) => {
+                        return "View fit";
+                    },
+
+                    doAction: function (context) {
+                        // Does nothing
+                    },
+
+                    doHover: function(context) {
+                        console.log("hover");
+                    }
+                }
+            ],
+
+            [ // Group
 
                 // Per-object emphasis effects
 
-                {
+                { // Item
+
                     getTitle: (context) => {
                         return "Effects";
                     },
@@ -159,9 +233,12 @@
                         // Does nothing
                     },
 
-                    items: [ // Sub-items
-                        [
+                    items: [ // Sub-menu
+
+                        [ // Group
+
                             // Show/hide object
+
                             {
                                 getTitle: (context) => {
                                     return (!context.entity.visible) ? "Show" : "Hide";
@@ -173,6 +250,7 @@
                             },
 
                             //Select/deselect object
+
                             {
                                 getTitle: (context) => {
                                     return (!context.entity.selected) ? "Select" : "Undo Select";
@@ -184,6 +262,7 @@
                             },
 
                             // Highlight/unhighlight object
+
                             {
                                 getTitle: (context) => {
                                     return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
@@ -199,7 +278,7 @@
 
                 // Per-object emphasis effects
 
-                {
+                { // Item
                     getTitle: (context) => {
                         return "ddd";
                     },
@@ -208,9 +287,9 @@
                         // Does nothing
                     },
 
-                    items: [ // Sub-items
-                        [
-                            {
+                    items: [ // Submenu
+                        [ // Group
+                            { // Item
                                 getTitle: (context) => {
                                     return (!context.entity.visible) ? "Show" : "Hide";
                                 },
@@ -252,9 +331,9 @@
 
                     },
 
-                    items: [ // Second level items
-                        [
-                            {
+                    items: [ // Submenu
+                        [ // Group
+                            { // Item
                                 getTitle: (context) => {
                                     return "Fit to View";
                                 },
