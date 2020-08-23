@@ -32,12 +32,10 @@ class Group {
  * @private
  */
 class Item {
-    constructor(id, getTitle, doAction, doHover) {
+    constructor(id, getTitle, doAction) {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
-        this.doHover = doHover;
-        this.parentMenu = null;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -72,7 +70,6 @@ class Item {
  * * a ````doAction()```` callback to fire when the item's title is clicked, and
  * * an optional ````getEnabled()```` callback that indicates if the item should enabled in the menu or not.
  *
- * <br>
  * The ````getEnabled()```` callbacks are invoked whenever the menu is shown. When an item's ````getEnabled()```` callback
  * returns ````true````, then the item is enabled and clickable. When it returns ````false````, then the item is disabled
  * and cannot be clicked. An item without a ````getEnabled()```` callback is always enabled and clickable.
@@ -315,7 +312,7 @@ class ContextMenu {
         this._clear();
         this._itemsCfg = itemsCfg || [];
         this._parseItems(itemsCfg);
-        this._createView();
+        this._createUI();
     }
 
     /**
@@ -381,7 +378,7 @@ class ContextMenu {
     /**
      * Shows this ````ContextMenu```` at the given page coordinates.
      *
-     * Silently does nothing when {@link ContextMenu#enabled} is ````false````.
+     * Does nothing when {@link ContextMenu#enabled} is ````false````.
      *
      * Logs error to console and does nothing if {@link ContextMenu#context} has not been set.
      *
@@ -455,7 +452,7 @@ class ContextMenu {
         this._itemMap = {};
     }
 
-    _parseItems(itemsCfg) { // Parses items config into menu data
+    _parseItems(itemsCfg) { // Parses "items" config into menu data
 
         const visitItems = (itemsCfg) => {
 
@@ -484,10 +481,7 @@ class ContextMenu {
                     const doAction = itemCfg.doAction || itemCfg.callback || (() => {
                     });
 
-                    const doHover = itemCfg.doHover || (() => {
-                    });
-
-                    const item = new Item(itemId, getTitle, doAction, doHover);
+                    const item = new Item(itemId, getTitle, doAction);
 
                     item.parentMenu = menu;
 
@@ -517,11 +511,11 @@ class ContextMenu {
         return "ContextMenu_" + this._id + "" + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
     }
 
-    _createView() { // Builds DOM elements from menu data
+    _createUI() { // Builds DOM elements for the entire menu tree
 
         const visitMenu = (menu) => {
 
-            this._createMenuView(menu);
+            this._createMenuUI(menu);
 
             const groups = menu.groups;
             for (let i = 0, len = groups.length; i < len; i++) {
@@ -540,11 +534,7 @@ class ContextMenu {
         visitMenu(this._rootMenu);
     }
 
-    _createMenuView(menu) { // Builds DOM elements for a menu
-
-        //-----------------------------------------------------------------
-        // Build menu DOM elements
-        //-----------------------------------------------------------------
+    _createMenuUI(menu) { // Builds DOM elements for a menu
 
         const groups = menu.groups;
         const html = [];
@@ -619,9 +609,7 @@ class ContextMenu {
             e.preventDefault();
         };
 
-        //-----------------------------------------------------------------
         // Bind event handlers
-        //-----------------------------------------------------------------
 
         const self = this;
 

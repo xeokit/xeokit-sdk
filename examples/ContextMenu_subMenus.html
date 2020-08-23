@@ -136,6 +136,8 @@
 
 <div id="info">
     <h1>ContextMenu with sub-menus</h1><br>
+    <p>Right-click an object to show the context menu.</p>
+    <br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -292,17 +294,6 @@
                                     viewer.cameraFlight.jumpTo({
                                         aabb: entity.aabb
                                     });
-                                }
-                            },
-                            {
-                                getTitle: (context) => {
-                                    const viewer = context.viewer;
-                                    const entity = context.entity;
-                                    return entity.visible ? "Hide Object" : "Show Object";
-                                },
-
-                                doAction: function (context) {
-
                                 }
                             }
                         ]

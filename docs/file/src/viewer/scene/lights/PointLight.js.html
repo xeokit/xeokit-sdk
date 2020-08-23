@@ -39,8 +39,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -71,7 +69,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -276,45 +273,31 @@ class PointLight extends Light {
         this._shadowViewMatrixDirty = true;
         this._shadowProjMatrixDirty = true;
 
-        const camera = this.scene.camera;
-        const canvas = this.scene.canvas;
-
-        this._onCameraViewMatrix = camera.on(&quot;viewMatrix&quot;, () =&gt; {
-            this._shadowViewMatrixDirty = true;
-        });
-
-        this._onCameraProjMatrix = camera.on(&quot;projMatrix&quot;, () =&gt; {
-            this._shadowProjMatrixDirty = true;
-        });
-
-        this._onCanvasBoundary = canvas.on(&quot;boundary&quot;, () =&gt; {
-            this._shadowProjMatrixDirty = true;
-        });
-
         this._state = new RenderState({
-
             type: &quot;point&quot;,
             pos: math.vec3([1.0, 1.0, 1.0]),
             color: math.vec3([0.7, 0.7, 0.8]),
             intensity: 1.0, attenuation: [0.0, 0.0, 0.0],
             space: cfg.space || &quot;view&quot;,
             castsShadow: false,
+            shadowDirty: true,
 
-            getShadowViewMatrix: () =&gt; {
-                if (self._shadowViewMatrixDirty) {
-                    if (!self._shadowViewMatrix) {
-                        self._shadowViewMatrix = math.identityMat4();
+            getShadowViewMatrix: (function () {
+                const look = math.vec3([0, 0, 0]);
+                const up = math.vec3([0, 1, 0]);
+                return function () {
+                    if (self._shadowViewMatrixDirty) {
+                        if (!self._shadowViewMatrix) {
+                            self._shadowViewMatrix = math.identityMat4();
+                        }
+                        math.lookAtMat4v(self._state.pos, look, up, self._shadowViewMatrix);
+                        self._shadowViewMatrixDirty = false;
                     }
-                    const eye = self._state.pos;
-                    const look = camera.look;
-                    const up = camera.up;
-                    math.lookAtMat4v(eye, look, up, self._shadowViewMatrix);
-                    self._shadowViewMatrixDirty = false;
-                }
-                return self._shadowViewMatrix;
-            },
+                    return self._shadowViewMatrix;
+                };
+            })(),
 
-            getShadowProjMatrix: () =&gt; {
+            getShadowProjMatrix: function () {
                 if (self._shadowProjMatrixDirty) { // TODO: Set when canvas resizes
                     if (!self._shadowProjMatrix) {
                         self._shadowProjMatrix = math.identityMat4();
@@ -326,9 +309,9 @@ class PointLight extends Light {
                 return self._shadowProjMatrix;
             },
 
-            getShadowRenderBuf: () =&gt; {
+            getShadowRenderBuf: function () {
                 if (!self._shadowRenderBuf) {
-                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]}); // Super old mobile devices have a limit of 1024x1024 textures
+                    self._shadowRenderBuf = new RenderBuffer(self.scene.canvas.canvas, self.scene.canvas.gl, {size: [1024, 1024]});
                 }
                 return self._shadowRenderBuf;
             }
@@ -350,7 +333,7 @@ class PointLight extends Light {
      *
      * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
      *
-     * Default value is ````[1.0, 1.0, 1.0]````.
+     * Default value is ````[0.0, 0.0, 0.0]````.
      *
      * @param {Number[]} pos The position.
      */
@@ -365,7 +348,7 @@ class PointLight extends Light {
      *
      * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
      *
-     * Default value is ````[1.0, 1.0, 1.0]````.
+     * Default value is ````[0.0, 0.0, 0.0]````.
      *
      * @returns {Number[]} The position.
      */
@@ -521,21 +504,12 @@ class PointLight extends Light {
      * Destroys this PointLight.
      */
     destroy() {
-
-        const camera = this.scene.camera;
-        const canvas = this.scene.canvas;
-        camera.off(this._onCameraViewMatrix);
-        camera.off(this._onCameraProjMatrix);
-        canvas.off(this._onCanvasBoundary);
-
         super.destroy();
-
         this._state.destroy();
         if (this._shadowRenderBuf) {
             this._shadowRenderBuf.destroy();
         }
         this.scene._lightDestroyed(this);
-        this.glRedraw();
     }
 }
 

@@ -39,8 +39,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -71,7 +69,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -139,7 +136,11 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/mesh/shadow/ShadowRenderer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {ShadowShaderSource} from &quot;./ShadowShaderSource.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * @author xeolabs / https://github.com/xeolabs
+ */
+
+import {ShadowShaderSource} from &quot;./ShadowShaderSource.js&quot;;
 import {Program} from &quot;../../webgl/Program.js&quot;;
 import {stats} from &quot;../../stats.js&quot;;
 
@@ -158,7 +159,11 @@ const renderers = {};
 
 ShadowRenderer.get = function (mesh) {
     const scene = mesh.scene;
-    const hash = [scene.canvas.canvas.id, scene._sectionPlanesState.getHash(), mesh._geometry._state.hash, mesh._state.hash].join(&quot;;&quot;);
+    const hash = [
+        scene.canvas.canvas.id,
+        scene._sectionPlanesState.getHash(),
+        mesh._geometry._state.hash,
+        mesh._state.hash].join(&quot;;&quot;);
     let renderer = renderers[hash];
     if (!renderer) {
         renderer = new ShadowRenderer(hash, mesh);
@@ -187,7 +192,8 @@ ShadowRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
+
+ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
     if (!this._program) {
         this._allocate(mesh);
     }
@@ -199,6 +205,14 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
         frame.lastProgramId = this._program.id;
         this._bindProgram(frame);
     }
+    frame.textureUnit = 0;
+    if (light.id !== this._lastLightId) {
+        gl.uniformMatrix4fv(this._uViewMatrix, false, light.getShadowViewMatrix());
+        gl.uniformMatrix4fv(this._uProjMatrix, false, light.getShadowProjMatrix());
+        this._lastLightId = light.id;
+    }
+    // gl.uniformMatrix4fv(this._uViewMatrix, false, this._scene.viewTransform.matrix);
+    // gl.uniformMatrix4fv(this._uProjMatrix, false, this._scene.projTransform.matrix);
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frame.backfaces !== backfaces) {
@@ -294,8 +308,8 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     const program = this._program;
     this._uPositionsDecodeMatrix = program.getLocation(&quot;positionsDecodeMatrix&quot;);
     this._uModelMatrix = program.getLocation(&quot;modelMatrix&quot;);
-    this._uShadowViewMatrix = program.getLocation(&quot;shadowViewMatrix&quot;);
-    this._uShadowProjMatrix = program.getLocation(&quot;shadowProjMatrix&quot;);
+    this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
+    this._uProjMatrix = program.getLocation(&quot;projMatrix&quot;);
     this._uSectionPlanes = {};
     const clips = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = clips.length; i &lt; len; i++) {
@@ -322,8 +336,7 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     const sectionPlanesState = scene._sectionPlanesState;
     this._program.bind();
     frame.useProgram++;
-    gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frame.shadowViewMatrix);
-    gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frame.shadowProjMatrix);
+    this._lastLightId = null;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
