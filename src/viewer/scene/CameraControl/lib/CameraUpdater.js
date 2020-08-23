@@ -1,6 +1,6 @@
 import {math} from "../../math/math.js";
 
-const SCALE_DOLLY_EACH_FRAME = 2; // Recalculate dolly speed for eye->target distance on each Nth frame
+const SCALE_DOLLY_EACH_FRAME = 1; // Recalculate dolly speed for eye->target distance on each Nth frame
 const EPSILON = 0.001;
 const tempVec3 = math.vec3();
 
@@ -15,6 +15,7 @@ class CameraUpdater {
 
         this._scene = scene;
         const camera = scene.camera;
+        const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
         const panController = controllers.panController;
 
@@ -28,8 +29,6 @@ class CameraUpdater {
             }
 
             let cursorType = "default";
-
-            const deltaTimeMilliSecs = e.deltaTime;
 
             //----------------------------------------------------------------------------------------------------------
             // Dolly decay
@@ -51,6 +50,10 @@ class CameraUpdater {
                 updates.rotateDeltaY = 0;
             }
 
+            if (updates.rotateDeltaX !== 0 || updates.rotateDeltaY !== 0) {
+                updates.dollyDelta = 0;
+            }
+
             //----------------------------------------------------------------------------------------------------------
             // Dolly speed eye->look scaling
             //
@@ -70,17 +73,9 @@ class CameraUpdater {
                 countDown = SCALE_DOLLY_EACH_FRAME;
 
                 if (updates.dollyDelta !== 0) {
-
                     if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
-
-                        const pickResult = this._scene.pick({
-                            pickSurface: true,
-                            pickSurfaceNormal: false,
-                            canvasPos: states.mouseCanvasPos
-                        });
-
-                        if (pickResult && pickResult.worldPos) {
-                            const worldPos = pickResult.worldPos;
+                        if (pickController.pickResult && pickController.pickResult.worldPos) {
+                            const worldPos = pickController.pickResult.worldPos;
                             pivotController.setPivotPos(worldPos);
                             pivotController.hidePivot();
                         } else {
@@ -240,7 +235,7 @@ class CameraUpdater {
                     }
 
                     if (updates.inputFromMouse && configs.followPointer) { // Using mouse input
-                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
                     }
@@ -274,7 +269,7 @@ class CameraUpdater {
                             panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
                         }
                     } else {
-                        camera.pan([0, 0, dollyDeltaForDist]);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     }
 
                 } else { // Orbiting
@@ -290,6 +285,8 @@ class CameraUpdater {
 
                 updates.dollyDelta *= configs.dollyInertia;
             }
+
+            pickController.fireEvents();
 
             document.body.style.cursor = cursorType;
         });

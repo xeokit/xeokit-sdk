@@ -11,7 +11,7 @@ import {KeyboardPanRotateDollyHandler} from "./lib/handlers/KeyboardPanRotateDol
 import {CameraUpdater} from "./lib/CameraUpdater.js";
 import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
-import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
+import {utils} from "../utils.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -45,6 +45,8 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *      + ["doublePickedSurface"](#---doublepickedsurface---)
  *      + ["doublePickedNothing"](#---doublepickednothing---)
  *      + ["rightClick"](#---rightclick---)
+ * * [Custom Keyboard Mappings](#custom-keyboard-mappings)
+ *
  * <br><br>
  *
  * # Overview
@@ -66,6 +68,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * * [First-Person Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_Duplex)
  * * [First-Person Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_HolterTower)
  * * [Plan-view Navigation - Schependomlaan Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView_Schependomlaan)
+ * * [Custom Keyboard Mapping](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_keyMap)
  * <br><br>
  *
  * # Orbit Mode
@@ -75,6 +78,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  * To enable orbit mode:
  *
  * ````javascript
+ * const cameraControl = myViewer.cameraControl;
  * cameraControl.navMode = "orbit";
  * ````
  *
@@ -398,7 +402,7 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * ## "doublePickedNothing"
  *
- * Wvent fired when we left-double-click or double-tap on empty space.
+ * Event fired when we left-double-click or double-tap on empty space.
  *
  * ````javascript
  * cameraControl.on("doublePickedNothing", (e) => {
@@ -416,6 +420,55 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *      const canvasPos = e.canvasPos;
  * });
  * ````
+ *
+ * ## Custom Keyboard Mappings
+ *
+ * We can customize````CameraControl```` key bindings as shown below.
+ *
+ * In this example, we'll just set the default bindings for a QWERTY keyboard.
+ *
+ * ````javascript
+ * const input = myViewer.scene.input;
+ *
+ * cameraControl.navMode = "orbit";
+ * cameraControl.followPointer = true;
+ *
+ * const keyMap = {};
+ *
+ * keyMap[cameraControl.PAN_LEFT] = [input.KEY_A];
+ * keyMap[cameraControl.PAN_RIGHT] = [input.KEY_D];
+ * keyMap[cameraControl.PAN_UP] = [input.KEY_Z];
+ * keyMap[cameraControl.PAN_DOWN] = [input.KEY_X];
+ * keyMap[cameraControl.DOLLY_FORWARDS] = [input.KEY_W, input.KEY_ADD];
+ * keyMap[cameraControl.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+ * keyMap[cameraControl.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+ * keyMap[cameraControl.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+ * keyMap[cameraControl.ROTATE_Y_POS] = [input.KEY_LEFT_ARROW];
+ * keyMap[cameraControl.ROTATE_Y_NEG] = [input.KEY_RIGHT_ARROW];
+ * keyMap[cameraControl.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+ * keyMap[cameraControl.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+ * keyMap[cameraControl.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+ * keyMap[cameraControl.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+ * keyMap[cameraControl.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+ * keyMap[cameraControl.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
+ *
+ * cameraControl.keyMap = keyMap;
+ * ````
+ *
+ * We can also just configure default bindings for a specified keyboard layout, like this:
+ *
+ * ````javascript
+ * cameraControl.keyMap = "qwerty";
+ * ````
+ *
+ * Then, ````CameraControl```` will internally set {@link CameraControl#keyMap} to the default key map for the QWERTY
+ * layout (which is the same set of mappings we set in the previous example). In other words, if we subsequently
+ * read {@link CameraControl#keyMap}, it will now be a key map, instead of the "qwerty" string value we set it to.
+ *
+ * Supported layouts are, so far:
+ *
+ * * ````"qwerty"````
+ * * ````"azerty"````
  */
 class CameraControl extends Component {
 
@@ -426,6 +479,134 @@ class CameraControl extends Component {
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_LEFT = 0;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_RIGHT = 1;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_UP = 2;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_DOWN = 3;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_FORWARDS = 4;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.PAN_BACKWARDS = 5;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.ROTATE_X_POS = 6;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.ROTATE_X_NEG = 7;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.ROTATE_Y_POS = 8;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.ROTATE_Y_NEG = 9;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.DOLLY_FORWARDS = 10;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.DOLLY_BACKWARDS = 11;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_RIGHT = 12;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_BACK = 13;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_LEFT = 14;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_FRONT = 15;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_TOP = 16;
+
+        /**
+         * Identifies the XX action.
+         * @final
+         * @type {Number}
+         */
+        this.AXIS_VIEW_BOTTOM = 17;
+
+        this._keyMap = {}; // Maps key codes to the above actions
 
         this.scene.canvas.canvas.oncontextmenu = (e) => {
             e.preventDefault();
@@ -459,7 +640,7 @@ class CameraControl extends Component {
 
             dragRotationRate: 360.0,
             keyboardRotationRate: 90.0,
-            rotationInertia: 0.5,
+            rotationInertia: 0.0,
 
             // Panning
 
@@ -471,6 +652,7 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 10,
+            touchDollyRate: 0.05,
             dollyInertia: 0.75,
             dollyProximityThreshold: 30.0,
             dollyMinSpeed: 1.0
@@ -479,7 +661,7 @@ class CameraControl extends Component {
         // Current runtime state of the CameraControl
 
         this._states = {
-            mouseCanvasPos: new Float32Array(2),
+            pointerCanvasPos: new Float32Array(2),
             mouseover: false,
             inputFromMouse: false, // TODO: Is this needed?
             mouseDownClientX: 0,
@@ -490,7 +672,7 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: new Float32Array(2),
             tapStartTime: -1,
-            lastTapTime: -1,
+            lastTapTime: -1
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event
@@ -526,7 +708,6 @@ class CameraControl extends Component {
             new MousePanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardAxisViewHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new MousePickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
-            new TouchPickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];
 
@@ -536,10 +717,16 @@ class CameraControl extends Component {
 
         // Set initial user configurations
 
-        this.planView = cfg.planView;
         this.navMode = cfg.navMode;
+        if (cfg.planView) {
+            this.planView = cfg.planView;
+        }
         this.constrainVertical = cfg.constrainVertical;
-        this.keyboardLayout = cfg.keyboardLayout;
+        if (cfg.keyboardLayout) {
+            this.keyboardLayout = cfg.keyboardLayout; // Deprecated
+        } else {
+            this.keyMap = cfg.keyMap;
+        }
         this.doublePickFlyTo = cfg.doublePickFlyTo;
         this.panRightClick = cfg.panRightClick;
         this.active = cfg.active;
@@ -549,6 +736,7 @@ class CameraControl extends Component {
         this.touchPanRate = cfg.touchPanRate;
         this.keyboardRotationRate = cfg.keyboardRotationRate;
         this.dragRotationRate = cfg.dragRotationRate;
+        this.touchDollyRate = cfg.touchDollyRate;
         this.dollyInertia = cfg.dollyInertia;
         this.dollyProximityThreshold = cfg.dollyProximityThreshold;
         this.dollyMinSpeed = cfg.dollyMinSpeed;
@@ -556,6 +744,107 @@ class CameraControl extends Component {
         this.pointerEnabled = true;
         this.keyboardDollyRate = cfg.keyboardDollyRate;
         this.mouseWheelDollyRate = cfg.mouseWheelDollyRate;
+    }
+
+    /**
+     * Sets custom mappings of keys to ````CameraControl```` actions.
+     *
+     * See class docs for usage.
+     *
+     * @param {{Number:Number}|String} value Either a set of new key mappings, or a string to select a keyboard layout,
+     * which causes ````CameraControl```` to use the default key mappings for that layout.
+     */
+    set keyMap(value) {
+        value = value || "qwerty";
+        if (utils.isString(value)) {
+            const input = this.scene.input;
+            const keyMap = {};
+
+            switch (value) {
+
+                default:
+                    this.error("Unsupported value for 'keyMap': " + value + " defaulting to 'qwerty'");
+                // Intentional fall-through to "qwerty"
+                case "qwerty":
+                    keyMap[this.PAN_LEFT] = [input.KEY_A];
+                    keyMap[this.PAN_RIGHT] = [input.KEY_D];
+                    keyMap[this.PAN_UP] = [input.KEY_Z];
+                    keyMap[this.PAN_DOWN] = [input.KEY_X];
+                    keyMap[this.PAN_BACKWARDS] = [];
+                    keyMap[this.PAN_FORWARDS] = [];
+                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_W, input.KEY_ADD];
+                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+                    keyMap[this.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+                    keyMap[this.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+                    keyMap[this.ROTATE_Y_POS] = [input.KEY_Q, input.KEY_LEFT_ARROW];
+                    keyMap[this.ROTATE_Y_NEG] = [input.KEY_E, input.KEY_RIGHT_ARROW];
+                    keyMap[this.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+                    keyMap[this.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+                    keyMap[this.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+                    keyMap[this.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+                    keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+                    keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
+                    break;
+
+                case "azerty":
+                    keyMap[this.PAN_LEFT] = [input.KEY_Q];
+                    keyMap[this.PAN_RIGHT] = [input.KEY_D];
+                    keyMap[this.PAN_UP] = [input.KEY_W];
+                    keyMap[this.PAN_DOWN] = [input.KEY_X];
+                    keyMap[this.PAN_BACKWARDS] = [];
+                    keyMap[this.PAN_FORWARDS] = [];
+                    keyMap[this.DOLLY_FORWARDS] = [input.KEY_Z, input.KEY_ADD];
+                    keyMap[this.DOLLY_BACKWARDS] = [input.KEY_S, input.KEY_SUBTRACT];
+                    keyMap[this.ROTATE_X_POS] = [input.KEY_DOWN_ARROW];
+                    keyMap[this.ROTATE_X_NEG] = [input.KEY_UP_ARROW];
+                    keyMap[this.ROTATE_Y_POS] = [input.KEY_A, input.KEY_LEFT_ARROW];
+                    keyMap[this.ROTATE_Y_NEG] = [input.KEY_E, input.KEY_RIGHT_ARROW];
+                    keyMap[this.AXIS_VIEW_RIGHT] = [input.KEY_NUM_1];
+                    keyMap[this.AXIS_VIEW_BACK] = [input.KEY_NUM_2];
+                    keyMap[this.AXIS_VIEW_LEFT] = [input.KEY_NUM_3];
+                    keyMap[this.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
+                    keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
+                    keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
+                    break;
+            }
+
+            this._keyMap = keyMap;
+        } else {
+            const keyMap = value;
+            this._keyMap = keyMap;
+        }
+    }
+
+    /**
+     * Gets custom mappings of keys to {@link CameraControl} actions.
+     *
+     * @returns {{Number:Number}} Current key mappings.
+     */
+    get keyMap() {
+        return this._keyMap;
+    }
+
+    /**
+     * Returns true if any keys configured for the given action are down.
+     * @param action
+     * @param keyDownMap
+     * @private
+     */
+    _isKeyDownForAction(action, keyDownMap) {
+        const keys = this._keyMap[action];
+        if (!keys) {
+            return false;
+        }
+        if (!keyDownMap) {
+            keyDownMap = this.scene.input.keyDown;
+        }
+        for (let i = 0, len = keys.length; i < len; i++) {
+            const key = keys[i];
+            if (keyDownMap[key]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -933,20 +1222,20 @@ class CameraControl extends Component {
      * without interference from inertia. Zero inertia can also mean that less frames are rendered while
      * you are rotating the Camera.
      *
-     * Default is ````0.5````.
+     * Default is ````0.0````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
      * @param {Number} rotationInertia New inertial factor.
      */
     set rotationInertia(rotationInertia) {
-        this._configs.rotationInertia = (rotationInertia !== undefined && rotationInertia !== null) ? rotationInertia : 0.5;
+        this._configs.rotationInertia = (rotationInertia !== undefined && rotationInertia !== null) ? rotationInertia : 0.0;
     }
 
     /**
      * Gets the rotation inertia factor.
      *
-     * Default is ````0.5````.
+     * Default is ````0.0````.
      *
      * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
      *
@@ -985,7 +1274,7 @@ class CameraControl extends Component {
         this._configs.touchPanRate = (touchPanRate !== null && touchPanRate !== undefined) ? touchPanRate : 1.0;
     }
 
-     /**
+    /**
      * Gets how fast the {@link Camera} pans on touch panning
      *
      * Default is ````1.0````.
@@ -1083,6 +1372,28 @@ class CameraControl extends Component {
      */
     get keyboardDollyRate() {
         return this._configs.keyboardDollyRate;
+    }
+
+    /**
+     * Sets how much the {@link Camera} dollys with touch input.
+     *
+     * Default is ````0.05````
+     *
+     * @param {Number} touchDollyRate The new touch dolly rate.
+     */
+    set touchDollyRate(touchDollyRate) {
+        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.05;
+    }
+
+    /**
+     * Gets how much the {@link Camera} dollys each second with touch input.
+     *
+     * Default is ````0.05````.
+     *
+     * @returns {Number} The current touch dolly rate.
+     */
+    get touchDollyRate() {
+        return this._configs.touchDollyRate;
     }
 
     /**
@@ -1224,15 +1535,18 @@ class CameraControl extends Component {
      * * ````"qwerty"```` (default)
      * * ````"azerty"````
      *
+     * @deprecated
      * @param {String} value Selects the keyboard layout.
      */
     set keyboardLayout(value) {
+        // this.warn("keyboardLayout property is deprecated - use keyMap property instead");
         value = value || "qwerty";
         if (value !== "qwerty" && value !== "azerty") {
             this.error("Unsupported value for keyboardLayout - defaulting to 'qwerty'");
             value = "qwerty";
         }
         this._configs.keyboardLayout = value;
+        this.keyMap = this._configs.keyboardLayout;
     }
 
     /**
@@ -1243,6 +1557,7 @@ class CameraControl extends Component {
      * * ````"qwerty"```` (default)
      * * ````"azerty"````
      *
+     * @deprecated
      * @returns {String} The current keyboard layout.
      */
     get keyboardLayout() {

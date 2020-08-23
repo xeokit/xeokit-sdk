@@ -7,6 +7,7 @@ import {InstancingPickNormalsRenderer} from "./pick/InstancingPickNormalsRendere
 import {InstancingOcclusionRenderer} from "./occlusion/InstancingOcclusionRenderer.js";
 import {InstancingDepthRenderer} from "./depth/InstancingDepthRenderer.js";
 import {InstancingNormalsRenderer} from "./normals/InstancingNormalsRenderer.js";
+import {InstancingShadowRenderer} from "./shadow/InstancingShadowRenderer.js";
 
 /**
  * @private
@@ -58,6 +59,10 @@ class InstancingRenderers {
             this.occlusionRenderer.destroy();
             this.occlusionRenderer = null;
         }
+        if (this.shadowRenderer && (!this.shadowRenderer.getValid())) {
+            this.shadowRenderer.destroy();
+            this.shadowRenderer = null;
+        }
         this._createRenderers();
     }
 
@@ -93,6 +98,9 @@ class InstancingRenderers {
         if (!this.normalsRenderer) {
             this.normalsRenderer = new InstancingNormalsRenderer(this._scene);
         }
+        if (!this.shadowRenderer) {
+            this.shadowRenderer = new InstancingShadowRenderer(this._scene);
+        }
     }
 
     _destroy() {
@@ -125,6 +133,9 @@ class InstancingRenderers {
         }
         if (this.occlusionRenderer) {
             this.occlusionRenderer.destroy();
+        }
+        if (this.shadowRenderer) {
+            this.shadowRenderer.destroy();
         }
     }
 }

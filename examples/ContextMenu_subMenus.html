@@ -202,23 +202,6 @@
 
         items: [
 
-            [
-                {
-
-                    getTitle: (context) => {
-                        return "View fit";
-                    },
-
-                    doAction: function (context) {
-                        // Does nothing
-                    },
-
-                    doHover: function(context) {
-                        console.log("hover");
-                    }
-                }
-            ],
-
             [ // Group
 
                 // Per-object emphasis effects
@@ -241,7 +224,7 @@
 
                             {
                                 getTitle: (context) => {
-                                    return (!context.entity.visible) ? "Show" : "Hide";
+                                    return (!context.entity.visible) ? "Show Object" : "Hide Object";
                                 },
 
                                 doAction: function (context) {
@@ -253,7 +236,7 @@
 
                             {
                                 getTitle: (context) => {
-                                    return (!context.entity.selected) ? "Select" : "Undo Select";
+                                    return (!context.entity.selected) ? "Select object" : "Undo Select Object";
                                 },
 
                                 doAction: function (context) {
@@ -265,7 +248,7 @@
 
                             {
                                 getTitle: (context) => {
-                                    return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
+                                    return (!context.entity.highlighted) ? "Highlight Object" : "Undo Highlight Object";
                                 },
 
                                 doAction: function (context) {
@@ -276,51 +259,7 @@
                     ]
                 },
 
-                // Per-object emphasis effects
-
-                { // Item
-                    getTitle: (context) => {
-                        return "ddd";
-                    },
-
-                    doAction: function (context) {
-                        // Does nothing
-                    },
-
-                    items: [ // Submenu
-                        [ // Group
-                            { // Item
-                                getTitle: (context) => {
-                                    return (!context.entity.visible) ? "Show" : "Hide";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.visible = !context.entity.visible;
-                                }
-                            },
-                            {
-                                getTitle: (context) => {
-                                    return (!context.entity.selected) ? "Select" : "Undo Select";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.selected = !context.entity.selected;
-                                }
-                            },
-                            {
-                                getTitle: (context) => {
-                                    return (!context.entity.highlighted) ? "Highlight" : "Undo Highlight";
-                                },
-
-                                doAction: function (context) {
-                                    context.entity.highlighted = !context.entity.highlighted;
-                                }
-                            }
-                        ]
-                    ]
-                },
-
-// Camera navigation
+                // Camera navigation
 
                 {
                     getTitle: (context) => {
@@ -333,18 +272,33 @@
 
                     items: [ // Submenu
                         [ // Group
-                            { // Item
-                                getTitle: (context) => {
-                                    return "Fit to View";
-                                },
-
+                            {
+                                title: "Fly to Object",
                                 doAction: function (context) {
-
+                                    const viewer = context.viewer;
+                                    const entity = context.entity;
+                                    viewer.cameraFlight.flyTo({
+                                        aabb: entity.aabb,
+                                        duration: 0.5
+                                    }, () => {
+                                    });
+                                }
+                            },
+                            {
+                                title: "Jump to Object",
+                                doAction: function (context) {
+                                    const viewer = context.viewer;
+                                    const entity = context.entity;
+                                    viewer.cameraFlight.jumpTo({
+                                        aabb: entity.aabb
+                                    });
                                 }
                             },
                             {
                                 getTitle: (context) => {
-                                    return "Hide";
+                                    const viewer = context.viewer;
+                                    const entity = context.entity;
+                                    return entity.visible ? "Hide Object" : "Show Object";
                                 },
 
                                 doAction: function (context) {
@@ -356,6 +310,7 @@
                 }
             ]
         ],
+
         enabled: true
     });
 

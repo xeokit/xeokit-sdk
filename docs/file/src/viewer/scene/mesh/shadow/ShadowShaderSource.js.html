@@ -39,6 +39,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -69,6 +71,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -137,10 +140,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/mesh/shadow/ShadowShaderSource.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @author xeolabs / https://github.com/xeolabs
- */
-
-/**
  * @private
  */
 class ShadowShaderSource {
@@ -154,14 +153,12 @@ function buildVertex(mesh) {
     const scene = mesh.scene;
     const clipping = scene._sectionPlanesState.sectionPlanes.length &gt; 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
-    const billboard = mesh._state.billboard;
-    const stationary = mesh._state.stationary;
     const src = [];
-    src.push(&quot;// Shadow drawing vertex shader&quot;);
+    src.push(&quot;// Mesh shadow vertex shader&quot;);
     src.push(&quot;attribute vec3 position;&quot;);
     src.push(&quot;uniform mat4 modelMatrix;&quot;);
-    src.push(&quot;uniform mat4 viewMatrix;&quot;);
-    src.push(&quot;uniform mat4 projMatrix;&quot;);
+    src.push(&quot;uniform mat4 shadowViewMatrix;&quot;);
+    src.push(&quot;uniform mat4 shadowProjMatrix;&quot;);
     src.push(&quot;uniform vec3 offset;&quot;);
     if (quantizedGeometry) {
         src.push(&quot;uniform mat4 positionsDecodeMatrix;&quot;);
@@ -169,44 +166,19 @@ function buildVertex(mesh) {
     if (clipping) {
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
     }
-    if (billboard === &quot;spherical&quot; || billboard === &quot;cylindrical&quot;) {
-        src.push(&quot;void billboard(inout mat4 mat) {&quot;);
-        src.push(&quot;   mat[0][0] = 1.0;&quot;);
-        src.push(&quot;   mat[0][1] = 0.0;&quot;);
-        src.push(&quot;   mat[0][2] = 0.0;&quot;);
-        if (billboard === &quot;spherical&quot;) {
-            src.push(&quot;   mat[1][0] = 0.0;&quot;);
-            src.push(&quot;   mat[1][1] = 1.0;&quot;);
-            src.push(&quot;   mat[1][2] = 0.0;&quot;);
-        }
-        src.push(&quot;   mat[2][0] = 0.0;&quot;);
-        src.push(&quot;   mat[2][1] = 0.0;&quot;);
-        src.push(&quot;   mat[2][2] =1.0;&quot;);
-        src.push(&quot;}&quot;);
-    }
     src.push(&quot;void main(void) {&quot;);
     src.push(&quot;vec4 localPosition = vec4(position, 1.0); &quot;);
     src.push(&quot;vec4 worldPosition;&quot;);
     if (quantizedGeometry) {
         src.push(&quot;localPosition = positionsDecodeMatrix * localPosition;&quot;);
     }
-    src.push(&quot;mat4 viewMatrix2 = viewMatrix;&quot;);
-    src.push(&quot;mat4 modelMatrix2 = modelMatrix;&quot;);
-    if (stationary) {
-        src.push(&quot;viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;&quot;)
-    }
-    if (billboard === &quot;spherical&quot; || billboard === &quot;cylindrical&quot;) {
-        src.push(&quot;mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;&quot;);
-        src.push(&quot;billboard(modelMatrix2);&quot;);
-        src.push(&quot;billboard(viewMatrix2);&quot;);
-    }
-    src.push(&quot;worldPosition = modelMatrix2 * localPosition;&quot;);
+    src.push(&quot;worldPosition = modelMatrix * localPosition;&quot;);
     src.push(&quot;worldPosition.xyz = worldPosition.xyz + offset;&quot;);
-    src.push(&quot;vec4 viewPosition  = viewMatrix2 * worldPosition; &quot;);
+    src.push(&quot;vec4 viewPosition  = shadowViewMatrix * worldPosition; &quot;);
     if (clipping) {
         src.push(&quot;vWorldPosition = worldPosition;&quot;);
     }
-    src.push(&quot;   gl_Position = projMatrix * viewPosition;&quot;);
+    src.push(&quot;   gl_Position = shadowProjMatrix * viewPosition;&quot;);
     src.push(&quot;}&quot;);
     return src;
 }
@@ -217,7 +189,7 @@ function buildFragment(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
     const src = [];
-    src.push(&quot;// Shadow fragment shader&quot;);
+    src.push(&quot;// Mesh shadow fragment shader&quot;);
 
     src.push(&quot;#ifdef GL_FRAGMENT_PRECISION_HIGH&quot;);
     src.push(&quot;precision highp float;&quot;);
@@ -236,11 +208,12 @@ function buildFragment(mesh) {
             src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
         }
     }
-    src.push(&quot;vec4 packDepth (float depth) {&quot;);
-    src.push(&quot;  const vec4 bitShift = vec4(1.0, 256.0, 256.0 * 256.0, 256.0 * 256.0 * 256.0);&quot;);
-    src.push(&quot;  const vec4 bitMask = vec4(1.0/256.0, 1.0/256.0, 1.0/256.0, 0.0);&quot;);
+
+    src.push(&quot;vec4 encodeFloat( const in float depth ) {&quot;);
+    src.push(&quot;  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);&quot;);
+    src.push(&quot;  const vec4 bitMask = vec4(0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);&quot;);
     src.push(&quot;  vec4 comp = fract(depth * bitShift);&quot;);
-    src.push(&quot;  comp -= comp.gbaa * bitMask;&quot;);
+    src.push(&quot;  comp -= comp.xxyz * bitMask;&quot;);
     src.push(&quot;  return comp;&quot;);
     src.push(&quot;}&quot;);
 
@@ -256,7 +229,7 @@ function buildFragment(mesh) {
         src.push(&quot;  if (dist &gt; 0.0) { discard; }&quot;);
         src.push(&quot;}&quot;);
     }
-    src.push(&quot;gl_FragColor = packDepth(gl_FragCoord.z);&quot;);
+    src.push(&quot;gl_FragColor = encodeFloat(gl_FragCoord.z);&quot;);
     src.push(&quot;}&quot;);
     return src;
 }

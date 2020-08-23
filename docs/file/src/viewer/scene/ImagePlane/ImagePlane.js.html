@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../">
+  <title data-ice="title">src/viewer/scene/ImagePlane/ImagePlane.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipboxplugin">plugins/ClipBoxPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html">ClipBoxPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html">SectionBox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/ImagePlane/ImagePlane.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Component} from &apos;../Component.js&apos;;
+import {Node} from &quot;../nodes/Node.js&quot;;
+import {Mesh} from &quot;../mesh/Mesh.js&quot;;
+import {PhongMaterial} from &quot;../materials/PhongMaterial.js&quot;;
+import {buildPlaneGeometry} from &quot;../geometry/builders/buildPlaneGeometry.js&quot;;
+import {Texture} from &quot;../materials/Texture.js&quot;;
+import {buildGridGeometry} from &quot;../geometry/builders/buildGridGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../geometry/ReadableGeometry.js&quot;;
+import {math} from &quot;../math/math.js&quot;;
+
+const tempVec3 = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const zeroVec = math.vec3([0, -1, 0]);
+const tempQuat = math.vec4([0, 0, 0, 1]);
+
+/**
+ *  @desc A plane-shaped 3D object containing a bitmap image.
+ *
+ * Use ````ImagePlane```` to embed bitmap images in your scenes.
+ *
+ * As shown in the examples below, ````ImagePlane```` is useful for creating ground planes from satellite maps and embedding 2D plan
+ * view images in cross-section slicing planes.
+ *
+ * # Example 1: Create a ground plane from a satellite image
+ *
+ * In our first example, we&apos;ll load the Schependomlaan model, then use
+ * an ````ImagePlane```` to create a ground plane, which will contain
+ * a satellite image sourced from Google Maps.
+ *
+ * &lt;img src=&quot;http://xeokit.io/img/docs/ImagePlane/schependomlaanGoogleSatMapMed.png&quot;&gt;
+ *
+ * [&lt;img src=&quot;http://xeokit.io/img/docs/ImagePlane/ImagePlane.png&quot;&gt;](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
+ *
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)]
+ *
+ * ````javascript
+ * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+ * import {ImagePlane} from &quot;../src/viewer/scene/ImagePlane/ImagePlane.js&quot;;
+ * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;,
+ *      transparent: true
+ *  });
+ *
+ * viewer.camera.eye = [-8.31, 42.21, 54.30];
+ * viewer.camera.look = [-0.86, 15.40, 14.90];
+ * viewer.camera.up = [0.10, 0.83, -0.54];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * xktLoader.load({             // Load IFC model
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+ *      metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;,
+ *      edges: true,
+ *
+ *      rotation: [0, 22, 0],   // Rotate, position and scale the model to align it correctly with the ImagePlane
+ *      position: [-8, 0, 15],
+ *      scale: [1.1, 1.1, 1.1]
+ *  });
+ *
+ * new ImagePlane(viewer.scene, {
+ *      src: &quot;./images/schependomlaanSatMap.png&quot;,       // Google satellite image; accepted file types are PNG and JPEG
+ *      visible: true,                                  // Show the ImagePlane
+ *      gridVisible: true,                              // Show the grid - grid is only visible when ImagePlane is also visible
+ *      size: 190,                                      // Size of ImagePlane&apos;s longest edge
+ *      position: [0, -1, 0],                           // World-space position of ImagePlane&apos;s center
+ *      rotation: [0, 0, 0],                            // Euler angles for X, Y and Z
+ *      opacity: 1.0,                                   // Fully opaque
+ *      collidable: false,                              // ImagePlane does not contribute to Scene boundary
+ *      clippable: true,                                // ImagePlane can be clipped by SectionPlanes
+ *      pickable: true                                  // Allow the ground plane to be picked
+ * });
+ * ````
+ *&lt;br&gt;
+ *
+ * # Example 2: Embed an image in a cross-section plane
+ *
+ * In our second example, we&apos;ll load the Schependomlaan model again, then slice it in half with
+ * a {@link SectionPlanesPlugin}, then use an ````ImagePlane```` to embed a 2D plan view image in the slicing plane.
+ *
+ * &lt;img src=&quot;http://xeokit.io/img/docs/ImagePlane/schependomlaanPlanViewMed.png&quot;&gt;
+ *
+ * [&lt;img src=&quot;http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png&quot;&gt;](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)
+ *
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)]
+ *
+ * ````javascript
+ * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+ * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+ * import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
+ * import {ImagePlane} from &quot;../src/viewer/scene/ImagePlane/ImagePlane.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ *     transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-9.11, 20.01, 5.13];
+ * viewer.camera.look = [9.07, 0.77, -9.78];
+ * viewer.camera.up = [0.47, 0.76, -0.38];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const sectionPlanes = new SectionPlanesPlugin(viewer, {
+ *     overviewVisible: false
+ * });
+ *
+ * model = xktLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+ *     metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;,
+ *     edges: true,
+ * });
+ *
+ * const sectionPlane = sectionPlanes.createSectionPlane({
+ *     id: &quot;mySectionPlane&quot;,
+ *     pos: [10.95, 1.95, -10.35],
+ *     dir: [0.0, -1.0, 0.0]
+ * });
+ *
+ * const imagePlane = new ImagePlane(viewer.scene, {
+ *     src: &quot;./images/schependomlaanPlanView.png&quot;,  // Plan view image; accepted file types are PNG and JPEG
+ *     visible: true,
+ *     gridVisible: true,
+ *     size: 23.95,
+ *     position: sectionPlane.pos,
+ *     dir: sectionPlane.dir,
+ *     collidable: false,
+ *     opacity: 0.75,
+ *     clippable: false,                            // Don&apos;t allow ImagePlane to be clipped by the SectionPlane
+ *     pickable: false                              // Don&apos;t allow ImagePlane to be picked
+ *  });
+ * ````
+ */
+class ImagePlane extends Component {
+
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this ````ImagePlane```` as well.
+     * @param {*} [cfg]  ````ImagePlane```` configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Boolean} [cfg.visible=true] Indicates whether or not this ````ImagePlane```` is visible.
+     * @param {Boolean} [cfg.gridVisible=true] Indicates whether or not the grid is visible.  Grid is only visible when ````ImagePlane```` is also visible.
+     * @param {Number[]} [cfg.position=[0,0,0]] World-space position of the ````ImagePlane````.
+     * @param {Number[]} [cfg.size=1] World-space size of the longest edge of the ````ImagePlane````. Note that
+     * ````ImagePlane```` sets its aspect ratio to match its image. If we set a value of ````1000````, and the image
+     * has size ````400x300````, then the ````ImagePlane```` will then have size ````1000 x 750````.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation of the ````ImagePlane````, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Modelling transform matrix for the ````ImagePlane````. Overrides the ````position````, ````size```, ````rotation```` and ````dir```` parameters.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the ````ImagePlane```` is initially included in boundary calculations.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the ````ImagePlane```` is initially clippable.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the ````ImagePlane```` is initially pickable.
+     * @param {Number} [cfg.opacity=1.0] ````ImagePlane````&apos;s initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {String} [cfg.src] URL of image. Accepted file types are PNG and JPEG.
+     * @param {HTMLImageElement} [cfg.image] An ````HTMLImageElement```` to source the image from. Overrides ````src````.
+     */
+    constructor(owner, cfg = {}) {
+
+        super(owner, cfg);
+
+        this._src = null;
+        this._image = null;
+        this._dir = math.vec3();
+        this._size = 1.0;
+        this._imageSize = math.vec2();
+
+        this._texture = new Texture(this);
+
+        this._plane = new Mesh(this, {
+
+            geometry: new ReadableGeometry(this, buildPlaneGeometry({
+                center: [0, 0, 0],
+                xSize: 1,
+                zSize: 1,
+                xSegments: 10,
+                zSegments: 10
+            })),
+
+            material: new PhongMaterial(this, {
+                diffuse: [0, 0, 0],
+                ambient: [0, 0, 0],
+                specular: [0, 0, 0],
+                diffuseMap: this._texture,
+                emissiveMap: this._texture,
+                backfaces: true
+            }),
+            clippable: cfg.clippable
+        });
+
+        this._grid = new Mesh(this, {
+            geometry: new ReadableGeometry(this, buildGridGeometry({
+                size: 1,
+                divisions: 10
+            })),
+            material: new PhongMaterial(this, {
+                diffuse: [0.0, 0.0, 0.0],
+                ambient: [0.0, 0.0, 0.0],
+                emissive: [0.2, 0.8, 0.2]
+            }),
+            position: [0, 0.001, 0.0],
+            clippable: cfg.clippable
+        });
+
+        this._node = new Node(this, {
+            rotation: [0, 0, 0],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            clippable: false,
+            children: [
+                this._plane,
+                this._grid
+            ]
+        });
+
+        this._gridVisible = false;
+
+        this.visible = true;
+        this.gridVisible = cfg.gridVisible;
+        this.position = cfg.position;
+        this.rotation = cfg.rotation;
+        this.dir = cfg.dir;
+        this.size = cfg.size;
+        this.collidable = cfg.collidable;
+        this.clippable = cfg.clippable;
+        this.pickable = cfg.pickable;
+        this.opacity = cfg.opacity;
+
+        if (cfg.image) {
+            this.image = cfg.image;
+        } else {
+            this.src = cfg.src;
+        }
+    }
+
+    /**
+     * Sets if this ````ImagePlane```` is visible or not.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} visible Set ````true```` to make this ````ImagePlane```` visible.
+     */
+    set visible(visible) {
+        this._plane.visible = visible;
+        this._grid.visible = (this._gridVisible &amp;&amp; visible);
+    }
+
+    /**
+     * Gets if this ````ImagePlane```` is visible or not.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` if visible.
+     */
+    get visible() {
+        return this._plane.visible;
+    }
+
+    /**
+     * Sets if this ````ImagePlane````&apos;s grid  is visible or not.
+     *
+     * Default value is ````false````.
+     *
+     * Grid is only visible when ````ImagePlane```` is also visible.
+     *
+     * @param {Boolean} visible Set ````true```` to make this ````ImagePlane````&apos;s grid visible.
+     */
+    set gridVisible(visible) {
+        visible = (visible !== false);
+        this._gridVisible = visible;
+        this._grid.visible = (this._gridVisible &amp;&amp; this.visible);
+    }
+
+    /**
+     * Gets if this ````ImagePlane````&apos;s grid is visible or not.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if visible.
+     */
+    get gridVisible() {
+        return this._gridVisible;
+    }
+
+    /**
+     * Sets an ````HTMLImageElement```` to source the image from.
+     *
+     * Sets {@link Texture#src} null.
+     *
+     * @type {HTMLImageElement}
+     */
+    set image(image) {
+        this._image = image;
+        if (this._image) {
+            this._imageSize[0] = image.width;
+            this._imageSize[1] = image.height;
+            this._updatePlaneSizeFromImage();
+            this._src = null;
+            this._texture.image = this._image;
+        }
+    }
+
+    /**
+     * Gets the ````HTMLImageElement```` the ````ImagePlane````&apos;s image is sourced from, if set.
+     *
+     * Returns null if not set.
+     *
+     * @type {HTMLImageElement}
+     */
+    get image() {
+        return this._image;
+    }
+
+    /**
+     * Sets an image file path that the ````ImagePlane````&apos;s image is sourced from.
+     *
+     * Accepted file types are PNG and JPEG.
+     *
+     * Sets {@link Texture#image} null.
+     *
+     * @type {String}
+     */
+    set src(src) {
+        this._src = src;
+        if (this._src) {
+            this._image = null;
+            const image = new Image();
+            image.onload = () =&gt; {
+                this._texture.image = image;
+                this._imageSize[0] = image.width;
+                this._imageSize[1] = image.height;
+                this._updatePlaneSizeFromImage();
+            };
+            image.src = this._src;
+        }
+    }
+
+    /**
+     * Gets the image file path that the ````ImagePlane````&apos;s image is sourced from, if set.
+     *
+     * Returns null if not set.
+     *
+     * @type {String}
+     */
+    get src() {
+        return this._src;
+    }
+
+    /**
+     * Sets the World-space position of this ````ImagePlane````.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * @param {Number[]} value New position.
+     */
+    set position(value) {
+        this._node.position = value;
+    }
+
+    /**
+     * Gets the World-space position of this ````ImagePlane````.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * @returns {Number[]} Current position.
+     */
+    get position() {
+        return this._node.position;
+    }
+
+    /**
+     * Sets the direction of this ````ImagePlane```` using Euler angles.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * @param {Number[]} value Euler angles for ````X````, ````Y```` and ````Z```` axis rotations.
+     */
+    set rotation(value) {
+        this._node.rotation = value;
+    }
+
+    /**
+     * Gets the direction of this ````ImagePlane```` as Euler angles.
+     *
+     * @returns {Number[]} Euler angles for ````X````, ````Y```` and ````Z```` axis rotations.
+     */
+    get rotation() {
+        return this._node.rotation;
+    }
+
+    /**
+     * Sets the World-space size of the longest edge of the ````ImagePlane````.
+     *
+     * Note that ````ImagePlane```` sets its aspect ratio to match its image. If we set a value of ````1000````, and
+     * the image has size ````400x300````, then the ````ImagePlane```` will then have size ````1000 x 750````.
+     *
+     * Default value is ````1.0````.
+     *
+     * @param {Number} size New World-space size of the ````ImagePlane````.
+     */
+    set size(size) {
+        this._size = (size === undefined || size === null) ? 1.0 : size;
+        if (this._image) {
+            this._updatePlaneSizeFromImage()
+        }
+    }
+
+    /**
+     * Gets the World-space size of the longest edge of the ````ImagePlane````.
+     *
+     * Returns {Number} World-space size of the ````ImagePlane````.
+     */
+    get size() {
+        return this._size;
+    }
+
+    /**
+     * Sets the direction of this ````ImagePlane```` as a direction vector.
+     *
+     * Default value is ````[0, 0, -1]````.
+     *
+     * @param {Number[]} dir New direction vector.
+     */
+    set dir(dir) {
+
+        this._dir.set(dir || [0, 0, -1]);
+
+        if (dir) {
+
+            const origin = this.scene.center;
+            const negDir = [-this._dir[0], -this._dir[1], -this._dir[2]];
+
+            math.subVec3(origin, this.position, tempVec3);
+
+            const dist = -math.dotVec3(negDir, tempVec3);
+
+            math.normalizeVec3(negDir);
+            math.mulVec3Scalar(negDir, dist, tempVec3b);
+            math.vec3PairToQuaternion(zeroVec, dir, tempQuat);
+
+            // tempVec3c[0] = tempVec3b[0] * 0.1;
+            // tempVec3c[1] = tempVec3b[1] * 0.1;
+            // tempVec3c[2] = tempVec3b[2] * 0.1;
+
+            this._node.quaternion = tempQuat;
+            // this._mesh.position = tempVec3c;
+        }
+    }
+
+    /**
+     * Gets the direction of this ````ImagePlane```` as a direction vector.
+     *
+     * @returns {Number[]} value Current direction.
+     */
+    get dir() {
+        return this._dir;
+    }
+
+    /**
+     * Sets if this ````ImagePlane```` is included in boundary calculations.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set collidable(value) {
+        this._node.collidable = (value !== false);
+    }
+
+    /**
+     * Gets if this ````ImagePlane```` is included in boundary calculations.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._node.collidable;
+    }
+
+    /**
+     * Sets if this ````ImagePlane```` is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set clippable(value) {
+        this._node.clippable = (value !== false);
+    }
+
+    /**
+     * Gets if this ````ImagePlane````  is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._node.clippable;
+    }
+
+    /**
+     * Sets if this ````ImagePlane```` is pickable.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set pickable(value) {
+        this._node.pickable = (value !== false);
+    }
+
+    /**
+     * Gets if this ````ImagePlane````  is pickable.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return this._node.pickable;
+    }
+
+    /**
+     * Sets the opacity factor for this ````ImagePlane````.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) {
+        this._node.opacity = opacity;
+    }
+
+    /**
+     * Gets this ````ImagePlane````&apos;s opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() {
+        return this._node.opacity;
+    }
+
+    /**
+     * @destroy
+     */
+    destroy() {
+        this._state.destroy();
+        super.destroy();
+    }
+
+    _updatePlaneSizeFromImage() {
+        const size = this._size;
+        const width = this._imageSize[0];
+        const height = this._imageSize[1];
+        const aspect = height / width;
+        if (width &gt; height) {
+            this._node.scale = [size, 1.0, size * aspect];
+        } else {
+            this._node.scale = [size * aspect, 1.0, size];
+        }
+    }
+}
+
+export {ImagePlane};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

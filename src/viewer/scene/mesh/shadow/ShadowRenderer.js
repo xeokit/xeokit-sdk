@@ -1,7 +1,3 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
-
 import {ShadowShaderSource} from "./ShadowShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
@@ -21,11 +17,7 @@ const renderers = {};
 
 ShadowRenderer.get = function (mesh) {
     const scene = mesh.scene;
-    const hash = [
-        scene.canvas.canvas.id,
-        scene._sectionPlanesState.getHash(),
-        mesh._geometry._state.hash,
-        mesh._state.hash].join(";");
+    const hash = [scene.canvas.canvas.id, scene._sectionPlanesState.getHash(), mesh._geometry._state.hash, mesh._state.hash].join(";");
     let renderer = renderers[hash];
     if (!renderer) {
         renderer = new ShadowRenderer(hash, mesh);
@@ -54,8 +46,7 @@ ShadowRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-
-ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
+ShadowRenderer.prototype.drawMesh = function (frame, mesh) {
     if (!this._program) {
         this._allocate(mesh);
     }
@@ -67,14 +58,6 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
         frame.lastProgramId = this._program.id;
         this._bindProgram(frame);
     }
-    frame.textureUnit = 0;
-    if (light.id !== this._lastLightId) {
-        gl.uniformMatrix4fv(this._uViewMatrix, false, light.getShadowViewMatrix());
-        gl.uniformMatrix4fv(this._uProjMatrix, false, light.getShadowProjMatrix());
-        this._lastLightId = light.id;
-    }
-    // gl.uniformMatrix4fv(this._uViewMatrix, false, this._scene.viewTransform.matrix);
-    // gl.uniformMatrix4fv(this._uProjMatrix, false, this._scene.projTransform.matrix);
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frame.backfaces !== backfaces) {
@@ -170,8 +153,8 @@ ShadowRenderer.prototype._allocate = function (mesh) {
     const program = this._program;
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
+    this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
+    this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
     this._uSectionPlanes = {};
     const clips = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = clips.length; i < len; i++) {
@@ -198,7 +181,8 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     const sectionPlanesState = scene._sectionPlanesState;
     this._program.bind();
     frame.useProgram++;
-    this._lastLightId = null;
+    gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frame.shadowViewMatrix);
+    gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frame.shadowProjMatrix);
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

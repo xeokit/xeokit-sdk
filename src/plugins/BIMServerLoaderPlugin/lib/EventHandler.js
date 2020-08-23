@@ -10,10 +10,10 @@ EventHandler.prototype.on = function (evt, handler) {
 };
 
 EventHandler.prototype.off = function (evt, handler) {
-    var h = this.handlers[evt];
-    var found = false;
-    if (typeof(h) !== 'undefined') {
-        var i = h.indexOf(handler);
+    const h = this.handlers[evt];
+    let found = false;
+    if (typeof (h) !== 'undefined') {
+        const i = h.indexOf(handler);
         if (i >= -1) {
             h.splice(i, 1);
             found = true;
@@ -25,13 +25,13 @@ EventHandler.prototype.off = function (evt, handler) {
 };
 
 EventHandler.prototype.fire = function (evt, args) {
-    var h = this.handlers[evt];
+    const h = this.handlers[evt];
     if (!h) {
         return;
     }
-    for (var i = 0; i < h.length; ++i) {
+    for (let i = 0; i < h.length; ++i) {
         h[i].apply(this, args);
     }
 };
 
-export {EventHandler};
+export { EventHandler };

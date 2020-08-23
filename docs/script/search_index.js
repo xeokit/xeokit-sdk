@@ -102,6 +102,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/clipboxplugin/clipboxplugin.js~clipboxplugin",
+    "class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html",
+    "<span>ClipBoxPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/component.js~component",
     "class/src/viewer/scene/Component.js~Component.html",
     "<span>Component</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Component.js</span>",
@@ -220,6 +226,12 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-IFCStoreyPlanObjectStates",
     "<span>IFCStoreyPlanObjectStates</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js</span>",
     "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/imageplane/imageplane.js~imageplane",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html",
+    "<span>ImagePlane</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/ImagePlane/ImagePlane.js</span>",
+    "class"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/input/input.js~input",
@@ -411,6 +423,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/scene/scene.js~scene",
     "class/src/viewer/scene/scene/Scene.js~Scene.html",
     "<span>Scene</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/scene/Scene.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/clipboxplugin/sectionbox.js~sectionbox",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html",
+    "<span>SectionBox</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ClipBoxPlugin/SectionBox.js</span>",
     "class"
   ],
   [
@@ -1968,6 +1986,144 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/clipboxplugin/clipboxplugin.js",
+    "file/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js.html",
+    "src/plugins/ClipBoxPlugin/ClipBoxPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/clipboxplugin/clipboxplugin.js~clipboxplugin#clear",
+    "class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html#instance-method-clear",
+    "src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin#clear",
+    "method"
+  ],
+  [
+    "src/plugins/clipboxplugin/clipboxplugin.js~clipboxplugin#constructor",
+    "class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html#instance-constructor-constructor",
+    "src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/clipboxplugin/clipboxplugin.js~clipboxplugin#destroy",
+    "class/src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin.html#instance-method-destroy",
+    "src/plugins/ClipBoxPlugin/ClipBoxPlugin.js~ClipBoxPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/clipboxplugin/control.js",
+    "file/src/plugins/ClipBoxPlugin/Control.js.html",
+    "src/plugins/ClipBoxPlugin/Control.js",
+    "file"
+  ],
+  [
+    "src/plugins/clipboxplugin/overview.js",
+    "file/src/plugins/ClipBoxPlugin/Overview.js.html",
+    "src/plugins/ClipBoxPlugin/Overview.js",
+    "file"
+  ],
+  [
+    "src/plugins/clipboxplugin/plane.js",
+    "file/src/plugins/ClipBoxPlugin/Plane.js.html",
+    "src/plugins/ClipBoxPlugin/Plane.js",
+    "file"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js",
+    "file/src/plugins/ClipBoxPlugin/SectionBox.js.html",
+    "src/plugins/ClipBoxPlugin/SectionBox.js",
+    "file"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#active",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-set-active",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#active",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#active",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-get-active",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#active",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#constructor",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-constructor-constructor",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#destroy",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-method-destroy",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#dir",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-set-dir",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#dir",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#dir",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-get-dir",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#dir",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#pos",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-set-pos",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#pos",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#pos",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-get-pos",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#pos",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplanexmax",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneXMax",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneXMax",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplanexmin",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneXMin",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneXMin",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplaneymax",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneYMax",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneYMax",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplaneymin",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneYMin",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneYMin",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplanezmax",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneZMax",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneZMax",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplanezmin",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlaneZMin",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlaneZMin",
+    "member"
+  ],
+  [
+    "src/plugins/clipboxplugin/sectionbox.js~sectionbox#sectionplanes",
+    "class/src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox.html#instance-member-sectionPlanes",
+    "src/plugins/ClipBoxPlugin/SectionBox.js~SectionBox#sectionPlanes",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js",
     "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js",
@@ -3486,6 +3642,114 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_back",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_BACK",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_BACK",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_bottom",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_BOTTOM",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_BOTTOM",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_front",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_FRONT",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_FRONT",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_left",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_LEFT",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_LEFT",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_right",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_RIGHT",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_RIGHT",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#axis_view_top",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-AXIS_VIEW_TOP",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#AXIS_VIEW_TOP",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dolly_backwards",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-DOLLY_BACKWARDS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#DOLLY_BACKWARDS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dolly_forwards",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-DOLLY_FORWARDS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#DOLLY_FORWARDS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_backwards",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_BACKWARDS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_BACKWARDS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_down",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_DOWN",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_DOWN",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_forwards",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_FORWARDS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_FORWARDS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_left",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_LEFT",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_LEFT",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_right",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_RIGHT",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_RIGHT",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#pan_up",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-PAN_UP",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#PAN_UP",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotate_x_neg",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-ROTATE_X_NEG",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#ROTATE_X_NEG",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotate_x_pos",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-ROTATE_X_POS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#ROTATE_X_POS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotate_y_neg",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-ROTATE_Y_NEG",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#ROTATE_Y_NEG",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotate_y_pos",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-member-ROTATE_Y_POS",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#ROTATE_Y_POS",
+    "member"
+  ],
+  [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#active",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-active",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#active",
@@ -3603,6 +3867,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#followpointer",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-followPointer",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#followPointer",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keymap",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyMap",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyMap",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keymap",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyMap",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyMap",
     "member"
   ],
   [
@@ -3765,6 +4041,30 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotationinertia",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-rotationInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#rotationInertia",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#touchdollyrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-touchDollyRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#touchDollyRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#touchdollyrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-touchDollyRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#touchDollyRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#touchpanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-touchPanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#touchPanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#touchpanrate",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-touchPanRate",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#touchPanRate",
     "member"
   ],
   [
@@ -4176,6 +4476,168 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/imageplane/imageplane.js",
+    "file/src/viewer/scene/ImagePlane/ImagePlane.js.html",
+    "src/viewer/scene/ImagePlane/ImagePlane.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#clippable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-clippable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#clippable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-clippable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#collidable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-collidable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#collidable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-collidable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#constructor",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-constructor-constructor",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#destroy",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-method-destroy",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#dir",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-dir",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#dir",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#dir",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-dir",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#dir",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#gridvisible",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-gridVisible",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#gridVisible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#gridvisible",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-gridVisible",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#gridVisible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#image",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-image",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#image",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-image",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#opacity",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-opacity",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#opacity",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-opacity",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#pickable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-pickable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#pickable",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-pickable",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#position",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-position",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#position",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-position",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#rotation",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-rotation",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#rotation",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-rotation",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#size",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-size",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#size",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#size",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-size",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#size",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#src",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-src",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#src",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-src",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#visible",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-set-visible",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/imageplane/imageplane.js~imageplane#visible",
+    "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html#instance-get-visible",
+    "src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane#visible",
+    "member"
+  ],
+  [
     "src/viewer/scene/performancemodel/performancemodel.js",
     "file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js",
@@ -4305,6 +4767,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#edges",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#entitylist",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-entityList",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#entityList",
     "member"
   ],
   [
@@ -4644,6 +5112,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/batching/shadow/batchingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/batching/shadow/batchingshadowshadersource.js",
+    "file/src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowShaderSource.js.html",
+    "src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowShaderSource.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/instancing/instancinglayer.js",
     "file/src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js.html",
     "src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js",
@@ -4761,6 +5241,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpicknormalsshadersource.js",
     "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsShaderSource.js.html",
     "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsShaderSource.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/instancing/shadow/instancingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/instancing/shadow/instancingshadowshadersource.js",
+    "file/src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowShaderSource.js.html",
+    "src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowShaderSource.js",
     "file"
   ],
   [

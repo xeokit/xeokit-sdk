@@ -1234,7 +1234,7 @@ function buildFragmentDraw(mesh) {
         }
         src.push("vec4 emissiveTexel = texture2D(emissiveMap, textureCoord);");
         src.push("emissiveTexel = " + TEXTURE_DECODE_FUNCS[material._emissiveMap._state.encoding] + "(emissiveTexel);");
-        src.push("emissiveColor *= emissiveTexel.rgb;");
+        src.push("emissiveColor = emissiveTexel.rgb;");
     }
 
     if (uvs && material._alphaMap) {

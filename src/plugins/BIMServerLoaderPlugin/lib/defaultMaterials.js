@@ -42,4 +42,4 @@ const defaultMaterials = {
     DEFAULT: [0.5, 0.5, 0.5, 1.0]
 };
 
-export {defaultMaterials}
+export { defaultMaterials }

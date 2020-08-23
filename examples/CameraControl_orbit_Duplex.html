@@ -54,7 +54,8 @@
 
 <div id="info">
     <h1><a target="_other"
-           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> - Orbit Mode</h1>
+           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> -
+        Orbit Mode</h1>
     <br>
     <ul>
         <li>
@@ -93,10 +94,19 @@
         transparent: true
     });
 
-    const cameraControl = viewer.cameraControl;
     const scene = viewer.scene;
     const cameraFlight = viewer.cameraFlight;
     const camera = scene.camera;
+
+    viewer.camera.eye = [-8.23, 10.67, 35.26];
+    viewer.camera.look = [4.39, 3.72, 8.89];
+    viewer.camera.up = [0.10, 0.97, -0.20];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Customize CameraControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControl = viewer.cameraControl;
 
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
@@ -105,9 +115,13 @@
     document.body.appendChild(pivotElement);
     cameraControl.pivotElement = pivotElement;
 
-    viewer.camera.eye = [-8.23, 10.67, 35.26];
-    viewer.camera.look = [4.39, 3.72, 8.89];
-    viewer.camera.up = [0.10, 0.97, -0.20];
+    cameraControl.on("picked", (e) => {
+        console.log("picked");
+    });
+
+    cameraControl.on("doublePicked", (e) => {
+        console.log("doublePicked");
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view

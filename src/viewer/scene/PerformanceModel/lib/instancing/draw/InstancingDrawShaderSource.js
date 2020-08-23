@@ -19,6 +19,14 @@ function buildVertex(scene) {
 
     src.push("// Instancing geometry drawing vertex shader");
 
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
@@ -83,7 +91,7 @@ function buildVertex(scene) {
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
     src.push("bool culled       = (float(flags2.w) > 0.0);");
-    src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
+    src.push("bool transparent  = (float(color.a) < 255.0);");
 
     src.push(`if 
     (culled || !visible || 
@@ -140,7 +148,8 @@ function buildVertex(scene) {
         src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
     }
 
-    src.push("vColor = vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);");
+    src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
+    src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
 
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
