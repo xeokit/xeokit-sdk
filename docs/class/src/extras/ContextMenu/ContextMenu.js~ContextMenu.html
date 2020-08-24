@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -136,13 +137,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber166">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber262">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber166">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber262">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -168,27 +169,29 @@
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run this example</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
-<li>Attach to anything that fires a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event">contextmenu</a> event</li>
-<li>Configure custom items</li>
-<li>Allows to dynamically enable or disable items</li>
+<li>A pure JavaScript, lightweight context menu</li>
+<li>Dynamically configure menu items</li>
+<li>Dynamically enable or disable items</li>
+<li>Supports cascading sub-menus</li>
 <li>Configure custom style with custom CSS (see examples above)</li>
 </ul>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a ContextMenu that pops up whenever we right-click on an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <code>ContextMenu</code> that pops up whenever we right-click on an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within
 our <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
-<p>First, we&apos;ll create the ContextMenu, configuring it with a list of menu items.</p>
+<p>First, we&apos;ll create the <code>ContextMenu</code>, configuring it with a list of menu items.</p>
 <p>Each item has:</p>
 <ul>
-<li>a title to display it in the menu,</li>
+<li>a <code>title</code> for the item,</li>
 <li>a <code>doAction()</code> callback to fire when the item&apos;s title is clicked, and</li>
 <li>an optional <code>getEnabled()</code> callback that indicates if the item should enabled in the menu or not.</li>
 </ul>
+<p><br></p>
 <p>The <code>getEnabled()</code> callbacks are invoked whenever the menu is shown. When an item&apos;s <code>getEnabled()</code> callback
 returns <code>true</code>, then the item is enabled and clickable. When it returns <code>false</code>, then the item is disabled
 and cannot be clicked. An item without a <code>getEnabled()</code> callback is always enabled and clickable.</p>
 <p>Note how the <code>doAction()</code> and <code>getEnabled()</code> callbacks accept a <code>context</code>
-object. That must be set on the ContextMenu before we&apos;re able to we show it. The context object can be anything. In this example,
+object. That must be set on the <code>ContextMenu</code> before we&apos;re able to we show it. The context object can be anything. In this example,
 we&apos;ll use the context object to provide the callbacks with the Entity that we right-clicked.</p>
-<p>We&apos;ll also initially enable the ContextMenu.</p>
+<p>We&apos;ll also initially enable the <code>ContextMenu</code>.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const canvasContextMenu = new ContextMenu({
 
@@ -231,12 +234,12 @@ we&apos;ll use the context object to provide the callbacks with the Entity that 
    ]
 });</code>
 </code></pre>
-<p>Next, we&apos;ll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
+<p>Next, we&apos;ll make the <code>ContextMenu</code> appear whenever we right-click on an Entity. Whenever we right-click
 on the canvas, we&apos;ll attempt to pick the Entity at those mouse coordinates. If we succeed, we&apos;ll feed the
-Entity into ContextMenu via the context object, then show the ContextMenu.</p>
-<p>From there, each ContextMenu item&apos;s <code>getEnabled()</code> callback will be invoked (if provided), to determine if the item should
+Entity into <code>ContextMenu</code> via the context object, then show the <code>ContextMenu</code>.</p>
+<p>From there, each <code>ContextMenu</code> item&apos;s <code>getEnabled()</code> callback will be invoked (if provided), to determine if the item should
 be enabled. If we click an item, its <code>doAction()</code> callback will be invoked with our context object.</p>
-<p>Remember that we must set the context on our ContextMenu before we show it, otherwise it will log an error to the console,
+<p>Remember that we must set the context on our <code>ContextMenu</code> before we show it, otherwise it will log an error to the console,
 and ignore our attempt to show it.</p>
 <pre><code class="lang-javascript*"><code class="source-code prettyprint">viewer.scene.canvas.canvas.oncontextmenu = (e) =&gt; { // Right-clicked on the canvas
 
@@ -260,12 +263,12 @@ and ignore our attempt to show it.</p>
     e.preventDefault();
 });</code>
 </code></pre>
-<p>Note how we only show the ContextMenu if it&apos;s enabled. We can use that mechanism to switch between multiple
-ContextMenu instances depending on what we clicked.</p>
-<h2 id="dynamic-item-titles">Dynamic Item Titles</h2><p>To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
-<code>getTitle()</code> callback. The callback will fire each time you show ContextMenu, which will dynamically
+<p>Note how we only show the <code>ContextMenu</code> if it&apos;s enabled. We can use that mechanism to switch between multiple
+<code>ContextMenu</code> instances depending on what we clicked.</p>
+<h2 id="dynamic-item-titles">Dynamic Item Titles</h2><p>To make an item dynamically regenerate its title text whenever we show the <code>ContextMenu</code>, provide its title with a
+<code>getTitle()</code> callback. The callback will fire each time you show <code>ContextMenu</code>, which will dynamically
 set the item title text.</p>
-<p>In the example below, we&apos;ll create a simple ContextMenu that allows us to toggle the selection of an object
+<p>In the example below, we&apos;ll create a simple <code>ContextMenu</code> that allows us to toggle the selection of an object
 via its first item, which changes text depending on whether we are selecting or deselecting the object.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles">Run an example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const canvasContextMenu = new ContextMenu({
@@ -293,6 +296,53 @@ via its first item, which changes text depending on whether we are selecting or 
          }
       ]
    ]
+});</code>
+</code></pre>
+<h2 id="sub-menus">Sub-menus</h2><p>Each menu item can optionally have a sub-menu, which will appear when we hover over the item.</p>
+<p>In the example below, we&apos;ll create a much simpler <code>ContextMenu</code> that has only one item, called &quot;Effects&quot;, which
+will open a cascading sub-menu whenever we hover over that item.</p>
+<p>Note that our &quot;Effects&quot; item has no <code>doAction</code> callback, because an item with a sub-menu performs no
+action of its own.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_subMenus">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const canvasContextMenu = new ContextMenu({
+    items: [ // Top level items
+        [
+            {
+                getTitle: (context) =&gt; {
+                    return &quot;Effects&quot;;
+                },
+
+                items: [ // Sub-menu
+                    [
+                        {
+                            getTitle: (context) =&gt; {
+                                return (!context.entity.visible) ? &quot;Show&quot; : &quot;Hide&quot;;
+                            },
+                            doAction: function (context) {
+                                context.entity.visible = !context.entity.visible;
+                            }
+                        },
+                        {
+                            getTitle: (context) =&gt; {
+                                return (!context.entity.selected) ? &quot;Select&quot; : &quot;Undo Select&quot;;
+                            },
+                            doAction: function (context) {
+                                context.entity.selected = !context.entity.selected;
+                            }
+                        },
+                        {
+                            getTitle: (context) =&gt; {
+                                return (!context.entity.highlighted) ? &quot;Highlight&quot; : &quot;Undo Highlight&quot;;
+                            },
+                            doAction: function (context) {
+                                context.entity.highlighted = !context.entity.highlighted;
+                            }
+                        }
+                    ]
+                ]
+            }
+         ]
+     ]
 });</code>
 </code></pre>
 </div>
@@ -333,7 +383,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Creates a context menu.</p>
+        <div data-ice="description"><p>Creates a <code>ContextMenu</code>.</p>
 </div>
       </div>
     </td>
@@ -369,9 +419,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Sets the menu&apos;s current context.</p>
-<p>The context can be any object that you need to be provides to the callbacks configured on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>.</p>
-<p>This must be set before calling <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span>.</p>
+        <div data-ice="description"><p>Sets the <code>ContextMenu</code> context.</p>
 </div>
       </div>
     </td>
@@ -400,7 +448,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Gets the menu&apos;s current context.</p>
+        <div data-ice="description"><p>Gets the <code>ContextMenu</code> context.</p>
 </div>
       </div>
     </td>
@@ -429,7 +477,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Sets whether this context menu is enabled.</p>
+        <div data-ice="description"><p>Sets whether this <code>ContextMenu</code> is enabled.</p>
 </div>
       </div>
     </td>
@@ -458,7 +506,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Gets whether this context menu is enabled.</p>
+        <div data-ice="description"><p>Gets whether this <code>ContextMenu</code> is enabled.</p>
 </div>
       </div>
     </td>
@@ -487,7 +535,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Sets the context menu items.</p>
+        <div data-ice="description"><p>Sets the <code>ContextMenu</code> items.</p>
 </div>
       </div>
     </td>
@@ -516,7 +564,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Gets the context menu items.</p>
+        <div data-ice="description"><p>Gets the <code>ContextMenu</code> items.</p>
 </div>
       </div>
     </td>
@@ -545,7 +593,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Gets whether this context menu is currently shown or not.</p>
+        <div data-ice="description"><p>Gets whether this <code>ContextMenu</code> is currently shown or not.</p>
 </div>
       </div>
     </td>
@@ -581,7 +629,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Destroys this context menu.</p>
+        <div data-ice="description"><p>Destroys this <code>ContextMenu</code>.</p>
 </div>
       </div>
     </td>
@@ -610,7 +658,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Hides this context menu.</p>
+        <div data-ice="description"><p>Hides this <code>ContextMenu</code>.</p>
 </div>
       </div>
     </td>
@@ -639,7 +687,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <div>
         
         
-        <div data-ice="description"><p>Shows this context menu at the given page coordinates.</p>
+        <div data-ice="description"><p>Shows this <code>ContextMenu</code> at the given page coordinates.</p>
 </div>
       </div>
     </td>
@@ -670,14 +718,15 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber274">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Creates a context menu.</p>
+  <div data-ice="description"><p>Creates a <code>ContextMenu</code>.</p>
+<p>The <code>ContextMenu</code> will be initially hidden.</p>
 </div>
 
   
@@ -694,7 +743,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <td data-ice="name" class="code" data-depth="0">cfg</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Context menu configuration.</p>
+      <td data-ice="description"><p><code>ContextMenu</code> configuration.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -716,7 +765,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether this context menu is initially enabled. <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span> does nothing while this is <code>false</code>.</p>
+      <td data-ice="description"><p>Whether this <code>ContextMenu</code> is initially enabled. <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span> does nothing while this is <code>false</code>.</p>
 </td>
     </tr>
 </tbody>
@@ -756,14 +805,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber336">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber366">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the menu&apos;s current context.</p>
+  <div data-ice="description"><p>Sets the <code>ContextMenu</code> context.</p>
 <p>The context can be any object that you need to be provides to the callbacks configured on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>.</p>
 <p>This must be set before calling <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span>.</p>
 </div>
@@ -802,14 +851,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber375">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the menu&apos;s current context.</p>
+  <div data-ice="description"><p>Gets the <code>ContextMenu</code> context.</p>
 </div>
 
   
@@ -846,15 +895,15 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber335">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether this context menu is enabled.</p>
-<p>When disabling, will hide the menu if currently shown.</p>
+  <div data-ice="description"><p>Sets whether this <code>ContextMenu</code> is enabled.</p>
+<p>Hides the menu when disabling.</p>
 </div>
 
   
@@ -891,14 +940,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber353">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether this context menu is enabled.</p>
+  <div data-ice="description"><p>Gets whether this <code>ContextMenu</code> is enabled.</p>
 <p><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span> does nothing while this is <code>false</code>.</p>
 </div>
 
@@ -936,15 +985,15 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the context menu items.</p>
-<p>These can be dynamically updated.</p>
+  <div data-ice="description"><p>Sets the <code>ContextMenu</code> items.</p>
+<p>These can be updated dynamically at any time.</p>
 <p>See class documentation for an example.</p>
 </div>
 
@@ -982,14 +1031,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber238">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber324">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the context menu items.</p>
+  <div data-ice="description"><p>Gets the <code>ContextMenu</code> items.</p>
 </div>
 
   
@@ -1026,14 +1075,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber390">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber412">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether this context menu is currently shown or not.</p>
+  <div data-ice="description"><p>Gets whether this <code>ContextMenu</code> is currently shown or not.</p>
 </div>
 
   
@@ -1047,7 +1096,7 @@ via its first item, which changes text depending on whether we are selecting or 
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether this context menu is shown.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>Whether this <code>ContextMenu</code> is shown.</p>
 </td>
         </tr>
       </tbody>
@@ -1086,14 +1135,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber433">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this context menu.</p>
+  <div data-ice="description"><p>Destroys this <code>ContextMenu</code>.</p>
 </div>
 
   
@@ -1130,14 +1179,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber419">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Hides this context menu.</p>
+  <div data-ice="description"><p>Hides this <code>ContextMenu</code>.</p>
 </div>
 
   
@@ -1174,15 +1223,14 @@ via its first item, which changes text depending on whether we are selecting or 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber361">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber389">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Shows this context menu at the given page coordinates.</p>
-<p>Also calls the <code>getEnabled()</code> callback on the menu items, where supplied, to enable or disable them. See the class documentation for more info.</p>
+  <div data-ice="description"><p>Shows this <code>ContextMenu</code> at the given page coordinates.</p>
 <p>Does nothing when <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-enabled">ContextMenu#enabled</a></span> is <code>false</code>.</p>
 <p>Logs error to console and does nothing if <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context">ContextMenu#context</a></span> has not been set.</p>
 </div>

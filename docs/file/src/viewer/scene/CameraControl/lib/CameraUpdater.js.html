@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -138,7 +139,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/CameraControl/lib/CameraUpdater.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../math/math.js&quot;;
 
-const SCALE_DOLLY_EACH_FRAME = 2; // Recalculate dolly speed for eye-&gt;target distance on each Nth frame
+const SCALE_DOLLY_EACH_FRAME = 1; // Recalculate dolly speed for eye-&gt;target distance on each Nth frame
 const EPSILON = 0.001;
 const tempVec3 = math.vec3();
 
@@ -153,6 +154,7 @@ class CameraUpdater {
 
         this._scene = scene;
         const camera = scene.camera;
+        const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
         const panController = controllers.panController;
 
@@ -166,8 +168,6 @@ class CameraUpdater {
             }
 
             let cursorType = &quot;default&quot;;
-
-            const deltaTimeMilliSecs = e.deltaTime;
 
             //----------------------------------------------------------------------------------------------------------
             // Dolly decay
@@ -189,6 +189,10 @@ class CameraUpdater {
                 updates.rotateDeltaY = 0;
             }
 
+            if (updates.rotateDeltaX !== 0 || updates.rotateDeltaY !== 0) {
+                updates.dollyDelta = 0;
+            }
+
             //----------------------------------------------------------------------------------------------------------
             // Dolly speed eye-&gt;look scaling
             //
@@ -208,17 +212,9 @@ class CameraUpdater {
                 countDown = SCALE_DOLLY_EACH_FRAME;
 
                 if (updates.dollyDelta !== 0) {
-
                     if (updates.rotateDeltaY === 0 &amp;&amp; updates.rotateDeltaX === 0) {
-
-                        const pickResult = this._scene.pick({
-                            pickSurface: true,
-                            pickSurfaceNormal: false,
-                            canvasPos: states.mouseCanvasPos
-                        });
-
-                        if (pickResult &amp;&amp; pickResult.worldPos) {
-                            const worldPos = pickResult.worldPos;
+                        if (pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
+                            const worldPos = pickController.pickResult.worldPos;
                             pivotController.setPivotPos(worldPos);
                             pivotController.hidePivot();
                         } else {
@@ -378,7 +374,7 @@ class CameraUpdater {
                     }
 
                     if (updates.inputFromMouse &amp;&amp; configs.followPointer) { // Using mouse input
-                        panController.dollyToCanvasPos(states.mouseCanvasPos, -dollyDeltaForDist);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
                     }
@@ -412,7 +408,7 @@ class CameraUpdater {
                             panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
                         }
                     } else {
-                        camera.pan([0, 0, dollyDeltaForDist]);
+                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
                     }
 
                 } else { // Orbiting
@@ -428,6 +424,8 @@ class CameraUpdater {
 
                 updates.dollyDelta *= configs.dollyInertia;
             }
+
+            pickController.fireEvents();
 
             document.body.style.cursor = cursorType;
         });

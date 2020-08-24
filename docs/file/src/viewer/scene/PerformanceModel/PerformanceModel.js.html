@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -146,6 +147,7 @@ import {getBatchingLayerScratchMemory} from &quot;./lib/batching/BatchingLayerSc
 import {BatchingLayer} from &apos;./lib/batching/BatchingLayer.js&apos;;
 import {InstancingLayer} from &apos;./lib/instancing/InstancingLayer.js&apos;;
 import {RENDER_FLAGS} from &apos;./lib/renderFlags.js&apos;;
+import {utils} from &quot;../../../viewer/scene/utils.js&quot;;
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;ANGLE_instanced_arrays&quot;];
 
@@ -196,6 +198,7 @@ class PerformanceModel extends Component {
      * @param {Number} [cfg.opacity=1.0] PerformanceModel&apos;s initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene&apos;s {@link SAO} component.
      * @param {Boolean} [cfg.backfaces=false] Indicates if backfaces are visible.
+     * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      */
     constructor(owner, cfg = {}) {
 
@@ -271,6 +274,8 @@ class PerformanceModel extends Component {
 
         /** @private */
         this._numTriangles = 0;
+
+        this._edgeThreshold = cfg.edgeThreshold || 10;
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -477,7 +482,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} cfg.normals Flat array of normal vectors.
      * @param {Number[]} cfg.indices Array of triangle indices.
-     * @param {Number[]} cfg.edgeIndices Array of edge line indices.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      */
     createGeometry(cfg) {
@@ -494,7 +499,7 @@ class PerformanceModel extends Component {
             this.error(&quot;Geometry already created: &quot; + geometryId);
             return;
         }
-        const instancingLayer = new InstancingLayer(this, cfg);
+        const instancingLayer = new InstancingLayer(this, utils.apply({edgeThreshold: this._edgeThreshold}, cfg));
         this._instancingLayers[geometryId] = instancingLayer;
         this._layerList.push(instancingLayer);
         this.numGeometries++;
@@ -532,7 +537,9 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
+     * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
+     * constructor. This parameter is ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -679,7 +686,7 @@ class PerformanceModel extends Component {
             layer = this._currentBatchingLayer;
 
             if (!edgeIndices &amp;&amp; indices) {
-                edgeIndices = buildEdgeIndices(positions, indices, null, 10);
+                edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
             }
 
             let meshMatrix;
@@ -872,6 +879,15 @@ class PerformanceModel extends Component {
      */
     get backfaces() {
         return this._backfaces;
+    }
+
+    /**
+     * Gets the list of {@link Entity}s within this PerformanceModel.
+     *
+     * @returns {Entity[]}
+     */
+    get entityList() {
+        return this._nodeList;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1218,7 +1234,12 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    set castsShadow(castsShadow) { // TODO
+    set castsShadow(castsShadow) {
+        castsShadow = (castsShadow !== false);
+        if (castsShadow !== this._castsShadow) {
+            this._castsShadow = castsShadow;
+            this.glRedraw();
+        }
     }
 
     /**
@@ -1226,8 +1247,8 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    get castsShadow() { // TODO
-        return false;
+    get castsShadow() {
+        return this._castsShadow;
     }
 
     /**
@@ -1235,7 +1256,12 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    set receivesShadow(receivesShadow) { // TODO
+    set receivesShadow(receivesShadow) {
+        receivesShadow = (receivesShadow !== false);
+        if (receivesShadow !== this._receivesShadow) {
+            this._receivesShadow = receivesShadow;
+            this.glRedraw();
+        }
     }
 
     /**
@@ -1243,8 +1269,8 @@ class PerformanceModel extends Component {
      *
      * @type {Boolean}
      */
-    get receivesShadow() { // TODO
-        return false;
+    get receivesShadow() {
+        return this._receivesShadow;
     }
 
     /**
@@ -1644,6 +1670,27 @@ class PerformanceModel extends Component {
         }
         for (var i = 0, len = this._layerList.length; i &lt; len; i++) {
             this._layerList[i].drawOcclusion(frameCtx);
+        }
+    }
+
+    /**
+     * @private
+     */
+    drawShadow(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
+        for (let i = 0, len = this._layerList.length; i &lt; len; i++) {
+            this._layerList[i].drawShadow(frameCtx);
         }
     }
 

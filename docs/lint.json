@@ -4,55 +4,55 @@
     "filePath": "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js",
     "lines": [
       {
-        "lineNumber": 928,
+        "lineNumber": 920,
         "line": "\t/**"
       },
       {
-        "lineNumber": 929,
+        "lineNumber": 921,
         "line": "\t * Call a single method, this method delegates to the multiCall method"
       },
       {
-        "lineNumber": 930,
+        "lineNumber": 922,
         "line": "\t * @param {string} interfaceName - Interface name, e.g. \"ServiceInterface\""
       },
       {
-        "lineNumber": 931,
+        "lineNumber": 923,
         "line": "\t * @param {string} methodName - Methodname, e.g. \"addProject\""
       },
       {
-        "lineNumber": 932,
+        "lineNumber": 924,
         "line": "\t * @param {Object} data - Object with a field per arument"
       },
       {
-        "lineNumber": 933,
+        "lineNumber": 925,
         "line": "\t * @param {Function} callback - Function to callback, first argument in callback will be the returned object"
       },
       {
-        "lineNumber": 934,
+        "lineNumber": 926,
         "line": "\t * @param {Function} errorCallback - Function to callback on error"
       },
       {
-        "lineNumber": 935,
+        "lineNumber": 927,
         "line": "\t * @param {boolean} showBusy - Whether to show busy indication"
       },
       {
-        "lineNumber": 936,
+        "lineNumber": 928,
         "line": "\t * @param {boolean} showDone - Whether to show done indication"
       },
       {
-        "lineNumber": 937,
+        "lineNumber": 929,
         "line": "\t * @param {boolean} showError - Whether to show errors"
       },
       {
-        "lineNumber": 938,
+        "lineNumber": 930,
         "line": "\t * "
       },
       {
-        "lineNumber": 939,
+        "lineNumber": 931,
         "line": "\t */"
       },
       {
-        "lineNumber": 940,
+        "lineNumber": 932,
         "line": "\tcall(interfaceName, methodName, data, callback, errorCallback, showBusy = true, showDone = false, showError = true, connectWebSocket = true) {"
       }
     ],

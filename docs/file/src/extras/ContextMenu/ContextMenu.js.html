@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -136,10 +137,49 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/extras/ContextMenu/ContextMenu.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {utils} from &quot;../../viewer/scene/utils.js&quot;;
-import {Map} from &quot;../../viewer/scene/utils/Map.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Map} from &quot;../../viewer/scene/utils/Map.js&quot;;
 
 const idMap = new Map();
+
+/**
+ * Internal data class that represents the state of a menu or a submenu.
+ * @private
+ */
+class Menu {
+    constructor(id) {
+        this.id = id;
+        this.parentItem = null; // Set to an Item when this Menu is a submenu
+        this.groups = [];
+        this.menuElement = null;
+        this.shown = false;
+        this.mouseOver = 0;
+    }
+}
+
+/**
+ * Internal data class that represents a group of Items in a Menu.
+ * @private
+ */
+class Group {
+    constructor() {
+        this.items = [];
+    }
+}
+
+/**
+ * Internal data class that represents the state of a menu item.
+ * @private
+ */
+class Item {
+    constructor(id, getTitle, doAction) {
+        this.id = id;
+        this.getTitle = getTitle;
+        this.doAction = doAction;
+        this.itemElement = null;
+        this.subMenu = null;
+        this.enabled = true;
+    }
+}
 
 /**
  * @desc A customizable HTML context menu.
@@ -150,34 +190,36 @@ const idMap = new Map();
  *
  * ## Overview
  *
- * * Attach to anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
- * * Configure custom items
- * * Allows to dynamically enable or disable items
+ * * A pure JavaScript, lightweight context menu
+ * * Dynamically configure menu items
+ * * Dynamically enable or disable items
+ * * Supports cascading sub-menus
  * * Configure custom style with custom CSS (see examples above)
  *
  * ## Usage
  *
- * In the example below we&apos;ll create a ContextMenu that pops up whenever we right-click on an {@link Entity} within
+ * In the example below we&apos;ll create a ````ContextMenu```` that pops up whenever we right-click on an {@link Entity} within
  * our {@link Scene}.
  *
- * First, we&apos;ll create the ContextMenu, configuring it with a list of menu items.
+ * First, we&apos;ll create the ````ContextMenu````, configuring it with a list of menu items.
  *
  * Each item has:
  *
- * * a title to display it in the menu,
+ * * a ````title```` for the item,
  * * a ````doAction()```` callback to fire when the item&apos;s title is clicked, and
  * * an optional ````getEnabled()```` callback that indicates if the item should enabled in the menu or not.
+ *
+ * &lt;br&gt;
  *
  * The ````getEnabled()```` callbacks are invoked whenever the menu is shown. When an item&apos;s ````getEnabled()```` callback
  * returns ````true````, then the item is enabled and clickable. When it returns ````false````, then the item is disabled
  * and cannot be clicked. An item without a ````getEnabled()```` callback is always enabled and clickable.
  *
- *
  * Note how the ````doAction()```` and ````getEnabled()```` callbacks accept a ````context````
- * object. That must be set on the ContextMenu before we&apos;re able to we show it. The context object can be anything. In this example,
+ * object. That must be set on the ````ContextMenu```` before we&apos;re able to we show it. The context object can be anything. In this example,
  * we&apos;ll use the context object to provide the callbacks with the Entity that we right-clicked.
  *
- * We&apos;ll also initially enable the ContextMenu.
+ * We&apos;ll also initially enable the ````ContextMenu````.
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom)]
  *
@@ -224,14 +266,14 @@ const idMap = new Map();
  * });
  * ````
  *
- * Next, we&apos;ll make the ContextMenu appear whenever we right-click on an Entity. Whenever we right-click
+ * Next, we&apos;ll make the ````ContextMenu```` appear whenever we right-click on an Entity. Whenever we right-click
  * on the canvas, we&apos;ll attempt to pick the Entity at those mouse coordinates. If we succeed, we&apos;ll feed the
- * Entity into ContextMenu via the context object, then show the ContextMenu.
+ * Entity into ````ContextMenu```` via the context object, then show the ````ContextMenu````.
  *
- * From there, each ContextMenu item&apos;s ````getEnabled()```` callback will be invoked (if provided), to determine if the item should
+ * From there, each ````ContextMenu```` item&apos;s ````getEnabled()```` callback will be invoked (if provided), to determine if the item should
  * be enabled. If we click an item, its ````doAction()```` callback will be invoked with our context object.
  *
- * Remember that we must set the context on our ContextMenu before we show it, otherwise it will log an error to the console,
+ * Remember that we must set the context on our ````ContextMenu```` before we show it, otherwise it will log an error to the console,
  * and ignore our attempt to show it.
  *
  * ````javascript*
@@ -258,16 +300,16 @@ const idMap = new Map();
  * });
  * ````
  *
- * Note how we only show the ContextMenu if it&apos;s enabled. We can use that mechanism to switch between multiple
- * ContextMenu instances depending on what we clicked.
+ * Note how we only show the ````ContextMenu```` if it&apos;s enabled. We can use that mechanism to switch between multiple
+ * ````ContextMenu```` instances depending on what we clicked.
  *
  * ## Dynamic Item Titles
  *
- * To make an item dynamically regenerate its title text whenever we show the ContextMenu, provide its title with a
- * ````getTitle()```` callback. The callback will fire each time you show ContextMenu, which will dynamically
+ * To make an item dynamically regenerate its title text whenever we show the ````ContextMenu````, provide its title with a
+ * ````getTitle()```` callback. The callback will fire each time you show ````ContextMenu````, which will dynamically
  * set the item title text.
  *
- * In the example below, we&apos;ll create a simple ContextMenu that allows us to toggle the selection of an object
+ * In the example below, we&apos;ll create a simple ````ContextMenu```` that allows us to toggle the selection of an object
  * via its first item, which changes text depending on whether we are selecting or deselecting the object.
  *
  * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles)]
@@ -300,151 +342,140 @@ const idMap = new Map();
  *    ]
  * });
  * ````
+ *
+ * ## Sub-menus
+ *
+ * Each menu item can optionally have a sub-menu, which will appear when we hover over the item.
+ *
+ * In the example below, we&apos;ll create a much simpler ````ContextMenu```` that has only one item, called &quot;Effects&quot;, which
+ * will open a cascading sub-menu whenever we hover over that item.
+ *
+ * Note that our &quot;Effects&quot; item has no ````doAction```` callback, because an item with a sub-menu performs no
+ * action of its own.
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_subMenus)]
+ *
+ * ````javascript
+ * const canvasContextMenu = new ContextMenu({
+ *     items: [ // Top level items
+ *         [
+ *             {
+ *                 getTitle: (context) =&gt; {
+ *                     return &quot;Effects&quot;;
+ *                 },
+ *
+ *                 items: [ // Sub-menu
+ *                     [
+ *                         {
+ *                             getTitle: (context) =&gt; {
+ *                                 return (!context.entity.visible) ? &quot;Show&quot; : &quot;Hide&quot;;
+ *                             },
+ *                             doAction: function (context) {
+ *                                 context.entity.visible = !context.entity.visible;
+ *                             }
+ *                         },
+ *                         {
+ *                             getTitle: (context) =&gt; {
+ *                                 return (!context.entity.selected) ? &quot;Select&quot; : &quot;Undo Select&quot;;
+ *                             },
+ *                             doAction: function (context) {
+ *                                 context.entity.selected = !context.entity.selected;
+ *                             }
+ *                         },
+ *                         {
+ *                             getTitle: (context) =&gt; {
+ *                                 return (!context.entity.highlighted) ? &quot;Highlight&quot; : &quot;Undo Highlight&quot;;
+ *                             },
+ *                             doAction: function (context) {
+ *                                 context.entity.highlighted = !context.entity.highlighted;
+ *                             }
+ *                         }
+ *                     ]
+ *                 ]
+ *             }
+ *          ]
+ *      ]
+ * });
+ * ````
  */
 class ContextMenu {
 
     /**
-     * Creates a context menu.
+     * Creates a ````ContextMenu````.
      *
-     * @param {Object} [cfg] Context menu configuration.
+     * The ````ContextMenu```` will be initially hidden.
+     *
+     * @param {Object} [cfg] ````ContextMenu```` configuration.
      * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
-     * @param {Boolean} [cfg.enabled=true] Whether this context menu is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
+     * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      */
     constructor(cfg = {}) {
+
         this._id = idMap.addItem();
         this._context = null;
-        this._menuElement = null;
-        this._enabled = false;
-        this._items = [];
-        this._shown = false;
+        this._enabled = false;  // True when the ContextMenu is enabled
+        this._itemsCfg = [];    // Items as given as configs
+        this._rootMenu = null;  // The root Menu in the tree
+        this._menuList = [];    // List of Menus
+        this._menuMap = {};     // Menus mapped to their IDs
+        this._itemList = [];    // List of Items
+        this._itemMap = {};     // Items mapped to their IDs
+        this._shown = false;    // True when the ContextMenu is visible
+        this._nextId = 0;
+
         document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
             if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
                 this.hide();
             }
         });
+
         if (cfg.items) {
             this.items = cfg.items;
         }
+
         this.context = cfg.context;
         this.enabled = cfg.enabled !== false;
         this.hide();
     }
 
     /**
-     * Sets the context menu items.
+     * Sets the ````ContextMenu```` items.
      *
-     * These can be dynamically updated.
+     * These can be updated dynamically at any time.
      *
      * See class documentation for an example.
      *
      * @type {Object[]}
      */
-    set items(items) {
-        this._items = items || [];
-        if (this._menuElement) {
-            this._menuElement.parentElement.removeChild(this._menuElement);
-            this._menuElement = null;
-        }
-        const html = [];
-        const idClass = &quot;xeokit-context-menu-&quot; + this._id;
-        html.push(&apos;&lt;div class=&quot;xeokit-context-menu &apos; + idClass + &apos;&quot; style=&quot;z-index:300000; position: absolute;&quot;&gt;&apos;);
-        html.push(&apos;&lt;ul&gt;&apos;);
-        this._buildActionLinks(this._items, html);
-        html.push(&apos;&lt;/ul&gt;&apos;);
-        html.push(&apos;&lt;/div&gt;&apos;);
-        const htmlStr = html.join(&quot;&quot;);
-        document.body.insertAdjacentHTML(&apos;beforeend&apos;, htmlStr);
-        this._menuElement = document.querySelector(&quot;.&quot; + idClass);
-        this._menuElement.style[&quot;border-radius&quot;] = 4 + &quot;px&quot;;
-        this._menuElement.style.display = &apos;none&apos;;
-        this._menuElement.style[&quot;z-index&quot;] = 300000;
-        this._menuElement.style.background = &quot;white&quot;;
-        this._menuElement.style.border = &quot;1px solid black&quot;;
-        this._menuElement.style[&quot;box-shadow&quot;] = &quot;0 4px 5px 0 gray&quot;;
-        this._menuElement.oncontextmenu = (e) =&gt; {
-            e.preventDefault();
-        };
-        this._bindActionLinks(this._items);
+    set items(itemsCfg) {
+        this._clear();
+        this._itemsCfg = itemsCfg || [];
+        this._parseItems(itemsCfg);
+        this._createUI();
     }
 
     /**
-     * Gets the context menu items.
+     * Gets the ````ContextMenu```` items.
      *
      * @type {Object[]}
      */
     get items() {
-        return this._items;
-    }
-
-    _buildActionLinks(items, html, ctx = {id: 0}) {
-        for (let i = 0, len = items.length; i &lt; len; i++) {
-            const itemsGroup = items[i];
-            ctx.groupIdx = i;
-            ctx.groupLen = len;
-            this._buildActionLinks2(itemsGroup, html, ctx);
-        }
-    }
-
-    _buildActionLinks2(itemsGroup, html, ctx) {
-        for (let i = 0, len = itemsGroup.length; i &lt; len; i++) {
-            const item = itemsGroup[i];
-            if (!item.title &amp;&amp; !item.getTitle) {
-                console.error(&quot;ContextMenu item without title or getTitle() - will not include in ContextMenu&quot;);
-                continue;
-            }
-            if ((!item.doAction) &amp;&amp; (!item.callback)) {
-                console.error(&quot;ContextMenu item without doAction() or callback() - will not include in ContextMenu&quot;);
-                continue;
-            }
-            if (item.callback) {
-                console.error(&quot;ContextMenu item has deprecated &apos;callback&apos; - rename to &apos;doAction&apos;&quot;);
-                continue;
-            }
-            const itemId = &quot;xeokit-context-menu-&quot; + this._id + &quot;-&quot; + ctx.id++;
-            const actionTitle = item.title || &quot;&quot;;
-            html.push(&apos;&lt;li id=&quot;&apos; + itemId + &apos;&quot; class=&quot;xeokit-context-menu-item&quot; style=&quot;&apos; + ((ctx.groupIdx === ctx.groupLen - 1) || ((i &lt; len - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
-            item._itemId = itemId;
-        }
-    }
-
-    _bindActionLinks(items, ctx = {id: 0}) {
-        const self = this;
-        for (let i = 0, len = items.length; i &lt; len; i++) {
-            const item = items[i];
-            if (utils.isArray(item)) {
-                this._bindActionLinks(item, ctx);
-            } else {
-                item._itemElement = document.getElementById(item._itemId);
-                if (!item._itemElement) {
-                    console.error(&quot;ContextMenu item element not found: &quot; + item._itemId);
-                    continue;
-                }
-                item._itemElement.addEventListener(&quot;click&quot;, (function () {
-                    const doAction = item.doAction || item.callback;
-                    return function (event) {
-                        if (!self._context) {
-                            return;
-                        }
-                        if (item._enabled !== false) {
-                            doAction(self._context);
-                            self.hide();
-                        }
-                        event.preventDefault();
-                    };
-                })());
-            }
-        }
+        return this._itemsCfg;
     }
 
     /**
-     * Sets whether this context menu is enabled.
+     * Sets whether this ````ContextMenu```` is enabled.
      *
-     * When disabling, will hide the menu if currently shown.
+     * Hides the menu when disabling.
      *
      * @type {Boolean}
      */
     set enabled(enabled) {
+        enabled = (!!enabled);
+        if (enabled === this._enabled) {
+            return;
+        }
         this._enabled = enabled;
         if (!this._enabled) {
             this.hide();
@@ -452,7 +483,7 @@ class ContextMenu {
     }
 
     /**
-     * Gets whether this context menu is enabled.
+     * Gets whether this ````ContextMenu```` is enabled.
      *
      * {@link ContextMenu#show} does nothing while this is ````false````.
      *
@@ -463,7 +494,7 @@ class ContextMenu {
     }
 
     /**
-     * Sets the menu&apos;s current context.
+     * Sets the ````ContextMenu```` context.
      *
      * The context can be any object that you need to be provides to the callbacks configured on {@link ContextMenu#items}.
      *
@@ -476,7 +507,7 @@ class ContextMenu {
     }
 
     /**
-     * Gets the menu&apos;s current context.
+     * Gets the ````ContextMenu```` context.
      *
      * @type {Object}
      */
@@ -485,9 +516,7 @@ class ContextMenu {
     }
 
     /**
-     * Shows this context menu at the given page coordinates.
-     *
-     * Also calls the ````getEnabled()```` callback on the menu items, where supplied, to enable or disable them. See the class documentation for more info.
+     * Shows this ````ContextMenu```` at the given page coordinates.
      *
      * Does nothing when {@link ContextMenu#enabled} is ````false````.
      *
@@ -501,98 +530,419 @@ class ContextMenu {
             console.error(&quot;ContextMenu cannot be shown without a context - set context first&quot;);
             return;
         }
-        if (!this._enabled || !this._menuElement) {
+        if (!this._enabled) {
             return;
         }
-        this._enableItems();
-        this._updateDynamicItemTitles(this._items);
-        this._menuElement.style.display = &apos;block&apos;;
-        const menuHeight = this._menuElement.offsetHeight;
-        const menuWidth = this._menuElement.offsetWidth;
+        if (this._shown) {
+            return;
+        }
+        this._hideAllMenus();
+        this._updateItemsTitles();
+        this._updateItemsEnabledStatus();
+        this._showMenu(this._rootMenu.id, pageX, pageY);
+        this._shown = true;
+    }
+
+    /**
+     * Gets whether this ````ContextMenu```` is currently shown or not.
+     *
+     * @returns {Boolean} Whether this ````ContextMenu```` is shown.
+     */
+    get shown() {
+        return this._shown;
+    }
+
+    /**
+     * Hides this ````ContextMenu````.
+     */
+    hide() {
+        if (!this._enabled) {
+            return;
+        }
+        if (!this._shown) {
+            return;
+        }
+        this._hideAllMenus();
+        this._shown = false;
+    }
+
+    /**
+     * Destroys this ````ContextMenu````.
+     */
+    destroy() {
+        this._context = null;
+        this._clear();
+        if (this._id !== null) {
+            idMap.removeItem(this._id);
+            this._id = null;
+        }
+    }
+
+    _clear() { // Destroys DOM elements, clears menu data
+        for (let i = 0, len = this._menuList.length; i &lt; len; i++) {
+            const menu = this._menuList[i];
+            const menuElement = menu.menuElement;
+            menuElement.parentElement.removeChild(menuElement);
+        }
+        this._itemsCfg = [];
+        this._rootMenu = null;
+        this._menuList = [];
+        this._menuMap = {};
+        this._itemList = [];
+        this._itemMap = {};
+    }
+
+    _parseItems(itemsCfg) { // Parses &quot;items&quot; config into menu data
+
+        const visitItems = (itemsCfg) =&gt; {
+
+            const menuId = this._getNextId();
+            const menu = new Menu(menuId);
+
+            for (let i = 0, len = itemsCfg.length; i &lt; len; i++) {
+
+                const itemsGroupCfg = itemsCfg[i];
+
+                const group = new Group();
+
+                menu.groups.push(group);
+
+                for (let j = 0, lenj = itemsGroupCfg.length; j &lt; lenj; j++) {
+
+                    const itemCfg = itemsGroupCfg[j];
+                    const subItemsCfg = itemCfg.items;
+                    const hasSubItems = (subItemsCfg &amp;&amp; (subItemsCfg.length &gt; 0));
+                    const itemId = this._getNextId();
+
+                    const getTitle = itemCfg.getTitle || (() =&gt; {
+                        return (itemCfg.title || &quot;&quot;);
+                    });
+
+                    const doAction = itemCfg.doAction || itemCfg.callback || (() =&gt; {
+                    });
+
+                    const item = new Item(itemId, getTitle, doAction);
+
+                    item.parentMenu = menu;
+
+                    group.items.push(item);
+
+                    if (hasSubItems) {
+                        const subMenu = visitItems(subItemsCfg);
+                        item.subMenu = subMenu;
+                        subMenu.parentItem = item;
+                    }
+
+                    this._itemList.push(item);
+                    this._itemMap[item.id] = item;
+                }
+            }
+
+            this._menuList.push(menu);
+            this._menuMap[menu.id] = menu;
+
+            return menu;
+        };
+
+        this._rootMenu = visitItems(itemsCfg);
+    }
+
+    _getNextId() { // Returns a unique ID
+        return &quot;ContextMenu_&quot; + this._id + &quot;&quot; + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
+    }
+
+    _createUI() { // Builds DOM elements for the entire menu tree
+
+        const visitMenu = (menu) =&gt; {
+
+            this._createMenuUI(menu);
+
+            const groups = menu.groups;
+            for (let i = 0, len = groups.length; i &lt; len; i++) {
+                const group = groups[i];
+                const groupItems = group.items;
+                for (let j = 0, lenj = groupItems.length; j &lt; lenj; j++) {
+                    const item = groupItems[j];
+                    const subMenu = item.subMenu;
+                    if (subMenu) {
+                        visitMenu(subMenu);
+                    }
+                }
+            }
+        };
+
+        visitMenu(this._rootMenu);
+    }
+
+    _createMenuUI(menu) { // Builds DOM elements for a menu
+
+        const groups = menu.groups;
+        const html = [];
+
+        html.push(&apos;&lt;div class=&quot;xeokit-context-menu &apos; + menu.id + &apos;&quot; style=&quot;z-index:300000; position: absolute;&quot;&gt;&apos;);
+
+        html.push(&apos;&lt;ul&gt;&apos;);
+
+        if (groups) {
+
+            for (let i = 0, len = groups.length; i &lt; len; i++) {
+
+                const group = groups[i];
+                const groupIdx = i;
+                const groupLen = len;
+                const groupItems = group.items;
+
+                if (groupItems) {
+
+                    for (let j = 0, lenj = groupItems.length; j &lt; lenj; j++) {
+
+                        const item = groupItems[j];
+                        const itemSubMenu = item.subMenu;
+                        const actionTitle = item.title || &quot;&quot;;
+
+                        if (itemSubMenu) {
+
+                            html.push(
+                                &apos;&lt;li id=&quot;&apos; + item.id + &apos;&quot; class=&quot;xeokit-context-menu-item&quot; style=&quot;&apos; +
+                                ((groupIdx === groupLen - 1) || ((j &lt; lenj - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) +
+                                &apos;&quot;&gt;&apos; +
+                                actionTitle +
+                                &apos; [MORE]&apos; +
+                                &apos;&lt;/li&gt;&apos;);
+
+                        } else {
+
+                            html.push(
+                                &apos;&lt;li id=&quot;&apos; + item.id + &apos;&quot; class=&quot;xeokit-context-menu-item&quot; style=&quot;&apos; +
+                                ((groupIdx === groupLen - 1) || ((j &lt; lenj - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) +
+                                &apos;&quot;&gt;&apos; +
+                                actionTitle +
+                                &apos;&lt;/li&gt;&apos;);
+                        }
+                    }
+                }
+            }
+        }
+
+        html.push(&apos;&lt;/ul&gt;&apos;);
+        html.push(&apos;&lt;/div&gt;&apos;);
+
+        const htmlString = html.join(&quot;&quot;);
+
+        document.body.insertAdjacentHTML(&apos;beforeend&apos;, htmlString);
+
+        const menuElement = document.querySelector(&quot;.&quot; + menu.id);
+
+        menu.menuElement = menuElement;
+
+        menuElement.style[&quot;border-radius&quot;] = 4 + &quot;px&quot;;
+        menuElement.style.display = &apos;none&apos;;
+        menuElement.style[&quot;z-index&quot;] = 300000;
+        menuElement.style.background = &quot;white&quot;;
+        menuElement.style.border = &quot;1px solid black&quot;;
+        menuElement.style[&quot;box-shadow&quot;] = &quot;0 4px 5px 0 gray&quot;;
+        menuElement.oncontextmenu = (e) =&gt; {
+            e.preventDefault();
+        };
+
+        // Bind event handlers
+
+        const self = this;
+
+        let lastSubMenu = null;
+
+        if (groups) {
+
+            for (let i = 0, len = groups.length; i &lt; len; i++) {
+
+                const group = groups[i];
+                const groupItems = group.items;
+
+                if (groupItems) {
+
+                    for (let j = 0, lenj = groupItems.length; j &lt; lenj; j++) {
+
+                        const item = groupItems[j];
+                        const itemSubMenu = item.subMenu;
+
+                        item.itemElement = document.getElementById(item.id);
+
+                        if (!item.itemElement) {
+                            console.error(&quot;ContextMenu item element not found: &quot; + item.id);
+                            continue;
+                        }
+
+                        item.itemElement.addEventListener(&quot;mouseenter&quot;, (event) =&gt; {
+                            event.preventDefault();
+                            if (item.enabled === false) {
+                                return;
+                            }
+                            const subMenu = item.subMenu;
+                            if (!subMenu) {
+                                if (lastSubMenu) {
+                                    self._hideMenu(lastSubMenu.id);
+                                    lastSubMenu = null;
+                                }
+                                return;
+                            }
+                            if (lastSubMenu &amp;&amp; (lastSubMenu.id !== subMenu.id)) {
+                                self._hideMenu(lastSubMenu.id);
+                                lastSubMenu = null;
+                            }
+
+                            const itemElement = item.itemElement;
+                            const subMenuElement = subMenu.menuElement;
+
+                            const itemRect = itemElement.getBoundingClientRect();
+                            const menuRect = subMenuElement.getBoundingClientRect();
+
+                            const subMenuWidth = 200; // TODO
+                            const showOnLeft = ((itemRect.right + subMenuWidth) &gt; window.innerWidth);
+
+                            if (showOnLeft) {
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                            } else {
+                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                            }
+
+                            lastSubMenu = subMenu;
+                        });
+
+                        if (!itemSubMenu) {
+
+                            // Item without sub-menu
+                            // clicking item fires the item&apos;s action callback
+
+                            item.itemElement.addEventListener(&quot;click&quot;, (event) =&gt; {
+                                event.preventDefault();
+                                if (!self._context) {
+                                    return;
+                                }
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doAction) {
+                                    item.doAction(self._context);
+                                }
+                                self.hide();
+                            });
+
+
+                            item.itemElement.addEventListener(&quot;mouseenter&quot;, (event) =&gt; {
+                                event.preventDefault();
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doHover) {
+                                    item.doHover(self._context);
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    _updateItemsTitles() { // Dynamically updates the title of each Item to the result of Item#getTitle()
+        if (!this._context) {
+            return;
+        }
+        for (let i = 0, len = this._itemList.length; i &lt; len; i++) {
+            const item = this._itemList[i];
+            const itemElement = item.itemElement;
+            if (!itemElement) {
+                continue;
+            }
+            const title = item.getTitle(this._context);
+            if (item.subMenu) {
+                itemElement.innerText = title + &quot; ...&quot;;
+            } else {
+                itemElement.innerText = title;
+            }
+        }
+    }
+
+    _updateItemsEnabledStatus() { // Enables or disables each Item, depending on the result of Item#getEnabled()
+        if (!this._context) {
+            return;
+        }
+        for (let i = 0, len = this._itemList.length; i &lt; len; i++) {
+            const item = this._itemList[i];
+            const itemElement = item.itemElement;
+            if (!itemElement) {
+                continue;
+            }
+            const getEnabled = item.getEnabled;
+            if (!getEnabled) {
+                continue;
+            }
+            const enabled = getEnabled(this._context);
+            item.enabled = enabled;
+            if (!enabled) {
+                itemElement.classList.add(&quot;disabled&quot;);
+            } else {
+                itemElement.classList.remove(&quot;disabled&quot;);
+            }
+        }
+    }
+
+    _showMenu(menuId, pageX, pageY) { // Shows the given menu, at the specified page coordinates
+        const menu = this._menuMap[menuId];
+        if (!menu) {
+            console.error(&quot;Menu not found: &quot; + menuId);
+            return;
+        }
+        if (menu.shown) {
+            return;
+        }
+        const menuElement = menu.menuElement;
+        if (menuElement) {
+            this._showMenuElement(menuElement, pageX, pageY);
+            menu.shown = true;
+        }
+    }
+
+    _hideMenu(menuId) { // Hides the given menu
+        const menu = this._menuMap[menuId];
+        if (!menu) {
+            console.error(&quot;Menu not found: &quot; + menuId);
+            return;
+        }
+        if (!menu.shown) {
+            return;
+        }
+        const menuElement = menu.menuElement;
+        if (menuElement) {
+            this._hideMenuElement(menuElement);
+            menu.shown = false;
+        }
+    }
+
+    _hideAllMenus() {
+        for (let i = 0, len = this._menuList.length; i &lt; len; i++) {
+            const menu = this._menuList[i];
+            this._hideMenu(menu.id);
+        }
+    }
+
+    _showMenuElement(menuElement, pageX, pageY) { // Shows the given menu element, at the specified page coordinates
+        menuElement.style.display = &apos;block&apos;;
+        const menuHeight = menuElement.offsetHeight;
+        const menuWidth = menuElement.offsetWidth;
         if ((pageY + menuHeight) &gt; window.innerHeight) {
             pageY = window.innerHeight - menuHeight;
         }
         if ((pageX + menuWidth) &gt; window.innerWidth) {
             pageX = window.innerWidth - menuWidth;
         }
-        this._menuElement.style.left = pageX + &apos;px&apos;;
-        this._menuElement.style.top = pageY + &apos;px&apos;;
-        this._shown = true;
+        menuElement.style.left = pageX + &apos;px&apos;;
+        menuElement.style.top = pageY + &apos;px&apos;;
     }
 
-    /**
-     * Gets whether this context menu is currently shown or not.
-     *
-     * @returns {Boolean} Whether this context menu is shown.
-     */
-    get shown() {
-        return this._shown;
-    }
-
-    _updateDynamicItemTitles(items) {
-        for (let i = 0, len = items.length; i &lt; len; i++) {
-            const item = items[i];
-            if (utils.isArray(item)) {
-                this._updateDynamicItemTitles(item);
-            } else {
-                item._itemElement = document.getElementById(item._itemId);
-                if (!item._itemElement) {
-                    console.error(&quot;ContextMenu item element not found: &quot; + item._itemId);
-                    continue;
-                }
-                item._itemElement.innerText = item.getTitle ? (item.getTitle(this._context) || item.title || &quot;&quot;) : (item.title || &quot;&quot;);
-            }
-        }
-    }
-
-    _enableItems() {
-        if (!this._context) {
-            return;
-        }
-        for (let i = 0, len = this._items.length; i &lt; len; i++) {
-            const itemsGroup = this._items[i];
-            for (let j = 0, lenj = itemsGroup.length; j &lt; lenj; j++) {
-                const item = itemsGroup[j];
-                if (!item._itemElement) {
-                    continue;
-                }
-                const getEnabled = item.getEnabled;
-                if (getEnabled) {
-                    const enabled = getEnabled(this._context);
-                    if (!enabled) {
-                        item._itemElement.classList.add(&quot;disabled&quot;);
-                    } else {
-                        item._itemElement.classList.remove(&quot;disabled&quot;);
-                    }
-                    item._enabled = enabled;
-                }
-            }
-        }
-    }
-
-    /**
-     * Hides this context menu.
-     */
-    hide() {
-        if (!this._menuElement) {
-            return;
-        }
-        this._menuElement.style.display = &apos;none&apos;;
-        this._shown = false;
-    }
-
-    /**
-     * Destroys this context menu.
-     */
-    destroy() {
-        if (this._menuElement) {
-            this._menuElement.parentElement.removeChild(this._menuElement);
-            this._menuElement = null;
-        }
-        if (this._id !== null) {
-            idMap.removeItem(this._id);
-            this._id = null;
-        }
+    _hideMenuElement(menuElement) {
+        menuElement.style.display = &apos;none&apos;;
     }
 }
 

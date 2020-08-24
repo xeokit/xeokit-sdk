@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -146,9 +147,11 @@ class KeyboardPanRotateDollyHandler {
         this._scene = scene;
         const input = scene.input;
 
-        const keyDown = [];
+        const keyDownMap = [];
 
         const canvas = scene.canvas.canvas;
+
+        const pickController = controllers.pickController;
 
         document.addEventListener(&quot;keydown&quot;, this._documentKeyDownHandler = (e) =&gt; {
             if (!(configs.active &amp;&amp; configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
@@ -158,7 +161,7 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
             const keyCode = e.keyCode;
-            keyDown[keyCode] = true;
+            keyDownMap[keyCode] = true;
 
             if (keyCode === input.KEY_SHIFT) {
                 canvas.style.cursor = &quot;move&quot;;
@@ -173,7 +176,7 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
             const keyCode = e.keyCode;
-            keyDown[keyCode] = false;
+            keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
                 canvas.style.cursor = &quot;default&quot;;
@@ -190,7 +193,7 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
 
-
+            const cameraControl = controllers.cameraControl;
             const elapsedSecs = (e.deltaTime / 1000.0);
 
             //-------------------------------------------------------------------------------------------------
@@ -199,50 +202,32 @@ class KeyboardPanRotateDollyHandler {
 
             if (!configs.planView) {
 
-                const leftArrowKey = keyDown[input.KEY_LEFT_ARROW];
-                const rightArrowKey = keyDown[input.KEY_RIGHT_ARROW];
-                const upArrowKey = keyDown[input.KEY_UP_ARROW];
-                const downArrowKey = keyDown[input.KEY_DOWN_ARROW];
+
+                const rotateYPos = cameraControl._isKeyDownForAction(cameraControl.ROTATE_Y_POS, keyDownMap);
+                const rotateYNeg = cameraControl._isKeyDownForAction(cameraControl.ROTATE_Y_NEG, keyDownMap);
+                const rotateXPos = cameraControl._isKeyDownForAction(cameraControl.ROTATE_X_POS, keyDownMap);
+                const rotateXNeg = cameraControl._isKeyDownForAction(cameraControl.ROTATE_X_NEG, keyDownMap);
 
                 const orbitDelta = elapsedSecs * configs.keyboardRotationRate;
 
-                if (leftArrowKey || rightArrowKey || upArrowKey || downArrowKey) {
+                if (rotateYPos || rotateYNeg || rotateXPos || rotateXNeg) {
 
                     if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                         controllers.pivotController.startPivot();
                     }
-                    if (rightArrowKey) {
-                        updates.rotateDeltaY -= orbitDelta;
 
-                    } else if (leftArrowKey) {
+                    if (rotateYPos) {
                         updates.rotateDeltaY += orbitDelta;
+
+                    } else if (rotateYNeg) {
+                        updates.rotateDeltaY -= orbitDelta;
                     }
-                    if (downArrowKey) {
+
+                    if (rotateXPos) {
                         updates.rotateDeltaX += orbitDelta;
 
-                    } else if (upArrowKey) {
+                    } else if (rotateXNeg) {
                         updates.rotateDeltaX -= orbitDelta;
-                    }
-                }
-
-                let rotateLeft;
-                let rotateRight;
-
-                if (configs.keyboardLayout === &apos;azerty&apos;) {
-                    rotateLeft = keyDown[input.KEY_A];
-                    rotateRight = keyDown[input.KEY_E];
-
-                } else {
-                    rotateLeft = keyDown[input.KEY_Q];
-                    rotateRight = keyDown[input.KEY_E];
-                }
-
-                if (rotateRight || rotateLeft) {
-                    if (rotateLeft) {
-                        updates.rotateDeltaY += orbitDelta;
-
-                    } else if (rotateRight) {
-                        updates.rotateDeltaY -= orbitDelta;
                     }
 
                     if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
@@ -255,78 +240,62 @@ class KeyboardPanRotateDollyHandler {
             // Keyboard panning
             //-------------------------------------------------------------------------------------------------
 
-            if (!keyDown[input.KEY_CTRL] &amp;&amp; !keyDown[input.KEY_ALT]) {
+            if (!keyDownMap[input.KEY_CTRL] &amp;&amp; !keyDownMap[input.KEY_ALT]) {
 
-                const addKey = keyDown[input.KEY_ADD];
-                const subtractKey = keyDown[input.KEY_SUBTRACT];
+                const dollyBackwards = cameraControl._isKeyDownForAction(cameraControl.DOLLY_BACKWARDS, keyDownMap);
+                const dollyForwards = cameraControl._isKeyDownForAction(cameraControl.DOLLY_FORWARDS, keyDownMap);
 
-                if (addKey || subtractKey) {
+                if (dollyBackwards || dollyForwards) {
 
                     const dollyDelta = elapsedSecs * configs.keyboardDollyRate;
 
                     if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                         controllers.pivotController.startPivot();
                     }
-                    if (subtractKey) {
-                        updates.dollyDelta += dollyDelta;
-                    } else if (addKey) {
+                    if (dollyForwards) {
                         updates.dollyDelta -= dollyDelta;
+                    } else if (dollyBackwards) {
+                        updates.dollyDelta += dollyDelta;
                     }
+                    pickController.pickCursorPos = states.pointerCanvasPos;
+                    pickController.schedulePickSurface = true;
+                    pickController.update();
                 }
             }
 
-            let panForwardKey;
-            let panBackKey;
-            let panLeftKey;
-            let panRightKey;
-            let panUpKey;
-            let panDownKey;
+            const panForwards = cameraControl._isKeyDownForAction(cameraControl.PAN_FORWARDS, keyDownMap);
+            const panBackwards = cameraControl._isKeyDownForAction(cameraControl.PAN_BACKWARDS, keyDownMap);
+            const panLeft = cameraControl._isKeyDownForAction(cameraControl.PAN_LEFT, keyDownMap);
+            const panRight = cameraControl._isKeyDownForAction(cameraControl.PAN_RIGHT, keyDownMap);
+            const panUp = cameraControl._isKeyDownForAction(cameraControl.PAN_UP, keyDownMap);
+            const panDown = cameraControl._isKeyDownForAction(cameraControl.PAN_DOWN, keyDownMap);
 
-            const panDelta = (keyDown[input.KEY_ALT] ? 0.3 : 1.0) * elapsedSecs * configs.keyboardPanRate; // ALT for slower pan rate
+            const panDelta = (keyDownMap[input.KEY_ALT] ? 0.3 : 1.0) * elapsedSecs * configs.keyboardPanRate; // ALT for slower pan rate
 
-            if (configs.keyboardLayout === &apos;azerty&apos;) {
-
-                panForwardKey = keyDown[input.KEY_Z];
-                panBackKey = keyDown[input.KEY_S];
-                panLeftKey = keyDown[input.KEY_Q];
-                panRightKey = keyDown[input.KEY_D];
-                panUpKey = keyDown[input.KEY_W];
-                panDownKey = keyDown[input.KEY_X];
-
-            } else {
-
-                panForwardKey = keyDown[input.KEY_W];
-                panBackKey = keyDown[input.KEY_S];
-                panLeftKey = keyDown[input.KEY_A];
-                panRightKey = keyDown[input.KEY_D];
-                panUpKey = keyDown[input.KEY_Z];
-                panDownKey = keyDown[input.KEY_X];
-            }
-
-            if (panForwardKey || panBackKey || panLeftKey || panRightKey || panUpKey || panDownKey) {
+            if (panForwards || panBackwards || panLeft || panRight || panUp || panDown) {
 
                 if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
                     controllers.pivotController.startPivot();
                 }
 
-                if (panDownKey) {
+                if (panDown) {
                     updates.panDeltaY += panDelta;
 
-                } else if (panUpKey) {
+                } else if (panUp) {
                     updates.panDeltaY += -panDelta;
                 }
 
-                if (panRightKey) {
+                if (panRight) {
                     updates.panDeltaX += -panDelta;
 
-                } else if (panLeftKey) {
+                } else if (panLeft) {
                     updates.panDeltaX += panDelta;
                 }
 
-                if (panBackKey) {
+                if (panBackwards) {
                     updates.panDeltaZ += panDelta;
 
-                } else if (panForwardKey) {
+                } else if (panForwards) {
                     updates.panDeltaZ += -panDelta;
                 }
             }

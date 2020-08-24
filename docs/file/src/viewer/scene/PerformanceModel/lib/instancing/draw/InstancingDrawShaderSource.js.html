@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -157,6 +158,14 @@ function buildVertex(scene) {
 
     src.push(&quot;// Instancing geometry drawing vertex shader&quot;);
 
+    src.push(&quot;#ifdef GL_FRAGMENT_PRECISION_HIGH&quot;);
+    src.push(&quot;precision highp float;&quot;);
+    src.push(&quot;precision highp int;&quot;);
+    src.push(&quot;#else&quot;);
+    src.push(&quot;precision mediump float;&quot;);
+    src.push(&quot;precision mediump int;&quot;);
+    src.push(&quot;#endif&quot;);
+
     src.push(&quot;uniform int renderPass;&quot;);
 
     src.push(&quot;attribute vec3 position;&quot;);
@@ -221,7 +230,7 @@ function buildVertex(scene) {
     src.push(&quot;bool highlighted  = (float(flags.z) &gt; 0.0);&quot;);
     src.push(&quot;bool selected     = (float(flags.w) &gt; 0.0);&quot;);
     src.push(&quot;bool culled       = (float(flags2.w) &gt; 0.0);&quot;);
-    src.push(&quot;bool transparent  = ((float(color.a) / 255.0) &lt; 1.0);&quot;);
+    src.push(&quot;bool transparent  = (float(color.a) &lt; 255.0);&quot;);
 
     src.push(`if 
     (culled || !visible || 
@@ -278,7 +287,8 @@ function buildVertex(scene) {
         src.push(&quot;reflectedColor += lambertian * (lightColor&quot; + i + &quot;.rgb * lightColor&quot; + i + &quot;.a);&quot;);
     }
 
-    src.push(&quot;vColor = vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);&quot;);
+    src.push(&quot;vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));&quot;);
+    src.push(&quot;vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);&quot;);
 
     if (clipping) {
         src.push(&quot;vWorldPosition = worldPosition;&quot;);

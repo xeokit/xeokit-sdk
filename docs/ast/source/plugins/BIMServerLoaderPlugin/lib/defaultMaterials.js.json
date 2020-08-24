@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2205,
+  "end": 2207,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 45,
-      "column": 25
+      "column": 27
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2205,
+    "end": 2207,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 45,
-        "column": 25
+        "column": 27
       }
     },
     "sourceType": "module",
@@ -5006,7 +5006,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 2180,
-        "end": 2205,
+        "end": 2207,
         "loc": {
           "start": {
             "line": 45,
@@ -5014,37 +5014,37 @@
           },
           "end": {
             "line": 45,
-            "column": 25
+            "column": 27
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 2188,
-            "end": 2204,
+            "start": 2189,
+            "end": 2205,
             "loc": {
               "start": {
                 "line": 45,
-                "column": 8
+                "column": 9
               },
               "end": {
                 "line": 45,
-                "column": 24
+                "column": 25
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 2188,
-              "end": 2204,
+              "start": 2189,
+              "end": 2205,
               "loc": {
                 "start": {
                   "line": 45,
-                  "column": 8
+                  "column": 9
                 },
                 "end": {
                   "line": 45,
-                  "column": 24
+                  "column": 25
                 },
                 "identifierName": "defaultMaterials"
               },
@@ -5052,16 +5052,16 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 2188,
-              "end": 2204,
+              "start": 2189,
+              "end": 2205,
               "loc": {
                 "start": {
                   "line": 45,
-                  "column": 8
+                  "column": 9
                 },
                 "end": {
                   "line": 45,
-                  "column": 24
+                  "column": 25
                 },
                 "identifierName": "defaultMaterials"
               },
@@ -5074,7 +5074,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 2180,
-        "end": 2205,
+        "end": 2207,
         "loc": {
           "start": {
             "line": 45,
@@ -5082,7 +5082,7 @@
           },
           "end": {
             "line": 45,
-            "column": 25
+            "column": 27
           }
         },
         "declaration": {
@@ -22039,16 +22039,16 @@
         "binop": null
       },
       "value": "defaultMaterials",
-      "start": 2188,
-      "end": 2204,
+      "start": 2189,
+      "end": 2205,
       "loc": {
         "start": {
           "line": 45,
-          "column": 8
+          "column": 9
         },
         "end": {
           "line": 45,
-          "column": 24
+          "column": 25
         }
       }
     },
@@ -22064,16 +22064,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2204,
-      "end": 2205,
+      "start": 2206,
+      "end": 2207,
       "loc": {
         "start": {
           "line": 45,
-          "column": 24
+          "column": 26
         },
         "end": {
           "line": 45,
-          "column": 25
+          "column": 27
         }
       }
     },
@@ -22090,16 +22090,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2205,
-      "end": 2205,
+      "start": 2207,
+      "end": 2207,
       "loc": {
         "start": {
           "line": 45,
-          "column": 25
+          "column": 27
         },
         "end": {
           "line": 45,
-          "column": 25
+          "column": 27
         }
       }
     }

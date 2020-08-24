@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -137,6 +138,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/BIMServerLoaderPlugin/lib/BIMServerPerformanceGeometryLoader.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {DataInputStreamReader} from &quot;./DataInputStreamReader.js&quot;;
+import {math as utils} from &quot;../../../viewer/scene/math/math.js&quot;;
 
 /**
  *
@@ -173,9 +175,9 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     function processMessage(stream) {
         var messageType = stream.readByte();
         if (messageType === 0) {
-        	if (!readStart(stream)) {
-				return false;
-        	}
+            if (!readStart(stream)) {
+                return false;
+            }
         } else if (messageType === 6) {
             readEnd(stream);
         } else {
@@ -193,11 +195,11 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             var topicId = stream.readLong();
             var type = stream.readLong();
             if (type == 0) {
-            	while (processMessage(stream)) {
+                while (processMessage(stream)) {
 
-            	}
+                }
             } else if (type == 1) {
-            	// End of stream
+                // End of stream
             }
             data = todo.shift();
         }
@@ -265,6 +267,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         fieldsToInclude.push(&quot;colorsQuantized&quot;);
 
         var newQuery = {
+            doublebuffer: false,
             type: &quot;GeometryInfo&quot;,
             oids: oids,
             include: {
@@ -363,7 +366,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             performanceModelBuilder.error(&quot;Unimplemented protocol version&quot;);
             return false;
         } else {
-        	currentState.version = protocolVersion;
+            currentState.version = protocolVersion;
         }
         if (protocolVersion &gt; 15) {
             o.multiplierToMm = data.readFloat();
@@ -396,7 +399,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         // protocol version assumed to be 16
         //---------------------------------------------------------------------------------
 
-        const color = new Float32Array([1, 1, 1, 1]);
+        let color = new Float32Array([1, 1, 1, 1]);
 
         if (geometryType === 1) {
 
@@ -437,12 +440,13 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 
             var colors = null;
 
-            if (numColors &gt; 0) {
+            if (!gotColor &amp;&amp; numColors &gt; 0) {
                 colors = stream.readFloatArray(numColors);
                 color[0] = colors[0];
                 color[1] = colors[1];
                 color[2] = colors[2];
                 color[3] = colors[3];
+                gotColor = true;
             }
 
             if (!gotColor) {
@@ -492,8 +496,10 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            performanceModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
-                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+                            const meshId = utils.createUUID();
+
+                            performanceModelBuilder.createMeshInstancingGeometry(meshId, geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, meshId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -533,8 +539,11 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            performanceModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
-                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+
+                            const meshId = utils.createUUID();
+
+                            performanceModelBuilder.createMeshSpecifyingGeometry(meshId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, meshId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -569,18 +578,18 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             let ifcType = stream.readUTF8();
             var numColors = stream.readInt();
 
-            // if (numColors &gt; 0) {
-            //     colors = stream.readFloatArray(numColors);
-            //     color[0] = colors[0];
-            //     color[1] = colors[1];
-            //     color[2] = colors[2];
-            //     color[3] = colors[3];
-            // } else {
-            color[0] = 1.0;
-            color[1] = 1.0;
-            color[2] = 1.0;
-            color[3] = 1.0;
-            //}
+            if (false /* FIXME */ &amp;&amp; numColors &gt; 0) {
+                colors = stream.readFloatArray(numColors);
+                color[0] = colors[0];
+                color[1] = colors[1];
+                color[2] = colors[2];
+                color[3] = colors[3];
+            } else {
+                color[0] = 1.0;
+                color[1] = 1.0;
+                color[2] = 1.0;
+                color[3] = 1.0;
+            }
 
             let meshColor = color;
             let meshOpacity = color[3];
@@ -637,8 +646,10 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                 // MULTI-USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
 
-                performanceModelBuilder.createMeshInstancingGeometry(geometryId, matrix, meshColor, meshOpacity);
-                performanceModelBuilder.createEntity(oid, geometryId, ifcType);
+                const meshId = utils.createUUID();
+
+                performanceModelBuilder.createMeshInstancingGeometry(meshId, geometryId, matrix, meshColor, meshOpacity);
+                performanceModelBuilder.createEntity(oid, meshId, ifcType);
 
             } else {
 
@@ -689,84 +700,85 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 
             //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
         } else if (geometryType === 3) {
-			var reused = stream.readInt();
-			var type = stream.readUTF8();
-			stream.align8();
-			var hasTransparency = stream.readLong() == 1;
-			var coreIds = [];
-			var geometryDataOid = stream.readLong();
-			var nrParts = stream.readInt();
+            var reused = stream.readInt();
+            var type = stream.readUTF8();
+            stream.align8();
+            var hasTransparency = stream.readLong() == 1;
+            var coreIds = [];
+            var geometryDataOid = stream.readLong();
+            var nrParts = stream.readInt();
 
-			for (var i=0; i&lt;nrParts; i++) {
-				var partId = stream.readLong();
-				var coreId = geometryDataOid + &quot;_&quot; + i;
-				coreIds.push(coreId);
-				var nrIndices = stream.readInt();
-				//o.stats.nrPrimitives += nrIndices / 3;
-				var indices = stream.readShortArray(nrIndices);
-				stream.align4();
-				var b = stream.readIstream;
-				if (b == 1) {
-					color = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
-				}
-				stream.align4();
-				var nrVertices = stream.readInt();
-				//o.stats.nrVertices += nrVertices;
-				var vertices = stream.readFloatArray(nrVertices);
-				var nrNormals = stream.readInt();
-				//o.stats.nrNormals += nrNormals;
-				var normals = stream.readFloatArray(nrNormals);
-				var nrColors = stream.readInt();
-				//o.stats.nrColors += nrColors;
-				var colors = stream.readFloatArray(nrColors);
-				
-				var geometry = {
-					type: &quot;geometry&quot;,
-					//primitive: o.type
-				};
-				
-				if (color != null) {
-					// Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
-					geometry.colors = new Array(nrVertices * 4);
-					for (var j=0; j&lt;nrVertices; j++) {
-						geometry.colors[j * 4 + 0] = color.r;
-						geometry.colors[j * 4 + 1] = color.g;
-						geometry.colors[j * 4 + 2] = color.b;
-						geometry.colors[j * 4 + 3] = color.a;
-					}
-				}
-				
-				geometry.coreId = coreId;
-				
-				/*if (o.type == &quot;lines&quot;) {
-					geometry.indices = o.convertToLines(indices);
-				} else {
-					geometry.indices = indices;
-				}*/
-				geometry.positions = vertices;
-				geometry.normals = normals;
-				
-				if (colors != null &amp;&amp; colors.length &gt; 0) {
-					geometry.colors = colors;
-				}
-				//o.library.add(&quot;node&quot;, geometry);
-			}
-			stream.align8();
-			//o.loadedGeometry[geometryDataOid] = coreIds;
-			/*if (o.dataToInfo[geometryDataOid] != null) {
-				o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
-					var node = o.viewer.scene.findNode(geometryInfoId);
-					if (node != null &amp;&amp; node.nodes[0] != null) {
-						coreIds.forEach(function(coreId){
-							node.nodes[0].addNode({
-								type: &quot;geometry&quot;,
-								coreId: coreId
-							});
-						});
-					}
-				});
-				delete o.dataToInfo[geometryDataOid];
-			}*/
+            for (var i = 0; i &lt; nrParts; i++) {
+                var partId = stream.readLong();
+                var coreId = geometryDataOid + &quot;_&quot; + i;
+                coreIds.push(coreId);
+                var nrIndices = stream.readInt();
+                //o.stats.nrPrimitives += nrIndices / 3;
+                var indices = stream.readShortArray(nrIndices);
+                stream.align4();
+                var b = stream.readIstream;
+                var rgba;
+                if (b === 1) {
+                    rgba = {r: stream.readFloat(), g: stream.readFloat(), b: stream.readFloat(), a: stream.readFloat()};
+                }
+                stream.align4();
+                var nrVertices = stream.readInt();
+                //o.stats.nrVertices += nrVertices;
+                var vertices = stream.readFloatArray(nrVertices);
+                var nrNormals = stream.readInt();
+                //o.stats.nrNormals += nrNormals;
+                var normals = stream.readFloatArray(nrNormals);
+                var nrColors = stream.readInt();
+                //o.stats.nrColors += nrColors;
+                var colors = stream.readFloatArray(nrColors);
+
+                var geometry = {
+                    type: &quot;geometry&quot;,
+                    //primitive: o.type
+                };
+
+                if (rgba) {
+                    // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+                    geometry.colors = new Array(nrVertices * 4);
+                    for (var j = 0; j &lt; nrVertices; j++) {
+                        geometry.colors[j * 4 + 0] = rgba.r;
+                        geometry.colors[j * 4 + 1] = rgba.g;
+                        geometry.colors[j * 4 + 2] = rgba.b;
+                        geometry.colors[j * 4 + 3] = rgba.a;
+                    }
+                }
+
+                geometry.coreId = coreId;
+
+                /*if (o.type == &quot;lines&quot;) {
+                    geometry.indices = o.convertToLines(indices);
+                } else {
+                    geometry.indices = indices;
+                }*/
+                geometry.positions = vertices;
+                geometry.normals = normals;
+
+                if (colors != null &amp;&amp; colors.length &gt; 0) {
+                    geometry.colors = colors;
+                }
+                //o.library.add(&quot;node&quot;, geometry);
+            }
+            stream.align8();
+            //o.loadedGeometry[geometryDataOid] = coreIds;
+            /*if (o.dataToInfo[geometryDataOid] != null) {
+                o.dataToInfo[geometryDataOid].forEach(function(geometryInfoId){
+                    var node = o.viewer.scene.findNode(geometryInfoId);
+                    if (node != null &amp;&amp; node.nodes[0] != null) {
+                        coreIds.forEach(function(coreId){
+                            node.nodes[0].addNode({
+                                type: &quot;geometry&quot;,
+                                coreId: coreId
+                            });
+                        });
+                    }
+                });
+                delete o.dataToInfo[geometryDataOid];
+            }*/
 
         } else if (geometryType === 7) {
             //  this.processPreparedBuffer(stream, true);

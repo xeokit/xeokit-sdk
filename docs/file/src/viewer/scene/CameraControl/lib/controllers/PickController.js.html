@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -137,6 +138,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/CameraControl/lib/controllers/PickController.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../../math/math.js&quot;;
+import {PickResult} from &quot;../../../webgl/PickResult.js&quot;;
 
 /**
  *
@@ -194,9 +196,7 @@ class PickController {
 
         this._lastPickedEntityId = null;
 
-        this._onTick = this._scene.on(&quot;tick&quot;, () =&gt; {
-            this.update()
-        });
+        this._needFireEvents = false;
     }
 
     /**
@@ -214,32 +214,87 @@ class PickController {
 
         this.picked = false;
         this.pickedSurface = false;
+        this._needFireEvents = false;
 
-        if (this.schedulePickSurface || this._cameraControl.hasSubs(&quot;hoverSurface&quot;)) {
+        const hasHoverSurfaceSubs = this._cameraControl.hasSubs(&quot;hoverSurface&quot;);
+
+        if (this.schedulePickSurface) {
+            if (this.pickResult &amp;&amp; this.pickResult.worldPos) {
+                const pickResultCanvasPos = this.pickResult.canvasPos;
+                if (pickResultCanvasPos[0] === this.pickCursorPos[0] &amp;&amp; pickResultCanvasPos[1] === this.pickCursorPos[1]) {
+                    this.picked = true;
+                    this.pickedSurface = true;
+                    this._needFireEvents = hasHoverSurfaceSubs;
+                    this.schedulePickEntity = false;
+                    this.schedulePickSurface = false;
+                    return;
+                }
+            }
+        }
+
+        if (this.schedulePickEntity) {
+            if (this.pickResult) {
+                const pickResultCanvasPos = this.pickResult.canvasPos;
+                if (pickResultCanvasPos[0] === this.pickCursorPos[0] &amp;&amp; pickResultCanvasPos[1] === this.pickCursorPos[1]) {
+                    this.picked = true;
+                    this.pickedSurface = false;
+                    this._needFireEvents = false;
+                    this.schedulePickEntity = false;
+                    this.schedulePickSurface = false;
+                    return;
+                }
+            }
+        }
+
+        if (this.schedulePickSurface) {
+
             this.pickResult = this._scene.pick({
                 pickSurface: true,
                 pickSurfaceNormal: true,
                 canvasPos: this.pickCursorPos
             });
+
+            if (this.pickResult) {
+                this.picked = true;
+                this.pickedSurface = true;
+                this._needFireEvents = true;
+            }
+
         } else { // schedulePickEntity == true
+
             this.pickResult = this._scene.pick({
                 canvasPos: this.pickCursorPos
             });
+
+            if (this.pickResult) {
+                this.picked = true;
+                this.pickedSurface = false;
+                this._needFireEvents = true;
+            }
         }
 
-        if (this.pickResult) {
+        this.schedulePickEntity = false;
+        this.schedulePickSurface = false;
+    }
 
-            this.picked = true;
+    fireEvents() {
+
+        if (!this._needFireEvents) {
+            return;
+        }
+
+        if (this.picked &amp;&amp; this.pickResult &amp;&amp; this.pickResult.entity) {
 
             const pickedEntityId = this.pickResult.entity.id;
 
             if (this._lastPickedEntityId !== pickedEntityId) {
-                if (this._lastPickedEntityId !== undefined) {
 
+                if (this._lastPickedEntityId !== undefined) {
                     this._cameraControl.fire(&quot;hoverOut&quot;, {
                         entity: this._scene.objects[this._lastPickedEntityId]
                     }, true);
                 }
+
                 this._cameraControl.fire(&quot;hoverEnter&quot;, this.pickResult, true);
                 this._lastPickedEntityId = pickedEntityId;
             }
@@ -265,8 +320,9 @@ class PickController {
             }, true);
         }
 
-        this.schedulePickEntity = false;
-        this.schedulePickSurface = false;
+        this.pickResult = null;
+
+        this._needFireEvents = false;
     }
 
     destroy() {

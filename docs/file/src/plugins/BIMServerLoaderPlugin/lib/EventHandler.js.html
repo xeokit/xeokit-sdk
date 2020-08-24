@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -148,10 +149,10 @@ EventHandler.prototype.on = function (evt, handler) {
 };
 
 EventHandler.prototype.off = function (evt, handler) {
-    var h = this.handlers[evt];
-    var found = false;
-    if (typeof(h) !== &apos;undefined&apos;) {
-        var i = h.indexOf(handler);
+    const h = this.handlers[evt];
+    let found = false;
+    if (typeof (h) !== &apos;undefined&apos;) {
+        const i = h.indexOf(handler);
         if (i &gt;= -1) {
             h.splice(i, 1);
             found = true;
@@ -163,16 +164,16 @@ EventHandler.prototype.off = function (evt, handler) {
 };
 
 EventHandler.prototype.fire = function (evt, args) {
-    var h = this.handlers[evt];
+    const h = this.handlers[evt];
     if (!h) {
         return;
     }
-    for (var i = 0; i &lt; h.length; ++i) {
+    for (let i = 0; i &lt; h.length; ++i) {
         h[i].apply(this, args);
     }
 };
 
-export {EventHandler};</code></pre>
+export { EventHandler };</code></pre>
 
 </div>
 

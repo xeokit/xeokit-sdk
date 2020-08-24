@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -147,7 +148,7 @@ import {utils} from &quot;../../viewer/scene/utils.js&quot;;
 /**
  * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org).
  *
- * Tested with BIMServer v1.5.120 and IFC schema ifc2x3tc1.
+ * Tested with BIMServer v1.5.182 and IFC schema ifc2x3tc1.
  *
  * * For each model loaded, creates a tree of {@link Entity}s within its {@link Viewer}&apos;s {@link Scene}, with the root {@link Entity} representing the model and sub-{@link Entity}s representing objects within the model.
  * * The root {@link Entity} will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
@@ -166,7 +167,7 @@ import {utils} from &quot;../../viewer/scene/utils.js&quot;;
  * we can issue RPC calls to the BIMServer Service Interface. The BIMServerLoaderPlugin makes RPC calls through that
  * to download the model and it&apos;s IFC metadata.
  *
- * Note that BIMServerLoaderPlugin works with BIMServer V1.5.120 or later.
+ * Note that BIMServerLoaderPlugin works with BIMServer V1.5.182 or later.
  *
  * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
  *
@@ -249,7 +250,7 @@ import {utils} from &quot;../../viewer/scene/utils.js&quot;;
  *     });
  * });
  * ````
- * @class BIMServerLoaderPluginOLD
+ * @class BIMServerLoaderPlugin
  */
 class BIMServerLoaderPlugin extends Plugin {
 
@@ -463,8 +464,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createMeshInstancingGeometry: function (geometryDataId, matrix, color, opacity) {
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
+                    createMeshInstancingGeometry: function (meshId, geometryDataId, matrix, color, opacity) {
                         const geometryId = `${modelId}.${geometryDataId}`;
                         performanceModel.createMesh({
                             id: meshId,
@@ -475,8 +475,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createMeshSpecifyingGeometry: function (geometryDataId, positions, normals, indices, matrix, color, opacity) {
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
+                    createMeshSpecifyingGeometry: function (meshId, positions, normals, indices, matrix, color, opacity) {
                         performanceModel.createMesh({
                             id: meshId,
                             primitive: &quot;triangles&quot;,
@@ -489,9 +488,8 @@ class BIMServerLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createEntity(id, geometryDataId, ifcType) { // Pass in color to set transparency
+                    createEntity(id, meshId, ifcType) { // Pass in color to set transparency
                         id = oidToGuid[id];
-                        const meshId = `${modelId}.${geometryDataId}.mesh`;
                         if (scene.objects[id]) {
                             self.error(`Can&apos;t create object - object with id ${id} already exists`);
                             return;
@@ -525,7 +523,10 @@ class BIMServerLoaderPlugin extends Plugin {
                         scene.canvas.spinner.processes--;
                         viewer.scene._registerModel(performanceModel);
                         performanceModel.finalize();
-                        performanceModel.fire(&quot;loaded&quot;, true, false);
+                        performanceModel.scene.once(&quot;tick&quot;, () =&gt; {
+                            performanceModel.scene.fire(&quot;modelLoaded&quot;, performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                            performanceModel.fire(&quot;loaded&quot;, true, false); // Don&apos;t forget the event, for late subscribers
+                        });
                     }
                 });
 

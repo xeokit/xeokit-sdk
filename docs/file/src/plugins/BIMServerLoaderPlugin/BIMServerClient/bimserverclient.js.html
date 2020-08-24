@@ -69,6 +69,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-batching">viewer/scene/PerformanceModel/lib/batching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-instancing">viewer/scene/PerformanceModel/lib/instancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
@@ -144,14 +145,6 @@ import {ifc4} from &apos;./ifc4.js&apos;;
 import Model from &apos;./model.js&apos;;
 import {translations} from &apos;./translations_en.js&apos;;
 
-//var XMLHttpRequest = require(&apos;node-http-xhr&apos;);
-
-export { default as BimServerApiPromise } from &apos;./bimserverapipromise.js&apos;;
-export { default as BimServerApiWebSocket } from &apos;./bimserverapiwebsocket.js&apos;;
-export { default as Model } from &apos;./model.js&apos;;
-
-//import XMLHttpRequest from &apos;xhr2&apos;;
-
 // Where does this come frome? The API crashes on the absence of this
 // member function?
 String.prototype.firstUpper = function () {
@@ -181,7 +174,7 @@ export default class BimServerClient {
 
 		// Base URL of the BIMserver
 		this.baseUrl = baseUrl;
-		if (this.baseUrl.substring(this.baseUrl.length - 1) == &quot;/&quot;) {
+		if (this.baseUrl.substring(this.baseUrl.length - 1) === &quot;/&quot;) {
 			this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
 		}
 
@@ -237,7 +230,7 @@ export default class BimServerClient {
 	}
 
 	init(callback) {
-		var promise = new Promise((resolve, reject) =&gt; {
+		const promise = new Promise((resolve, reject) =&gt; {
 			this.call(&quot;AdminInterface&quot;, &quot;getServerInfo&quot;, {}, (serverInfo) =&gt; {
 				this.version = serverInfo.version;
 				//const versionString = this.version.major + &quot;.&quot; + this.version.minor + &quot;.&quot; + this.version.revision;
@@ -342,7 +335,7 @@ export default class BimServerClient {
 	
 	processNotification(message) {
 		if (message instanceof ArrayBuffer) {
-			if (message == null || message.byteLength == 0) {
+			if (message === null || message.byteLength === 0) {
 				return;
 			}
 			const view = new DataView(message, 0, 8);
