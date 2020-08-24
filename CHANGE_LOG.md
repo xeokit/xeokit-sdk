@@ -8,7 +8,12 @@ Unreleased
 
 * CameraControl 
     * Improve CameraControl touch dolly/pan. [#415](https://github.com/xeokit/xeokit-sdk/pull/415) ([**@amoki**](https://github.com/amoki))
-       
+* ContextMenu 
+    * Multi-level ContextMenu. [#416](https://github.com/xeokit/xeokit-sdk/issues/415) ([**@xeolabs**](https://github.com/xeolabs))
+* SectionPlane, SectionPlanesPlugin 
+    * Ability to flip direction of a SectionPlane. [#417](https://github.com/xeokit/xeokit-sdk/issues/417) ([**@xeolabs**](https://github.com/xeolabs))
+        
+        
 # 1.3.8
 
 August 14, 2020
