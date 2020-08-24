@@ -32,10 +32,11 @@ class Group {
  * @private
  */
 class Item {
-    constructor(id, getTitle, doAction) {
+    constructor(id, getTitle, doAction, getEnabled) {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
+        this.getEnabled = getEnabled;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -482,7 +483,11 @@ class ContextMenu {
                     const doAction = itemCfg.doAction || itemCfg.callback || (() => {
                     });
 
-                    const item = new Item(itemId, getTitle, doAction);
+                    const getEnabled = itemCfg.getEnabled || (() => {
+                        return true;
+                    });
+
+                    const item = new Item(itemId, getTitle, doAction, getEnabled);
 
                     item.parentMenu = menu;
 
