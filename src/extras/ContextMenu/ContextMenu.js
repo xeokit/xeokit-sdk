@@ -539,11 +539,7 @@ class ContextMenu {
         const groups = menu.groups;
         const html = [];
 
-        if (menu.parentItem) {
-            html.push('<div class="xeokit-context-menu xeokit-context-submenu ' + menu.id + '" style="z-index:300000; position: absolute;">');
-        } else {
-            html.push('<div class="xeokit-context-menu ' + menu.id + '" style="z-index:300000; position: absolute;">');
-        }
+        html.push('<div class="xeokit-context-menu ' + menu.id + '" style="z-index:300000; position: absolute;">');
 
         html.push('<ul>');
 
@@ -613,24 +609,7 @@ class ContextMenu {
 
         const self = this;
 
-        let overMenu = false;
         let lastSubMenu = null;
-
-        menu.menuElement.addEventListener("mouseenter", (function () {
-            const _menu = menu;
-            return (event) => {
-                event.preventDefault();
-                overMenu = true;
-            };
-        })());
-
-        menu.menuElement.addEventListener("mouseleave", (function () {
-            const _menu = menu;
-            return (event) => {
-                event.preventDefault();
-                overMenu = false;
-            };
-        })());
 
         if (groups) {
 
@@ -653,80 +632,71 @@ class ContextMenu {
                             continue;
                         }
 
-                        item.itemElement.addEventListener("mouseenter", (function () {
-                            const _item = item;
-                            return (event) => {
-                                event.preventDefault();
-                                if (_item.enabled === false) {
-                                    return;
-                                }
-                                const subMenu = _item.subMenu;
-                                if (!subMenu) {
-                                    if (lastSubMenu) {
-                                        self._hideMenu(lastSubMenu.id);
-                                        lastSubMenu = null;
-                                    }
-                                    return;
-                                }
-                                if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
+                        item.itemElement.addEventListener("mouseenter", (event) => {
+                            event.preventDefault();
+                            if (item.enabled === false) {
+                                return;
+                            }
+                            const subMenu = item.subMenu;
+                            if (!subMenu) {
+                                if (lastSubMenu) {
                                     self._hideMenu(lastSubMenu.id);
                                     lastSubMenu = null;
                                 }
+                                return;
+                            }
+                            if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
+                                self._hideMenu(lastSubMenu.id);
+                                lastSubMenu = null;
+                            }
 
-                                const itemElement = _item.itemElement;
-                                const subMenuElement = subMenu.menuElement;
+                            const itemElement = item.itemElement;
+                            const subMenuElement = subMenu.menuElement;
 
-                                const itemRect = itemElement.getBoundingClientRect();
-                                const menuRect = subMenuElement.getBoundingClientRect();
+                            const itemRect = itemElement.getBoundingClientRect();
+                            const menuRect = subMenuElement.getBoundingClientRect();
 
-                                const subMenuWidth = 200; // TODO
-                                const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                            const subMenuWidth = 200; // TODO
+                            const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
 
-                                if (showOnLeft) {
-                                    self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
-                                } else {
-                                    self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
-                                }
+                            if (showOnLeft) {
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                            } else {
+                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                            }
 
-                                lastSubMenu = subMenu;
-                            };
-                        })());
+                            lastSubMenu = subMenu;
+                        });
 
                         if (!itemSubMenu) {
 
                             // Item without sub-menu
                             // clicking item fires the item's action callback
 
-                            item.itemElement.addEventListener("click", (function () {
-                                const _item = item;
-                                return (event) => {
-                                    event.preventDefault();
-                                    if (!self._context) {
-                                        return;
-                                    }
-                                    if (_item.enabled === false) {
-                                        return;
-                                    }
-                                    if (_item.doAction) {
-                                        _item.doAction(self._context);
-                                    }
-                                    self.hide();
-                                };
-                            })());
+                            item.itemElement.addEventListener("click", (event) => {
+                                event.preventDefault();
+                                if (!self._context) {
+                                    return;
+                                }
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doAction) {
+                                    item.doAction(self._context);
+                                }
+                                self.hide();
+                            });
 
 
-                            item.itemElement.addEventListener("mouseenter", (function () {
-                                const _item = item;
-                                return (event) => {
-                                    event.preventDefault();
-                                    if (_item.enabled === false) {
-                                        return;
-                                    }
-                                    if (_item.doHover) {
-                                        _item.doHover(self._context);
-                                    }
-                                };
-                            })());
+                            item.itemElement.addEventListener("mouseenter", (event) => {
+                                event.preventDefault();
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doHover) {
+                                    item.doHover(self._context);
+                                }
+                            });
 
                         }
                     }
