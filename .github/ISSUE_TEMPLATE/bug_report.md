@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+**Is this feature critical for your commercial enterprise?**
+If you need prioritized xeokit SDK fixes and features for your commercial enterprise, consider a Service Level Agreement (SLA) with xeolabs - [get in touch](http://xeokit.io/index.html?foo=3#contact) if you need one.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
