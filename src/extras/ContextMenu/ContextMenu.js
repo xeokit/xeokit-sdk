@@ -51,7 +51,7 @@ class Item {
  *
  * ## Overview
  *
- * * Attach to anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
+ * * A pure JavaScript, lightweight context menu
  * * Dynamically configure menu items
  * * Dynamically enable or disable items
  * * Supports cascading sub-menus
@@ -66,14 +66,15 @@ class Item {
  *
  * Each item has:
  *
- * * a title to display it in the menu,
+ * * a ````title```` for the item,
  * * a ````doAction()```` callback to fire when the item's title is clicked, and
  * * an optional ````getEnabled()```` callback that indicates if the item should enabled in the menu or not.
+ *
+ * <br>
  *
  * The ````getEnabled()```` callbacks are invoked whenever the menu is shown. When an item's ````getEnabled()```` callback
  * returns ````true````, then the item is enabled and clickable. When it returns ````false````, then the item is disabled
  * and cannot be clicked. An item without a ````getEnabled()```` callback is always enabled and clickable.
- *
  *
  * Note how the ````doAction()```` and ````getEnabled()```` callbacks accept a ````context````
  * object. That must be set on the ````ContextMenu```` before we're able to we show it. The context object can be anything. In this example,
@@ -213,7 +214,7 @@ class Item {
  * Note that our "Effects" item has no ````doAction```` callback, because an item with a sub-menu performs no
  * action of its own.
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_multiLevel)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_subMenus)]
  *
  * ````javascript
  * const canvasContextMenu = new ContextMenu({
