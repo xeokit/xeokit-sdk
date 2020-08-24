@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.3.91
+
+August 24, 2020
+
+* ContextMenu 
+    * Fix ContextMenu getEnabled() callbacks. [#419](https://github.com/xeokit/xeokit-sdk/pull/419) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.3.9
 
 August 24, 2020
