@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.3.9
 
-Unreleased
+August 24, 2020
 
 * CameraControl 
     * Improve CameraControl touch dolly/pan. [#415](https://github.com/xeokit/xeokit-sdk/pull/415) ([**@amoki**](https://github.com/amoki))
