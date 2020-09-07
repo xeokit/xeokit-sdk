@@ -2,6 +2,14 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.0
+
+Unreleased
+
+* ContextMenu 
+    * Add ContextMenu "shown" and "hidden" events. [#425](https://github.com/xeokit/xeokit-sdk/issues/425) ([**@xeolabs**](https://github.com/xeolabs))
+
+
 # 1.3.91
 
 August 24, 2020
