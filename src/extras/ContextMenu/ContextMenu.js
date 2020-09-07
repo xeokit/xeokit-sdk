@@ -286,11 +286,17 @@ class ContextMenu {
         this._shown = false;    // True when the ContextMenu is visible
         this._nextId = 0;
 
+        /**
+         * Subscriptions to events fired at this ContextMenu.
+         * @private
+         */
+        this._eventSubs = {};
+
         document.addEventListener("mousedown", (event) => {
             if (!event.target.classList.contains("xeokit-context-menu-item")) {
-                this.hide();
-            }
-        });
+            this.hide();
+        }
+    });
 
         if (cfg.items) {
             this.items = cfg.items;
@@ -299,6 +305,37 @@ class ContextMenu {
         this.context = cfg.context;
         this.enabled = cfg.enabled !== false;
         this.hide();
+    }
+
+
+    /**
+     Subscribes to an event fired at this ````ContextMenu````.
+
+     @param {String} event The event
+     @param {Function} callback Callback fired on the event
+     */
+    on(event, callback) {
+        let subs = this._eventSubs[event];
+        if (!subs) {
+            subs = [];
+            this._eventSubs[event] = subs;
+        }
+        subs.push(callback);
+    }
+
+    /**
+     Fires an event at this ````ContextMenu````.
+
+     @param {String} event The event type name
+     @param {Object} value The event parameters
+     */
+    fire(event, value) {
+        const subs = this._eventSubs[event];
+        if (subs) {
+            for (let i = 0, len = subs.length; i < len; i++) {
+                subs[i](value);
+            }
+        }
     }
 
     /**
@@ -384,6 +421,8 @@ class ContextMenu {
      *
      * Logs error to console and does nothing if {@link ContextMenu#context} has not been set.
      *
+     * Fires a "shown" event when shown.
+     *
      * @param {Number} pageX Page X-coordinate.
      * @param {Number} pageY Page Y-coordinate.
      */
@@ -403,6 +442,7 @@ class ContextMenu {
         this._updateItemsEnabledStatus();
         this._showMenu(this._rootMenu.id, pageX, pageY);
         this._shown = true;
+        this.fire("shown", {});
     }
 
     /**
@@ -416,6 +456,8 @@ class ContextMenu {
 
     /**
      * Hides this ````ContextMenu````.
+     *
+     * Fires a "hidden" event when hidden.
      */
     hide() {
         if (!this._enabled) {
@@ -426,6 +468,7 @@ class ContextMenu {
         }
         this._hideAllMenus();
         this._shown = false;
+        this.fire("hidden", {});
     }
 
     /**
@@ -478,14 +521,14 @@ class ContextMenu {
 
                     const getTitle = itemCfg.getTitle || (() => {
                         return (itemCfg.title || "");
-                    });
+                });
 
                     const doAction = itemCfg.doAction || itemCfg.callback || (() => {
                     });
 
                     const getEnabled = itemCfg.getEnabled || (() => {
                         return true;
-                    });
+                });
 
                     const item = new Item(itemId, getTitle, doAction, getEnabled);
 
@@ -640,39 +683,39 @@ class ContextMenu {
 
                         item.itemElement.addEventListener("mouseenter", (event) => {
                             event.preventDefault();
-                            if (item.enabled === false) {
-                                return;
-                            }
-                            const subMenu = item.subMenu;
-                            if (!subMenu) {
-                                if (lastSubMenu) {
-                                    self._hideMenu(lastSubMenu.id);
-                                    lastSubMenu = null;
-                                }
-                                return;
-                            }
-                            if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
+                        if (item.enabled === false) {
+                            return;
+                        }
+                        const subMenu = item.subMenu;
+                        if (!subMenu) {
+                            if (lastSubMenu) {
                                 self._hideMenu(lastSubMenu.id);
                                 lastSubMenu = null;
                             }
+                            return;
+                        }
+                        if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
+                            self._hideMenu(lastSubMenu.id);
+                            lastSubMenu = null;
+                        }
 
-                            const itemElement = item.itemElement;
-                            const subMenuElement = subMenu.menuElement;
+                        const itemElement = item.itemElement;
+                        const subMenuElement = subMenu.menuElement;
 
-                            const itemRect = itemElement.getBoundingClientRect();
-                            const menuRect = subMenuElement.getBoundingClientRect();
+                        const itemRect = itemElement.getBoundingClientRect();
+                        const menuRect = subMenuElement.getBoundingClientRect();
 
-                            const subMenuWidth = 200; // TODO
-                            const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                        const subMenuWidth = 200; // TODO
+                        const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
 
-                            if (showOnLeft) {
-                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
-                            } else {
-                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
-                            }
+                        if (showOnLeft) {
+                            self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                        } else {
+                            self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                        }
 
-                            lastSubMenu = subMenu;
-                        });
+                        lastSubMenu = subMenu;
+                    });
 
                         if (!itemSubMenu) {
 
@@ -681,28 +724,28 @@ class ContextMenu {
 
                             item.itemElement.addEventListener("click", (event) => {
                                 event.preventDefault();
-                                if (!self._context) {
-                                    return;
-                                }
-                                if (item.enabled === false) {
-                                    return;
-                                }
-                                if (item.doAction) {
-                                    item.doAction(self._context);
-                                }
-                                self.hide();
-                            });
+                            self.hide();
+                            if (!self._context) {
+                                return;
+                            }
+                            if (item.enabled === false) {
+                                return;
+                            }
+                            if (item.doAction) {
+                                item.doAction(self._context);
+                            }
+                        });
 
 
                             item.itemElement.addEventListener("mouseenter", (event) => {
                                 event.preventDefault();
-                                if (item.enabled === false) {
-                                    return;
-                                }
-                                if (item.doHover) {
-                                    item.doHover(self._context);
-                                }
-                            });
+                            if (item.enabled === false) {
+                                return;
+                            }
+                            if (item.doHover) {
+                                item.doHover(self._context);
+                            }
+                        });
 
                         }
                     }
