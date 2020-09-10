@@ -2,7 +2,7 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.4.0
+# 1.4.1
 
 September 10, 2020
 
