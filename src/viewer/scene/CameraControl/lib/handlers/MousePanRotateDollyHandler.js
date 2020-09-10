@@ -51,6 +51,8 @@ class MousePanRotateDollyHandler {
         let mouseDownPicked = false;
         const pickedWorldPos = math.vec3();
 
+        let mouseMovedSinceLastWheel = true;
+
         const canvas = this._scene.canvas.canvas;
 
         const keyDown = [];
@@ -193,6 +195,8 @@ class MousePanRotateDollyHandler {
             }
 
             updates.inputFromMouse = true;
+
+            mouseMovedSinceLastWheel = true;
 
             if (!this._down) {
                 return;
@@ -339,9 +343,11 @@ class MousePanRotateDollyHandler {
             }
             const normalizedDelta = delta / Math.abs(delta);
             updates.dollyDelta += -normalizedDelta * secsElapsed * configs.mouseWheelDollyRate;
-            pickController.pickCursorPos = states.pointerCanvasPos;
-            pickController.schedulePickSurface = true;
-            pickController.update();
+
+            if (mouseMovedSinceLastWheel) {
+                states.followPointerDirty = true;
+                mouseMovedSinceLastWheel = false;
+            }
 
             e.preventDefault();
         });

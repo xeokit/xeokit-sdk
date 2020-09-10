@@ -74,12 +74,23 @@ class CameraUpdater {
 
                 if (updates.dollyDelta !== 0) {
                     if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
-                        if (pickController.pickResult && pickController.pickResult.worldPos) {
-                            const worldPos = pickController.pickResult.worldPos;
-                            pivotController.setPivotPos(worldPos);
-                            pivotController.hidePivot();
-                        } else {
-                            dollyDistFactor = 1.0
+
+                        if (configs.followPointer && states.followPointerDirty) {
+
+                            pickController.pickCursorPos = states.pointerCanvasPos;
+                            pickController.schedulePickSurface = true;
+                            pickController.update();
+
+                            if (pickController.pickResult && pickController.pickResult.worldPos) {
+                                const worldPos = pickController.pickResult.worldPos;
+                                pivotController.setPivotPos(worldPos);
+                                pivotController.hidePivot();
+                                states.proximitySurfacePos.set(worldPos);
+                            } else {
+                                dollyDistFactor = 1.0
+                            }
+
+                            states.followPointerDirty = false;
                         }
                     }
 

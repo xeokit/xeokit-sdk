@@ -664,6 +664,7 @@ class CameraControl extends Component {
             pointerCanvasPos: new Float32Array(2),
             mouseover: false,
             inputFromMouse: false, // TODO: Is this needed?
+            followPointerDirty: true,
             mouseDownClientX: 0,
             mouseDownClientY: 0,
             mouseDownCursorX: 0,

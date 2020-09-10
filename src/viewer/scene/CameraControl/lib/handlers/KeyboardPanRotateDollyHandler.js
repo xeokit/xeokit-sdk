@@ -14,6 +14,12 @@ class KeyboardPanRotateDollyHandler {
 
         const pickController = controllers.pickController;
 
+        let mouseMovedSinceLastKeyboardDolly = true;
+
+        document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
+            mouseMovedSinceLastKeyboardDolly = true;
+        });
+
         document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -62,7 +68,6 @@ class KeyboardPanRotateDollyHandler {
             //-------------------------------------------------------------------------------------------------
 
             if (!configs.planView) {
-
 
                 const rotateYPos = cameraControl._isKeyDownForAction(cameraControl.ROTATE_Y_POS, keyDownMap);
                 const rotateYNeg = cameraControl._isKeyDownForAction(cameraControl.ROTATE_Y_NEG, keyDownMap);
@@ -118,9 +123,11 @@ class KeyboardPanRotateDollyHandler {
                     } else if (dollyBackwards) {
                         updates.dollyDelta += dollyDelta;
                     }
-                    pickController.pickCursorPos = states.pointerCanvasPos;
-                    pickController.schedulePickSurface = true;
-                    pickController.update();
+
+                    if (mouseMovedSinceLastKeyboardDolly) {
+                        states.followPointerDirty = true;
+                        mouseMovedSinceLastKeyboardDolly = false;
+                    }
                 }
             }
 
@@ -170,6 +177,7 @@ class KeyboardPanRotateDollyHandler {
 
         this._scene.off(this._onTick);
 
+        document.removeEventListener("mousemove", this._documentMouseMoveHandler);
         document.removeEventListener("keydown", this._documentKeyDownHandler);
         document.removeEventListener("keyup", this._documentKeyUpHandler);
     }

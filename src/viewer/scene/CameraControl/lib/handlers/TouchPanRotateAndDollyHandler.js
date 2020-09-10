@@ -194,7 +194,6 @@ class TouchPanRotateAndDollyHandler {
                 }
 
                 // Dollying
-                states.skipNextPick = true;
 
                 const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                 const d2 = math.distVec2(lastTouches[0], lastTouches[1]);
