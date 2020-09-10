@@ -31,8 +31,7 @@ August 24, 2020
     * Multi-level ContextMenu. [#418](https://github.com/xeokit/xeokit-sdk/pull/418) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, SectionPlanesPlugin 
     * Ability to flip direction of a SectionPlane. [#417](https://github.com/xeokit/xeokit-sdk/issues/417) ([**@xeolabs**](https://github.com/xeolabs))
-        
-        
+             
 # 1.3.8
 
 August 14, 2020
