@@ -85,7 +85,6 @@ class CameraUpdater {
                                 const worldPos = pickController.pickResult.worldPos;
                                 pivotController.setPivotPos(worldPos);
                                 pivotController.hidePivot();
-                                states.proximitySurfacePos.set(worldPos);
                             } else {
                                 dollyDistFactor = 1.0
                             }
