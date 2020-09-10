@@ -8,6 +8,8 @@ Unreleased
 
 * ContextMenu 
     * Add ContextMenu "shown" and "hidden" events. [#425](https://github.com/xeokit/xeokit-sdk/issues/425) ([**@xeolabs**](https://github.com/xeolabs))
+    * Add ContextMenu "hideOnMouseDown" option. [#430](https://github.com/xeokit/xeokit-sdk/issues/430) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl  
     * Optimize CameraControl proximity-dependent dolly speed. [#429](https://github.com/xeokit/xeokit-sdk/issues/429) ([**@xeolabs**](https://github.com/xeolabs)) 
 
 # 1.3.91
