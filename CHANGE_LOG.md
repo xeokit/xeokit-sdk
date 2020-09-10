@@ -4,14 +4,16 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.4.0
 
-Unreleased
+September 10, 2020
 
+* CameraControl  
+    * Optimize CameraControl proximity-dependent dolly speed. [#429](https://github.com/xeokit/xeokit-sdk/issues/429) ([**@xeolabs**](https://github.com/xeolabs)) 
 * ContextMenu 
     * Add ContextMenu "shown" and "hidden" events. [#425](https://github.com/xeokit/xeokit-sdk/issues/425) ([**@xeolabs**](https://github.com/xeolabs))
     * Add ContextMenu "hideOnMouseDown" option. [#430](https://github.com/xeokit/xeokit-sdk/issues/430) ([**@xeolabs**](https://github.com/xeolabs))
-* CameraControl  
-    * Optimize CameraControl proximity-dependent dolly speed. [#429](https://github.com/xeokit/xeokit-sdk/issues/429) ([**@xeolabs**](https://github.com/xeolabs)) 
-
+* Viewer
+    * Ability to disable Viewer anti-aliasing. [#427](https://github.com/xeokit/xeokit-sdk/issues/427) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.3.91
 
 August 24, 2020
