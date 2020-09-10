@@ -37,6 +37,7 @@ class Viewer {
      * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
      * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
      * @param {Boolean} [cfg.saoEnabled=false] Whether to enable Scalable Ambient Obscurance (SAO) effect. See {@link SAO} for more info.
+     * @param {Boolean} [cfg.antialias=true] Whether to enable anti-aliasing.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      * @param {Boolean} [cfg.alphaDepthMask=true] Whether writing into the depth buffer is enabled or disabled when rendering transparent objects.
      */
@@ -61,7 +62,8 @@ class Viewer {
             webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,
-                premultipliedAlpha: (!!cfg.premultipliedAlpha)
+                premultipliedAlpha: (!!cfg.premultipliedAlpha),
+                antialias: (cfg.antialias !== false)
             },
             spinnerElementId: cfg.spinnerElementId,
             transparent: (cfg.transparent !== false),
