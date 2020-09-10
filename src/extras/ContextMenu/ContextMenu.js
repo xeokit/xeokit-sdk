@@ -271,6 +271,7 @@ class ContextMenu {
      * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
+     * @param {Boolean} [cfg.hideOnMouseDown=true] Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page.
      */
     constructor(cfg = {}) {
 
@@ -292,11 +293,13 @@ class ContextMenu {
          */
         this._eventSubs = {};
 
-        document.addEventListener("mousedown", (event) => {
-            if (!event.target.classList.contains("xeokit-context-menu-item")) {
-            this.hide();
+        if (cfg.hideOnMouseDown !== false) {
+            document.addEventListener("mousedown", (event) => {
+                if (!event.target.classList.contains("xeokit-context-menu-item")) {
+                    this.hide();
+                }
+            });
         }
-    });
 
         if (cfg.items) {
             this.items = cfg.items;
@@ -521,14 +524,14 @@ class ContextMenu {
 
                     const getTitle = itemCfg.getTitle || (() => {
                         return (itemCfg.title || "");
-                });
+                    });
 
                     const doAction = itemCfg.doAction || itemCfg.callback || (() => {
                     });
 
                     const getEnabled = itemCfg.getEnabled || (() => {
                         return true;
-                });
+                    });
 
                     const item = new Item(itemId, getTitle, doAction, getEnabled);
 
@@ -683,39 +686,39 @@ class ContextMenu {
 
                         item.itemElement.addEventListener("mouseenter", (event) => {
                             event.preventDefault();
-                        if (item.enabled === false) {
-                            return;
-                        }
-                        const subMenu = item.subMenu;
-                        if (!subMenu) {
-                            if (lastSubMenu) {
+                            if (item.enabled === false) {
+                                return;
+                            }
+                            const subMenu = item.subMenu;
+                            if (!subMenu) {
+                                if (lastSubMenu) {
+                                    self._hideMenu(lastSubMenu.id);
+                                    lastSubMenu = null;
+                                }
+                                return;
+                            }
+                            if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
                                 self._hideMenu(lastSubMenu.id);
                                 lastSubMenu = null;
                             }
-                            return;
-                        }
-                        if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
-                            self._hideMenu(lastSubMenu.id);
-                            lastSubMenu = null;
-                        }
 
-                        const itemElement = item.itemElement;
-                        const subMenuElement = subMenu.menuElement;
+                            const itemElement = item.itemElement;
+                            const subMenuElement = subMenu.menuElement;
 
-                        const itemRect = itemElement.getBoundingClientRect();
-                        const menuRect = subMenuElement.getBoundingClientRect();
+                            const itemRect = itemElement.getBoundingClientRect();
+                            const menuRect = subMenuElement.getBoundingClientRect();
 
-                        const subMenuWidth = 200; // TODO
-                        const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                            const subMenuWidth = 200; // TODO
+                            const showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
 
-                        if (showOnLeft) {
-                            self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
-                        } else {
-                            self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
-                        }
+                            if (showOnLeft) {
+                                self._showMenu(subMenu.id, itemRect.left - subMenuWidth, itemRect.top - 1);
+                            } else {
+                                self._showMenu(subMenu.id, itemRect.right - 5, itemRect.top - 1);
+                            }
 
-                        lastSubMenu = subMenu;
-                    });
+                            lastSubMenu = subMenu;
+                        });
 
                         if (!itemSubMenu) {
 
@@ -724,28 +727,28 @@ class ContextMenu {
 
                             item.itemElement.addEventListener("click", (event) => {
                                 event.preventDefault();
-                            self.hide();
-                            if (!self._context) {
-                                return;
-                            }
-                            if (item.enabled === false) {
-                                return;
-                            }
-                            if (item.doAction) {
-                                item.doAction(self._context);
-                            }
-                        });
+                                self.hide();
+                                if (!self._context) {
+                                    return;
+                                }
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doAction) {
+                                    item.doAction(self._context);
+                                }
+                            });
 
 
                             item.itemElement.addEventListener("mouseenter", (event) => {
                                 event.preventDefault();
-                            if (item.enabled === false) {
-                                return;
-                            }
-                            if (item.doHover) {
-                                item.doHover(self._context);
-                            }
-                        });
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doHover) {
+                                    item.doHover(self._context);
+                                }
+                            });
 
                         }
                     }
