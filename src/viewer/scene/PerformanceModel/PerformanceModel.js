@@ -1035,7 +1035,7 @@ class PerformanceModel extends Component {
      * @type {Boolean}
      */
     get pickable() {
-        return this._pickable;
+        return (this.numPickableLayerPortions > 0);
     }
 
     /**

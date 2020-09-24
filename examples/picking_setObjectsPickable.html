@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Controlling which objects are pickable</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Controlling which objects are pickable</h1>
+    <br/>
+    <p>In this example, the grey objects are set un-pickable, while the blue object remains pickable.<br><br>Try clicking objects to pick them.
+    <br><br>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads .xkt model from file system
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create a xeokit loader plugin, load a model, fit to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        edges: true,
+        pickable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Set all objects un-pickable and grey, except for the slab in front of the door, which we'll set pickable and blue
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", () => {
+
+        viewer.scene.setObjectsColorized(viewer.scene.objectIds, [0.4, 0.4, 0.4]);
+
+        viewer.scene.setObjectsColorized(["1CZILmCaHETO8tf3SgGEXu"], [0, 0, 1]);
+
+        viewer.scene.setObjectsPickable(["1CZILmCaHETO8tf3SgGEXu"], true);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Click Entities to colorize them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+    var lastColorize = null;
+
+    viewer.cameraControl.on("picked", (pickResult) => {
+
+        console.log(pickResult.entity.id);
+
+        if (!lastEntity || pickResult.entity.id !== lastEntity.id) {
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+            }
+
+            lastEntity = pickResult.entity;
+            lastColorize = pickResult.entity.colorize.slice();
+
+            pickResult.entity.highlighted = false;
+            pickResult.entity.colorize = [1.0, 0.0, 0.0];
+        }
+    });
+
+    viewer.cameraControl.on("pickedNothing", () => {
+        if (lastEntity) {
+            lastEntity.colorize = lastColorize;
+            lastEntity = null;
+        }
+    });
+</script>
+</html>
