@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.4.2
 
-(Unreleased)
+September 25, 2020
 
 * Picking  
     * Fix Scene#setObjectsPickable. [#434](https://github.com/xeokit/xeokit-sdk/issues/434) ([**@xeolabs**](https://github.com/xeolabs))     
