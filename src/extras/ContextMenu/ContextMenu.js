@@ -769,7 +769,7 @@ class ContextMenu {
             }
             const title = item.getTitle(this._context);
             if (item.subMenu) {
-                itemElement.innerText = title + " ...";
+                itemElement.innerText = title;
             } else {
                 itemElement.innerText = title;
             }
