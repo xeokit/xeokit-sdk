@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.3
+
+September 28, 2020
+
+* ContextMenu  
+    * Remove ellipsis from ContextMenu items with sub-menus. [#435](https://github.com/xeokit/xeokit-sdk/issues/435) ([**@xeolabs**](https://github.com/xeolabs))     
+    
 # 1.4.2
 
 September 25, 2020
