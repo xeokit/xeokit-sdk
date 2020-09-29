@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingShadowShaderSource} from "./InstancingShadowShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
@@ -24,11 +25,11 @@ class InstancingShadowRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, instancingLayer) {
+        const model = instancingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
 
         if (!this._program) {
@@ -43,7 +44,7 @@ class InstancingShadowRenderer {
             this._bindProgram(frameCtx);
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);

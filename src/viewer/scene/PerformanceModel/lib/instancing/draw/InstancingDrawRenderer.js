@@ -1,8 +1,10 @@
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingDrawShaderSource} from "./InstancingDrawShaderSource.js";
 import {math} from "../../../../math/math.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 const tempVec4 = math.vec4();
+const viewNormalMatrix = math.mat4();
 
 /**
  * @private
@@ -26,11 +28,11 @@ class InstancingDrawRenderer {
         return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this.withSAO ? "sao" : "nosao")].join(";");
     }
 
-    drawLayer(frameCtx, layer, renderPass) {
-        const model = layer.model;
+    drawLayer(frameCtx, instancingLayer, renderPass) {
+        const model = instancingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
 
         if (!this._program) {
@@ -47,10 +49,24 @@ class InstancingDrawRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        const rtcCenter = instancingLayer._state.rtcCenter;
+
+        if (rtcCenter) {
+
+            const viewMatrix = createRTCViewMat(model.viewMatrix, rtcCenter);
+            gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
+
+            math.inverseMat4(viewMatrix, viewNormalMatrix);
+            math.transposeMat4(viewNormalMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
+
+        } else {
+
+            gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        }
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);

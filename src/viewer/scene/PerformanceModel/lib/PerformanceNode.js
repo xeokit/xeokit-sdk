@@ -104,7 +104,7 @@ class PerformanceNode {
     /**
      * World-space 3D axis-aligned bounding box (AABB) of this PerformanceNode.
      *
-     * Represented by a six-element Float32Array containing the min/max extents of the
+     * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}

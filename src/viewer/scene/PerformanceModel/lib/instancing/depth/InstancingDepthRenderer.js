@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingDepthShaderSource} from "./InstancingDepthShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -21,11 +22,11 @@ class InstancingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, instancingLayer) {
+        const model = instancingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
 
         if (!this._program) {
@@ -40,8 +41,10 @@ class InstancingDepthRenderer {
             this._bindProgram();
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+
+        const viewMat = (instancingLayer._state.rtcCenter) ? createRTCViewMat(model.viewMatrix, instancingLayer._state.rtcCenter) : model.viewMatrix;
+        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);

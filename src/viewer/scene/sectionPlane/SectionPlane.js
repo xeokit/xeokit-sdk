@@ -127,7 +127,7 @@ class SectionPlane extends Component {
          Fired whenever this SectionPlane's {@link SectionPlane#pos} property changes.
 
          @event pos
-         @param value Float32Array The property's new value
+         @param value The property's new value
          */
         this.fire("pos", this._state.pos);
     }

@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingShadowShaderSource} from "./BatchingShadowShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * Renders BatchingLayer fragment depths to a shadow map.
@@ -23,10 +24,10 @@ class BatchingShadowRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
+    drawLayer(frameCtx, batchingLayer) {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
             this._allocate();
         }
@@ -34,7 +35,7 @@ class BatchingShadowRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         if (this._aColor) { // Needed for masking out transparent entities using alpha channel
             this._aColor.bindArrayBuffer(state.colorsBuf);

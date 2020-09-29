@@ -1,6 +1,7 @@
 import {stats} from "../../../../stats.js"
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingDepthShaderSource} from "./BatchingDepthShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -22,11 +23,11 @@ class BatchingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, batchingLayer) {
+        const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
             this._allocate();
         }
@@ -34,8 +35,9 @@ class BatchingDepthRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        const viewMat = (batchingLayer._state.rtcCenter) ? createRTCViewMat(model.viewMatrix, batchingLayer._state.rtcCenter) : model.viewMatrix;
+        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aColor) { // Needed for masking out transparent entities using alpha channel

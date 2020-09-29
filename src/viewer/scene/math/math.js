@@ -1,8 +1,11 @@
 // Some temporary vars to help avoid garbage collection
 
-const tempMat1 = new Float32Array(16);
-const tempMat2 = new Float32Array(16);
-const tempVec4 = new Float32Array(4);
+const doublePrecision = true;
+const FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+
+const tempMat1 = new FloatArrayType(16);
+const tempMat2 = new FloatArrayType(16);
+const tempVec4 = new FloatArrayType(4);
 
 
 /**
@@ -35,7 +38,7 @@ const math = {
      * @returns {Number[]}
      */
     vec2(values) {
-        return new Float32Array(values || 2);
+        return new FloatArrayType(values || 2);
     },
 
     /**
@@ -46,7 +49,7 @@ const math = {
      * @returns {Number[]}
      */
     vec3(values) {
-        return new Float32Array(values || 3);
+        return new FloatArrayType(values || 3);
     },
 
     /**
@@ -57,7 +60,7 @@ const math = {
      * @returns {Number[]}
      */
     vec4(values) {
-        return new Float32Array(values || 4);
+        return new FloatArrayType(values || 4);
     },
 
     /**
@@ -68,7 +71,7 @@ const math = {
      * @returns {Number[]}
      */
     mat3(values) {
-        return new Float32Array(values || 9);
+        return new FloatArrayType(values || 9);
     },
 
     /**
@@ -79,7 +82,7 @@ const math = {
      * @static
      * @returns {Number[]}
      */
-    mat3ToMat4(mat3, mat4 = new Float32Array(16)) {
+    mat3ToMat4(mat3, mat4 = new FloatArrayType(16)) {
         mat4[0] = mat3[0];
         mat4[1] = mat3[1];
         mat4[2] = mat3[2];
@@ -107,7 +110,7 @@ const math = {
      * @returns {Number[]}
      */
     mat4(values) {
-        return new Float32Array(values || 16);
+        return new FloatArrayType(values || 16);
     },
 
     /**
@@ -119,7 +122,7 @@ const math = {
      * @returns {Number[]}
      */
     mat4ToMat3(mat4, mat3) { // TODO
-        //return new Float32Array(values || 9);
+        //return new FloatArrayType(values || 9);
     },
 
     /**
@@ -196,6 +199,16 @@ const math = {
             a -= b;
         }
         return a;
+    },
+
+    /**
+     * Returns true if the two 3-element vectors are the same.
+     * @param v1
+     * @param v2
+     * @returns {boolean}
+     */
+    compareVec3(v1, v2) {
+        return (v1[0] === v2[0] && v1[1] === v2[1] && v1[2] === v2[2]);
     },
 
     /**
@@ -743,7 +756,7 @@ const math = {
     },
 
     distVec3: ((() => {
-        const vec = new Float32Array(3);
+        const vec = new FloatArrayType(3);
         return (v, w) => math.lenVec3(math.subVec3(v, w, vec));
     }))(),
 
@@ -759,7 +772,7 @@ const math = {
     },
 
     distVec2: ((() => {
-        const vec = new Float32Array(2);
+        const vec = new FloatArrayType(2);
         return (v, w) => math.lenVec2(math.subVec2(v, w, vec));
     }))(),
 
@@ -829,7 +842,7 @@ const math = {
      */
     vec3FromMat4Scale: ((() => {
 
-        const tempVec3 = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (m, dest) => {
 
@@ -889,7 +902,7 @@ const math = {
      * @returns {*[]}
      */
     xyzObjectToArray(xyz, arry) {
-        arry = arry || new Float32Array(3);
+        arry = arry || new FloatArrayType(3);
         arry[0] = xyz.x;
         arry[1] = xyz.y;
         arry[2] = xyz.z;
@@ -956,7 +969,7 @@ const math = {
      * @static
      */
     diagonalMat4v(v) {
-        return new Float32Array([
+        return new FloatArrayType([
             v[0], 0.0, 0.0, 0.0,
             0.0, v[1], 0.0, 0.0,
             0.0, 0.0, v[2], 0.0,
@@ -987,7 +1000,7 @@ const math = {
      * @method identityMat4
      * @static
      */
-    identityMat4(mat = new Float32Array(16)) {
+    identityMat4(mat = new FloatArrayType(16)) {
         mat[0] = 1.0;
         mat[1] = 0.0;
         mat[2] = 0.0;
@@ -1016,7 +1029,7 @@ const math = {
      * @method identityMat3
      * @static
      */
-    identityMat3(mat = new Float32Array(9)) {
+    identityMat3(mat = new FloatArrayType(9)) {
         mat[0] = 1.0;
         mat[1] = 0.0;
         mat[2] = 0.0;
@@ -1296,7 +1309,7 @@ const math = {
      */
     mulMat3(a, b, dest) {
         if (!dest) {
-            dest = new Float32Array(9);
+            dest = new FloatArrayType(9);
         }
 
         const a11 = a[0];
@@ -1599,7 +1612,7 @@ const math = {
      * @static
      */
     translationMat4c: ((() => {
-        const xyz = new Float32Array(3);
+        const xyz = new FloatArrayType(3);
         return (x, y, z, dest) => {
             xyz[0] = x;
             xyz[1] = y;
@@ -1682,6 +1695,40 @@ const math = {
 
         return m;
     },
+
+    /**
+     * Creates a new matrix that replaces the translation in the rightmost column of the given
+     * affine matrix with the given translation.
+     * @param m
+     * @param translation
+     * @param dest
+     * @returns {*}
+     */
+    setMat4Translation(m, translation, dest) {
+
+        dest[0] = m[0];
+        dest[1] = m[1];
+        dest[2] = m[2];
+        dest[3] = m[3];
+
+        dest[4] = m[4];
+        dest[5] = m[5];
+        dest[6] = m[6];
+        dest[7] = m[7];
+
+        dest[8] = m[8];
+        dest[9] = m[9];
+        dest[10] = m[10];
+        dest[11] = m[11];
+
+        dest[12] = translation[0];
+        dest[13] = translation[1];
+        dest[14] = translation[2];
+        dest[15] = m[15];
+
+        return dest;
+    },
+
     /**
      * Returns 4x4 rotation matrix.
      * @method rotationMat4v
@@ -1777,7 +1824,7 @@ const math = {
      * @static
      */
     scalingMat4c: ((() => {
-        const xyz = new Float32Array(3);
+        const xyz = new FloatArrayType(3);
         return (x, y, z, dest) => {
             xyz[0] = x;
             xyz[1] = y;
@@ -2009,8 +2056,8 @@ const math = {
 
     decomposeMat4: (() => {
 
-        const vec = new Float32Array(3);
-        const matrix = new Float32Array(16);
+        const vec = new FloatArrayType(3);
+        const matrix = new FloatArrayType(16);
 
         return function decompose(mat, position, quaternion, scale) {
 
@@ -2698,9 +2745,9 @@ const math = {
      * @static
      */
     unprojectVec3: ((() => {
-        const mat = new Float32Array(16);
-        const mat2 = new Float32Array(16);
-        const mat3 = new Float32Array(16);
+        const mat = new FloatArrayType(16);
+        const mat2 = new FloatArrayType(16);
+        const mat3 = new FloatArrayType(16);
         return function (p, viewMat, projMat, q) {
             return this.transformVec3(this.mulMat4(this.inverseMat4(viewMat, mat), this.inverseMat4(projMat, mat2), mat3), p, q)
         };
@@ -2959,7 +3006,7 @@ const math = {
     },
 
     quaternionToEuler: ((() => {
-        const mat = new Float32Array(16);
+        const mat = new FloatArrayType(16);
         return (q, order, dest) => {
             dest = dest || math.vec3();
             math.quaternionToRotationMat4(q, mat);
@@ -3145,7 +3192,7 @@ const math = {
      * @private
      */
     AABB3(values) {
-        return new Float32Array(values || 6);
+        return new FloatArrayType(values || 6);
     },
 
     /**
@@ -3154,7 +3201,7 @@ const math = {
      * @private
      */
     AABB2(values) {
-        return new Float32Array(values || 4);
+        return new FloatArrayType(values || 4);
     },
 
     /**
@@ -3163,7 +3210,7 @@ const math = {
      * @private
      */
     OBB3(values) {
-        return new Float32Array(values || 32);
+        return new FloatArrayType(values || 32);
     },
 
     /**
@@ -3172,12 +3219,12 @@ const math = {
      * @private
      */
     OBB2(values) {
-        return new Float32Array(values || 16);
+        return new FloatArrayType(values || 16);
     },
 
     /** Returns a new 3D bounding sphere */
     Sphere3(x, y, z, r) {
-        return new Float32Array([x, y, z, r]);
+        return new FloatArrayType([x, y, z, r]);
     },
 
     /**
@@ -3246,9 +3293,9 @@ const math = {
      */
     getAABB3Diag: ((() => {
 
-        const min = new Float32Array(3);
-        const max = new Float32Array(3);
-        const tempVec3 = new Float32Array(3);
+        const min = new FloatArrayType(3);
+        const max = new FloatArrayType(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return aabb => {
 
@@ -3273,9 +3320,9 @@ const math = {
      */
     getAABB3DiagPoint: ((() => {
 
-        const min = new Float32Array(3);
-        const max = new Float32Array(3);
-        const tempVec3 = new Float32Array(3);
+        const min = new FloatArrayType(3);
+        const max = new FloatArrayType(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (aabb, p) => {
 

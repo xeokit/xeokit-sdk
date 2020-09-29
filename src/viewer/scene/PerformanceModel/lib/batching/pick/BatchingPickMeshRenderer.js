@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingPickMeshShaderSource} from "./BatchingPickMeshShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -21,20 +22,26 @@ class BatchingPickMeshRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, batchingLayer) {
+        const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
-            this._allocate(layer);
+            this._allocate(batchingLayer);
         }
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
+
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+
+        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        const viewMatrix = batchingLayer._state.rtcCenter ? createRTCViewMat(pickViewMatrix, batchingLayer._state.rtcCenter) : pickViewMatrix;
+
+        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
+
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aFlags) {

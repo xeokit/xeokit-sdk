@@ -24,6 +24,8 @@ class BatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.positionsDecodeMatrix
+     * @param cfg.rtcCenter
      * @param cfg.buffer
      * @param cfg.scratchMemory
      * @param cfg.primitive
@@ -75,7 +77,8 @@ class BatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: math.mat4()
+            positionsDecodeMatrix: math.mat4(),
+            rtcCenter : null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -95,6 +98,10 @@ class BatchingLayer {
         this._finalized = false;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
     }
 
     /**
@@ -216,6 +223,16 @@ class BatchingLayer {
                     }
                 }
             }
+        }
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
         }
 
         if (normals) {

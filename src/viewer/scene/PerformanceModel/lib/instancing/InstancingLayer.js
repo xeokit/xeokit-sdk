@@ -35,6 +35,7 @@ class InstancingLayer {
      * @param cfg.indices Flat int indices array.
      * @param cfg.edgeIndices Flat int edges indices array.
      * @param cfg.edgeThreshold
+     * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
         this._instancingRenderers = getInstancingRenderers(model.scene);
@@ -75,7 +76,8 @@ class InstancingLayer {
             primitive: primitive,
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
-            obb: math.OBB3()
+            obb: math.OBB3(),
+            rtcCenter : null
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
@@ -164,6 +166,10 @@ class InstancingLayer {
         this._modelNormalMatrixCol2 = [];
 
         this._portions = [];
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
 
         this._finalized = false;
     }
@@ -315,6 +321,16 @@ class InstancingLayer {
             } else {
                 math.expandAABB3Point3(worldAABB, tempVec4b);
             }
+        }
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
         }
 
         this._state.numInstances++;

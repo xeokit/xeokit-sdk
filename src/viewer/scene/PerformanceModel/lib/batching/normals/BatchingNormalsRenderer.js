@@ -1,5 +1,7 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingNormalsShaderSource} from "./BatchingNormalsShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
+import {math} from "../../../../math/math.js";
 
 /**
  * @private
@@ -21,21 +23,37 @@ class BatchingNormalsRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, batchingLayer) {
+        const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
-            this._allocate(layer);
+            this._allocate(batchingLayer);
         }
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+
+        const rtcCenter = batchingLayer._state.rtcCenter;
+
+        if (rtcCenter) {
+
+            const viewMatrix = createRTCViewMat(model.viewMatrix, rtcCenter);
+            gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
+
+            math.inverseMat4(viewMatrix, viewNormalMatrix);
+            math.transposeMat4(viewNormalMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
+
+        } else {
+
+            gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        }
+
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
         this._aNormal.bindArrayBuffer(state.normalsBuf);

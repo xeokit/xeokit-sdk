@@ -1,6 +1,7 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingFillShaderSource} from "./BatchingFillShaderSource.js";
 import {RENDER_PASSES} from "../../renderPasses.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -22,11 +23,11 @@ class BatchingFillRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer, renderPass) {
-        const model = layer.model;
+    drawLayer(frameCtx, batchingLayer, renderPass) {
+        const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
             this._allocate();
             if (this.errors) {
@@ -37,11 +38,11 @@ class BatchingFillRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        const viewMat = (batchingLayer._state.rtcCenter) ? createRTCViewMat(model.viewMatrix, batchingLayer._state.rtcCenter) : model.viewMatrix;
+        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
+        gl.uniformMatrix4fv(this._uModelMatrix, false, model.worldMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aFlags) {

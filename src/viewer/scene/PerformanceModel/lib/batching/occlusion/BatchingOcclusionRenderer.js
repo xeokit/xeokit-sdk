@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingOcclusionShaderSource} from "./BatchingOcclusionShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -21,22 +22,23 @@ class BatchingOcclusionRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
-        const model = layer.model;
+    drawLayer(frameCtx, batchingLayer) {
+        const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         const camera = scene.camera;
         if (!this._program) {
-            this._allocate(layer);
+            this._allocate(batchingLayer);
         }
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+        const viewMat = (batchingLayer._state.rtcCenter) ? createRTCViewMat(model.viewMatrix, batchingLayer._state.rtcCenter) : model.viewMatrix;
+        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
         if (this._aColor) {

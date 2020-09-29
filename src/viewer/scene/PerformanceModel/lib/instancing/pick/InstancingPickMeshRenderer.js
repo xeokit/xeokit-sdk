@@ -1,5 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingPickMeshShaderSource} from "./InstancingPickMeshShaderSource.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 /**
  * @private
@@ -21,12 +22,12 @@ class InstancingPickMeshRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
+    drawLayer(frameCtx, instancingLayer) {
 
-        const model = layer.model;
+        const model = instancingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
 
         if (!this._program) {
@@ -41,8 +42,12 @@ class InstancingPickMeshRenderer {
             this._bindProgram(frameCtx);
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        const rtcPickViewMatrix = (instancingLayer._state.rtcCenter) ? createRTCViewMat(pickViewMatrix, instancingLayer._state.rtcCenter) : pickViewMatrix;
+
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
+
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);

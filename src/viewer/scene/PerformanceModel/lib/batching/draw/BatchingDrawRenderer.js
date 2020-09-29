@@ -1,8 +1,10 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingDrawShaderSource} from "./batchingDrawShaderSource.js";
 import {math} from "../../../../math/math.js";
+import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
 const tempVec4 = math.vec4();
+const viewNormalMatrix = math.mat4();
 
 /**
  * @private
@@ -26,11 +28,11 @@ class BatchingDrawRenderer {
         return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
     }
 
-    drawLayer(frameCtx, layer, renderPass) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
         const scene = this._scene;
-        const model = layer.model;
+        const model = batchingLayer.model;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
             this._allocate();
         }
@@ -38,9 +40,25 @@ class BatchingDrawRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+
+        const rtcCenter = batchingLayer._state.rtcCenter;
+
+        if (rtcCenter) {
+
+            const viewMatrix = createRTCViewMat(model.viewMatrix, rtcCenter);
+            gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
+
+            math.inverseMat4(viewMatrix, viewNormalMatrix);
+            math.transposeMat4(viewNormalMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
+
+        } else {
+
+            gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        }
+
         gl.uniform1i(this._uRenderPass, renderPass);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         if (this._aNormal) {
