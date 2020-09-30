@@ -1,5 +1,7 @@
 /*
+
  Parser for .XKT Format V6
+
  */
 
 import {utils} from "../../../viewer/scene/utils.js";
@@ -66,7 +68,7 @@ function inflate(deflatedData) {
         eachEntityPrimitiveInstancesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityPrimitiveInstancesPortion).buffer),
         eachEntityMatricesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityMatricesPortion).buffer),
 
-        eachTileAABB: new Float32Array(pako.inflate(deflatedData.eachTileAABB).buffer),
+        eachTileAABB: new Float64Array(pako.inflate(deflatedData.eachTileAABB).buffer),
         eachTileDecodeMatrix: new Float32Array(pako.inflate(deflatedData.eachTileDecodeMatrix).buffer),
         eachTileEntitiesPortion: new Uint32Array(pako.inflate(deflatedData.eachTileEntitiesPortion).buffer),
     };
@@ -197,6 +199,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createGeometry({
                             id: geometryId,
+                            rtcCenter: tileCenter,
                             primitive: "triangles",
                             positions: primitivePositions,
                             normals: primitiveNormals,
@@ -212,9 +215,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         id: meshId,
                         geometryId: geometryId,
                         matrix: entityMatrix,
-                           rtcCenter: tileCenter,
-                        color: color,
-                        opacity: opacity
+                        // color: color,
+                        // opacity: opacity
                     }));
 
                     meshIds.push(meshId);
@@ -223,15 +225,15 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     performanceModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
+                        rtcCenter: tileCenter,
                         primitive: "triangles",
                         positions: primitivePositions,
                         normals: primitiveNormals,
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
                         //            positionsDecodeMatrix: tileDecodeMatrix,
-                        rtcCenter: tileCenter,
-                        color: color,
-                        opacity: opacity
+                        // color: color,
+                        // opacity: opacity
                     }));
 
                     meshIds.push(meshId);
