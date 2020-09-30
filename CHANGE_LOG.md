@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.4
+
+Unreleased
+
+* ObjectsMemento  
+    * Support null Entity#colorize values in ObjectsMemento#saveobjects. [#437](https://github.com/xeokit/xeokit-sdk/issues/437) ([**@xeolabs**](https://github.com/xeolabs))     
+    
 # 1.4.3
 
 September 28, 2020
