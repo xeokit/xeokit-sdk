@@ -115,7 +115,6 @@ function load(viewer, options, inflatedData, performanceModel) {
     const numEntities = eachEntityId.length;
     const numTiles = eachTileEntitiesPortion.length;
 
-    const geometryCreated = {};
     let nextMeshId = 0;
 
     // Count instances of each primitive
@@ -150,6 +149,8 @@ function load(viewer, options, inflatedData, performanceModel) {
         const tileAABB = eachTileAABB.subarray(tileAABBIndex, tileAABBIndex + 6);
 
         math.getAABB3Center(tileAABB, tileCenter);
+
+        const geometryCreated = {};
 
         // Iterate over each tile's entities
 
@@ -193,7 +194,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     // Create mesh for multi-use primitive - create (or reuse) geometry, create mesh using that geometry
 
-                    const geometryId = "geometry" + primitiveIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the PerformanceModel
 
                     if (!geometryCreated[geometryId]) {
 
