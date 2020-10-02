@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.5
+
+October 2, 2020
+
+* Annotation, AnnotationsPlugin
+    * Workaround for iOS14 bug affecting WebGL framebuffers. [#439](https://github.com/xeokit/xeokit-sdk/issues/439) ([**@xeolabs**](https://github.com/xeolabs))  
+
 # 1.4.4
 
 September 30, 2020
