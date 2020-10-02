@@ -88,10 +88,10 @@ class OcclusionTester {
     }
 
     /**
-     * Prepares for an occlusion test.
-     * Binds render buffer.
+     * Returns true if we need an occlusion test.
+     * @returns {boolean}
      */
-    bindRenderBuf() {
+    get needOcclusionTest() {
 
         const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";"); // TODO: optimize?
         if (shaderSourceHash !== this._shaderSourceHash) {
@@ -133,10 +133,26 @@ class OcclusionTester {
             this._buildOcclusionTestList();
         }
 
-        if (!TEST_MODE) {
-            this._readPixelBuf = this._readPixelBuf || (this._readPixelBuf = new RenderBuffer(this._scene.canvas.canvas, this._scene.canvas.gl));
-            this._readPixelBuf.bind();
-            this._readPixelBuf.clear();
+        return (this._lenOcclusionTestList > 0);
+    }
+
+
+    /**
+     * Prepares for an occlusion test.
+     * Binds render buffer.
+     */
+    bindRenderBuf() {
+
+        if (!this.needOcclusionTest) {
+            return;
+        }
+
+        if (this._lenOcclusionTestList > 0) {
+            if (!TEST_MODE) {
+                this._readPixelBuf = this._readPixelBuf || (this._readPixelBuf = new RenderBuffer(this._scene.canvas.canvas, this._scene.canvas.gl));
+                this._readPixelBuf.bind();
+                this._readPixelBuf.clear();
+            }
         }
     }
 
@@ -319,8 +335,15 @@ class OcclusionTester {
 
     /**
      * Draws {@link Marker}s to the render buffer.
+     *
+     * Does nothing if there are no occludable Markers to test.
      */
     drawMarkers() {
+
+        if (this._lenOcclusionTestList === 0) {
+            return;
+        }
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
@@ -360,8 +383,15 @@ class OcclusionTester {
 
     /**
      * Reads render buffer and updates visibility states of {@link Marker}s if they can be found in the buffer.
+     *
+     * Does nothing if there are no occludable Markers to test.
      */
     doOcclusionTest() {
+
+        if (this._lenOcclusionTestList === 0) {
+            return;
+        }
+
         if (!TEST_MODE) {
             const markerR = MARKER_COLOR[0] * 255;
             const markerG = MARKER_COLOR[1] * 255;
@@ -379,8 +409,15 @@ class OcclusionTester {
 
     /**
      * Unbinds render buffer.
+     *
+     * Does nothing if there are no occludable Markers to test.
      */
     unbindRenderBuf() {
+
+        if (this._lenOcclusionTestList === 0) {
+            return;
+        }
+
         if (!TEST_MODE) {
             this._readPixelBuf.unbind();
         }

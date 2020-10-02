@@ -245,7 +245,7 @@ const Renderer = function (scene, options) {
         }
 
 
-            drawShadowMaps();
+        drawShadowMaps();
 
         drawColor(params);
     }
@@ -1085,7 +1085,7 @@ const Renderer = function (scene, options) {
      */
     this.doOcclusionTest = function () {
 
-        if (this._occlusionTester) {
+        if (this._occlusionTester && this._occlusionTester.needOcclusionTest) {
 
             updateDrawableList();
 
