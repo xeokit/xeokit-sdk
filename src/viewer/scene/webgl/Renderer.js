@@ -182,7 +182,7 @@ const Renderer = function (scene, options) {
      */
     this.render = function (params) {
         params = params || {};
-        updateDrawlist();
+        updateDrawableList();
         if (imageDirty || params.force) {
             draw(params);
             stats.frame.frameCount++;
@@ -190,7 +190,7 @@ const Renderer = function (scene, options) {
         }
     };
 
-    function updateDrawlist() { // Prepares state-sorted array of drawables from maps of inserted drawables
+    function updateDrawableList() { // Prepares state-sorted array of drawables from maps of inserted drawables
         if (drawableListDirty) {
             buildDrawableList();
             drawableListDirty = false;
@@ -784,7 +784,7 @@ const Renderer = function (scene, options) {
 
             pickResult.reset();
 
-            updateDrawlist();
+            updateDrawableList();
 
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
                 gl.getExtension("OES_element_index_uint");
@@ -1087,30 +1087,31 @@ const Renderer = function (scene, options) {
 
         if (this._occlusionTester) {
 
-            updateDrawlist();
+            updateDrawableList();
 
             this._occlusionTester.bindRenderBuf();
+
+            // Draw silhouettes of occluding objects
 
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            for (var type in drawableTypeInfo) {
+            for (let type in drawableTypeInfo) {
                 if (drawableTypeInfo.hasOwnProperty(type)) {
                     const drawableInfo = drawableTypeInfo[type];
                     const drawableList = drawableInfo.drawableList;
-                    for (var i = 0, len = drawableList.length; i < len; i++) {
+                    for (let i = 0, len = drawableList.length; i < len; i++) {
                         const drawable = drawableList[i];
-                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
-
-                            // nTODO: Exclude transpArent
+                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
                             continue;
                         }
                         drawable.drawOcclusion(frameCtx);
