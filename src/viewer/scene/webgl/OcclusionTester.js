@@ -23,7 +23,7 @@ class OcclusionTester {
         this._indices = [];                     // Indices corresponding to array above
         this._positionsBuf = null;              // Positions VBO to render marker positions
         this._indicesBuf = null;                // Indices VBO
-        this._occlusionTestList = [];           // List of
+        this._occlusionTestList = [];
         this._lenOcclusionTestList = 0;
         this._pixels = [];
         this._shaderSource = null;
@@ -36,7 +36,7 @@ class OcclusionTester {
         this._markerListDirty = false;          // Need to (re)build _markerList ?
         this._positionsDirty = false;           // Need to (re)build _positions and _indices ?
         this._vbosDirty = false;                // Need to rebuild _positionsBuf and _indicesBuf ?
-        this._occlusionTestListDirty = false;   // Need to build _occlusionTestList ?
+        this._occlusionTestListDirty = true;    // Need to build _occlusionTestList ?
 
         this._lenPositionsBuf = 0;
 
@@ -93,13 +93,13 @@ class OcclusionTester {
      */
     bindRenderBuf() {
 
-        const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";");
+        const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";"); // TODO: optimize?
         if (shaderSourceHash !== this._shaderSourceHash) {
             this._shaderSourceHash = shaderSourceHash;
             this._shaderSourceDirty = true;
         }
 
-        if (this._shaderSourceDirty) { // TODO: Set this when hash changes
+        if (this._shaderSourceDirty) {
             this._buildShaderSource();
             this._shaderSourceDirty = false;
             this._programDirty = true;
@@ -118,7 +118,7 @@ class OcclusionTester {
             this._occlusionTestListDirty = true;
         }
 
-        if (this._positionsDirty) { //////////////  TODO: Don't rebuild this when positions change, very wasteful
+        if (this._positionsDirty) { //  TODO: Don't rebuild this when positions change, very wasteful
             this._buildPositions();
             this._positionsDirty = false;
             this._vbosDirty = true;
@@ -319,15 +319,13 @@ class OcclusionTester {
 
     /**
      * Draws {@link Marker}s to the render buffer.
-     * @param frameCtx
      */
-    drawMarkers(frameCtx) {
+    drawMarkers() {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
         const sectionPlanesState = scene._sectionPlanesState;
         const camera = scene.camera;
-        const cameraState = camera._state;
         program.bind();
         if (sectionPlanesState.sectionPlanes.length > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -336,7 +334,7 @@ class OcclusionTester {
             let sectionPlane;
             let uSectionPlanePos;
             let uSectionPlaneDir;
-            for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
                 sectionPlaneUniforms = this._uSectionPlanes[i];
                 uSectionPlaneActive = sectionPlaneUniforms.active;
                 sectionPlane = sectionPlanes[i];
@@ -353,8 +351,8 @@ class OcclusionTester {
                 }
             }
         }
-        gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         this._aPosition.bindArrayBuffer(this._positionsBuf);
         this._indicesBuf.bind();
         gl.drawElements(gl.POINTS, this._indicesBuf.numItems, this._indicesBuf.itemType, 0);
@@ -368,7 +366,7 @@ class OcclusionTester {
             const markerR = MARKER_COLOR[0] * 255;
             const markerG = MARKER_COLOR[1] * 255;
             const markerB = MARKER_COLOR[2] * 255;
-            for (var i = 0; i < this._lenOcclusionTestList; i++) {
+            for (let i = 0; i < this._lenOcclusionTestList; i++) {
                 const marker = this._occlusionTestList[i];
                 const j = i * 2;
                 const k = i * 4;
