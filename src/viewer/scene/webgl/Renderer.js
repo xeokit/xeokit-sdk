@@ -10,6 +10,7 @@ import {OcclusionTester} from "./OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {SAOBlendRenderer} from "./sao/SAOBlendRenderer.js";
 import {SAOBlurRenderer} from "./sao/SAOBlurRenderer.js";
+import {createRTCViewMat} from "../math/rtcCoords.js";
 
 /**
  * @private
@@ -28,10 +29,6 @@ const Renderer = function (scene, options) {
 
     var drawableTypeInfo = {};
     var drawables = {};
-
-    const drawableListSorted = [];
-    let drawableListSortedLen = 0;
-    const shadowMeshLists = {};
 
     let drawableListDirty = true;
     let stateSortDirty = true;
@@ -245,7 +242,7 @@ const Renderer = function (scene, options) {
         }
 
 
-            drawShadowMaps();
+        drawShadowMaps();
 
         drawColor(params);
     }
@@ -969,6 +966,7 @@ const Renderer = function (scene, options) {
         const tempVec4e = math.vec4();
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
+        const tempMat4c = math.mat4();
 
         return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
@@ -993,10 +991,21 @@ const Renderer = function (scene, options) {
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
             // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            var x = (canvasX - canvas.width / 2) / (canvas.width / 2);
-            var y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
-            var pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4a);
-            var pvMatInverse = math.inverseMat4(pvMat, tempMat4b);
+            const x = (canvasX - canvas.width / 2) / (canvas.width / 2);
+            const y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+
+            const rtcCenter = pickable.rtcCenter;
+            let pvMat;
+
+            if (rtcCenter) {
+                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, rtcCenter, tempMat4a);
+                pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
+
+            } else {
+                pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4b);
+            }
+
+            const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
 
             tempVec4a[0] = x;
             tempVec4a[1] = y;
@@ -1014,8 +1023,12 @@ const Renderer = function (scene, options) {
             var world2 = math.transformVec4(pvMatInverse, tempVec4b);
             world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
 
-            var dir = math.subVec3(world2, world1, tempVec4c);
-            var worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+            const dir = math.subVec3(world2, world1, tempVec4c);
+            const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+
+            if (rtcCenter) {
+                math.addVec3(worldPos, rtcCenter);
+            }
 
             pickResult.worldPos = worldPos;
         }
