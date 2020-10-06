@@ -12,14 +12,6 @@ function buildVertex(scene) {
     const src = [];
     src.push("// Instancing geometry depth drawing vertex shader");
 
-    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-    src.push("precision highp float;");
-    src.push("precision highp int;");
-    src.push("#else");
-    src.push("precision mediump float;");
-    src.push("precision mediump int;");
-    src.push("#endif");
-
     src.push("attribute vec3 position;");
     src.push("attribute vec3 offset;");
     src.push("attribute vec4 color;");
