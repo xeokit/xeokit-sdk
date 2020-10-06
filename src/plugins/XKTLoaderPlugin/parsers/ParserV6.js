@@ -16,27 +16,20 @@ if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
 function extract(elements) {
 
     return {
-
         positions: elements[0],
         normals: elements[1],
         indices: elements[2],
         edgeIndices: elements[3],
-
         matrices: elements[4],
-
         reusedPrimitivesDecodeMatrix: elements[5],
-
         eachPrimitivePositionsAndNormalsPortion: elements[6],
         eachPrimitiveIndicesPortion: elements[7],
         eachPrimitiveEdgeIndicesPortion: elements[8],
         eachPrimitiveColorAndOpacity: elements[9],
-
         primitiveInstances: elements[10],
-
         eachEntityId: elements[11],
         eachEntityPrimitiveInstancesPortion: elements[12],
         eachEntityMatricesPortion: elements[13],
-
         eachTileAABB: elements[14],
         eachTileDecodeMatrix: elements[15],
         eachTileEntitiesPortion: elements[16]
@@ -46,28 +39,20 @@ function extract(elements) {
 function inflate(deflatedData) {
 
     return {
-
-        //positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
-        positions: new Float32Array(pako.inflate(deflatedData.positions).buffer),
+        positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
         normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
         indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
         edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices).buffer),
-
         matrices: new Float32Array(pako.inflate(deflatedData.matrices).buffer),
-
         reusedPrimitivesDecodeMatrix: new Float32Array(pako.inflate(deflatedData.reusedPrimitivesDecodeMatrix).buffer),
-
         eachPrimitivePositionsAndNormalsPortion: new Uint32Array(pako.inflate(deflatedData.eachPrimitivePositionsAndNormalsPortion).buffer),
         eachPrimitiveIndicesPortion: new Uint32Array(pako.inflate(deflatedData.eachPrimitiveIndicesPortion).buffer),
         eachPrimitiveEdgeIndicesPortion: new Uint32Array(pako.inflate(deflatedData.eachPrimitiveEdgeIndicesPortion).buffer),
         eachPrimitiveColorAndOpacity: new Uint8Array(pako.inflate(deflatedData.eachPrimitiveColorAndOpacity).buffer),
-
         primitiveInstances: new Uint32Array(pako.inflate(deflatedData.primitiveInstances).buffer),
-
         eachEntityId: pako.inflate(deflatedData.eachEntityId, {to: 'string'}),
         eachEntityPrimitiveInstancesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityPrimitiveInstancesPortion).buffer),
         eachEntityMatricesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityMatricesPortion).buffer),
-
         eachTileAABB: new Float64Array(pako.inflate(deflatedData.eachTileAABB).buffer),
         eachTileDecodeMatrix: new Float32Array(pako.inflate(deflatedData.eachTileDecodeMatrix).buffer),
         eachTileEntitiesPortion: new Uint32Array(pako.inflate(deflatedData.eachTileEntitiesPortion).buffer),
@@ -206,7 +191,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                             normals: primitiveNormals,
                             indices: primitiveIndices,
                             edgeIndices: primitiveEdgeIndices,
-                            // positionsDecodeMatrix: reusedPrimitivesDecodeMatrix
+                            positionsDecodeMatrix: reusedPrimitivesDecodeMatrix
                         });
 
                         geometryCreated[geometryId] = true;
@@ -232,7 +217,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                         normals: primitiveNormals,
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
-                        //            positionsDecodeMatrix: tileDecodeMatrix,
+                        positionsDecodeMatrix: tileDecodeMatrix,
                         // color: color,
                         // opacity: opacity
                     }));
