@@ -77,6 +77,16 @@ class PerformanceMesh {
         this._colorizing = false;
 
         this.numTriangles = 0;
+
+        /**
+         * 3D origin of the PerformanceMesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
+         *
+         * When this is defined, then the positions are RTC, which means that they are relative to this position.
+         *
+         * @property rtcCenter
+         * @type {Float64Array}
+         */
+        this.rtcCenter = null;
     }
 
     /**

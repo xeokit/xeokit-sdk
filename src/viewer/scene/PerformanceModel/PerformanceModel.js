@@ -1221,9 +1221,9 @@ class PerformanceModel extends Component {
             this.numTransparentLayerPortions++;
         }
 
-        var mesh = new PerformanceMesh(this, id, color, opacity);
+        const mesh = new PerformanceMesh(this, id, color, opacity);
 
-        var pickId = mesh.pickId;
+        const pickId = mesh.pickId;
 
         const a = pickId >> 24 & 0xFF;
         const b = pickId >> 16 & 0xFF;
@@ -1257,6 +1257,8 @@ class PerformanceModel extends Component {
             const numTriangles = Math.round(instancingLayer.numIndices / 3);
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
+
+            mesh.rtcCenter = instancingLayer.rtcCenter;
 
         } else { // Batching
 
@@ -1371,6 +1373,8 @@ class PerformanceModel extends Component {
             const numTriangles = Math.round(indices.length / 3);
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
+
+            mesh.rtcCenter = cfg.rtcCenter;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
