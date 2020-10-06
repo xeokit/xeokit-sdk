@@ -107,7 +107,7 @@ class PerformanceNode {
      * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Number[]}
+     * @type {Float64Array}
      */
     get aabb() {
         return this._offsetAABB;
