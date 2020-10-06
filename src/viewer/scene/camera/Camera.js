@@ -539,7 +539,7 @@ class Camera extends Component {
     set worldAxis(axis) {
         axis = axis || [1, 0, 0, 0, 1, 0, 0, 0, 1];
         if (!this._worldAxis) {
-            this._worldAxis = new Float32Array(axis);
+            this._worldAxis = math.vec3(axis);
         } else {
             this._worldAxis.set(axis);
         }
