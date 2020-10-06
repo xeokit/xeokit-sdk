@@ -35,15 +35,15 @@ class PickResult {
         this.primIndex = -1;
 
         this._canvasPos = new Int16Array([0, 0]);
-        this._origin = new Float32Array([0, 0, 0]);
-        this._direction = new Float32Array([0, 0, 0]);
+        this._origin = new Float64Array([0, 0, 0]);
+        this._direction = new Float64Array([0, 0, 0]);
         this._indices = new Int32Array(3);
-        this._localPos = new Float32Array([0, 0, 0]);
-        this._worldPos = new Float32Array([0, 0, 0]);
-        this._viewPos = new Float32Array([0, 0, 0]);
-        this._bary = new Float32Array([0, 0, 0]);
-        this._worldNormal = new Float32Array([0, 0, 0]);
-        this._uv = new Float32Array([0, 0]);
+        this._localPos = new Float64Array([0, 0, 0]);
+        this._worldPos = new Float64Array([0, 0, 0]);
+        this._viewPos = new Float64Array([0, 0, 0]);
+        this._bary = new Float64Array([0, 0, 0]);
+        this._worldNormal = new Float64Array([0, 0, 0]);
+        this._uv = new Float64Array([0, 0]);
 
         this.reset();
     }
