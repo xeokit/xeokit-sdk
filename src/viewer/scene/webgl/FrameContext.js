@@ -1,10 +1,25 @@
+import {math} from "../math/math.js";
+import {createRTCViewMat} from "../math/rtcCoords.js";
+
 /**
- * @desc Provides rendering context to {@link Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
+ * @desc Provides rendering context to {@link Drawable"}s as xeokit renders them for a frame.
+ *
+ * Also creates RTC viewing and picking matrices, caching and reusing matrices within each frame.
+ *
  * @private
  */
 class FrameContext {
 
-    constructor() {
+    constructor(scene) {
+
+        this._scene = scene;
+
+        this._matPool = [];
+        this._matPoolNextFreeIndex = 0;
+
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
+
         this.reset();
     }
 
@@ -13,6 +28,10 @@ class FrameContext {
      * @private
      */
     reset() {
+
+        this._matPoolNextFreeIndex = 0;
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
 
         /**
          * ID of the last {@link webgl.Program} that was bound during the current frame.
@@ -160,6 +179,53 @@ class FrameContext {
          * @type Number
          */
         this.lineWidth = 1;
+    }
+
+    /**
+     * Get View and View-Normal RTC matrices for the given RTC coordinates.
+     */
+    getRTCViewMatrices(rtcCenter) {
+        const hash = rtcCenter.join();
+        let rtcViewMats = this._rtcViewMats[hash];
+        if (!rtcViewMats) {
+            rtcViewMats = [
+                this._getNewMat(), // RTC view matrix
+                this._getNewMat()  // RTC view normal matrix
+            ];
+            this._rtcViewMats[hash] = rtcViewMats;
+            const viewMat = this._scene.camera.viewMatrix;
+            const rtcViewMat = rtcViewMats[0];
+            const rtcViewNormalMat = rtcViewMats[1];
+            createRTCViewMat(viewMat, rtcCenter, rtcViewMat);
+            math.inverseMat4(rtcViewMat, rtcViewNormalMat);
+            math.transposeMat4(rtcViewNormalMat);
+        }
+        return rtcViewMats;
+    }
+
+    /**
+     * Get picking View RTC matrix for the given RTC coordinates.
+     */
+    getRTCPickViewMatrix(rtcCenter) {
+        const hash = rtcCenter.join();
+        let rtcPickViewMat = this._rtcPickViewMats[hash];
+        if (!rtcPickViewMat) {
+            rtcPickViewMat = this._getNewMat();
+            this._rtcPickViewMats[hash] = rtcPickViewMat;
+            const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
+            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
+        }
+        return rtcPickViewMat;
+    }
+
+    _getNewMat() {
+        let mat = this._matPool[this._matPoolNextFreeIndex];
+        if (!mat) {
+            mat = math.mat4();
+            this._matPool[this._matPoolNextFreeIndex] = mat;
+        }
+        this._matPoolNextFreeIndex++;
+        return mat;
     }
 }
 

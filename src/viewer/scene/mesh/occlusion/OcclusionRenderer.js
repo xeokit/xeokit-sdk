@@ -91,20 +91,25 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     }
 
     const camera = scene.camera;
-    const cameraState = camera._state;
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
+    const rtcCenter = mesh.rtcCenter;
+    if (rtcCenter) {
+        const rtcMatrices = frameCtx.getRTCViewMatrices(rtcCenter);
+        const rtcViewMat = rtcMatrices[0];
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMat);
+    } else {
+        gl.uniformMatrix4fv(this._uViewMatrix, false, camera.viewMatrix);
+    }
+
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
 
-    // Mesh state
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
 
     gl.uniform3fv(this._uOffset, mesh._state.offset);
 
-    // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);

@@ -19,7 +19,7 @@ const Renderer = function (scene, options) {
 
     options = options || {};
 
-    const frameCtx = new FrameContext();
+    const frameCtx = new FrameContext(scene);
     const canvas = scene.canvas.canvas;
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);

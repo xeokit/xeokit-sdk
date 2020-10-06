@@ -56,7 +56,7 @@ PickMeshRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
+PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     if (!this._program) {
         this._allocate(mesh);
     }
@@ -64,51 +64,55 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
     const gl = scene.canvas.gl;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
-    if (frame.lastProgramId !== this._program.id) {
-        frame.lastProgramId = this._program.id;
-        this._bindProgram(frame);
+    if (frameCtx.lastProgramId !== this._program.id) {
+        frameCtx.lastProgramId = this._program.id;
+        this._bindProgram(frameCtx);
     }
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
-        if (frame.backfaces !== backfaces) {
+        if (frameCtx.backfaces !== backfaces) {
             if (backfaces) {
                 gl.disable(gl.CULL_FACE);
             } else {
                 gl.enable(gl.CULL_FACE);
             }
-            frame.backfaces = backfaces;
+            frameCtx.backfaces = backfaces;
         }
         const frontface = materialState.frontface;
-        if (frame.frontface !== frontface) {
+        if (frameCtx.frontface !== frontface) {
             if (frontface) {
                 gl.frontFace(gl.CCW);
             } else {
                 gl.frontFace(gl.CW);
             }
-            frame.frontface = frontface;
+            frameCtx.frontface = frontface;
         }
         this._lastMaterialId = materialState.id;
     }
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
+    const rtcCenter = mesh.rtcCenter;
+    if (rtcCenter) {
+        const rtcPickViewMat = frameCtx.getRTCPickViewMatrix(rtcCenter);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMat);
+    } else {
+        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
+    }
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);
-    // Mesh state
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
     gl.uniform3fv(this._uOffset, mesh._state.offset);
-    // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
         if (this._aPosition) {
             this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-            frame.bindArray++;
+            frameCtx.bindArray++;
         }
         if (geometryState.indicesBuf) {
             geometryState.indicesBuf.bind();
-            frame.bindArray++;
+            frameCtx.bindArray++;
         }
         this._lastGeometryId = geometryState.id;
     }
@@ -121,7 +125,7 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
     gl.uniform4f(this._uPickColor, r / 255, g / 255, b / 255, a / 255);
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-        frame.drawElements++;
+        frameCtx.drawElements++;
     } else if (geometryState.positions) {
         gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
     }
@@ -157,12 +161,12 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._lastGeometryId = null;
 };
 
-PickMeshRenderer.prototype._bindProgram = function (frame) {
+PickMeshRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
     this._program.bind();
-    frame.useProgram++;
+    frameCtx.useProgram++;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;

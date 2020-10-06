@@ -56,19 +56,28 @@ EmphasisEdgesRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
+EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     if (!this._program) {
         this._allocate(mesh);
     }
     const scene = this._scene;
+    const camera = scene.camera;
     const gl = scene.canvas.gl;
     let materialState;
     const meshState = mesh._state;
     const geometry = mesh._geometry;
     const geometryState = geometry._state;
-    if (frame.lastProgramId !== this._program.id) {
-        frame.lastProgramId = this._program.id;
-        this._bindProgram(frame);
+    if (frameCtx.lastProgramId !== this._program.id) {
+        frameCtx.lastProgramId = this._program.id;
+        this._bindProgram(frameCtx);
+    }
+    const rtcCenter = mesh.rtcCenter;
+    if (rtcCenter) {
+        const rtcMatrices = frameCtx.getRTCViewMatrices(rtcCenter);
+        const rtcViewMat = rtcMatrices[0];
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMat);
+    } else {
+        gl.uniformMatrix4fv(this._uViewMatrix, false, camera.viewMatrix);
     }
     switch (mode) {
         case 0:
@@ -87,17 +96,17 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     }
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
-        if (frame.backfaces !== backfaces) {
+        if (frameCtx.backfaces !== backfaces) {
             if (backfaces) {
                 gl.disable(gl.CULL_FACE);
             } else {
                 gl.enable(gl.CULL_FACE);
             }
-            frame.backfaces = backfaces;
+            frameCtx.backfaces = backfaces;
         }
-        if (frame.lineWidth !== materialState.edgeWidth) {
+        if (frameCtx.lineWidth !== materialState.edgeWidth) {
             gl.lineWidth(materialState.edgeWidth);
-            frame.lineWidth = materialState.edgeWidth;
+            frameCtx.lineWidth = materialState.edgeWidth;
         }
         if (this._uEdgeColor) {
             const edgeColor = materialState.edgeColor;
@@ -130,14 +139,14 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
             }
             if (this._aPosition) {
                 this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
+                frameCtx.bindArray++;
             }
             indicesBuf.bind();
-            frame.bindArray++;
+            frameCtx.bindArray++;
             this._lastGeometryId = geometryState.id;
         }
         gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
-        frame.drawElements++;
+        frameCtx.drawElements++;
     }
 };
 
@@ -172,7 +181,7 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
     this._lastGeometryId = null;
 };
 
-EmphasisEdgesRenderer.prototype._bindProgram = function (frame) {
+EmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx) {
     const program = this._program;
     const scene = this._scene;
     const gl = scene.canvas.gl;
@@ -180,11 +189,10 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frame) {
     const camera = scene.camera;
     const cameraState = camera._state;
     program.bind();
-    frame.useProgram++;
+    frameCtx.useProgram++;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = sectionPlanesState.sectionPlanes;

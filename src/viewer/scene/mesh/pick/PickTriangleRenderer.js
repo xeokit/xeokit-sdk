@@ -54,7 +54,7 @@ PickTriangleRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
+PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     if (!this._program) {
         this._allocate(mesh);
     }
@@ -62,19 +62,22 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
-    const meshState = mesh._state;
     const geometry = mesh._geometry;
     const geometryState = mesh._geometry._state;
     const backfaces = materialState.backfaces;
     const frontface = materialState.frontface;
     const positionsBuf = geometry._getPickTrianglePositions();
     const pickColorsBuf = geometry._getPickTriangleColors();
-    const camera = scene.camera;
-    const cameraState = camera._state;
     this._program.bind();
-    frame.useProgram++;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
+    frameCtx.useProgram++;
+    const rtcCenter = mesh.rtcCenter;
+    if (rtcCenter) {
+        const rtcPickViewMat = frameCtx.getRTCPickViewMatrix(rtcCenter);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMat);
+    } else {
+        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
+    }
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -99,21 +102,21 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
             }
         }
     }
-    if (frame.backfaces !== backfaces) {
+    if (frameCtx.backfaces !== backfaces) {
         if (backfaces) {
             gl.disable(gl.CULL_FACE);
         } else {
             gl.enable(gl.CULL_FACE);
         }
-        frame.backfaces = backfaces;
+        frameCtx.backfaces = backfaces;
     }
-    if (frame.frontface !== frontface) {
+    if (frameCtx.frontface !== frontface) {
         if (frontface) {
             gl.frontFace(gl.CCW);
         } else {
             gl.frontFace(gl.CW);
         }
-        frame.frontface = frontface;
+        frameCtx.frontface = frontface;
     }
     this._lastMaterialId = materialState.id;
     gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);

@@ -232,7 +232,8 @@ class Mesh extends Component {
             pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
             pickHash: "",
-            offset: math.vec3()
+            offset: math.vec3(),
+            rtcCenter: null
         });
 
         this._drawRenderer = null;
@@ -270,6 +271,10 @@ class Mesh extends Component {
         this._localMatrixDirty = true;
         this._worldMatrixDirty = true;
         this._worldNormalMatrixDirty = true;
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
 
         if (cfg.matrix) {
             this.matrix = cfg.matrix;
@@ -373,7 +378,7 @@ class Mesh extends Component {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-           // this._shadowRenderer = ShadowRenderer.get(this);
+            // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
@@ -536,15 +541,28 @@ class Mesh extends Component {
     }
 
     _buildAABB(worldMatrix, aabb) {
+
         math.transformOBB3(worldMatrix, this._geometry.obb, obb);
         math.OBB3ToAABB3(obb, aabb);
+
         const offset = this._state.offset;
+
         aabb[0] += offset[0];
         aabb[1] += offset[1];
         aabb[2] += offset[2];
         aabb[3] += offset[0];
         aabb[4] += offset[1];
         aabb[5] += offset[2];
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            aabb[0] += rtcCenter[0];
+            aabb[1] += rtcCenter[1];
+            aabb[2] += rtcCenter[2];
+            aabb[3] += rtcCenter[0];
+            aabb[4] += rtcCenter[1];
+            aabb[5] += rtcCenter[2];
+        }
     }
 
     /**
@@ -927,6 +945,41 @@ class Mesh extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * Sets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        if (rtcCenter) {
+            if (!this._state.rtcCenter) {
+                this._state.rtcCenter = math.vec3();
+            }
+            this._state.rtcCenter.set(rtcCenter);
+            this._setAABBDirty();
+            this.scene._aabbDirty = true;
+        } else {
+            if (this._state.rtcCenter) {
+                this._state.rtcCenter = null;
+                this._setAABBDirty();
+                this.scene._aabbDirty = true;
+            }
+        }
+    }
+
+    /**
+     * 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this._state.rtcCenter;
     }
 
     /**
