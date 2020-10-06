@@ -65,7 +65,7 @@ class PerformanceMesh {
          *
          * @property aabb
          * @final
-         * @type {Number[]}
+         * @type {Float64Array}
          */
         this.aabb = math.AABB3();
 
