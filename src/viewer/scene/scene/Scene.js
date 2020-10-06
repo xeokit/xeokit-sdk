@@ -163,12 +163,12 @@ function getEntityIDMap(scene, entityIds) {
  *     var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
  *     var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
  *     var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
- *     var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
- *     var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
- *     var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
- *     var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
- *     var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
- *     var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+ *     var localPos = pickResult.localPos; // Float64Array containing the picked Local-space position on the triangle
+ *     var worldPos = pickResult.worldPos; // Float64Array containing the picked World-space position on the triangle
+ *     var viewPos = pickResult.viewPos; // Float64Array containing the picked View-space position on the triangle
+ *     var bary = pickResult.bary; // Float64Array containing the picked barycentric position within the triangle
+ *     var normal = pickResult.normal; // Float64Array containing the interpolated normal vector at the picked position on the triangle
+ *     var uv = pickResult.uv; // Float64Array containing the interpolated UV coordinates at the picked position on the triangle
  * }
  * ````
  *
@@ -1750,7 +1750,7 @@ class Scene extends Component {
     /**
      * Gets the World-space axis-aligned 3D boundary (AABB) of this Scene.
      *
-     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * When the Scene has no content, will be ````[-100,-100,-100,100,100,100]````.
      *
@@ -1862,19 +1862,19 @@ class Scene extends Component {
      *
      *         var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Entity's Geometry's indices array
      *         var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
-     *         var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
-     *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
-     *         var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
-     *         var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
-     *         var worldNormal = pickResult.worldNormal; // Float32Array containing the interpolated World-space normal vector at the picked position on the triangle
-     *         var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+     *         var localPos = pickResult.localPos; // Float64Array containing the picked Local-space position on the triangle
+     *         var worldPos = pickResult.worldPos; // Float64Array containing the picked World-space position on the triangle
+     *         var viewPos = pickResult.viewPos; // Float64Array containing the picked View-space position on the triangle
+     *         var bary = pickResult.bary; // Float64Array containing the picked barycentric position within the triangle
+     *         var worldNormal = pickResult.worldNormal; // Float64Array containing the interpolated World-space normal vector at the picked position on the triangle
+     *         var uv = pickResult.uv; // Float64Array containing the interpolated UV coordinates at the picked position on the triangle
      *
      *     } else if (pickResult.worldPos && pickResult.worldNormal) {
      *
      *         // Picked a point and normal on the entity surface
      *
-     *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
-     *         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
+     *         var worldPos = pickResult.worldPos; // Float64Array containing the picked World-space position on the Entity surface
+     *         var worldNormal = pickResult.worldNormal; // Float64Array containing the picked World-space normal vector on the Entity Surface
      *     }
      * }
      * ````
@@ -1899,21 +1899,21 @@ class Scene extends Component {
      *           var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
      *           var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Entity's Geometry's indices array
      *           var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
-     *           var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
-     *           var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
-     *           var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
-     *           var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
-     *           var worldNormal = pickResult.worldNormal; // Float32Array containing the interpolated World-space normal vector at the picked position on the triangle
-     *           var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
-     *           var origin = pickResult.origin; // Float32Array containing the World-space ray origin
-     *           var direction = pickResult.direction; // Float32Array containing the World-space ray direction
+     *           var localPos = pickResult.localPos; // Float64Array containing the picked Local-space position on the triangle
+     *           var worldPos = pickResult.worldPos; // Float64Array containing the picked World-space position on the triangle
+     *           var viewPos = pickResult.viewPos; // Float64Array containing the picked View-space position on the triangle
+     *           var bary = pickResult.bary; // Float64Array containing the picked barycentric position within the triangle
+     *           var worldNormal = pickResult.worldNormal; // Float64Array containing the interpolated World-space normal vector at the picked position on the triangle
+     *           var uv = pickResult.uv; // Float64Array containing the interpolated UV coordinates at the picked position on the triangle
+     *           var origin = pickResult.origin; // Float64Array containing the World-space ray origin
+     *           var direction = pickResult.direction; // Float64Array containing the World-space ray direction
      *
      *     } else if (pickResult.worldPos && pickResult.worldNormal) {
      *
      *         // Picked a point and normal on the entity surface
      *
-     *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
-     *         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
+     *         var worldPos = pickResult.worldPos; // Float64Array containing the picked World-space position on the Entity surface
+     *         var worldNormal = pickResult.worldNormal; // Float64Array containing the picked World-space normal vector on the Entity Surface
      *     }
      * }
      *  ````
@@ -1965,7 +1965,7 @@ class Scene extends Component {
 
         if (pickResult) {
             if (pickResult.entity.fire) {
-                pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doeosn't fire events...
+                pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doesn't fire events
             }
             return pickResult;
         }
