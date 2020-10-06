@@ -56,6 +56,10 @@
         transparent: true
     });
 
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
@@ -135,7 +139,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.on("tick", () => {
-        viewer.camera.orbitYaw(0.4);
+        //viewer.camera.orbitYaw(0.4);
     });
 
     //------------------------------------------------------------------------------------------------------------------
