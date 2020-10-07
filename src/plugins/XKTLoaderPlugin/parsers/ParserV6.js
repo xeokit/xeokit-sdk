@@ -7,6 +7,7 @@
 import {utils} from "../../../viewer/scene/utils.js";
 import * as p from "./lib/pako.js";
 import {math} from "../../../viewer/scene/math/math.js";
+import {geometryCompressionUtils} from "../../../viewer/scene/math/geometryCompressionUtils.js";
 
 let pako = window.pako || p;
 if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
@@ -118,6 +119,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     // Iterate over tiles
 
     const tileCenter = math.vec3();
+    const rtcAABB = math.AABB3();
 
     for (let tileIndex = 0; tileIndex < numTiles; tileIndex++) {
 
@@ -130,10 +132,19 @@ function load(viewer, options, inflatedData, performanceModel) {
         const tileDecodeMatrixIndex = tileIndex * 16;
         const tileAABBIndex = tileIndex * 6;
 
-        const tileDecodeMatrix = eachTileDecodeMatrix.subarray(tileDecodeMatrixIndex, tileDecodeMatrixIndex + 16);
+        //const tileDecodeMatrix = eachTileDecodeMatrix.subarray(tileDecodeMatrixIndex, tileDecodeMatrixIndex + 16);
         const tileAABB = eachTileAABB.subarray(tileAABBIndex, tileAABBIndex + 6);
 
         math.getAABB3Center(tileAABB, tileCenter);
+
+        rtcAABB[0] = tileAABB[0] - tileCenter[0];
+        rtcAABB[1] = tileAABB[1] - tileCenter[1];
+        rtcAABB[2] = tileAABB[2] - tileCenter[2];
+        rtcAABB[3] = tileAABB[3] - tileCenter[0];
+        rtcAABB[4] = tileAABB[4] - tileCenter[1];
+        rtcAABB[5] = tileAABB[5] - tileCenter[2];
+
+        const tileDecodeMatrix = geometryCompressionUtils.createPositionsDecodeMatrix(rtcAABB);
 
         const geometryCreated = {};
 
@@ -201,8 +212,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         id: meshId,
                         geometryId: geometryId,
                         matrix: entityMatrix,
-                        // color: color,
-                        // opacity: opacity
+                        color: color,
+                        opacity: opacity
                     }));
 
                     meshIds.push(meshId);
@@ -218,8 +229,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
                         positionsDecodeMatrix: tileDecodeMatrix,
-                        // color: color,
-                        // opacity: opacity
+                        color: color,
+                        opacity: opacity
                     }));
 
                     meshIds.push(meshId);
