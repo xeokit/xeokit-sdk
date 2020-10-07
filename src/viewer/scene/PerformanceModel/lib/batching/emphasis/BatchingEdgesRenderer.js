@@ -60,7 +60,9 @@ class BatchingEdgesRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
         gl.uniform1i(this._uRenderPass, renderPass);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        }
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }

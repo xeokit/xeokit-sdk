@@ -3,6 +3,8 @@ import {BatchingFillShaderSource} from "./BatchingFillShaderSource.js";
 import {RENDER_PASSES} from "../../renderPasses.js";
 import {createRTCViewMat} from "../../../../math/rtcCoords.js";
 
+const defaultColor = new Float32Array([1, 1, 1]);
+
 /**
  * @private
  */
@@ -44,7 +46,9 @@ class BatchingFillRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniformMatrix4fv(this._uModelMatrix, false, model.worldMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        }
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }

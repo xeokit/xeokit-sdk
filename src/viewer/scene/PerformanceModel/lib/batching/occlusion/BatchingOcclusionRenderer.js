@@ -40,7 +40,9 @@ class BatchingOcclusionRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        }
         if (this._aColor) {
             this._aColor.bindArrayBuffer(state.colorsBuf);
         }

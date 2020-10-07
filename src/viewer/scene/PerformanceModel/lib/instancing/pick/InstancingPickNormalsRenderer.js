@@ -80,8 +80,10 @@ class InstancingPickNormalsRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
 
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
-        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+        }
 
         state.indicesBuf.bind();
 
@@ -98,7 +100,10 @@ class InstancingPickNormalsRenderer {
         if (this._aFlags2) { // Won't be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
-        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
+
+        if (this._aOffset) {
+            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
+        }
     }
 
     _allocate() {

@@ -62,8 +62,10 @@ class InstancingOcclusionRenderer {
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
-        this._aOffset.bindArrayBuffer(state.offsetsBuf);
-        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
+        }
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
@@ -89,7 +91,9 @@ class InstancingOcclusionRenderer {
         if (this._aFlags2) { // Won't be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
-        instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
+        if (this._aOffset) {
+            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
+        }
     }
 
     _allocate() {
