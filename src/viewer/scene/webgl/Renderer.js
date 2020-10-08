@@ -862,6 +862,10 @@ const Renderer = function (scene, options) {
 
             pickResult.entity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
+            if (!pickResult.entity) {
+                return null;
+            }
+
             return pickResult;
         };
     })();
