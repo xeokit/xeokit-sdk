@@ -12,6 +12,7 @@ import {CameraUpdater} from "./lib/CameraUpdater.js";
 import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
 import {utils} from "../utils.js";
+import {math} from "../math/math.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -661,7 +662,7 @@ class CameraControl extends Component {
         // Current runtime state of the CameraControl
 
         this._states = {
-            pointerCanvasPos: new Float32Array(2),
+            pointerCanvasPos: math.vec2(),
             mouseover: false,
             inputFromMouse: false, // TODO: Is this needed?
             followPointerDirty: true,
@@ -671,7 +672,7 @@ class CameraControl extends Component {
             mouseDownCursorY: 0,
             touchStartTime: null,
             activeTouches: [],
-            tapStartPos: new Float32Array(2),
+            tapStartPos: math.vec2(),
             tapStartTime: -1,
             lastTapTime: -1
         };

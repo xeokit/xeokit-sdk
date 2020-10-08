@@ -12,14 +12,14 @@ class TouchPanRotateAndDollyHandler {
         const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
 
-        const tapStartPos = new Float32Array(2);
+        const tapStartPos = math.vec2();
         let tapStartTime = -1;
 
         const lastTouches = [];
         let numTouches = 0;
 
-        const touch0Vec = new Float32Array(2);
-        const touch1Vec = new Float32Array(2);
+        const touch0Vec = math.vec2();
+        const touch1Vec = math.vec2();
 
         const canvas = this._scene.canvas.canvas;
 
@@ -80,7 +80,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             while (lastTouches.length < touches.length) {
-                lastTouches.push(new Float32Array(2));
+                lastTouches.push(math.vec2());
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
@@ -165,7 +165,7 @@ class TouchPanRotateAndDollyHandler {
                 const lastMiddleTouch = math.geometricMeanVec2(lastTouches[0], lastTouches[1]);
                 const currentMiddleTouch = math.geometricMeanVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
 
-                const touchDelta = new Float32Array(2);
+                const touchDelta = math.vec2();
 
                 math.subVec2(lastMiddleTouch, currentMiddleTouch, touchDelta);
 
