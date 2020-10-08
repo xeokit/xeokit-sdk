@@ -5,8 +5,8 @@ import {Label} from "../lib/html/Label.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
 
-var originVec = new Float32Array(3);
-var targetVec = new Float32Array(3);
+var originVec = math.vec3();
+var targetVec = math.vec3();
 
 /**
  * @desc Measures the angle indicated by three 3D points.
@@ -39,9 +39,9 @@ class AngleMeasurement extends Component {
         this._cornerMarker = new Marker(scene, cfg.corner);
         this._targetMarker = new Marker(scene, cfg.target);
 
-        this._originWorld = new Float32Array(3);
-        this._cornerWorld = new Float32Array(3);
-        this._targetWorld = new Float32Array(3);
+        this._originWorld = math.vec3();
+        this._cornerWorld = math.vec3();
+        this._targetWorld = math.vec3();
 
         this._wp = new Float32Array(12);
         this._vp = new Float32Array(12);
