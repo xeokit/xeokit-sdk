@@ -11,8 +11,8 @@ import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
 
-const zeroVec = new Float32Array([0, 0, 1]);
-const quat = new Float32Array(4);
+const zeroVec = math.vec3([0, 0, 1]);
+const quat = math.vec4();
 
 /**
  * Controls a {@link SectionPlane} with mouse and touch input.
@@ -907,7 +907,7 @@ class Control {
         }
 
         const getClickCoordsWithinElement = (function () {
-            const canvasPos = new Float32Array(2);
+            const canvasPos = math.vec2(2);
             return function (event) {
                 if (!event) {
                     event = window.event;
