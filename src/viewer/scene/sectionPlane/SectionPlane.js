@@ -77,6 +77,7 @@ class SectionPlane extends Component {
         });
 
         this.active = cfg.active;
+        this.rtcCenter = cfg.rtcCenter;
         this.pos = cfg.pos;
         this.dir = cfg.dir;
 
@@ -111,6 +112,31 @@ class SectionPlane extends Component {
      */
     get active() {
         return this._state.active;
+    }
+
+    /**
+     * Sets the optional 3D relative-to-center (RTC) coordinate origin for {@link SectionPlane#pos}.
+     *
+     * When this has a value, it indicates that {@link SectionPlane#pos} is in RTC coordinates.
+     *
+     * @type {Float64Array|Null}
+     */
+    set rtcCenter(rtcCenter) {
+        this._rtcCenter = rtcCenter;
+        if (this._occludable) {
+            this._renderer.markerWorldPosUpdated(this);
+        }
+        this._viewPosDirty = true;
+        this.fire("rtcCenter", this._rtcCenter);
+    }
+
+    /**
+     * Gets the optional 3D relative-to-center (RTC) coordinate origin for {@link SectionPlane#pos}.
+     *
+     * @type {Float64Array|Null}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
     }
 
     /**

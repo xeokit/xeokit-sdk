@@ -80,7 +80,7 @@
     //-----------------------------------------------------------
 
     //const OFFSET = 10000000.0;
-    const OFFSET = 40.0;
+    const OFFSET = 150.0;
 
     const rtcCenters = [
         [0, 0, 0],
@@ -161,7 +161,7 @@
             zSize: 1
         }));
 
-        new Node(viewer.scene, {
+       const model = new Node(viewer.scene, {
             id: modelId,
             isModel: true, // <--------------------- Node represents a model
             rotation: [0, 50, 0],
@@ -232,6 +232,8 @@
                 })
             ]
         });
+
+        model.edges = true;
     }
 
 </script>

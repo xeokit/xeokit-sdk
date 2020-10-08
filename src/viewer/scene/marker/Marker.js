@@ -124,6 +124,7 @@ class Marker extends Component {
      * @param {Entity} [cfg.entity] Entity to associate this Marker with. When the Marker has an Entity, then {@link Marker#visible} will always be ````false```` if {@link Entity#visible} is false.
      * @param {Boolean} [cfg.occludable=false] Indicates whether or not this Marker is hidden (ie. {@link Marker#visible} is ````false```` whenever occluded by {@link Entity}s in the {@link Scene}.
      * @param {Number[]} [cfg.worldPos=[0,0,0]] World-space 3D Marker position.
+     * @param {Number[]} [cfg.rtcCenter] When ````worldPos```` is in relative-to-center (RTC) coordinates, this is the origin of the RTC coordinate system.
      */
     constructor(owner, cfg) {
 
@@ -131,9 +132,10 @@ class Marker extends Component {
 
         this._entity = null;
         this._visible = null;
-        this._worldPos = new Float32Array(3);
-        this._viewPos = new Float32Array(3);
-        this._canvasPos = new Float32Array(2);
+        this._rtcCenter = cfg.rtcCenter;
+        this._worldPos = math.vec3();
+        this._viewPos = math.vec3();
+        this._canvasPos = math.vec2();
         this._occludable = false;
 
         this._onCameraViewMatrix = this.scene.camera.on("matrix", () => {
@@ -258,6 +260,33 @@ class Marker extends Component {
      */
     get occludable() {
         return this._occludable;
+    }
+
+    /**
+     * Sets the 3D origin of the Mesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array|Null}
+     */
+    set rtcCenter(rtcCenter) {
+        this._rtcCenter = rtcCenter;
+        if (this._occludable) {
+            this._renderer.markerWorldPosUpdated(this);
+        }
+        this._viewPosDirty = true;
+        this.fire("rtcCenter", this._rtcCenter);
+    }
+
+    /**
+     * Gets the 3D origin of the Mesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array|Null}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
     }
 
     /**
