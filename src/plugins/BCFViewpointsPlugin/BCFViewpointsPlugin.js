@@ -552,9 +552,9 @@ class BCFViewpointsPlugin extends Plugin {
                         scene.setObjectsOpacity(uuids, alpha);
                     }
                     let colorArray = [
-                        parseInt(color.substring(0, 2), 16),
-                        parseInt(color.substring(2, 4), 16),
-                        parseInt(color.substring(4, 6), 16)
+                        parseInt(color.substring(0, 2), 16) / 256,
+                        parseInt(color.substring(2, 4), 16) / 256,
+                        parseInt(color.substring(4, 6), 16) / 256
                     ]
                     scene.setObjectsColorized(uuids, colorArray);
                 })
