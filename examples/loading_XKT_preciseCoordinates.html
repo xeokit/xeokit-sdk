@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Loading a Model from the File System</title>
+    <title>XKTLoaderPlugin - Double Precision Coordinates</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -18,23 +18,20 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>XKTLoaderPlugin - Loading an IFC Model from the File System</h1><br>
+    <h1>XKTLoaderPlugin - Double Precision Coordinate Support</h1><br>
+    <p>Loading two IFC models spaced far apart from each other.</p><br>
     <ul>
+        <li><a href="javascript:jumpToBuilding1()">Jump to Model #1</a></li>
+        <li><a href="javascript:jumpToBuilding2()">Jump to Model #2</a></li>
+    </ul>
+    <br>
+    <ul>
+        <li>Model #1 center is [1842022, 10, -5173301]</li>
+        <li>Model #2 center is [4,3,8]</li>
         <li>
-            <div id="time">Loading JavaScript modules...</div>
+            Model #1 provided by <a target="_other" href="https://bimdata.io">BIMData.io</a>
         </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit XKT model from the file system
-        </li>
-        <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
-        </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
-        </li>
+    </ul>
     </ul>
 </div>
 </body>
@@ -46,6 +43,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -60,27 +58,63 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
+    viewer.camera.orbitPitch(20);
+    viewer.camera.orbitYaw(100);
+
+    viewer.cameraControl.followPointer = true;
+
+    const scene = viewer.scene;
+    const sao = scene.sao;
+    const camera = scene.camera;
+
+    camera.perspective.near = 0.1;
+    camera.perspective.far = 5000.0;
+
+    // sao.enabled = true;
+    // sao.intensity = 0.25;
+    // sao.bias = 0.5;
+    // sao.scale = 1000.0;
+    // sao.minResolution = 0.0;
+    // sao.kernelRadius = 100;
+
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
     //----------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    var t0 = performance.now();
+    const model1 = xktLoader.load({
+        id: "myModel1",
+        src: "./models/xkt/MAP/MAP.xkt",
+        //   metaModelSrc: "./metaModels/MAP/metaModel.json",
+        edges: true,
+        saoEnabled: true
+    });
 
-    document.getElementById("time").innerHTML = "Loading model...";
-
-    const model = xktLoader.load({
-        id: "myModel",
-        src: "./models/xkt/preciseCoords/duplex/duplex.xkt",
+    const model2 = xktLoader.load({
+        id: "myModel2",
+        src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json",
-        edges: true
+        edges: true,
+        saoEnabled: true
     });
 
-    model.on("loaded", () => {
-        var t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) /1000.0 + " seconds<br>Objects: " + model.numEntities;
+    model1.on("loaded", () => {
+
+        model2.on("loaded", () => {
+
+            viewer.cameraFlight.jumpTo(model1);
+        });
     });
+
+    window.jumpToBuilding1 = function () {
+        viewer.cameraFlight.jumpTo(model1);
+    };
+
+    window.jumpToBuilding2 = function () {
+        viewer.cameraFlight.jumpTo(model2);
+    };
+
 
 </script>
 </html>
