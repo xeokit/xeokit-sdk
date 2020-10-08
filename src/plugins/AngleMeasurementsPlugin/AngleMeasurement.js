@@ -43,9 +43,9 @@ class AngleMeasurement extends Component {
         this._cornerWorld = math.vec3();
         this._targetWorld = math.vec3();
 
-        this._wp = new Float32Array(12);
-        this._vp = new Float32Array(12);
-        this._pp = new Float32Array(12);
+        this._wp = new Float64Array(12);
+        this._vp = new Float64Array(12);
+        this._pp = new Float64Array(12);
         this._cp = new Int16Array(6);
 
         this._originDot = new Dot(this._container, {});
