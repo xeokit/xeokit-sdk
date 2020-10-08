@@ -32,8 +32,7 @@ function extract(elements) {
         eachEntityPrimitiveInstancesPortion: elements[12],
         eachEntityMatricesPortion: elements[13],
         eachTileAABB: elements[14],
-        eachTileDecodeMatrix: elements[15],
-        eachTileEntitiesPortion: elements[16]
+        eachTileEntitiesPortion: elements[15]
     };
 }
 
@@ -55,7 +54,6 @@ function inflate(deflatedData) {
         eachEntityPrimitiveInstancesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityPrimitiveInstancesPortion).buffer),
         eachEntityMatricesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityMatricesPortion).buffer),
         eachTileAABB: new Float64Array(pako.inflate(deflatedData.eachTileAABB).buffer),
-        eachTileDecodeMatrix: new Float32Array(pako.inflate(deflatedData.eachTileDecodeMatrix).buffer),
         eachTileEntitiesPortion: new Uint32Array(pako.inflate(deflatedData.eachTileEntitiesPortion).buffer),
     };
 }
@@ -93,7 +91,6 @@ function load(viewer, options, inflatedData, performanceModel) {
     const eachEntityMatricesPortion = inflatedData.eachEntityMatricesPortion;
 
     const eachTileAABB = inflatedData.eachTileAABB;
-    const eachTileDecodeMatrix = inflatedData.eachTileDecodeMatrix;
     const eachTileEntitiesPortion = inflatedData.eachTileEntitiesPortion;
 
     const numPrimitives = eachPrimitivePositionsAndNormalsPortion.length;
@@ -124,15 +121,13 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let tileIndex = 0; tileIndex < numTiles; tileIndex++) {
 
         const lastTileIndex = (numTiles - 1);
+
         const atLastTile = (tileIndex === lastTileIndex);
 
         const firstTileEntityIndex = eachTileEntitiesPortion [tileIndex];
         const lastTileEntityIndex = atLastTile ? numEntities : eachTileEntitiesPortion[tileIndex + 1];
 
-        const tileDecodeMatrixIndex = tileIndex * 16;
         const tileAABBIndex = tileIndex * 6;
-
-        //const tileDecodeMatrix = eachTileDecodeMatrix.subarray(tileDecodeMatrixIndex, tileDecodeMatrixIndex + 16);
         const tileAABB = eachTileAABB.subarray(tileAABBIndex, tileAABBIndex + 6);
 
         math.getAABB3Center(tileAABB, tileCenter);
