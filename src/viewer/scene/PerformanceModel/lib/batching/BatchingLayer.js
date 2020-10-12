@@ -102,6 +102,12 @@ class BatchingLayer {
         if (cfg.rtcCenter) {
             this._state.rtcCenter = math.vec3(cfg.rtcCenter);
         }
+
+        /**
+         * The axis-aligned World-space boundary of this BatchingLayer's positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -234,6 +240,8 @@ class BatchingLayer {
             worldAABB[4] += rtcCenter[1];
             worldAABB[5] += rtcCenter[2];
         }
+
+        math.expandAABB3(this.aabb, worldAABB);
 
         if (normals) {
 

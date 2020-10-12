@@ -12,7 +12,7 @@ import {utils} from "../../../viewer/scene/utils.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
-var tempMat4 = math.mat4();
+const tempMat4 = math.mat4();
 
 const defaultScale = math.vec3([1, 1, 1]);
 const defaultPosition = math.vec3([0, 0, 0]);

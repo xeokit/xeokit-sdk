@@ -172,6 +172,12 @@ class InstancingLayer {
         }
 
         this._finalized = false;
+
+        /**
+         * The axis-aligned World-space boundary of this BatchingLayer's positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -332,6 +338,8 @@ class InstancingLayer {
             worldAABB[4] += rtcCenter[1];
             worldAABB[5] += rtcCenter[2];
         }
+
+        math.expandAABB3(this.aabb, worldAABB);
 
         this._state.numInstances++;
 
