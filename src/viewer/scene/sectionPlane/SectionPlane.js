@@ -181,6 +181,7 @@ class SectionPlane extends Component {
         dir[0] *= -1.0;
         dir[1] *= -1.0;
         dir[2] *= -1.0;
+        this.fire("dir", this._state.dir);
         this.glRedraw();
     }
 

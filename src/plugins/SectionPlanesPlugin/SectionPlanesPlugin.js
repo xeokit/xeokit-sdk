@@ -254,7 +254,7 @@ class SectionPlanesPlugin extends Plugin {
      * Inverts all SectionPlanes, including those that were not created with SectionPlanesPlugin.
      */
     flipSectionPlanes() {
-        var sectionPlanes = this.viewer.scene.sectionPlanes;
+        const sectionPlanes = this.viewer.scene.sectionPlanes;
         for (let id in sectionPlanes) {
             const sectionPlane = sectionPlanes[id];
             sectionPlane.flipDir();

@@ -2,7 +2,6 @@ import {math} from "../../viewer/scene/math/math.js";
 
 import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
 import {buildTorusGeometry} from "../../viewer/scene/geometry/builders/buildTorusGeometry.js";
-import {buildBoxGeometry} from "../../viewer/scene/geometry/builders/buildBoxGeometry.js";
 
 import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
@@ -50,14 +49,28 @@ class Control {
     /**
      * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
      * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
+     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
      * @private
      */
     _setSectionPlane(sectionPlane) {
-        this._sectionPlane = sectionPlane;
+        if (this._sectionPlane) {
+            this._sectionPlane.off(this._onSectionPlanePos);
+            this._sectionPlane.off(this._onSectionPlaneDir);
+            this._onSectionPlanePos = null;
+            this._onSectionPlaneDir = null;
+            this._sectionPlane = null;
+        }
         if (sectionPlane) {
             this.id = sectionPlane.id;
             this._setPos(sectionPlane.pos);
             this._setDir(sectionPlane.dir);
+            this._sectionPlane = sectionPlane;
+            this._onSectionPlanePos = sectionPlane.on("pos", () => {
+                this._setPos(this._sectionPlane.pos);
+            });
+            this._onSectionPlaneDir = sectionPlane.on("dir", () => {
+                this._setDir(this._sectionPlane.dir);
+            });
         }
     }
 
@@ -1266,6 +1279,7 @@ class Control {
     }
 
     _destroyNodes() {
+        this._setSectionPlane(null);
         this._rootNode.destroy();
         this._displayMeshes = {};
         this._affordanceMeshes = {};
