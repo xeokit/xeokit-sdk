@@ -1,5 +1,6 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
+import {math} from "../math/math.js";
 
 /**
  *  @desc An arbitrarily-aligned World-space clipping plane.
@@ -73,11 +74,11 @@ class SectionPlane extends Component {
         this._state = new RenderState({
             active: true,
             pos: new Float32Array(3),
-            dir: new Float32Array(3)
+            dir: new Float32Array(3),
+            distToWorldOrigin: 0
         });
 
         this.active = cfg.active;
-        this.rtcCenter = cfg.rtcCenter;
         this.pos = cfg.pos;
         this.dir = cfg.dir;
 
@@ -115,31 +116,6 @@ class SectionPlane extends Component {
     }
 
     /**
-     * Sets the optional 3D relative-to-center (RTC) coordinate origin for {@link SectionPlane#pos}.
-     *
-     * When this has a value, it indicates that {@link SectionPlane#pos} is in RTC coordinates.
-     *
-     * @type {Float64Array|Null}
-     */
-    set rtcCenter(rtcCenter) {
-        this._rtcCenter = rtcCenter;
-        if (this._occludable) {
-            this._renderer.markerWorldPosUpdated(this);
-        }
-        this._viewPosDirty = true;
-        this.fire("rtcCenter", this._rtcCenter);
-    }
-
-    /**
-     * Gets the optional 3D relative-to-center (RTC) coordinate origin for {@link SectionPlane#pos}.
-     *
-     * @type {Float64Array|Null}
-     */
-    get rtcCenter() {
-        return this._rtcCenter;
-    }
-
-    /**
      * Sets the World-space position of this SectionPlane's plane.
      *
      * Default value is ````[0, 0, 0]````.
@@ -148,6 +124,7 @@ class SectionPlane extends Component {
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
+        this._state.distToWorldOrigin = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#pos} property changes.
@@ -178,6 +155,7 @@ class SectionPlane extends Component {
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
+        this._state.distToWorldOrigin = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#dir} property changes.
@@ -197,6 +175,18 @@ class SectionPlane extends Component {
      */
     get dir() {
         return this._state.dir;
+    }
+
+    /**
+     * Gets this SectionPlane's distance to the origin of the World-space coordinate system.
+     *
+     * This is the dot product of {@link SectionPlane#pos} and {@link SectionPlane#dir} and is automatically re-calculated
+     * each time either of two properties are updated.
+     *
+     * @returns {Number}
+     */
+    get distToWorldOrigin() {
+        return this._state.distToWorldOrigin;
     }
 
     /**
