@@ -206,7 +206,7 @@
 
     const dollyFolder = gui.addFolder('Dolly');
     dollyFolder.add(cameraControlParams, 'keyboardDollyRate', 0, 30);
-    dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 100);
     dollyFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
     dollyFolder.add(cameraControlParams, 'dollyProximityThreshold', 0, 150);
     dollyFolder.add(cameraControlParams, 'dollyMinSpeed', 0.01, 1.0);
