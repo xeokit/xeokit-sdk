@@ -404,7 +404,9 @@ class BCFViewpointsPlugin extends Plugin {
                 return coloring;
             }, {});
 
-        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
+        const coloringArray = Object.entries(coloring).map(([color, components]) => {
+            return {color, components}
+        });
 
         bcfViewpoint.components.coloring = coloringArray;
 
@@ -510,12 +512,26 @@ class BCFViewpointsPlugin extends Plugin {
                 if (!bcfViewpoint.components.visibility.default_visibility) {
                     scene.setObjectsVisible(scene.objectIds, false);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), true));
+                        bcfViewpoint.components.visibility.exceptions.forEach((x) => {
+                            const entity = viewer.scene.objects[x.ifc_guid];
+                            if (entity) {
+                                entity.visible = true;
+                            } else {
+                                scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), true);
+                            }
+                        });
                     }
                 } else {
                     scene.setObjectsVisible(scene.objectIds, true);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), false));
+                        bcfViewpoint.components.visibility.exceptions.forEach((x) => {
+                            const entity = viewer.scene.objects[x.ifc_guid];
+                            if (entity) {
+                                entity.visible = false;
+                            } else {
+                                scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), false);
+                            }
+                        });
                     }
                 }
 
