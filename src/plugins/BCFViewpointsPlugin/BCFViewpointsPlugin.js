@@ -510,12 +510,12 @@ class BCFViewpointsPlugin extends Plugin {
                 if (!bcfViewpoint.components.visibility.default_visibility) {
                     scene.setObjectsVisible(scene.objectIds, false);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
+                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), true));
                     }
                 } else {
                     scene.setObjectsVisible(scene.objectIds, true);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
+                        bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), false));
                     }
                 }
 
@@ -555,7 +555,7 @@ class BCFViewpointsPlugin extends Plugin {
                         parseInt(color.substring(0, 2), 16) / 256,
                         parseInt(color.substring(2, 4), 16) / 256,
                         parseInt(color.substring(4, 6), 16) / 256
-                    ]
+                    ];
                     scene.setObjectsColorized(uuids, colorArray);
                 })
             }
