@@ -41,6 +41,13 @@ class FrameContext {
         this.lastProgramId = null;
 
         /**
+         * The last RTC center that was used during the current frame.
+         * @property lastRTCCenter
+         * @type {Number[]}
+         */
+        this.lastRTCCenter = null;
+
+        /**
          * Whether SAO is currently enabled during the current frame.
          * @property withSAO
          * @default false
@@ -182,7 +189,7 @@ class FrameContext {
     }
 
     /**
-     * Get View and View-Normal RTC matrices for the given RTC coordinates.
+     * Get View and View-Normal RTC matrices for the given RTC center.
      */
     getRTCViewMatrices(rtcCenter) {
         const hash = rtcCenter.join();
@@ -204,7 +211,7 @@ class FrameContext {
     }
 
     /**
-     * Get picking View RTC matrix for the given RTC coordinates.
+     * Get picking View RTC matrix for the given RTC center.
      */
     getRTCPickViewMatrix(rtcCenter) {
         const hash = rtcCenter.join();
