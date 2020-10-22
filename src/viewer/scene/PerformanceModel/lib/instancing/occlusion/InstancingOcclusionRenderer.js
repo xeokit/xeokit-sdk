@@ -1,6 +1,9 @@
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingOcclusionShaderSource} from "./InstancingOcclusionShaderSource.js";
-import {createRTCViewMat} from "../../../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+import {math} from "../../../../math/math.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -22,13 +25,14 @@ class InstancingOcclusionRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, instancingLayer) {
+    drawLayer( frameCtx, instancingLayer) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
+        const rtcCenter = instancingLayer._state.rtcCenter;
 
         if (!this._program) {
             this._allocate();
@@ -37,15 +41,56 @@ class InstancingOcclusionRenderer {
             }
         }
 
+        let loadSectionPlanes = false;
+
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
+            loadSectionPlanes = true;
+        }
+
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
+
+        if (rtcCenter) {
+            if (frameCtx.lastRTCCenter) {
+                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
+                    frameCtx.lastRTCCenter = rtcCenter;
+                    loadSectionPlanes = true;
+                }
+            } else {
+                frameCtx.lastRTCCenter = rtcCenter;
+                loadSectionPlanes = true;
+            }
+        } else if (frameCtx.lastRTCCenter) {
+            frameCtx.lastRTCCenter = null;
+            loadSectionPlanes = true;
+        }
+
+        if (loadSectionPlanes) {
+            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+            if (numSectionPlanes > 0) {
+                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+                const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
+                const renderFlags = model.renderFlags;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (rtcCenter) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    }
+                }
+            }
         }
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
-
-        const viewMat = (instancingLayer._state.rtcCenter) ? createRTCViewMat(model.viewMatrix, instancingLayer._state.rtcCenter) : model.viewMatrix;
-        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -133,35 +178,9 @@ class InstancingOcclusionRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
-        const sectionPlanesState = scene._sectionPlanesState;
         program.bind();
         const camera = scene.camera;
-        const cameraState = camera._state;
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-        if (sectionPlanesState.sectionPlanes.length > 0) {
-            const clips = scene._sectionPlanesState.sectionPlanes;
-            let sectionPlaneUniforms;
-            let uSectionPlaneActive;
-            let sectionPlane;
-            let uSectionPlanePos;
-            let uSectionPlaneDir;
-            for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-                sectionPlaneUniforms = this._uSectionPlanes[i];
-                uSectionPlaneActive = sectionPlaneUniforms.active;
-                sectionPlane = clips[i];
-                if (uSectionPlaneActive) {
-                    gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-                }
-                uSectionPlanePos = sectionPlaneUniforms.pos;
-                if (uSectionPlanePos) {
-                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                }
-                uSectionPlaneDir = sectionPlaneUniforms.dir;
-                if (uSectionPlaneDir) {
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                }
-            }
-        }
     }
 
     webglContextRestored() {
