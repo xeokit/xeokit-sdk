@@ -75,7 +75,7 @@ class SectionPlane extends Component {
             active: true,
             pos: new Float32Array(3),
             dir: new Float32Array(3),
-            distToWorldOrigin: 0
+            dist: 0
         });
 
         this.active = cfg.active;
@@ -124,7 +124,7 @@ class SectionPlane extends Component {
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
-        this._state.distToWorldOrigin = (-math.dotVec3(this._state.pos, this._state.dir));
+        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#pos} property changes.
@@ -155,7 +155,7 @@ class SectionPlane extends Component {
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
-        this._state.distToWorldOrigin = (-math.dotVec3(this._state.pos, this._state.dir));
+        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#dir} property changes.
@@ -185,8 +185,8 @@ class SectionPlane extends Component {
      *
      * @returns {Number}
      */
-    get distToWorldOrigin() {
-        return this._state.distToWorldOrigin;
+    get dist() {
+        return this._state.dist;
     }
 
     /**
