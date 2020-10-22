@@ -54,17 +54,9 @@ class BatchingDrawRenderer {
             loadSectionPlanes = true;
         }
 
-        if (rtcCenter) {
-            const viewMatrix = createRTCViewMat(model.viewMatrix, rtcCenter);
-            gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
-            math.inverseMat4(viewMatrix, viewNormalMatrix);
-            math.transposeMat4(viewNormalMatrix);
-            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
 
-        } else {
-            gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
-            gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
-        }
+        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
 
         if (rtcCenter) {
             if (frameCtx.lastRTCCenter) {
