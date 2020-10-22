@@ -92,12 +92,20 @@ class Drawable {
     }
 
     /**
-     * Called by xeokit when about to render this Drawable, to get flags indicating what rendering effects to apply for it.
+     * Called by xeokit when about to render this Drawable, to generate {@link Drawable#renderFlags}.
      *
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
      * @abstract
      */
-    getRenderFlags(renderFlags) {
+    rebuildRenderFlags(renderFlags) {
+    }
+
+    /**
+     * Called by xeokit when about to render this Drawable, to get flags indicating what rendering effects to apply for it.
+     * @type {RenderFlags}
+     * @abstract
+     */
+    get renderFlags() {
+
     }
 
     /**
