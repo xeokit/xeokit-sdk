@@ -1,6 +1,6 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {math} from "../../viewer/scene/math/math.js";
-import {Frustum, frustumIntersectsAABB3, setFrustum} from "./Frustum.js";
+import {Frustum, frustumIntersectsAABB3, setFrustum} from "../../viewer/scene/math/Frustum.js";
 import {getObjectCullStates} from "../lib/culling/ObjectCullStates.js";
 
 const MAX_KD_TREE_DEPTH = 8; // Increase if greater precision needed
