@@ -126,36 +126,38 @@ const math = {
     },
 
     /**
+     * Converts a list of double-precision values to a list of high-part floats and a list of low-part floats.
+     * @param doubleVals
+     * @param floatValsHigh
+     * @param floatValsLow
+     */
+    doublesToFloats(doubleVals, floatValsHigh, floatValsLow) {
+        const floatPair = new Float32Array(2);
+        for (let i = 0, len = doubleVals.length; i < len; i++) {
+            math.splitDouble(doubleVals[i], floatPair);
+            floatValsHigh[i] = floatPair[0];
+            floatValsLow[i] = floatPair[1];
+        }
+    },
+
+    /**
+     * Splits a double value into two floats.
+     * @param value
+     * @param floatPair
+     */
+    splitDouble(value, floatPair) {
+        const hi = Float32Array.from([value])[0];
+        const low = value - hi;
+        floatPair[0] = hi;
+        floatPair[1] = low;
+    },
+
+    /**
      * Returns a new UUID.
      * @method createUUID
      * @static
      * @return string The new UUID
      */
-    //createUUID: function () {
-    //    // http://www.broofa.com/Tools/Math.uuid.htm
-    //    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-    //    var uuid = new Array(36);
-    //    var rnd = 0;
-    //    var r;
-    //    return function () {
-    //        for (var i = 0; i < 36; i++) {
-    //            if (i === 8 || i === 13 || i === 18 || i === 23) {
-    //                uuid[i] = '-';
-    //            } else if (i === 14) {
-    //                uuid[i] = '4';
-    //            } else {
-    //                if (rnd <= 0x02) {
-    //                    rnd = 0x2000000 + ( Math.random() * 0x1000000 ) | 0;
-    //                }
-    //                r = rnd & 0xf;
-    //                rnd = rnd >> 4;
-    //                uuid[i] = chars[( i === 19 ) ? ( r & 0x3 ) | 0x8 : r];
-    //            }
-    //        }
-    //        return uuid.join('');
-    //    };
-    //}(),
-    //
     createUUID: ((() => {
         const self = {};
         const lut = [];
@@ -3944,6 +3946,49 @@ const math = {
 
     point3AABB3Intersect(aabb, p) {
         return aabb[0] > p[0] || aabb[3] < p[0] || aabb[1] > p[1] || aabb[4] < p[1] || aabb[2] > p[2] || aabb[5] < p[2];
+    },
+
+    /**
+     * 
+     * @param dir
+     * @param constant
+     * @param aabb
+     * @returns {number}
+     */
+    planeAABB3Intersect(dir, constant, aabb) {
+        let min, max;
+        if (dir[0] > 0) {
+            min = dir[0] * aabb[0];
+            max = dir[0] * aabb[3];
+        } else {
+            min = dir[0] * aabb[3];
+            max = dir[0] * aabb[0];
+        }
+        if (dir[1] > 0) {
+            min += dir[1] * aabb[1];
+            max += dir[1] * aabb[4];
+        } else {
+            min += dir[1] * aabb[4];
+            max += dir[1] * aabb[1];
+        }
+        if (dir[2] > 0) {
+            min += dir[2] * aabb[2];
+            max += dir[2] * aabb[5];
+        } else {
+            min += dir[2] * aabb[5];
+            max += dir[2] * aabb[2];
+        }
+        const outside = (min <= -constant) && (max <= -constant);
+        if (outside) {
+            return -1;
+        }
+
+        const inside = (min >= -constant) && (max >= -constant);
+        if (inside) {
+            return 1;
+        }
+
+        return 0;
     },
 
     /**
