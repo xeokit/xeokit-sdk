@@ -1,6 +1,9 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingPickNormalsShaderSource} from "./BatchingPickNormalsShaderSource.js";
-import {createRTCViewMat} from "../../../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+import {math} from "../../../../math/math.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -23,43 +26,97 @@ class BatchingPickNormalsRenderer {
     }
 
     drawLayer(frameCtx, batchingLayer) {
+
         const model = batchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
+        const rtcCenter = batchingLayer._state.rtcCenter;
+
         if (!this._program) {
             this._allocate(batchingLayer);
         }
+
+        let loadSectionPlanes = false;
+
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
+            loadSectionPlanes = true;
         }
-        // In practice, these binds will only happen once per frame
-        // because we pick normals on a single previously-picked mesh
+
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+
         const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
-        const viewMatrix = batchingLayer._state.rtcCenter ? createRTCViewMat(pickViewMatrix, batchingLayer._state.rtcCenter) : pickViewMatrix;
+        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+
+        if (rtcCenter) {
+            if (frameCtx.lastRTCCenter) {
+                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
+                    frameCtx.lastRTCCenter = rtcCenter;
+                    loadSectionPlanes = true;
+                }
+            } else {
+                frameCtx.lastRTCCenter = rtcCenter;
+                loadSectionPlanes = true;
+            }
+        } else if (frameCtx.lastRTCCenter) {
+            frameCtx.lastRTCCenter = null;
+            loadSectionPlanes = true;
         }
-        if (this._aNormal) {
-            this._aNormal.bindArrayBuffer(state.normalsBuf);
+
+        if (loadSectionPlanes) {
+            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+            if (numSectionPlanes > 0) {
+                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+                const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+                const renderFlags = model.renderFlags;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (rtcCenter) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    }
+                }
+            }
         }
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-        }
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
-        state.indicesBuf.bind();
 
         //=============================================================
         // TODO: Use drawElements count and offset to draw only one entity
         //=============================================================
+
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+
+        this._aPosition.bindArrayBuffer(state.positionsBuf);
+
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        }
+
+        if (this._aNormal) {
+            this._aNormal.bindArrayBuffer(state.normalsBuf);
+        }
+
+        if (this._aFlags) {
+            this._aFlags.bindArrayBuffer(state.flagsBuf);
+        }
+
+        if (this._aFlags2) {
+            this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        }
+
+        state.indicesBuf.bind();
 
         gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
     }
@@ -95,36 +152,7 @@ class BatchingPickNormalsRenderer {
     }
 
     _bindProgram() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const camera = scene.camera;
-        program.bind();
-        if (sectionPlanesState.sectionPlanes.length > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            let sectionPlaneUniforms;
-            let uSectionPlaneActive;
-            let sectionPlane;
-            let uSectionPlanePos;
-            let uSectionPlaneDir;
-            for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-                sectionPlaneUniforms = this._uSectionPlanes[i];
-                uSectionPlaneActive = sectionPlaneUniforms.active;
-                sectionPlane = sectionPlanes[i];
-                if (uSectionPlaneActive) {
-                    gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-                }
-                uSectionPlanePos = sectionPlaneUniforms.pos;
-                if (uSectionPlanePos) {
-                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                }
-                uSectionPlaneDir = sectionPlaneUniforms.dir;
-                if (uSectionPlaneDir) {
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                }
-            }
-        }
+        this._program.bind();
     }
 
     webglContextRestored() {

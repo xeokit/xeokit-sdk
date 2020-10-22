@@ -24,6 +24,7 @@ class BatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.rtcCenter
      * @param cfg.buffer
@@ -31,6 +32,13 @@ class BatchingLayer {
      * @param cfg.primitive
      */
     constructor(model, cfg) {
+
+        /**
+         * Index of this BatchingLayer in {@link PerformanceModel#_layerList}.
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
         this._buffer = new BatchingBuffer();
@@ -78,7 +86,7 @@ class BatchingLayer {
             indicesBuf: null,
             edgeIndicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
-            rtcCenter : null
+            rtcCenter: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -125,8 +133,7 @@ class BatchingLayer {
     }
 
     /**
-     *
-     * Creates a new portion within this InstancingLayer, returns the new portion ID.
+     * Creates a new portion within this BatchingLayer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, flags, color and matrix.
      *
@@ -981,8 +988,7 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
         const xMultiplier = maxInt / xwid;
         const yMultiplier = maxInt / ywid;
         const zMultiplier = maxInt / zwid;
-        let i;
-        for (i = 0; i < lenPositions; i += 3) {
+        for (let i = 0; i < lenPositions; i += 3) {
             quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
             quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
             quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);
