@@ -9,6 +9,7 @@ import {BatchingLayer} from './lib/batching/BatchingLayer.js';
 import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
 import {utils} from "../../../viewer/scene/utils.js";
+import {RenderFlags} from "../webgl/RenderFlags.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -838,6 +839,7 @@ class PerformanceModel extends Component {
         this._aabbDirty = false;
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
+
         this._lastDecodeMatrix = null;
 
         this._instancingLayers = {};
@@ -846,6 +848,9 @@ class PerformanceModel extends Component {
 
         this._meshes = {};
         this._nodes = {};
+
+        /** @private **/
+        this.renderFlags = new RenderFlags();
 
         /**
          * @private
@@ -897,6 +902,11 @@ class PerformanceModel extends Component {
         /**
          * @private
          */
+        this.numClippableLayerPortions = 0;
+
+        /**
+         * @private
+         */
         this.numCulledLayerPortions = 0;
 
         /** @private */
@@ -920,7 +930,6 @@ class PerformanceModel extends Component {
         this.edges = cfg.edges;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
-
         this.backfaces = cfg.backfaces;
 
         // Build static matrix
@@ -1130,7 +1139,10 @@ class PerformanceModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        const instancingLayer = new InstancingLayer(this, utils.apply({edgeThreshold: this._edgeThreshold}, cfg));
+        const instancingLayer = new InstancingLayer(this, utils.apply({
+            layerIndex: 0, // This is set in #finalize()
+            edgeThreshold: this._edgeThreshold
+        }, cfg));
         this._instancingLayers[geometryId] = instancingLayer;
         this._layerList.push(instancingLayer);
         this.numGeometries++;
@@ -1210,9 +1222,9 @@ class PerformanceModel extends Component {
             }
         }
 
-        var flags = 0;
-        var layer;
-        var portionId;
+        let flags = 0;
+        let layer;
+        let portionId;
 
         const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
         const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
@@ -1262,24 +1274,24 @@ class PerformanceModel extends Component {
 
         } else { // Batching
 
-            var primitive = cfg.primitive || "triangles";
+            let primitive = cfg.primitive || "triangles";
             if (primitive !== "points" && primitive !== "lines" && primitive !== "line-loop" &&
                 primitive !== "line-strip" && primitive !== "triangles" && primitive !== "triangle-strip" && primitive !== "triangle-fan") {
                 this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
                 primitive = "triangles";
             }
 
-            var indices = cfg.indices;
-            var edgeIndices = cfg.edgeIndices;
+            let indices = cfg.indices;
+            let edgeIndices = cfg.edgeIndices;
 
-            var positions = cfg.positions;
+            let positions = cfg.positions;
 
             if (!positions) {
                 this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
-            var normals = cfg.normals;
+            let normals = cfg.normals;
 
             if (!normals) {
                 this.error("Config missing: normals (no meshIds provided, so expecting geometry arrays instead)");
@@ -1332,8 +1344,8 @@ class PerformanceModel extends Component {
             }
 
             if (!this._currentBatchingLayer) {
-                // console.log("New batching layer");
                 this._currentBatchingLayer = new BatchingLayer(this, {
+                    layerIndex: 0, // This is set in #finalize()
                     primitive: "triangles",
                     scratchMemory: this._batchingScratchMemory,
                     positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
@@ -1423,11 +1435,11 @@ class PerformanceModel extends Component {
             this.error("Config missing: meshIds");
             return;
         }
-        var i;
-        var len;
-        var meshId;
-        var mesh;
-        var meshes = [];
+        let i;
+        let len;
+        let meshId;
+        let mesh;
+        let meshes = [];
         for (i = 0, len = meshIds.length; i < len; i++) {
             meshId = meshIds[i];
             mesh = this._meshes[meshId];
@@ -1442,7 +1454,7 @@ class PerformanceModel extends Component {
             meshes.push(mesh);
         }
         // Create PerformanceModelNode flags
-        var flags = 0;
+        let flags = 0;
         if (this._visible && cfg.visible !== false) {
             flags = flags | RENDER_FLAGS.VISIBLE;
         }
@@ -1472,7 +1484,7 @@ class PerformanceModel extends Component {
         }
 
         // Create PerformanceModelNode AABB
-        var aabb;
+        let aabb;
         if (meshes.length === 1) {
             aabb = meshes[0].aabb;
         } else {
@@ -1497,20 +1509,42 @@ class PerformanceModel extends Component {
      * Once finalized, you can't add anything more to this PerformanceModel.
      */
     finalize() {
+
         if (this._currentBatchingLayer) {
             this._currentBatchingLayer.finalize();
             this._currentBatchingLayer = null;
         }
+
         for (const geometryId in this._instancingLayers) {
             if (this._instancingLayers.hasOwnProperty(geometryId)) {
                 this._instancingLayers[geometryId].finalize();
             }
         }
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             const node = this._nodeList[i];
             node._finalize();
         }
+
+        // Support WebGL batching by grouping BatchingLayers and InstancingLayers into two runs within layerList
+
+        const sortedLayerList = [];
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
+            const layer = this._layerList[i];
+            if (layer instanceof BatchingLayer) {
+                sortedLayerList.push(layer);
+            } else {
+                sortedLayerList.unshift(layer);
+            }
+        }
+        for (let i = 0, len = sortedLayerList.length; i < len; i++) {
+            const layer = sortedLayerList[i];
+            this._layerList[i] = layer;
+            layer.layerIndex = i;
+        }
+
         this.glRedraw();
+
         this.scene._aabbDirty = true;
     }
 
@@ -1627,7 +1661,7 @@ class PerformanceModel extends Component {
     set visible(visible) {
         visible = visible !== false;
         this._visible = visible;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].visible = visible;
         }
         this.glRedraw();
@@ -1652,7 +1686,7 @@ class PerformanceModel extends Component {
     set xrayed(xrayed) {
         xrayed = !!xrayed;
         this._xrayed = xrayed;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].xrayed = xrayed;
         }
         this.glRedraw();
@@ -1675,7 +1709,7 @@ class PerformanceModel extends Component {
     set highlighted(highlighted) {
         highlighted = !!highlighted;
         this._highlighted = highlighted;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].highlighted = highlighted;
         }
         this.glRedraw();
@@ -1698,7 +1732,7 @@ class PerformanceModel extends Component {
     set selected(selected) {
         selected = !!selected;
         this._selected = selected;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].selected = selected;
         }
         this.glRedraw();
@@ -1721,7 +1755,7 @@ class PerformanceModel extends Component {
     set edges(edges) {
         edges = !!edges;
         this._edges = edges;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].edges = edges;
         }
         this.glRedraw();
@@ -1746,7 +1780,7 @@ class PerformanceModel extends Component {
     set culled(culled) {
         culled = !!culled;
         this._culled = culled;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].culled = culled;
         }
         this.glRedraw();
@@ -1773,7 +1807,7 @@ class PerformanceModel extends Component {
     set clippable(clippable) {
         clippable = clippable !== false;
         this._clippable = clippable;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].clippable = clippable;
         }
         this.glRedraw();
@@ -1798,7 +1832,7 @@ class PerformanceModel extends Component {
     set collidable(collidable) {
         collidable = collidable !== false;
         this._collidable = collidable;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].collidable = collidable;
         }
     }
@@ -1822,7 +1856,7 @@ class PerformanceModel extends Component {
     set pickable(pickable) {
         pickable = pickable !== false;
         this._pickable = pickable;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].pickable = pickable;
         }
     }
@@ -1849,7 +1883,7 @@ class PerformanceModel extends Component {
      */
     set colorize(colorize) {
         this._colorize = colorize;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].colorize = colorize;
         }
     }
@@ -1874,7 +1908,7 @@ class PerformanceModel extends Component {
      */
     set opacity(opacity) {
         this._opacity = opacity;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
             this._nodeList[i].opacity = opacity;
         }
     }
@@ -1969,9 +2003,74 @@ class PerformanceModel extends Component {
     }
 
     /** @private */
-    getRenderFlags(renderFlags) {
+    rebuildRenderFlags() {
+        this.renderFlags.reset();
+        this._updateRenderFlagsVisibleLayers();
+        if (this.renderFlags.numLayers > 0 && this.renderFlags.numVisibleLayers === 0) {
+            this.renderFlags.culled = true;
+            return;
+        }
+        this._updateRenderFlags();
+    }
 
-        renderFlags.reset();
+    /**
+     * @private
+     */
+    _updateRenderFlagsVisibleLayers() {
+        const renderFlags = this.renderFlags;
+        renderFlags.numLayers = this._layerList.length;
+        renderFlags.numVisibleLayers = 0;
+        for (let layerIndex = 0, len = this._layerList.length; layerIndex < len; layerIndex++) {
+            const layer = this._layerList[layerIndex];
+            const layerVisible = this._getActiveSectionPlanesForLayer(layer);
+            if (layerVisible) {
+                renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
+            }
+        }
+    }
+
+    /** @private */
+    _getActiveSectionPlanesForLayer(layer) {
+
+        const renderFlags = this.renderFlags;
+        const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+        const numSectionPlanes = sectionPlanes.length;
+        const baseIndex = layer.layerIndex * numSectionPlanes;
+
+        if (numSectionPlanes > 0) {
+            for (let i = 0; i < numSectionPlanes; i++) {
+
+                const sectionPlane = sectionPlanes[i];
+
+                if (!sectionPlane.active) {
+                    renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = false;
+
+                } else {
+
+                    const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, layer.aabb);
+                    const outside = (intersect === -1);
+
+                    if (outside) {
+
+                        if (layer._numClippableLayerPortions < layer._numPortions) {
+                            // Layer has objects that cannot be clipped by SectionPlanes
+                            renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    const intersecting = (intersect === 0);
+                    renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = intersecting;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /** @private */
+    _updateRenderFlags() {
 
         if (this.numVisibleLayerPortions === 0) {
             return;
@@ -1980,6 +2079,8 @@ class PerformanceModel extends Component {
         if (this.numCulledLayerPortions === this.numPortions) {
             return;
         }
+
+        const renderFlags = this.renderFlags;
 
         renderFlags.normalFillOpaque = true;
 
@@ -2108,8 +2209,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (let i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawNormalFillOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalFillOpaque(frameCtx);
         }
     }
 
@@ -2124,8 +2227,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawDepth(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawDepth(frameCtx);
         }
     }
 
@@ -2140,113 +2245,145 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawNormals(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormals(frameCtx);
         }
     }
 
     /** @private */
     drawNormalEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawNormalEdgesOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawNormalFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawNormalFillTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawNormalEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawNormalEdgesTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawXRayedFillOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawXRayedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawXRayedEdgesOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawXRayedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawXRayedFillTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawXRayedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawXRayedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawXRayedEdgesTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawXRayedEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawHighlightedFillOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawHighlightedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawHighlightedEdgesOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawHighlightedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawHighlightedFillTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawHighlightedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawHighlightedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawHighlightedEdgesTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawHighlightedEdgesTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedFillOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawSelectedFillOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawSelectedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedEdgesOpaque(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawSelectedEdgesOpaque(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawSelectedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedFillTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawSelectedFillTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawSelectedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
     drawSelectedEdgesTransparent(frameCtx) {
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawSelectedEdgesTransparent(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawSelectedEdgesTransparent(frameCtx);
         }
     }
 
@@ -2264,8 +2401,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawPickMesh(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawPickMesh(frameCtx);
         }
     }
 
@@ -2286,8 +2425,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawPickDepths(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawPickDepths(frameCtx);
         }
     }
 
@@ -2308,8 +2449,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawPickNormals(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawPickNormals(frameCtx);
         }
     }
 
@@ -2329,8 +2472,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (var i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawOcclusion(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawOcclusion(frameCtx);
         }
     }
 
@@ -2350,8 +2495,10 @@ class PerformanceModel extends Component {
             }
             frameCtx.backfaces = this.backfaces;
         }
-        for (let i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].drawShadow(frameCtx);
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawShadow(frameCtx);
         }
     }
 

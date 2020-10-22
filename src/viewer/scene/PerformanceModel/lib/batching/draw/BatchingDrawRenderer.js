@@ -5,7 +5,6 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
-const viewNormalMatrix = math.mat4();
 
 /**
  * @private
@@ -56,7 +55,7 @@ class BatchingDrawRenderer {
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
 
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
 
         if (rtcCenter) {
             if (frameCtx.lastRTCCenter) {

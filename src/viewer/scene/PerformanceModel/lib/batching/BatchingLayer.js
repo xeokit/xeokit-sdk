@@ -96,6 +96,7 @@ class BatchingLayer {
         this._numXRayedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
@@ -310,6 +311,10 @@ class BatchingLayer {
                 this._numSelectedLayerPortions++;
                 this.model.numSelectedLayerPortions++;
             }
+            if (clippable) {
+                this._numClippableLayerPortions++;
+                this.model.numClippableLayerPortions++;
+            }
             if (edges) {
                 this._numEdgesLayerPortions++;
                 this.model.numEdgesLayerPortions++;
@@ -455,7 +460,7 @@ class BatchingLayer {
         this._finalized = true;
     }
 
-    // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
     initFlags(portionId, flags) {
@@ -474,6 +479,10 @@ class BatchingLayer {
         if (flags & RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
         }
         if (flags & RENDER_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
@@ -564,6 +573,13 @@ class BatchingLayer {
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
         }
         this._setFlags2(portionId, flags);
     }
