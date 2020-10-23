@@ -202,7 +202,6 @@ class BatchingDrawRenderer {
         this._aFlags2 = program.getAttribute("flags2");
 
         if (this._withSAO) {
-            this._uSAOEnabled = program.getLocation("uSAOEnabled");
             this._uOcclusionTexture = "uOcclusionTexture";
             this._uSAOParams = program.getLocation("uSAOParams");
         }

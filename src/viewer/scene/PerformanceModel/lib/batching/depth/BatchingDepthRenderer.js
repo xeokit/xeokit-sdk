@@ -49,8 +49,7 @@ class BatchingDepthRenderer {
             loadSectionPlanes = true;
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix;
-        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
 
         if (rtcCenter) {
             if (frameCtx.lastRTCCenter) {
@@ -94,17 +93,14 @@ class BatchingDepthRenderer {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
 
-        if (this._aColor) { // Needed for masking out transparent entities using alpha channel
-            this._aColor.bindArrayBuffer(state.colorsBuf);
-        }
+        this._aColor.bindArrayBuffer(state.colorsBuf); // Needed for masking out transparent entities using alpha channel
 
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-        }
+        this._aFlags.bindArrayBuffer(state.flagsBuf);
 
         if (this._aFlags2) {
             this._aFlags2.bindArrayBuffer(state.flags2Buf);
@@ -156,7 +152,7 @@ class BatchingDepthRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         this._program.bind();
-        gl.uniformMatrix4fv(this._uProjMatrix, false, scene.camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, scene.camera.projMatrix);
     }
 
     webglContextRestored() {
