@@ -25,7 +25,7 @@ class InstancingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer( frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -90,8 +90,6 @@ class InstancingDepthRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
-
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
         this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
@@ -100,6 +98,8 @@ class InstancingDepthRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
         if (this._aOffset) {
@@ -107,7 +107,7 @@ class InstancingDepthRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        this._aColor.bindArrayBuffer(state.colorsBuf);
+        this._aColor.bindArrayBuffer(state.colorsBuf); // Needed for masking out transparent entities using alpha channel
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
@@ -131,6 +131,7 @@ class InstancingDepthRenderer {
         if (this._aFlags2) { // Won't be in shader when not clipping
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
         }
+
         if (this._aOffset) {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
         }
