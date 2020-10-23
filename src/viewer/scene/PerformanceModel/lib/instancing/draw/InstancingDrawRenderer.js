@@ -19,7 +19,7 @@ class InstancingDrawRenderer {
         this._scene = scene;
         this._withSAO = withSAO;
         this._hash = this._getHash();
-        this._shaderSource = new InstancingDrawShaderSource(this._scene);
+        this._shaderSource = new InstancingDrawShaderSource(this._scene, this._withSAO);
         this._allocate();
     }
 
@@ -59,6 +59,45 @@ class InstancingDrawRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
 
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+
+        if (rtcCenter) {
+            if (frameCtx.lastRTCCenter) {
+                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
+                    frameCtx.lastRTCCenter = rtcCenter;
+                    loadSectionPlanes = true;
+                }
+            } else {
+                frameCtx.lastRTCCenter = rtcCenter;
+                loadSectionPlanes = true;
+            }
+        } else if (frameCtx.lastRTCCenter) {
+            frameCtx.lastRTCCenter = null;
+            loadSectionPlanes = true;
+        }
+
+        if (loadSectionPlanes) {
+            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+            if (numSectionPlanes > 0) {
+                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+                const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
+                const renderFlags = model.renderFlags;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (rtcCenter) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    }
+                }
+            }
+        }
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
@@ -100,45 +139,6 @@ class InstancingDrawRenderer {
         }
 
         state.indicesBuf.bind();
-
-        if (rtcCenter) {
-            if (frameCtx.lastRTCCenter) {
-                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
-                    frameCtx.lastRTCCenter = rtcCenter;
-                    loadSectionPlanes = true;
-                }
-            } else {
-                frameCtx.lastRTCCenter = rtcCenter;
-                loadSectionPlanes = true;
-            }
-        } else if (frameCtx.lastRTCCenter) {
-            frameCtx.lastRTCCenter = null;
-            loadSectionPlanes = true;
-        }
-
-        if (loadSectionPlanes) {
-            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-            if (numSectionPlanes > 0) {
-                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-                const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
 
         instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
@@ -243,7 +243,6 @@ class InstancingDrawRenderer {
         this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
         this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
 
-        this._uSAOEnabled = program.getLocation("uSAOEnabled");
         this._uOcclusionTexture = "uOcclusionTexture";
         this._uSAOParams = program.getLocation("uSAOParams");
     }
