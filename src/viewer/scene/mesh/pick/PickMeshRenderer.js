@@ -5,6 +5,10 @@
 import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
+import {math} from "../../math/math.js";
+import {getPlaneRTCPos} from "../../math/rtcCoords.js";
+
+const tempVec3a = math.vec3();
 
 // No ID, because there is exactly one PickMeshRenderer per scene
 
@@ -57,17 +61,43 @@ PickMeshRenderer.prototype.webglContextRestored = function () {
 };
 
 PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
+
     if (!this._program) {
         this._allocate(mesh);
     }
+
     const scene = this._scene;
     const gl = scene.canvas.gl;
+    const meshState = mesh._state;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
+    const rtcCenter = mesh.rtcCenter;
+
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
     }
+
+    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
+
+    if (meshState.clippable) {
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const renderFlags = mesh.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a) : sectionPlane.pos);
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                }
+            }
+        }
+    }
+
     if (materialState.id !== this._lastMaterialId) {
         const backfaces = materialState.backfaces;
         if (frameCtx.backfaces !== backfaces) {
@@ -89,19 +119,14 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         }
         this._lastMaterialId = materialState.id;
     }
-    const rtcCenter = mesh.rtcCenter;
-    if (rtcCenter) {
-        const rtcPickViewMat = frameCtx.getRTCPickViewMatrix(rtcCenter);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMat);
-    } else {
-        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
-    }
+
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
     gl.uniform3fv(this._uOffset, mesh._state.offset);
+
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
@@ -116,6 +141,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         }
         this._lastGeometryId = geometryState.id;
     }
+
     // Mesh-indexed color
     var pickID = mesh._state.pickID;
     const a = pickID >> 24 & 0xFF;
@@ -123,6 +149,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const g = pickID >> 8 & 0xFF;
     const r = pickID & 0xFF;
     gl.uniform4f(this._uPickColor, r / 255, g / 255, b / 255, a / 255);
+
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
         frameCtx.drawElements++;
@@ -157,42 +184,14 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._uPickColor = program.getLocation("pickColor");
     this._uOffset = program.getLocation("offset");
     this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
     this._lastGeometryId = null;
 };
 
 PickMeshRenderer.prototype._bindProgram = function (frameCtx) {
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const sectionPlanesState = scene._sectionPlanesState;
     this._program.bind();
     frameCtx.useProgram++;
     this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    if (sectionPlanesState.sectionPlanes.length > 0) {
-        let sectionPlaneUniforms;
-        let uSectionPlaneActive;
-        let sectionPlane;
-        let uSectionPlanePos;
-        let uSectionPlaneDir;
-        for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-            sectionPlaneUniforms = this._uSectionPlanes[i];
-            uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = sectionPlanesState.sectionPlanes[i];
-            if (uSectionPlaneActive) {
-                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-            }
-            uSectionPlanePos = sectionPlaneUniforms.pos;
-            if (uSectionPlanePos) {
-                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-            }
-            uSectionPlaneDir = sectionPlaneUniforms.dir;
-            if (uSectionPlaneDir) {
-                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-            }
-        }
-    }
 };
 
 export {PickMeshRenderer};

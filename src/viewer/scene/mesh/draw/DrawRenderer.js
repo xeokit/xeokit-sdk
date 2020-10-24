@@ -7,6 +7,10 @@ import {DrawShaderSource} from "./DrawShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from '../../stats.js';
 import {WEBGL_INFO} from '../../webglInfo.js';
+import {math} from "../../math/math.js";
+import {getPlaneRTCPos} from "../../math/rtcCoords.js";
+
+const tempVec3a = math.vec3();
 
 const ids = new Map({});
 
@@ -65,9 +69,11 @@ DrawRenderer.prototype.webglContextRestored = function () {
 };
 
 DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
+
     if (!this._program) {
         this._allocate(mesh);
     }
+
     const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
     const scene = mesh.scene;
     const material = mesh._material;
@@ -77,22 +83,32 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
     const camera = scene.camera;
+    const rtcCenter = mesh.rtcCenter;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
     }
 
-    const rtcCenter = mesh.rtcCenter;
-    if (rtcCenter) {
-        const rtcMatrices = frameCtx.getRTCViewMatrices(rtcCenter);
-        const rtcViewMat = rtcMatrices[0];
-        const rtcViewNormalMat = rtcMatrices[1];
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMat);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, rtcViewNormalMat);
-    } else {
-        gl.uniformMatrix4fv(this._uViewMatrix, false, camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+
+    if (meshState.clippable) {
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const renderFlags = mesh.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a) : sectionPlane.pos);
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                }
+            }
+        }
     }
 
     if (materialState.id !== this._lastMaterialId) {
@@ -588,11 +604,13 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 };
 
 DrawRenderer.prototype._allocate = function (mesh) {
+
     const gl = mesh.scene.canvas.gl;
     const material = mesh._material;
     const lightsState = mesh.scene._lightsState;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const materialState = mesh._material._state;
+
     this._program = new Program(gl, this._shaderSource);
     if (this._program.errors) {
         this.errors = this._program.errors;
@@ -865,8 +883,6 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const lightsState = scene._lightsState;
-    const sectionPlanesState = scene._sectionPlanesState;
-    const lights = lightsState.lights;
     let light;
 
     const program = this._program;
@@ -940,31 +956,6 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
         program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
         frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
         frameCtx.bindTexture++;
-    }
-
-    if (sectionPlanesState.sectionPlanes.length > 0) {
-        const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-        let sectionPlaneUniforms;
-        let uSectionPlaneActive;
-        let sectionPlane;
-        let uSectionPlanePos;
-        let uSectionPlaneDir;
-        for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-            sectionPlaneUniforms = this._uSectionPlanes[i];
-            uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = sectionPlanes[i];
-            if (uSectionPlaneActive) {
-                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-            }
-            uSectionPlanePos = sectionPlaneUniforms.pos;
-            if (uSectionPlanePos) {
-                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-            }
-            uSectionPlaneDir = sectionPlaneUniforms.dir;
-            if (uSectionPlaneDir) {
-                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-            }
-        }
     }
 
     if (this._uGammaFactor) {

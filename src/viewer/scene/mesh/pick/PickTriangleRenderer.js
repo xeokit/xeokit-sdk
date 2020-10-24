@@ -5,6 +5,10 @@
 import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
+import {getPlaneRTCPos} from "../../math/rtcCoords.js";
+import {math} from "../../math/math.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -55,53 +59,49 @@ PickTriangleRenderer.prototype.webglContextRestored = function () {
 };
 
 PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
+
     if (!this._program) {
         this._allocate(mesh);
     }
+
     const scene = this._scene;
     const gl = scene.canvas.gl;
-    const sectionPlanesState = scene._sectionPlanesState;
+    const meshState = mesh._state;
     const materialState = mesh._material._state;
     const geometry = mesh._geometry;
     const geometryState = mesh._geometry._state;
+    const rtcCenter = mesh.rtcCenter;
     const backfaces = materialState.backfaces;
     const frontface = materialState.frontface;
     const positionsBuf = geometry._getPickTrianglePositions();
     const pickColorsBuf = geometry._getPickTriangleColors();
+
     this._program.bind();
+
     frameCtx.useProgram++;
-    const rtcCenter = mesh.rtcCenter;
-    if (rtcCenter) {
-        const rtcPickViewMat = frameCtx.getRTCPickViewMatrix(rtcCenter);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMat);
-    } else {
-        gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
-    }
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
-    if (sectionPlanesState.sectionPlanes.length > 0) {
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        let sectionPlaneUniforms;
-        let uSectionPlaneActive;
-        let sectionPlane;
-        let uSectionPlanePos;
-        let uSectionPlaneDir;
-        for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-            sectionPlaneUniforms = this._uSectionPlanes[i];
-            uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = sectionPlanes[i];
-            if (uSectionPlaneActive) {
-                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-            }
-            uSectionPlanePos = sectionPlaneUniforms.pos;
-            if (uSectionPlanePos) {
-                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-            }
-            uSectionPlaneDir = sectionPlaneUniforms.dir;
-            if (uSectionPlaneDir) {
-                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+
+    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
+
+    if (meshState.clippable) {
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const renderFlags = mesh.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a) : sectionPlane.pos);
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                }
             }
         }
     }
+
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
+
     if (frameCtx.backfaces !== backfaces) {
         if (backfaces) {
             gl.disable(gl.CULL_FACE);
@@ -118,7 +118,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         }
         frameCtx.frontface = frontface;
     }
-    this._lastMaterialId = materialState.id;
+
     gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);

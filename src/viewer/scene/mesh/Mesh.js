@@ -16,6 +16,7 @@ import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
 import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
+import {RenderFlags} from "../webgl/RenderFlags.js";
 
 const obb = math.OBB3();
 const angleAxis = new Float32Array(4);
@@ -213,6 +214,9 @@ class Mesh extends Component {
 
         super(owner, cfg);
 
+        /** @private **/
+        this.renderFlags = new RenderFlags();
+
         this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from Mesh#matrix and Mesh.#normalWorldMatrix
             visible: true,
             culled: false,
@@ -233,7 +237,8 @@ class Mesh extends Component {
             drawHash: "",
             pickHash: "",
             offset: math.vec3(),
-            rtcCenter: null
+            rtcCenter: null,
+            rtcCenterHash: null
         });
 
         this._drawRenderer = null;
@@ -274,6 +279,7 @@ class Mesh extends Component {
 
         if (cfg.rtcCenter) {
             this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+            this._state.rtcCenterHash = cfg.rtcCenter.join();
         }
 
         if (cfg.matrix) {
@@ -960,11 +966,13 @@ class Mesh extends Component {
                 this._state.rtcCenter = math.vec3();
             }
             this._state.rtcCenter.set(rtcCenter);
+            this._state.rtcCenterHash = rtcCenter.join();
             this._setAABBDirty();
             this.scene._aabbDirty = true;
         } else {
             if (this._state.rtcCenter) {
                 this._state.rtcCenter = null;
+                this._state.rtcCenterHash = null;
                 this._setAABBDirty();
                 this.scene._aabbDirty = true;
             }
@@ -1532,15 +1540,25 @@ class Mesh extends Component {
             || (mesh1._geometry._state.id - mesh2._geometry._state.id); // Geometry state
     }
 
+    /** @private */
+    rebuildRenderFlags() {
+        this.renderFlags.reset();
+        if (!this._getActiveSectionPlanes()) {
+            this.renderFlags.culled = true;
+            return;
+        }
+        this.renderFlags.numLayers = 1;
+        this.renderFlags.numVisibleLayers = 1;
+        this.renderFlags.visibleLayers[0] = 0;
+        this._updateRenderFlags();
+    }
+
     /**
-     * Called by xeokit when about to render this Mesh, to get flags indicating what rendering effects to apply for it.
-     *
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
+     * @private
      */
-    getRenderFlags(renderFlags) {
+    _updateRenderFlags() {
 
-        renderFlags.reset();
-
+        const renderFlags = this.renderFlags;
         const state = this._state;
 
         if (state.xrayed) {
@@ -1608,6 +1626,47 @@ class Mesh extends Component {
                 }
             }
         }
+    }
+
+    _getActiveSectionPlanes() {
+
+        if (this._state.clippable) {
+
+            const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+            const numSectionPlanes = sectionPlanes.length;
+
+            if (numSectionPlanes > 0) {
+                for (let i = 0; i < numSectionPlanes; i++) {
+
+                    const sectionPlane = sectionPlanes[i];
+                    const renderFlags = this.renderFlags;
+
+                    if (!sectionPlane.active) {
+                        renderFlags.sectionPlanesActivePerLayer[i] = false;
+
+                    } else {
+
+                        if (this._state.rtcCenter) {
+
+                            const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
+                            const outside = (intersect === -1);
+
+                            if (outside) {
+                                return false;
+                            }
+
+                            const intersecting = (intersect === 0);
+                            renderFlags.sectionPlanesActivePerLayer[i] = intersecting;
+
+                        } else {
+                            renderFlags.sectionPlanesActivePerLayer[i] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

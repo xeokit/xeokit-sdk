@@ -189,38 +189,28 @@ class FrameContext {
     }
 
     /**
-     * Get View and View-Normal RTC matrices for the given RTC center.
+     * Get View matrix for the given RTC center.
      */
-    getRTCViewMatrices(rtcCenter) {
-        const hash = rtcCenter.join();
-        let rtcViewMats = this._rtcViewMats[hash];
-        if (!rtcViewMats) {
-            rtcViewMats = [
-                this._getNewMat(), // RTC view matrix
-                this._getNewMat()  // RTC view normal matrix
-            ];
-            this._rtcViewMats[hash] = rtcViewMats;
-            const viewMat = this._scene.camera.viewMatrix;
-            const rtcViewMat = rtcViewMats[0];
-            const rtcViewNormalMat = rtcViewMats[1];
-            createRTCViewMat(viewMat, rtcCenter, rtcViewMat);
-            math.inverseMat4(rtcViewMat, rtcViewNormalMat);
-            math.transposeMat4(rtcViewNormalMat);
+    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+        if (!rtcViewMat) {
+            rtcViewMat = this._getNewMat();
+            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
+            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
         }
-        return rtcViewMats;
+        return rtcViewMat;
     }
 
     /**
      * Get picking View RTC matrix for the given RTC center.
      */
-    getRTCPickViewMatrix(rtcCenter) {
-        const hash = rtcCenter.join();
-        let rtcPickViewMat = this._rtcPickViewMats[hash];
+    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
         if (!rtcPickViewMat) {
             rtcPickViewMat = this._getNewMat();
-            this._rtcPickViewMats[hash] = rtcPickViewMat;
             const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
             createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
+            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
         }
         return rtcPickViewMat;
     }
