@@ -73,8 +73,8 @@ class SectionPlane extends Component {
 
         this._state = new RenderState({
             active: true,
-            pos: new Float32Array(3),
-            dir: new Float32Array(3),
+            pos: math.vec3(),
+            dir: math.vec3(),
             dist: 0
         });
 
