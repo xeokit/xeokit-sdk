@@ -184,6 +184,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -954,9 +955,9 @@ class Mesh extends Component {
     }
 
     /**
-     * Sets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     * Center of the relative-to-center (RTC) coordinate system for this Mesh.
      *
-     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
      *
      * @type {Float64Array}
      */

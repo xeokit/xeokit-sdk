@@ -1123,7 +1123,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} cfg.indices Array of triangle indices.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] When the positions are relative-to-center (RTC) coordinates, this is the origin of their RTC coordinate system.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -1184,7 +1184,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] When ````positions```` are given and they are in relative-to-center (RTC) coordinates, this is the origin of their RTC coordinate system.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
      * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
