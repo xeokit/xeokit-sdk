@@ -118,49 +118,51 @@ class SectionPlanesPlugin extends Plugin {
         } else {
 
             const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
+
             if (!overviewCanvas) {
                 this.error("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
-                return;
-            }
 
-            this._overview = new Overview(this, {
-                overviewCanvas: overviewCanvas,
-                visible: cfg.overviewVisible,
+            } else {
 
-                onHoverEnterPlane: ((id) => {
-                    this._overview.setPlaneHighlighted(id, true);
-                }),
+                this._overview = new Overview(this, {
+                    overviewCanvas: overviewCanvas,
+                    visible: cfg.overviewVisible,
 
-                onHoverLeavePlane: ((id) => {
-                    this._overview.setPlaneHighlighted(id, false);
-                }),
+                    onHoverEnterPlane: ((id) => {
+                        this._overview.setPlaneHighlighted(id, true);
+                    }),
 
-                onClickedPlane: ((id) => {
-                    if (this.getShownControl() === id) {
+                    onHoverLeavePlane: ((id) => {
+                        this._overview.setPlaneHighlighted(id, false);
+                    }),
+
+                    onClickedPlane: ((id) => {
+                        if (this.getShownControl() === id) {
+                            this.hideControl();
+                            return;
+                        }
+                        this.showControl(id);
+                        const sectionPlane = this.sectionPlanes[id];
+                        const sectionPlanePos = sectionPlane.pos;
+                        tempAABB.set(this.viewer.scene.aabb);
+                        math.getAABB3Center(tempAABB, tempVec3);
+                        tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
+                        tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
+                        tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
+                        tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
+                        tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
+                        tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
+                        this.viewer.cameraFlight.flyTo({
+                            aabb: tempAABB,
+                            fitFOV: 65
+                        });
+                    }),
+
+                    onClickedNothing: (() => {
                         this.hideControl();
-                        return;
-                    }
-                    this.showControl(id);
-                    const sectionPlane = this.sectionPlanes[id];
-                    const sectionPlanePos = sectionPlane.pos;
-                    tempAABB.set(this.viewer.scene.aabb);
-                    math.getAABB3Center(tempAABB, tempVec3);
-                    tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
-                    tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
-                    tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
-                    tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
-                    tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
-                    tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
-                    this.viewer.cameraFlight.flyTo({
-                        aabb: tempAABB,
-                        fitFOV: 65
-                    });
-                }),
-
-                onClickedNothing: (() => {
-                    this.hideControl();
-                })
-            });
+                    })
+                });
+            }
         }
 
         this._onSceneSectionPlaneCreated = viewer.scene.on("sectionPlaneCreated", (sectionPlane) => {
