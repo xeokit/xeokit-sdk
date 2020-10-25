@@ -7,6 +7,7 @@ import {Texture} from "../materials/Texture.js";
 import {buildGridGeometry} from "../geometry/builders/buildGridGeometry.js";
 import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
 import {math} from "../math/math.js";
+import {worldToRTCPos} from "../math/rtcCoords.js";
 
 const tempVec3 = math.vec3();
 const tempVec3b = math.vec3();
@@ -163,6 +164,9 @@ class ImagePlane extends Component {
 
         this._src = null;
         this._image = null;
+        this._pos = math.vec3();
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;
         this._imageSize = math.vec2();
@@ -356,7 +360,10 @@ class ImagePlane extends Component {
      * @param {Number[]} value New position.
      */
     set position(value) {
-        this._node.position = value;
+        this._pos.set(value || [0, 0, 0]);
+        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
+        this._node.rtcCenter = this._rtcCenter;
+        this._node.position = this._rtcPos;
     }
 
     /**
@@ -367,7 +374,7 @@ class ImagePlane extends Component {
      * @returns {Number[]} Current position.
      */
     get position() {
-        return this._node.position;
+        return this._pos;
     }
 
     /**
@@ -440,12 +447,7 @@ class ImagePlane extends Component {
             math.mulVec3Scalar(negDir, dist, tempVec3b);
             math.vec3PairToQuaternion(zeroVec, dir, tempQuat);
 
-            // tempVec3c[0] = tempVec3b[0] * 0.1;
-            // tempVec3c[1] = tempVec3b[1] * 0.1;
-            // tempVec3c[2] = tempVec3b[2] * 0.1;
-
             this._node.quaternion = tempQuat;
-            // this._mesh.position = tempVec3c;
         }
     }
 
