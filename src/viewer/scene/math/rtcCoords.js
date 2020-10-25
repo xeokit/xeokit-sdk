@@ -42,10 +42,10 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
     const xHigh = Float32Array.from([worldPos[0]])[0];
     const xLow = worldPos[0] - xHigh;
 
-    const yHigh = Float32Array.from([worldPos[1]])[1];
+    const yHigh = Float32Array.from([worldPos[1]])[0];
     const yLow = worldPos[1] - yHigh;
 
-    const zHigh = Float32Array.from([worldPos[2]])[2];
+    const zHigh = Float32Array.from([worldPos[2]])[0];
     const zLow = worldPos[2] - zHigh;
 
     rtcCenter[0] = xHigh;
