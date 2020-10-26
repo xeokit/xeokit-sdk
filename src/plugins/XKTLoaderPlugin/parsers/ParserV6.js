@@ -159,6 +159,47 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             const meshIds = [];
 
+            const metaObject = viewer.metaScene.metaObjects[entityId];
+            const entityDefaults = {};
+            const meshDefaults = {};
+
+            if (metaObject) {
+
+                // Mask loading of object types
+
+                if (options.excludeTypesMap && metaObject.type && options.excludeTypesMap[metaObject.type]) {
+                    continue;
+                }
+
+                if (options.includeTypesMap && metaObject.type && (!options.includeTypesMap[metaObject.type])) {
+                    continue;
+                }
+
+                // Get initial property values for object types
+
+                const props = options.objectDefaults ? options.objectDefaults[metaObject.type] || options.objectDefaults["DEFAULT"] : null;
+
+                if (props) {
+                    if (props.visible === false) {
+                        entityDefaults.visible = false;
+                    }
+                    if (props.pickable === false) {
+                        entityDefaults.pickable = false;
+                    }
+                    if (props.colorize) {
+                        meshDefaults.color = props.colorize;
+                    }
+                    if (props.opacity !== undefined && props.opacity !== null) {
+                        meshDefaults.opacity = props.opacity;
+                    }
+                }
+
+            } else {
+                if (options.excludeUnclassifiedObjects) {
+                    continue;
+                }
+            }
+
             // Iterate each entity's primitive instances
 
             for (let primitiveInstancesIndex = firstPrimitiveInstanceIndex; primitiveInstancesIndex < lastPrimitiveInstanceIndex; primitiveInstancesIndex++) {
@@ -178,8 +219,6 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const opacity = eachPrimitiveColorAndOpacity[(primitiveIndex * 4) + 3] / 255.0;
 
                 const meshId = nextMeshId++;
-
-                const meshDefaults = {}; // TODO: get from lookup from entity IDs
 
                 if (isReusedPrimitive) {
 
@@ -234,11 +273,9 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                const entityDefaults = {}; // TODO: get from lookup from entity IDs
-
                 performanceModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
-                    isObject: true, // TODO: If metaobject exists
+                    isObject: true,
                     meshIds: meshIds
                 }));
             }
