@@ -47,12 +47,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-
+    
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
     //------------------------------------------------------------------------------------------------------------------
@@ -83,22 +78,6 @@
     // Create a red table leg object
     // Each object is comprised of a mesh, which belongs to a node
     //-----------------------------------------------------------
-
-    new Mesh(viewer.scene, {
-        geometry: new ReadableGeometry(viewer.scene, buildBoxGeometry({
-            xSize: 1,
-            ySize: 3,
-            zSize: 1
-        })),
-        material: new PhongMaterial(viewer.scene, {
-            ambient: [0.9, 0.3, 0.9],
-            shininess: 30,
-            diffuseMap: new Texture(viewer.scene, {
-                src: "textures/diffuse/uvGrid2.jpg"
-            })
-        }),
-        position: [20, 0, 0]
-    });
 
     performanceModel.createMesh({
         id: "redLegMesh",
