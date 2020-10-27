@@ -1,6 +1,7 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {PerformanceNode} from "../PerformanceModel/lib/PerformanceNode.js";
+import {worldToRTCPos} from "../math/rtcCoords.js";
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -124,7 +125,6 @@ class Marker extends Component {
      * @param {Entity} [cfg.entity] Entity to associate this Marker with. When the Marker has an Entity, then {@link Marker#visible} will always be ````false```` if {@link Entity#visible} is false.
      * @param {Boolean} [cfg.occludable=false] Indicates whether or not this Marker is hidden (ie. {@link Marker#visible} is ````false```` whenever occluded by {@link Entity}s in the {@link Scene}.
      * @param {Number[]} [cfg.worldPos=[0,0,0]] World-space 3D Marker position.
-     * @param {Number[]} [cfg.rtcCenter] When ````worldPos```` is in relative-to-center (RTC) coordinates, this is the origin of the RTC coordinate system.
      */
     constructor(owner, cfg) {
 
@@ -132,8 +132,9 @@ class Marker extends Component {
 
         this._entity = null;
         this._visible = null;
-        this._rtcCenter = cfg.rtcCenter;
         this._worldPos = math.vec3();
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
         this._viewPos = math.vec3();
         this._canvasPos = math.vec2();
         this._occludable = false;
@@ -263,33 +264,6 @@ class Marker extends Component {
     }
 
     /**
-     * Sets the 3D origin of the Mesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
-     *
-     * When this is defined, then the positions are RTC, which means that they are relative to this position.
-     *
-     * @type {Float64Array|Null}
-     */
-    set rtcCenter(rtcCenter) {
-        this._rtcCenter = rtcCenter;
-        if (this._occludable) {
-            this._renderer.markerWorldPosUpdated(this);
-        }
-        this._viewPosDirty = true;
-        this.fire("rtcCenter", this._rtcCenter);
-    }
-
-    /**
-     * Gets the 3D origin of the Mesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
-     *
-     * When this is defined, then the positions are RTC, which means that they are relative to this position.
-     *
-     * @type {Float64Array|Null}
-     */
-    get rtcCenter() {
-        return this._rtcCenter;
-    }
-
-    /**
      * Sets the World-space 3D position of this Marker.
      *
      * Fires a "worldPos" event with new World position.
@@ -298,6 +272,7 @@ class Marker extends Component {
      */
     set worldPos(worldPos) {
         this._worldPos.set(worldPos || [0, 0, 0]);
+        worldToRTCPos(this._worldPos, this._rtcCenter, this._rtcPos);
         if (this._occludable) {
             this._renderer.markerWorldPosUpdated(this);
         }
@@ -312,6 +287,28 @@ class Marker extends Component {
      */
     get worldPos() {
         return this._worldPos;
+    }
+
+    /**
+     * Gets the RTC center of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
+    }
+
+    /**
+     * Gets the RTC position of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcPos() {
+        return this._rtcPos;
     }
 
     /**
