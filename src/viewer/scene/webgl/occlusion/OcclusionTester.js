@@ -1,12 +1,14 @@
-import {math} from '../math/math.js';
-import {Program} from "./Program.js";
-import {ArrayBuf} from "./ArrayBuf.js";
-import {RenderBuffer} from "./RenderBuffer.js";
-import {RTCOcclusionTester} from "./RTCOcclusionTester.js";
+import {math} from '../../math/math.js';
+import {Program} from "./../Program.js";
+import {RenderBuffer} from "./../RenderBuffer.js";
+import {OcclusionLayer} from "./OcclusionLayer.js";
+import {createRTCViewMat, getPlaneRTCPos, worldToRTCPos} from "../../math/rtcCoords.js";
 
 const TEST_MODE = false;
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
+
+const tempVec3a = math.vec3();
 
 /**
  * Manages occlusion testing. Private member of a Renderer.
@@ -17,7 +19,9 @@ class OcclusionTester {
 
         this._scene = scene;
 
-        this._rtcOcclusionTesters = {};
+        this._occlusionLayers = {};
+        this._occlusionLayersList = [];
+        this._occlusionLayersListDirty = false;
 
         this._shaderSource = null;
         this._program = null;
@@ -27,17 +31,17 @@ class OcclusionTester {
         this._shaderSourceDirty = true;         // Need to build shader source code ?
         this._programDirty = false;             // Need to build shader program ?
 
-        this._lenPositionsBuf = 0;
+        this._markersToOcclusionLayersMap = {};
 
-        scene.camera.on("viewMatrix", () => {
+        this._onCameraViewMatrix = scene.camera.on("viewMatrix", () => {
             this._occlusionTestListDirty = true;
         });
 
-        scene.camera.on("projMatrix", () => {
+        this._onCameraProjMatrix = scene.camera.on("projMatrix", () => {
             this._occlusionTestListDirty = true;
         });
 
-        scene.canvas.on("boundary", () => {
+        this._onCanvasBoundary = scene.canvas.on("boundary", () => {
             this._occlusionTestListDirty = true;
         });
     }
@@ -47,14 +51,15 @@ class OcclusionTester {
      * @param marker
      */
     addMarker(marker) {
-        const rtcCenter = marker.rtcCenter || [0, 0, 0];
-        const hash = rtcCenter.join();
-        let rtcOcclusionTester = this._rtcOcclusionTesters[hash];
-        if (!rtcOcclusionTester) {
-            rtcOcclusionTester = new RTCOcclusionTester(this._scene, this._readPixelBuf, this._program, rtcCenter);
-            this._rtcOcclusionTesters[hash] = rtcOcclusionTester;
+        const rtcCenterHash = marker.rtcCenter.join();
+        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        if (!occlusionLayer) {
+            occlusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
+            this._occlusionLayers[occlusionLayer.rtcCenterHash] = occlusionLayer;
+            this._occlusionLayersListDirty = true;
         }
-        rtcOcclusionTester.addMarker(marker);
+        occlusionLayer.addMarker(marker);
+        this._markersToOcclusionLayersMap[marker.id] = occlusionLayer;
     }
 
     /**
@@ -62,13 +67,31 @@ class OcclusionTester {
      * @param marker
      */
     markerWorldPosUpdated(marker) {
-        const rtcCenter = marker.rtcCenter || [0, 0, 0];
-        const hash = rtcCenter.join();
-        let rtcOcclusionTester = this._rtcOcclusionTesters[hash];
-        if (!rtcOcclusionTester) {
+        const occlusionLayer = this._markersToOcclusionLayersMap[marker.id];
+        if (!occlusionLayer) {
+            marker.error("Marker has not been added to OcclusionTester");
             return;
         }
-        rtcOcclusionTester.markerWorldPosUpdated(marker);
+        const rtcCenterHash = marker.rtcCenter.join();
+        if (rtcCenterHash !== occlusionLayer.rtcCenterHash) {
+            if (occlusionLayer.numMarkers === 1) {
+                occlusionLayer.destroy();
+                delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+                this._occlusionLayersListDirty = true;
+            } else {
+                occlusionLayer.removeMarker(marker);
+            }
+            let newOcclusionLayer = this._occlusionLayers[rtcCenterHash];
+            if (!newOcclusionLayer) {
+                newOcclusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
+                this._occlusionLayers[rtcCenterHash] = occlusionLayer;
+                this._occlusionLayersListDirty = true;
+            }
+            newOcclusionLayer.addMarker(marker);
+            this._markersToOcclusionLayersMap[marker.id] = newOcclusionLayer;
+        } else {
+            occlusionLayer.markerWorldPosUpdated(marker);
+        }
     }
 
     /**
@@ -76,32 +99,35 @@ class OcclusionTester {
      * @param marker
      */
     removeMarker(marker) {
-        const rtcCenter = marker.rtcCenter || [0, 0, 0];
-        const hash = rtcCenter.join();
-        let rtcOcclusionTester = this._rtcOcclusionTesters[hash];
-        if (!rtcOcclusionTester) {
+        const rtcCenterHash = marker.rtcCenter.join();
+        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        if (!occlusionLayer) {
             return;
         }
-        if (rtcOcclusionTester.numMarkers === 1) {
-            delete this._rtcOcclusionTesters[hash];
+        if (occlusionLayer.numMarkers === 1) {
+            occlusionLayer.destroy();
+            delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+            this._occlusionLayersListDirty = true;
         } else {
-            rtcOcclusionTester.removeMarker(marker);
+            occlusionLayer.removeMarker(marker);
         }
+        delete this._markersToOcclusionLayersMap[marker.id];
     }
 
     /**
-     * Prepares for an occlusion test.
-     * Binds render buffer.
+     * Binds the render buffer. After calling this, the caller then renders object silhouettes to the render buffer,
+     * then calls drawMarkers() and doOcclusionTest().
      */
     bindRenderBuf() {
 
         const shaderSourceHash = [this._scene.canvas.canvas.id, this._scene._sectionPlanesState.getHash()].join(";");
+
         if (shaderSourceHash !== this._shaderSourceHash) {
             this._shaderSourceHash = shaderSourceHash;
             this._shaderSourceDirty = true;
         }
 
-        if (this._shaderSourceDirty) { // TODO: Set this when hash changes
+        if (this._shaderSourceDirty) {
             this._buildShaderSource();
             this._shaderSourceDirty = false;
             this._programDirty = true;
@@ -113,26 +139,17 @@ class OcclusionTester {
             this._occlusionTestListDirty = true;
         }
 
-        if (this._markerListDirty) {
-            this._buildMarkerList();
-            this._markerListDirty = false;
-            this._positionsDirty = true;
-            this._occlusionTestListDirty = true;
-        }
-
-        if (this._positionsDirty) { //////////////  TODO: Don't rebuild this when positions change, very wasteful
-            this._buildPositions();
-            this._positionsDirty = false;
-            this._vbosDirty = true;
-        }
-
-        if (this._vbosDirty) {
-            this._buildVBOs();
-            this._vbosDirty = false;
+        if (this._occlusionLayersListDirty) {
+            this._buildOcclusionLayersList();
+            this._occlusionLayersListDirty = false;
         }
 
         if (this._occlusionTestListDirty) {
-            this._buildOcclusionTestList();
+            for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
+                const occlusionLayer = this._occlusionLayersList[i];
+                occlusionLayer.occlusionTestListDirty = true;
+            }
+            this._occlusionTestListDirty = false;
         }
 
         if (!TEST_MODE) {
@@ -140,6 +157,16 @@ class OcclusionTester {
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
+    }
+
+    _buildOcclusionLayersList() {
+        let numOcclusionLayers = 0;
+        for (let rtcCenterHash in this._occlusionLayers) {
+            if (this._occlusionLayers.hasOwnProperty(rtcCenterHash)) {
+                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[rtcCenterHash];
+            }
+        }
+        this._occlusionLayersList.length = numOcclusionLayers;
     }
 
     _buildShaderSource() {
@@ -153,7 +180,7 @@ class OcclusionTester {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Mesh occlusion vertex shader");
+        src.push("// OcclusionTester vertex shader");
         src.push("attribute vec3 position;");
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -178,7 +205,7 @@ class OcclusionTester {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Mesh occlusion fragment shader");
+        src.push("// OcclusionTester fragment shader");
         src.push("precision lowp float;");
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
@@ -220,7 +247,7 @@ class OcclusionTester {
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -230,153 +257,82 @@ class OcclusionTester {
         this._aPosition = program.getAttribute("position");
     }
 
-    _buildMarkerList() {
-        this._numMarkers = 0;
-        for (var id in this._markers) {
-            if (this._markers.hasOwnProperty(id)) {
-                this._markerList[this._numMarkers] = this._markers[id];
-                this._markerIndices[id] = this._numMarkers;
-                this._numMarkers++;
-            }
-        }
-        this._markerList.length = this._numMarkers;
-    }
-
-    _buildPositions() {
-        var j = 0;
-        for (var i = 0; i < this._numMarkers; i++) {
-            if (this._markerList[i]) {
-                const marker = this._markerList[i];
-                const worldPos = marker.worldPos;
-                this._positions[j++] = worldPos[0];
-                this._positions[j++] = worldPos[1];
-                this._positions[j++] = worldPos[2];
-                this._indices[i] = i;
-            }
-        }
-        this._positions.length = this._numMarkers * 3;
-        this._indices.length = this._numMarkers;
-    }
-
-    _buildVBOs() {
-        if (this._positionsBuf) {
-            if (this._lenPositionsBuf === this._positions.length) { // Just updating buffer elements, don't need to reallocate
-                this._positionsBuf.setData(this._positions); // Indices don't need updating
-                return;
-            }
-            this._positionsBuf.destroy();
-            this._positionsBuf = null;
-            this._indicesBuf.destroy();
-            this._indicesBuf = null;
-        }
-        const gl = this._scene.canvas.gl;
-        const lenPositions = this._numMarkers * 3;
-        const lenIndices = this._numMarkers;
-        this._positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._positions), lenPositions, 3, gl.STATIC_DRAW);
-        this._indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), lenIndices, 1, gl.STATIC_DRAW);
-        this._lenPositionsBuf = this._positions.length;
-    }
-
-    _buildOcclusionTestList() {
-        const canvas = this._scene.canvas;
-        const near = this._scene.camera.perspective.near; // Assume near enough to ortho near
-        let marker;
-        let canvasPos;
-        let viewPos;
-        let canvasX;
-        let canvasY;
-        let lenPixels = 0;
-        let i;
-        const boundary = canvas.boundary;
-        const canvasWidth = boundary[2];
-        const canvasHeight = boundary[3];
-        this._lenOcclusionTestList = 0;
-        for (i = 0; i < this._numMarkers; i++) {
-            marker = this._markerList[i];
-            viewPos = marker.viewPos;
-            if (viewPos[2] > -near) { // Clipped by near plane
-                marker._setVisible(false);
-                continue;
-            }
-            canvasPos = marker.canvasPos;
-            canvasX = canvasPos[0];
-            canvasY = canvasPos[1];
-            if ((canvasX + 10) < 0 || (canvasY + 10) < 0 || (canvasX - 10) > canvasWidth || (canvasY - 10) > canvasHeight) {
-                marker._setVisible(false);
-                continue;
-            }
-            if (marker.entity && !marker.entity.visible) {
-                marker._setVisible(false);
-                continue;
-            }
-            if (marker.occludable) {
-                this._occlusionTestList[this._lenOcclusionTestList++] = marker;
-                this._pixels[lenPixels++] = canvasX;
-                this._pixels[lenPixels++] = canvasY;
-                continue;
-            }
-            marker._setVisible(true);
-        }
-    }
-
     /**
      * Draws {@link Marker}s to the render buffer.
-     * @param frameCtx
      */
-    drawMarkers(frameCtx) {
+    drawMarkers() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
         const sectionPlanesState = scene._sectionPlanesState;
         const camera = scene.camera;
-        const cameraState = camera._state;
+
         program.bind();
-        if (sectionPlanesState.sectionPlanes.length > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            let sectionPlaneUniforms;
-            let uSectionPlaneActive;
-            let sectionPlane;
-            let uSectionPlanePos;
-            let uSectionPlaneDir;
-            for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-                sectionPlaneUniforms = this._uSectionPlanes[i];
-                uSectionPlaneActive = sectionPlaneUniforms.active;
-                sectionPlane = sectionPlanes[i];
-                if (uSectionPlaneActive) {
-                    gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-                }
-                uSectionPlanePos = sectionPlaneUniforms.pos;
-                if (uSectionPlanePos) {
-                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                }
-                uSectionPlaneDir = sectionPlaneUniforms.dir;
-                if (uSectionPlaneDir) {
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+
+        for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
+
+            const occlusionLayer = this._occlusionLayersList[i];
+
+            occlusionLayer.update();
+
+            if (occlusionLayer.culledBySectionPlanes) {
+                continue;
+            }
+
+            const rtcCenter = occlusionLayer.rtcCenter;
+
+            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, rtcCenter));
+
+            const numSectionPlanes = sectionPlanesState.sectionPlanes.length;
+            if (numSectionPlanes > 0) {
+                const sectionPlanes = sectionPlanesState.sectionPlanes;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                    const active = occlusionLayer.sectionPlanesActive[sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a));
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    }
                 }
             }
+
+            this._aPosition.bindArrayBuffer(occlusionLayer.positionsBuf);
+
+            const indicesBuf = occlusionLayer.indicesBuf;
+            indicesBuf.bind();
+            gl.drawElements(gl.POINTS, indicesBuf.numItems, indicesBuf.itemType, 0);
         }
-        gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-        this._aPosition.bindArrayBuffer(this._positionsBuf);
-        this._indicesBuf.bind();
-        gl.drawElements(gl.POINTS, this._indicesBuf.numItems, this._indicesBuf.itemType, 0);
     }
 
     /**
-     * Reads render buffer and updates visibility states of {@link Marker}s if they can be found in the buffer.
+     * Sets visibilities of {@link Marker}s according to whether or not they are obscured by anything in the render buffer.
      */
     doOcclusionTest() {
+
         if (!TEST_MODE) {
+
             const markerR = MARKER_COLOR[0] * 255;
             const markerG = MARKER_COLOR[1] * 255;
             const markerB = MARKER_COLOR[2] * 255;
-            for (var i = 0; i < this._lenOcclusionTestList; i++) {
-                const marker = this._occlusionTestList[i];
-                const j = i * 2;
-                const k = i * 4;
-                const color = this._readPixelBuf.read(this._pixels[j], this._pixels[j + 1]);
-                const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
-                marker._setVisible(visible);
+
+            for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
+
+                const occlusionLayer = this._occlusionLayersList[i];
+
+                for (let i = 0; i < occlusionLayer.lenOcclusionTestList; i++) {
+
+                    const marker = occlusionLayer.occlusionTestList[i];
+                    const j = i * 2;
+                    const color = this._readPixelBuf.read(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
+                    const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
+
+                    marker._setVisible(visible);
+                }
             }
         }
     }
@@ -394,18 +350,22 @@ class OcclusionTester {
      * Destroys this OcclusionTester.
      */
     destroy() {
-        this._markers = {};
-        this._markerList.length = 0;
+        if (this.destroyed) {
+            return;
+        }
+        for (let i = 0, len = this._occlusionLayersList.length; i < len; i++) {
+            const occlusionLayer = this._occlusionLayersList[i];
+            occlusionLayer.destroy();
+        }
 
-        if (this._positionsBuf) {
-            this._positionsBuf.destroy();
-        }
-        if (this._indicesBuf) {
-            this._indicesBuf.destroy();
-        }
         if (this._program) {
             this._program.destroy();
         }
+
+        this._scene.camera.off(this._onCameraViewMatrix);
+        this._scene.camera.off(this._onCameraProjMatrix);
+        this._scene.canvas.off(this._onCanvasBoundary);
+        this.destroyed = true;
     }
 }
 

@@ -5,7 +5,7 @@ import {stats} from '../stats.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
-import {OcclusionTester} from "./OcclusionTester.js";
+import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {SAOBlendRenderer} from "./sao/SAOBlendRenderer.js";
 import {SAOBlurRenderer} from "./sao/SAOBlurRenderer.js";
