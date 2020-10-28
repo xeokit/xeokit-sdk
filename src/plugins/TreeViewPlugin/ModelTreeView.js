@@ -1,5 +1,4 @@
 import {Map} from "./../../viewer/scene/utils/Map.js";
-import {math} from "../../viewer/scene/math/math.js";
 
 const idMap = new Map();
 
@@ -24,7 +23,7 @@ class ModelTreeView {
         this._id = idMap.addItem();
         this._baseId = "" + this._id;
         this._viewer = viewer;
-        this._metaModel = model;
+        this._metaModel = metaModel;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
         this._containerElement = cfg.containerElement;
@@ -124,9 +123,9 @@ class ModelTreeView {
                     numUpdated++;
                 }
                 node.checked = visible;
-                const checkbox = document.getElementById(checkBoxId);
-                if (checkbox) {
-                    checkbox.checked = visible;
+                const checkbox2 = document.getElementById(checkBoxId);
+                if (checkbox2) {
+                    checkbox2.checked = visible;
                 }
                 if (entity) {
                     entity.visible = visible;
@@ -135,15 +134,15 @@ class ModelTreeView {
             let parent = checkedNode.parent;
             while (parent) {
                 parent.checked = visible;
-                const checkbox = document.getElementById(parent.nodeId); // Parent checkboxes are always in DOM
+                const checkbox2 = document.getElementById(parent.nodeId); // Parent checkboxes are always in DOM
                 if (visible) {
                     parent.numVisibleEntities += numUpdated;
                 } else {
                     parent.numVisibleEntities -= numUpdated;
                 }
                 const newChecked = (parent.numVisibleEntities > 0);
-                if (newChecked !== checkbox.checked) {
-                    checkbox.checked = newChecked;
+                if (newChecked !== checkbox2.checked) {
+                    checkbox2.checked = newChecked;
                 }
                 parent = parent.parent;
             }
@@ -244,7 +243,7 @@ class ModelTreeView {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -262,7 +261,7 @@ class ModelTreeView {
             storeyNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                 type: metaObjectType,
                 parent: buildingNode,
                 numEntities: 0,
@@ -301,7 +300,7 @@ class ModelTreeView {
                     const node = {
                         nodeId: this._objectToNodeID(objectId),
                         objectId: objectId,
-                        title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                        title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                         type: metaObjectType,
                         parent: typeNode,
                         numEntities: 0,
@@ -322,10 +321,7 @@ class ModelTreeView {
         }
     }
 
-    _createTypesNodes(
-        metaObject = this._rootMetaObject,
-        buildingNode,
-        typeNodes) {
+    _createTypesNodes(metaObject = this._rootMetaObject, buildingNode, typeNodes) {
         if (this._pruneEmptyNodes && (metaObject._countEntities === 0)) {
             return;
         }
@@ -337,7 +333,7 @@ class ModelTreeView {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -353,11 +349,11 @@ class ModelTreeView {
                 const objects = this._viewer.scene.objects;
                 const object = objects[objectId];
                 if (object) {
-                    var typeNode = typeNodes[metaObjectType];
+                    let typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
                         typeNode = {
-                            nodeId: this._objectToNodeID(metaObjectType),
-                            objectId: metaObjectType,
+                            nodeId: this._objectToNodeID(buildingNode.objectId + "." + metaObjectType),
+                            objectId: buildingNode.objectId + "." + metaObjectType,
                             title: metaObjectType,
                             type: metaObjectType,
                             parent: buildingNode,
@@ -405,7 +401,7 @@ class ModelTreeView {
         const node = {
             nodeId: this._objectToNodeID(objectId),
             objectId: objectId,
-            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
             type: metaObjectType,
             parent: parent,
             numEntities: 0,
@@ -562,7 +558,8 @@ class ModelTreeView {
 
     _createNodeElement(node) {
         const nodeElement = document.createElement('li');
-        const nodeId = this._objectToNodeID(node.objectId);
+        //const nodeId = this._objectToNodeID(node.objectId);
+        const nodeId = node.nodeId;
         nodeElement.id = 'node-' + nodeId;
         if (node.children.length > 0) {
             const switchElementId = "switch-" + nodeId;
