@@ -325,12 +325,8 @@ class BCFViewpointsPlugin extends Plugin {
             };
         }
 
-        bcfViewpoint.lines = [];
-        bcfViewpoint.bitmaps = [];
-
         // Clipping planes
 
-        bcfViewpoint.clipping_planes = [];
         const sectionPlanes = scene.sectionPlanes;
         for (let id in sectionPlanes) {
             if (sectionPlanes.hasOwnProperty(id)) {
@@ -354,6 +350,9 @@ class BCFViewpointsPlugin extends Plugin {
 
                 location = xyzArrayToObject(location);
                 direction = xyzArrayToObject(direction);
+                if (!bcfViewpoint.clipping_planes) {
+                    bcfViewpoint.clipping_planes = [];
+                }
                 bcfViewpoint.clipping_planes.push({location, direction});
             }
         }
@@ -462,6 +461,8 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````false````.
      * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
      * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
+     * @param {Boolean} [options.updateCompositeObjects=false] When ````true````, then when visibility and selection updates refer to composite objects (eg. an IfcBuildingStorey),
+     * then this method will apply the updates to objects within those composites.
      */
     setViewpoint(bcfViewpoint, options = {}) {
         if (!bcfViewpoint) {
@@ -474,6 +475,7 @@ class BCFViewpointsPlugin extends Plugin {
         const rayCast = (options.rayCast !== false);
         const immediate = (options.immediate !== false);
         const reset = (options.reset !== false);
+        const updateCompositeObjects = (!!options.updateCompositeObjects);
         const realWorldOffset = scene.realWorldOffset;
         const reverseClippingPlanes = (options.reverseClippingPlanes === true);
 
@@ -515,7 +517,7 @@ class BCFViewpointsPlugin extends Plugin {
                             if (entity) {
                                 entity.visible = true;
                             } else {
-                                scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), true);
+                                scene.setObjectsVisible(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, true);
                             }
                         });
                     }
@@ -527,7 +529,7 @@ class BCFViewpointsPlugin extends Plugin {
                             if (entity) {
                                 entity.visible = false;
                             } else {
-                                scene.setObjectsVisible(viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid), false);
+                                scene.setObjectsVisible(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, false);
                             }
                         });
                     }
@@ -551,7 +553,7 @@ class BCFViewpointsPlugin extends Plugin {
             if (bcfViewpoint.components.selection) {
                 scene.setObjectsSelected(scene.selectedObjectIds, false);
                 Object.keys(scene.models).forEach(() => {
-                    bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
+                    bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, true));
                 });
             }
 
