@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.4.7
 
-Unreleased
+October 28, 2020
 
 * BCFViewpointsPlugin
     * Fix BCFViewpointsPlugin visibility update for composite elements. [#452](https://github.com/xeokit/xeokit-sdk/issues/446) ([**@xeolabs**](https://github.com/xeolabs))  
