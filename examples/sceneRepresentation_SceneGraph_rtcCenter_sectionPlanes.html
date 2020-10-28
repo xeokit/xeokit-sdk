@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Basic Scene Graph with Relative-to-Center (RTC) Coordinates and Moving SectionPlane</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>Basic Scene Graph with Relative-to-Center (RTC) Coordinates and Moving SectionPlane</h1>
+
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {Node} from "../src/viewer/scene/nodes/Node.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+    import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    //-----------------------------------------------------------
+    // Create several RTC center points
+    //-----------------------------------------------------------
+
+    //const OFFSET = 1000000000.0;
+    const OFFSET = 40.0;
+
+    const rtcCenters = [
+        [0, 0, 0],
+        [OFFSET, 0, 0],
+        [0, 0, OFFSET],
+        [OFFSET, 0, OFFSET]
+    ];
+
+    //-----------------------------------------------------------
+    // Create a simple table model
+    // at each of our RTC centers. This will result in several
+    // tables, positioned apart from each other.
+    //-----------------------------------------------------------
+
+    for (let i = 0, len = rtcCenters.length; i < len; i++) {
+        buildTable(rtcCenters[i]);
+    }
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a moving SectionPlane, that moves through the table models
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewCanvasId: "mySectionPlanesOverviewCanvas",
+        overviewVisible: true
+    });
+
+    //const rtcCenter = rtcCenters[2];
+
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [rtcCenters[0][0] - 10, -10, rtcCenters[0][2] - 10],
+        dir: math.normalizeVec3([1.0, 0.01, 1])
+    });
+
+    sectionPlanes.showControl(sectionPlane.id);
+
+    let i = 0;
+    viewer.scene.on("tick", () => {
+        sectionPlane.pos = [sectionPlane.pos[0] + i, sectionPlane.pos[1], sectionPlane.pos[2] + i];
+        i += 0.001;
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastPickedEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastPickedEntity || hit.entity.id !== lastPickedEntity.id) {
+                if (lastPickedEntity) {
+                    lastPickedEntity.highlighted = false;
+                }
+                lastPickedEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastPickedEntity) {
+                lastPickedEntity.highlighted = false;
+                lastPickedEntity = null;
+            }
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Flies camera to the specified RTC center
+    //------------------------------------------------------------------------------------------------------------------
+
+    window.gotoRTCCenter = function (i) {
+
+        const rtcCenter = rtcCenters[i];
+
+        if (!rtcCenter) {
+            return;
+        }
+
+        viewer.cameraFlight.flyTo({
+            eye: [rtcCenter[0], 0, rtcCenter[2] - 10],
+            look: rtcCenter,
+            up: [0, 1, 0]
+        });
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Creates a simple table-shaped model from Nodes and Meshes, and centered at the given RTC center
+    //------------------------------------------------------------------------------------------------------------------
+
+    function buildTable(rtcCenter) {
+
+        let modelId = math.createUUID();
+
+        const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+            xSize: 1,
+            ySize: 1,
+            zSize: 1
+        }));
+
+        const model = new Node(viewer.scene, {
+            id: modelId,
+            isModel: true, // <--------------------- Node represents a model
+            rotation: [0, 0, 0],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            edges: true,
+
+            children: [
+
+                new Mesh(viewer.scene, { // Red table leg
+                    isObject: true, // <---------- Node represents an object
+                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    position: [-4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1, 0.3, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, { // Green table leg
+                    isObject: true, // <---------- Node represents an object
+                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    position: [4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 1.0, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {// Blue table leg
+                    isObject: true, // <---------- Node represents an object
+                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    position: [4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 0.3, 1.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {  // Yellow table leg
+                    isObject: true, // <---------- Node represents an object
+                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    position: [-4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 1.0, 0.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, { // Purple table top
+                    isObject: true, // <---------- Node represents an object
+                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    position: [0, -3, 0],
+                    scale: [6, 0.5, 6],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 0.3, 1.0]
+                    })
+                })
+            ]
+        });
+
+        model.edges = true;
+    }
+
+</script>
+</html>
