@@ -776,8 +776,10 @@ const Renderer = function (scene, options) {
 
         const tempVec3a = math.vec3();
         const tempMat4a = math.mat4();
+        const tempMat4b = math.mat4();
+
         const up = math.vec3([0, 1, 0]);
-        const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, 10000);
+        const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, 2000);
         const _pickResult = new PickResult();
 
         return function (params, pickResult = _pickResult) {
@@ -815,6 +817,8 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, scene.camera.project.far, tempMat4a);
+
                 if (params.matrix) {
 
                     pickViewMatrix = params.matrix;
@@ -826,7 +830,7 @@ const Renderer = function (scene, options) {
                     direction = params.direction || math.vec3([0, 0, 1]);
                     look = math.addVec3(origin, direction, tempVec3a);
 
-                    pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4a);
+                    pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
                     pickResult.origin = origin;
