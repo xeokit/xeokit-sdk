@@ -115,6 +115,15 @@ class OcclusionTester {
     }
 
     /**
+     * Returns true if an occlusion test is needed.
+     *
+     * @returns {boolean}
+     */
+    get needOcclusionTest() {
+        return this._occlusionTestListDirty;
+    }
+
+    /**
      * Binds the render buffer. After calling this, the caller then renders object silhouettes to the render buffer,
      * then calls drawMarkers() and doOcclusionTest().
      */
