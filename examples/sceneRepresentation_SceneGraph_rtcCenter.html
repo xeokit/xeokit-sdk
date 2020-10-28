@@ -80,7 +80,7 @@
     //-----------------------------------------------------------
 
     //const OFFSET = 10000000.0;
-    const OFFSET = 150.0;
+    const OFFSET = 50.0;
 
     const rtcCenters = [
         [0, 0, 0],
@@ -98,6 +98,8 @@
     for (let i = 0, len = rtcCenters.length; i < len; i++) {
         buildTable(rtcCenters[i]);
     }
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over Entities to highlight them
