@@ -325,12 +325,8 @@ class BCFViewpointsPlugin extends Plugin {
             };
         }
 
-        bcfViewpoint.lines = [];
-        bcfViewpoint.bitmaps = [];
-
         // Clipping planes
 
-        bcfViewpoint.clipping_planes = [];
         const sectionPlanes = scene.sectionPlanes;
         for (let id in sectionPlanes) {
             if (sectionPlanes.hasOwnProperty(id)) {
@@ -354,6 +350,9 @@ class BCFViewpointsPlugin extends Plugin {
 
                 location = xyzArrayToObject(location);
                 direction = xyzArrayToObject(direction);
+                if (!bcfViewpoint.clipping_planes) {
+                    bcfViewpoint.clipping_planes = [];
+                }
                 bcfViewpoint.clipping_planes.push({location, direction});
             }
         }
