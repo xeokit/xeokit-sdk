@@ -8,6 +8,7 @@ Unreleased
 
 * BCFViewpointsPlugin
     * Fix BCFViewpointsPlugin visibility update for composite elements. [#452](https://github.com/xeokit/xeokit-sdk/issues/446) ([**@xeolabs**](https://github.com/xeolabs))  
+    * Don't return empty non-mandatory nodes. [#454](https://github.com/xeokit/xeokit-sdk/issues/454) ([**@xeolabs**](https://github.com/xeolabs))
 * TreeViewPlugin
     * Fix TreeViewPlugin node checked states. [#455](https://github.com/xeokit/xeokit-sdk/issues/455) ([**@xeolabs**](https://github.com/xeolabs))
     
