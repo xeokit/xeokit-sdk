@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel with Batched Geometries and Transforms</title>
+    <title>PerformanceModel with Batched Geometries and SAO</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
         #myCanvas {
             background: lightblue;
         }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
+
     </style>
+
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
 
 </head>
 
@@ -18,8 +29,11 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>PerformanceModel with Batched Geometries and Transforms</h1>
+    <h1>PerformanceModel with Batched Geometries and SAO</h1>
 </div>
+
+<div id="my-gui-container"></div>
+
 </body>
 
 <script type="module">
@@ -45,16 +59,31 @@
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
     //------------------------------------------------------------------------------------------------------------------
+    // Enable and configure Scalable Ambient Obscurance (SAO)
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sao = viewer.scene.sao;
+
+    sao.enabled = true; // Only works if supported
+    sao.intensity = 0.20;
+    sao.bias = 0.5;
+    sao.scale = 230.0; // <<------- Scale the SAO effect for this model
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+    sao.blur = true;
+
+    //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
         id: "table",
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
-        position: [20, 0, 0],
+        position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
-        edges: true
+        edges: true,
+        saoEnabled: true
     });
 
     //-----------------------------------------------------------
@@ -292,7 +321,61 @@
         }
     });
 
-    window.viewer = viewer;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with SAO parameters
+    //------------------------------------------------------------------------------------------------------------------
+
+    const camera = viewer.camera;
+
+    var saoParams = new function () {
+        this.enabled = sao.enabled;
+        this.kernelRadius = sao.kernelRadius;
+        this.intensity = sao.intensity;
+        this.bias = sao.bias;
+        this.scale = sao.scale;
+        this.minResolution = sao.minResolution;
+        this.blur = sao.blur;
+        this.perspective = (camera.projection === "perspective");
+        this.far = camera.perspective.far;
+    }();
+
+    var update = function () {
+        sao.enabled = saoParams.enabled;
+        sao.kernelRadius = saoParams.kernelRadius;
+        sao.intensity = saoParams.intensity;
+        sao.bias = saoParams.bias;
+        sao.scale = saoParams.scale;
+        sao.minResolution = saoParams.minResolution;
+        sao.blur = saoParams.blur;
+        camera.projection = saoParams.perspective ? "perspective" : "ortho";
+        camera.perspective.far = saoParams.far;
+        camera.ortho.far = saoParams.far;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const saoFolder = gui.addFolder('SAO');
+    saoFolder.add(saoParams, 'enabled');
+    saoFolder.add(saoParams, 'bias', -2, 2);
+    saoFolder.add(saoParams, 'intensity', 0, 1.0);
+    saoFolder.add(saoParams, 'scale', 0, 2000);
+    saoFolder.add(saoParams, 'kernelRadius', 1, 200);
+    saoFolder.add(saoParams, 'minResolution', 0, 1);
+    saoFolder.add(saoParams, 'blur');
+    saoFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(saoParams, 'perspective');
+    cameraFolder.add(saoParams, 'far', 100, 5000);
+    cameraFolder.open();
+
+    var customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
 
 
 </script>

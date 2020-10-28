@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel Geometry Instancing</title>
+    <title>PerformanceModel with Geometry Instancing and Transform</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -18,24 +18,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>PerformanceModel</h1>
-    <p>Geometry instancing example</p>
-    <ul>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
-            - high-performance model representation
-        </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User Guide</a>
-        </li>
-
-    </ul>
+    <h1>PerformanceModel with Geometry Instancing and Transform</h1>
 </div>
 </body>
 
@@ -228,6 +211,8 @@
     //--------------------------------------------------------
 
     performanceModel.finalize();
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
     // Find Entity instances by their IDs
