@@ -2,6 +2,36 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.7
+
+Unreleased
+
+* BCFViewpointsPlugin
+    * Fix BCFViewpointsPlugin visibility update for composite elements. [#452](https://github.com/xeokit/xeokit-sdk/issues/446) ([**@xeolabs**](https://github.com/xeolabs))  
+
+# 1.4.6
+
+October 13, 2020
+
+* SectionPlane, SectionPlanesPlugin
+    * When flipping SectionPlanes, also flip the editing control. [#439](https://github.com/xeokit/xeokit-sdk/issues/446) ([**@xeolabs**](https://github.com/xeolabs))  
+* BCFViewpointsPlugin
+    * Fix setViewpoint colors. [#444](https://github.com/xeokit/xeokit-sdk/pull/444) ([**@amoki**](https://github.com/amoki))
+
+# 1.4.5
+
+October 2, 2020
+
+* Annotation, AnnotationsPlugin
+    * Workaround for iOS14 bug affecting WebGL framebuffers. [#439](https://github.com/xeokit/xeokit-sdk/issues/439) ([**@xeolabs**](https://github.com/xeolabs))  
+
+# 1.4.4
+
+September 30, 2020
+
+* ObjectsMemento  
+    * Support null Entity#colorize values in ObjectsMemento#saveobjects. [#437](https://github.com/xeokit/xeokit-sdk/issues/437) ([**@xeolabs**](https://github.com/xeolabs))     
+    
 # 1.4.3
 
 September 28, 2020

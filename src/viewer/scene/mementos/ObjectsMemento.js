@@ -106,6 +106,9 @@ class ObjectsMemento {
         this.objectsColorize = [];
 
         /** @private */
+        this.objectsHasColorize = [];
+
+        /** @private */
         this.objectsOpacity = [];
 
         /** @private */
@@ -145,7 +148,7 @@ class ObjectsMemento {
         const colorize = (!mask || mask.colorize);
         const opacity = (!mask || mask.opacity);
 
-        for (var objectId in objects) {
+        for (let objectId in objects) {
             if (objects.hasOwnProperty(objectId)) {
                 const object = objects[objectId];
                 const i = this.numObjects;
@@ -172,9 +175,14 @@ class ObjectsMemento {
                 }
                 if (colorize) {
                     const objectColor = object.colorize;
-                    this.objectsColorize[i * 3 + 0] = objectColor[0];
-                    this.objectsColorize[i * 3 + 1] = objectColor[1];
-                    this.objectsColorize[i * 3 + 2] = objectColor[2];
+                    if (objectColor) {
+                        this.objectsColorize[i * 3 + 0] = objectColor[0];
+                        this.objectsColorize[i * 3 + 1] = objectColor[1];
+                        this.objectsColorize[i * 3 + 2] = objectColor[2];
+                        this.objectsHasColorize[i] = true;
+                    } else {
+                        this.objectsHasColorize[i] = false;
+                    }
                 }
                 if (opacity) {
                     this.objectsOpacity[i] = object.opacity;
@@ -206,7 +214,7 @@ class ObjectsMemento {
 
         const objects = scene.objects;
 
-        for (var objectId in objects) {
+        for (let objectId in objects) {
             if (objects.hasOwnProperty(objectId)) {
                 const object = objects[objectId];
                 if (visible) {
@@ -230,11 +238,15 @@ class ObjectsMemento {
                 if (pickable) {
                     object.pickable = this.objectsPickable[i];
                 }
-                if (colorize) {
-                    color[0] = this.objectsColorize[i * 3 + 0];
-                    color[1] = this.objectsColorize[i * 3 + 1];
-                    color[2] = this.objectsColorize[i * 3 + 2];
-                    object.colorize = color;
+                if (colorize ) {
+                    if (this.objectsHasColorize[i]) {
+                        color[0] = this.objectsColorize[i * 3 + 0];
+                        color[1] = this.objectsColorize[i * 3 + 1];
+                        color[2] = this.objectsColorize[i * 3 + 2];
+                        object.colorize = color;
+                    } else {
+                        object.colorize = null;
+                    }
                 }
                 if (opacity) {
                     object.opacity = this.objectsOpacity[i];

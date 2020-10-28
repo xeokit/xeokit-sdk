@@ -1120,7 +1120,7 @@ const Renderer = function (scene, options) {
      */
     this.doOcclusionTest = function () {
 
-        if (this._occlusionTester) {
+        if (this._occlusionTester && this._occlusionTester.needOcclusionTest) {
 
             updateDrawlist();
 
@@ -1143,9 +1143,7 @@ const Renderer = function (scene, options) {
                     const drawableList = drawableInfo.drawableList;
                     for (let i = 0, len = drawableList.length; i < len; i++) {
                         const drawable = drawableList[i];
-                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
-
-                            // nTODO: Exclude transpArent
+                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
                             continue;
                         }
 
