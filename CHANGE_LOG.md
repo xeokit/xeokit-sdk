@@ -11,6 +11,8 @@ Unreleased
     * Don't return empty non-mandatory nodes. [#454](https://github.com/xeokit/xeokit-sdk/issues/454) ([**@xeolabs**](https://github.com/xeolabs))
 * TreeViewPlugin
     * Fix TreeViewPlugin node checked states. [#455](https://github.com/xeokit/xeokit-sdk/issues/455) ([**@xeolabs**](https://github.com/xeolabs))
+* Picking
+    * Fix PickResult#worldPos for arbitrary ray picking. [#447](https://github.com/xeokit/xeokit-sdk/issues/447) ([**@xeolabs**](https://github.com/xeolabs))
     
 # 1.4.6
 
