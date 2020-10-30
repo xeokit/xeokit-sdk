@@ -114,7 +114,7 @@ class Texture extends Component {
 
         this._state = new RenderState({
             texture: new Texture2D(this.scene.canvas.gl),
-            matrix: math.identityMat4(),   // Float32Array
+            matrix: math.identityMat4(),
             hasMatrix: (cfg.translate && (cfg.translate[0] !== 0 || cfg.translate[1] !== 0)) || (!!cfg.rotate) || (cfg.scale && (cfg.scale[0] !== 0 || cfg.scale[1] !== 0)),
             minFilter: this._checkMinFilter(cfg.minFilter),
             magFilter: this._checkMagFilter(cfg.magFilter),

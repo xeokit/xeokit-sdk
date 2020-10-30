@@ -9,6 +9,7 @@ import {ParserV2} from "./parsers/ParserV2.js";
 import {ParserV3} from "./parsers/ParserV3.js";
 import {ParserV4} from "./parsers/ParserV4.js";
 import {ParserV5} from "./parsers/ParserV5.js";
+import {ParserV6} from "./parsers/ParserV6.js";
 
 const parsers = {};
 
@@ -17,6 +18,7 @@ parsers[ParserV2.version] = ParserV2;
 parsers[ParserV3.version] = ParserV3;
 parsers[ParserV4.version] = ParserV4;
 parsers[ParserV5.version] = ParserV5;
+parsers[ParserV6.version] = ParserV6;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.xkt````* format.
@@ -30,11 +32,12 @@ parsers[ParserV5.version] = ParserV5;
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.xkt````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
+ * * Supports double-precision coordinates, via ````.xkt```` format version 6.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
- * * Does not support textures or physically-based materials.
+ * * Does not (yet) support textures or physically-based materials.
  *
  * ## Credits
  *

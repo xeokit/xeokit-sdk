@@ -40,9 +40,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye= [-9.54, 13.47, 29.97];
-    viewer.camera.look=[4.40, 3.72, 8.89];
-    viewer.camera.up= [0.21, 0.91, -0.31];
+    viewer.camera.eye = [-9.54, 13.47, 29.97];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [0.21, 0.91, -0.31];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -61,9 +61,9 @@
     // Display a red line segment to show the picking ray 
     //------------------------------------------------------------------------------------------------------------------
 
-    var rayHelper = new (function () {
+    const rayHelper = new (function () {
 
-        var origin = new Mesh(viewer.scene, {
+        const origin = new Mesh(viewer.scene, {
             geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
                 radius: 0.3,
                 heightSegments: 60,
@@ -75,7 +75,7 @@
             visible: true
         });
 
-        var ray = new Mesh(viewer.scene, {
+        const ray = new Mesh(viewer.scene, {
             geometry: new ReadableGeometry(viewer.scene, {
                 primitive: "lines",
                 positions: [0, 0, 0, 0, 0, 0],
@@ -90,7 +90,7 @@
             pickable: false
         });
 
-        var rayPositions = new Float32Array(6);
+        const rayPositions = new Float32Array(6);
 
         this.setRay = function (pos, dir) {
 
@@ -116,9 +116,9 @@
     // Display a red sphere wherever the ray picks a surface
     //------------------------------------------------------------------------------------------------------------------
 
-    var hitHelper = new (function () {
+    const hitHelper = new (function () {
 
-        var mesh = new Mesh(viewer.scene, {
+        const mesh = new Mesh(viewer.scene, {
             geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
                 radius: 0.3,
                 heightSegments: 60,
@@ -144,8 +144,8 @@
     // Dynamically pick surfaces of model with the pointer, show pick intersection with red sphere
     //------------------------------------------------------------------------------------------------------------------
 
-    var rayOrigin = new Float32Array([-10, 0, 5.0]);
-    var rayDirection = new Float32Array([20, -10, -10]);
+    const rayOrigin = new Float64Array([-10, 0, 5.0]);
+    const rayDirection = new Float64Array([20, -10, -10]);
 
     var xinc = 0.05;
     var i = 0;
@@ -173,7 +173,7 @@
 
             rayHelper.setRay(rayOrigin, rayDirection);
 
-            var hit = viewer.scene.pick({
+            const hit = viewer.scene.pick({
                 pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                 origin: rayOrigin,
                 direction: rayDirection

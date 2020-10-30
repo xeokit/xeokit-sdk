@@ -1,15 +1,15 @@
 import {FrameContext} from './FrameContext.js';
-import {RenderFlags} from './RenderFlags.js';
 import {RenderBuffer} from './RenderBuffer.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
-import {OcclusionTester} from "./OcclusionTester.js";
+import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {SAOBlendRenderer} from "./sao/SAOBlendRenderer.js";
 import {SAOBlurRenderer} from "./sao/SAOBlurRenderer.js";
+import {createRTCViewMat} from "../math/rtcCoords.js";
 
 /**
  * @private
@@ -18,7 +18,7 @@ const Renderer = function (scene, options) {
 
     options = options || {};
 
-    const frameCtx = new FrameContext();
+    const frameCtx = new FrameContext(scene);
     const canvas = scene.canvas.canvas;
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);
@@ -26,12 +26,8 @@ const Renderer = function (scene, options) {
 
     const pickIDs = new Map({});
 
-    var drawableTypeInfo = {};
-    var drawables = {};
-
-    const drawableListSorted = [];
-    let drawableListSortedLen = 0;
-    const shadowMeshLists = {};
+    let drawableTypeInfo = {};
+    let drawables = {};
 
     let drawableListDirty = true;
     let stateSortDirty = true;
@@ -55,8 +51,6 @@ const Renderer = function (scene, options) {
     const saoBlendRenderer = new SAOBlendRenderer(scene);
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
-
-    const renderFlags = new RenderFlags();
 
     this.needStateSort = function () {
         stateSortDirty = true;
@@ -93,12 +87,12 @@ const Renderer = function (scene, options) {
      *  @private
      */
     this.addDrawable = function (id, drawable) {
-        var type = drawable.type;
+        const type = drawable.type;
         if (!type) {
             console.error("Renderer#addDrawable() : drawable with ID " + id + " has no 'type' - ignoring");
             return;
         }
-        var drawableInfo = drawableTypeInfo[type];
+        let drawableInfo = drawableTypeInfo[type];
         if (!drawableInfo) {
             drawableInfo = {
                 type: drawable.type,
@@ -106,8 +100,8 @@ const Renderer = function (scene, options) {
                 isStateSortable: drawable.isStateSortable,
                 stateSortCompare: drawable.stateSortCompare,
                 drawableMap: {},
-                drawableList: [],
-                lenDrawableList: 0
+                drawableListPreCull: [],
+                drawableList: []
             };
             drawableTypeInfo[type] = drawableInfo;
         }
@@ -182,15 +176,18 @@ const Renderer = function (scene, options) {
      */
     this.render = function (params) {
         params = params || {};
-        updateDrawableList();
-        if (imageDirty || params.force) {
+        if (params.force) {
+            imageDirty = true;
+        }
+        updateDrawlist();
+        if (imageDirty) {
             draw(params);
             stats.frame.frameCount++;
             imageDirty = false;
         }
     };
 
-    function updateDrawableList() { // Prepares state-sorted array of drawables from maps of inserted drawables
+    function updateDrawlist() { // Prepares state-sorted array of drawables from maps of inserted drawables
         if (drawableListDirty) {
             buildDrawableList();
             drawableListDirty = false;
@@ -201,33 +198,54 @@ const Renderer = function (scene, options) {
             stateSortDirty = false;
             imageDirty = true;
         }
+        if (imageDirty) { // Image is usually dirty because the camera moved
+            cullDrawableList();
+        }
     }
 
     function buildDrawableList() {
-        for (var type in drawableTypeInfo) {
+        for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableMap = drawableInfo.drawableMap;
-                const drawableList = drawableInfo.drawableList;
-                var lenDrawableList = 0;
-                for (var id in drawableMap) {
+                const drawableListPreCull = drawableInfo.drawableListPreCull;
+                let lenDrawableList = 0;
+                for (let id in drawableMap) {
                     if (drawableMap.hasOwnProperty(id)) {
-                        drawableList[lenDrawableList++] = drawableMap[id];
+                        drawableListPreCull[lenDrawableList++] = drawableMap[id];
                     }
                 }
-                drawableList.length = lenDrawableList;
-                drawableInfo.lenDrawableList = lenDrawableList;
+                drawableListPreCull.length = lenDrawableList;
             }
         }
     }
 
     function sortDrawableList() {
-        for (var type in drawableTypeInfo) {
+        for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
                 const drawableInfo = drawableTypeInfo[type];
                 if (drawableInfo.isStateSortable) {
-                    drawableInfo.drawableList.sort(drawableInfo.stateSortCompare);
+                    drawableInfo.drawableListPreCull.sort(drawableInfo.stateSortCompare);
                 }
+            }
+        }
+    }
+
+    function cullDrawableList() {
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableListPreCull = drawableInfo.drawableListPreCull;
+                const drawableList = drawableInfo.drawableList;
+                let lenDrawableList = 0;
+                for (let i = 0, len = drawableListPreCull.length; i < len; i++) {
+                    const drawable = drawableListPreCull[i];
+                    drawable.rebuildRenderFlags();
+                    if (!drawable.renderFlags.culled) {
+                        drawableList[lenDrawableList++] = drawable;
+                    }
+                }
+                drawableList.length = lenDrawableList;
             }
         }
     }
@@ -243,7 +261,6 @@ const Renderer = function (scene, options) {
         if (sao.possible) {
             drawSAOBuffers(params);
         }
-
 
         drawShadowMaps();
 
@@ -317,9 +334,7 @@ const Renderer = function (scene, options) {
                         continue;
                     }
 
-                    drawable.getRenderFlags(renderFlags);
-
-                    if (renderFlags.normalFillOpaque) {
+                    if (drawable.renderFlags.normalFillOpaque) {
                         drawable.drawDepth(frameCtx);
                     }
                 }
@@ -399,9 +414,7 @@ const Renderer = function (scene, options) {
                         continue;
                     }
 
-                    drawable.getRenderFlags(renderFlags);
-
-                    if (renderFlags.normalFillOpaque) { // Transparent objects don't cast shadows (yet)
+                    if (drawable.renderFlags.normalFillOpaque) { // Transparent objects don't cast shadows (yet)
                         drawable.drawShadow(frameCtx);
                     }
                 }
@@ -498,7 +511,7 @@ const Renderer = function (scene, options) {
             // Render normal opaque solids, defer others to bins to render after
             //------------------------------------------------------------------------------------------------------
 
-            for (var type in drawableTypeInfo) {
+            for (let type in drawableTypeInfo) {
                 if (drawableTypeInfo.hasOwnProperty(type)) {
 
                     const drawableInfo = drawableTypeInfo[type];
@@ -512,7 +525,7 @@ const Renderer = function (scene, options) {
                             continue;
                         }
 
-                        drawable.getRenderFlags(renderFlags);
+                        const renderFlags = drawable.renderFlags;
 
                         if (renderFlags.normalFillOpaque) {
                             if (saoPossible && drawable.saoEnabled) {
@@ -786,7 +799,7 @@ const Renderer = function (scene, options) {
 
             pickResult.reset();
 
-            updateDrawableList();
+            updateDrawlist();
 
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
                 gl.getExtension("OES_element_index_uint");
@@ -850,6 +863,12 @@ const Renderer = function (scene, options) {
                 return null;
             }
 
+            const pickedEntity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
+
+            if (!pickedEntity) {
+                return null;
+            }
+
             if (params.pickSurface) {
 
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
@@ -867,7 +886,7 @@ const Renderer = function (scene, options) {
 
             pickBuffer.unbind();
 
-            pickResult.entity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
+            pickResult.entity = pickedEntity;
 
             return pickResult;
         };
@@ -895,7 +914,7 @@ const Renderer = function (scene, options) {
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
-        for (var type in drawableTypeInfo) {
+        for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
 
                 const drawableInfo = drawableTypeInfo[type];
@@ -964,7 +983,7 @@ const Renderer = function (scene, options) {
         pickResult.primIndex = primIndex;
     }
 
-    var pickWorldPos = (function () {
+    const pickWorldPos = (function () {
 
         const tempVec4a = math.vec4();
         const tempVec4b = math.vec4();
@@ -973,6 +992,7 @@ const Renderer = function (scene, options) {
         const tempVec4e = math.vec4();
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
+        const tempMat4c = math.mat4();
 
         return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
@@ -997,17 +1017,28 @@ const Renderer = function (scene, options) {
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
             // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            var x = (canvasX - canvas.width / 2) / (canvas.width / 2);
-            var y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
-            var pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4a);
-            var pvMatInverse = math.inverseMat4(pvMat, tempMat4b);
+            const x = (canvasX - canvas.width / 2) / (canvas.width / 2);
+            const y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+
+            const rtcCenter = pickable.rtcCenter;
+            let pvMat;
+
+            if (rtcCenter) {
+                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, rtcCenter, tempMat4a);
+                pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
+
+            } else {
+                pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4b);
+            }
+
+            const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
 
             tempVec4a[0] = x;
             tempVec4a[1] = y;
             tempVec4a[2] = -1;
             tempVec4a[3] = 1;
 
-            var world1 = math.transformVec4(pvMatInverse, tempVec4a);
+            let world1 = math.transformVec4(pvMatInverse, tempVec4a);
             world1 = math.mulVec4Scalar(world1, 1 / world1[3]);
 
             tempVec4b[0] = x;
@@ -1015,19 +1046,23 @@ const Renderer = function (scene, options) {
             tempVec4b[2] = 1;
             tempVec4b[3] = 1;
 
-            var world2 = math.transformVec4(pvMatInverse, tempVec4b);
+            let world2 = math.transformVec4(pvMatInverse, tempVec4b);
             world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
 
-            var dir = math.subVec3(world2, world1, tempVec4c);
-            var worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+            const dir = math.subVec3(world2, world1, tempVec4c);
+            const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+
+            if (rtcCenter) {
+                math.addVec3(worldPos, rtcCenter);
+            }
 
             pickResult.worldPos = worldPos;
         }
     })();
 
     function unpackDepth(depthZ) {
-        var vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
-        var bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
+        const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
+        const bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
         return math.dotVec4(vec, bitShift);
     }
 
@@ -1091,18 +1126,15 @@ const Renderer = function (scene, options) {
 
         if (this._occlusionTester && this._occlusionTester.needOcclusionTest) {
 
-            updateDrawableList();
+            updateDrawlist();
 
             this._occlusionTester.bindRenderBuf();
-
-            // Draw silhouettes of occluding objects
 
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
@@ -1118,6 +1150,7 @@ const Renderer = function (scene, options) {
                         if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
                             continue;
                         }
+
                         drawable.drawOcclusion(frameCtx);
                     }
                 }

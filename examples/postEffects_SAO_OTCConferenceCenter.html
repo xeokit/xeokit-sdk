@@ -85,13 +85,15 @@
     const camera = scene.camera;
 
     sao.enabled = true; // Only works if supported (see above)
-    sao.intensity = 0.25;
+    sao.intensity = 0.20;
     sao.bias = 0.5;
     sao.scale = 1000.0;
     sao.minResolution = 0.0;
     sao.kernelRadius = 100;
 
     cameraControl.followPointer = true;
+    cameraControl.dollyInertia = 0;
+    cameraControl.mouseWheelDollyRate = 40;
 
     camera.eye = [10.45, 17.38, -98.31];
     camera.look = [43.09, 0.5, -26.76];
@@ -183,7 +185,7 @@
 
     const cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(saoParams, 'perspective');
-    cameraFolder.add(saoParams, 'far', 100, 5000);
+    cameraFolder.add(saoParams, 'far', 100, 10000);
     cameraFolder.open();
 
     var customContainer = document.getElementById('my-gui-container');

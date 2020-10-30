@@ -156,6 +156,7 @@ class Node extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Node.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -224,6 +225,7 @@ class Node extends Component {
             this.scene._registerObject(this);
         }
 
+        this.rtcCenter = cfg.rtcCenter;
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -305,7 +307,7 @@ class Node extends Component {
     /**
      * Gets the Node's World-space 3D axis-aligned bounding box.
      *
-     * Represented by a six-element Float32Array containing the min/max extents of the
+     * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}
@@ -315,6 +317,36 @@ class Node extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * Sets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        if (rtcCenter) {
+            if (!this._rtcCenter) {
+                this._rtcCenter = math.vec3();
+            }
+            this._rtcCenter.set(rtcCenter);
+        } else {
+            if (this._rtcCenter) {
+                this._rtcCenter = null;
+            }
+        }
+        for (let i = 0, len = this._children.length; i < len; i++) {
+            this._children[i].rtcCenter = rtcCenter;
+        }
+    }
+
+    /**
+     *  Gets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
     }
 
     /**

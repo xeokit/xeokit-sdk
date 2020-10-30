@@ -12,6 +12,7 @@ function buildVertex(scene) {
     const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Batched geometry normals vertex shader");
+
     src.push("attribute vec3 position;");
     src.push("attribute vec3 offset;");
     src.push("attribute vec3 normal;");

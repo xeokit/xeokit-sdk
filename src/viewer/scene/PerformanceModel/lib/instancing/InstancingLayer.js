@@ -29,20 +29,32 @@ class InstancingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.layerIndex
      * @param cfg.primitive
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.normals Flat float normals array.
      * @param cfg.indices Flat int indices array.
      * @param cfg.edgeIndices Flat int edges indices array.
      * @param cfg.edgeThreshold
+     * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
+
+        /**
+         * Index of this InstancingLayer in PerformanceModel#_layerList
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
         this._instancingRenderers = getInstancingRenderers(model.scene);
         this.model = model;
         this._aabb = math.collapseAABB3();
-        var primitiveName = cfg.primitive || "triangles";
-        var primitive;
+
+        let primitiveName = cfg.primitive || "triangles";
+        let primitive;
+
         const gl = model.scene.canvas.gl;
+
         switch (primitiveName) {
             case "points":
                 primitive = gl.POINTS;
@@ -70,12 +82,14 @@ class InstancingLayer {
                 primitive = gl.TRIANGLES;
                 primitiveName = "triangles";
         }
-        var stateCfg = {
+
+        const stateCfg = {
             primitiveName: primitiveName,
             primitive: primitive,
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
-            obb: math.OBB3()
+            obb: math.OBB3(),
+            rtcCenter: null
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
@@ -104,17 +118,18 @@ class InstancingLayer {
                 stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
             }
         }
+
         if (cfg.normals) {
 
             if (preCompressed) {
 
-                let normalized = true; // For oct-encoded UInt8
+                const normalized = true; // For oct-encoded UInt8
                 stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
 
             } else {
 
-                var lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
-                let normalized = true; // For oct-encoded UInt8
+                const lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
+                const normalized = true; // For oct-encoded UInt8
                 stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
             }
         }
@@ -123,7 +138,7 @@ class InstancingLayer {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
 
-        var edgeIndices = cfg.edgeIndices;
+        let edgeIndices = cfg.edgeIndices;
         if (!edgeIndices) {
             edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
         }
@@ -139,6 +154,7 @@ class InstancingLayer {
         this._numXRayedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
@@ -165,7 +181,17 @@ class InstancingLayer {
 
         this._portions = [];
 
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
+
         this._finalized = false;
+
+        /**
+         * The axis-aligned World-space boundary of this InstancingLayer's positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -192,14 +218,14 @@ class InstancingLayer {
 
         // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
-        var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
-        var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        var selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-        var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
-        var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-        var culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
+        const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
+        const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
+        const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        const selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+        const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        const culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
 
         this._flags.push(visible);
         this._flags.push(xrayed);
@@ -227,6 +253,10 @@ class InstancingLayer {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
         }
+        if (clippable) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        }
         if (edges) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
@@ -244,10 +274,12 @@ class InstancingLayer {
         const g = rgbaInt[1];
         const b = rgbaInt[2];
         const a = rgbaInt[3];
+
         if (opacity < 255) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
+
         this._colors.push(r);
         this._colors.push(g);
         this._colors.push(b);
@@ -302,9 +334,9 @@ class InstancingLayer {
         // Expand AABB
 
         math.collapseAABB3(worldAABB);
-        var obb = this._state.obb;
-        var lenPositions = obb.length;
-        for (var i = 0; i < lenPositions; i += 4) {
+        const obb = this._state.obb;
+        const lenPositions = obb.length;
+        for (let i = 0; i < lenPositions; i += 4) {
             tempVec4a[0] = obb[i + 0];
             tempVec4a[1] = obb[i + 1];
             tempVec4a[2] = obb[i + 2];
@@ -317,9 +349,21 @@ class InstancingLayer {
             }
         }
 
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
+        }
+
+        math.expandAABB3(this.aabb, worldAABB);
+
         this._state.numInstances++;
 
-        var portionId = this._portions.length;
+        const portionId = this._portions.length;
         this._portions.push({});
 
         this._numPortions++;
@@ -334,25 +378,25 @@ class InstancingLayer {
         }
         const gl = this.model.scene.canvas.gl;
         if (this._colors.length > 0) {
-            let normalized = false;
+            const normalized = false;
             this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._colors = []; // Release memory
         }
         if (this._flags.length > 0) {
-            let normalized = true;
+            const normalized = true;
             this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags), this._flags.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._flags = [];
             this._flags2 = [];
         }
         if (this._offsets.length > 0) {
-            let normalized = false;
+            const normalized = false;
             this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, normalized);
             this._offsets = []; // Release memory
         }
         if (this._modelMatrixCol0.length > 0) {
 
-            let normalized = false;
+            const normalized = false;
 
             this._state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
             this._state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
@@ -369,14 +413,14 @@ class InstancingLayer {
             this._modelNormalMatrixCol2 = [];
         }
         if (this._pickColors.length > 0) {
-            let normalized = false;
+            const normalized = false;
             this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
             this._pickColors = []; // Release memory
         }
         this._finalized = true;
     }
 
-    // The following setters are called by PerformanceMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
     initFlags(portionId, flags) {
@@ -395,6 +439,10 @@ class InstancingLayer {
         if (flags & RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
         }
         if (flags & RENDER_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
@@ -485,6 +533,13 @@ class InstancingLayer {
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
         }
         this._setFlags2(portionId, flags);
     }
@@ -578,10 +633,10 @@ class InstancingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
-        var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
+        const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
+        const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
+        const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        const selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
         tempUint8Vec4[0] = visible;
         tempUint8Vec4[1] = xrayed;
         tempUint8Vec4[2] = highlighted;
@@ -593,10 +648,10 @@ class InstancingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-        var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
-        var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-        var culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
+        const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+        const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        const culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
         tempUint8Vec4[0] = clippable;
         tempUint8Vec4[1] = edges;
         tempUint8Vec4[2] = pickable;
@@ -909,7 +964,7 @@ class InstancingLayer {
     }
 }
 
-var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
+const quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
     const translate = math.mat4();
     const scale = math.mat4();
     const scalar = math.vec3();
@@ -927,8 +982,8 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
         const xMultiplier = xmax !== xmin ? 65535 / (xmax - xmin) : 0;
         const yMultiplier = ymax !== ymin ? 65535 / (ymax - ymin) : 0;
         const zMultiplier = zmax !== zmin ? 65535 / (zmax - zmin) : 0;
-        let i;
-        for (i = 0; i < lenPositions; i += 3) {
+
+        for (let i = 0; i < lenPositions; i += 3) {
             quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
             quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
             quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);

@@ -6,7 +6,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
 
 
-var distVec3 = new Float32Array(3);
+var distVec3 = math.vec3();
 
 const lengthWire = (x1, y1, x2, y2) => {
     var a = x1 - x2;
@@ -46,12 +46,12 @@ class DistanceMeasurement extends Component {
         this._originMarker = new Marker(scene, cfg.origin);
         this._targetMarker = new Marker(scene, cfg.target);
 
-        this._originWorld = new Float32Array(3);
-        this._targetWorld = new Float32Array(3);
+        this._originWorld = math.vec3();
+        this._targetWorld = math.vec3();
 
-        this._wp = new Float32Array(24);
-        this._vp = new Float32Array(24);
-        this._pp = new Float32Array(24);
+        this._wp = new Float64Array(24);
+        this._vp = new Float64Array(24);
+        this._pp = new Float64Array(24);
         this._cp = new Int16Array(8);
 
         this._xAxisLabelCulled = false;

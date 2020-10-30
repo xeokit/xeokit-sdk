@@ -55,7 +55,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * }
  *
  * sao.enabled = true; // Enable SAO - only works if supported (see above)
- * sao.intensity = 0.25;
+ * sao.intensity = 0.20;
  * sao.bias = 0.5;
  * sao.scale = 500.0;
  * sao.minResolution = 0.0;
@@ -300,13 +300,13 @@ class SAO extends Component {
     /**
      * Sets the degree of darkening (ambient obscurance) produced by the SAO effect.
      *
-     * Default value is ````0.25````.
+     * Default value is ````0.20````.
      *
      * @type {Number}
      */
     set intensity(value) {
         if (value === undefined || value === null) {
-            value = 0.25;
+            value = 0.20;
         }
         if (this._intensity === value) {
             return;

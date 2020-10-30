@@ -29,6 +29,26 @@ function getPositionsBounds(array) {
     };
 }
 
+const createPositionsDecodeMatrix = (function () {
+    const translate = math.mat4();
+    const scale = math.mat4();
+    return function (aabb, positionsDecodeMatrix) {
+        positionsDecodeMatrix = positionsDecodeMatrix || math.mat4();
+        const xmin = aabb[0];
+        const ymin = aabb[1];
+        const zmin = aabb[2];
+        const xwid = aabb[3] - xmin;
+        const ywid = aabb[4] - ymin;
+        const zwid = aabb[5] - zmin;
+        const maxInt = 65535;
+        math.identityMat4(translate);
+        math.translationMat4v(aabb, translate);
+        math.identityMat4(scale);
+        math.scalingMat4v([xwid / maxInt, ywid / maxInt, zwid / maxInt], scale);
+        math.mulMat4(translate, scale, positionsDecodeMatrix);
+        return positionsDecodeMatrix;
+    };
+})();
 
 /**
  * @private
@@ -314,6 +334,7 @@ function decompressNormals(octs, result) {
 const geometryCompressionUtils = {
 
     getPositionsBounds: getPositionsBounds,
+    createPositionsDecodeMatrix: createPositionsDecodeMatrix,
     compressPositions: compressPositions,
     decompressPositions: decompressPositions,
     decompressPosition: decompressPosition,

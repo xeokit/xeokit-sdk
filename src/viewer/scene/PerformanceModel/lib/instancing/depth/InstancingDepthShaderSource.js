@@ -11,6 +11,7 @@ function buildVertex(scene) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Instancing geometry depth drawing vertex shader");
+
     src.push("attribute vec3 position;");
     src.push("attribute vec3 offset;");
     src.push("attribute vec4 color;");

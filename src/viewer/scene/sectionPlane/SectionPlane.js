@@ -1,5 +1,6 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
+import {math} from "../math/math.js";
 
 /**
  *  @desc An arbitrarily-aligned World-space clipping plane.
@@ -72,8 +73,9 @@ class SectionPlane extends Component {
 
         this._state = new RenderState({
             active: true,
-            pos: new Float32Array(3),
-            dir: new Float32Array(3)
+            pos: math.vec3(),
+            dir: math.vec3(),
+            dist: 0
         });
 
         this.active = cfg.active;
@@ -122,12 +124,13 @@ class SectionPlane extends Component {
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
+        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#pos} property changes.
 
          @event pos
-         @param value Float32Array The property's new value
+         @param value The property's new value
          */
         this.fire("pos", this._state.pos);
     }
@@ -152,6 +155,7 @@ class SectionPlane extends Component {
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
+        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#dir} property changes.
@@ -171,6 +175,18 @@ class SectionPlane extends Component {
      */
     get dir() {
         return this._state.dir;
+    }
+
+    /**
+     * Gets this SectionPlane's distance to the origin of the World-space coordinate system.
+     *
+     * This is the dot product of {@link SectionPlane#pos} and {@link SectionPlane#dir} and is automatically re-calculated
+     * each time either of two properties are updated.
+     *
+     * @returns {Number}
+     */
+    get dist() {
+        return this._state.dist;
     }
 
     /**

@@ -24,11 +24,21 @@ class BatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.layerIndex
+     * @param cfg.positionsDecodeMatrix
+     * @param cfg.rtcCenter
      * @param cfg.buffer
      * @param cfg.scratchMemory
      * @param cfg.primitive
      */
     constructor(model, cfg) {
+
+        /**
+         * Index of this BatchingLayer in {@link PerformanceModel#_layerList}.
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
         this._buffer = new BatchingBuffer();
@@ -75,7 +85,8 @@ class BatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: math.mat4()
+            positionsDecodeMatrix: math.mat4(),
+            rtcCenter: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -85,6 +96,7 @@ class BatchingLayer {
         this._numXRayedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
@@ -95,6 +107,16 @@ class BatchingLayer {
         this._finalized = false;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
+
+        /**
+         * The axis-aligned World-space boundary of this BatchingLayer's positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -112,8 +134,7 @@ class BatchingLayer {
     }
 
     /**
-     *
-     * Creates a new portion within this InstancingLayer, returns the new portion ID.
+     * Creates a new portion within this BatchingLayer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, flags, color and matrix.
      *
@@ -218,6 +239,18 @@ class BatchingLayer {
             }
         }
 
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
+        }
+
+        math.expandAABB3(this.aabb, worldAABB);
+
         if (normals) {
 
             if (this._preCompressed) {
@@ -277,6 +310,10 @@ class BatchingLayer {
             if (selected) {
                 this._numSelectedLayerPortions++;
                 this.model.numSelectedLayerPortions++;
+            }
+            if (clippable) {
+                this._numClippableLayerPortions++;
+                this.model.numClippableLayerPortions++;
             }
             if (edges) {
                 this._numEdgesLayerPortions++;
@@ -423,7 +460,7 @@ class BatchingLayer {
         this._finalized = true;
     }
 
-    // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
     initFlags(portionId, flags) {
@@ -442,6 +479,10 @@ class BatchingLayer {
         if (flags & RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
         }
         if (flags & RENDER_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
@@ -532,6 +573,13 @@ class BatchingLayer {
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
         }
         this._setFlags2(portionId, flags);
     }
@@ -956,8 +1004,7 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
         const xMultiplier = maxInt / xwid;
         const yMultiplier = maxInt / ywid;
         const zMultiplier = maxInt / zwid;
-        let i;
-        for (i = 0; i < lenPositions; i += 3) {
+        for (let i = 0; i < lenPositions; i += 3) {
             quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
             quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
             quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);

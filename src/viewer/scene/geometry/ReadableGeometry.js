@@ -584,7 +584,7 @@ class ReadableGeometry extends Geometry {
     /**
      * Local-space axis-aligned 3D boundary (AABB) of this geometry.
      *
-     * The AABB is represented by a six-element Float32Array containing the min/max extents of the
+     * The AABB is represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @property aabb
@@ -605,7 +605,7 @@ class ReadableGeometry extends Geometry {
     /**
      * Local-space oriented 3D boundary (OBB) of this geometry.
      *
-     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box,
+     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box,
      * where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
      *
      * @property obb

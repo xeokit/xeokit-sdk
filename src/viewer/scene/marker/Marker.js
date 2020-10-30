@@ -1,6 +1,7 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {PerformanceNode} from "../PerformanceModel/lib/PerformanceNode.js";
+import {worldToRTCPos} from "../math/rtcCoords.js";
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -131,9 +132,11 @@ class Marker extends Component {
 
         this._entity = null;
         this._visible = null;
-        this._worldPos = new Float32Array(3);
-        this._viewPos = new Float32Array(3);
-        this._canvasPos = new Float32Array(2);
+        this._worldPos = math.vec3();
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
+        this._viewPos = math.vec3();
+        this._canvasPos = math.vec2();
         this._occludable = false;
 
         this._onCameraViewMatrix = this.scene.camera.on("matrix", () => {
@@ -269,6 +272,7 @@ class Marker extends Component {
      */
     set worldPos(worldPos) {
         this._worldPos.set(worldPos || [0, 0, 0]);
+        worldToRTCPos(this._worldPos, this._rtcCenter, this._rtcPos);
         if (this._occludable) {
             this._renderer.markerWorldPosUpdated(this);
         }
@@ -283,6 +287,28 @@ class Marker extends Component {
      */
     get worldPos() {
         return this._worldPos;
+    }
+
+    /**
+     * Gets the RTC center of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
+    }
+
+    /**
+     * Gets the RTC position of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcPos() {
+        return this._rtcPos;
     }
 
     /**

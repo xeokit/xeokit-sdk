@@ -83,11 +83,13 @@ class PivotController {
      */
     startPivot(worldPos) {
 
-        if (worldPos) { // Use last pivotPoint by default
-            this._pivotWorldPos.set(worldPos);
-        }
-
         const camera = this._scene.camera;
+
+        if (worldPos) {
+            this._pivotWorldPos.set(worldPos);
+        } else {
+            this._pivotWorldPos.set(camera.look);
+        }
 
         let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
         math.transformPoint3(lookat, this._pivotWorldPos, this._cameraOffset);

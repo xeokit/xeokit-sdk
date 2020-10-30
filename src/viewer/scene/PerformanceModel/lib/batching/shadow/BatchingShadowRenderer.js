@@ -1,5 +1,9 @@
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingShadowShaderSource} from "./BatchingShadowShaderSource.js";
+import {math} from "../../../../math/math.js";
+import {getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * Renders BatchingLayer fragment depths to a shadow map.
@@ -23,10 +27,10 @@ class BatchingShadowRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, layer) {
+    drawLayer( frameCtx, batchingLayer) {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
+        const state = batchingLayer._state;
         if (!this._program) {
             this._allocate();
         }
@@ -34,7 +38,7 @@ class BatchingShadowRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         if (this._aColor) { // Needed for masking out transparent entities using alpha channel
             this._aColor.bindArrayBuffer(state.colorsBuf);
@@ -49,6 +53,32 @@ class BatchingShadowRenderer {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
         state.indicesBuf.bind();
+
+        // TODO: Section planes need to be set if RTC center has changed since last RTC center recorded on frameCtx
+
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const renderFlags = model.renderFlags;
+            const rtcCenter = batchingLayer._state.rtcCenter;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    if (rtcCenter) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                    } else {
+                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                    }
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                }
+            }
+        }
+
         gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
     }
 
@@ -85,34 +115,9 @@ class BatchingShadowRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
-        const sectionPlanesState = scene._sectionPlanesState;
         program.bind();
         gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frameCtx.shadowViewMatrix);
         gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix);
-        if (sectionPlanesState.sectionPlanes.length > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            let sectionPlaneUniforms;
-            let uSectionPlaneActive;
-            let sectionPlane;
-            let uSectionPlanePos;
-            let uSectionPlaneDir;
-            for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-                sectionPlaneUniforms = this._uSectionPlanes[i];
-                uSectionPlaneActive = sectionPlaneUniforms.active;
-                sectionPlane = sectionPlanes[i];
-                if (uSectionPlaneActive) {
-                    gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-                }
-                uSectionPlanePos = sectionPlaneUniforms.pos;
-                if (uSectionPlanePos) {
-                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                }
-                uSectionPlaneDir = sectionPlaneUniforms.dir;
-                if (uSectionPlaneDir) {
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                }
-            }
-        }
         this._lastLightId = null;
     }
 

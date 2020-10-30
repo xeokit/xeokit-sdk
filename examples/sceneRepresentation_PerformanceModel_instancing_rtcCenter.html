@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Relative-to-center (RTC) coordinates with instanced geometry</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1><a target="_other"
+           href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
+    </h1>
+    <p>Relative-to-center (RTC) coordinates with instanced geometry. Each of these four tables has a different RTC
+        center.</p>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
+            - xeokit Viewer
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
+            - high-performance model representation
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "tables",
+        isModel: true,
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    //-----------------------------------------------------------
+    // Create several RTC center points
+    //-----------------------------------------------------------
+
+    const OFFSET = 40.0;
+    //const OFFSET = 1000000.0;
+
+    const rtcCenters = [
+        [0, 0, 0],
+        [OFFSET, 0, 0],
+        [0, 0, OFFSET],
+        [OFFSET, 0, OFFSET]
+    ];
+
+    //-----------------------------------------------------------
+    // Within out PerformanceModel, create a simple table model
+    // at each of our RTC centers. This will result in several
+    // tables, positioned very far apart from each other.
+    //-----------------------------------------------------------
+
+    for (let i = 0, len = rtcCenters.length; i < len; i++) {
+        buildTable(performanceModel, rtcCenters[i]);
+    }
+
+    //------------------------------------------------------------
+    // Finalize the PerformanceModel.
+    //------------------------------------------------------------
+
+    performanceModel.finalize();
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastPickedEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastPickedEntity || hit.entity.id !== lastPickedEntity.id) {
+                if (lastPickedEntity) {
+                    lastPickedEntity.highlighted = false;
+                }
+                lastPickedEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastPickedEntity) {
+                lastPickedEntity.highlighted = false;
+                lastPickedEntity = null;
+            }
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Continually orbit the point-of-interest
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.on("tick", () => {
+      //  viewer.camera.orbitYaw(0.4);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Flies camera to the specified RTC center
+    //------------------------------------------------------------------------------------------------------------------
+
+    window.gotoRTCCenter = function (i) {
+
+        const rtcCenter = rtcCenters[i];
+
+        if (!rtcCenter) {
+            return;
+        }
+
+        viewer.cameraFlight.flyTo({
+            eye: [rtcCenter[0], 0, rtcCenter[2] - 10],
+            look: rtcCenter,
+            up: [0, 1, 0]
+        });
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Creates a simple table-shaped model with the given PerformanceModel, reusing geometry amongst all
+    // meshes, and centered at the given RTC center
+    //------------------------------------------------------------------------------------------------------------------
+
+    function buildTable(performanceModel, rtcCenter) {
+
+        const geometryId = math.createUUID();
+
+        performanceModel.createGeometry({
+            id: geometryId,
+            rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+            primitive: "triangles",
+            positions: [
+                1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+                1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+                -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+            ],
+            normals: [
+                0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+                0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+                0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+            ],
+            indices: [
+                0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+                16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+            ]
+        });
+
+        let meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [-4, -6, -4],
+            scale: [1, 3, 1],
+            rotation: [0, 0, 0],
+            color: [1, 0.3, 0.3]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [4, -6, -4],
+            scale: [1, 3, 1],
+            rotation: [0, 0, 0],
+            color: [0.3, 1.0, 0.3]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [4, -6, 4],
+            scale: [1, 3, 1],
+            rotation: [0, 0, 0],
+            color: [0.3, 0.3, 1.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [-4, -6, 4],
+            scale: [1, 3, 1],
+            rotation: [0, 0, 0],
+            color: [1.0, 1.0, 0.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [0, -3, 0],
+            scale: [6, 0.5, 6],
+            rotation: [0, 0, 0],
+            color: [1.0, 0.3, 1.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+    }
+
+</script>
+</html>

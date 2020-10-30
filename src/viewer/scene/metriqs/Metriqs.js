@@ -234,7 +234,7 @@ class Metrics extends Component {
      * @param {Number[]} [realPos] Destination for Real-space 3D position.
      * @returns {Number[]} Real-space 3D position, in units indicated by {@link Metrics#units}.
      */
-    worldToRealPos(worldPos, realPos = new Float32Array(3)) {
+    worldToRealPos(worldPos, realPos = math.vec3(3)) {
         realPos[0] = this._origin[0] + (this._scale * worldPos[0]);
         realPos[1] = this._origin[1] + (this._scale * worldPos[1]);
         realPos[2] = this._origin[2] + (this._scale * worldPos[2]);
@@ -249,7 +249,7 @@ class Metrics extends Component {
      * @param {Number[]} [worldPos] Destination for World-space 3D position.
      * @returns {Number[]} World-space 3D position.
      */
-    realToWorldPos(realPos, worldPos = new Float32Array(3)) {
+    realToWorldPos(realPos, worldPos = math.vec3(3)) {
         worldPos[0] = (realPos[0] - this._origin[0]) / this._scale;
         worldPos[1] = (realPos[1] - this._origin[1]) / this._scale;
         worldPos[2] = (realPos[2] - this._origin[2]) / this._scale;

@@ -9,6 +9,7 @@ import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
+import {worldToRTCPos} from "../../viewer/scene/math/rtcCoords.js";
 
 const zeroVec = new Float32Array([0, 0, 1]);
 const quat = new Float32Array(4);
@@ -36,7 +37,10 @@ class Control {
         this._viewer = plugin.viewer;
 
         this._visible = false;
-        this._pos = math.vec3(); // Holds the current position of the center of the clip plane.
+        this._pos = math.vec3(); // Full-precision position of the center of the Control
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
+
         this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
         this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
@@ -84,8 +88,13 @@ class Control {
 
     /** @private */
     _setPos(xyz) {
+
         this._pos.set(xyz);
-        this._rootNode.position = xyz;
+
+        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
+
+        this._rootNode.rtcCenter = this._rtcCenter;
+        this._rootNode.position = this._rtcPos;
     }
 
     /** @private */
@@ -784,7 +793,7 @@ class Control {
                 rotation: [0, 0, 45]
             }), NO_STATE_INHERIT),
 
-            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full 
+            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full
                 geometry: shapes.hoop,
                 material: materials.red,
                 highlighted: true,
@@ -912,7 +921,7 @@ class Control {
             this._onSceneTick = scene.on("tick", () => {
                 var dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, rootNode.position, tempVec3a)));
                 if (dist !== lastDist) {
-                    var scale = 10 * (dist / 50);
+                    const scale = 10 * (dist / 50);
                     rootNode.scale = [scale, scale, scale];
                     lastDist = dist;
                 }

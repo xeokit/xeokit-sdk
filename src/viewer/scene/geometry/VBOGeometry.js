@@ -264,7 +264,7 @@ class VBOGeometry extends Geometry {
     /**
      * Gets the local-space axis-aligned 3D boundary (AABB).
      *
-     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}
      */
@@ -275,7 +275,7 @@ class VBOGeometry extends Geometry {
     /**
      * Gets the local-space oriented 3D boundary (OBB).
      *
-     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
+     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
      *
      * @type {Number[]}
      */

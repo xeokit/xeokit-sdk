@@ -6,8 +6,12 @@ import {Map} from "../../utils/Map.js";
 import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from '../../stats.js';
+import {math} from "../../math/math.js";
+import {getPlaneRTCPos} from "../../math/rtcCoords.js";
 
 const ids = new Map({});
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
@@ -57,41 +61,72 @@ EmphasisFillRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-EmphasisFillRenderer.prototype.drawMesh = function (frame, mesh, mode) {
+EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
+
     if (!this._program) {
         this._allocate(mesh);
     }
+
     const scene = this._scene;
+    const camera = scene.camera;
     const gl = scene.canvas.gl;
     const materialState = mode === 0 ? mesh._xrayMaterial._state : (mode === 1 ? mesh._highlightMaterial._state : mesh._selectedMaterial._state);
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
-    if (frame.lastProgramId !== this._program.id) {
-        frame.lastProgramId = this._program.id;
-        this._bindProgram(frame);
+    const rtcCenter = mesh.rtcCenter;
+
+    if (frameCtx.lastProgramId !== this._program.id) {
+        frameCtx.lastProgramId = this._program.id;
+        this._bindProgram(frameCtx);
     }
+
+    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+
+    if (meshState.clippable) {
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const renderFlags = mesh.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a) : sectionPlane.pos);
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                }
+            }
+        }
+    }
+
     if (materialState.id !== this._lastMaterialId) {
         const fillColor = materialState.fillColor;
         const backfaces = materialState.backfaces;
-        if (frame.backfaces !== backfaces) {
+        if (frameCtx.backfaces !== backfaces) {
             if (backfaces) {
                 gl.disable(gl.CULL_FACE);
             } else {
                 gl.enable(gl.CULL_FACE);
             }
-            frame.backfaces = backfaces;
+            frameCtx.backfaces = backfaces;
         }
         gl.uniform4f(this._uFillColor, fillColor[0], fillColor[1], fillColor[2], materialState.fillAlpha);
         this._lastMaterialId = materialState.id;
     }
+
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
     if (this._uModelNormalMatrix) {
         gl.uniformMatrix4fv(this._uModelNormalMatrix, gl.FALSE, mesh.worldNormalMatrix);
     }
+
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
+
     gl.uniform3fv(this._uOffset, meshState.offset);
+
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
@@ -102,29 +137,30 @@ EmphasisFillRenderer.prototype.drawMesh = function (frame, mesh, mode) {
         }
         if (this._aPosition) {
             this._aPosition.bindArrayBuffer(geometryState.positionsBuf);
-            frame.bindArray++;
+            frameCtx.bindArray++;
         }
         if (this._aNormal) {
             this._aNormal.bindArrayBuffer(geometryState.normalsBuf);
-            frame.bindArray++;
+            frameCtx.bindArray++;
         }
         if (geometryState.indicesBuf) {
             geometryState.indicesBuf.bind();
-            frame.bindArray++;
+            frameCtx.bindArray++;
             // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            // frame.drawElements++;
+            // frameCtx.drawElements++;
         } else if (geometryState.positionsBuf) {
             // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
-            //  frame.drawArrays++;
+            //  frameCtx.drawArrays++;
         }
         this._lastGeometryId = geometryState.id;
     }
+
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-        frame.drawElements++;
+        frameCtx.drawElements++;
     } else if (geometryState.positionsBuf) {
         gl.drawArrays(gl.TRIANGLES, 0, geometryState.positionsBuf.numItems);
-        frame.drawArrays++;
+        frameCtx.drawArrays++;
     }
 };
 
@@ -187,23 +223,21 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._lastGeometryId = null;
 };
 
-EmphasisFillRenderer.prototype._bindProgram = function (frame) {
+EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
-    const sectionPlanesState = scene._sectionPlanesState;
     const lightsState = scene._lightsState;
     const camera = scene.camera;
     const cameraState = camera._state;
     let light;
     const program = this._program;
     program.bind();
-    frame.useProgram++;
-    frame.textureUnit = 0;
+    frameCtx.useProgram++;
+    frameCtx.textureUnit = 0;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
     this._lastIndicesBufId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, cameraState.normalMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
     for (var i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -222,30 +256,6 @@ EmphasisFillRenderer.prototype._bindProgram = function (frame) {
             }
             if (this._uLightDir[i]) {
                 gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-    }
-    if (sectionPlanesState.sectionPlanes.length > 0) {
-        const clips = scene._sectionPlanesState.sectionPlanes;
-        let sectionPlaneUniforms;
-        let uSectionPlaneActive;
-        let sectionPlane;
-        let uSectionPlanePos;
-        let uSectionPlaneDir;
-        for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
-            sectionPlaneUniforms = this._uSectionPlanes[i];
-            uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = clips[i];
-            if (uSectionPlaneActive) {
-                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
-            }
-            uSectionPlanePos = sectionPlaneUniforms.pos;
-            if (uSectionPlanePos) {
-                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-            }
-            uSectionPlaneDir = sectionPlaneUniforms.dir;
-            if (uSectionPlaneDir) {
-                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
             }
         }
     }

@@ -403,9 +403,7 @@ class BCFViewpointsPlugin extends Plugin {
                 return coloring;
             }, {});
 
-        const coloringArray = Object.entries(coloring).map(([color, components]) => {
-            return {color, components}
-        });
+        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
 
         bcfViewpoint.components.coloring = coloringArray;
 

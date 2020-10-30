@@ -1,10 +1,25 @@
+import {math} from "../math/math.js";
+import {createRTCViewMat} from "../math/rtcCoords.js";
+
 /**
- * @desc Provides rendering context to {@link Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
+ * @desc Provides rendering context to {@link Drawable"}s as xeokit renders them for a frame.
+ *
+ * Also creates RTC viewing and picking matrices, caching and reusing matrices within each frame.
+ *
  * @private
  */
 class FrameContext {
 
-    constructor() {
+    constructor(scene) {
+
+        this._scene = scene;
+
+        this._matPool = [];
+        this._matPoolNextFreeIndex = 0;
+
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
+
         this.reset();
     }
 
@@ -14,12 +29,23 @@ class FrameContext {
      */
     reset() {
 
+        this._matPoolNextFreeIndex = 0;
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
+
         /**
          * ID of the last {@link webgl.Program} that was bound during the current frame.
          * @property lastProgramId
          * @type {Number}
          */
         this.lastProgramId = null;
+
+        /**
+         * The last RTC center that was used during the current frame.
+         * @property lastRTCCenter
+         * @type {Number[]}
+         */
+        this.lastRTCCenter = null;
 
         /**
          * Whether SAO is currently enabled during the current frame.
@@ -160,6 +186,43 @@ class FrameContext {
          * @type Number
          */
         this.lineWidth = 1;
+    }
+
+    /**
+     * Get View matrix for the given RTC center.
+     */
+    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+        if (!rtcViewMat) {
+            rtcViewMat = this._getNewMat();
+            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
+            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
+        }
+        return rtcViewMat;
+    }
+
+    /**
+     * Get picking View RTC matrix for the given RTC center.
+     */
+    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
+        if (!rtcPickViewMat) {
+            rtcPickViewMat = this._getNewMat();
+            const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
+            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
+            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
+        }
+        return rtcPickViewMat;
+    }
+
+    _getNewMat() {
+        let mat = this._matPool[this._matPoolNextFreeIndex];
+        if (!mat) {
+            mat = math.mat4();
+            this._matPool[this._matPoolNextFreeIndex] = mat;
+        }
+        this._matPoolNextFreeIndex++;
+        return mat;
     }
 }
 

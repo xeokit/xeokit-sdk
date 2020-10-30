@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XKTLoaderPlugin - Full-Precision Model with Annotations</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        .annotation-marker {
+            color: #ffffff;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ffffff;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 0;
+        }
+
+        .annotation-label {
+            position: absolute;
+            max-width: 250px;
+            min-height: 50px;
+            padding: 8px;
+            padding-left: 12px;
+            padding-right: 12px;
+            background: #ffffff;
+            color: #000000;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 8px;
+            border: #ffffff solid 2px;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 90000;
+        }
+
+        .annotation-label:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent white;
+            display: block;
+            width: 0;
+            z-index: 1;
+            margin-top: -11px;
+            left: -12px;
+            top: 20px;
+        }
+
+        .annotation-label:before {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 9px 13px 9px 0;
+            border-color: transparent #ffffff;
+            display: block;
+            width: 0;
+            z-index: 0;
+            margin-top: -12px;
+            left: -15px;
+            top: 20px;
+        }
+
+        .annotation-title {
+            font: normal 20px arial, serif;
+            margin-bottom: 8px;
+        }
+
+        .annotation-desc {
+            font: normal 14px arial, serif;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Full-Precision Model with Annotations</h1><br>
+    <p>Model is loaded from XKT V6, which supports full-precision geometry, which fixes rounding jitter</p><br>
+    <ul>
+        <li>Model center is [1842022, 10, -5173301]</li>
+        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {MAPObjectDefaults} from "./js/MAPObjectDefaults.js";
+    import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    viewer.camera.orbitPitch(20);
+    viewer.camera.orbitYaw(100);
+
+    viewer.cameraControl.followPointer = true;
+
+    const scene = viewer.scene;
+    const sao = scene.sao;
+    // sao.enabled = true;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create a xeokit loader plugin, load a model, fit to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model1 = xktLoader.load({
+        id: "myModel1",
+        src: "./models/xkt/MAP/MAP.v6.xkt",
+        metaModelSrc: "./metaModels/MAP/metaModel.json",
+        objectDefaults: MAPObjectDefaults,
+        edges: true
+    });
+
+    model1.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model1);
+    });
+
+    viewer.scene.on("tick", () => {
+          viewer.scene.camera.orbitYaw(1.0);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an AnnotationsPlugin, then create some annotations
+    //------------------------------------------------------------------------------------------------------------------
+
+    const annotations = new AnnotationsPlugin(viewer, {
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
+        labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
+        values: {
+            markerBGColor: "red",
+            glyph: "X",
+            title: "Untitled",
+            description: "No description"
+        },
+        surfaceOffset: 0.75
+    });
+
+    annotations.on("markerClicked", (annotation) => {
+        annotation.labelShown = !annotation.labelShown;
+    });
+
+    annotations.createAnnotation({
+        id: "a1",
+        worldPos: [1842036.164901515, 2.2709207218137575, -5173304.935329479],
+        occludable: true,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A1",
+            title: "My annotation 1",
+            description: "My description 1"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "a2",
+        worldPos: [1842016.7502089352, 16.116118310916697, -5173304.496801555],
+        occludable: true,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A2",
+            title: "My annotation 2",
+            description: "My description 2"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "a3",
+        worldPos: [1842009.1252660889, 0.22266775344006823, -5173293.303721189],
+        occludable: true,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A3",
+            title: "My annotation 3",
+            description: "My description 3"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "a4",
+        worldPos: [1842021.0555786698, 22.064205794296942, -5173293.94533045],
+        occludable: true,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A4",
+            title: "My annotation 4",
+            description: "My description 4"
+        },
+    });
+
+</script>
+</html>

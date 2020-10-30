@@ -16,6 +16,7 @@ import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
 import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
+import {RenderFlags} from "../webgl/RenderFlags.js";
 
 const obb = math.OBB3();
 const angleAxis = new Float32Array(4);
@@ -56,6 +57,8 @@ const identityMat = math.identityMat4();
  * import {Mesh} from "../src/scene/mesh/Mesh.js";
  * import {Node} from "../src/scene/nodes/Node.js";
  * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+ * import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
@@ -64,6 +67,12 @@ const identityMat = math.identityMat4();
  * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
  * viewer.scene.camera.look = [0, -5.75, 0];
  * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+ *      xSize: 1,
+ *      ySize: 1,
+ *      zSize: 1
+ * }));
  *
  * new Node(viewer.scene, {
  *      id: "table",
@@ -82,7 +91,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1, 0.3, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Green table leg
@@ -93,7 +103,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 1.0, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {// Blue table leg
@@ -104,7 +115,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {  // Yellow table leg
@@ -115,7 +127,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                   diffuse: [1.0, 1.0, 0.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Purple table top
@@ -126,7 +139,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1.0, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          })
  *      ]
  *  });
@@ -183,6 +197,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -213,6 +228,9 @@ class Mesh extends Component {
 
         super(owner, cfg);
 
+        /** @private **/
+        this.renderFlags = new RenderFlags();
+
         this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from Mesh#matrix and Mesh.#normalWorldMatrix
             visible: true,
             culled: false,
@@ -232,7 +250,9 @@ class Mesh extends Component {
             pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
             pickHash: "",
-            offset: math.vec3()
+            offset: math.vec3(),
+            rtcCenter: null,
+            rtcCenterHash: null
         });
 
         this._drawRenderer = null;
@@ -270,6 +290,11 @@ class Mesh extends Component {
         this._localMatrixDirty = true;
         this._worldMatrixDirty = true;
         this._worldNormalMatrixDirty = true;
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+            this._state.rtcCenterHash = cfg.rtcCenter.join();
+        }
 
         if (cfg.matrix) {
             this.matrix = cfg.matrix;
@@ -373,7 +398,7 @@ class Mesh extends Component {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-           // this._shadowRenderer = ShadowRenderer.get(this);
+            // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
@@ -536,15 +561,28 @@ class Mesh extends Component {
     }
 
     _buildAABB(worldMatrix, aabb) {
+
         math.transformOBB3(worldMatrix, this._geometry.obb, obb);
         math.OBB3ToAABB3(obb, aabb);
+
         const offset = this._state.offset;
+
         aabb[0] += offset[0];
         aabb[1] += offset[1];
         aabb[2] += offset[2];
         aabb[3] += offset[0];
         aabb[4] += offset[1];
         aabb[5] += offset[2];
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            aabb[0] += rtcCenter[0];
+            aabb[1] += rtcCenter[1];
+            aabb[2] += rtcCenter[2];
+            aabb[3] += rtcCenter[0];
+            aabb[4] += rtcCenter[1];
+            aabb[5] += rtcCenter[2];
+        }
     }
 
     /**
@@ -917,7 +955,7 @@ class Mesh extends Component {
     /**
      * Gets the Mesh's World-space 3D axis-aligned bounding box.
      *
-     * Represented by a six-element Float32Array containing the min/max extents of the
+     * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}
@@ -927,6 +965,43 @@ class Mesh extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * Center of the relative-to-center (RTC) coordinate system for this Mesh.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        if (rtcCenter) {
+            if (!this._state.rtcCenter) {
+                this._state.rtcCenter = math.vec3();
+            }
+            this._state.rtcCenter.set(rtcCenter);
+            this._state.rtcCenterHash = rtcCenter.join();
+            this._setAABBDirty();
+            this.scene._aabbDirty = true;
+        } else {
+            if (this._state.rtcCenter) {
+                this._state.rtcCenter = null;
+                this._state.rtcCenterHash = null;
+                this._setAABBDirty();
+                this.scene._aabbDirty = true;
+            }
+        }
+    }
+
+    /**
+     * 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this._state.rtcCenter;
     }
 
     /**
@@ -1479,15 +1554,25 @@ class Mesh extends Component {
             || (mesh1._geometry._state.id - mesh2._geometry._state.id); // Geometry state
     }
 
+    /** @private */
+    rebuildRenderFlags() {
+        this.renderFlags.reset();
+        if (!this._getActiveSectionPlanes()) {
+            this.renderFlags.culled = true;
+            return;
+        }
+        this.renderFlags.numLayers = 1;
+        this.renderFlags.numVisibleLayers = 1;
+        this.renderFlags.visibleLayers[0] = 0;
+        this._updateRenderFlags();
+    }
+
     /**
-     * Called by xeokit when about to render this Mesh, to get flags indicating what rendering effects to apply for it.
-     *
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
+     * @private
      */
-    getRenderFlags(renderFlags) {
+    _updateRenderFlags() {
 
-        renderFlags.reset();
-
+        const renderFlags = this.renderFlags;
         const state = this._state;
 
         if (state.xrayed) {
@@ -1555,6 +1640,47 @@ class Mesh extends Component {
                 }
             }
         }
+    }
+
+    _getActiveSectionPlanes() {
+
+        if (this._state.clippable) {
+
+            const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+            const numSectionPlanes = sectionPlanes.length;
+
+            if (numSectionPlanes > 0) {
+                for (let i = 0; i < numSectionPlanes; i++) {
+
+                    const sectionPlane = sectionPlanes[i];
+                    const renderFlags = this.renderFlags;
+
+                    if (!sectionPlane.active) {
+                        renderFlags.sectionPlanesActivePerLayer[i] = false;
+
+                    } else {
+
+                        if (this._state.rtcCenter) {
+
+                            const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
+                            const outside = (intersect === -1);
+
+                            if (outside) {
+                                return false;
+                            }
+
+                            const intersecting = (intersect === 0);
+                            renderFlags.sectionPlanesActivePerLayer[i] = intersecting;
+
+                        } else {
+                            renderFlags.sectionPlanesActivePerLayer[i] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

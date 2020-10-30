@@ -60,12 +60,12 @@ class PerformanceMesh {
         /**
          * World-space 3D axis-aligned bounding box (AABB).
          *
-         * Represented by a six-element Float32Array containing the min/max extents of the
+         * Represented by a six-element Float64Array containing the min/max extents of the
          * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
          *
          * @property aabb
          * @final
-         * @type {Number[]}
+         * @type {Float64Array}
          */
         this.aabb = math.AABB3();
 
@@ -77,6 +77,16 @@ class PerformanceMesh {
         this._colorizing = false;
 
         this.numTriangles = 0;
+
+        /**
+         * 3D origin of the PerformanceMesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
+         *
+         * When this is defined, then the positions are RTC, which means that they are relative to this position.
+         *
+         * @property rtcCenter
+         * @type {Float64Array}
+         */
+        this.rtcCenter = null;
     }
 
     /**

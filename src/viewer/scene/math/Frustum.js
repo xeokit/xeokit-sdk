@@ -1,4 +1,4 @@
-import {math} from "./../../viewer/scene/math/math.js";
+import {math} from "./math.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
