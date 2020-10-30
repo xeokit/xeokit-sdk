@@ -57,6 +57,8 @@ const identityMat = math.identityMat4();
  * import {Mesh} from "../src/scene/mesh/Mesh.js";
  * import {Node} from "../src/scene/nodes/Node.js";
  * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+ * import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
@@ -65,6 +67,12 @@ const identityMat = math.identityMat4();
  * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
  * viewer.scene.camera.look = [0, -5.75, 0];
  * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+ *      xSize: 1,
+ *      ySize: 1,
+ *      zSize: 1
+ * }));
  *
  * new Node(viewer.scene, {
  *      id: "table",
@@ -83,7 +91,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1, 0.3, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Green table leg
@@ -94,7 +103,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 1.0, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {// Blue table leg
@@ -105,7 +115,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {  // Yellow table leg
@@ -116,7 +127,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                   diffuse: [1.0, 1.0, 0.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Purple table top
@@ -127,7 +139,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1.0, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          })
  *      ]
  *  });
