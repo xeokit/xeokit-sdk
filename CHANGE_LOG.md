@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.8
+
+Unreleased
+
+* PerformanceModel, Mesh, XKTLoaderPlugin  
+    * Support full-precision model geometry. [#456](https://github.com/xeokit/xeokit-sdk/pull/456) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.4.7
 
 October 28, 2020
