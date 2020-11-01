@@ -13,8 +13,8 @@ const tempVec4 = new FloatArrayType(4);
  */
 const math = {
 
-    MAX_DOUBLE: Number.MAX_VALUE,
-    MIN_DOUBLE: Number.MIN_VALUE,
+    MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
+    MAX_DOUBLE:  Number.MAX_SAFE_INTEGER,
 
     /**
      * The number of radiians in a degree (0.0174532925).
@@ -3404,9 +3404,9 @@ const math = {
         aabb[0] = math.MAX_DOUBLE;
         aabb[1] = math.MAX_DOUBLE;
         aabb[2] = math.MAX_DOUBLE;
-        aabb[3] = -math.MAX_DOUBLE;
-        aabb[4] = -math.MAX_DOUBLE;
-        aabb[5] = -math.MAX_DOUBLE;
+        aabb[3] = math.MIN_DOUBLE;
+        aabb[4] = math.MIN_DOUBLE;
+        aabb[5] = math.MIN_DOUBLE;
 
         return aabb;
     },
@@ -3476,9 +3476,9 @@ const math = {
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;
             let zmin = math.MAX_DOUBLE;
-            let xmax = -math.MAX_DOUBLE;
-            let ymax = -math.MAX_DOUBLE;
-            let zmax = -math.MAX_DOUBLE;
+            let xmax = math.MIN_DOUBLE;
+            let ymax = math.MIN_DOUBLE;
+            let zmax = math.MIN_DOUBLE;
 
             let x;
             let y;
@@ -3549,9 +3549,9 @@ const math = {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
         let zmin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
-        let zmax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
+        let zmax = math.MIN_DOUBLE;
 
         let x;
         let y;
@@ -3607,9 +3607,9 @@ const math = {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
         let zmin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
-        let zmax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
+        let zmax = math.MIN_DOUBLE;
 
         let x;
         let y;
@@ -3938,8 +3938,8 @@ const math = {
     collapseAABB2(aabb = math.AABB2()) {
         aabb[0] = math.MAX_DOUBLE;
         aabb[1] = math.MAX_DOUBLE;
-        aabb[2] = -math.MAX_DOUBLE;
-        aabb[3] = -math.MAX_DOUBLE;
+        aabb[2] = math.MIN_DOUBLE;
+        aabb[3] = math.MIN_DOUBLE;
 
         return aabb;
     },
@@ -3999,8 +3999,8 @@ const math = {
     OBB3ToAABB2(points, aabb = math.AABB2()) {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
 
         let x;
         let y;
