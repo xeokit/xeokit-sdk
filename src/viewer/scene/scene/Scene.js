@@ -1764,9 +1764,9 @@ class Scene extends Component {
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;
             let zmin = math.MAX_DOUBLE;
-            let xmax = -math.MAX_DOUBLE;
-            let ymax = -math.MAX_DOUBLE;
-            let zmax = -math.MAX_DOUBLE;
+            let xmax = math.MIN_DOUBLE;
+            let ymax = math.MIN_DOUBLE;
+            let zmax = math.MIN_DOUBLE;
             let aabb;
             const collidables = this._collidables;
             let collidable;
