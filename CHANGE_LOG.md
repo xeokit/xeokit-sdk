@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.4.9
+
+November 1, 2020
+
+* Scene  
+    * Add Scene#getAABB() full-precision coordinate support. [#457](https://github.com/xeokit/xeokit-sdk/pull/457) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.4.8
 
 October 20, 2020
