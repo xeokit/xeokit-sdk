@@ -65,6 +65,10 @@
 
     viewer.cameraControl.on("picked", (pickResult) => {
 
+        if (!pickResult.entity) {
+            return;
+        }
+
         console.log(pickResult.entity.id);
 
         if (!lastEntity || pickResult.entity.id !== lastEntity.id) {
@@ -74,7 +78,7 @@
             }
 
             lastEntity = pickResult.entity;
-            lastColorize = pickResult.entity.colorize.slice();
+            lastColorize = pickResult.entity.colorize ? pickResult.entity.colorize.slice() : null;
 
             pickResult.entity.colorize = [0.0, 1.0, 0.0];
         }
