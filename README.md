@@ -18,7 +18,7 @@ To install from npm:
 npm i @xeokit/xeokit-sdk
 ````
 
-## Links 
+## Resources 
 
  * [Website](https://xeokit.io/)
  * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
@@ -28,4 +28,5 @@ npm i @xeokit/xeokit-sdk
  * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
  * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
  * [Contact](http://xeolabs.com/contact/)
+
 
