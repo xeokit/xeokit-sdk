@@ -36,7 +36,6 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {MAPObjectDefaults} from "./js/MAPObjectDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -72,7 +71,6 @@
         id: "myModel1",
         src: "./models/xkt/MAP/MAP.v3.xkt",
         metaModelSrc: "./metaModels/MAP/metaModel.json",
-        objectDefaults: MAPObjectDefaults,
         edges: true
     });
 
@@ -81,7 +79,7 @@
     });
 
     viewer.scene.on("tick", () => {
-        viewer.scene.camera.orbitYaw(1.0);
+      //  viewer.scene.camera.orbitYaw(1.0);
     });
 
 </script>
