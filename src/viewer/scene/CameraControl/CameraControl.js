@@ -652,11 +652,11 @@ class CameraControl extends Component {
             // Dollying
 
             keyboardDollyRate: 10,
-            mouseWheelDollyRate: 10,
+            mouseWheelDollyRate: 100,
             touchDollyRate: 0.05,
-            dollyInertia: 0.75,
+            dollyInertia: 0,
             dollyProximityThreshold: 30.0,
-            dollyMinSpeed: 1.0
+            dollyMinSpeed: 0.01
         };
 
         // Current runtime state of the CameraControl
@@ -1401,19 +1401,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second as we spin
+     * Default is ````100.0````, to dolly the {@link Camera} ````10.0```` World-space units per second as we spin
      * the mouse wheel.
      *
      * @param {Number} mouseWheelDollyRate The new mouse wheel dolly rate.
      */
     set mouseWheelDollyRate(mouseWheelDollyRate) {
-        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null && mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 15.0;
+        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null && mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 100.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````15.0````.
+     * Default is ````100.0````.
      *
      * @returns {Number} The current mouseWheel dolly rate.
      */
@@ -1434,18 +1434,18 @@ class CameraControl extends Component {
      * without interference from inertia. This also means that xeokit renders less frames while dollying the Camera,
      * which can improve rendering performance.
      *
-     * Default is ````0.75````.
+     * Default is ````0````.
      *
      * @param {Number} dollyInertia New dolly inertia factor.
      */
     set dollyInertia(dollyInertia) {
-        this._configs.dollyInertia = (dollyInertia !== undefined && dollyInertia !== null) ? dollyInertia : 0.75;
+        this._configs.dollyInertia = (dollyInertia !== undefined && dollyInertia !== null) ? dollyInertia : 0;
     }
 
     /**
      * Gets the dolly inertia factor.
      *
-     * Default is ````0.75````.
+     * Default is ````0````.
      *
      * @returns {Number} The current dolly inertia factor.
      */
@@ -1478,18 +1478,18 @@ class CameraControl extends Component {
     /**
      * Sets the minimum dolly speed.
      *
-     * Default is ````0.05````.
+     * Default is ````0.01````.
      *
      * @param {Number} dollyMinSpeed New dolly minimum speed.
      */
     set dollyMinSpeed(dollyMinSpeed) {
-        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined && dollyMinSpeed !== null) ? dollyMinSpeed : 0.05;
+        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined && dollyMinSpeed !== null) ? dollyMinSpeed : 0.01;
     }
 
     /**
      * Gets the minimum dolly speed.
      *
-     * Default is ````0.05````.
+     * Default is ````0.01````.
      *
      * @returns {Number} The current minimum dolly speed.
      */

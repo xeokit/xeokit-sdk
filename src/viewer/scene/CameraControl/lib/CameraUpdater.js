@@ -244,8 +244,8 @@ class CameraUpdater {
                         }
                     }
 
-                    if (updates.inputFromMouse && configs.followPointer) { // Using mouse input
-                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
+                    if (configs.followPointer) {
+                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
                     }
@@ -269,34 +269,27 @@ class CameraUpdater {
 
                 } else if (configs.planView) {
 
-                    if (updates.inputFromMouse && configs.followPointer) {
-
-                        // Pan-to-canvas pos works better for ortho
-
-                        if (dollyDeltaForDist > 0) {
-                            camera.pan([0, 0, dollyDeltaForDist]);
-                        } else {
-                            panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
-                        }
+                    if (configs.followPointer) {
+                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
-                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
+                        camera.zoom(dollyDeltaForDist);
                     }
 
                 } else { // Orbiting
 
                     if (configs.followPointer) {
-                        panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist); // FIXME: What about when pivotPos undefined?
+                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.zoom(dollyDeltaForDist);
                     }
                 }
 
-                camera.ortho.scale = camera.ortho.scale + (.5 * dollyDeltaForDist);
-
                 updates.dollyDelta *= configs.dollyInertia;
             }
 
             pickController.fireEvents();
+
+            updates.inputFromMouse = false;
 
             document.body.style.cursor = cursorType;
         });
