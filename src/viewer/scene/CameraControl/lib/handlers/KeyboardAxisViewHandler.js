@@ -23,7 +23,7 @@ class KeyboardAxisViewHandler {
         const cameraControl = controllers.cameraControl;
         const camera = scene.camera;
 
-        document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
+        scene.input.on("keydown", this._documentKeyDownHandler = (e) => {
 
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -49,41 +49,44 @@ class KeyboardAxisViewHandler {
 
             math.getAABB3Center(aabb, center);
 
-            const dist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
+            const perspectiveDist = Math.abs(diag / Math.tan(controllers.cameraFlight.fitFOV * math.DEGTORAD));
+            const orthoScale = diag * 1.1;
+
+            tempCameraTarget.orthoScale = orthoScale;
 
             if (axisViewRight) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(camera.worldUp);
 
             } else if (axisViewBack) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(camera.worldUp);
 
             } else if (axisViewLeft) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldRight, -perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(camera.worldUp);
 
             } else if (axisViewFront) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldForward, -perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(camera.worldUp);
 
             } else if (axisViewTop) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, 1, tempVec3b), tempVec3c));
 
             } else if (axisViewBottom) {
 
-                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -dist, tempVec3a), tempVec3d));
+                tempCameraTarget.eye.set(math.addVec3(center, math.mulVec3Scalar(camera.worldUp, -perspectiveDist, tempVec3a), tempVec3d));
                 tempCameraTarget.look.set(center);
                 tempCameraTarget.up.set(math.normalizeVec3(math.mulVec3Scalar(camera.worldForward, -1, tempVec3b)));
             }
