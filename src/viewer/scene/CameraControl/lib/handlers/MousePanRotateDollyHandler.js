@@ -239,8 +239,14 @@ class MousePanRotateDollyHandler {
 
                 if (!configs.planView) { // No rotating in plan-view mode
 
-                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
-                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
+                    if (configs.firstPerson) {
+                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2;
+                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
+
+                    } else {
+                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
+                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate);
+                    }
                 }
             }
 
