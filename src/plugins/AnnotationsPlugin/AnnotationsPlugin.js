@@ -527,7 +527,8 @@ class AnnotationsPlugin extends Plugin {
             eye: params.eye,
             look: params.look,
             up: params.up,
-            projection: params.projection
+            projection: params.projection,
+            visible: (params.visible !== false)
         });
         this.annotations[annotation.id] = annotation;
         annotation.on("destroyed", () => {

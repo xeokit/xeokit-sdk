@@ -59,7 +59,6 @@ function Core() {
         const ticksPerRender = scene.ticksPerRender;
         scenesRenderInfo[scene.id] = {
             ticksPerOcclusionTest: ticksPerOcclusionTest,
-            occlusionTestCountdown: ticksPerOcclusionTest,
             ticksPerRender: ticksPerRender,
             renderCountdown: ticksPerRender
         };
@@ -212,9 +211,9 @@ function renderScenes() {
                 renderInfo.ticksPerOcclusionTest = ticksPerOcclusionTest;
                 renderInfo.renderCountdown = ticksPerOcclusionTest;
             }
-            if (--renderInfo.occlusionTestCountdown === 0) {
+            if (--scene.occlusionTestCountdown <= 0) {
                 scene.doOcclusionTest();
-                renderInfo.occlusionTestCountdown = ticksPerOcclusionTest;
+                scene.occlusionTestCountdown = ticksPerOcclusionTest;
             }
 
             ticksPerRender = scene.ticksPerRender;

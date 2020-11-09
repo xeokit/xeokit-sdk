@@ -60,6 +60,7 @@ class OcclusionTester {
         }
         occlusionLayer.addMarker(marker);
         this._markersToOcclusionLayersMap[marker.id] = occlusionLayer;
+        this._occlusionTestListDirty = true;
     }
 
     /**

@@ -792,7 +792,6 @@ const Renderer = function (scene, options) {
         const tempMat4b = math.mat4();
 
         const up = math.vec3([0, 1, 0]);
-        const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, 2000);
         const _pickResult = new PickResult();
 
         return function (params, pickResult = _pickResult) {
@@ -1100,6 +1099,7 @@ const Renderer = function (scene, options) {
     this.addMarker = function (marker) {
         this._occlusionTester = this._occlusionTester || new OcclusionTester(scene);
         this._occlusionTester.addMarker(marker);
+        scene.occlusionTestCountdown = 0;
     };
 
     /**

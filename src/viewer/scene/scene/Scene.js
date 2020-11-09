@@ -353,6 +353,12 @@ class Scene extends Component {
 
         this._aabbDirty = true;
 
+        /** Decremented each frame, triggers occlusion test for occludable {@link Marker}s when zero.
+         * @private
+         * @type {number}
+         */
+        this.occlusionTestCountdown = 0;
+
         /**
          The number of models currently loading.
 
