@@ -2,6 +2,14 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.0
+
+November 9, 2020
+
+* CameraControl
+    * Improve CameraControl#followPointer behaviour for ortho projection. [#462](https://github.com/xeokit/xeokit-sdk/pull/462) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix CameraControl#dragRotationRate sensitivity. [#466](https://github.com/xeokit/xeokit-sdk/pull/466) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.4.9
 
 November 1, 2020
