@@ -17,6 +17,7 @@ class PivotController {
         this._azimuth = 0;
         this._polar = 0;
         this._radius = 0;
+        this._pivotPosSet = false; // Initially false, true as soon as _pivotWorldPos has been set to some value
         this._pivoting = false; // True while pivoting
         this._shown = false;
 
@@ -29,11 +30,11 @@ class PivotController {
             this._cameraDirty = true;
         });
 
-      this._onProjMatrix =   this._scene.camera.on("projMatrix", () => {
+        this._onProjMatrix = this._scene.camera.on("projMatrix", () => {
             this._cameraDirty = true;
         });
 
-       this._onTick =  this._scene.on("tick", () => {
+        this._onTick = this._scene.on("tick", () => {
             this.updatePivotElement();
         });
     }
@@ -85,11 +86,7 @@ class PivotController {
 
         const camera = this._scene.camera;
 
-        if (worldPos) {
-            this._pivotWorldPos.set(worldPos);
-        } else {
-            this._pivotWorldPos.set(camera.look);
-        }
+        this.setPivotPos(worldPos || camera.look);
 
         let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
         math.transformPoint3(lookat, this._pivotWorldPos, this._cameraOffset);
@@ -132,6 +129,7 @@ class PivotController {
      */
     setPivotPos(worldPos) {
         this._pivotWorldPos.set(worldPos);
+        this._pivotPosSet = true;
     }
 
     /**
@@ -139,7 +137,7 @@ class PivotController {
      * @returns {Number[]} The current World-space pivot position.
      */
     getPivotPos() {
-        return this._pivotWorldPos;
+        return (this._pivotPosSet) ? this._pivotWorldPos : this._scene.camera.look; // Avoid pivoting about [0,0,0] by default
     }
 
     /**
@@ -161,7 +159,6 @@ class PivotController {
         if (camera.worldUp[2] === 1) {
             dx = -dx;
         }
-
         this._azimuth += -dx * .01;
         this._polar += dy * .01;
         this._polar = math.clamp(this._polar, .001, Math.PI - .001);
@@ -177,8 +174,9 @@ class PivotController {
         }
         // Preserve the eye->look distance, since in xeokit "look" is the point-of-interest, not the direction vector.
         const eyeLookLen = math.lenVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
-        math.addVec3(pos, this._pivotWorldPos);
-        let lookat = math.lookAtMat4v(pos, this._pivotWorldPos, camera.worldUp);
+        const pivotPos = this.getPivotPos();
+        math.addVec3(pos, pivotPos);
+        let lookat = math.lookAtMat4v(pos, pivotPos, camera.worldUp);
         lookat = math.inverseMat4(lookat);
         const offset = math.transformVec3(lookat, this._cameraOffset);
         lookat[12] -= offset[0];
