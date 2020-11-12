@@ -2,6 +2,14 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.1
+
+Unreleased
+
+* CameraControl
+    * Fix disappearing models after pivot from downward-looking direction. [#289](https://github.com/xeokit/xeokit-sdk/pull/289) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix disappearing models when CameraControl zooming in orbit mode. [#468](https://github.com/xeokit/xeokit-sdk/pull/468) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.0
 
 November 10, 2020
