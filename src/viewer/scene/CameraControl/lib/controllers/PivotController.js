@@ -1,5 +1,8 @@
 import {math} from "../../../math/math.js";
 
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+
 /** @private */
 class PivotController {
 
@@ -82,11 +85,14 @@ class PivotController {
      *
      * @param {Number[]} worldPos The World-space pivot position.
      */
-    startPivot(worldPos) {
+    startPivot() {
+
+        if (this._cameraLookingDownwards()) {
+            this._pivoting = false;
+            return false;
+        }
 
         const camera = this._scene.camera;
-
-        this.setPivotPos(worldPos || camera.look);
 
         let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
         math.transformPoint3(lookat, this._pivotWorldPos, this._cameraOffset);
@@ -111,6 +117,14 @@ class PivotController {
         this._polar = Math.acos(diff[1] / this._radius);
         this._azimuth = Math.atan2(diff[0], diff[2]);
         this._pivoting = true;
+    }
+
+    _cameraLookingDownwards() { // Returns true if angle between camera viewing direction and World-space "up" axis is too small
+        const camera = this._scene.camera;
+        const forwardAxis = math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3a));
+        const rightAxis = math.cross3Vec3(forwardAxis, camera.worldUp, tempVec3b);
+        let rightAxisLen = math.sqLenVec3(rightAxis);
+        return (rightAxisLen <= 0.0001);
     }
 
     /**

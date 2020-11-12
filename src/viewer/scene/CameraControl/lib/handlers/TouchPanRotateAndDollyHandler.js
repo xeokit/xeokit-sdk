@@ -53,14 +53,18 @@ class TouchPanRotateAndDollyHandler {
                     pickController.update();
 
                     if (!configs.planView) {
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult) {
+                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
 
-                            pivotController.startPivot(pickController.pickResult.worldPos);
-                            pivotController.showPivot();
+                            pivotController.setPivotPos(pickController.pickResult.worldPos);
+
+                            if (pivotController.startPivot()) {
+                                pivotController.showPivot();
+                            }
 
                         } else {
-                            pivotController.startPivot(); // Continue to use last pivot point
-                            pivotController.showPivot();
+                            if (pivotController.startPivot()) { // Continue to use last pivot point
+                                pivotController.showPivot();
+                            }
                         }
                     }
                 }

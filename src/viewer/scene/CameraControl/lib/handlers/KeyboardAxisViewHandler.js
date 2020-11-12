@@ -92,7 +92,7 @@ class KeyboardAxisViewHandler {
             }
 
             if ((!configs.firstPerson) && configs.followPointer) {
-                controllers.pivotController.startPivot(center);
+                controllers.pivotController.setPivotPos(center);
             }
 
             if (controllers.cameraFlight.duration > 0) {
