@@ -656,7 +656,7 @@ class CameraControl extends Component {
             touchDollyRate: 0.05,
             dollyInertia: 0,
             dollyProximityThreshold: 30.0,
-            dollyMinSpeed: 0.01
+            dollyMinSpeed: 0.06
         };
 
         // Current runtime state of the CameraControl
@@ -1478,18 +1478,18 @@ class CameraControl extends Component {
     /**
      * Sets the minimum dolly speed.
      *
-     * Default is ````0.01````.
+     * Default is ````0.06````.
      *
      * @param {Number} dollyMinSpeed New dolly minimum speed.
      */
     set dollyMinSpeed(dollyMinSpeed) {
-        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined && dollyMinSpeed !== null) ? dollyMinSpeed : 0.01;
+        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined && dollyMinSpeed !== null) ? dollyMinSpeed : 0.06;
     }
 
     /**
      * Gets the minimum dolly speed.
      *
-     * Default is ````0.01````.
+     * Default is ````0.06````.
      *
      * @returns {Number} The current minimum dolly speed.
      */
