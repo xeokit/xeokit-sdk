@@ -476,7 +476,6 @@ class CameraFlightAnimation extends Component {
                 camera.look = math.subVec3(newEye, newLookEyeVec, newLook);
             } else if (this._flyingLook) {
                 camera.look = math.lerpVec3(tFlight, 0, 1, this._look1, this._look2, newLook);
-                //    camera.eye = math.addVec3(newLook, newLookEyeVec, newEye);
                 camera.up = math.lerpVec3(tFlight, 0, 1, this._up1, this._up2, newUp);
             }
 

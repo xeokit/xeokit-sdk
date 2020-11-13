@@ -49,7 +49,7 @@ class PivotController {
 
         if (this._pivoting && this._cameraDirty) {
 
-            math.transformPoint3(camera.viewMatrix, this._pivotWorldPos, this._pivotViewPos);
+            math.transformPoint3(camera.viewMatrix, this.getPivotPos(), this._pivotViewPos);
             this._pivotViewPos[3] = 1;
             math.transformPoint4(camera.projMatrix, this._pivotViewPos, this._pivotProjPos);
 
@@ -82,8 +82,6 @@ class PivotController {
 
     /**
      * Begins pivoting.
-     *
-     * @param {Number[]} worldPos The World-space pivot position.
      */
     startPivot() {
 
@@ -95,16 +93,17 @@ class PivotController {
         const camera = this._scene.camera;
 
         let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
-        math.transformPoint3(lookat, this._pivotWorldPos, this._cameraOffset);
+        math.transformPoint3(lookat, this.getPivotPos(), this._cameraOffset);
 
-        this._cameraOffset[2] += math.distVec3(camera.eye, this._pivotWorldPos);
+        const pivotPos = this.getPivotPos();
+        this._cameraOffset[2] += math.distVec3(camera.eye, pivotPos);
 
         lookat = math.inverseMat4(lookat);
 
         const offset = math.transformVec3(lookat, this._cameraOffset);
         const diff = math.vec3();
 
-        math.subVec3(camera.eye, this._pivotWorldPos, diff);
+        math.subVec3(camera.eye, pivotPos, diff);
         math.addVec3(diff, offset);
 
         if (camera.zUp) {

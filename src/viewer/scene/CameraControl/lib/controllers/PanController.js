@@ -55,17 +55,17 @@ class PanController {
      *
      * @param worldPos World position we're dollying towards
      * @param canvasPos Current mouse canvas position
-     * @param dollyDist Dollying distance
+     * @param dollyDelta Dollying distance
      */
-    dolly(worldPos, canvasPos, dollyDist) {
+    dolly(worldPos, canvasPos, dollyDelta) {
 
         const camera = this._scene.camera;
 
         if (camera.projection === "perspective") {
 
-            camera.ortho.scale = camera.ortho.scale - dollyDist;
+            camera.ortho.scale = camera.ortho.scale - dollyDelta;
 
-            this._dollyToWorldPos(worldPos, dollyDist);
+            this._dollyToWorldPos(worldPos, dollyDelta);
 
         } else if (camera.projection === "ortho") {
 
@@ -75,14 +75,12 @@ class PanController {
 
             const worldPos1 = this._unprojectOrtho(canvasPos, viewPos, tempVec4a);
 
-            camera.ortho.scale = camera.ortho.scale - dollyDist;
+            camera.ortho.scale = camera.ortho.scale - dollyDelta;
             camera.ortho._update(); // HACK
-
-            console.log(camera.ortho.scale);
 
             const worldPos2 = this._unprojectOrtho(canvasPos, viewPos, tempVec4b);
             const offset = math.subVec3(worldPos2, worldPos1, tempVec4c);
-            const eyeLookMoveVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3a)), -dollyDist, tempVec3b);
+            const eyeLookMoveVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3a)), -dollyDelta, tempVec3b);
             const moveVec = math.addVec3(offset, eyeLookMoveVec, tempVec3c);
 
             camera.eye = [camera.eye[0] - moveVec[0], camera.eye[1] - moveVec[1], camera.eye[2] - moveVec[2]];
@@ -190,22 +188,22 @@ class PanController {
         return worldPos;
     }
 
-    _dollyToWorldPos(worldPos, dollyDist) {
+    _dollyToWorldPos(worldPos, dollyDelta) {
 
         const camera = this._scene.camera;
         const eyeToWorldPosVec = math.subVec3(worldPos, camera.eye, tempVec3a);
 
         const dist = math.lenVec3(eyeToWorldPosVec);
 
-        if (dist < dollyDist) {
+        if (dist < dollyDelta) {
             return;
         }
 
         math.normalizeVec3(eyeToWorldPosVec);
 
-        const px = eyeToWorldPosVec[0] * dollyDist;
-        const py = eyeToWorldPosVec[1] * dollyDist;
-        const pz = eyeToWorldPosVec[2] * dollyDist;
+        const px = eyeToWorldPosVec[0] * dollyDelta;
+        const py = eyeToWorldPosVec[1] * dollyDelta;
+        const pz = eyeToWorldPosVec[2] * dollyDelta;
 
         const eye = camera.eye;
         const look = camera.look;

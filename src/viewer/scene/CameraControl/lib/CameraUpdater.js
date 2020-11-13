@@ -65,7 +65,7 @@ class CameraUpdater {
             // want dolly speed wildly varying depending on how accurately the user avoids the gaps with the pointer.
             //----------------------------------------------------------------------------------------------------------
 
-            if (configs.firstPerson && (!configs.followPointer)) {
+            if (!configs.followPointer) {
 
 
             } else if (--countDown <= 0) {
@@ -111,7 +111,7 @@ class CameraUpdater {
 
             if (updates.rotateDeltaY !== 0 || updates.rotateDeltaX !== 0) {
 
-                if (pivotController.getPivoting() && configs.followPointer) {
+                if ((!configs.firstPerson) && configs.followPointer && pivotController.getPivoting()) {
                     pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
                     pivotController.showPivot();
 
@@ -248,6 +248,7 @@ class CameraUpdater {
                         panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
+                        camera.ortho.scale = camera.ortho.scale - dollyDeltaForDist;
                     }
 
                     if (configs.constrainVertical) {
