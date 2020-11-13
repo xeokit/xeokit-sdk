@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.11
+
+November 13, 2020
+
+* CameraControl
+    * A better way to dolly CameraControl through objects. [#472](https://github.com/xeokit/xeokit-sdk/pull/472) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.1
 
 November 13, 2020
