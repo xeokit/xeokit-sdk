@@ -245,7 +245,10 @@ class CameraUpdater {
                     }
 
                     if (configs.followPointer) {
-                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
+                        }
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
                         camera.ortho.scale = camera.ortho.scale - dollyDeltaForDist;
@@ -271,7 +274,10 @@ class CameraUpdater {
                 } else if (configs.planView) {
 
                     if (configs.followPointer) {
-                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
+                        }
                     } else {
                         camera.zoom(dollyDeltaForDist);
                     }
@@ -279,7 +285,10 @@ class CameraUpdater {
                 } else { // Orbiting
 
                     if (configs.followPointer) {
-                        panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        let dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
+                        }
                     } else {
                         camera.zoom(dollyDeltaForDist);
                     }

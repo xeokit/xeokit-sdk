@@ -145,8 +145,9 @@ class MousePickHandler {
                 pickController.update();
 
                 if (e.which === 1) {// Left button
-                    if (pickController.pickResult) {
-                        pivotController.setPivotPos(pickController.pickResult.worldPos);
+                    const pickResult = pickController.pickResult;
+                    if (pickResult && pickResult.worldPos) {
+                        pivotController.setPivotPos(pickResult.worldPos);
                         pivotController.startPivot();
                     } else {
                         pivotController.setPivotPos(scene.camera.look);

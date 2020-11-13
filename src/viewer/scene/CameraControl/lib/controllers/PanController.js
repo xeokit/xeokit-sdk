@@ -61,11 +61,13 @@ class PanController {
 
         const camera = this._scene.camera;
 
+        let dolliedThroughSurface = false;
+
         if (camera.projection === "perspective") {
 
             camera.ortho.scale = camera.ortho.scale - dollyDelta;
 
-            this._dollyToWorldPos(worldPos, dollyDelta);
+            dolliedThroughSurface = this._dollyToWorldPos(worldPos, dollyDelta);
 
         } else if (camera.projection === "ortho") {
 
@@ -86,6 +88,8 @@ class PanController {
             camera.eye = [camera.eye[0] - moveVec[0], camera.eye[1] - moveVec[1], camera.eye[2] - moveVec[2]];
             camera.look = [camera.look[0] - moveVec[0], camera.look[1] - moveVec[1], camera.look[2] - moveVec[2]];
         }
+
+        return dolliedThroughSurface;
     }
 
     _getInverseProjectMat() {
@@ -192,11 +196,12 @@ class PanController {
 
         const camera = this._scene.camera;
         const eyeToWorldPosVec = math.subVec3(worldPos, camera.eye, tempVec3a);
+        const eyeWorldPosDist = math.lenVec3(eyeToWorldPosVec);
 
-        const dist = math.lenVec3(eyeToWorldPosVec);
+        let dolliedThroughSurface = false;
 
-        if (dist < dollyDelta) {
-            return;
+        if (eyeWorldPosDist < dollyDelta) {
+            dolliedThroughSurface = true;
         }
 
         math.normalizeVec3(eyeToWorldPosVec);
@@ -210,6 +215,8 @@ class PanController {
 
         camera.eye = [eye[0] + px, eye[1] + py, eye[2] + pz];
         camera.look = [look[0] + px, look[1] + py, look[2] + pz];
+
+        return dolliedThroughSurface;
     }
 
     destroy() {
