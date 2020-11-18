@@ -38,12 +38,9 @@ class BatchingPickDepthRenderer {
             this._allocate();
         }
 
-        let loadSectionPlanes = false;
-
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
-            loadSectionPlanes = true;
         }
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
@@ -57,41 +54,24 @@ class BatchingPickDepthRenderer {
         gl.uniform1f(this._uZNear, projectState.near);
         gl.uniform1f(this._uZFar, projectState.far);
 
-        if (rtcCenter) {
-            if (frameCtx.lastRTCCenter) {
-                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
-                    frameCtx.lastRTCCenter = rtcCenter;
-                    loadSectionPlanes = true;
-                }
-            } else {
-                frameCtx.lastRTCCenter = rtcCenter;
-                loadSectionPlanes = true;
-            }
-        } else if (frameCtx.lastRTCCenter) {
-            frameCtx.lastRTCCenter = null;
-            loadSectionPlanes = true;
-        }
-
-        if (loadSectionPlanes) {
-            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-            if (numSectionPlanes > 0) {
-                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-                const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const renderFlags = model.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    if (rtcCenter) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                    } else {
+                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
                     }
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }
