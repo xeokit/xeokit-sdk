@@ -25,7 +25,7 @@ class InstancingPickNormalsRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer( frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -41,12 +41,9 @@ class InstancingPickNormalsRenderer {
             }
         }
 
-        let loadSectionPlanes = false;
-
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
-            loadSectionPlanes = true;
         }
 
         // In practice, these binds will only happen once per frame
@@ -60,41 +57,24 @@ class InstancingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
 
-        if (rtcCenter) {
-            if (frameCtx.lastRTCCenter) {
-                if (!math.compareVec3(rtcCenter, frameCtx.lastRTCCenter)) {
-                    frameCtx.lastRTCCenter = rtcCenter;
-                    loadSectionPlanes = true;
-                }
-            } else {
-                frameCtx.lastRTCCenter = rtcCenter;
-                loadSectionPlanes = true;
-            }
-        } else if (frameCtx.lastRTCCenter) {
-            frameCtx.lastRTCCenter = null;
-            loadSectionPlanes = true;
-        }
-
-        if (loadSectionPlanes) {
-            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-            if (numSectionPlanes > 0) {
-                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-                const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        if (numSectionPlanes > 0) {
+            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
+            const renderFlags = model.renderFlags;
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
+                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                if (active) {
+                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                    if (rtcCenter) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                    } else {
+                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
                     }
+                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }
