@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.12
+
+November 18, 2020
+
+* CameraControl
+    * CameraControl picking robustness. [#473](https://github.com/xeokit/xeokit-sdk/pull/473) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.11
 
 November 13, 2020
@@ -14,8 +21,8 @@ November 13, 2020
 November 13, 2020
 
 * CameraControl
-    * Fix disappearing models after pivot from downward-looking direction. [#289](https://github.com/xeokit/xeokit-sdk/pull/289) ([**@xeolabs**](https://github.com/xeolabs))
-    * Fix disappearing models when CameraControl zooming in orbit mode. [#468](https://github.com/xeokit/xeokit-sdk/pull/468) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix disappearing models after pivot from downward-looking direction. [#289](https://github.com/xeokit/xeokit-sdk/issues/289) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix disappearing models when CameraControl zooming in orbit mode. [#468](https://github.com/xeokit/xeokit-sdk/issues/468) ([**@xeolabs**](https://github.com/xeolabs))
     * Improve CameraControl dollying through objects. [#469](https://github.com/xeokit/xeokit-sdk/pull/469) ([**@xeolabs**](https://github.com/xeolabs))
     * Fix CameraControl first-person rotation and dolly for touch devices. [#470](https://github.com/xeokit/xeokit-sdk/pull/470) ([**@xeolabs**](https://github.com/xeolabs))
 
