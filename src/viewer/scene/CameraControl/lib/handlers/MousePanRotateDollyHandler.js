@@ -107,7 +107,7 @@ class MousePanRotateDollyHandler {
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult) {
+                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
                             mouseDownPicked = true;
                             pickedWorldPos.set(pickController.pickResult.worldPos);
                         } else {
@@ -169,7 +169,7 @@ class MousePanRotateDollyHandler {
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult) {
+                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
                             mouseDownPicked = true;
                             pickedWorldPos.set(pickController.pickResult.worldPos);
                         } else {
@@ -325,8 +325,8 @@ class MousePanRotateDollyHandler {
             this._down = false;
         });
 
-        const maxElapsed = 1/20;
-        const minElapsed = 1/60;
+        const maxElapsed = 1 / 20;
+        const minElapsed = 1 / 60;
 
         let secsNowLast = null;
 
