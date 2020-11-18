@@ -41,13 +41,6 @@ class FrameContext {
         this.lastProgramId = null;
 
         /**
-         * The last RTC center that was used during the current frame.
-         * @property lastRTCCenter
-         * @type {Number[]}
-         */
-        this.lastRTCCenter = null;
-
-        /**
          * Whether SAO is currently enabled during the current frame.
          * @property withSAO
          * @default false
