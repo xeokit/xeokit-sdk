@@ -6,8 +6,10 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 November 18, 2020
 
+* SectionPlane, SectionPlanesPlugin
+    * Fix case for which SectionPlane does not clip everything. [#474](https://github.com/xeokit/xeokit-sdk/issues/474) ([**@xeolabs**](https://github.com/xeolabs))
 * CameraControl
-    * CameraControl picking robustness. [#473](https://github.com/xeokit/xeokit-sdk/pull/473) ([**@xeolabs**](https://github.com/xeolabs))
+    * CameraControl picking robustness. [#473](https://github.com/xeokit/xeokit-sdk/issues/473) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.5.11
 
