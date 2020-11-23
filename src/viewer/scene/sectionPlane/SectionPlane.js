@@ -156,7 +156,6 @@ class SectionPlane extends Component {
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
-        this.glRedraw();
         /**
          Fired whenever this SectionPlane's {@link SectionPlane#dir} property changes.
 
@@ -164,6 +163,7 @@ class SectionPlane extends Component {
          @param value {Number[]} The property's new value
          */
         this.fire("dir", this._state.dir);
+        this.glRedraw();
     }
 
     /**
@@ -197,6 +197,7 @@ class SectionPlane extends Component {
         dir[0] *= -1.0;
         dir[1] *= -1.0;
         dir[2] *= -1.0;
+        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.fire("dir", this._state.dir);
         this.glRedraw();
     }
