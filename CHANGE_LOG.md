@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.13
+
+November 23, 2020
+
+* SectionPlane, SectionPlanesPlugin
+    * Fix rotation bug in SectionPlanesPlugin editing control. [#479](https://github.com/xeokit/xeokit-sdk/issues/479) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.12
 
 November 18, 2020
