@@ -46,7 +46,6 @@ class Control {
         this._displayMeshes = null; // Meshes that are always visible
         this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
 
-        this._ignoreNextSectionPlanePosUpdate = false;  
         this._ignoreNextSectionPlaneDirUpdate = false;
 
         this._createNodes();
@@ -73,11 +72,7 @@ class Control {
             this._setDir(sectionPlane.dir);
             this._sectionPlane = sectionPlane;
             this._onSectionPlanePos = sectionPlane.on("pos", () => {
-                if (!this._ignoreNextSectionPlanePosUpdate) {
-                    this._setPos(this._sectionPlane.pos);
-                } else {
-                    this._ignoreNextSectionPlanePosUpdate = false;
-                }
+                this._setPos(this._sectionPlane.pos);
             });
             this._onSectionPlaneDir = sectionPlane.on("dir", () => {
                 if (!this._ignoreNextSectionPlaneDirUpdate) {
@@ -112,13 +107,6 @@ class Control {
     _setDir(xyz) {
         this._baseDir.set(xyz);
         this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
-    }
-
-    _setSectionPlanePos(pos) {
-        if (this._sectionPlane) {
-            this._ignoreNextSectionPlanePosUpdate = true;
-            this._sectionPlane.pos = pos;
-        }
     }
 
     _setSectionPlaneDir(dir) {
@@ -1017,7 +1005,9 @@ class Control {
                 self._pos[1] += worldAxis[1] * dot;
                 self._pos[2] += worldAxis[2] * dot;
                 self._rootNode.position = self._pos;
-                self._setSectionPlanePos(self._pos);
+                if (self._sectionPlane) {
+                    self._sectionPlane.pos = self._pos;
+                }
             }
         })();
 
