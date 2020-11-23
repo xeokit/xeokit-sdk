@@ -11,8 +11,8 @@ import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
 import {worldToRTCPos} from "../../viewer/scene/math/rtcCoords.js";
 
-const zeroVec = new Float32Array([0, 0, 1]);
-const quat = new Float32Array(4);
+const zeroVec = new Float64Array([0, 0, 1]);
+const quat = new Float64Array(4);
 
 /**
  * Controls a {@link SectionPlane} with mouse and touch input.
@@ -46,6 +46,9 @@ class Control {
         this._displayMeshes = null; // Meshes that are always visible
         this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
 
+        this._ignoreNextSectionPlanePosUpdate = false;  
+        this._ignoreNextSectionPlaneDirUpdate = false;
+
         this._createNodes();
         this._bindEvents();
     }
@@ -70,10 +73,18 @@ class Control {
             this._setDir(sectionPlane.dir);
             this._sectionPlane = sectionPlane;
             this._onSectionPlanePos = sectionPlane.on("pos", () => {
-                this._setPos(this._sectionPlane.pos);
+                if (!this._ignoreNextSectionPlanePosUpdate) {
+                    this._setPos(this._sectionPlane.pos);
+                } else {
+                    this._ignoreNextSectionPlanePosUpdate = false;
+                }
             });
             this._onSectionPlaneDir = sectionPlane.on("dir", () => {
-                this._setDir(this._sectionPlane.dir);
+                if (!this._ignoreNextSectionPlaneDirUpdate) {
+                    this._setDir(this._sectionPlane.dir);
+                } else {
+                    this._ignoreNextSectionPlaneDirUpdate = false;
+                }
             });
         }
     }
@@ -101,6 +112,20 @@ class Control {
     _setDir(xyz) {
         this._baseDir.set(xyz);
         this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
+    }
+
+    _setSectionPlanePos(pos) {
+        if (this._sectionPlane) {
+            this._ignoreNextSectionPlanePosUpdate = true;
+            this._sectionPlane.pos = pos;
+        }
+    }
+
+    _setSectionPlaneDir(dir) {
+        if (this._sectionPlane) {
+            this._ignoreNextSectionPlaneDirUpdate = true;
+            this._sectionPlane.dir = dir;
+        }
     }
 
     /**
@@ -929,7 +954,7 @@ class Control {
         }
 
         const getClickCoordsWithinElement = (function () {
-            const canvasPos = new Float32Array(2);
+            const canvasPos = new Float64Array(2);
             return function (event) {
                 if (!event) {
                     event = window.event;
@@ -992,9 +1017,7 @@ class Control {
                 self._pos[1] += worldAxis[1] * dot;
                 self._pos[2] += worldAxis[2] * dot;
                 self._rootNode.position = self._pos;
-                if (self.sectionPlane) {
-                    self.sectionPlane.pos = self._pos;
-                }
+                self._setSectionPlanePos(self._pos);
             }
         })();
 
@@ -1069,7 +1092,7 @@ class Control {
                 if (self.sectionPlane) {
                     math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
                     math.transformVec3(mat, [0, 0, 1], dir);
-                    self._sectionPlane.dir = dir;
+                    self._setSectionPlaneDir(dir);
                 }
             };
         })();
