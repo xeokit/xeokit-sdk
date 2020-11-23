@@ -2,15 +2,15 @@ import {utils} from '../utils.js';
 import {Component} from '../Component.js';
 import {math} from '../math/math.js';
 
-const angleAxis = new Float32Array(4);
-const q1 = new Float32Array(4);
-const q2 = new Float32Array(4);
-const xAxis = new Float32Array([1, 0, 0]);
-const yAxis = new Float32Array([0, 1, 0]);
-const zAxis = new Float32Array([0, 0, 1]);
+const angleAxis = math.vec4(4);
+const q1 = math.vec4();
+const q2 = math.vec4();
+const xAxis = math.vec3([1, 0, 0]);
+const yAxis = math.vec3([0, 1, 0]);
+const zAxis = math.vec3([0, 0, 1]);
 
-const veca = new Float32Array(3);
-const vecb = new Float32Array(3);
+const veca = math.vec3(3);
+const vecb = math.vec3(3);
 
 const identityMat = math.identityMat4();
 

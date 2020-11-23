@@ -95,12 +95,6 @@ class SectionPlane extends Component {
     set active(value) {
         this._state.active = value !== false;
         this.glRedraw();
-        /**
-         Fired whenever this SectionPlane's {@link SectionPlane#active} property changes.
-
-         @event active
-         @param value {Boolean} The property's new value
-         */
         this.fire("active", this._state.active);
     }
 
@@ -125,13 +119,6 @@ class SectionPlane extends Component {
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
-        this.glRedraw();
-        /**
-         Fired whenever this SectionPlane's {@link SectionPlane#pos} property changes.
-
-         @event pos
-         @param value The property's new value
-         */
         this.fire("pos", this._state.pos);
     }
 
@@ -156,14 +143,8 @@ class SectionPlane extends Component {
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
-        /**
-         Fired whenever this SectionPlane's {@link SectionPlane#dir} property changes.
-
-         @event dir
-         @param value {Number[]} The property's new value
-         */
-        this.fire("dir", this._state.dir);
         this.glRedraw();
+        this.fire("dir", this._state.dir);
     }
 
     /**
