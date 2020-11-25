@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.14
+
+November 25, 2020
+
+* SectionPlane, SectionPlanesPlugin
+    * Fix SectionPlane failure to clip certain objects. [#481](https://github.com/xeokit/xeokit-sdk/issues/481) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.13
 
 November 23, 2020
