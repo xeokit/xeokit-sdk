@@ -2046,22 +2046,7 @@ class PerformanceModel extends Component {
                     renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = false;
 
                 } else {
-
-                    const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, layer.aabb);
-                    const outside = (intersect === -1);
-
-                    if (outside) {
-
-                        if (layer._numClippableLayerPortions < layer._numPortions) {
-                            // Layer has objects that cannot be clipped by SectionPlanes
-                            renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = true;
-                        } else {
-                            return false;
-                        }
-                    }
-
-                    const intersecting = (intersect === 0);
-                    renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = intersecting;
+                    renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = true;
                 }
             }
         }
