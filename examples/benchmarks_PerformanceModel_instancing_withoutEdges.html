@@ -72,6 +72,8 @@
         transparent: true
     });
 
+    viewer.cameraControl.followPointer = true;
+
     viewer.scene.camera.perspective.far = 10000;
 
     viewer.scene.camera.eye = [-2760.80, 606.64, -1098.80];
@@ -79,9 +81,6 @@
     viewer.scene.camera.up = [0.32, 0.92, 0.11];
 
     viewer.scene.highlightMaterial.edges = false;
-
-    viewer.scene.gammaInput = false;
-    viewer.scene.gammaOutput = false;
 
     //------------------------------------------------------------------------------------------------------------------
     // Generate the buildings
@@ -95,7 +94,7 @@
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
-        edges: true
+        edges: false
     });
 
     // Create a reusable geometry within the PerformanceModel
