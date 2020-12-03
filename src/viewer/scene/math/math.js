@@ -14,7 +14,7 @@ const tempVec4 = new FloatArrayType(4);
 const math = {
 
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
-    MAX_DOUBLE:  Number.MAX_SAFE_INTEGER,
+    MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
 
     /**
      * The number of radiians in a degree (0.0174532925).
@@ -29,6 +29,15 @@ const math = {
      * @type {Number}
      */
     RADTODEG: 57.295779513,
+
+    unglobalizeObjectId(modelId, globalId) {
+        const idx = globalId.indexOf("#");
+        return (idx === modelId.length && globalId.startsWith(modelId)) ? globalId.substring(idx) : globalId;
+    },
+
+    globalizeObjectId(modelId, objectId) {
+        return (modelId + "#" + objectId)
+    },
 
     /**
      * Returns a new, uninitialized two-element vector.
@@ -3949,7 +3958,7 @@ const math = {
     },
 
     /**
-     * 
+     *
      * @param dir
      * @param constant
      * @param aabb

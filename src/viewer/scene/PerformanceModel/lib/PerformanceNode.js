@@ -52,10 +52,18 @@ class PerformanceNode {
         /**
          * ID of this PerformanceNode, unique within the {@link Scene}.
          * @property id
-         * @type {String|Number
-         * @final}
+         * @type {String|Number}
+         * @final
          */
         this.id = id;
+
+        /**
+         * ID of the corresponding object within the originating system.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = math.unglobalizeObjectId(model.id, id);
 
         this._flags = flags;
         this._aabb = aabb;

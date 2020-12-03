@@ -16,7 +16,7 @@
  */
 class MetaObject {
 
-    constructor(metaModel, id, name, type, properties, parent, children, external) {
+    constructor(metaModel, id, originalSystemId, name, type, properties, parent, children, external) {
 
         /**
          * Model metadata.
@@ -35,6 +35,14 @@ class MetaObject {
          * @type {String|Number}
          */
         this.id = id;
+
+        /**
+         * ID of the corresponding object within the originating system, if any.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = originalSystemId;
 
         /**
          * Human-readable name.
@@ -153,6 +161,7 @@ class MetaObject {
 
         visit(this);
     }
+
     /**
      * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree that have the given {@link MetaObject#type}s.
      *

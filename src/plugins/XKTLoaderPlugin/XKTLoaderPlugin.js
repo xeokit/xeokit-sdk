@@ -37,6 +37,7 @@ parsers[ParserV6.version] = ParserV6;
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
+ * * Can be configured to load multiple instances of the same model, without object ID clashes.
  * * Does not (yet) support textures or physically-based materials.
  *
  * ## Credits
@@ -324,6 +325,62 @@ parsers[ParserV6.version] = ParserV6;
  *      metaModelSrc: "./metaModels/duplex/metaModel.json" // Creates a MetaObject instances in scene.metaScene.metaObjects
  * });
  * ````
+ *
+ * ## Loading multiple copies of a model, without object ID clashes
+ *
+ * Sometimes we need to load two or more instances of the same model, without having clashes
+ * between the IDs of the equivalent objects in the model instances.
+ *
+ *
+ * To do this, we set {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
+ *
+ * ````javascript
+ * xktLoader.globalizeObjectIds = true;
+ *
+ * const model = xktLoader.load({
+ *      id: "model1",
+ *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+ *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ * });
+ *
+ * const model2 = xktLoader.load({
+ *    id: "model2",
+ *    src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+ *    metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ * });
+ * ````
+ *
+ * For each {@link Entity} loaded by these two calls, {@link Entity#id} and {@link MetaObject#id} will get prefixed by
+ * the ID of their model, in order to avoid ID clashes between the two models.
+ *
+ * An Entity belonging to the first model will get an ID like this:
+ *
+ * ````
+ * myModel1#0BTBFw6f90Nfh9rP1dlXrb
+ * ````
+ *
+ * The equivalent Entity in the second model will get an ID like this:
+ *
+ * ````
+ * myModel2#0BTBFw6f90Nfh9rP1dlXrb
+ * ````
+ *
+ * Now, to update the visibility of both of those Entities collectively, using {@link Scene#setObjectsVisible}, we can
+ * supply just the IFC product ID part to that method:
+ *
+ * ````javascript
+ * myViewer.scene.setObjectVisibilities("0BTBFw6f90Nfh9rP1dlXrb", true);
+ * ````
+ *
+ * The method, along with {@link Scene#setObjectsXRayed}, {@link Scene#setObjectsHighlighted} etc, will internally expand
+ * the given ID to refer to the instances of that Entity in both models.
+ *
+ * We can also reference each Entity directly, using its globalized ID:
+ *
+ * ````javascript
+ * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
+ *````
+ *
  * @class XKTLoaderPlugin
  */
 class XKTLoaderPlugin extends Plugin {
@@ -489,6 +546,38 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
+     * Sets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     *
+     * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
+     * between the objects in the different instances.
+     *
+     * When we load a model with this set ````true````, then each {@link Entity#id} and {@link MetaObject#id} will be
+     * prefixed by the ID of the model, ie. ````<modelId>#<objectId>````.
+     *
+     * {@link Entity#originalSystemId} and {@link MetaObject#originalSystemId} will always hold the original, un-prefixed, ID values.
+     *
+     * Default value is ````false````.
+     *
+     * See the main {@link XKTLoaderPlugin} class documentation for usage info.
+     *
+     * @type {Boolean}
+     */
+    set globalizeObjectIds(value) {
+        this._globalizeObjectIds = !!value;
+    }
+
+    /**
+     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get globalizeObjectIds() {
+        return this._globalizeObjectIds;
+    }
+
+    /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
      * @param {*} params Loading parameters.
@@ -508,7 +597,8 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component.
      * @param {Boolean} [params.backfaces=false] Indicates if backfaces are visible on the model. Making this ````true```` will reduce rendering performance.
-     * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
+     * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -556,12 +646,14 @@ class XKTLoaderPlugin extends Plugin {
             }
 
             options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
+            options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
             const processMetaModelData = (metaModelData) => {
 
                 this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: includeTypes,
-                    excludeTypes: excludeTypes
+                    excludeTypes: excludeTypes,
+                    globalizeObjectIds: this.globalizeObjectIds
                 });
 
                 this.viewer.scene.canvas.spinner.processes--;

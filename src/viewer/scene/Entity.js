@@ -45,6 +45,20 @@ class Entity {
     }
 
     /**
+     * ID of the corresponding object within the originating system, if any.
+     *
+     * By default, this has the same value as {@link Entity#id}. When we load a model using {@link XKTLoaderPlugin#load},
+     * with {@link XKTLoaderPlugin#globalizeObjectIds} set ````true````, then that plugin will prefix {@link Entity#id}
+     * with the model ID, while leaving this property holding the original value of {@link Entity#id}. When loading an
+     * IFC model, this property will hold the IFC product ID of the corresponding IFC element.
+     *
+     * @type {String}
+     * @abstract
+     */
+    get originalSystemId() {
+    }
+
+    /**
      * Returns true to indicate that this is an Entity.
      *
      * @returns {Boolean}

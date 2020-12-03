@@ -2288,8 +2288,17 @@ class Scene extends Component {
             let entity = entities[id];
             if (entity) {
                 changed = callback(entity) || changed;
+            } else {
+                const modelIds = this.modelIds;
+                for (let i = 0, len = modelIds.length; i < len; i++) {
+                    const modelId = modelIds[i];
+                    const globalObjectId = math.globalizeObjectId(modelId, id);
+                    entity = entities[globalObjectId];
+                    if (entity) {
+                        changed = callback(entity) || changed;
+                    }
+                }
             }
-            //   this.warn("Entity not found: '" + id + "'");
         }
         return changed;
     }

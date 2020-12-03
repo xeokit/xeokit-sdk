@@ -147,7 +147,8 @@ function load(viewer, options, inflatedData, performanceModel) {
 
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
-            const entityId = eachEntityId[tileEntityIndex];
+            const xktEntityId = eachEntityId[tileEntityIndex];
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
 
             const entityMatrixIndex = eachEntityMatricesPortion[tileEntityIndex];
             const entityMatrix = matrices.slice(entityMatrixIndex, entityMatrixIndex + 16);
