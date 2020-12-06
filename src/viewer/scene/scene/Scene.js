@@ -2045,7 +2045,7 @@ class Scene extends Component {
         let ymax = math.MIN_DOUBLE;
         let zmax = math.MIN_DOUBLE;
         let valid;
-        this._withEntities(ids, this.objects, entity => {
+        this.withObjects(ids, entity => {
                 if (entity.collidable) {
                     const aabb = entity.aabb;
                     if (aabb[0] < xmin) {
@@ -2097,7 +2097,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsVisible(ids, visible) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.visible !== visible);
             entity.visible = visible;
             return changed;
@@ -2114,7 +2114,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCollidable(ids, collidable) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.collidable !== collidable);
             entity.collidable = collidable;
             return changed;
@@ -2131,7 +2131,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCulled(ids, culled) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, this.objects, entity => {
             const changed = (entity.culled !== culled);
             entity.culled = culled;
             return changed;
@@ -2151,7 +2151,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsSelected(ids, selected) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.selected !== selected);
             entity.selected = selected;
             return changed;
@@ -2171,7 +2171,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsHighlighted(ids, highlighted) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.highlighted !== highlighted);
             entity.highlighted = highlighted;
             return changed;
@@ -2191,7 +2191,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsXRayed(ids, xrayed) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.xrayed !== xrayed);
             entity.xrayed = xrayed;
             return changed;
@@ -2208,7 +2208,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsEdges(ids, edges) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.edges !== edges);
             entity.edges = edges;
             return changed;
@@ -2225,7 +2225,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
     setObjectsColorized(ids, colorize) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             entity.colorize = colorize;
         });
     }
@@ -2240,7 +2240,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
     setObjectsOpacity(ids, opacity) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.opacity !== opacity);
             entity.opacity = opacity;
             return changed;
@@ -2257,7 +2257,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsPickable(ids, pickable) {
-        return this._withEntities(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.pickable !== pickable);
             entity.pickable = pickable;
             return changed;
@@ -2273,19 +2273,19 @@ class Scene extends Component {
      * @param {Number[]} [offset] 3D offset vector.
      */
     setObjectsOffset(ids, offset) {
-        this._withEntities(ids, this.objects, entity => {
+        this.withObjects(ids, entity => {
             entity.offset = offset;
         });
     }
 
-    _withEntities(ids, entities, callback) {
+    withObjects(ids, callback) {
         if (utils.isString(ids)) {
             ids = [ids];
         }
         let changed = false;
         for (let i = 0, len = ids.length; i < len; i++) {
             const id = ids[i];
-            let entity = entities[id];
+            let entity = this.objects[id];
             if (entity) {
                 changed = callback(entity) || changed;
             } else {
@@ -2293,7 +2293,7 @@ class Scene extends Component {
                 for (let i = 0, len = modelIds.length; i < len; i++) {
                     const modelId = modelIds[i];
                     const globalObjectId = math.globalizeObjectId(modelId, id);
-                    entity = entities[globalObjectId];
+                    entity = this.objects[globalObjectId];
                     if (entity) {
                         changed = callback(entity) || changed;
                     }
