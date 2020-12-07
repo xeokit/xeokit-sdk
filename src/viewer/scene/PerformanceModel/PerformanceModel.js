@@ -2090,7 +2090,7 @@ class PerformanceModel extends Component {
         if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
             if (edgeMaterial.edges) {
-                if (edgeMaterial.alpha < 1.0) {
+                if (edgeMaterial.edgeAlpha < 1.0) {
                     renderFlags.normalEdgesTransparent = true;
                 } else {
                     renderFlags.normalEdgesOpaque = true;
