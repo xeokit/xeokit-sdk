@@ -457,28 +457,29 @@ class BCFViewpointsPlugin extends Plugin {
     _createBCFComponents(objectIds) {
         const scene = this.viewer.scene;
         const originalSystemIdMap = {};
-        const result = [];
+        const authoringComponents = [];
+        const ifcComponents = [];
         for (let i = 0, len = objectIds.length; i < len; i++) {
             const objectId = objectIds[i];
             const entity = scene.objects[objectId];
             if (entity) {
                 const originalSystemId = entity.originalSystemId;
                 if (objectId !== originalSystemId) {
-                    result.push({
+                    authoringComponents.push({
                         authoring_tool_id: objectId,
                         originating_system: this.originatingSystem
                     });
                 }
-                if (originalSystemIdMap[originalSystemId] === undefined) {
+                if (authoringComponents.length === 0 && originalSystemIdMap[originalSystemId] === undefined) {
                     originalSystemIdMap[originalSystemId] = originalSystemId;
-                    result.push({
+                    ifcComponents.push({
                         ifc_guid: originalSystemId,
                         originating_system: this.originatingSystem
                     });
                 }
             }
         }
-        return result;
+        return (authoringComponents.length > 0) ? authoringComponents : ifcComponents;
     }
 
     /**
@@ -669,7 +670,7 @@ class BCFViewpointsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
 
-        if (component.authoring_tool_id && component.originatingSystem === this.originatingSystem) {
+        if (component.authoring_tool_id && component.originating_system === this.originatingSystem) {
 
             const id = component.authoring_tool_id;
             const entity = scene.objects[id];
