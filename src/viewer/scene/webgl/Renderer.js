@@ -627,7 +627,7 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0) {
+            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
 
@@ -653,16 +653,19 @@ const Renderer = function (scene, options) {
                         xrayedFillTransparentBin[i].drawXRayedFillTransparent(frameCtx);
                     }
                 }
-                if (normalFillTransparentBinLen > 0) {
-                    for (i = 0; i < normalFillTransparentBinLen; i++) {
-                        drawable = normalFillTransparentBin[i];
-                        drawable.drawNormalFillTransparent(frameCtx);
-                    }
+                if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
                 }
                 if (normalEdgesTransparentBinLen > 0) {
                     for (i = 0; i < normalEdgesTransparentBinLen; i++) {
                         drawable = normalEdgesTransparentBin[i];
                         drawable.drawNormalEdgesTransparent(frameCtx);
+                    }
+                }
+                if (normalFillTransparentBinLen > 0) {
+                    for (i = 0; i < normalFillTransparentBinLen; i++) {
+                        drawable = normalFillTransparentBin[i];
+                        drawable.drawNormalFillTransparent(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
