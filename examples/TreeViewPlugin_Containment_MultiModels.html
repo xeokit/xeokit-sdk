@@ -163,7 +163,6 @@
             font-weight: normal;
         }
 
-
     </style>
 
 </head>
@@ -209,7 +208,6 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
-
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
@@ -219,7 +217,7 @@
     import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    // Create a Viewer, arrange the camera, tweak some emphasis materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -262,7 +260,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an IFC structure tree view
+    // Create an IFC containment tree view
     //------------------------------------------------------------------------------------------------------------------
 
     const treeView = new TreeViewPlugin(viewer, {
@@ -271,9 +269,12 @@
         hierarchy: "containment"
     });
 
-    //----------------------------------------------------------------------------------------------------------------------
-    // Load models and fit to view
-    //----------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    // Load two instances of the same Schependomlaan  model
+    //
+    // We enable XKTLoaderPlugin's globalizeObjectIds mode, which automatically globalizes the ID of each
+    // Entity loaded, in order to avoid Entity ID clashes between the two models.
+    //------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
@@ -300,9 +301,21 @@
         });
 
         model2.on("loaded", () => {
+
             const t1 = performance.now();
+
             document.getElementById("time").innerHTML = "Model loaded in "
                 + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + (model.numEntities = model2.numEntities);
+
+            //------------------------------------------------------------------------------------------------------------------
+            // When the models have loaded:
+            //
+            // 1. Set both models X-rayed
+            // 2. Select two objects, one the first model, the other in the second model, using their globalized IDs
+            // 3. Highlight three objects in each model, using their original IDs. Each ID will automatically map to
+            //    its corresponding object in each of the two models.
+            //------------------------------------------------------------------------------------------------------------------
+
 
             viewer.scene.setObjectsOpacity(viewer.scene.objectIds, 0.4);
 
@@ -323,9 +336,11 @@
         });
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Create ContextMenus
+    //------------------------------------------------------------------------------------------------------------------
 
     const treeViewContextMenu = new ContextMenu({
-
         items: [
             [
                 {
@@ -588,10 +603,6 @@
             }, 500);
         });
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create two ContextMenus - one for right-click on empty space, the other for right-click on an Entity
-    //------------------------------------------------------------------------------------------------------------------
 
     const canvasContextMenu = new ContextMenu({
         enabled: true,
