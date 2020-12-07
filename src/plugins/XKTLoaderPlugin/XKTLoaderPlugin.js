@@ -381,6 +381,8 @@ parsers[ParserV6.version] = ParserV6;
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ *
  * @class XKTLoaderPlugin
  */
 class XKTLoaderPlugin extends Plugin {
