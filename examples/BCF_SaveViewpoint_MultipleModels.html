@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>BCFViewpointsPlugin - Saving a BCF Viewpoint with Multiple Instances of Same Model</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Saving a BCF Viewpoint with Multiple Instances of Same Model</h1>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads BIM model from the file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
+            - Saves and loads BCF viewpoints
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>See source code to examine the BCF JSON record</li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+    import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const camera = viewer.camera;
+
+    viewer.camera.eye = [-1.7346133752341162, 34.520294074995206, -48.39572736452684];
+    viewer.camera.look = [30.17234053737633, -6.417836726776081, 0.3217219570559129];
+    viewer.camera.up = [0.31508633693614363, 0.818089489558055, 0.48109270141086513];
+
+    viewer.cameraControl.followPointer = true;
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    sectionPlanes.createSectionPlane({
+        id: "myClip",
+        pos: [0, 0, 0],
+        dir: [0.5, 0.0, 0.5]
+    });
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    xktLoader.globalizeObjectIds = true;
+
+    const model = xktLoader.load({
+        id: "model1",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        excludeUnclassifiedObjects: false
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    model.on("loaded", function () {
+
+        const model2 = xktLoader.load({
+            id: "model2",
+            src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+            metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+            edges: true,
+            excludeUnclassifiedObjects: false,
+            position: [30, 0, 0]
+        });
+
+        model2.on("loaded", () => {
+
+            const t1 = performance.now();
+            document.getElementById("time").innerHTML = "Model loaded in "
+                + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + (model.numEntities = model2.numEntities);
+
+            viewer.scene.setObjectsOpacity(viewer.scene.objectIds, 0.4);
+
+            viewer.scene.setObjectsSelected([
+                "model1#3b2U496P5Ebhz5FROhTwFH"
+            ], true);
+
+            viewer.scene.setObjectsSelected([
+                "model2#2MGtJUm9nD$Re1_MDIv0g2"
+            ], true);
+
+            viewer.scene.setObjectsHighlighted([
+                "3IbuwYOm5EV9Q6cXmwVWqd",
+                "3lhisrBxL8xgLCRdxNG$2v",
+                "1uDn0xT8LBkP15zQc9MVDW"
+            ], true);
+
+            const bcfViewpoints = new BCFViewpointsPlugin(viewer);
+
+            const viewpoint = bcfViewpoints.getViewpoint({ // Options
+                spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+                spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+                openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+            });
+
+            const viewpointStr = JSON.stringify(viewpoint, null, 4);
+
+            console.log(viewpointStr);
+        });
+    });
+
+
+</script>
+
+</html>

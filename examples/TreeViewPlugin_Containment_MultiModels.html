@@ -9,7 +9,7 @@
     <style>
 
         #myCanvas {
-            background: lightblue;
+            background: #c6e4e6;
         }
 
         #myNavCubeCanvas {
@@ -104,6 +104,66 @@
             padding-right: 5px;
         }
 
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* ContextMenu */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        .xeokit-context-menu {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            display: none;
+            z-index: 300000;
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid black;
+            border-radius: 6px;
+            padding: 0;
+            width: 200px;
+        }
+
+        .xeokit-context-menu ul {
+            list-style: none;
+            margin-left: 0;
+            padding: 0;
+        }
+
+        .xeokit-context-menu ul li {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            color: black;
+            border-bottom: 1px solid gray;
+            background: rgba(255, 255, 255, 0.46);
+            cursor: pointer;
+            width: calc(100% - 30px);
+        }
+
+        .xeokit-context-menu ul li:hover {
+            background: black;
+            color: white;
+            font-weight: bold;
+        }
+
+        .xeokit-context-menu ul li span {
+            display: inline-block;
+        }
+
+        .xeokit-context-menu .disabled {
+            display: inline-block;
+            color: gray;
+            cursor: default;
+            font-weight: normal;
+        }
+
+        .xeokit-context-menu .disabled:hover {
+            color: gray;
+            cursor: default;
+            background: #eeeeee;
+            font-weight: normal;
+        }
+
+
     </style>
 
 </head>
@@ -149,12 +209,14 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
+
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
     import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+    import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -177,14 +239,14 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
-    viewer.scene.xrayMaterial.fillAlpha = 0.1;
-    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
-    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
-    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+    viewer.scene.edgeMaterial.edgeAlpha = 0.4;
+    viewer.scene.edgeMaterial.edgeColor = [0, 0, 0];
 
-    viewer.scene.highlightMaterial.fill = false;
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+    viewer.scene.highlightMaterial.edgeAlpha = 0.7;
+    viewer.scene.highlightMaterial.fillAlpha = 0.7;
+
+    viewer.scene.selectedMaterial.edgeAlpha = 0.7;
+    viewer.scene.selectedMaterial.fillAlpha = 0.7;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a NavCube
@@ -210,7 +272,7 @@
     });
 
     //----------------------------------------------------------------------------------------------------------------------
-    // Load a model and fit it to view
+    // Load models and fit to view
     //----------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
@@ -218,11 +280,10 @@
     xktLoader.globalizeObjectIds = true;
 
     const model = xktLoader.load({
-        id: "widget1",
+        id: "model1",
         src: "./models/xkt/schependomlaan/schependomlaan.xkt",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
-        edges: true,
-        excludeUnclassifiedObjects: false
+        edges: true
     });
 
     const t0 = performance.now();
@@ -231,55 +292,553 @@
     model.on("loaded", function () {
 
         const model2 = xktLoader.load({
-            id: "widget2",
+            id: "model2",
             src: "./models/xkt/schependomlaan/schependomlaan.xkt",
             metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
             edges: true,
-            excludeUnclassifiedObjects: false,
-            position: [50, 0, 0]
+            position: [30, 0, 0]
         });
 
         model2.on("loaded", () => {
             const t1 = performance.now();
             document.getElementById("time").innerHTML = "Model loaded in "
                 + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + (model.numEntities = model2.numEntities);
+
+            viewer.scene.setObjectsOpacity(viewer.scene.objectIds, 0.4);
+
+            viewer.scene.setObjectsSelected([
+                "model1#3b2U496P5Ebhz5FROhTwFH"
+            ], true);
+
+            viewer.scene.setObjectsSelected([
+                "model2#2MGtJUm9nD$Re1_MDIv0g2"
+            ], true);
+
+            viewer.scene.setObjectsHighlighted([
+                "3IbuwYOm5EV9Q6cXmwVWqd",
+                "3lhisrBxL8xgLCRdxNG$2v",
+                "1uDn0xT8LBkP15zQc9MVDW"
+            ], true);
+
+        });
+    });
+
+
+    const treeViewContextMenu = new ContextMenu({
+
+        items: [
+            [
+                {
+                    title: "View Fit",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        const objectIds = [];
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                objectIds.push(treeViewNode.objectId);
+                            }
+                        });
+                        scene.setObjectsVisible(objectIds, true);
+                        scene.setObjectsHighlighted(objectIds, true);
+                        context.viewer.cameraFlight.flyTo({
+                            projection: "perspective",
+                            aabb: scene.getAABB(objectIds),
+                            duration: 0.5
+                        }, () => {
+                            setTimeout(function () {
+                                scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                            }, 500);
+                        });
+                    }
+                },
+                {
+                    title: "View Fit All",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        context.viewer.cameraFlight.flyTo({
+                            projection: "perspective",
+                            aabb: scene.getAABB({}),
+                            duration: 0.5
+                        });
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Hide",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.visible = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Hide Others",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.visibleObjectIds, false);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.visible = true;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Hide All",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.visibleObjectIds.length > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Show",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.visible = true;
+                                    entity.xrayed = false;
+                                    entity.selected = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Show Others",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.visible = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Show All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numVisibleObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "X-Ray",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.xrayed = true;
+                                    entity.visible = true;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Undo X-Ray",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.xrayed = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "X-Ray Others",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.objectIds, true);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.xrayed = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Reset X-Ray",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numXRayedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsXRayed(context.viewer.scene.xrayedObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Select",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.selected = true;
+                                    entity.visible = true;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Deselect",
+                    doAction: function (context) {
+                        context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) => {
+                            if (treeViewNode.objectId) {
+                                const entity = context.viewer.scene.objects[treeViewNode.objectId];
+                                if (entity) {
+                                    entity.selected = false;
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Clear Selection",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numSelectedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+                    }
+                }
+            ]
+        ]
+    });
+
+    // Right-clicking on a tree node shows the context menu for that node
+
+    treeView.on("contextmenu", (e) => {
+
+        treeViewContextMenu.context = { // Must set context before opening menu
+            viewer: e.viewer,
+            treeViewPlugin: e.treeViewPlugin,
+            treeViewNode: e.treeViewNode,
+            entity: e.viewer.scene.objects[e.treeViewNode.objectId] // Only defined if tree node is a leaf node
+        };
+
+        treeViewContextMenu.show(e.event.pageX, e.event.pageY);
+    });
+
+    // Left-clicking on a tree node isolates that object in the 3D view
+
+    treeView.on("nodeTitleClicked", (e) => {
+        const scene = viewer.scene;
+        const objectIds = [];
+        e.treeViewPlugin.withNodeTree(e.treeViewNode, (treeViewNode) => {
+            if (treeViewNode.objectId) {
+                objectIds.push(treeViewNode.objectId);
+            }
+        });
+        e.treeViewPlugin.unShowNode();
+        scene.setObjectsXRayed(scene.objectIds, true);
+        scene.setObjectsVisible(scene.objectIds, true);
+        scene.setObjectsXRayed(objectIds, false);
+        scene.setObjectsSelected(scene.selectedObjectIds, false);
+        scene.setObjectsSelected(objectIds, true);
+        viewer.cameraFlight.flyTo({
+            aabb: scene.getAABB(objectIds),
+            duration: 0.5
+        }, () => {
+            setTimeout(function () {
+                scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+            }, 500);
         });
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over entities to highlight them
+    // Create two ContextMenus - one for right-click on empty space, the other for right-click on an Entity
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastEntity = null;
+    const canvasContextMenu = new ContextMenu({
+        enabled: true,
+        context: {
+            viewer: viewer
+        },
+        items: [
+            [
+                {
+                    title: "Hide All",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numVisibleObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+                    }
+                },
+                {
+                    title: "Show All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numVisibleObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "View Fit All",
+                    doAction: function (context) {
+                        context.viewer.cameraFlight.flyTo({
+                            aabb: context.viewer.scene.getAABB()
+                        });
+                    }
+                }
+            ]
+        ]
+    });
 
-    viewer.scene.input.on("mousemove", function (coords) {
+    const objectContextMenu = new ContextMenu({
+        items: [
+            [
+                {
+                    title: "View Fit",
+                    doAction: function (context) {
+                        const viewer = context.viewer;
+                        const scene = viewer.scene;
+                        const entity = context.entity;
+                        viewer.cameraFlight.flyTo({
+                            aabb: entity.aabb,
+                            duration: 0.5
+                        }, () => {
+                            setTimeout(function () {
+                                scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                            }, 500);
+                        });
+                    }
+                },
+                {
+                    title: "View Fit All",
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        context.viewer.cameraFlight.flyTo({
+                            projection: "perspective",
+                            aabb: scene.getAABB(),
+                            duration: 0.5
+                        });
+                    }
+                },
+                {
+                    title: "Show in Tree",
+                    doAction: function (context) {
+                        const objectId = context.entity.id;
+                        context.treeViewPlugin.showNode(objectId);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Hide",
+                    getEnabled: function (context) {
+                        return context.entity.visible;
+                    },
+                    doAction: function (context) {
+                        context.entity.visible = false;
+                    }
+                },
+                {
+                    title: "Hide Others",
+                    doAction: function (context) {
+                        const viewer = context.viewer;
+                        const scene = viewer.scene;
+                        const entity = context.entity;
+                        const metaObject = viewer.metaScene.metaObjects[entity.id];
+                        if (!metaObject) {
+                            return;
+                        }
+                        scene.setObjectsVisible(scene.visibleObjectIds, false);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        metaObject.withMetaObjectsInSubtree((metaObject) => {
+                            const entity = scene.objects[metaObject.id];
+                            if (entity) {
+                                entity.visible = true;
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Hide All",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numVisibleObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+                    }
+                },
+                {
+                    title: "Show All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numVisibleObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "X-Ray",
+                    getEnabled: function (context) {
+                        return (!context.entity.xrayed);
+                    },
+                    doAction: function (context) {
+                        context.entity.xrayed = true;
+                    }
+                },
+                {
+                    title: "Undo X-Ray",
+                    getEnabled: function (context) {
+                        return context.entity.xrayed;
+                    },
+                    doAction: function (context) {
+                        context.entity.xrayed = false;
+                    }
+                },
+                {
+                    title: "X-Ray Others",
+                    doAction: function (context) {
+                        const viewer = context.viewer;
+                        const scene = viewer.scene;
+                        const entity = context.entity;
+                        const metaObject = viewer.metaScene.metaObjects[entity.id];
+                        if (!metaObject) {
+                            return;
+                        }
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.objectIds, true);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        metaObject.withMetaObjectsInSubtree((metaObject) => {
+                            const entity = scene.objects[metaObject.id];
+                            if (entity) {
+                                entity.xrayed = false;
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Reset X-Ray",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numXRayedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsXRayed(context.viewer.scene.xrayedObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Select",
+                    getEnabled: function (context) {
+                        return (!context.entity.selected);
+                    },
+                    doAction: function (context) {
+                        context.entity.selected = true;
+                    }
+                },
+                {
+                    title: "Undo select",
+                    getEnabled: function (context) {
+                        return context.entity.selected;
+                    },
+                    doAction: function (context) {
+                        context.entity.selected = false;
+                    }
+                },
+                {
+                    title: "Clear Selection",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numSelectedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+                    }
+                }
+            ]
+        ],
+        enabled: true
+    });
+
+    viewer.cameraControl.on("rightClick", function (e) {
 
         var hit = viewer.scene.pick({
-            canvasPos: coords
+            canvasPos: e.canvasPos
         });
 
-        if (hit) {
+        if (hit && hit.entity.isObject) {
 
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+            objectContextMenu.context = { // Must set context before showing menu
+                viewer: viewer,
+                treeViewPlugin: treeView,
+                entity: hit.entity
+            };
 
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
+            objectContextMenu.show(e.event.pageX, e.event.pageY);
 
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
         } else {
 
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
+            canvasContextMenu.context = { // Must set context before showing menu
+                viewer: viewer
+            };
+
+            canvasContextMenu.show(e.event.pageX, e.event.pageY);
         }
+
+        e.event.preventDefault();
     });
 
-    window.treeView = treeView;
-    window.viewer = viewer;
 
 </script>
 </html>
