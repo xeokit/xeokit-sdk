@@ -12,7 +12,9 @@ Unreleased
     * Improve rendering of translucent objects [#489](https://github.com/xeokit/xeokit-sdk/issues/489) ([**@xeolabs**](https://github.com/xeolabs))   
 * Entity, EdgeMaterial, EmphasisMaterial
     * Fix rendering of translucent edges [#490](https://github.com/xeokit/xeokit-sdk/issues/490) ([**@xeolabs**](https://github.com/xeolabs))
-        
+* SectionPlane, SectionPlanesPlugin
+    * Fix SectionPlane slicing for transformed PerformanceModels [#494](https://github.com/xeokit/xeokit-sdk/issues/494) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.14
 
 November 25, 2020
