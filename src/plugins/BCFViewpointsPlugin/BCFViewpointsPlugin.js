@@ -373,11 +373,13 @@ class BCFViewpointsPlugin extends Plugin {
         const xrayedObjectIds = new Set(scene.xrayedObjectIds);
         const colorizedObjectIds = new Set(scene.colorizedObjectIds);
 
+        let authoringComponentsCreated = false;
         const originalSystemIdMap = {};
+        const originalSystemColoringMap = {};
 
-        const coloring = Object.values(scene.objects)
+        const authoringSystemColoringMap = Object.values(scene.objects)
             .filter(entity => opacityObjectIds.has(entity.id) || colorizedObjectIds.has(entity.id) || xrayedObjectIds.has(entity.id))
-            .reduce((coloring, entity) => {
+            .reduce((authoringSystemColoringMap, entity) => {
 
                 let color = colorizeToRGB(entity.colorize);
                 let alpha;
@@ -396,33 +398,39 @@ class BCFViewpointsPlugin extends Plugin {
                     color = alpha + color;
                 }
 
-                if (!coloring[color]) {
-                    coloring[color] = [];
+                if (!authoringSystemColoringMap[color]) {
+                    authoringSystemColoringMap[color] = [];
+                }
+
+                if (!originalSystemColoringMap[color]) {
+                    originalSystemColoringMap[color] = [];
                 }
 
                 const objectId = entity.id;
                 const originalSystemId = entity.originalSystemId;
 
                 if (objectId !== originalSystemId) {
-                    coloring[color].push({
+                    authoringSystemColoringMap[color].push({
                         authoring_tool_id: objectId,
                         originating_system: this.originatingSystem
                     });
+                    authoringComponentsCreated = true;
                 }
 
-                if (originalSystemIdMap[originalSystemId] === undefined) {
+                if ((!authoringComponentsCreated) && (originalSystemIdMap[originalSystemId] === undefined)) {
                     originalSystemIdMap[originalSystemId] = originalSystemId;
-                    coloring[color].push({
+                    originalSystemColoringMap[color].push({
                         ifc_guid: originalSystemId,
                         originating_system: this.originatingSystem
                     });
                 }
 
-                return coloring;
+                return authoringSystemColoringMap;
 
             }, {});
 
-        const coloringArray = Object.entries(coloring).map(([color, components]) => {
+        const coloringMap  = authoringComponentsCreated ? authoringSystemColoringMap : originalSystemColoringMap;
+        const coloringArray = Object.entries(coloringMap).map(([color, components]) => {
             return {color, components};
         });
 
@@ -590,6 +598,9 @@ class BCFViewpointsPlugin extends Plugin {
 
                     if (color.length === 8) {
                         alpha = parseInt(color.substring(0, 2), 16) / 256;
+                        if (alpha <= 1.0 && alpha >= 0.95) {
+                            alpha = 1.0;
+                        }
                         color = color.substring(2);
                         alphaDefined = true;
                     }
