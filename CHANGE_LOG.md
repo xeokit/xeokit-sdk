@@ -7,9 +7,9 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 Unreleased
 
 * XKTLoaderPlugin, BCFViewpointsPlugin
-    * Ability to load multiple copies of same IFC model without object ID clashes [#485](https://github.com/xeokit/xeokit-sdk/issues/485) ([**@xeolabs**](https://github.com/xeolabs))
+    * Ability to load multiple copies of same IFC model without object ID clashes [#485](https://github.com/xeokit/xeokit-sdk/pull/495) ([**@xeolabs**](https://github.com/xeolabs))
 * Entity
-    * Improve normal rendering for objects with opacity < 1 [#489](https://github.com/xeokit/xeokit-sdk/issues/489) ([**@xeolabs**](https://github.com/xeolabs))   
+    * Improve rendering of translucent objects [#489](https://github.com/xeokit/xeokit-sdk/issues/489) ([**@xeolabs**](https://github.com/xeolabs))   
 * Entity, EdgeMaterial, EmphasisMaterial
     * Fix rendering of translucent edges [#490](https://github.com/xeokit/xeokit-sdk/issues/490) ([**@xeolabs**](https://github.com/xeolabs))
         
