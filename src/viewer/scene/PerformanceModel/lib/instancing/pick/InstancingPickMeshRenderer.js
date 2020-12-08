@@ -31,6 +31,7 @@ class InstancingPickMeshRenderer {
 
         const model = instancingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
@@ -48,10 +49,11 @@ class InstancingPickMeshRenderer {
             this._bindProgram(frameCtx);
         }
 
-        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -142,6 +144,7 @@ class InstancingPickMeshRenderer {
 
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];

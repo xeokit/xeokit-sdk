@@ -944,6 +944,8 @@ class PerformanceModel extends Component {
         this._worldMatrix = math.mat4();
         math.composeMat4(this._position, this._quaternion, this._scale, this._worldMatrix);
         this._worldNormalMatrix = math.mat4();
+        math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
+        math.transposeMat4(this._worldNormalMatrix);
 
         if (cfg.matrix || cfg.position || cfg.rotation || cfg.scale || cfg.quaternion) {
             this._viewMatrix = math.mat4();

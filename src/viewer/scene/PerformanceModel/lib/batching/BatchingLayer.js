@@ -261,16 +261,16 @@ class BatchingLayer {
 
             } else {
 
-                const modelNormalMatrix = tempMat4;
+                const worldNormalMatrix = tempMat4;
 
                 if (meshMatrix) {
-                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn't matter
+                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
 
                 } else {
-                    math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+                    math.identityMat4(worldNormalMatrix, worldNormalMatrix);
                 }
 
-                transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
+                transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
             }
         }
 
@@ -1017,7 +1017,7 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     };
 })();
 
-function transformAndOctEncodeNormals(modelNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
+function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
     // http://jcgt.org/published/0003/02/01/
     let oct, dec, best, currentCos, bestCos;
     let i, ei;
@@ -1028,7 +1028,7 @@ function transformAndOctEncodeNormals(modelNormalMatrix, normals, lenNormals, co
         localNormal[1] = normals[i + 1];
         localNormal[2] = normals[i + 2];
 
-        math.transformVec3(modelNormalMatrix, localNormal, worldNormal);
+        math.transformVec3(worldNormalMatrix, localNormal, worldNormal);
         math.normalizeVec3(worldNormal, worldNormal);
 
         // Test various combinations of ceil and floor to minimize rounding errors

@@ -37,9 +37,11 @@ function buildVertex(scene) {
     src.push("attribute vec4 modelNormalMatrixCol1;");
     src.push("attribute vec4 modelNormalMatrixCol2;");
 
+    src.push("uniform mat4 worldMatrix;");
+    src.push("uniform mat4 worldNormalMatrix;");
     src.push("uniform mat4 viewMatrix;");
-    src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 viewNormalMatrix;");
+    src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
 
     src.push("uniform vec4 lightAmbient;");
@@ -96,14 +98,14 @@ function buildVertex(scene) {
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
 
-    src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-    src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+    src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
+    src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
     src.push("worldPosition.xyz = worldPosition.xyz + offset;");
 
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
     src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-    src.push("vec4 worldNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+    src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
     src.push("vec3 viewNormal = normalize(vec4(worldNormal * viewNormalMatrix).xyz);");
 
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");

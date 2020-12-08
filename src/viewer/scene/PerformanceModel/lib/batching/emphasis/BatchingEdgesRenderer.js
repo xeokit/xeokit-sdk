@@ -30,6 +30,7 @@ class BatchingEdgesRenderer {
 
         const model = batchingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const rtcCenter = batchingLayer._state.rtcCenter;
@@ -46,8 +47,8 @@ class BatchingEdgesRenderer {
             this._bindProgram();
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix;
-        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -125,6 +126,7 @@ class BatchingEdgesRenderer {
         this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;

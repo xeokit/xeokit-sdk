@@ -29,6 +29,7 @@ class BatchingPickMeshRenderer {
 
         const model = batchingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const rtcCenter = batchingLayer._state.rtcCenter;
@@ -42,9 +43,12 @@ class BatchingPickMeshRenderer {
             this._bindProgram(frameCtx);
         }
 
-        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+
+        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
 
+        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -111,6 +115,7 @@ class BatchingPickMeshRenderer {
 
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];

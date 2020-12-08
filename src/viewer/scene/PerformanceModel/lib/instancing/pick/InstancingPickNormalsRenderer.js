@@ -29,6 +29,7 @@ class InstancingPickNormalsRenderer {
 
         const model = instancingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
@@ -51,11 +52,14 @@ class InstancingPickNormalsRenderer {
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
-        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
+
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -151,6 +155,8 @@ class InstancingPickNormalsRenderer {
         const program = this._program;
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
+        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
