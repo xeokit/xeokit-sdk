@@ -158,7 +158,7 @@ const tempVec3 = math.vec3();
  * slice the model in half using a {@link SectionPlanesPlugin}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we&apos;ll log to the JavaScript developer console.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ * * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
  * ````javascript
  * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
@@ -268,9 +268,9 @@ const tempVec3 = math.vec3();
  * ## Dealing With Loaded Models That Are Not in the Viewpoint
  *
  * If, for example, we load model &quot;duplex&quot;, hide some objects, then save a BCF viewpoint with
- * ````BCFViewpointsPlugin````, then load another model, &quot;schependomlaan&quot;, then load the viewpoint again, then
- * sometimes all of the objects in model &quot;schependomlaan&quot; become visible, along with the visible objects in the
- * viewpoint, which belong to model &quot;duplex&quot;.
+ * ````BCFViewpointsPlugin#getViewpoint````, then load another model, &quot;schependomlaan&quot;, then load the viewpoint again
+ * with ````BCFViewpointsPlugin#setViewpoint````, then sometimes all of the objects in model &quot;schependomlaan&quot; become
+ * visible, along with the visible objects in the viewpoint, which belong to model &quot;duplex&quot;.
  *
  * The reason is that, when saving a BCF viewpoint, BCF logic works like the following pseudo code:
  *
@@ -314,6 +314,32 @@ const tempVec3 = math.vec3();
  *
  * [[Run an example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultInvisible)]
  *
+ * ## Behaviour with XKTLoaderPlugin globalizeObjectIds
+ *
+ * Whenever we use {@link XKTLoaderPlugin} to load duplicate copies of the same model, after configuring
+ * {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` to avoid ````Entity```` ID clashes, this has consequences
+ * for BCF viewpoints created by {@link BCFViewpointsPlugin#getViewpoint}.
+ *
+ * When no duplicate copies of a model are loaded like this, viewpoints created by {@link BCFViewpointsPlugin#getViewpoint} will
+ * continue to load as usual in other BIM viewers. Conversely, a viewpoint created for a single model in other BIM viewers
+ * will continue to load as usual with ````BCFViewpointsPlugin````.
+ *
+ * When duplicate copies of a model are loaded, however, viewpoints created by {@link BCFViewpointsPlugin#getViewpoint}
+ * will contain certain changes that will affect the viewpoint&apos;s portability, however. Such viewpoints will
+ * use ````authoring_tool_id```` fields to save the globalized ````Entity#id```` values, which enables the viewpoints to
+ * capture the states of the individual ````Entitys```` that represent the duplicate IFC elements. Take a look at the
+ * following two examples to learn more.
+ *
+ * * [Example: Saving a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_MultipleModels)
+ * * [Example: Loading a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_MultipleModels)
+ *
+ * **Caveat:** when loading a BCF viewpoint, we always assume that we have loaded in our target BIM viewer the same models that were
+ * loaded in the viewpoint&apos;s original authoring application when the viewpoint was created.  In the case of multi-model
+ * viewpoints, the target BIM viewer, whether it be xeokit or another BIM viewer, will need to first have those exact
+ * models loaded, with their objects having globalized IDs, following the same prefixing scheme we&apos;re using in
+ * xeokit. Then, the viewpoint&apos;s ````authoring_tool_id```` fields will be able to resolve to their objects within the
+ * target viewer.
+*
  * @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {

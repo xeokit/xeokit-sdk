@@ -165,13 +165,13 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        750,
-        754,
-        762,
-        766,
-        770,
-        465,
-        679
+        776,
+        780,
+        788,
+        792,
+        796,
+        491,
+        705
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -878,14 +878,14 @@
       "actualCount": 16,
       "undocumentLines": [
         14,
-        429,
-        451,
-        476,
-        504,
-        533,
-        568,
-        708,
-        725
+        433,
+        455,
+        480,
+        508,
+        537,
+        572,
+        712,
+        729
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {

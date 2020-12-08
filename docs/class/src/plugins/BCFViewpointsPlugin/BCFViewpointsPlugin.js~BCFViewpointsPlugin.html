@@ -140,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber177">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber203">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber177">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber203">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -172,7 +172,9 @@ the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> speci
 <h2 id="saving-a-bcf-viewpoint">Saving a BCF Viewpoint</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load a glTF model into it using a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>,
 slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>, then use a <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>
 to save a viewpoint to JSON, which we&apos;ll log to the JavaScript developer console.</p>
-<p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</p>
+<ul>
+<li>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</li>
+</ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
@@ -259,9 +261,9 @@ Entity&apos;s surface.</p>
 });</code>
 </code></pre>
 <h2 id="dealing-with-loaded-models-that-are-not-in-the-viewpoint">Dealing With Loaded Models That Are Not in the Viewpoint</h2><p>If, for example, we load model &quot;duplex&quot;, hide some objects, then save a BCF viewpoint with
-<code>BCFViewpointsPlugin</code>, then load another model, &quot;schependomlaan&quot;, then load the viewpoint again, then
-sometimes all of the objects in model &quot;schependomlaan&quot; become visible, along with the visible objects in the
-viewpoint, which belong to model &quot;duplex&quot;.</p>
+<code>BCFViewpointsPlugin#getViewpoint</code>, then load another model, &quot;schependomlaan&quot;, then load the viewpoint again
+with <code>BCFViewpointsPlugin#setViewpoint</code>, then sometimes all of the objects in model &quot;schependomlaan&quot; become
+visible, along with the visible objects in the viewpoint, which belong to model &quot;duplex&quot;.</p>
 <p>The reason is that, when saving a BCF viewpoint, BCF logic works like the following pseudo code:</p>
 <pre><code><code class="source-code prettyprint">If numVisibleObjects &lt; numInvisibleObjects
      save IDs of visible objects in BCF
@@ -290,6 +292,27 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
 });</code>
 </code></pre>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultInvisible">Run an example</a>]</p>
+<h2 id="behaviour-with-xktloaderplugin-globalizeobjectids">Behaviour with XKTLoaderPlugin globalizeObjectIds</h2><p>Whenever we use <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load duplicate copies of the same model, after configuring
+<span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> to avoid <code>Entity</code> ID clashes, this has consequences
+for BCF viewpoints created by <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>.</p>
+<p>When no duplicate copies of a model are loaded like this, viewpoints created by <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span> will
+continue to load as usual in other BIM viewers. Conversely, a viewpoint created for a single model in other BIM viewers
+will continue to load as usual with <code>BCFViewpointsPlugin</code>.</p>
+<p>When duplicate copies of a model are loaded, however, viewpoints created by <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>
+will contain certain changes that will affect the viewpoint&apos;s portability, however. Such viewpoints will
+use <code>authoring_tool_id</code> fields to save the globalized <code>Entity#id</code> values, which enables the viewpoints to
+capture the states of the individual <code>Entitys</code> that represent the duplicate IFC elements. Take a look at the
+following two examples to learn more.</p>
+<ul>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_MultipleModels">Example: Saving a BCF viewpoint containing duplicate models</a></li>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_MultipleModels">Example: Loading a BCF viewpoint containing duplicate models</a></li>
+</ul>
+<p><strong>Caveat:</strong> when loading a BCF viewpoint, we always assume that we have loaded in our target BIM viewer the same models that were
+loaded in the viewpoint&apos;s original authoring application when the viewpoint was created.  In the case of multi-model
+viewpoints, the target BIM viewer, whether it be xeokit or another BIM viewer, will need to first have those exact
+models loaded, with their objects having globalized IDs, following the same prefixing scheme we&apos;re using in
+xeokit. Then, the viewpoint&apos;s <code>authoring_tool_id</code> fields will be able to resolve to their objects within the
+target viewer.</p>
 </div>
   
 
@@ -755,7 +778,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber213">source</a></span></span>
     </span>
   </h3>
 
@@ -848,7 +871,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber229">source</a></span></span>
     </span>
   </h3>
 
@@ -908,7 +931,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -971,7 +994,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber745">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber771">source</a></span></span>
     </span>
   </h3>
 
@@ -1015,7 +1038,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber317">source</a></span></span>
     </span>
   </h3>
 
@@ -1214,7 +1237,7 @@ const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber516">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber542">source</a></span></span>
     </span>
   </h3>
 

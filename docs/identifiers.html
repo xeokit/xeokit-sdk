@@ -1163,12 +1163,12 @@ and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
 <li>Filter which IFC types get loaded.</li>
 <li>Configure initial default appearances for IFC types.</li>
 <li>Set a custom data source for <em><code>.xkt</code></em> and IFC metadata files.</li>
-<li>Can be configured to load multiple instances of the same model, without object ID clashes.</li>
+<li>Option to load multiple copies of the same model, without object ID clashes.</li>
 <li>Does not (yet) support textures or physically-based materials.</li>
 </ul>
 <h2 id="credits">Credits</h2><p>XKTLoaderPlugin and the <code>xeokit-gltf-to-xkt</code> tool (see below) are based on prototypes
 by <a href="https://github.com/tmarti">Toni Marti</a> at <a href="https://www.unizite.com/login">uniZite</a>.</p>
-<h2 id="creating--em--code--xkt--code---em--files-and-metadata">Creating <em><code>.xkt</code></em> files and metadata</h2><p>See <a href="https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM">Creating Files for Offline BIM</a>.</p>
+<h2 id="creating--em--code--xkt--code---em--files-and-metadata">Creating <em><code>.XKT</code></em> Files and Metadata</h2><p>See <a href="https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM">Creating Files for Offline BIM</a>.</p>
 <h2 id="scene-representation">Scene representation</h2><p>When loading a model, XKTLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
 will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The XKTLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
@@ -1179,7 +1179,7 @@ to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity
 <p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading
 metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin
 uses its own map of default colors and visibilities for IFC element types.</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>, along
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>, along
 with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
 </div>
       </div>
