@@ -21,7 +21,7 @@ parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
 
 /**
- * {@link Viewer} plugin that loads models from xeokit's optimized *````.xkt````* format.
+ * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
@@ -30,13 +30,13 @@ parsers[ParserV6.version] = ParserV6;
  * ## Overview
  *
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
- * * An *````.xkt````* file is a single BLOB containing a model, compressed using geometry quantization
+ * * An *````.XKT````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
- * * Supports double-precision coordinates, via ````.xkt```` format version 6.
+ * * Supports double-precision coordinates, via ````.XKT```` format version 6.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
- * * Set a custom data source for *````.xkt````* and IFC metadata files.
+ * * Set a custom data source for *````.XKT````* and IFC metadata files.
  * * Option to load multiple copies of the same model, without object ID clashes.
  * * Does not (yet) support textures or physically-based materials.
  *

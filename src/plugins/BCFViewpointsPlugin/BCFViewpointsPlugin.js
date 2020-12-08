@@ -12,7 +12,7 @@ const tempVec3 = math.vec3();
  *
  * ## Saving a BCF Viewpoint
  *
- * In the example below we'll create a {@link Viewer}, load an ````.XKT```` model into it using a {@link XKTLoaderPlugin},
+ * In the example below we'll create a {@link Viewer}, load an ````.XKT```` model into it using an {@link XKTLoaderPlugin},
  * slice the model in half using a {@link SectionPlanesPlugin}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
