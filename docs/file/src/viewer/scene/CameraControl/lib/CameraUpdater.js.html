@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -204,7 +207,7 @@ class CameraUpdater {
             // want dolly speed wildly varying depending on how accurately the user avoids the gaps with the pointer.
             //----------------------------------------------------------------------------------------------------------
 
-            if (configs.firstPerson &amp;&amp; (!configs.followPointer)) {
+            if (!configs.followPointer) {
 
 
             } else if (--countDown &lt;= 0) {
@@ -213,12 +216,22 @@ class CameraUpdater {
 
                 if (updates.dollyDelta !== 0) {
                     if (updates.rotateDeltaY === 0 &amp;&amp; updates.rotateDeltaX === 0) {
-                        if (pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
-                            const worldPos = pickController.pickResult.worldPos;
-                            pivotController.setPivotPos(worldPos);
-                            pivotController.hidePivot();
-                        } else {
-                            dollyDistFactor = 1.0
+
+                        if (configs.followPointer &amp;&amp; states.followPointerDirty) {
+
+                            pickController.pickCursorPos = states.pointerCanvasPos;
+                            pickController.schedulePickSurface = true;
+                            pickController.update();
+
+                            if (pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
+                                const worldPos = pickController.pickResult.worldPos;
+                                pivotController.setPivotPos(worldPos);
+                                pivotController.hidePivot();
+                            } else {
+                                dollyDistFactor = 1.0
+                            }
+
+                            states.followPointerDirty = false;
                         }
                     }
 
@@ -240,7 +253,7 @@ class CameraUpdater {
 
             if (updates.rotateDeltaY !== 0 || updates.rotateDeltaX !== 0) {
 
-                if (pivotController.getPivoting() &amp;&amp; configs.followPointer) {
+                if ((!configs.firstPerson) &amp;&amp; configs.followPointer &amp;&amp; pivotController.getPivoting()) {
                     pivotController.continuePivot(updates.rotateDeltaY, updates.rotateDeltaX);
                     pivotController.showPivot();
 
@@ -373,10 +386,14 @@ class CameraUpdater {
                         }
                     }
 
-                    if (updates.inputFromMouse &amp;&amp; configs.followPointer) { // Using mouse input
-                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
+                    if (configs.followPointer) {
+                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
+                        }
                     } else {
                         camera.pan([0, 0, dollyDeltaForDist]);
+                        camera.ortho.scale = camera.ortho.scale - dollyDeltaForDist;
                     }
 
                     if (configs.constrainVertical) {
@@ -398,34 +415,33 @@ class CameraUpdater {
 
                 } else if (configs.planView) {
 
-                    if (updates.inputFromMouse &amp;&amp; configs.followPointer) {
-
-                        // Pan-to-canvas pos works better for ortho
-
-                        if (dollyDeltaForDist &gt; 0) {
-                            camera.pan([0, 0, dollyDeltaForDist]);
-                        } else {
-                            panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist);
+                    if (configs.followPointer) {
+                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
                         }
                     } else {
-                        panController.dollyToCanvasPos(states.pointerCanvasPos, -dollyDeltaForDist);
+                        camera.zoom(dollyDeltaForDist);
                     }
 
                 } else { // Orbiting
 
                     if (configs.followPointer) {
-                        panController.dollyToWorldPos(pivotController.getPivotPos(), -dollyDeltaForDist); // FIXME: What about when pivotPos undefined?
+                        let dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        if (dolliedThroughSurface) {
+                            states.followPointerDirty = true;
+                        }
                     } else {
                         camera.zoom(dollyDeltaForDist);
                     }
                 }
 
-                camera.ortho.scale = camera.ortho.scale + (.5 * dollyDeltaForDist);
-
                 updates.dollyDelta *= configs.dollyInertia;
             }
 
             pickController.fireEvents();
+
+            updates.inputFromMouse = false;
 
             document.body.style.cursor = cursorType;
         });

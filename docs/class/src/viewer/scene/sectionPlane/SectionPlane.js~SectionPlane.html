@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,20 +132,21 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber51">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber52">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber51">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber52">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -367,6 +370,37 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
         
         <div data-ice="description"><p>Gets the direction of this SectionPlane&apos;s plane.</p>
 <p>Default value is <code>[0, 0, -1]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-dist">dist</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets this SectionPlane&apos;s distance to the origin of the World-space coordinate system.</p>
+<p>This is the dot product of <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-pos">SectionPlane#pos</a></span> and <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-dir">SectionPlane#dir</a></span> and is automatically re-calculated
+each time either of two properties are updated.</p>
 </div>
       </div>
     </td>
@@ -1020,7 +1054,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
@@ -1121,7 +1155,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1166,7 +1200,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
@@ -1224,7 +1258,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
@@ -1269,7 +1303,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber157">source</a></span></span>
     </span>
   </h3>
 
@@ -1316,6 +1350,64 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dist">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dist</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber169">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets this SectionPlane&apos;s distance to the origin of the World-space coordinate system.</p>
+<p>This is the dot product of <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-pos">SectionPlane#pos</a></span> and <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-dir">SectionPlane#dir</a></span> and is automatically re-calculated
+each time either of two properties are updated.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-pos">
     <span class="access" data-ice="access">public</span>
     
@@ -1327,7 +1419,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -1372,7 +1464,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber142">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1433,7 +1525,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber190">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -1477,7 +1569,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber179">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber176">source</a></span></span>
     </span>
   </h3>
 

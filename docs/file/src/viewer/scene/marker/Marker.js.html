@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -140,6 +143,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &apos;../math/math.js&apos;;
 import {Component} from &apos;../Component.js&apos;;
 import {PerformanceNode} from &quot;../PerformanceModel/lib/PerformanceNode.js&quot;;
+import {worldToRTCPos} from &quot;../math/rtcCoords.js&quot;;
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -270,9 +274,11 @@ class Marker extends Component {
 
         this._entity = null;
         this._visible = null;
-        this._worldPos = new Float32Array(3);
-        this._viewPos = new Float32Array(3);
-        this._canvasPos = new Float32Array(2);
+        this._worldPos = math.vec3();
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
+        this._viewPos = math.vec3();
+        this._canvasPos = math.vec2();
         this._occludable = false;
 
         this._onCameraViewMatrix = this.scene.camera.on(&quot;matrix&quot;, () =&gt; {
@@ -408,6 +414,7 @@ class Marker extends Component {
      */
     set worldPos(worldPos) {
         this._worldPos.set(worldPos || [0, 0, 0]);
+        worldToRTCPos(this._worldPos, this._rtcCenter, this._rtcPos);
         if (this._occludable) {
             this._renderer.markerWorldPosUpdated(this);
         }
@@ -422,6 +429,28 @@ class Marker extends Component {
      */
     get worldPos() {
         return this._worldPos;
+    }
+
+    /**
+     * Gets the RTC center of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
+    }
+
+    /**
+     * Gets the RTC position of this Marker.
+     *
+     * This is automatically calculated from {@link Marker#worldPos}.
+     *
+     * @type {Number[]}
+     */
+    get rtcPos() {
+        return this._rtcPos;
     }
 
     /**

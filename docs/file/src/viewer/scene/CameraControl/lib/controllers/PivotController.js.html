@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,14 +132,18 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/CameraControl/lib/controllers/PivotController.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../../math/math.js&quot;;
+
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
 
 /** @private */
 class PivotController {
@@ -156,6 +162,7 @@ class PivotController {
         this._azimuth = 0;
         this._polar = 0;
         this._radius = 0;
+        this._pivotPosSet = false; // Initially false, true as soon as _pivotWorldPos has been set to some value
         this._pivoting = false; // True while pivoting
         this._shown = false;
 
@@ -168,11 +175,11 @@ class PivotController {
             this._cameraDirty = true;
         });
 
-      this._onProjMatrix =   this._scene.camera.on(&quot;projMatrix&quot;, () =&gt; {
+        this._onProjMatrix = this._scene.camera.on(&quot;projMatrix&quot;, () =&gt; {
             this._cameraDirty = true;
         });
 
-       this._onTick =  this._scene.on(&quot;tick&quot;, () =&gt; {
+        this._onTick = this._scene.on(&quot;tick&quot;, () =&gt; {
             this.updatePivotElement();
         });
     }
@@ -184,7 +191,7 @@ class PivotController {
 
         if (this._pivoting &amp;&amp; this._cameraDirty) {
 
-            math.transformPoint3(camera.viewMatrix, this._pivotWorldPos, this._pivotViewPos);
+            math.transformPoint3(camera.viewMatrix, this.getPivotPos(), this._pivotViewPos);
             this._pivotViewPos[3] = 1;
             math.transformPoint4(camera.projMatrix, this._pivotViewPos, this._pivotProjPos);
 
@@ -217,28 +224,28 @@ class PivotController {
 
     /**
      * Begins pivoting.
-     *
-     * @param {Number[]} worldPos The World-space pivot position.
      */
-    startPivot(worldPos) {
+    startPivot() {
 
-        if (worldPos) { // Use last pivotPoint by default
-            this._pivotWorldPos.set(worldPos);
+        if (this._cameraLookingDownwards()) {
+            this._pivoting = false;
+            return false;
         }
 
         const camera = this._scene.camera;
 
         let lookat = math.lookAtMat4v(camera.eye, camera.look, camera.worldUp);
-        math.transformPoint3(lookat, this._pivotWorldPos, this._cameraOffset);
+        math.transformPoint3(lookat, this.getPivotPos(), this._cameraOffset);
 
-        this._cameraOffset[2] += math.distVec3(camera.eye, this._pivotWorldPos);
+        const pivotPos = this.getPivotPos();
+        this._cameraOffset[2] += math.distVec3(camera.eye, pivotPos);
 
         lookat = math.inverseMat4(lookat);
 
         const offset = math.transformVec3(lookat, this._cameraOffset);
         const diff = math.vec3();
 
-        math.subVec3(camera.eye, this._pivotWorldPos, diff);
+        math.subVec3(camera.eye, pivotPos, diff);
         math.addVec3(diff, offset);
 
         if (camera.zUp) {
@@ -251,6 +258,14 @@ class PivotController {
         this._polar = Math.acos(diff[1] / this._radius);
         this._azimuth = Math.atan2(diff[0], diff[2]);
         this._pivoting = true;
+    }
+
+    _cameraLookingDownwards() { // Returns true if angle between camera viewing direction and World-space &quot;up&quot; axis is too small
+        const camera = this._scene.camera;
+        const forwardAxis = math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3a));
+        const rightAxis = math.cross3Vec3(forwardAxis, camera.worldUp, tempVec3b);
+        let rightAxisLen = math.sqLenVec3(rightAxis);
+        return (rightAxisLen &lt;= 0.0001);
     }
 
     /**
@@ -269,6 +284,7 @@ class PivotController {
      */
     setPivotPos(worldPos) {
         this._pivotWorldPos.set(worldPos);
+        this._pivotPosSet = true;
     }
 
     /**
@@ -276,7 +292,7 @@ class PivotController {
      * @returns {Number[]} The current World-space pivot position.
      */
     getPivotPos() {
-        return this._pivotWorldPos;
+        return (this._pivotPosSet) ? this._pivotWorldPos : this._scene.camera.look; // Avoid pivoting about [0,0,0] by default
     }
 
     /**
@@ -298,7 +314,6 @@ class PivotController {
         if (camera.worldUp[2] === 1) {
             dx = -dx;
         }
-
         this._azimuth += -dx * .01;
         this._polar += dy * .01;
         this._polar = math.clamp(this._polar, .001, Math.PI - .001);
@@ -314,8 +329,9 @@ class PivotController {
         }
         // Preserve the eye-&gt;look distance, since in xeokit &quot;look&quot; is the point-of-interest, not the direction vector.
         const eyeLookLen = math.lenVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
-        math.addVec3(pos, this._pivotWorldPos);
-        let lookat = math.lookAtMat4v(pos, this._pivotWorldPos, camera.worldUp);
+        const pivotPos = this.getPivotPos();
+        math.addVec3(pos, pivotPos);
+        let lookat = math.lookAtMat4v(pos, pivotPos, camera.worldUp);
         lookat = math.inverseMat4(lookat);
         const offset = math.transformVec3(lookat, this._cameraOffset);
         lookat[12] -= offset[0];

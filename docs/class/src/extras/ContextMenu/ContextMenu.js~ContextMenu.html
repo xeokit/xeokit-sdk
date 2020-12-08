@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,20 +132,21 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber262">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber263">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber262">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber263">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -652,6 +655,35 @@ action of its own.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-fire">fire</a></span></span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Fires an event at this <code>ContextMenu</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-hide">hide</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
@@ -659,6 +691,35 @@ action of its own.</p>
         
         
         <div data-ice="description"><p>Hides this <code>ContextMenu</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-on">on</a></span></span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Subscribes to an event fired at this <code>ContextMenu</code>.</p>
 </div>
       </div>
     </td>
@@ -718,7 +779,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
@@ -768,6 +829,14 @@ action of its own.</p>
       <td data-ice="description"><p>Whether this <code>ContextMenu</code> is initially enabled. <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-show">ContextMenu#show</a></span> does nothing while this is <code>false</code>.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.hideOnMouseDown</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Whether this <code>ContextMenu</code> automatically hides whenever we mouse-down or tap anywhere in the page.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -805,7 +874,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber366">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber407">source</a></span></span>
     </span>
   </h3>
 
@@ -851,7 +920,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber375">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
@@ -895,7 +964,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber376">source</a></span></span>
     </span>
   </h3>
 
@@ -940,7 +1009,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
@@ -985,7 +1054,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber353">source</a></span></span>
     </span>
   </h3>
 
@@ -1031,7 +1100,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber365">source</a></span></span>
     </span>
   </h3>
 
@@ -1075,7 +1144,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber456">source</a></span></span>
     </span>
   </h3>
 
@@ -1135,7 +1204,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber433">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber480">source</a></span></span>
     </span>
   </h3>
 
@@ -1168,6 +1237,74 @@ action of its own.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-fire">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">fire</span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber335">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Fires an event at this <code>ContextMenu</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">event</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The event type name</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">value</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The event parameters</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-hide">
     <span class="access" data-ice="access">public</span>
     
@@ -1179,7 +1316,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber419">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber465">source</a></span></span>
     </span>
   </h3>
 
@@ -1187,11 +1324,80 @@ action of its own.</p>
   
   
   <div data-ice="description"><p>Hides this <code>ContextMenu</code>.</p>
+<p>Fires a &quot;hidden&quot; event when hidden.</p>
 </div>
 
   
 
   <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-on">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">on</span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber320">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Subscribes to an event fired at this <code>ContextMenu</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">event</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The event</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">callback</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Callback fired on the event</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -1223,7 +1429,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber389">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber432">source</a></span></span>
     </span>
   </h3>
 
@@ -1233,6 +1439,7 @@ action of its own.</p>
   <div data-ice="description"><p>Shows this <code>ContextMenu</code> at the given page coordinates.</p>
 <p>Does nothing when <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-enabled">ContextMenu#enabled</a></span> is <code>false</code>.</p>
 <p>Logs error to console and does nothing if <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-context">ContextMenu#context</a></span> has not been set.</p>
+<p>Fires a &quot;shown&quot; event when shown.</p>
 </div>
 
   

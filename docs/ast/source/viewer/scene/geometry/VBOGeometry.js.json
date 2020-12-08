@@ -15926,7 +15926,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+                  "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
                   "start": 10156,
                   "end": 10433,
                   "loc": {
@@ -16066,7 +16066,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+                  "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
                   "start": 10156,
                   "end": 10433,
                   "loc": {
@@ -16084,7 +16084,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+                  "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
                   "start": 10489,
                   "end": 10768,
                   "loc": {
@@ -16224,7 +16224,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+                  "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
                   "start": 10489,
                   "end": 10768,
                   "loc": {
@@ -32988,7 +32988,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+                    "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
                     "start": 10156,
                     "end": 10433,
                     "loc": {
@@ -33128,7 +33128,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+                    "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
                     "start": 10156,
                     "end": 10433,
                     "loc": {
@@ -33146,7 +33146,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+                    "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
                     "start": 10489,
                     "end": 10768,
                     "loc": {
@@ -33286,7 +33286,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+                    "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
                     "start": 10489,
                     "end": 10768,
                     "loc": {
@@ -35527,7 +35527,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+      "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
       "start": 10156,
       "end": 10433,
       "loc": {
@@ -35543,7 +35543,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+      "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
       "start": 10489,
       "end": 10768,
       "loc": {
@@ -66008,7 +66008,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
+      "value": "*\n     * Gets the local-space axis-aligned 3D boundary (AABB).\n     *\n     * The AABB is represented by a six-element Float64Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.\n     *\n     * @type {Number[]}\n     ",
       "start": 10156,
       "end": 10433,
       "loc": {
@@ -66310,7 +66310,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
+      "value": "*\n     * Gets the local-space oriented 3D boundary (OBB).\n     *\n     * The OBB is represented by a 32-element Float64Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.\n     *\n     * @type {Number[]}\n     ",
       "start": 10489,
       "end": 10768,
       "loc": {

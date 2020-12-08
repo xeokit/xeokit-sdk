@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -163,11 +166,21 @@ class BatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.layerIndex
+     * @param cfg.positionsDecodeMatrix
+     * @param cfg.rtcCenter
      * @param cfg.buffer
      * @param cfg.scratchMemory
      * @param cfg.primitive
      */
     constructor(model, cfg) {
+
+        /**
+         * Index of this BatchingLayer in {@link PerformanceModel#_layerList}.
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
         this._buffer = new BatchingBuffer();
@@ -214,7 +227,8 @@ class BatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: math.mat4()
+            positionsDecodeMatrix: math.mat4(),
+            rtcCenter: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -224,6 +238,7 @@ class BatchingLayer {
         this._numXRayedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
@@ -234,6 +249,16 @@ class BatchingLayer {
         this._finalized = false;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
+
+        /**
+         * The axis-aligned World-space boundary of this BatchingLayer&apos;s positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -251,8 +276,7 @@ class BatchingLayer {
     }
 
     /**
-     *
-     * Creates a new portion within this InstancingLayer, returns the new portion ID.
+     * Creates a new portion within this BatchingLayer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, flags, color and matrix.
      *
@@ -357,6 +381,18 @@ class BatchingLayer {
             }
         }
 
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
+        }
+
+        math.expandAABB3(this.aabb, worldAABB);
+
         if (normals) {
 
             if (this._preCompressed) {
@@ -367,16 +403,16 @@ class BatchingLayer {
 
             } else {
 
-                const modelNormalMatrix = tempMat4;
+                const worldNormalMatrix = tempMat4;
 
                 if (meshMatrix) {
-                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn&apos;t matter
+                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn&apos;t matter
 
                 } else {
-                    math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+                    math.identityMat4(worldNormalMatrix, worldNormalMatrix);
                 }
 
-                transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
+                transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
             }
         }
 
@@ -416,6 +452,10 @@ class BatchingLayer {
             if (selected) {
                 this._numSelectedLayerPortions++;
                 this.model.numSelectedLayerPortions++;
+            }
+            if (clippable) {
+                this._numClippableLayerPortions++;
+                this.model.numClippableLayerPortions++;
             }
             if (edges) {
                 this._numEdgesLayerPortions++;
@@ -562,7 +602,7 @@ class BatchingLayer {
         this._finalized = true;
     }
 
-    // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
     // It&apos;s important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
     initFlags(portionId, flags) {
@@ -581,6 +621,10 @@ class BatchingLayer {
         if (flags &amp; RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
+        }
+        if (flags &amp; RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
         }
         if (flags &amp; RENDER_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
@@ -671,6 +715,13 @@ class BatchingLayer {
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; RENDER_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
         }
         this._setFlags2(portionId, flags);
     }
@@ -844,7 +895,7 @@ class BatchingLayer {
         }
     }
 
-    drawNormalTransparentEdges(frameCtx) {
+    drawNormalEdgesTransparent(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
@@ -1095,8 +1146,7 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
         const xMultiplier = maxInt / xwid;
         const yMultiplier = maxInt / ywid;
         const zMultiplier = maxInt / zwid;
-        let i;
-        for (i = 0; i &lt; lenPositions; i += 3) {
+        for (let i = 0; i &lt; lenPositions; i += 3) {
             quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
             quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
             quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);
@@ -1109,7 +1159,7 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     };
 })();
 
-function transformAndOctEncodeNormals(modelNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
+function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
     // http://jcgt.org/published/0003/02/01/
     let oct, dec, best, currentCos, bestCos;
     let i, ei;
@@ -1120,7 +1170,7 @@ function transformAndOctEncodeNormals(modelNormalMatrix, normals, lenNormals, co
         localNormal[1] = normals[i + 1];
         localNormal[2] = normals[i + 2];
 
-        math.transformVec3(modelNormalMatrix, localNormal, worldNormal);
+        math.transformVec3(worldNormalMatrix, localNormal, worldNormal);
         math.normalizeVec3(worldNormal, worldNormal);
 
         // Test various combinations of ceil and floor to minimize rounding errors

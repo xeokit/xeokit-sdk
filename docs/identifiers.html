@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -1155,11 +1158,13 @@
 <li>XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.</li>
 <li>An <em><code>.xkt</code></em> file is a single BLOB containing a model, compressed using geometry quantization
 and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
+<li>Supports double-precision coordinates, via <code>.xkt</code> format version 6.</li>
 <li>Set the position, scale and rotation of each model as you load it.</li>
 <li>Filter which IFC types get loaded.</li>
 <li>Configure initial default appearances for IFC types.</li>
 <li>Set a custom data source for <em><code>.xkt</code></em> and IFC metadata files.</li>
-<li>Does not support textures or physically-based materials.</li>
+<li>Can be configured to load multiple instances of the same model, without object ID clashes.</li>
+<li>Does not (yet) support textures or physically-based materials.</li>
 </ul>
 <h2 id="credits">Credits</h2><p>XKTLoaderPlugin and the <code>xeokit-gltf-to-xkt</code> tool (see below) are based on prototypes
 by <a href="https://github.com/tmarti">Toni Marti</a> at <a href="https://www.unizite.com/login">uniZite</a>.</p>
@@ -3026,6 +3031,75 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
 </div>
     </div>
 <div data-ice="dirSummaryWrap">
+      <h2 data-ice="dirPath" id="viewer-scene-math">viewer/scene/math</h2>
+      <div data-ice="dirSummary"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-function">F</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span><span class="code" data-ice="signature">(dist: <span>*</span>, dir: <span>*</span>, rtcCenter: <span>*</span>, rtcPlanePos: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Given a 3D plane defined by distance from origin and direction, and an RTC center position,
+return a plane position that is relative to the RTC center.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-function">F</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span><span class="code" data-ice="signature">(worldPos: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></span>, rtcCenter: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></span>, rtcPos: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Converts a World-space 3D position to RTC coordinates.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+    </div>
+<div data-ice="dirSummaryWrap">
       <h2 data-ice="dirPath" id="viewer-scene-mementos">viewer/scene/mementos</h2>
       <div data-ice="dirSummary"><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
@@ -3626,14 +3700,52 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
           <span data-ice="kind-icon" class="kind-class">C</span>
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Manages occlusion testing.</p>
+        <div data-ice="description"><p>Pick result returned by <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+    </div>
+<div data-ice="dirSummaryWrap">
+      <h2 data-ice="dirPath" id="viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</h2>
+      <div data-ice="dirSummary"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -3655,13 +3767,13 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
           <span data-ice="kind-icon" class="kind-class">C</span>
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Pick result returned by <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>.</p>
+        <div data-ice="description"><p>Manages occlusion testing.</p>
 </div>
       </div>
     </td>
@@ -3715,6 +3827,7 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
 <div style="padding-left: 2em"><a href="#viewer-scene-lights">lights</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-marker">marker</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-materials">materials</a></div>
+<div style="padding-left: 2em"><a href="#viewer-scene-math">math</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-mementos">mementos</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-mesh">mesh</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-metriqs">metriqs</a></div>
@@ -3725,7 +3838,8 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
 <div style="padding-left: 2em"><a href="#viewer-scene-sectionplane">sectionPlane</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-skybox">skybox</a></div>
 <div style="padding-left: 2em"><a href="#viewer-scene-viewport">viewport</a></div>
-<div style="padding-left: 2em"><a href="#viewer-scene-webgl">webgl</a></div></div>
+<div style="padding-left: 2em"><a href="#viewer-scene-webgl">webgl</a></div>
+<div style="padding-left: 3em"><a href="#viewer-scene-webgl-occlusion">occlusion</a></div></div>
   </div>
 </div>
 </div>

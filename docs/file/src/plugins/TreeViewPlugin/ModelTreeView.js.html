@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,15 +132,15 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/TreeViewPlugin/ModelTreeView.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Map} from &quot;./../../viewer/scene/utils/Map.js&quot;;
-import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
 const idMap = new Map();
 
@@ -163,7 +165,7 @@ class ModelTreeView {
         this._id = idMap.addItem();
         this._baseId = &quot;&quot; + this._id;
         this._viewer = viewer;
-        this._metaModel = model;
+        this._metaModel = metaModel;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
         this._containerElement = cfg.containerElement;
@@ -263,9 +265,9 @@ class ModelTreeView {
                     numUpdated++;
                 }
                 node.checked = visible;
-                const checkbox = document.getElementById(checkBoxId);
-                if (checkbox) {
-                    checkbox.checked = visible;
+                const checkbox2 = document.getElementById(checkBoxId);
+                if (checkbox2) {
+                    checkbox2.checked = visible;
                 }
                 if (entity) {
                     entity.visible = visible;
@@ -274,15 +276,15 @@ class ModelTreeView {
             let parent = checkedNode.parent;
             while (parent) {
                 parent.checked = visible;
-                const checkbox = document.getElementById(parent.nodeId); // Parent checkboxes are always in DOM
+                const checkbox2 = document.getElementById(parent.nodeId); // Parent checkboxes are always in DOM
                 if (visible) {
                     parent.numVisibleEntities += numUpdated;
                 } else {
                     parent.numVisibleEntities -= numUpdated;
                 }
                 const newChecked = (parent.numVisibleEntities &gt; 0);
-                if (newChecked !== checkbox.checked) {
-                    checkbox.checked = newChecked;
+                if (newChecked !== checkbox2.checked) {
+                    checkbox2.checked = newChecked;
                 }
                 parent = parent.parent;
             }
@@ -383,7 +385,7 @@ class ModelTreeView {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType),
+                title: this._rootName || ((metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Undefined&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -401,7 +403,7 @@ class ModelTreeView {
             storeyNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
+                title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Undefined&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
                 type: metaObjectType,
                 parent: buildingNode,
                 numEntities: 0,
@@ -440,7 +442,7 @@ class ModelTreeView {
                     const node = {
                         nodeId: this._objectToNodeID(objectId),
                         objectId: objectId,
-                        title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
+                        title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Undefined&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
                         type: metaObjectType,
                         parent: typeNode,
                         numEntities: 0,
@@ -461,10 +463,7 @@ class ModelTreeView {
         }
     }
 
-    _createTypesNodes(
-        metaObject = this._rootMetaObject,
-        buildingNode,
-        typeNodes) {
+    _createTypesNodes(metaObject = this._rootMetaObject, buildingNode, typeNodes) {
         if (this._pruneEmptyNodes &amp;&amp; (metaObject._countEntities === 0)) {
             return;
         }
@@ -476,7 +475,7 @@ class ModelTreeView {
             buildingNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType),
+                title: this._rootName || ((metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Undefined&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -492,11 +491,11 @@ class ModelTreeView {
                 const objects = this._viewer.scene.objects;
                 const object = objects[objectId];
                 if (object) {
-                    var typeNode = typeNodes[metaObjectType];
+                    let typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
                         typeNode = {
-                            nodeId: this._objectToNodeID(metaObjectType),
-                            objectId: metaObjectType,
+                            nodeId: this._objectToNodeID(buildingNode.objectId + &quot;.&quot; + metaObjectType),
+                            objectId: buildingNode.objectId + &quot;.&quot; + metaObjectType,
                             title: metaObjectType,
                             type: metaObjectType,
                             parent: buildingNode,
@@ -544,7 +543,7 @@ class ModelTreeView {
         const node = {
             nodeId: this._objectToNodeID(objectId),
             objectId: objectId,
-            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Undefined&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
             type: metaObjectType,
             parent: parent,
             numEntities: 0,
@@ -701,7 +700,8 @@ class ModelTreeView {
 
     _createNodeElement(node) {
         const nodeElement = document.createElement(&apos;li&apos;);
-        const nodeId = this._objectToNodeID(node.objectId);
+        //const nodeId = this._objectToNodeID(node.objectId);
+        const nodeId = node.nodeId;
         nodeElement.id = &apos;node-&apos; + nodeId;
         if (node.children.length &gt; 0) {
             const switchElementId = &quot;switch-&quot; + nodeId;

@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -139,6 +142,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/metadata/MetaScene.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {MetaModel} from &quot;./MetaModel.js&quot;;
 import {MetaObject} from &quot;./MetaObject.js&quot;;
+import {math} from &quot;../scene/math/math.js&quot;;
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -244,15 +248,17 @@ class MetaScene {
     /**
      * Creates a {@link MetaModel} in this MetaScene.
      *
-     * @param {String} id ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
+     * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {Object} [options] Options for creating the {@link MetaModel}.
-     * @param {Object} [options.includeTypes] When provided, only {@link MetaObject}s with types in this list.
-     * @param {Object} [options.includeTypes] When provided, never {@link MetaObject}s with types in this list.
-     * @param {Object} [options.excludeTypes]
+     * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
+     * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
+     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set
+     * this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between
+     * the meta objects in the different instances.
      * @returns {MetaModel} The new MetaModel.
      */
-    createMetaModel(id, metaModelData, options = {}) {
+    createMetaModel(modelId, metaModelData, options = {}) {
 
         // TODO: validate metadata
         // TODO: replace MetaModel if ID already used
@@ -281,9 +287,9 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, id, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
 
-        this.metaModels[id] = metaModel;
+        this.metaModels[modelId] = metaModel;
 
         for (let i = 0, len = newObjects.length; i &lt; len; i++) {
             const newObject = newObjects[i];
@@ -294,15 +300,16 @@ class MetaScene {
             if (includeTypes &amp;&amp; !includeTypes[type]) {
                 continue;
             }
-            const id = newObject.id;
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const originalSystemId = newObject.id;
             const name = newObject.name;
             const properties = newObject.properties;
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, id, name, type, properties, parent, children, external);
-            this.metaObjects[id] = metaObject;
-            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[id] = metaObject;
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            this.metaObjects[objectId] = metaObject;
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
                 this._typeCounts[type] = 1;
             } else {
@@ -312,15 +319,16 @@ class MetaScene {
 
         for (let i = 0, len = newObjects.length; i &lt; len; i++) {
             const newObject = newObjects[i];
-            const id = newObject.id;
-            const metaObject = this.metaObjects[id];
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const metaObject = this.metaObjects[objectId];
             if (!metaObject) {
                 continue;
             }
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
             } else if (newObject.parent) {
-                let parentMetaObject = this.metaObjects[newObject.parent];
+                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.parent) : newObject.parent;
+                let parentMetaObject = this.metaObjects[parentId];
                 if (parentMetaObject) {
                     metaObject.parent = parentMetaObject;
                     parentMetaObject.children = parentMetaObject.children || [];
@@ -329,7 +337,7 @@ class MetaScene {
             }
         }
 
-        this.fire(&quot;metaModelCreated&quot;, id);
+        this.fire(&quot;metaModelCreated&quot;, modelId);
         return metaModel;
     }
 

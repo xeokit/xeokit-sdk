@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -190,6 +193,8 @@ class MousePanRotateDollyHandler {
         let mouseDownPicked = false;
         const pickedWorldPos = math.vec3();
 
+        let mouseMovedSinceLastWheel = true;
+
         const canvas = this._scene.canvas.canvas;
 
         const keyDown = [];
@@ -244,7 +249,7 @@ class MousePanRotateDollyHandler {
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
-                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult) {
+                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
                             mouseDownPicked = true;
                             pickedWorldPos.set(pickController.pickResult.worldPos);
                         } else {
@@ -306,7 +311,7 @@ class MousePanRotateDollyHandler {
                         pickController.schedulePickSurface = true;
                         pickController.update();
 
-                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult) {
+                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
                             mouseDownPicked = true;
                             pickedWorldPos.set(pickController.pickResult.worldPos);
                         } else {
@@ -332,6 +337,8 @@ class MousePanRotateDollyHandler {
             }
 
             updates.inputFromMouse = true;
+
+            mouseMovedSinceLastWheel = true;
 
             if (!this._down) {
                 return;
@@ -374,8 +381,14 @@ class MousePanRotateDollyHandler {
 
                 if (!configs.planView) { // No rotating in plan-view mode
 
-                    updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
-                    updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
+                    if (configs.firstPerson) {
+                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2;
+                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
+
+                    } else {
+                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
+                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate);
+                    }
                 }
             }
 
@@ -454,8 +467,8 @@ class MousePanRotateDollyHandler {
             this._down = false;
         });
 
-        const maxElapsed = 1/20;
-        const minElapsed = 1/60;
+        const maxElapsed = 1 / 20;
+        const minElapsed = 1 / 60;
 
         let secsNowLast = null;
 
@@ -478,9 +491,11 @@ class MousePanRotateDollyHandler {
             }
             const normalizedDelta = delta / Math.abs(delta);
             updates.dollyDelta += -normalizedDelta * secsElapsed * configs.mouseWheelDollyRate;
-            pickController.pickCursorPos = states.pointerCanvasPos;
-            pickController.schedulePickSurface = true;
-            pickController.update();
+
+            if (mouseMovedSinceLastWheel) {
+                states.followPointerDirty = true;
+                mouseMovedSinceLastWheel = false;
+            }
 
             e.preventDefault();
         });

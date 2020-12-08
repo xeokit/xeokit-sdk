@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -257,49 +260,51 @@ class SectionPlanesPlugin extends Plugin {
         } else {
 
             const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
+
             if (!overviewCanvas) {
                 this.error(&quot;Can&apos;t find overview canvas: &apos;&quot; + cfg.overviewCanvasId + &quot;&apos; - will create plugin without overview&quot;);
-                return;
-            }
 
-            this._overview = new Overview(this, {
-                overviewCanvas: overviewCanvas,
-                visible: cfg.overviewVisible,
+            } else {
 
-                onHoverEnterPlane: ((id) =&gt; {
-                    this._overview.setPlaneHighlighted(id, true);
-                }),
+                this._overview = new Overview(this, {
+                    overviewCanvas: overviewCanvas,
+                    visible: cfg.overviewVisible,
 
-                onHoverLeavePlane: ((id) =&gt; {
-                    this._overview.setPlaneHighlighted(id, false);
-                }),
+                    onHoverEnterPlane: ((id) =&gt; {
+                        this._overview.setPlaneHighlighted(id, true);
+                    }),
 
-                onClickedPlane: ((id) =&gt; {
-                    if (this.getShownControl() === id) {
+                    onHoverLeavePlane: ((id) =&gt; {
+                        this._overview.setPlaneHighlighted(id, false);
+                    }),
+
+                    onClickedPlane: ((id) =&gt; {
+                        if (this.getShownControl() === id) {
+                            this.hideControl();
+                            return;
+                        }
+                        this.showControl(id);
+                        const sectionPlane = this.sectionPlanes[id];
+                        const sectionPlanePos = sectionPlane.pos;
+                        tempAABB.set(this.viewer.scene.aabb);
+                        math.getAABB3Center(tempAABB, tempVec3);
+                        tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
+                        tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
+                        tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
+                        tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
+                        tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
+                        tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
+                        this.viewer.cameraFlight.flyTo({
+                            aabb: tempAABB,
+                            fitFOV: 65
+                        });
+                    }),
+
+                    onClickedNothing: (() =&gt; {
                         this.hideControl();
-                        return;
-                    }
-                    this.showControl(id);
-                    const sectionPlane = this.sectionPlanes[id];
-                    const sectionPlanePos = sectionPlane.pos;
-                    tempAABB.set(this.viewer.scene.aabb);
-                    math.getAABB3Center(tempAABB, tempVec3);
-                    tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
-                    tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
-                    tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
-                    tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
-                    tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
-                    tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
-                    this.viewer.cameraFlight.flyTo({
-                        aabb: tempAABB,
-                        fitFOV: 65
-                    });
-                }),
-
-                onClickedNothing: (() =&gt; {
-                    this.hideControl();
-                })
-            });
+                    })
+                });
+            }
         }
 
         this._onSceneSectionPlaneCreated = viewer.scene.on(&quot;sectionPlaneCreated&quot;, (sectionPlane) =&gt; {
@@ -393,7 +398,7 @@ class SectionPlanesPlugin extends Plugin {
      * Inverts all SectionPlanes, including those that were not created with SectionPlanesPlugin.
      */
     flipSectionPlanes() {
-        var sectionPlanes = this.viewer.scene.sectionPlanes;
+        const sectionPlanes = this.viewer.scene.sectionPlanes;
         for (let id in sectionPlanes) {
             const sectionPlane = sectionPlanes[id];
             sectionPlane.flipDir();

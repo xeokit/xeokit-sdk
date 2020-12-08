@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -141,15 +144,15 @@
 import {Component} from &apos;../Component.js&apos;;
 import {math} from &apos;../math/math.js&apos;;
 
-const angleAxis = new Float32Array(4);
-const q1 = new Float32Array(4);
-const q2 = new Float32Array(4);
-const xAxis = new Float32Array([1, 0, 0]);
-const yAxis = new Float32Array([0, 1, 0]);
-const zAxis = new Float32Array([0, 0, 1]);
+const angleAxis = math.vec4(4);
+const q1 = math.vec4();
+const q2 = math.vec4();
+const xAxis = math.vec3([1, 0, 0]);
+const yAxis = math.vec3([0, 1, 0]);
+const zAxis = math.vec3([0, 0, 1]);
 
-const veca = new Float32Array(3);
-const vecb = new Float32Array(3);
+const veca = math.vec3(3);
+const vecb = math.vec3(3);
 
 const identityMat = math.identityMat4();
 
@@ -295,6 +298,7 @@ class Node extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Node.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -363,6 +367,7 @@ class Node extends Component {
             this.scene._registerObject(this);
         }
 
+        this.rtcCenter = cfg.rtcCenter;
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -444,7 +449,7 @@ class Node extends Component {
     /**
      * Gets the Node&apos;s World-space 3D axis-aligned bounding box.
      *
-     * Represented by a six-element Float32Array containing the min/max extents of the
+     * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}
@@ -454,6 +459,36 @@ class Node extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * Sets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        if (rtcCenter) {
+            if (!this._rtcCenter) {
+                this._rtcCenter = math.vec3();
+            }
+            this._rtcCenter.set(rtcCenter);
+        } else {
+            if (this._rtcCenter) {
+                this._rtcCenter = null;
+            }
+        }
+        for (let i = 0, len = this._children.length; i &lt; len; i++) {
+            this._children[i].rtcCenter = rtcCenter;
+        }
+    }
+
+    /**
+     *  Gets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this._rtcCenter;
     }
 
     /**

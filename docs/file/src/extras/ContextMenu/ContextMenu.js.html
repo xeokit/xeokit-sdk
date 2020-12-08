@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -171,10 +174,11 @@ class Group {
  * @private
  */
 class Item {
-    constructor(id, getTitle, doAction) {
+    constructor(id, getTitle, doAction, getEnabled) {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
+        this.getEnabled = getEnabled;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -409,6 +413,7 @@ class ContextMenu {
      * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
+     * @param {Boolean} [cfg.hideOnMouseDown=true] Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page.
      */
     constructor(cfg = {}) {
 
@@ -424,11 +429,19 @@ class ContextMenu {
         this._shown = false;    // True when the ContextMenu is visible
         this._nextId = 0;
 
-        document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
-            if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
-                this.hide();
-            }
-        });
+        /**
+         * Subscriptions to events fired at this ContextMenu.
+         * @private
+         */
+        this._eventSubs = {};
+
+        if (cfg.hideOnMouseDown !== false) {
+            document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
+                if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
+                    this.hide();
+                }
+            });
+        }
 
         if (cfg.items) {
             this.items = cfg.items;
@@ -437,6 +450,37 @@ class ContextMenu {
         this.context = cfg.context;
         this.enabled = cfg.enabled !== false;
         this.hide();
+    }
+
+
+    /**
+     Subscribes to an event fired at this ````ContextMenu````.
+
+     @param {String} event The event
+     @param {Function} callback Callback fired on the event
+     */
+    on(event, callback) {
+        let subs = this._eventSubs[event];
+        if (!subs) {
+            subs = [];
+            this._eventSubs[event] = subs;
+        }
+        subs.push(callback);
+    }
+
+    /**
+     Fires an event at this ````ContextMenu````.
+
+     @param {String} event The event type name
+     @param {Object} value The event parameters
+     */
+    fire(event, value) {
+        const subs = this._eventSubs[event];
+        if (subs) {
+            for (let i = 0, len = subs.length; i &lt; len; i++) {
+                subs[i](value);
+            }
+        }
     }
 
     /**
@@ -522,6 +566,8 @@ class ContextMenu {
      *
      * Logs error to console and does nothing if {@link ContextMenu#context} has not been set.
      *
+     * Fires a &quot;shown&quot; event when shown.
+     *
      * @param {Number} pageX Page X-coordinate.
      * @param {Number} pageY Page Y-coordinate.
      */
@@ -541,6 +587,7 @@ class ContextMenu {
         this._updateItemsEnabledStatus();
         this._showMenu(this._rootMenu.id, pageX, pageY);
         this._shown = true;
+        this.fire(&quot;shown&quot;, {});
     }
 
     /**
@@ -554,6 +601,8 @@ class ContextMenu {
 
     /**
      * Hides this ````ContextMenu````.
+     *
+     * Fires a &quot;hidden&quot; event when hidden.
      */
     hide() {
         if (!this._enabled) {
@@ -564,6 +613,7 @@ class ContextMenu {
         }
         this._hideAllMenus();
         this._shown = false;
+        this.fire(&quot;hidden&quot;, {});
     }
 
     /**
@@ -621,7 +671,11 @@ class ContextMenu {
                     const doAction = itemCfg.doAction || itemCfg.callback || (() =&gt; {
                     });
 
-                    const item = new Item(itemId, getTitle, doAction);
+                    const getEnabled = itemCfg.getEnabled || (() =&gt; {
+                        return true;
+                    });
+
+                    const item = new Item(itemId, getTitle, doAction, getEnabled);
 
                     item.parentMenu = menu;
 
@@ -815,6 +869,7 @@ class ContextMenu {
 
                             item.itemElement.addEventListener(&quot;click&quot;, (event) =&gt; {
                                 event.preventDefault();
+                                self.hide();
                                 if (!self._context) {
                                     return;
                                 }
@@ -824,7 +879,6 @@ class ContextMenu {
                                 if (item.doAction) {
                                     item.doAction(self._context);
                                 }
-                                self.hide();
                             });
 
 
@@ -857,7 +911,7 @@ class ContextMenu {
             }
             const title = item.getTitle(this._context);
             if (item.subMenu) {
-                itemElement.innerText = title + &quot; ...&quot;;
+                itemElement.innerText = title;
             } else {
                 itemElement.innerText = title;
             }

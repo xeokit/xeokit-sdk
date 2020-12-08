@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -139,9 +142,12 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/math/math.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// Some temporary vars to help avoid garbage collection
 
-const tempMat1 = new Float32Array(16);
-const tempMat2 = new Float32Array(16);
-const tempVec4 = new Float32Array(4);
+const doublePrecision = true;
+const FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+
+const tempMat1 = new FloatArrayType(16);
+const tempMat2 = new FloatArrayType(16);
+const tempVec4 = new FloatArrayType(4);
 
 
 /**
@@ -149,8 +155,8 @@ const tempVec4 = new Float32Array(4);
  */
 const math = {
 
-    MAX_DOUBLE: Number.MAX_VALUE,
-    MIN_DOUBLE: Number.MIN_VALUE,
+    MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
+    MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
 
     /**
      * The number of radiians in a degree (0.0174532925).
@@ -166,6 +172,15 @@ const math = {
      */
     RADTODEG: 57.295779513,
 
+    unglobalizeObjectId(modelId, globalId) {
+        const idx = globalId.indexOf(&quot;#&quot;);
+        return (idx === modelId.length &amp;&amp; globalId.startsWith(modelId)) ? globalId.substring(idx + 1) : globalId;
+    },
+
+    globalizeObjectId(modelId, objectId) {
+        return (modelId + &quot;#&quot; + objectId)
+    },
+
     /**
      * Returns a new, uninitialized two-element vector.
      * @method vec2
@@ -174,7 +189,7 @@ const math = {
      * @returns {Number[]}
      */
     vec2(values) {
-        return new Float32Array(values || 2);
+        return new FloatArrayType(values || 2);
     },
 
     /**
@@ -185,7 +200,7 @@ const math = {
      * @returns {Number[]}
      */
     vec3(values) {
-        return new Float32Array(values || 3);
+        return new FloatArrayType(values || 3);
     },
 
     /**
@@ -196,7 +211,7 @@ const math = {
      * @returns {Number[]}
      */
     vec4(values) {
-        return new Float32Array(values || 4);
+        return new FloatArrayType(values || 4);
     },
 
     /**
@@ -207,7 +222,7 @@ const math = {
      * @returns {Number[]}
      */
     mat3(values) {
-        return new Float32Array(values || 9);
+        return new FloatArrayType(values || 9);
     },
 
     /**
@@ -218,7 +233,7 @@ const math = {
      * @static
      * @returns {Number[]}
      */
-    mat3ToMat4(mat3, mat4 = new Float32Array(16)) {
+    mat3ToMat4(mat3, mat4 = new FloatArrayType(16)) {
         mat4[0] = mat3[0];
         mat4[1] = mat3[1];
         mat4[2] = mat3[2];
@@ -246,7 +261,7 @@ const math = {
      * @returns {Number[]}
      */
     mat4(values) {
-        return new Float32Array(values || 16);
+        return new FloatArrayType(values || 16);
     },
 
     /**
@@ -258,7 +273,34 @@ const math = {
      * @returns {Number[]}
      */
     mat4ToMat3(mat4, mat3) { // TODO
-        //return new Float32Array(values || 9);
+        //return new FloatArrayType(values || 9);
+    },
+
+    /**
+     * Converts a list of double-precision values to a list of high-part floats and a list of low-part floats.
+     * @param doubleVals
+     * @param floatValsHigh
+     * @param floatValsLow
+     */
+    doublesToFloats(doubleVals, floatValsHigh, floatValsLow) {
+        const floatPair = new Float32Array(2);
+        for (let i = 0, len = doubleVals.length; i &lt; len; i++) {
+            math.splitDouble(doubleVals[i], floatPair);
+            floatValsHigh[i] = floatPair[0];
+            floatValsLow[i] = floatPair[1];
+        }
+    },
+
+    /**
+     * Splits a double value into two floats.
+     * @param value
+     * @param floatPair
+     */
+    splitDouble(value, floatPair) {
+        const hi = Float32Array.from([value])[0];
+        const low = value - hi;
+        floatPair[0] = hi;
+        floatPair[1] = low;
     },
 
     /**
@@ -267,31 +309,6 @@ const math = {
      * @static
      * @return string The new UUID
      */
-    //createUUID: function () {
-    //    // http://www.broofa.com/Tools/Math.uuid.htm
-    //    var chars = &apos;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&apos;.split(&apos;&apos;);
-    //    var uuid = new Array(36);
-    //    var rnd = 0;
-    //    var r;
-    //    return function () {
-    //        for (var i = 0; i &lt; 36; i++) {
-    //            if (i === 8 || i === 13 || i === 18 || i === 23) {
-    //                uuid[i] = &apos;-&apos;;
-    //            } else if (i === 14) {
-    //                uuid[i] = &apos;4&apos;;
-    //            } else {
-    //                if (rnd &lt;= 0x02) {
-    //                    rnd = 0x2000000 + ( Math.random() * 0x1000000 ) | 0;
-    //                }
-    //                r = rnd &amp; 0xf;
-    //                rnd = rnd &gt;&gt; 4;
-    //                uuid[i] = chars[( i === 19 ) ? ( r &amp; 0x3 ) | 0x8 : r];
-    //            }
-    //        }
-    //        return uuid.join(&apos;&apos;);
-    //    };
-    //}(),
-    //
     createUUID: ((() =&gt; {
         const self = {};
         const lut = [];
@@ -335,6 +352,16 @@ const math = {
             a -= b;
         }
         return a;
+    },
+
+    /**
+     * Returns true if the two 3-element vectors are the same.
+     * @param v1
+     * @param v2
+     * @returns {boolean}
+     */
+    compareVec3(v1, v2) {
+        return (v1[0] === v2[0] &amp;&amp; v1[1] === v2[1] &amp;&amp; v1[2] === v2[2]);
     },
 
     /**
@@ -517,7 +544,7 @@ const math = {
      * @return {Array(Number)} The geometric mean vec2
      */
     geometricMeanVec2(...vectors) {
-        const geometricMean = new Float32Array(vectors[0]);
+        const geometricMean = new FloatArrayType(vectors[0]);
         for (let i = 1; i &lt; vectors.length; i++) {
             geometricMean[0] += vectors[i][0];
             geometricMean[1] += vectors[i][1];
@@ -882,7 +909,7 @@ const math = {
     },
 
     distVec3: ((() =&gt; {
-        const vec = new Float32Array(3);
+        const vec = new FloatArrayType(3);
         return (v, w) =&gt; math.lenVec3(math.subVec3(v, w, vec));
     }))(),
 
@@ -898,7 +925,7 @@ const math = {
     },
 
     distVec2: ((() =&gt; {
-        const vec = new Float32Array(2);
+        const vec = new FloatArrayType(2);
         return (v, w) =&gt; math.lenVec2(math.subVec2(v, w, vec));
     }))(),
 
@@ -968,7 +995,7 @@ const math = {
      */
     vec3FromMat4Scale: ((() =&gt; {
 
-        const tempVec3 = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (m, dest) =&gt; {
 
@@ -1028,7 +1055,7 @@ const math = {
      * @returns {*[]}
      */
     xyzObjectToArray(xyz, arry) {
-        arry = arry || new Float32Array(3);
+        arry = arry || new FloatArrayType(3);
         arry[0] = xyz.x;
         arry[1] = xyz.y;
         arry[2] = xyz.z;
@@ -1095,7 +1122,7 @@ const math = {
      * @static
      */
     diagonalMat4v(v) {
-        return new Float32Array([
+        return new FloatArrayType([
             v[0], 0.0, 0.0, 0.0,
             0.0, v[1], 0.0, 0.0,
             0.0, 0.0, v[2], 0.0,
@@ -1126,7 +1153,7 @@ const math = {
      * @method identityMat4
      * @static
      */
-    identityMat4(mat = new Float32Array(16)) {
+    identityMat4(mat = new FloatArrayType(16)) {
         mat[0] = 1.0;
         mat[1] = 0.0;
         mat[2] = 0.0;
@@ -1155,7 +1182,7 @@ const math = {
      * @method identityMat3
      * @static
      */
-    identityMat3(mat = new Float32Array(9)) {
+    identityMat3(mat = new FloatArrayType(9)) {
         mat[0] = 1.0;
         mat[1] = 0.0;
         mat[2] = 0.0;
@@ -1435,7 +1462,7 @@ const math = {
      */
     mulMat3(a, b, dest) {
         if (!dest) {
-            dest = new Float32Array(9);
+            dest = new FloatArrayType(9);
         }
 
         const a11 = a[0];
@@ -1738,7 +1765,7 @@ const math = {
      * @static
      */
     translationMat4c: ((() =&gt; {
-        const xyz = new Float32Array(3);
+        const xyz = new FloatArrayType(3);
         return (x, y, z, dest) =&gt; {
             xyz[0] = x;
             xyz[1] = y;
@@ -1821,6 +1848,40 @@ const math = {
 
         return m;
     },
+
+    /**
+     * Creates a new matrix that replaces the translation in the rightmost column of the given
+     * affine matrix with the given translation.
+     * @param m
+     * @param translation
+     * @param dest
+     * @returns {*}
+     */
+    setMat4Translation(m, translation, dest) {
+
+        dest[0] = m[0];
+        dest[1] = m[1];
+        dest[2] = m[2];
+        dest[3] = m[3];
+
+        dest[4] = m[4];
+        dest[5] = m[5];
+        dest[6] = m[6];
+        dest[7] = m[7];
+
+        dest[8] = m[8];
+        dest[9] = m[9];
+        dest[10] = m[10];
+        dest[11] = m[11];
+
+        dest[12] = translation[0];
+        dest[13] = translation[1];
+        dest[14] = translation[2];
+        dest[15] = m[15];
+
+        return dest;
+    },
+
     /**
      * Returns 4x4 rotation matrix.
      * @method rotationMat4v
@@ -1916,7 +1977,7 @@ const math = {
      * @static
      */
     scalingMat4c: ((() =&gt; {
-        const xyz = new Float32Array(3);
+        const xyz = new FloatArrayType(3);
         return (x, y, z, dest) =&gt; {
             xyz[0] = x;
             xyz[1] = y;
@@ -2148,8 +2209,8 @@ const math = {
 
     decomposeMat4: (() =&gt; {
 
-        const vec = new Float32Array(3);
-        const matrix = new Float32Array(16);
+        const vec = new FloatArrayType(3);
+        const matrix = new FloatArrayType(16);
 
         return function decompose(mat, position, quaternion, scale) {
 
@@ -2837,9 +2898,9 @@ const math = {
      * @static
      */
     unprojectVec3: ((() =&gt; {
-        const mat = new Float32Array(16);
-        const mat2 = new Float32Array(16);
-        const mat3 = new Float32Array(16);
+        const mat = new FloatArrayType(16);
+        const mat2 = new FloatArrayType(16);
+        const mat3 = new FloatArrayType(16);
         return function (p, viewMat, projMat, q) {
             return this.transformVec3(this.mulMat4(this.inverseMat4(viewMat, mat), this.inverseMat4(projMat, mat2), mat3), p, q)
         };
@@ -3098,7 +3159,7 @@ const math = {
     },
 
     quaternionToEuler: ((() =&gt; {
-        const mat = new Float32Array(16);
+        const mat = new FloatArrayType(16);
         return (q, order, dest) =&gt; {
             dest = dest || math.vec3();
             math.quaternionToRotationMat4(q, mat);
@@ -3284,7 +3345,7 @@ const math = {
      * @private
      */
     AABB3(values) {
-        return new Float32Array(values || 6);
+        return new FloatArrayType(values || 6);
     },
 
     /**
@@ -3293,7 +3354,7 @@ const math = {
      * @private
      */
     AABB2(values) {
-        return new Float32Array(values || 4);
+        return new FloatArrayType(values || 4);
     },
 
     /**
@@ -3302,7 +3363,7 @@ const math = {
      * @private
      */
     OBB3(values) {
-        return new Float32Array(values || 32);
+        return new FloatArrayType(values || 32);
     },
 
     /**
@@ -3311,12 +3372,12 @@ const math = {
      * @private
      */
     OBB2(values) {
-        return new Float32Array(values || 16);
+        return new FloatArrayType(values || 16);
     },
 
     /** Returns a new 3D bounding sphere */
     Sphere3(x, y, z, r) {
-        return new Float32Array([x, y, z, r]);
+        return new FloatArrayType([x, y, z, r]);
     },
 
     /**
@@ -3385,9 +3446,9 @@ const math = {
      */
     getAABB3Diag: ((() =&gt; {
 
-        const min = new Float32Array(3);
-        const max = new Float32Array(3);
-        const tempVec3 = new Float32Array(3);
+        const min = new FloatArrayType(3);
+        const max = new FloatArrayType(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return aabb =&gt; {
 
@@ -3412,9 +3473,9 @@ const math = {
      */
     getAABB3DiagPoint: ((() =&gt; {
 
-        const min = new Float32Array(3);
-        const max = new Float32Array(3);
-        const tempVec3 = new Float32Array(3);
+        const min = new FloatArrayType(3);
+        const max = new FloatArrayType(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (aabb, p) =&gt; {
 
@@ -3494,9 +3555,9 @@ const math = {
         aabb[0] = math.MAX_DOUBLE;
         aabb[1] = math.MAX_DOUBLE;
         aabb[2] = math.MAX_DOUBLE;
-        aabb[3] = -math.MAX_DOUBLE;
-        aabb[4] = -math.MAX_DOUBLE;
-        aabb[5] = -math.MAX_DOUBLE;
+        aabb[3] = math.MIN_DOUBLE;
+        aabb[4] = math.MIN_DOUBLE;
+        aabb[5] = math.MIN_DOUBLE;
 
         return aabb;
     },
@@ -3566,9 +3627,9 @@ const math = {
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;
             let zmin = math.MAX_DOUBLE;
-            let xmax = -math.MAX_DOUBLE;
-            let ymax = -math.MAX_DOUBLE;
-            let zmax = -math.MAX_DOUBLE;
+            let xmax = math.MIN_DOUBLE;
+            let ymax = math.MIN_DOUBLE;
+            let zmax = math.MIN_DOUBLE;
 
             let x;
             let y;
@@ -3639,9 +3700,9 @@ const math = {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
         let zmin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
-        let zmax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
+        let zmax = math.MIN_DOUBLE;
 
         let x;
         let y;
@@ -3697,9 +3758,9 @@ const math = {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
         let zmin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
-        let zmax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
+        let zmax = math.MIN_DOUBLE;
 
         let x;
         let y;
@@ -4028,14 +4089,57 @@ const math = {
     collapseAABB2(aabb = math.AABB2()) {
         aabb[0] = math.MAX_DOUBLE;
         aabb[1] = math.MAX_DOUBLE;
-        aabb[2] = -math.MAX_DOUBLE;
-        aabb[3] = -math.MAX_DOUBLE;
+        aabb[2] = math.MIN_DOUBLE;
+        aabb[3] = math.MIN_DOUBLE;
 
         return aabb;
     },
 
     point3AABB3Intersect(aabb, p) {
         return aabb[0] &gt; p[0] || aabb[3] &lt; p[0] || aabb[1] &gt; p[1] || aabb[4] &lt; p[1] || aabb[2] &gt; p[2] || aabb[5] &lt; p[2];
+    },
+
+    /**
+     *
+     * @param dir
+     * @param constant
+     * @param aabb
+     * @returns {number}
+     */
+    planeAABB3Intersect(dir, constant, aabb) {
+        let min, max;
+        if (dir[0] &gt; 0) {
+            min = dir[0] * aabb[0];
+            max = dir[0] * aabb[3];
+        } else {
+            min = dir[0] * aabb[3];
+            max = dir[0] * aabb[0];
+        }
+        if (dir[1] &gt; 0) {
+            min += dir[1] * aabb[1];
+            max += dir[1] * aabb[4];
+        } else {
+            min += dir[1] * aabb[4];
+            max += dir[1] * aabb[1];
+        }
+        if (dir[2] &gt; 0) {
+            min += dir[2] * aabb[2];
+            max += dir[2] * aabb[5];
+        } else {
+            min += dir[2] * aabb[5];
+            max += dir[2] * aabb[2];
+        }
+        const outside = (min &lt;= -constant) &amp;&amp; (max &lt;= -constant);
+        if (outside) {
+            return -1;
+        }
+
+        const inside = (min &gt;= -constant) &amp;&amp; (max &gt;= -constant);
+        if (inside) {
+            return 1;
+        }
+
+        return 0;
     },
 
     /**
@@ -4046,8 +4150,8 @@ const math = {
     OBB3ToAABB2(points, aabb = math.AABB2()) {
         let xmin = math.MAX_DOUBLE;
         let ymin = math.MAX_DOUBLE;
-        let xmax = -math.MAX_DOUBLE;
-        let ymax = -math.MAX_DOUBLE;
+        let xmax = math.MIN_DOUBLE;
+        let ymax = math.MIN_DOUBLE;
 
         let x;
         let y;

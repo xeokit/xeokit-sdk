@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -155,17 +158,18 @@ import {OcclusionRenderer} from &quot;./occlusion/OcclusionRenderer.js&quot;;
 import {ShadowRenderer} from &quot;./shadow/ShadowRenderer.js&quot;;
 
 import {geometryCompressionUtils} from &apos;../math/geometryCompressionUtils.js&apos;;
+import {RenderFlags} from &quot;../webgl/RenderFlags.js&quot;;
 
 const obb = math.OBB3();
-const angleAxis = new Float32Array(4);
-const q1 = new Float32Array(4);
-const q2 = new Float32Array(4);
-const xAxis = new Float32Array([1, 0, 0]);
-const yAxis = new Float32Array([0, 1, 0]);
-const zAxis = new Float32Array([0, 0, 1]);
+const angleAxis = math.vec4();
+const q1 = math.vec4();
+const q2 = math.vec4();
+const xAxis = math.vec3([1, 0, 0]);
+const yAxis = math.vec3([0, 1, 0]);
+const zAxis = math.vec3([0, 0, 1]);
 
-const veca = new Float32Array(3);
-const vecb = new Float32Array(3);
+const veca = math.vec3(3);
+const vecb = math.vec3(3);
 
 const identityMat = math.identityMat4();
 
@@ -195,6 +199,8 @@ const identityMat = math.identityMat4();
  * import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
  * import {Node} from &quot;../src/scene/nodes/Node.js&quot;;
  * import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+ * import {buildBoxGeometry} from &quot;../src/viewer/scene/geometry/builders/buildBoxGeometry.js&quot;;
+ * import {ReadableGeometry} from &quot;../src/viewer/scene/geometry/ReadableGeometry.js&quot;;
  *
  * const viewer = new Viewer({
  *     canvasId: &quot;myCanvas&quot;
@@ -203,6 +209,12 @@ const identityMat = math.identityMat4();
  * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
  * viewer.scene.camera.look = [0, -5.75, 0];
  * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+ *      xSize: 1,
+ *      ySize: 1,
+ *      zSize: 1
+ * }));
  *
  * new Node(viewer.scene, {
  *      id: &quot;table&quot;,
@@ -221,7 +233,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1, 0.3, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Green table leg
@@ -232,7 +245,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 1.0, 0.3]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {// Blue table leg
@@ -243,7 +257,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [0.3, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, {  // Yellow table leg
@@ -254,7 +269,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                   diffuse: [1.0, 1.0, 0.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          }),
  *
  *          new Mesh(viewer.scene, { // Purple table top
@@ -265,7 +281,8 @@ const identityMat = math.identityMat4();
  *              rotation: [0, 0, 0],
  *              material: new PhongMaterial(viewer.scene, {
  *                  diffuse: [1.0, 0.3, 1.0]
- *              })
+ *              }),
+ *              geometry: boxGeometry
  *          })
  *      ]
  *  });
@@ -319,9 +336,11 @@ class Mesh extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {String} [cfg.originalSystemId] ID of the corresponding object within the originating system, if any.
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -352,6 +371,17 @@ class Mesh extends Component {
 
         super(owner, cfg);
 
+        /**
+         * ID of the corresponding object within the originating system, if any.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = (cfg.originalSystemId || this.id);
+
+        /** @private **/
+        this.renderFlags = new RenderFlags();
+
         this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from Mesh#matrix and Mesh.#normalWorldMatrix
             visible: true,
             culled: false,
@@ -371,7 +401,9 @@ class Mesh extends Component {
             pickID: this.scene._renderer.getPickID(this),
             drawHash: &quot;&quot;,
             pickHash: &quot;&quot;,
-            offset: math.vec3()
+            offset: math.vec3(),
+            rtcCenter: null,
+            rtcCenterHash: null
         });
 
         this._drawRenderer = null;
@@ -409,6 +441,11 @@ class Mesh extends Component {
         this._localMatrixDirty = true;
         this._worldMatrixDirty = true;
         this._worldNormalMatrixDirty = true;
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+            this._state.rtcCenterHash = cfg.rtcCenter.join();
+        }
 
         if (cfg.matrix) {
             this.matrix = cfg.matrix;
@@ -512,7 +549,7 @@ class Mesh extends Component {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-           // this._shadowRenderer = ShadowRenderer.get(this);
+            // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
@@ -675,15 +712,28 @@ class Mesh extends Component {
     }
 
     _buildAABB(worldMatrix, aabb) {
+
         math.transformOBB3(worldMatrix, this._geometry.obb, obb);
         math.OBB3ToAABB3(obb, aabb);
+
         const offset = this._state.offset;
+
         aabb[0] += offset[0];
         aabb[1] += offset[1];
         aabb[2] += offset[2];
         aabb[3] += offset[0];
         aabb[4] += offset[1];
         aabb[5] += offset[2];
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            aabb[0] += rtcCenter[0];
+            aabb[1] += rtcCenter[1];
+            aabb[2] += rtcCenter[2];
+            aabb[3] += rtcCenter[0];
+            aabb[4] += rtcCenter[1];
+            aabb[5] += rtcCenter[2];
+        }
     }
 
     /**
@@ -1056,7 +1106,7 @@ class Mesh extends Component {
     /**
      * Gets the Mesh&apos;s World-space 3D axis-aligned bounding box.
      *
-     * Represented by a six-element Float32Array containing the min/max extents of the
+     * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
      * @type {Number[]}
@@ -1066,6 +1116,43 @@ class Mesh extends Component {
             this._updateAABB();
         }
         return this._aabb;
+    }
+
+    /**
+     * Center of the relative-to-center (RTC) coordinate system for this Mesh.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        if (rtcCenter) {
+            if (!this._state.rtcCenter) {
+                this._state.rtcCenter = math.vec3();
+            }
+            this._state.rtcCenter.set(rtcCenter);
+            this._state.rtcCenterHash = rtcCenter.join();
+            this._setAABBDirty();
+            this.scene._aabbDirty = true;
+        } else {
+            if (this._state.rtcCenter) {
+                this._state.rtcCenter = null;
+                this._state.rtcCenterHash = null;
+                this._setAABBDirty();
+                this.scene._aabbDirty = true;
+            }
+        }
+    }
+
+    /**
+     * 3D origin of the Mesh&apos;s {@link Geometry}&apos;s vertex positions.
+     *
+     * When this is defined, then the positions are RTC, which means that they are relative to this position.
+     *
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this._state.rtcCenter;
     }
 
     /**
@@ -1618,15 +1705,25 @@ class Mesh extends Component {
             || (mesh1._geometry._state.id - mesh2._geometry._state.id); // Geometry state
     }
 
+    /** @private */
+    rebuildRenderFlags() {
+        this.renderFlags.reset();
+        if (!this._getActiveSectionPlanes()) {
+            this.renderFlags.culled = true;
+            return;
+        }
+        this.renderFlags.numLayers = 1;
+        this.renderFlags.numVisibleLayers = 1;
+        this.renderFlags.visibleLayers[0] = 0;
+        this._updateRenderFlags();
+    }
+
     /**
-     * Called by xeokit when about to render this Mesh, to get flags indicating what rendering effects to apply for it.
-     *
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
+     * @private
      */
-    getRenderFlags(renderFlags) {
+    _updateRenderFlags() {
 
-        renderFlags.reset();
-
+        const renderFlags = this.renderFlags;
         const state = this._state;
 
         if (state.xrayed) {
@@ -1694,6 +1791,47 @@ class Mesh extends Component {
                 }
             }
         }
+    }
+
+    _getActiveSectionPlanes() {
+
+        if (this._state.clippable) {
+
+            const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+            const numSectionPlanes = sectionPlanes.length;
+
+            if (numSectionPlanes &gt; 0) {
+                for (let i = 0; i &lt; numSectionPlanes; i++) {
+
+                    const sectionPlane = sectionPlanes[i];
+                    const renderFlags = this.renderFlags;
+
+                    if (!sectionPlane.active) {
+                        renderFlags.sectionPlanesActivePerLayer[i] = false;
+
+                    } else {
+
+                        if (this._state.rtcCenter) {
+
+                            const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
+                            const outside = (intersect === -1);
+
+                            if (outside) {
+                                return false;
+                            }
+
+                            const intersecting = (intersect === 0);
+                            renderFlags.sectionPlanesActivePerLayer[i] = intersecting;
+
+                        } else {
+                            renderFlags.sectionPlanesActivePerLayer[i] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -151,6 +154,7 @@ import {CameraUpdater} from &quot;./lib/CameraUpdater.js&quot;;
 import {MouseMiscHandler} from &quot;./lib/handlers/MouseMiscHandler.js&quot;;
 import {TouchPanRotateAndDollyHandler} from &quot;./lib/handlers/TouchPanRotateAndDollyHandler.js&quot;;
 import {utils} from &quot;../utils.js&quot;;
+import {math} from &quot;../math/math.js&quot;;
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -790,26 +794,27 @@ class CameraControl extends Component {
             // Dollying
 
             keyboardDollyRate: 10,
-            mouseWheelDollyRate: 10,
+            mouseWheelDollyRate: 100,
             touchDollyRate: 0.05,
-            dollyInertia: 0.75,
+            dollyInertia: 0,
             dollyProximityThreshold: 30.0,
-            dollyMinSpeed: 1.0
+            dollyMinSpeed: 0.04
         };
 
         // Current runtime state of the CameraControl
 
         this._states = {
-            pointerCanvasPos: new Float32Array(2),
+            pointerCanvasPos: math.vec2(),
             mouseover: false,
             inputFromMouse: false, // TODO: Is this needed?
+            followPointerDirty: true,
             mouseDownClientX: 0,
             mouseDownClientY: 0,
             mouseDownCursorX: 0,
             mouseDownCursorY: 0,
             touchStartTime: null,
             activeTouches: [],
-            tapStartPos: new Float32Array(2),
+            tapStartPos: math.vec2(),
             tapStartTime: -1,
             lastTapTime: -1
         };
@@ -1538,19 +1543,19 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second as we spin
+     * Default is ````100.0````, to dolly the {@link Camera} ````10.0```` World-space units per second as we spin
      * the mouse wheel.
      *
      * @param {Number} mouseWheelDollyRate The new mouse wheel dolly rate.
      */
     set mouseWheelDollyRate(mouseWheelDollyRate) {
-        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null &amp;&amp; mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 15.0;
+        this._configs.mouseWheelDollyRate = (mouseWheelDollyRate !== null &amp;&amp; mouseWheelDollyRate !== undefined) ? mouseWheelDollyRate : 100.0;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second while the mouse wheel is spinning.
      *
-     * Default is ````15.0````.
+     * Default is ````100.0````.
      *
      * @returns {Number} The current mouseWheel dolly rate.
      */
@@ -1571,18 +1576,18 @@ class CameraControl extends Component {
      * without interference from inertia. This also means that xeokit renders less frames while dollying the Camera,
      * which can improve rendering performance.
      *
-     * Default is ````0.75````.
+     * Default is ````0````.
      *
      * @param {Number} dollyInertia New dolly inertia factor.
      */
     set dollyInertia(dollyInertia) {
-        this._configs.dollyInertia = (dollyInertia !== undefined &amp;&amp; dollyInertia !== null) ? dollyInertia : 0.75;
+        this._configs.dollyInertia = (dollyInertia !== undefined &amp;&amp; dollyInertia !== null) ? dollyInertia : 0;
     }
 
     /**
      * Gets the dolly inertia factor.
      *
-     * Default is ````0.75````.
+     * Default is ````0````.
      *
      * @returns {Number} The current dolly inertia factor.
      */
@@ -1615,18 +1620,18 @@ class CameraControl extends Component {
     /**
      * Sets the minimum dolly speed.
      *
-     * Default is ````0.05````.
+     * Default is ````0.04````.
      *
      * @param {Number} dollyMinSpeed New dolly minimum speed.
      */
     set dollyMinSpeed(dollyMinSpeed) {
-        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined &amp;&amp; dollyMinSpeed !== null) ? dollyMinSpeed : 0.05;
+        this._configs.dollyMinSpeed = (dollyMinSpeed !== undefined &amp;&amp; dollyMinSpeed !== null) ? dollyMinSpeed : 0.04;
     }
 
     /**
      * Gets the minimum dolly speed.
      *
-     * Default is ````0.05````.
+     * Default is ````0.04````.
      *
      * @returns {Number} The current minimum dolly speed.
      */

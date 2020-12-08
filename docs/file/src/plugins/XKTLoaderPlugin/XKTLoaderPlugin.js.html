@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -148,6 +151,7 @@ import {ParserV2} from &quot;./parsers/ParserV2.js&quot;;
 import {ParserV3} from &quot;./parsers/ParserV3.js&quot;;
 import {ParserV4} from &quot;./parsers/ParserV4.js&quot;;
 import {ParserV5} from &quot;./parsers/ParserV5.js&quot;;
+import {ParserV6} from &quot;./parsers/ParserV6.js&quot;;
 
 const parsers = {};
 
@@ -156,6 +160,7 @@ parsers[ParserV2.version] = ParserV2;
 parsers[ParserV3.version] = ParserV3;
 parsers[ParserV4.version] = ParserV4;
 parsers[ParserV5.version] = ParserV5;
+parsers[ParserV6.version] = ParserV6;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit&apos;s optimized *````.xkt````* format.
@@ -169,11 +174,13 @@ parsers[ParserV5.version] = ParserV5;
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.xkt````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
+ * * Supports double-precision coordinates, via ````.xkt```` format version 6.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
- * * Does not support textures or physically-based materials.
+ * * Can be configured to load multiple instances of the same model, without object ID clashes.
+ * * Does not (yet) support textures or physically-based materials.
  *
  * ## Credits
  *
@@ -460,6 +467,64 @@ parsers[ParserV5.version] = ParserV5;
  *      metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot; // Creates a MetaObject instances in scene.metaScene.metaObjects
  * });
  * ````
+ *
+ * ## Loading multiple copies of a model, without object ID clashes
+ *
+ * Sometimes we need to load two or more instances of the same model, without having clashes
+ * between the IDs of the equivalent objects in the model instances.
+ *
+ *
+ * To do this, we set {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
+ *
+ * ````javascript
+ * xktLoader.globalizeObjectIds = true;
+ *
+ * const model = xktLoader.load({
+ *      id: &quot;model1&quot;,
+ *      src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+ *      metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+ * });
+ *
+ * const model2 = xktLoader.load({
+ *    id: &quot;model2&quot;,
+ *    src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+ *    metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+ * });
+ * ````
+ *
+ * For each {@link Entity} loaded by these two calls, {@link Entity#id} and {@link MetaObject#id} will get prefixed by
+ * the ID of their model, in order to avoid ID clashes between the two models.
+ *
+ * An Entity belonging to the first model will get an ID like this:
+ *
+ * ````
+ * myModel1#0BTBFw6f90Nfh9rP1dlXrb
+ * ````
+ *
+ * The equivalent Entity in the second model will get an ID like this:
+ *
+ * ````
+ * myModel2#0BTBFw6f90Nfh9rP1dlXrb
+ * ````
+ *
+ * Now, to update the visibility of both of those Entities collectively, using {@link Scene#setObjectsVisible}, we can
+ * supply just the IFC product ID part to that method:
+ *
+ * ````javascript
+ * myViewer.scene.setObjectVisibilities(&quot;0BTBFw6f90Nfh9rP1dlXrb&quot;, true);
+ * ````
+ *
+ * The method, along with {@link Scene#setObjectsXRayed}, {@link Scene#setObjectsHighlighted} etc, will internally expand
+ * the given ID to refer to the instances of that Entity in both models.
+ *
+ * We can also reference each Entity directly, using its globalized ID:
+ *
+ * ````javascript
+ * myViewer.scene.setObjectVisibilities(&quot;myModel1#0BTBFw6f90Nfh9rP1dlXrb&quot;, true);
+ *````
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ *
  * @class XKTLoaderPlugin
  */
 class XKTLoaderPlugin extends Plugin {
@@ -625,6 +690,38 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
+     * Sets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     *
+     * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
+     * between the objects in the different instances.
+     *
+     * When we load a model with this set ````true````, then each {@link Entity#id} and {@link MetaObject#id} will be
+     * prefixed by the ID of the model, ie. ````&lt;modelId&gt;#&lt;objectId&gt;````.
+     *
+     * {@link Entity#originalSystemId} and {@link MetaObject#originalSystemId} will always hold the original, un-prefixed, ID values.
+     *
+     * Default value is ````false````.
+     *
+     * See the main {@link XKTLoaderPlugin} class documentation for usage info.
+     *
+     * @type {Boolean}
+     */
+    set globalizeObjectIds(value) {
+        this._globalizeObjectIds = !!value;
+    }
+
+    /**
+     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get globalizeObjectIds() {
+        return this._globalizeObjectIds;
+    }
+
+    /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin&apos;s {@link Viewer}.
      *
      * @param {*} params Loading parameters.
@@ -644,7 +741,8 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Boolean} [params.edges=false] Indicates if the model&apos;s edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene&apos;s {@link SAO} component.
      * @param {Boolean} [params.backfaces=false] Indicates if backfaces are visible on the model. Making this ````true```` will reduce rendering performance.
-     * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
+     * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -692,12 +790,14 @@ class XKTLoaderPlugin extends Plugin {
             }
 
             options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
+            options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
             const processMetaModelData = (metaModelData) =&gt; {
 
                 this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: includeTypes,
-                    excludeTypes: excludeTypes
+                    excludeTypes: excludeTypes,
+                    globalizeObjectIds: this.globalizeObjectIds
                 });
 
                 this.viewer.scene.canvas.spinner.processes--;

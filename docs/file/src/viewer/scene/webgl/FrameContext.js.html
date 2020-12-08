@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,20 +132,36 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/webgl/FrameContext.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @desc Provides rendering context to {@link Drawable&quot;}}Drawables{{/crossLink}} as xeokit renders them for a frame.
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../math/math.js&quot;;
+import {createRTCViewMat} from &quot;../math/rtcCoords.js&quot;;
+
+/**
+ * @desc Provides rendering context to {@link Drawable&quot;}s as xeokit renders them for a frame.
+ *
+ * Also creates RTC viewing and picking matrices, caching and reusing matrices within each frame.
+ *
  * @private
  */
 class FrameContext {
 
-    constructor() {
+    constructor(scene) {
+
+        this._scene = scene;
+
+        this._matPool = [];
+        this._matPoolNextFreeIndex = 0;
+
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
+
         this.reset();
     }
 
@@ -152,6 +170,10 @@ class FrameContext {
      * @private
      */
     reset() {
+
+        this._matPoolNextFreeIndex = 0;
+        this._rtcViewMats = {};
+        this._rtcPickViewMats = {};
 
         /**
          * ID of the last {@link webgl.Program} that was bound during the current frame.
@@ -299,6 +321,43 @@ class FrameContext {
          * @type Number
          */
         this.lineWidth = 1;
+    }
+
+    /**
+     * Get View matrix for the given RTC center.
+     */
+    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+        if (!rtcViewMat) {
+            rtcViewMat = this._getNewMat();
+            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
+            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
+        }
+        return rtcViewMat;
+    }
+
+    /**
+     * Get picking View RTC matrix for the given RTC center.
+     */
+    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
+        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
+        if (!rtcPickViewMat) {
+            rtcPickViewMat = this._getNewMat();
+            const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
+            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
+            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
+        }
+        return rtcPickViewMat;
+    }
+
+    _getNewMat() {
+        let mat = this._matPool[this._matPoolNextFreeIndex];
+        if (!mat) {
+            mat = math.mat4();
+            this._matPool[this._matPoolNextFreeIndex] = mat;
+        }
+        this._matPoolNextFreeIndex++;
+        return mat;
     }
 }
 

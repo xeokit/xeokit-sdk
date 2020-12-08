@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -151,14 +154,14 @@ class TouchPanRotateAndDollyHandler {
         const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
 
-        const tapStartPos = new Float32Array(2);
+        const tapStartPos = math.vec2();
         let tapStartTime = -1;
 
         const lastTouches = [];
         let numTouches = 0;
 
-        const touch0Vec = new Float32Array(2);
-        const touch1Vec = new Float32Array(2);
+        const touch0Vec = math.vec2();
+        const touch1Vec = math.vec2();
 
         const canvas = this._scene.canvas.canvas;
 
@@ -191,15 +194,20 @@ class TouchPanRotateAndDollyHandler {
                     pickController.schedulePickSurface = true;
                     pickController.update();
 
-                    if (!configs.planView) {
-                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult) {
+                    if (!configs.planView ) {
 
-                            pivotController.startPivot(pickController.pickResult.worldPos);
-                            pivotController.showPivot();
+                        if (pickController.picked &amp;&amp; pickController.pickedSurface &amp;&amp; pickController.pickResult &amp;&amp; pickController.pickResult.worldPos) {
+
+                            pivotController.setPivotPos(pickController.pickResult.worldPos);
+
+                            if (!configs.firstPerson &amp;&amp; pivotController.startPivot()) {
+                                pivotController.showPivot();
+                            }
 
                         } else {
-                            pivotController.startPivot(); // Continue to use last pivot point
-                            pivotController.showPivot();
+                            if (!configs.firstPerson &amp;&amp; pivotController.startPivot()) { // Continue to use last pivot point
+                                pivotController.showPivot();
+                            }
                         }
                     }
                 }
@@ -219,7 +227,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             while (lastTouches.length &lt; touches.length) {
-                lastTouches.push(new Float32Array(2));
+                lastTouches.push(math.vec2());
             }
 
             for (let i = 0, len = touches.length; i &lt; len; ++i) {
@@ -304,7 +312,7 @@ class TouchPanRotateAndDollyHandler {
                 const lastMiddleTouch = math.geometricMeanVec2(lastTouches[0], lastTouches[1]);
                 const currentMiddleTouch = math.geometricMeanVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
 
-                const touchDelta = new Float32Array(2);
+                const touchDelta = math.vec2();
 
                 math.subVec2(lastMiddleTouch, currentMiddleTouch, touchDelta);
 
@@ -333,7 +341,6 @@ class TouchPanRotateAndDollyHandler {
                 }
 
                 // Dollying
-                states.skipNextPick = true;
 
                 const d1 = math.distVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
                 const d2 = math.distVec2(lastTouches[0], lastTouches[1]);

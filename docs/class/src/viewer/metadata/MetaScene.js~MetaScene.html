@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,20 +132,21 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetaScene} from &apos;<span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber12">@xeokit/xeokit-sdk/src/viewer/metadata/MetaScene.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetaScene} from &apos;<span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber13">@xeokit/xeokit-sdk/src/viewer/metadata/MetaScene.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber12">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber13">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -355,7 +358,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-createMetaModel">createMetaModel</a></span></span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, metaModelData: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-createMetaModel">createMetaModel</a></span></span><span class="code" data-ice="signature">(modelId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, metaModelData: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
         </p>
       </div>
       <div>
@@ -596,7 +599,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -640,7 +643,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -684,7 +687,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
@@ -728,7 +731,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -788,7 +791,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -847,11 +850,11 @@
     
     
     
-    <span class="code" data-ice="name">createMetaModel</span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, metaModelData: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
+    <span class="code" data-ice="name">createMetaModel</span><span class="code" data-ice="signature">(modelId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, metaModelData: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber116">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -872,7 +875,7 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">id</td>
+      <td data-ice="name" class="code" data-depth="0">modelId</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>ID for the new <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, which will have <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-id">MetaModel#id</a></span> set to this value.</p>
@@ -896,21 +899,25 @@
       <td data-ice="name" class="code" data-depth="1">options.includeTypes</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>When provided, only <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s with types in this list.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.includeTypes</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>When provided, never <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s with types in this list.</p>
+      <td data-ice="description"><p>When provided, only create <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s with types in this list.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.excludeTypes</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>When provided, never create <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s with types in this list.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.globalizeObjectIds</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether to globalize each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span>. Set
+this <code>true</code> when you need to load multiple instances of the same meta model, to avoid ID clashes between
+the meta objects in the different instances.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -959,7 +966,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -1021,7 +1028,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -1089,7 +1096,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -1163,7 +1170,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 
@@ -1251,7 +1258,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1311,7 +1318,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -1379,7 +1386,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/MetaScene.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 

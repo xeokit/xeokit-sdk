@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,20 +132,21 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber37">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber807">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber37">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber807">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -164,13 +167,698 @@
   
   
   <div class="description" data-ice="description"><p>A high-performance model representation for efficient rendering and low memory usage.</p>
-<h2 id="examples">Examples</h2><ul>
+<h1 id="examples">Examples</h1><ul>
 <li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching">PerformanceModel using geometry batching</a></li>
+<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter">PerformanceModel using geometry batching and RTC coordinates</a></li>
 <li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing">PerformanceModel using geometry instancing</a></li>
+<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter">PerformanceModel using geometry instancing and RTC coordinates</a></li>
 </ul>
-<h2 id="user-guide">User Guide</h2><ul>
-<li><a href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">High Performance Model Representation</a></li>
+<h1 id="overview">Overview</h1><p>While xeokit&apos;s standard <a href="https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs">scene graph</a> is great for gizmos and medium-sized models, it doesn&apos;t scale up to millions of objects in terms of memory and rendering efficiency.</p>
+<p>For huge models, we have the <code>PerformanceModel</code> representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.</p>
+<p><code>PerformanceModel</code> is the default model representation loaded by <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>, <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> and <span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span>.</p>
+<p>In this tutorial you&apos;ll learn how to use <code>PerformanceModel</code> to create high-detail content programmatically. Ordinarily you&apos;d be learning about <code>PerformanceModel</code> if you were writing your own model loader plugins.</p>
+<h1 id="contents">Contents</h1><ul>
+<li><a href="#performancemodel">PerformanceModel</a></li>
+<li><a href="#gpu-resident-geometry">GPU-Resident Geometry</a></li>
+<li><a href="#picking">Picking</a></li>
+<li><a href="#example-1--geometry-instancing">Example 1: Geometry Instancing</a></li>
+<li><a href="#finalizing-a-performancemodel">Finalizing a PerformanceModel</a></li>
+<li><a href="#finding-entities">Finding Entities</a></li>
+<li><a href="#example-2--geometry-batching">Example 2: Geometry Batching</a></li>
+<li><a href="#classifying-with-metadata">Classifying with Metadata</a></li>
+<li><a href="#querying-metadata">Querying Metadata</a></li>
+<li><a href="#metadata-structure">Metadata Structure</a></li>
+<li><a href="#rtc-coordinates">RTC Coordinates</a><ul>
+<li><a href="#example-2--rtc-coordinates-with-geometry-instancing">Example 3: RTC Coordinates with Geometry Instancing</a></li>
+<li><a href="#example-2--rtc-coordinates-with-geometry-batching">Example 4: RTC Coordinates with Geometry Batching</a></li>
 </ul>
+</li>
+</ul>
+<h2 id="performancemodel">PerformanceModel</h2><p><code>PerformanceModel</code> uses two rendering techniques internally:</p>
+<ol>
+<li><strong><em>Geometry batching</em></strong> for unique geometries, combining those into a single WebGL geometry buffer, to render in one draw call, and</li>
+<li><strong><em>geometry instancing</em></strong> for geometries that are shared by multiple meshes, rendering all instances of each shared geometry in one draw call.</li>
+</ol>
+<p><br>
+These techniques come with certain limitations:</p>
+<ul>
+<li>Non-realistic rendering - while scene graphs can use xeokit&apos;s full set of material workflows, <code>PerformanceModel</code> uses simple Lambertian shading without textures.</li>
+<li>Static transforms - transforms within a <code>PerformanceModel</code> are static and cannot be dynamically translated, rotated and scaled the way <span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span>s and <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es in scene graphs can.</li>
+<li>Immutable model representation - while scene graph <span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span>s and
+<span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es can be dynamically plugged together, <code>PerformanceModel</code> is immutable,
+since it packs its geometries into buffers and instanced arrays.</li>
+</ul>
+<p><code>PerformanceModel</code>&apos;s API allows us to exploit batching and instancing, while exposing its elements as
+abstract <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> types.</p>
+<p><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> is the abstract base class for
+the various xeokit components that represent models, objects, or anonymous visible elements. An Entity has a unique ID and can be
+individually shown, hidden, selected, highlighted, ghosted, culled, picked and clipped, and has its own World-space boundary.</p>
+<ul>
+<li>A <code>PerformanceModel</code> is an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents a model.</li>
+<li>A <code>PerformanceModel</code> represents each of its objects with an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</li>
+<li>Each <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> has one or more meshes that define its shape.</li>
+<li>Each mesh has either its own unique geometry, or shares a geometry with other meshes.</li>
+</ul>
+<h2 id="gpu-resident-geometry">GPU-Resident Geometry</h2><p>For a low memory footprint, <code>PerformanceModel</code> stores its geometries in GPU memory only, compressed (quantized) as integers. Unfortunately, GPU-resident geometry is
+not readable by JavaScript.</p>
+<h2 id="example-1--geometry-instancing">Example 1: Geometry Instancing</h2><p>In the example below, we&apos;ll use a <code>PerformanceModel</code>
+to build a simple table model using geometry instancing.</p>
+<p>We&apos;ll start by adding a reusable box-shaped geometry to our <code>PerformanceModel</code>.</p>
+<p>Then, for each object in our model we&apos;ll add an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>
+that has a mesh that instances our box geometry, transforming and coloring the instance.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {PerformanceModel} from &quot;../src/viewer/scene/PerformanceModels/PerformanceModel.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;,
+    transparent: true
+});
+
+viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+viewer.scene.camera.look = [0, -5.75, 0];
+viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+// Build a PerformanceModel representing a table
+// with four legs, using geometry instancing
+
+const performanceModel = new PerformanceModel(viewer.scene, {
+    id: &quot;table&quot;,
+    isModel: true, // &lt;--- Registers PerformanceModel in viewer.scene.models
+    position: [0, 0, 0],
+    scale: [1, 1, 1],
+    rotation: [0, 0, 0]
+});
+
+// Create a reusable geometry within the PerformanceModel
+// We&apos;ll instance this geometry by five meshes
+
+performanceModel.createGeometry({
+
+    id: &quot;myBoxGeometry&quot;,
+
+    // The primitive type - allowed values are &quot;points&quot;, &quot;lines&quot;,
+    // &quot;line-loop&quot;, &quot;line-strip&quot;, &quot;triangles&quot;, &quot;triangle-strip&quot;
+    // and &quot;triangle-fan&quot;.  See the OpenGL/WebGL specification docs
+    // for how the coordinate arrays are supposed to be laid out.
+    primitive: &quot;triangles&quot;,
+
+    // The vertices - eight for our cube, each
+    // one spanning three array elements for X,Y and Z
+    positions: [
+         1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
+         1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, // v0-v3-v4-v1 right
+         1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, // v0-v1-v6-v1 top
+         -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, // v1-v6-v7-v2 left
+         -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, // v7-v4-v3-v2 bottom
+         1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1 // v4-v7-v6-v1 back
+    ],
+
+    // Normal vectors, one for each vertex
+    normals: [
+        0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, // v0-v1-v2-v3 front
+        1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, // v0-v3-v4-v5 right
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, // v0-v5-v6-v1 top
+        -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, // v1-v6-v7-v2 left
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, // v7-v4-v3-v2 bottom
+        0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1 // v4-v7-v6-v5 back
+    ],
+
+    // Indices - these organise the positions and and normals
+    // into geometric primitives in accordance with the &quot;primitive&quot; parameter,
+    // in this case a set of three indices for each triangle.
+    //
+    // Note that each triangle is specified in counter-clockwise winding order.
+    //
+    indices: [
+        0, 1, 2, 0, 2, 3, // front
+        4, 5, 6, 4, 6, 7, // right
+        8, 9, 10, 8, 10, 11, // top
+        12, 13, 14, 12, 14, 15, // left
+        16, 17, 18, 16, 18, 19, // bottom
+        20, 21, 22, 20, 22, 23
+    ]
+});
+
+// Red table leg
+
+performanceModel.createMesh({
+    id: &quot;redLegMesh&quot;,
+    geometryId: &quot;myBoxGeometry&quot;,
+    position: [-4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1, 0.3, 0.3]
+});
+
+performanceModel.createEntity({
+    id: &quot;redLeg&quot;,
+    meshIds: [&quot;redLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Green table leg
+
+performanceModel.createMesh({
+    id: &quot;greenLegMesh&quot;,
+    geometryId: &quot;myBoxGeometry&quot;,
+    position: [4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 1.0, 0.3]
+});
+
+performanceModel.createEntity({
+    id: &quot;greenLeg&quot;,
+    meshIds: [&quot;greenLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Blue table leg
+
+performanceModel.createMesh({
+    id: &quot;blueLegMesh&quot;,
+    geometryId: &quot;myBoxGeometry&quot;,
+    position: [4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;blueLeg&quot;,
+    meshIds: [&quot;blueLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Yellow table leg
+
+performanceModel.createMesh({
+     id: &quot;yellowLegMesh&quot;,
+     geometryId: &quot;myBoxGeometry&quot;,
+     position: [-4, -6, 4],
+     scale: [1, 3, 1],
+     rotation: [0, 0, 0],
+     color: [1.0, 1.0, 0.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;yellowLeg&quot;,
+    meshIds: [&quot;yellowLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Purple table top
+
+performanceModel.createMesh({
+    id: &quot;purpleTableTopMesh&quot;,
+    geometryId: &quot;myBoxGeometry&quot;,
+    position: [0, -3, 0],
+    scale: [6, 0.5, 6],
+    rotation: [0, 0, 0],
+    color: [1.0, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;purpleTableTop&quot;,
+    meshIds: [&quot;purpleTableTopMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});</code>
+</code></pre>
+<h2 id="finalizing-a-performancemodel">Finalizing a PerformanceModel</h2><p>Before we can view and interact with our <code>PerformanceModel</code>, we need to <strong>finalize</strong> it. Internally, this causes the <code>PerformanceModel</code> to build the
+vertex buffer objects (VBOs) that support our geometry instances. When using geometry batching (see next example),
+this causes <code>PerformanceModel</code> to build the VBOs that combine the batched geometries. Note that you can do both instancing and
+batching within the same <code>PerformanceModel</code>.</p>
+<p>Once finalized, we can&apos;t add anything more to our <code>PerformanceModel</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">performanceModel.finalize();</code>
+</code></pre>
+<h2 id="finding-entities">Finding Entities</h2><p>As mentioned earlier, <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> is
+the abstract base class for components that represent models, objects, or just
+anonymous visible elements.</p>
+<p>Since we created configured our <code>PerformanceModel</code> with <code>isModel: true</code>,
+we&apos;re able to find it as an Entity by ID in <code>viewer.scene.models</code>. Likewise, since
+we configured each of its Entities with <code>isObject: true</code>, we&apos;re able to
+find them in  <code>viewer.scene.objects</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">// Get the whole table model Entity
+const table = viewer.scene.models[&quot;table&quot;];
+
+ // Get some leg object Entities
+const redLeg = viewer.scene.objects[&quot;redLeg&quot;];
+const greenLeg = viewer.scene.objects[&quot;greenLeg&quot;];
+const blueLeg = viewer.scene.objects[&quot;blueLeg&quot;];</code>
+</code></pre>
+<h2 id="example-2--geometry-batching">Example 2: Geometry Batching</h2><p>Let&apos;s once more use a <code>PerformanceModel</code>
+to build the simple table model, this time exploiting geometry batching.</p>
+<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching">Run this example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {PerformanceModel} from &quot;../src/viewer/scene/PerformanceModel/PerformanceModel.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;,
+    transparent: true
+});
+
+viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+viewer.scene.camera.look = [0, -5.75, 0];
+viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+// Create a PerformanceModel representing a table with four legs, using geometry batching
+const performanceModel = new PerformanceModel(viewer.scene, {
+    id: &quot;table&quot;,
+    isModel: true,  // &lt;--- Registers PerformanceModel in viewer.scene.models
+    position: [0, 0, 0],
+    scale: [1, 1, 1],
+    rotation: [0, 0, 0]
+});
+
+// Red table leg
+
+performanceModel.createMesh({
+    id: &quot;redLegMesh&quot;,
+
+    // Geometry arrays are same as for the earlier batching example
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [-4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1, 0.3, 0.3]
+});
+
+performanceModel.createEntity({
+    id: &quot;redLeg&quot;,
+    meshIds: [&quot;redLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Green table leg
+
+performanceModel.createMesh({
+    id: &quot;greenLegMesh&quot;,
+    primitive: &quot;triangles&quot;,
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 1.0, 0.3]
+});
+
+performanceModel.createEntity({
+    id: &quot;greenLeg&quot;,
+    meshIds: [&quot;greenLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Blue table leg
+
+performanceModel.createMesh({
+    id: &quot;blueLegMesh&quot;,
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;blueLeg&quot;,
+    meshIds: [&quot;blueLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Yellow table leg object
+
+performanceModel.createMesh({
+    id: &quot;yellowLegMesh&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [-4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1.0, 1.0, 0.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;yellowLeg&quot;,
+    meshIds: [&quot;yellowLegMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Purple table top
+
+performanceModel.createMesh({
+    id: &quot;purpleTableTopMesh&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [0, -3, 0],
+    scale: [6, 0.5, 6],
+    rotation: [0, 0, 0],
+    color: [1.0, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    id: &quot;purpleTableTop&quot;,
+    meshIds: [&quot;purpleTableTopMesh&quot;],
+    isObject: true // &lt;---- Registers Entity by ID on viewer.scene.objects
+});
+
+// Finalize the PerformanceModel.
+
+performanceModel.finalize();
+
+// Find BigModelNodes by their model and object IDs
+
+// Get the whole table model
+const table = viewer.scene.models[&quot;table&quot;];
+
+// Get some leg objects
+const redLeg = viewer.scene.objects[&quot;redLeg&quot;];
+const greenLeg = viewer.scene.objects[&quot;greenLeg&quot;];
+const blueLeg = viewer.scene.objects[&quot;blueLeg&quot;];</code>
+</code></pre>
+<h2 id="classifying-with-metadata">Classifying with Metadata</h2><p>In the previous examples, we used <code>PerformanceModel</code> to build
+two versions of the same table model, to demonstrate geometry batching and geometry instancing.</p>
+<p>We&apos;ll now classify our <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s with metadata. This metadata
+will work the same for both our examples, since they create the exact same structure of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s
+to represent their models and objects. The abstract Entity type is, after all, intended to provide an abstract interface through which differently-implemented scene content can be accessed uniformly.</p>
+<p>To create the metadata, we&apos;ll create a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> for our model,
+with a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each of it&apos;s objects. The MetaModel and MetaObjects
+get the same IDs as the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represent their model and objects within our scene.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const furnitureMetaModel = viewer.metaScene.createMetaModel(&quot;furniture&quot;, {         // Creates a MetaModel in the MetaScene
+
+     &quot;projectId&quot;: &quot;myTableProject&quot;,
+     &quot;revisionId&quot;: &quot;V1.0&quot;,
+
+     &quot;metaObjects&quot;: [
+         {                               // Creates a MetaObject in the MetaModel
+             &quot;id&quot;: &quot;table&quot;,
+             &quot;name&quot;: &quot;Table&quot;,            // Same ID as an object Entity
+             &quot;type&quot;: &quot;furniture&quot;,        // Arbitrary type, could be IFC type
+             &quot;properties&quot;: {             // Arbitrary properties, could be IfcPropertySet
+                 &quot;cost&quot;: &quot;200&quot;
+             }
+         },
+         {
+             &quot;id&quot;: &quot;redLeg&quot;,
+             &quot;name&quot;: &quot;Red table Leg&quot;,
+             &quot;type&quot;: &quot;leg&quot;,
+             &quot;parent&quot;: &quot;table&quot;,           // References first MetaObject as parent
+             &quot;properties&quot;: {
+                 &quot;material&quot;: &quot;wood&quot;
+             }
+         },
+         {
+             &quot;id&quot;: &quot;greenLeg&quot;,           // Node with corresponding id does not need to exist
+             &quot;name&quot;: &quot;Green table leg&quot;,  // and MetaObject does not need to exist for Node with an id
+             &quot;type&quot;: &quot;leg&quot;,
+             &quot;parent&quot;: &quot;table&quot;,
+             &quot;properties&quot;: {
+                 &quot;material&quot;: &quot;wood&quot;
+             }
+         },
+         {
+             &quot;id&quot;: &quot;blueLeg&quot;,
+             &quot;name&quot;: &quot;Blue table leg&quot;,
+             &quot;type&quot;: &quot;leg&quot;,
+             &quot;parent&quot;: &quot;table&quot;,
+             &quot;properties&quot;: {
+                 &quot;material&quot;: &quot;wood&quot;
+             }
+         },
+         {
+             &quot;id&quot;: &quot;yellowLeg&quot;,
+             &quot;name&quot;: &quot;Yellow table leg&quot;,
+             &quot;type&quot;: &quot;leg&quot;,
+             &quot;parent&quot;: &quot;table&quot;,
+             &quot;properties&quot;: {
+                 &quot;material&quot;: &quot;wood&quot;
+             }
+         },
+         {
+             &quot;id&quot;: &quot;tableTop&quot;,
+             &quot;name&quot;: &quot;Purple table top&quot;,
+             &quot;type&quot;: &quot;surface&quot;,
+             &quot;parent&quot;: &quot;table&quot;,
+             &quot;properties&quot;: {
+                 &quot;material&quot;: &quot;formica&quot;,
+                 &quot;width&quot;: &quot;60&quot;,
+                 &quot;depth&quot;: &quot;60&quot;,
+                 &quot;thickness&quot;: &quot;5&quot;
+             }
+         }
+     ]
+ });</code>
+</code></pre>
+<h2 id="querying-metadata">Querying Metadata</h2><p>Having created and classified our model (either the instancing or batching example), we can now find the <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>
+and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s using the IDs of their
+corresponding <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">const furnitureMetaModel = scene.metaScene.metaModels[&quot;furniture&quot;];
+
+const redLegMetaObject = scene.metaScene.metaObjects[&quot;redLeg&quot;];</code>
+</code></pre>
+<p>In the snippet below, we&apos;ll log metadata on each <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> we click on:</p>
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">viewer.scene.input.on(&quot;mouseclicked&quot;, function (coords) {
+
+     const hit = viewer.scene.pick({
+         canvasPos: coords
+     });
+
+     if (hit) {
+         const entity = hit.entity;
+         const metaObject = viewer.metaScene.metaObjects[entity.id];
+         if (metaObject) {
+             console.log(JSON.stringify(metaObject.getJSON(), null, &quot;\t&quot;));
+         }
+     }
+ });</code>
+</code></pre>
+<h2 id="metadata-structure">Metadata Structure</h2><p>The <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>
+organizes its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s in
+a tree that describes their structural composition:</p>
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">// Get metadata on the root object
+const tableMetaObject = furnitureMetaModel.rootMetaObject;
+
+// Get metadata on the leg objects
+const redLegMetaObject = tableMetaObject.children[0];
+const greenLegMetaObject = tableMetaObject.children[1];
+const blueLegMetaObject = tableMetaObject.children[2];
+const yellowLegMetaObject = tableMetaObject.children[3];</code>
+</code></pre>
+<p>Given an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, we can find the object or model of which it is a part, or the objects that comprise it. We can also generate UI
+components from the metadata, such as the tree view demonstrated in <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter">this demo</a>.</p>
+<p>This hierarchy allows us to express the hierarchical structure of a model while representing it in
+various ways in the 3D scene (such as with <code>PerformanceModel</code>, which
+has a non-hierarchical scene representation).</p>
+<p>Note also that a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> does not need to have a corresponding
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> and vice-versa.</p>
+<h1 id="rtc-coordinates-for-64-bit-precision">RTC Coordinates for 64-Bit Precision</h1><p><code>PerformanceModel</code> can emulate 64-bit precision on GPUs using relative-to-center (RTC) coordinates.</p>
+<p>Consider a model that contains many small objects, but with such large spatial extents that 32 bits of GPU precision (accurate to ~7 digits) will not be sufficient to render all of the the objects without jittering.</p>
+<p>To prevent jittering, we could spatially subdivide the objects into &quot;tiles&quot;. Each tile would have a center position, and the positions of the objects within the tile would be relative to that center (&quot;RTC coordinates&quot;).</p>
+<p>While the center positions of the tiles would be 64-bit values, the object positions only need to be 32-bit.</p>
+<p>Internally, when rendering an object with RTC coordinates, xeokit first temporarily translates the camera viewing matrix by the object&apos;s tile&apos;s RTC center, on the CPU, using 64-bit math.</p>
+<p>Then xeokit loads the viewing matrix into its WebGL shaders, where math happens at 32-bit precision. Within the shaders, the matrix is effectively down-cast to 32-bit precision, and the object&apos;s 32-bit vertex positions are transformed by the matrix.</p>
+<p>We see no jittering, because with RTC a detectable loss of GPU accuracy only starts happening to objects as they become very distant from the camera viewpoint, at which point they are too small to be discernible anyway.</p>
+<h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>rtcCenter</code>.</p>
+<p>For simplicity, our example&apos;s meshes all instance the same geometry. Therefore, our example model has only one RTC center.</p>
+<p>Note that the axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter">Run this example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const rtcCenter = [100000000, 0, 100000000];
+
+performanceModel.createGeometry({
+    id: &quot;box&quot;,
+    rtcCenter: rtcCenter, // This geometry&apos;s positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+});
+
+performanceModel.createMesh({
+    id: &quot;leg1&quot;,
+    geometryId: &quot;box&quot;,
+    position: [-4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1, 0.3, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg1&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg2&quot;,
+    geometryId: &quot;box&quot;,
+    position: [4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 1.0, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg2&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg3&quot;,
+    geometryId: &quot;box&quot;,
+    position: [4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg3&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg4&quot;,
+    geometryId: &quot;box&quot;,
+    position: [-4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1.0, 1.0, 0.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg4&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;top&quot;,
+    geometryId: &quot;box&quot;,
+    position: [0, -3, 0],
+    scale: [6, 0.5, 6],
+    rotation: [0, 0, 0],
+    color: [1.0, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;top&quot;],
+    isObject: true
+});</code>
+</code></pre>
+<h2 id="rtc-coordinates-with-geometry-batching">RTC Coordinates with Geometry Batching</h2><p>To use RTC with <code>PerformanceModel</code> geometry batching, we specify an RTC center (<code>rtcCenter</code>) for each mesh. For performance, we try to have as many meshes share the same value for <code>rtcCenter</code> as possible. Each mesh&apos;s <code>positions</code>, <code>position</code> and <code>rotation</code> properties are assumed to be relative to <code>rtcCenter</code>.</p>
+<p>For simplicity, the meshes in our example all share the same RTC center.</p>
+<p>The axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter">Run this example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const rtcCenter = [100000000, 0, 100000000];
+
+performanceModel.createMesh({
+    id: &quot;leg1&quot;,
+    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [-4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1, 0.3, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg1&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg2&quot;,
+    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 1.0, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg2&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg3&quot;,
+    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg3&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg4&quot;,
+    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [-4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1.0, 1.0, 0.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg4&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;top&quot;,
+    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [0, -3, 0],
+    scale: [6, 0.5, 6],
+    rotation: [0, 0, 0],
+    color: [1.0, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;top&quot;],
+    isObject: true
+});</code>
+</code></pre>
 </div>
   
 
@@ -245,7 +933,7 @@
         
         
         <div data-ice="description"><p>Gets the PerformanceModel&apos;s World-space 3D axis-aligned bounding box.</p>
-<p>Represented by a six-element Float32Array containing the min/max extents of the
+<p>Represented by a six-element Float64Array containing the min/max extents of the
 axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
 </div>
       </div>
@@ -2297,7 +2985,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber834">source</a></span></span>
     </span>
   </h3>
 
@@ -2524,7 +3212,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber795">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1631">source</a></span></span>
     </span>
   </h3>
 
@@ -2532,7 +3220,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
   
   <div data-ice="description"><p>Gets the PerformanceModel&apos;s World-space 3D axis-aligned bounding box.</p>
-<p>Represented by a six-element Float32Array containing the min/max extents of the
+<p>Represented by a six-element Float64Array containing the min/max extents of the
 axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
 </div>
 
@@ -2570,7 +3258,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber728">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1564">source</a></span></span>
     </span>
   </h3>
 
@@ -2615,7 +3303,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber741">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1577">source</a></span></span>
     </span>
   </h3>
 
@@ -2660,7 +3348,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1098">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1934">source</a></span></span>
     </span>
   </h3>
 
@@ -2704,7 +3392,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1947">source</a></span></span>
     </span>
   </h3>
 
@@ -2748,7 +3436,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber973">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1809">source</a></span></span>
     </span>
   </h3>
 
@@ -2793,7 +3481,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber989">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1825">source</a></span></span>
     </span>
   </h3>
 
@@ -2838,7 +3526,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber998">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1834">source</a></span></span>
     </span>
   </h3>
 
@@ -2882,7 +3570,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1011">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1847">source</a></span></span>
     </span>
   </h3>
 
@@ -2926,7 +3614,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1050">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1886">source</a></span></span>
     </span>
   </h3>
 
@@ -2972,7 +3660,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1064">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1900">source</a></span></span>
     </span>
   </h3>
 
@@ -3017,7 +3705,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber946">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1782">source</a></span></span>
     </span>
   </h3>
 
@@ -3062,7 +3750,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber962">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1798">source</a></span></span>
     </span>
   </h3>
 
@@ -3107,7 +3795,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2184">source</a></span></span>
     </span>
   </h3>
 
@@ -3152,7 +3840,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber921">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1757">source</a></span></span>
     </span>
   </h3>
 
@@ -3196,7 +3884,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber935">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1771">source</a></span></span>
     </span>
   </h3>
 
@@ -3240,7 +3928,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber750">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1586">source</a></span></span>
     </span>
   </h3>
 
@@ -3296,7 +3984,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2162">source</a></span></span>
     </span>
   </h3>
 
@@ -3341,7 +4029,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber875">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1711">source</a></span></span>
     </span>
   </h3>
 
@@ -3385,7 +4073,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber889">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1725">source</a></span></span>
     </span>
   </h3>
 
@@ -3429,7 +4117,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1994">source</a></span></span>
     </span>
   </h3>
 
@@ -3473,7 +4161,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber762">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1598">source</a></span></span>
     </span>
   </h3>
 
@@ -3517,7 +4205,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber774">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1610">source</a></span></span>
     </span>
   </h3>
 
@@ -3563,7 +4251,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber783">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1619">source</a></span></span>
     </span>
   </h3>
 
@@ -3607,7 +4295,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber980">source</a></span></span>
     </span>
   </h3>
 
@@ -3651,7 +4339,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1035">source</a></span></span>
     </span>
   </h3>
 
@@ -3696,7 +4384,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber816">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1652">source</a></span></span>
     </span>
   </h3>
 
@@ -3740,7 +4428,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1075">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1911">source</a></span></span>
     </span>
   </h3>
 
@@ -3785,7 +4473,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1089">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1925">source</a></span></span>
     </span>
   </h3>
 
@@ -3830,7 +4518,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1022">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1858">source</a></span></span>
     </span>
   </h3>
 
@@ -3875,7 +4563,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1037">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1873">source</a></span></span>
     </span>
   </h3>
 
@@ -3920,7 +4608,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber991">source</a></span></span>
     </span>
   </h3>
 
@@ -3965,7 +4653,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1013">source</a></span></span>
     </span>
   </h3>
 
@@ -4010,7 +4698,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1956">source</a></span></span>
     </span>
   </h3>
 
@@ -4054,7 +4742,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1969">source</a></span></span>
     </span>
   </h3>
 
@@ -4098,7 +4786,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1002">source</a></span></span>
     </span>
   </h3>
 
@@ -4143,7 +4831,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1981">source</a></span></span>
     </span>
   </h3>
 
@@ -4188,7 +4876,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1024">source</a></span></span>
     </span>
   </h3>
 
@@ -4233,7 +4921,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber898">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1734">source</a></span></span>
     </span>
   </h3>
 
@@ -4277,7 +4965,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber912">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1748">source</a></span></span>
     </span>
   </h3>
 
@@ -4321,7 +5009,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2173">source</a></span></span>
     </span>
   </h3>
 
@@ -4366,7 +5054,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber827">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1663">source</a></span></span>
     </span>
   </h3>
 
@@ -4412,7 +5100,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber843">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1679">source</a></span></span>
     </span>
   </h3>
 
@@ -4457,7 +5145,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1045">source</a></span></span>
     </span>
   </h3>
 
@@ -4517,7 +5205,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1054">source</a></span></span>
     </span>
   </h3>
 
@@ -4561,7 +5249,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2151">source</a></span></span>
     </span>
   </h3>
 
@@ -4606,7 +5294,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber852">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1688">source</a></span></span>
     </span>
   </h3>
 
@@ -4650,7 +5338,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber866">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1702">source</a></span></span>
     </span>
   </h3>
 
@@ -4697,7 +5385,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber611">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1425">source</a></span></span>
     </span>
   </h3>
 
@@ -4880,7 +5568,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1130">source</a></span></span>
     </span>
   </h3>
 
@@ -4962,6 +5650,13 @@ quantized and in World-space, and <code>normals</code> will be oct-encoded and i
       <td data-ice="description"><p>A 4x4 matrix for decompressing <code>positions</code>.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.rtcCenter</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Relative-to-center (RTC) coordinate system center. When this is given, then <code>positions</code> are assumed to be relative to this center.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -4996,7 +5691,7 @@ quantized and in World-space, and <code>normals</code> will be oct-encoded and i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1201">source</a></span></span>
     </span>
   </h3>
 
@@ -5013,9 +5708,13 @@ rendering performance.</p>
 <p>If you accompany the arrays with a  <code>positionsDecodeMatrix</code> , then <code>createMesh()</code> will assume
 that the <code>positions</code> and <code>normals</code> arrays are compressed. When compressed, <code>positions</code> will be
 quantized and in World-space, and <code>normals</code> will be oct-encoded and in World-space.</p>
-<p>When creating compressed batches, <code>createMesh()</code> will start a new batch each time <code>positionsDecodeMatrix</code>
-changes. Therefore, to combine arrays into the minimum number of batches, it&apos;s best for performance to create
-your shared meshes in runs that have the value for <code>positionsDecodeMatrix</code>.</p>
+<p>If you accompany the arrays with an  <code>rtcCenter</code>, then <code>createMesh()</code> will assume
+that the <code>positions</code> are in relative-to-center (RTC) coordinates, with <code>rtcCenter</code> being the origin of their
+RTC coordinate system.</p>
+<p>When providing either <code>positionsDecodeMatrix</code> or <code>rtcCenter</code>, <code>createMesh()</code> will start a new
+batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
+minimum number of batches, it&apos;s best for performance to create your shared meshes in runs that have the same value
+for <code>positionsDecodeMatrix</code> and <code>rtcCenter</code>.</p>
 <p>Note that <code>positions</code>, <code>normals</code> and <code>indices</code> are all required together.</p>
 </div>
 
@@ -5077,6 +5776,13 @@ your shared meshes in runs that have the value for <code>positionsDecodeMatrix</
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>A 4x4 matrix for decompressing <code>positions</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.rtcCenter</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Relative-to-center (RTC) coordinate system center. When this is given, then <code>positions</code> are assumed to be relative to this center.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -5189,7 +5895,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1565">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2499">source</a></span></span>
     </span>
   </h3>
 
@@ -5233,7 +5939,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber699">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1513">source</a></span></span>
     </span>
   </h3>
 

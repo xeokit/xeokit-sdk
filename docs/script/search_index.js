@@ -330,9 +330,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusiontester.js~occlusiontester",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html",
-    "<span>OcclusionTester</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/OcclusionTester.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html",
+    "<span>OcclusionLayer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/OcclusionLayer.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html",
+    "<span>OcclusionTester</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/OcclusionTester.js</span>",
     "class"
   ],
   [
@@ -606,6 +612,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~getplanertcpos",
+    "function/index.html#static-function-getPlaneRTCPos",
+    "<span>getPlaneRTCPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
     "function/index.html#static-function-load3DSGeometry",
     "<span>load3DSGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</span>",
@@ -615,6 +627,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~worldtortcpos",
+    "function/index.html#static-function-worldToRTCPos",
+    "<span>worldToRTCPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
     "function"
   ],
   [
@@ -942,6 +960,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/extras/contextmenu/contextmenu.js~contextmenu#fire",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-fire",
+    "src/extras/ContextMenu/ContextMenu.js~ContextMenu#fire",
+    "method"
+  ],
+  [
     "src/extras/contextmenu/contextmenu.js~contextmenu#hide",
     "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-hide",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#hide",
@@ -958,6 +982,12 @@ window.esdocSearchIndex = [
     "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-get-items",
     "src/extras/ContextMenu/ContextMenu.js~ContextMenu#items",
     "member"
+  ],
+  [
+    "src/extras/contextmenu/contextmenu.js~contextmenu#on",
+    "class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-method-on",
+    "src/extras/ContextMenu/ContextMenu.js~ContextMenu#on",
+    "method"
   ],
   [
     "src/extras/contextmenu/contextmenu.js~contextmenu#show",
@@ -2844,12 +2874,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/viewcullplugin/frustum.js",
-    "file/src/plugins/ViewCullPlugin/Frustum.js.html",
-    "src/plugins/ViewCullPlugin/Frustum.js",
-    "file"
-  ],
-  [
     "src/plugins/viewcullplugin/viewcullplugin.js",
     "file/src/plugins/ViewCullPlugin/ViewCullPlugin.js.html",
     "src/plugins/ViewCullPlugin/ViewCullPlugin.js",
@@ -2952,6 +2976,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#globalizeobjectids",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#globalizeobjectids",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#includetypes",
     "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-includeTypes",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#includeTypes",
@@ -2988,12 +3024,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/xktloaderplugin/lib/pako.js",
-    "file/src/plugins/XKTLoaderPlugin/lib/pako.js.html",
-    "src/plugins/XKTLoaderPlugin/lib/pako.js",
-    "file"
-  ],
-  [
     "src/plugins/xktloaderplugin/parsers/parserv1.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/ParserV1.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js",
@@ -3021,6 +3051,12 @@ window.esdocSearchIndex = [
     "src/plugins/xktloaderplugin/parsers/parserv5.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/ParserV5.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/ParserV5.js",
+    "file"
+  ],
+  [
+    "src/plugins/xktloaderplugin/parsers/parserv6.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV6.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV6.js",
     "file"
   ],
   [
@@ -3381,6 +3417,12 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/metaobject.js~metaobject#name",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-name",
     "src/viewer/metadata/MetaObject.js~MetaObject#name",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#originalsystemid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-originalSystemId",
+    "src/viewer/metadata/MetaObject.js~MetaObject#originalSystemId",
     "member"
   ],
   [
@@ -4251,6 +4293,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/entity.js~entity#opacity",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-get-opacity",
     "src/viewer/scene/Entity.js~Entity#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/entity.js~entity#originalsystemid",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-get-originalSystemId",
+    "src/viewer/scene/Entity.js~Entity#originalSystemId",
     "member"
   ],
   [
@@ -7236,6 +7284,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/marker/marker.js~marker#rtccenter",
+    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-rtcCenter",
+    "src/viewer/scene/marker/Marker.js~Marker#rtcCenter",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/marker.js~marker#rtcpos",
+    "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-rtcPos",
+    "src/viewer/scene/marker/Marker.js~Marker#rtcPos",
+    "member"
+  ],
+  [
     "src/viewer/scene/marker/marker.js~marker#viewpos",
     "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-viewPos",
     "src/viewer/scene/marker/Marker.js~Marker#viewPos",
@@ -8478,6 +8538,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/math/frustum.js",
+    "file/src/viewer/scene/math/Frustum.js.html",
+    "src/viewer/scene/math/Frustum.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/math/buildedgeindices.js",
     "file/src/viewer/scene/math/buildEdgeIndices.js.html",
     "src/viewer/scene/math/buildEdgeIndices.js",
@@ -8493,6 +8559,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/math/math.js",
     "file/src/viewer/scene/math/math.js.html",
     "src/viewer/scene/math/math.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/rtccoords.js",
+    "file/src/viewer/scene/math/rtcCoords.js.html",
+    "src/viewer/scene/math/rtcCoords.js",
     "file"
   ],
   [
@@ -8682,12 +8754,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/mesh/mesh.js~mesh#getrenderflags",
-    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-method-getRenderFlags",
-    "src/viewer/scene/mesh/Mesh.js~Mesh#getRenderFlags",
-    "method"
-  ],
-  [
     "src/viewer/scene/mesh/mesh.js~mesh#highlightmaterial",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-highlightMaterial",
     "src/viewer/scene/mesh/Mesh.js~Mesh#highlightMaterial",
@@ -8802,6 +8868,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/mesh/mesh.js~mesh#originalsystemid",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-member-originalSystemId",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#originalSystemId",
+    "member"
+  ],
+  [
     "src/viewer/scene/mesh/mesh.js~mesh#parent",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-parent",
     "src/viewer/scene/mesh/Mesh.js~Mesh#parent",
@@ -8895,6 +8967,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/mesh/mesh.js~mesh#rotation",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-rotation",
     "src/viewer/scene/mesh/Mesh.js~Mesh#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#rtccenter",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-rtcCenter",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#rtcCenter",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#rtccenter",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-rtcCenter",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#rtcCenter",
     "member"
   ],
   [
@@ -9016,18 +9100,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayed",
     "src/viewer/scene/mesh/Mesh.js~Mesh#xrayed",
     "member"
-  ],
-  [
-    "src/viewer/scene/mesh/depth/depthrenderer.js",
-    "file/src/viewer/scene/mesh/depth/DepthRenderer.js.html",
-    "src/viewer/scene/mesh/depth/DepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/mesh/depth/depthshadersource.js",
-    "file/src/viewer/scene/mesh/depth/DepthShaderSource.js.html",
-    "src/viewer/scene/mesh/depth/DepthShaderSource.js",
-    "file"
   ],
   [
     "src/viewer/scene/mesh/draw/drawrenderer.js",
@@ -9477,6 +9549,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/nodes/node.js~node#rotation",
     "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-rotation",
     "src/viewer/scene/nodes/Node.js~Node#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#rtccenter",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-set-rtcCenter",
+    "src/viewer/scene/nodes/Node.js~Node#rtcCenter",
+    "member"
+  ],
+  [
+    "src/viewer/scene/nodes/node.js~node#rtccenter",
+    "class/src/viewer/scene/nodes/Node.js~Node.html#instance-get-rtcCenter",
+    "src/viewer/scene/nodes/Node.js~Node#rtcCenter",
     "member"
   ],
   [
@@ -10494,6 +10578,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#withobjects",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-withObjects",
+    "src/viewer/scene/scene/Scene.js~Scene#withObjects",
+    "method"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#xraymaterial",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial",
     "src/viewer/scene/scene/Scene.js~Scene#xrayMaterial",
@@ -10551,6 +10641,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#dir",
     "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-dir",
     "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#dir",
+    "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplane.js~sectionplane#dist",
+    "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-dist",
+    "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#dist",
     "member"
   ],
   [
@@ -10684,72 +10780,6 @@ window.esdocSearchIndex = [
     "file/src/viewer/scene/webgl/FrameContext.js.html",
     "src/viewer/scene/webgl/FrameContext.js",
     "file"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js",
-    "file/src/viewer/scene/webgl/OcclusionTester.js.html",
-    "src/viewer/scene/webgl/OcclusionTester.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#addmarker",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-addMarker",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#addMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#bindrenderbuf",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-bindRenderBuf",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#bindRenderBuf",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#constructor",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-constructor-constructor",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#destroy",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-destroy",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#doocclusiontest",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-doOcclusionTest",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#doOcclusionTest",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#drawmarkers",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-drawMarkers",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#drawMarkers",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#errors",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-member-errors",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#errors",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#markerworldposupdated",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-markerWorldPosUpdated",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#markerWorldPosUpdated",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#removemarker",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-removeMarker",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#removeMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusiontester.js~occlusiontester#unbindrenderbuf",
-    "class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html#instance-method-unbindRenderBuf",
-    "src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester#unbindRenderBuf",
-    "method"
   ],
   [
     "src/viewer/scene/webgl/pickresult.js",
@@ -10888,6 +10918,264 @@ window.esdocSearchIndex = [
     "file/src/viewer/scene/webgl/Texture2D.js.html",
     "src/viewer/scene/webgl/Texture2D.js",
     "file"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js",
+    "file/src/viewer/scene/webgl/occlusion/OcclusionLayer.js.html",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#aabb",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-aabb",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#aabb",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#aabbdirty",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-aabbDirty",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#aabbDirty",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#addmarker",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-addMarker",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#addMarker",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#constructor",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-constructor-constructor",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#culledbysectionplanes",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-culledBySectionPlanes",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#culledBySectionPlanes",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#destroy",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-destroy",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#indices",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-indices",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#indices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#indicesbuf",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-indicesBuf",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#indicesBuf",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#lenocclusiontestlist",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-lenOcclusionTestList",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#lenOcclusionTestList",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#lenpositionsbuf",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-lenPositionsBuf",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#lenPositionsBuf",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerindices",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerIndices",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerIndices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerlist",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerList",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerList",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerlistdirty",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerListDirty",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerListDirty",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerworldposupdated",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-markerWorldPosUpdated",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerWorldPosUpdated",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markers",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markers",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markers",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#nummarkers",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-numMarkers",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#numMarkers",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#occlusiontestlist",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-occlusionTestList",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#occlusionTestList",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#occlusiontestlistdirty",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-occlusionTestListDirty",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#occlusionTestListDirty",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#pixels",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-pixels",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#pixels",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positions",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positions",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positions",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positionsbuf",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positionsBuf",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positionsBuf",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positionsdirty",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positionsDirty",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positionsDirty",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#removemarker",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-removeMarker",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#removeMarker",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#rtccenter",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-rtcCenter",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#rtcCenter",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#rtccenterhash",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-rtcCenterHash",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#rtcCenterHash",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#scene",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-scene",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#scene",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#sectionplanesactive",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-sectionPlanesActive",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#sectionPlanesActive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#update",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-update",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#update",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#vbosdirty",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-vbosDirty",
+    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#vbosDirty",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js",
+    "file/src/viewer/scene/webgl/occlusion/OcclusionTester.js.html",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#addmarker",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-addMarker",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#addMarker",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#bindrenderbuf",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-bindRenderBuf",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#bindRenderBuf",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#constructor",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-constructor-constructor",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#destroy",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-destroy",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#destroyed",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-member-destroyed",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#destroyed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#doocclusiontest",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-doOcclusionTest",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#doOcclusionTest",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#drawmarkers",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-drawMarkers",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#drawMarkers",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#errors",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-member-errors",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#errors",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#markerworldposupdated",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-markerWorldPosUpdated",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#markerWorldPosUpdated",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#needocclusiontest",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-get-needOcclusionTest",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#needOcclusionTest",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#removemarker",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-removeMarker",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#removeMarker",
+    "method"
+  ],
+  [
+    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#unbindrenderbuf",
+    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-unbindRenderBuf",
+    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#unbindRenderBuf",
+    "method"
   ],
   [
     "src/viewer/scene/webgl/sao/saoblendrenderer.js",

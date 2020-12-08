@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1902,
+  "end": 2205,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 59,
+      "line": 69,
       "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1902,
+    "end": 2205,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 59,
+        "line": 69,
         "column": 18
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 1882,
+        "end": 2185,
         "loc": {
           "start": {
             "line": 8,
             "column": 0
           },
           "end": {
-            "line": 57,
+            "line": 67,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 1882,
+          "end": 2185,
           "loc": {
             "start": {
               "line": 8,
               "column": 15
             },
             "end": {
-              "line": 57,
+              "line": 67,
               "column": 1
             }
           },
@@ -156,7 +156,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+                  "value": "*\n     * Picks a triangle on this Pickable.\n     ",
                   "start": 262,
                   "end": 315,
                   "loc": {
@@ -252,7 +252,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+                  "value": "*\n     * Picks a triangle on this Pickable.\n     ",
                   "start": 262,
                   "end": 315,
                   "loc": {
@@ -270,7 +270,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
                   "start": 361,
                   "end": 1262,
                   "loc": {
@@ -366,7 +366,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
                   "start": 361,
                   "end": 1262,
                   "loc": {
@@ -384,7 +384,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+                  "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
                   "start": 1312,
                   "end": 1493,
                   "loc": {
@@ -462,7 +462,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+                  "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
                   "start": 1312,
                   "end": 1493,
                   "loc": {
@@ -480,7 +480,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
                   "start": 1529,
                   "end": 1626,
                   "loc": {
@@ -576,7 +576,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+                  "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
                   "start": 1529,
                   "end": 1626,
                   "loc": {
@@ -729,7 +729,8 @@
                     }
                   }
                 ],
-                "directives": []
+                "directives": [],
+                "trailingComments": null
               },
               "leadingComments": [
                 {
@@ -748,6 +749,99 @@
                     }
                   }
                 }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+                  "start": 1886,
+                  "end": 2155,
+                  "loc": {
+                    "start": {
+                      "line": 58,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 2160,
+              "end": 2183,
+              "loc": {
+                "start": {
+                  "line": 65,
+                  "column": 4
+                },
+                "end": {
+                  "line": 66,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 2164,
+                "end": 2173,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 65,
+                    "column": 17
+                  },
+                  "identifierName": "rtcCenter"
+                },
+                "name": "rtcCenter"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 2176,
+                "end": 2183,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 66,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+                  "start": 1886,
+                  "end": 2155,
+                  "loc": {
+                    "start": {
+                      "line": 58,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
               ]
             }
           ]
@@ -758,15 +852,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1884,
-        "end": 1902,
+        "start": 2187,
+        "end": 2205,
         "loc": {
           "start": {
-            "line": 59,
+            "line": 69,
             "column": 0
           },
           "end": {
-            "line": 59,
+            "line": 69,
             "column": 18
           }
         },
@@ -774,29 +868,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1892,
-            "end": 1900,
+            "start": 2195,
+            "end": 2203,
             "loc": {
               "start": {
-                "line": 59,
+                "line": 69,
                 "column": 8
               },
               "end": {
-                "line": 59,
+                "line": 69,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1892,
-              "end": 1900,
+              "start": 2195,
+              "end": 2203,
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 69,
                   "column": 8
                 },
                 "end": {
-                  "line": 59,
+                  "line": 69,
                   "column": 16
                 },
                 "identifierName": "Pickable"
@@ -805,15 +899,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1892,
-              "end": 1900,
+              "start": 2195,
+              "end": 2203,
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 69,
                   "column": 8
                 },
                 "end": {
-                  "line": 59,
+                  "line": 69,
                   "column": 16
                 },
                 "identifierName": "Pickable"
@@ -826,29 +920,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1884,
-        "end": 1902,
+        "start": 2187,
+        "end": 2205,
         "loc": {
           "start": {
-            "line": 59,
+            "line": 69,
             "column": 0
           },
           "end": {
-            "line": 59,
+            "line": 69,
             "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 1882,
+          "end": 2185,
           "loc": {
             "start": {
               "line": 8,
               "column": 0
             },
             "end": {
-              "line": 57,
+              "line": 67,
               "column": 1
             }
           },
@@ -874,14 +968,14 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 1882,
+            "end": 2185,
             "loc": {
               "start": {
                 "line": 8,
                 "column": 15
               },
               "end": {
-                "line": 57,
+                "line": 67,
                 "column": 1
               }
             },
@@ -966,7 +1060,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+                    "value": "*\n     * Picks a triangle on this Pickable.\n     ",
                     "start": 262,
                     "end": 315,
                     "loc": {
@@ -1062,7 +1156,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+                    "value": "*\n     * Picks a triangle on this Pickable.\n     ",
                     "start": 262,
                     "end": 315,
                     "loc": {
@@ -1080,7 +1174,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
                     "start": 361,
                     "end": 1262,
                     "loc": {
@@ -1176,7 +1270,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
                     "start": 361,
                     "end": 1262,
                     "loc": {
@@ -1194,7 +1288,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+                    "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
                     "start": 1312,
                     "end": 1493,
                     "loc": {
@@ -1272,7 +1366,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+                    "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
                     "start": 1312,
                     "end": 1493,
                     "loc": {
@@ -1290,7 +1384,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
                     "start": 1529,
                     "end": 1626,
                     "loc": {
@@ -1386,7 +1480,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+                    "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
                     "start": 1529,
                     "end": 1626,
                     "loc": {
@@ -1539,7 +1633,8 @@
                       }
                     }
                   ],
-                  "directives": []
+                  "directives": [],
+                  "trailingComments": null
                 },
                 "leadingComments": [
                   {
@@ -1554,6 +1649,99 @@
                       },
                       "end": {
                         "line": 53,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+                    "start": 1886,
+                    "end": 2155,
+                    "loc": {
+                      "start": {
+                        "line": 58,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 64,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 2160,
+                "end": 2183,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 66,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 2164,
+                  "end": 2173,
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 17
+                    },
+                    "identifierName": "rtcCenter"
+                  },
+                  "name": "rtcCenter"
+                },
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 2176,
+                  "end": 2183,
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 66,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+                    "start": 1886,
+                    "end": 2155,
+                    "loc": {
+                      "start": {
+                        "line": 58,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 64,
                         "column": 7
                       }
                     }
@@ -1625,7 +1813,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+      "value": "*\n     * Picks a triangle on this Pickable.\n     ",
       "start": 262,
       "end": 315,
       "loc": {
@@ -1641,7 +1829,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
       "start": 361,
       "end": 1262,
       "loc": {
@@ -1657,7 +1845,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+      "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
       "start": 1312,
       "end": 1493,
       "loc": {
@@ -1673,7 +1861,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
       "start": 1529,
       "end": 1626,
       "loc": {
@@ -1699,6 +1887,22 @@
         },
         "end": {
           "line": 53,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+      "start": 1886,
+      "end": 2155,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 4
+        },
+        "end": {
+          "line": 64,
           "column": 7
         }
       }
@@ -1944,7 +2148,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Picks a triangle on this Drawable.\n     ",
+      "value": "*\n     * Picks a triangle on this Pickable.\n     ",
       "start": 262,
       "end": 315,
       "loc": {
@@ -2112,7 +2316,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
+      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
       "start": 361,
       "end": 1262,
       "loc": {
@@ -2280,7 +2484,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Drawable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
+      "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
       "start": 1312,
       "end": 1493,
       "loc": {
@@ -2422,7 +2626,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders color-encoded fragment depths of this Drawable.\n     * @param frameCtx\n     ",
+      "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
       "start": 1529,
       "end": 1626,
       "loc": {
@@ -2865,6 +3069,149 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
+      "start": 1886,
+      "end": 2155,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 4
+        },
+        "end": {
+          "line": 64,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 2160,
+      "end": 2163,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 4
+        },
+        "end": {
+          "line": 65,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "rtcCenter",
+      "start": 2164,
+      "end": 2173,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 8
+        },
+        "end": {
+          "line": 65,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2173,
+      "end": 2174,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 17
+        },
+        "end": {
+          "line": 65,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2174,
+      "end": 2175,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 18
+        },
+        "end": {
+          "line": 65,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2176,
+      "end": 2177,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 20
+        },
+        "end": {
+          "line": 65,
+          "column": 21
+        }
+      }
+    },
+    {
       "type": {
         "label": "}",
         "beforeExpr": false,
@@ -2876,15 +3223,40 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1881,
-      "end": 1882,
+      "start": 2182,
+      "end": 2183,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 66,
+          "column": 4
+        },
+        "end": {
+          "line": 66,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2184,
+      "end": 2185,
+      "loc": {
+        "start": {
+          "line": 67,
           "column": 0
         },
         "end": {
-          "line": 57,
+          "line": 67,
           "column": 1
         }
       }
@@ -2904,15 +3276,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1884,
-      "end": 1890,
+      "start": 2187,
+      "end": 2193,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 0
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 6
         }
       }
@@ -2929,15 +3301,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1891,
-      "end": 1892,
+      "start": 2194,
+      "end": 2195,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 7
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 8
         }
       }
@@ -2955,15 +3327,15 @@
         "binop": null
       },
       "value": "Pickable",
-      "start": 1892,
-      "end": 1900,
+      "start": 2195,
+      "end": 2203,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 8
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 16
         }
       }
@@ -2980,15 +3352,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1900,
-      "end": 1901,
+      "start": 2203,
+      "end": 2204,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 16
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 17
         }
       }
@@ -3006,15 +3378,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1901,
-      "end": 1902,
+      "start": 2204,
+      "end": 2205,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 17
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 18
         }
       }
@@ -3032,15 +3404,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1902,
-      "end": 1902,
+      "start": 2205,
+      "end": 2205,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 69,
           "column": 18
         },
         "end": {
-          "line": 59,
+          "line": 69,
           "column": 18
         }
       }

@@ -114,6 +114,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -130,8 +132,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -141,7 +144,6 @@
 
 import {buildCylinderGeometry} from &quot;../../viewer/scene/geometry/builders/buildCylinderGeometry.js&quot;;
 import {buildTorusGeometry} from &quot;../../viewer/scene/geometry/builders/buildTorusGeometry.js&quot;;
-import {buildBoxGeometry} from &quot;../../viewer/scene/geometry/builders/buildBoxGeometry.js&quot;;
 
 import {ReadableGeometry} from &quot;../../viewer/scene/geometry/ReadableGeometry.js&quot;;
 import {PhongMaterial} from &quot;../../viewer/scene/materials/PhongMaterial.js&quot;;
@@ -149,9 +151,10 @@ import {EmphasisMaterial} from &quot;../../viewer/scene/materials/EmphasisMateri
 import {Node} from &quot;../../viewer/scene/nodes/Node.js&quot;;
 import {Mesh} from &quot;../../viewer/scene/mesh/Mesh.js&quot;;
 import {buildSphereGeometry} from &quot;../../viewer/scene/geometry/builders/buildSphereGeometry.js&quot;;
+import {worldToRTCPos} from &quot;../../viewer/scene/math/rtcCoords.js&quot;;
 
-const zeroVec = new Float32Array([0, 0, 1]);
-const quat = new Float32Array(4);
+const zeroVec = new Float64Array([0, 0, 1]);
+const quat = new Float64Array(4);
 
 /**
  * Controls a {@link SectionPlane} with mouse and touch input.
@@ -176,11 +179,16 @@ class Control {
         this._viewer = plugin.viewer;
 
         this._visible = false;
-        this._pos = math.vec3(); // Holds the current position of the center of the clip plane.
+        this._pos = math.vec3(); // Full-precision position of the center of the Control
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
+
         this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
         this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
         this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
+
+        this._ignoreNextSectionPlaneDirUpdate = false;
 
         this._createNodes();
         this._bindEvents();
@@ -189,14 +197,32 @@ class Control {
     /**
      * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
      * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
+     * Call with a null or undefined value to disconnect the Control ffrom whatever SectionPlane it was assigned to.
      * @private
      */
     _setSectionPlane(sectionPlane) {
-        this._sectionPlane = sectionPlane;
+        if (this._sectionPlane) {
+            this._sectionPlane.off(this._onSectionPlanePos);
+            this._sectionPlane.off(this._onSectionPlaneDir);
+            this._onSectionPlanePos = null;
+            this._onSectionPlaneDir = null;
+            this._sectionPlane = null;
+        }
         if (sectionPlane) {
             this.id = sectionPlane.id;
             this._setPos(sectionPlane.pos);
             this._setDir(sectionPlane.dir);
+            this._sectionPlane = sectionPlane;
+            this._onSectionPlanePos = sectionPlane.on(&quot;pos&quot;, () =&gt; {
+                this._setPos(this._sectionPlane.pos);
+            });
+            this._onSectionPlaneDir = sectionPlane.on(&quot;dir&quot;, () =&gt; {
+                if (!this._ignoreNextSectionPlaneDirUpdate) {
+                    this._setDir(this._sectionPlane.dir);
+                } else {
+                    this._ignoreNextSectionPlaneDirUpdate = false;
+                }
+            });
         }
     }
 
@@ -210,14 +236,26 @@ class Control {
 
     /** @private */
     _setPos(xyz) {
+
         this._pos.set(xyz);
-        this._rootNode.position = xyz;
+
+        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
+
+        this._rootNode.rtcCenter = this._rtcCenter;
+        this._rootNode.position = this._rtcPos;
     }
 
     /** @private */
     _setDir(xyz) {
         this._baseDir.set(xyz);
         this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
+    }
+
+    _setSectionPlaneDir(dir) {
+        if (this._sectionPlane) {
+            this._ignoreNextSectionPlaneDirUpdate = true;
+            this._sectionPlane.dir = dir;
+        }
     }
 
     /**
@@ -910,7 +948,7 @@ class Control {
                 rotation: [0, 0, 45]
             }), NO_STATE_INHERIT),
 
-            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full 
+            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full
                 geometry: shapes.hoop,
                 material: materials.red,
                 highlighted: true,
@@ -1038,7 +1076,7 @@ class Control {
             this._onSceneTick = scene.on(&quot;tick&quot;, () =&gt; {
                 var dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, rootNode.position, tempVec3a)));
                 if (dist !== lastDist) {
-                    var scale = 10 * (dist / 50);
+                    const scale = 10 * (dist / 50);
                     rootNode.scale = [scale, scale, scale];
                     lastDist = dist;
                 }
@@ -1046,7 +1084,7 @@ class Control {
         }
 
         const getClickCoordsWithinElement = (function () {
-            const canvasPos = new Float32Array(2);
+            const canvasPos = new Float64Array(2);
             return function (event) {
                 if (!event) {
                     event = window.event;
@@ -1109,8 +1147,8 @@ class Control {
                 self._pos[1] += worldAxis[1] * dot;
                 self._pos[2] += worldAxis[2] * dot;
                 self._rootNode.position = self._pos;
-                if (self.sectionPlane) {
-                    self.sectionPlane.pos = self._pos;
+                if (self._sectionPlane) {
+                    self._sectionPlane.pos = self._pos;
                 }
             }
         })();
@@ -1186,7 +1224,7 @@ class Control {
                 if (self.sectionPlane) {
                     math.quaternionToMat4(rootNode.quaternion, mat);  // &lt;&lt; ---
                     math.transformVec3(mat, [0, 0, 1], dir);
-                    self._sectionPlane.dir = dir;
+                    self._setSectionPlaneDir(dir);
                 }
             };
         })();
@@ -1405,6 +1443,7 @@ class Control {
     }
 
     _destroyNodes() {
+        this._setSectionPlane(null);
         this._rootNode.destroy();
         this._displayMeshes = {};
         this._affordanceMeshes = {};
