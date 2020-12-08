@@ -944,6 +944,8 @@ class PerformanceModel extends Component {
         this._worldMatrix = math.mat4();
         math.composeMat4(this._position, this._quaternion, this._scale, this._worldMatrix);
         this._worldNormalMatrix = math.mat4();
+        math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
+        math.transposeMat4(this._worldNormalMatrix);
 
         if (cfg.matrix || cfg.position || cfg.rotation || cfg.scale || cfg.quaternion) {
             this._viewMatrix = math.mat4();
@@ -2090,7 +2092,7 @@ class PerformanceModel extends Component {
         if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
             if (edgeMaterial.edges) {
-                if (edgeMaterial.alpha < 1.0) {
+                if (edgeMaterial.edgeAlpha < 1.0) {
                     renderFlags.normalEdgesTransparent = true;
                 } else {
                     renderFlags.normalEdgesOpaque = true;

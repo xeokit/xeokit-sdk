@@ -194,6 +194,7 @@ class Mesh extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {String} [cfg.originalSystemId] ID of the corresponding object within the originating system, if any.
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
@@ -227,6 +228,14 @@ class Mesh extends Component {
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        /**
+         * ID of the corresponding object within the originating system, if any.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = (cfg.originalSystemId || this.id);
 
         /** @private **/
         this.renderFlags = new RenderFlags();

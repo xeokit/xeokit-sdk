@@ -373,13 +373,18 @@ class BCFViewpointsPlugin extends Plugin {
         const xrayedObjectIds = new Set(scene.xrayedObjectIds);
         const colorizedObjectIds = new Set(scene.colorizedObjectIds);
 
-        const coloring = Object.values(scene.objects)
-            .filter(object => opacityObjectIds.has(object.id) || colorizedObjectIds.has(object.id) || xrayedObjectIds.has(object.id))
-            .reduce((coloring, object) => {
-                let color = colorizeToRGB(object.colorize);
+        let authoringComponentsCreated = false;
+        const originalSystemIdMap = {};
+        const originalSystemColoringMap = {};
+
+        const authoringSystemColoringMap = Object.values(scene.objects)
+            .filter(entity => opacityObjectIds.has(entity.id) || colorizedObjectIds.has(entity.id) || xrayedObjectIds.has(entity.id))
+            .reduce((authoringSystemColoringMap, entity) => {
+
+                let color = colorizeToRGB(entity.colorize);
                 let alpha;
 
-                if (object.xrayed) {
+                if (entity.xrayed) {
                     if (scene.xrayMaterial.fillAlpha === 0.0 && scene.xrayMaterial.edgeAlpha !== 0.0) {
                         // BCF can't deal with edges. If xRay is implemented only with edges, set an arbitrary opacity
                         alpha = 0.1;
@@ -388,22 +393,46 @@ class BCFViewpointsPlugin extends Plugin {
                     }
                     alpha = Math.round(alpha * 255).toString(16).padStart(2, "0");
                     color = alpha + color;
-                } else if (opacityObjectIds.has(object.id)) {
-                    alpha = Math.round(object.opacity * 255).toString(16).padStart(2, "0");
+                } else if (opacityObjectIds.has(entity.id)) {
+                    alpha = Math.round(entity.opacity * 255).toString(16).padStart(2, "0");
                     color = alpha + color;
                 }
 
-                if (!coloring[color]) {
-                    coloring[color] = [];
+                if (!authoringSystemColoringMap[color]) {
+                    authoringSystemColoringMap[color] = [];
                 }
-                coloring[color].push({
-                    ifc_guid: object.id,
-                    originating_system: this.originatingSystem
-                });
-                return coloring;
+
+                if (!originalSystemColoringMap[color]) {
+                    originalSystemColoringMap[color] = [];
+                }
+
+                const objectId = entity.id;
+                const originalSystemId = entity.originalSystemId;
+
+                if (objectId !== originalSystemId) {
+                    authoringSystemColoringMap[color].push({
+                        authoring_tool_id: objectId,
+                        originating_system: this.originatingSystem
+                    });
+                    authoringComponentsCreated = true;
+                }
+
+                if ((!authoringComponentsCreated) && (originalSystemIdMap[originalSystemId] === undefined)) {
+                    originalSystemIdMap[originalSystemId] = originalSystemId;
+                    originalSystemColoringMap[color].push({
+                        ifc_guid: originalSystemId,
+                        originating_system: this.originatingSystem
+                    });
+                }
+
+                return authoringSystemColoringMap;
+
             }, {});
 
-        const coloringArray = Object.entries(coloring).map(([color, components]) => { return { color, components } });
+        const coloringMap  = authoringComponentsCreated ? authoringSystemColoringMap : originalSystemColoringMap;
+        const coloringArray = Object.entries(coloringMap).map(([color, components]) => {
+            return {color, components};
+        });
 
         bcfViewpoint.components.coloring = coloringArray;
 
@@ -414,14 +443,14 @@ class BCFViewpointsPlugin extends Plugin {
         const selectedObjectIds = scene.selectedObjectIds;
 
         if (options.defaultInvisible || visibleObjectIds.length < invisibleObjectIds.length) {
-            bcfViewpoint.components.visibility.exceptions = visibleObjectIds.map(el => this._objectIdToComponent(el));
+            bcfViewpoint.components.visibility.exceptions = this._createBCFComponents(visibleObjectIds);
             bcfViewpoint.components.visibility.default_visibility = false;
         } else {
-            bcfViewpoint.components.visibility.exceptions = invisibleObjectIds.map(el => this._objectIdToComponent(el));
+            bcfViewpoint.components.visibility.exceptions = this._createBCFComponents(invisibleObjectIds);
             bcfViewpoint.components.visibility.default_visibility = true;
         }
 
-        bcfViewpoint.components.selection = selectedObjectIds.map(el => this._objectIdToComponent(el));
+        bcfViewpoint.components.selection = this._createBCFComponents(selectedObjectIds);
 
         if (options.snapshot !== false) {
             bcfViewpoint.snapshot = {
@@ -433,12 +462,32 @@ class BCFViewpointsPlugin extends Plugin {
         return bcfViewpoint;
     }
 
-    _objectIdToComponent(objectId) {
-        return {
-            ifc_guid: objectId,
-            originating_system: this.originatingSystem,
-            authoring_tool_id: this.authoringTool
-        };
+    _createBCFComponents(objectIds) {
+        const scene = this.viewer.scene;
+        const originalSystemIdMap = {};
+        const authoringComponents = [];
+        const ifcComponents = [];
+        for (let i = 0, len = objectIds.length; i < len; i++) {
+            const objectId = objectIds[i];
+            const entity = scene.objects[objectId];
+            if (entity) {
+                const originalSystemId = entity.originalSystemId;
+                if (objectId !== originalSystemId) {
+                    authoringComponents.push({
+                        authoring_tool_id: objectId,
+                        originating_system: this.originatingSystem
+                    });
+                }
+                if (authoringComponents.length === 0 && originalSystemIdMap[originalSystemId] === undefined) {
+                    originalSystemIdMap[originalSystemId] = originalSystemId;
+                    ifcComponents.push({
+                        ifc_guid: originalSystemId,
+                        originating_system: this.originatingSystem
+                    });
+                }
+            }
+        }
+        return (authoringComponents.length > 0) ? authoringComponents : ifcComponents;
     }
 
     /**
@@ -475,7 +524,6 @@ class BCFViewpointsPlugin extends Plugin {
         const rayCast = (options.rayCast !== false);
         const immediate = (options.immediate !== false);
         const reset = (options.reset !== false);
-        const updateCompositeObjects = (!!options.updateCompositeObjects);
         const realWorldOffset = scene.realWorldOffset;
         const reverseClippingPlanes = (options.reverseClippingPlanes === true);
 
@@ -512,26 +560,12 @@ class BCFViewpointsPlugin extends Plugin {
                 if (!bcfViewpoint.components.visibility.default_visibility) {
                     scene.setObjectsVisible(scene.objectIds, false);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach((x) => {
-                            const entity = viewer.scene.objects[x.ifc_guid];
-                            if (entity) {
-                                entity.visible = true;
-                            } else {
-                                scene.setObjectsVisible(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, true);
-                            }
-                        });
+                        bcfViewpoint.components.visibility.exceptions.forEach((component) => this._withBCFComponent(options, component, entity => entity.visible = true));
                     }
                 } else {
                     scene.setObjectsVisible(scene.objectIds, true);
                     if (bcfViewpoint.components.visibility.exceptions) {
-                        bcfViewpoint.components.visibility.exceptions.forEach((x) => {
-                            const entity = viewer.scene.objects[x.ifc_guid];
-                            if (entity) {
-                                entity.visible = false;
-                            } else {
-                                scene.setObjectsVisible(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, false);
-                            }
-                        });
+                        bcfViewpoint.components.visibility.exceptions.forEach((component) => this._withBCFComponent(options, component, entity => entity.visible = false));
                     }
                 }
 
@@ -549,31 +583,42 @@ class BCFViewpointsPlugin extends Plugin {
                 }
             }
 
-
             if (bcfViewpoint.components.selection) {
                 scene.setObjectsSelected(scene.selectedObjectIds, false);
-                Object.keys(scene.models).forEach(() => {
-                    bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(updateCompositeObjects ? viewer.metaScene.getObjectIDsInSubtree(x.ifc_guid) : x.ifc_guid, true));
-                });
+                bcfViewpoint.components.selection.forEach(component => this._withBCFComponent(options, component, entity => entity.selected = true));
+
             }
 
             if (bcfViewpoint.components.coloring) {
                 bcfViewpoint.components.coloring.forEach(coloring => {
-                    let uuids = coloring.components.map(component => component.ifc_guid);
+
                     let color = coloring.color;
+                    let alpha = 0;
+                    let alphaDefined = false;
+
                     if (color.length === 8) {
-                        // There is an alpha color
-                        let alpha = parseInt(color.substring(0, 2), 16) / 256;
+                        alpha = parseInt(color.substring(0, 2), 16) / 256;
+                        if (alpha <= 1.0 && alpha >= 0.95) {
+                            alpha = 1.0;
+                        }
                         color = color.substring(2);
-                        scene.setObjectsOpacity(uuids, alpha);
+                        alphaDefined = true;
                     }
-                    let colorArray = [
+
+                    const colorize = [
                         parseInt(color.substring(0, 2), 16) / 256,
                         parseInt(color.substring(2, 4), 16) / 256,
                         parseInt(color.substring(4, 6), 16) / 256
                     ];
-                    scene.setObjectsColorized(uuids, colorArray);
-                })
+
+                    coloring.components.map(component =>
+                        this._withBCFComponent(options, component, entity => {
+                            entity.colorize = colorize;
+                            if (alphaDefined) {
+                                entity.opacity = alpha;
+                            }
+                        }));
+                });
             }
         }
 
@@ -628,6 +673,69 @@ class BCFViewpointsPlugin extends Plugin {
             } else {
                 viewer.cameraFlight.flyTo({eye, look, up, duration: options.duration, projection});
             }
+        }
+    }
+
+    _withBCFComponent(options, component, callback) {
+
+        const viewer = this.viewer;
+        const scene = viewer.scene;
+
+        if (component.authoring_tool_id && component.originating_system === this.originatingSystem) {
+
+            const id = component.authoring_tool_id;
+            const entity = scene.objects[id];
+
+            if (entity) {
+                callback(entity);
+                return
+            }
+
+            if (options.updateCompositeObjects) {
+                const metaObject = viewer.metaScene.metaObjects[id];
+                if (metaObject) {
+                    scene.withObjects(viewer.metaScene.getObjectIDsInSubtree(id), callback);
+                    return;
+                }
+            }
+        }
+
+        if (component.ifc_guid) {
+
+            const originalSystemId = component.ifc_guid;
+            const entity = scene.objects[originalSystemId];
+
+            if (entity) {
+                callback(entity);
+                return;
+            }
+
+            if (options.updateCompositeObjects) {
+                const metaObject = viewer.metaScene.metaObjects[originalSystemId];
+                if (metaObject) {
+                    scene.withObjects(viewer.metaScene.getObjectIDsInSubtree(originalSystemId), callback);
+                    return;
+                }
+            }
+
+            Object.keys(scene.models).forEach((modelId) => {
+
+                const id = math.globalizeObjectId(modelId, originalSystemId);
+                const entity = scene.objects[id];
+
+                if (entity) {
+                    callback(entity);
+                    return;
+                }
+
+                if (options.updateCompositeObjects) {
+                    const metaObject = viewer.metaScene.metaObjects[id];
+                    if (metaObject) {
+                        scene.withObjects(viewer.metaScene.getObjectIDsInSubtree(id), callback);
+                        return;
+                    }
+                }
+            });
         }
     }
 

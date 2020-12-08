@@ -30,6 +30,7 @@ class InstancingNormalsRenderer {
 
         const model = instancingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
@@ -47,8 +48,11 @@ class InstancingNormalsRenderer {
             this._bindProgram();
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -137,6 +141,8 @@ class InstancingNormalsRenderer {
         const program = this._program;
 
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
+        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");

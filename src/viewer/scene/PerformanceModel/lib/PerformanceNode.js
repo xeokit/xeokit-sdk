@@ -52,10 +52,18 @@ class PerformanceNode {
         /**
          * ID of this PerformanceNode, unique within the {@link Scene}.
          * @property id
-         * @type {String|Number
-         * @final}
+         * @type {String|Number}
+         * @final
          */
         this.id = id;
+
+        /**
+         * ID of the corresponding object within the originating system.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = math.unglobalizeObjectId(model.id, id);
 
         this._flags = flags;
         this._aabb = aabb;
@@ -494,6 +502,7 @@ class PerformanceNode {
             return;
         }
         const opacityUpdated = (opacity !== null && opacity !== undefined);
+        const lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
         if (opacityUpdated) {
             if (opacity < 0) {
                 opacity = 0;
@@ -501,12 +510,14 @@ class PerformanceNode {
                 opacity = 1;
             }
             opacity = Math.floor(opacity * 255.0); // Quantize
-            var lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
             if (lastOpacity === opacity) {
                 return;
             }
         } else {
             opacity = 255.0;
+            if (lastOpacity === opacity) {
+                return;
+            }
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setOpacity(opacity);

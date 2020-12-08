@@ -1,5 +1,6 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
+import {math} from "../scene/math/math.js";
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -105,15 +106,17 @@ class MetaScene {
     /**
      * Creates a {@link MetaModel} in this MetaScene.
      *
-     * @param {String} id ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
+     * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {Object} [options] Options for creating the {@link MetaModel}.
-     * @param {Object} [options.includeTypes] When provided, only {@link MetaObject}s with types in this list.
-     * @param {Object} [options.includeTypes] When provided, never {@link MetaObject}s with types in this list.
-     * @param {Object} [options.excludeTypes]
+     * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
+     * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
+     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set
+     * this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between
+     * the meta objects in the different instances.
      * @returns {MetaModel} The new MetaModel.
      */
-    createMetaModel(id, metaModelData, options = {}) {
+    createMetaModel(modelId, metaModelData, options = {}) {
 
         // TODO: validate metadata
         // TODO: replace MetaModel if ID already used
@@ -142,9 +145,9 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, id, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
 
-        this.metaModels[id] = metaModel;
+        this.metaModels[modelId] = metaModel;
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
@@ -155,15 +158,16 @@ class MetaScene {
             if (includeTypes && !includeTypes[type]) {
                 continue;
             }
-            const id = newObject.id;
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const originalSystemId = newObject.id;
             const name = newObject.name;
             const properties = newObject.properties;
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, id, name, type, properties, parent, children, external);
-            this.metaObjects[id] = metaObject;
-            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[id] = metaObject;
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            this.metaObjects[objectId] = metaObject;
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
                 this._typeCounts[type] = 1;
             } else {
@@ -173,15 +177,16 @@ class MetaScene {
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
-            const id = newObject.id;
-            const metaObject = this.metaObjects[id];
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const metaObject = this.metaObjects[objectId];
             if (!metaObject) {
                 continue;
             }
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
             } else if (newObject.parent) {
-                let parentMetaObject = this.metaObjects[newObject.parent];
+                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.parent) : newObject.parent;
+                let parentMetaObject = this.metaObjects[parentId];
                 if (parentMetaObject) {
                     metaObject.parent = parentMetaObject;
                     parentMetaObject.children = parentMetaObject.children || [];
@@ -190,7 +195,7 @@ class MetaScene {
             }
         }
 
-        this.fire("metaModelCreated", id);
+        this.fire("metaModelCreated", modelId);
         return metaModel;
     }
 

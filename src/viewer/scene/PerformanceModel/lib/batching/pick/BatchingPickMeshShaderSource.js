@@ -22,6 +22,7 @@ function buildVertex(scene) {
     src.push("attribute vec4 pickColor;");
 
     src.push("uniform bool pickInvisible;");
+    src.push("uniform mat4 worldMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
@@ -40,7 +41,7 @@ function buildVertex(scene) {
     src.push("  if (culled || (!pickInvisible && !visible) ||  !pickable) {");
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("  } else {");
-    src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+    src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
     src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
     src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
     src.push("      vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);");

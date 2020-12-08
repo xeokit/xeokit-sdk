@@ -31,6 +31,7 @@ class BatchingFillRenderer {
 
         const model = batchingLayer.model;
         const scene = model.scene;
+        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const rtcCenter = batchingLayer._state.rtcCenter;
@@ -47,10 +48,10 @@ class BatchingFillRenderer {
             this._bindProgram();
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(model.viewMatrix, rtcCenter) : model.viewMatrix;
+        const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
-        gl.uniformMatrix4fv(this._uModelMatrix, false, model.worldMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -128,7 +129,7 @@ class BatchingFillRenderer {
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uModelMatrix = program.getLocation("modelMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uColor = program.getLocation("color");

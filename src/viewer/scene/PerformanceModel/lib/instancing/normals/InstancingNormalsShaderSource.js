@@ -20,6 +20,8 @@ function buildVertex(scene) {
     src.push("attribute vec4 modelMatrixCol0;");
     src.push("attribute vec4 modelMatrixCol1;");
     src.push("attribute vec4 modelMatrixCol2;");
+    src.push("uniform mat4 worldMatrix;");
+    src.push("uniform mat4 worldNormalMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 viewNormalMatrix;");
@@ -45,10 +47,10 @@ function buildVertex(scene) {
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-    src.push("  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+    src.push("  worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
     src.push("  worldPosition.xyz = worldPosition.xyz + offset;");
     src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
-    src.push("  vec4 worldNormal    = vec4(octDecode(normal.xy), 0.0); ");
+    src.push("  vec4 worldNormal    = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
     src.push("  vec3 viewNormal     = normalize((viewNormalMatrix * worldNormal).xyz);");
 
     if (clipping) {

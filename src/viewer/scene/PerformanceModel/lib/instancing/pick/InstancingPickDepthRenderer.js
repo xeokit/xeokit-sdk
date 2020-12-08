@@ -51,10 +51,11 @@ class InstancingPickDepthRenderer {
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
-        const pickViewMatrix = frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix;
+        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniform1f(this._uZNear, projectState.near);
@@ -146,6 +147,7 @@ class InstancingPickDepthRenderer {
 
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];

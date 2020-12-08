@@ -10,6 +10,7 @@
 
 import {utils} from "../../../viewer/scene/utils.js";
 import * as p from "./lib/pako.js";
+import {math} from "../../../viewer/scene/math/math.js";
 
 let pako = window.pako || p;
 if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
@@ -81,7 +82,8 @@ function load(viewer, options, inflatedData, performanceModel) {
 
     for (let i = 0; i < numEntities; i++) {
 
-        const entityId = entityIDs [i];
+        const xktEntityId = entityIDs [i];
+        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
         const metaObject = viewer.metaScene.metaObjects[entityId];
         const entityDefaults = {};
         const meshDefaults = {};
