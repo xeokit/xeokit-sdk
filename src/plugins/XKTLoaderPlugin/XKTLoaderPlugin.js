@@ -78,7 +78,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -160,7 +160,7 @@ parsers[ParserV6.version] = ParserV6;
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform)]
  *
  * ````javascript
  * xktLoader.load({
@@ -178,7 +178,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * In the example below, we'll load only the objects that represent walls.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
  *
  * ````javascript
  * const model2 = xktLoader.load({
@@ -193,7 +193,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * In the example below, we'll load only the objects that do not represent empty space.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
  *
  * ````javascript
  * const model3 = xktLoader.load({
@@ -271,8 +271,6 @@ parsers[ParserV6.version] = ParserV6;
  * });
  * ````
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_originalIFCColors)]
- *
  * ## Configuring a custom data source
  *
  * By default, XKTLoaderPlugin will load *````.xkt````* files and metadata JSON over HTTP.
@@ -280,7 +278,7 @@ parsers[ParserV6.version] = ParserV6;
  * As shown below, we can customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
  * ````javascript
  * import {utils} from "./../src/viewer/scene/utils.js";
