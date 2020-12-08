@@ -12,7 +12,7 @@ const tempVec3 = math.vec3();
  *
  * ## Saving a BCF Viewpoint
  *
- * In the example below we'll create a {@link Viewer}, load a glTF model into it using a {@link GLTFLoaderPlugin},
+ * In the example below we'll create a {@link Viewer}, load an ````.XKT```` model into it using a {@link XKTLoaderPlugin},
  * slice the model in half using a {@link SectionPlanesPlugin}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
@@ -20,7 +20,7 @@ const tempVec3 = math.vec3();
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
  * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  * import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
  *
@@ -30,8 +30,8 @@ const tempVec3 = math.vec3();
  *      transparent: true
  * });
  *
- * // Add a GLTFLoaderPlugin
- * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ * // Add a XKTLoaderPlugin
+ * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * // Add a SectionPlanesPlugin
  * const sectionPlanes = new SectionPlanesPlugin(viewer);
@@ -39,12 +39,11 @@ const tempVec3 = math.vec3();
  * // Add a BCFViewpointsPlugin
  * const bcfViewpoints = new BCFViewpointsPlugin(viewer);
  *
- * // Load a glTF model
- * const modelNode = gltfLoader.load({
+ * // Load an .XKT model
+ * const modelNode = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/gltf/schependomlaan/scene.gltf",
+ *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
  *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
- *      lambertMaterial: true,
  *      edges: true // Emphasise edges
  * });
  *
