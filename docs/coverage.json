@@ -165,13 +165,13 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        776,
-        780,
-        788,
-        792,
-        796,
-        491,
-        705
+        775,
+        779,
+        787,
+        791,
+        795,
+        490,
+        704
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {

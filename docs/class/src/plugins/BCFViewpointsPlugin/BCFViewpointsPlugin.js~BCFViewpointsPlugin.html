@@ -140,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber203">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber202">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber203">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber202">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -169,14 +169,14 @@
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that saves and loads BCF viewpoints as JSON objects.</p>
 <p>BCF is a format for managing issues on a BIM project. This plugin&apos;s viewpoints conform to
 the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.</p>
-<h2 id="saving-a-bcf-viewpoint">Saving a BCF Viewpoint</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load a glTF model into it using a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>,
+<h2 id="saving-a-bcf-viewpoint">Saving a BCF Viewpoint</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load an <code>.XKT</code> model into it using an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>,
 slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>, then use a <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>
 to save a viewpoint to JSON, which we&apos;ll log to the JavaScript developer console.</p>
 <ul>
 <li>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
+import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
 import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
 import {BCFViewpointsPlugin} from &quot;../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js&quot;;
 
@@ -186,8 +186,8 @@ const viewer = new Viewer({
      transparent: true
 });
 
-// Add a GLTFLoaderPlugin
-const gltfLoader = new GLTFLoaderPlugin(viewer);
+// Add a XKTLoaderPlugin
+const xktLoader = new XKTLoaderPlugin(viewer);
 
 // Add a SectionPlanesPlugin
 const sectionPlanes = new SectionPlanesPlugin(viewer);
@@ -195,12 +195,11 @@ const sectionPlanes = new SectionPlanesPlugin(viewer);
 // Add a BCFViewpointsPlugin
 const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
-// Load a glTF model
-const modelNode = gltfLoader.load({
+// Load an .XKT model
+const modelNode = xktLoader.load({
      id: &quot;myModel&quot;,
-     src: &quot;./models/gltf/schependomlaan/scene.gltf&quot;,
+     src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
      metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;, // Creates a MetaObject instances in scene.metaScene.metaObjects
-     lambertMaterial: true,
      edges: true // Emphasise edges
 });
 
@@ -778,7 +777,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber212">source</a></span></span>
     </span>
   </h3>
 
@@ -871,7 +870,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber228">source</a></span></span>
     </span>
   </h3>
 
@@ -931,7 +930,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber221">source</a></span></span>
     </span>
   </h3>
 
@@ -994,7 +993,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber771">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber770">source</a></span></span>
     </span>
   </h3>
 
@@ -1038,7 +1037,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -1237,7 +1236,7 @@ const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber542">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber541">source</a></span></span>
     </span>
   </h3>
 
