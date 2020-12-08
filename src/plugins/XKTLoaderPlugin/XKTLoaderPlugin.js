@@ -37,7 +37,7 @@ parsers[ParserV6.version] = ParserV6;
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
- * * Can be configured to load multiple instances of the same model, without object ID clashes.
+ * * Option to load multiple copies of the same model, without object ID clashes.
  * * Does not (yet) support textures or physically-based materials.
  *
  * ## Credits
@@ -45,7 +45,7 @@ parsers[ParserV6.version] = ParserV6;
  * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
  * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
  *
- * ## Creating *````.xkt````* files and metadata
+ * ## Creating *````.XKT````* Files and Metadata
  *
  * See [Creating Files for Offline BIM](https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM).
  *
@@ -68,7 +68,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
+ * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
  * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
@@ -153,7 +153,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * ## Transforming
  *
- * We have the option to rotate, scale and translate each  *````.xkt````* model as we load it.
+ * We have the option to rotate, scale and translate each  *````.XKT````* model as we load it.
  *
  * This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.
  *
@@ -213,9 +213,11 @@ parsers[ParserV6.version] = ParserV6;
  * * setting the colors to our objects according to their IFC types,
  * * automatically hiding ````IfcSpace```` objects, and
  * * ensuring that ````IfcWindow```` objects are always transparent.
- *
  * <br>
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
+ * In the example below, we'll load a model, while configuring ````IfcSpace```` elements to be always initially invisible,
+ * and ````IfcWindow```` types to be always translucent blue.
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
  *
  * ````javascript
  * const myObjectDefaults = {
@@ -273,9 +275,9 @@ parsers[ParserV6.version] = ParserV6;
  *
  * ## Configuring a custom data source
  *
- * By default, XKTLoaderPlugin will load *````.xkt````* files and metadata JSON over HTTP.
+ * By default, XKTLoaderPlugin will load *````.XKT````* files and metadata JSON over HTTP.
  *
- * As shown below, we can customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
+ * In the example below, we'll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
@@ -300,7 +302,7 @@ parsers[ParserV6.version] = ParserV6;
  *              });
  *      }
  *
- *      // Gets the contents of the given .xkt file in an arraybuffer
+ *      // Gets the contents of the given .XKT file in an arraybuffer
  *      getXKT(src, ok, error) {
  *          console.log("MyDataSource#getXKT(" + xKTSrc + ", ... )");
  *          utils.loadArraybuffer(src,
@@ -329,8 +331,9 @@ parsers[ParserV6.version] = ParserV6;
  * Sometimes we need to load two or more instances of the same model, without having clashes
  * between the IDs of the equivalent objects in the model instances.
  *
+ * As shown in the example below, we do this by setting {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
  *
- * To do this, we set {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
  *
  * ````javascript
  * xktLoader.globalizeObjectIds = true;
@@ -373,13 +376,16 @@ parsers[ParserV6.version] = ParserV6;
  * The method, along with {@link Scene#setObjectsXRayed}, {@link Scene#setObjectsHighlighted} etc, will internally expand
  * the given ID to refer to the instances of that Entity in both models.
  *
- * We can also reference each Entity directly, using its globalized ID:
+ * We can also, of course, reference each Entity directly, using its globalized ID:
  *
  * ````javascript
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ * ## BCFViewpointsPlugin Consequences
+ *
+ * Using ````XKTLoaderPlugin```` to load models with {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` has consequences
+ * for BCF viewpoints created by {@link BCFViewpointsPlugin#getViewpoint}.
  *
  * @class XKTLoaderPlugin
  */
