@@ -35,7 +35,8 @@
 
 <div id="info">
     <h1>Section planes</h1><br>
-    <p>This example contains an IFC appartment model with two section planes. At bottom right is an overview of the section planes. Click the planes in
+    <p>This example contains an IFC appartment model with two section planes. At bottom right is an overview of the
+        section planes. Click the planes in
         the overview to activate an editing gizmo with which you can reposition them.</p>
     <br>
     <ul>
@@ -81,7 +82,7 @@
     viewer.camera.up = [-0.05, 0.99, 0.02];
     viewer.camera.project.fov = 45;
 
-    viewer.camera.zoom(5);
+    viewer.camera.projection = "ortho";
 
     viewer.cameraControl.followPointer = true;
 
@@ -112,6 +113,10 @@
         backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
     });
 
+    model.on("loaded", ()=> {
+        viewer.cameraFlight.flyTo(model);
+    });
+
     //------------------------------------------------------------------------------------------------------------------
     // Create a couple of cross-section planes
     //------------------------------------------------------------------------------------------------------------------
@@ -128,26 +133,6 @@
         dir: [0.0, -0.09, -0.79]
     });
 
-    // viewer.scene.input.on("mouseup", function (coords) {
-    //     var hit = viewer.scene.pick({
-    //         canvasPos: coords,
-    //         pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-    //     });
-    //     if (hit) {
-    //         if (hit.entity.isObject) { // Only create CrossSections on surfaces of model objects, not on gizmos etc
-    //
-    //             const sectionPlane = sectionPlanes.createSectionPlane({
-    //                 canvasPos: hit.canvasPos,
-    //                 pos: hit.worldPos,
-    //                 dir: [-hit.worldNormal[0], -hit.worldNormal[1], -hit.worldNormal[2]]
-    //             });
-    //
-    //             sectionPlanes.showControl(sectionPlane.id);
-    //         }
-    //     }
-    // });
-
-    window.viewer = viewer;
 </script>
 
 </html>
