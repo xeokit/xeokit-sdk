@@ -67,38 +67,40 @@ class CameraUpdater {
 
             if (!configs.followPointer) {
 
+            } else {
 
-            } else if (--countDown <= 0) {
+                if (--countDown <= 0) {
 
-                countDown = SCALE_DOLLY_EACH_FRAME;
+                    countDown = SCALE_DOLLY_EACH_FRAME;
 
-                if (updates.dollyDelta !== 0) {
-                    if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
+                    if (updates.dollyDelta !== 0) {
+                        if (updates.rotateDeltaY === 0 && updates.rotateDeltaX === 0) {
 
-                        if (configs.followPointer && states.followPointerDirty) {
+                            if (configs.followPointer && states.followPointerDirty) {
 
-                            pickController.pickCursorPos = states.pointerCanvasPos;
-                            pickController.schedulePickSurface = true;
-                            pickController.update();
+                                pickController.pickCursorPos = states.pointerCanvasPos;
+                                pickController.schedulePickSurface = true;
+                                pickController.update();
 
-                            if (pickController.pickResult && pickController.pickResult.worldPos) {
-                                const worldPos = pickController.pickResult.worldPos;
-                                pivotController.setPivotPos(worldPos);
-                                pivotController.hidePivot();
-                            } else {
-                                dollyDistFactor = 1.0
+                                if (pickController.pickResult && pickController.pickResult.worldPos) {
+                                    const worldPos = pickController.pickResult.worldPos;
+                                    pivotController.setPivotPos(worldPos);
+                                    pivotController.hidePivot();
+                                } else {
+                                    dollyDistFactor = 1.0
+                                }
+
+                                states.followPointerDirty = false;
                             }
-
-                            states.followPointerDirty = false;
                         }
-                    }
 
-                    const dist = Math.abs(math.lenVec3(math.subVec3(pivotController.getPivotPos(), scene.camera.eye, tempVec3)));
+                        const dist = Math.abs(math.lenVec3(math.subVec3(pivotController.getPivotPos(), scene.camera.eye, tempVec3)));
 
-                    dollyDistFactor = dist / configs.dollyProximityThreshold;
+                        dollyDistFactor = dist / configs.dollyProximityThreshold;
 
-                    if (dollyDistFactor < configs.dollyMinSpeed) {
-                        dollyDistFactor = configs.dollyMinSpeed;
+                        if (dollyDistFactor < configs.dollyMinSpeed) {
+                            dollyDistFactor = configs.dollyMinSpeed;
+                        }
                     }
                 }
             }
@@ -279,6 +281,7 @@ class CameraUpdater {
                             states.followPointerDirty = true;
                         }
                     } else {
+                        camera.ortho.scale = camera.ortho.scale + dollyDeltaForDist;
                         camera.zoom(dollyDeltaForDist);
                     }
 
@@ -290,6 +293,7 @@ class CameraUpdater {
                             states.followPointerDirty = true;
                         }
                     } else {
+                        camera.ortho.scale = camera.ortho.scale + dollyDeltaForDist;
                         camera.zoom(dollyDeltaForDist);
                     }
                 }
