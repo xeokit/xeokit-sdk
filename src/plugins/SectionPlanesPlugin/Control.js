@@ -922,20 +922,37 @@ class Control {
         const scene = this._viewer.scene;
 
         { // Keep gizmo screen size constant
+
             const tempVec3a = math.vec3([0, 0, 0]);
-            var distDirty = true;
-            var lastDist = -1;
+
+            let distDirty = true;
+            let lastDist = -1;
+
             this._onCameraViewMatrix = scene.camera.on("viewMatrix", () => {
                 distDirty = true;
             });
+
             this._onCameraProjMatrix = scene.camera.on("projMatrix", () => {
                 distDirty = true;
             });
+
             this._onSceneTick = scene.on("tick", () => {
-                var dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, rootNode.position, tempVec3a)));
+
+                const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, this._pos, tempVec3a)));
+
                 if (dist !== lastDist) {
-                    const scale = 10 * (dist / 50);
-                    rootNode.scale = [scale, scale, scale];
+                    if (camera.projection === "perspective") {
+                        const worldSize = (2 * Math.tan(camera.perspective.fov / 2.0)) * dist;
+                        const size = 0.1 * worldSize;
+                        rootNode.scale = [size, size, size];
+                        lastDist = dist;
+                    }
+                }
+
+                if (camera.projection === "ortho") {
+                    const worldSize = camera.ortho.scale / 10;
+                    const size = worldSize;
+                    rootNode.scale = [size, size, size];
                     lastDist = dist;
                 }
             });
