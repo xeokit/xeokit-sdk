@@ -942,8 +942,8 @@ class Control {
 
                 if (dist !== lastDist) {
                     if (camera.projection === "perspective") {
-                        const worldSize = (2 * Math.tan(camera.perspective.fov / 2.0)) * dist;
-                        const size = 0.1 * worldSize;
+                        const worldSize = (Math.tan(camera.perspective.fov * math.DEGTORAD)) * dist;
+                        const size = 0.07 * worldSize;
                         rootNode.scale = [size, size, size];
                         lastDist = dist;
                     }
