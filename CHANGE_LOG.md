@@ -4,18 +4,23 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.5.2
 
-Unreleased
+December 9, 2020
 
-* XKTLoaderPlugin, BCFViewpointsPlugin
-    * Ability to load multiple copies of same IFC model without object ID clashes [#485](https://github.com/xeokit/xeokit-sdk/pull/495) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl
+    * Fix CameraControl zoom for ortho mode when followPointer false. [#484](https://github.com/xeokit/xeokit-sdk/pull/484) ([**@xeolabs**](https://github.com/xeolabs))
+    * Prevent middle mouse button from rotating the camera. [#492](https://github.com/xeokit/xeokit-sdk/pull/492) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix CameraControl pivot marker centering for custom size. [#471](https://github.com/xeokit/xeokit-sdk/pull/471) ([**@xeolabs**](https://github.com/xeolabs))
 * Entity
-    * Improve rendering of translucent objects [#489](https://github.com/xeokit/xeokit-sdk/issues/489) ([**@xeolabs**](https://github.com/xeolabs))   
+    * Improve rendering of translucent objects. [#489](https://github.com/xeokit/xeokit-sdk/issues/489) ([**@xeolabs**](https://github.com/xeolabs))   
 * Entity, EdgeMaterial, EmphasisMaterial
-    * Fix rendering of translucent edges [#490](https://github.com/xeokit/xeokit-sdk/issues/490) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix rendering of translucent edges. [#490](https://github.com/xeokit/xeokit-sdk/issues/490) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, SectionPlanesPlugin
-    * Fix SectionPlane slicing for transformed PerformanceModels [#494](https://github.com/xeokit/xeokit-sdk/issues/494) ([**@xeolabs**](https://github.com/xeolabs))
-    * Fix SectionPlanesPlugin overview for orthographic projection [#145](https://github.com/xeokit/xeokit-sdk/issues/145) ([**@xeolabs**](https://github.com/xeolabs))
-    * Fix size of SectionPlane editing control [#480](https://github.com/xeokit/xeokit-sdk/issues/480) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix SectionPlane slicing for transformed PerformanceModels. [#494](https://github.com/xeokit/xeokit-sdk/issues/494) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix SectionPlanesPlugin overview for orthographic projection. [#145](https://github.com/xeokit/xeokit-sdk/issues/145) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix size of SectionPlane editing control. [#480](https://github.com/xeokit/xeokit-sdk/issues/480) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin, BCFViewpointsPlugin
+    * Ability to load multiple copies of same IFC model without object ID clashes. [#485](https://github.com/xeokit/xeokit-sdk/pull/495) ([**@xeolabs**](https://github.com/xeolabs))
+
     
 # 1.5.14
 
