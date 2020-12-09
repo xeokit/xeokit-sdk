@@ -14,7 +14,9 @@ Unreleased
     * Fix rendering of translucent edges [#490](https://github.com/xeokit/xeokit-sdk/issues/490) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, SectionPlanesPlugin
     * Fix SectionPlane slicing for transformed PerformanceModels [#494](https://github.com/xeokit/xeokit-sdk/issues/494) ([**@xeolabs**](https://github.com/xeolabs))
-
+    * Fix SectionPlanesPlugin overview for orthographic projection [#145](https://github.com/xeokit/xeokit-sdk/issues/145) ([**@xeolabs**](https://github.com/xeolabs))
+    * Fix size of SectionPlane editing control [#480](https://github.com/xeokit/xeokit-sdk/issues/480) ([**@xeolabs**](https://github.com/xeolabs))
+    
 # 1.5.14
 
 November 25, 2020
