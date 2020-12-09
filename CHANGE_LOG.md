@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.21
+
+December 9, 2020
+
+* SectionPlane, SectionPlanesPlugin
+    * Fix size of SectionPlane editing control (2). [#480](https://github.com/xeokit/xeokit-sdk/issues/480) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.5.2
 
 December 9, 2020
