@@ -118,10 +118,6 @@ class Overview {
             this._scene.camera.perspective.fov = fov;
         });
 
-        this._onViewerCameraProjection = this._viewer.camera.on("projection", (projection) => {
-            this._scene.camera.projection = projection;
-        });
-
         //--------------------------------------------------------------------------------------------------------------
         // Bind overview canvas events
         //--------------------------------------------------------------------------------------------------------------
@@ -241,7 +237,6 @@ class Overview {
         this._viewer.camera.off(this._onViewerCameraMatrix);
         this._viewer.camera.off(this._onViewerCameraWorldAxis);
         this._viewer.camera.perspective.off(this._onViewerCameraFOV);
-        this._viewer.camera.off(this._onViewerCameraProjection);
 
         this._scene.input.off(this._onInputMouseMove);
         this._scene.canvas.canvas.removeEventListener("mouseup", this._onCanvasMouseUp);
