@@ -60,6 +60,8 @@
     viewer.camera.look = [22.20, 1.86, 4.44];
     viewer.camera.up = [0.19, 0.94, -0.25];
 
+    viewer.cameraControl.followPointer = true;
+
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
     //----------------------------------------------------------------------------------------------------------------------
@@ -117,47 +119,12 @@
                                     })
                                         .on("loaded", () => {
                                             var t1 = performance.now();
-                                            document.getElementById("time").innerHTML = "Models loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+                                            document.getElementById("time").innerHTML = "Six models loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
                                         });
                                 });
                         });
                 });
         });
-
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Mouse over Entities to highlight them
-    //------------------------------------------------------------------------------------------------------------------
-
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
-
-    window.viewer = viewer
 
 </script>
 </html>
