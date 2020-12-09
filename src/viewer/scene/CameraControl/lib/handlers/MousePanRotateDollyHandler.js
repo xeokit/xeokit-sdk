@@ -134,7 +134,7 @@ class MousePanRotateDollyHandler {
 
                     mouseDownMiddle = true;
 
-                    if (!configs.panRightClick) {
+                   if (!configs.panRightClick) {
 
                         canvas.style.cursor = "move";
 
@@ -145,6 +145,17 @@ class MousePanRotateDollyHandler {
                         lastY = states.pointerCanvasPos[1];
                         lastXDown = states.pointerCanvasPos[0];
                         lastYDown = states.pointerCanvasPos[1];
+
+                        pickController.pickCursorPos = states.pointerCanvasPos;
+                        pickController.schedulePickSurface = true;
+                        pickController.update();
+
+                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
+                            mouseDownPicked = true;
+                            pickedWorldPos.set(pickController.pickResult.worldPos);
+                        } else {
+                            mouseDownPicked = false;
+                        }
                     }
 
                     break;
@@ -235,7 +246,7 @@ class MousePanRotateDollyHandler {
                     updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
                 }
 
-            } else {
+            } else if (!mouseDownMiddle && !mouseDownRight) {
 
                 if (!configs.planView) { // No rotating in plan-view mode
 
