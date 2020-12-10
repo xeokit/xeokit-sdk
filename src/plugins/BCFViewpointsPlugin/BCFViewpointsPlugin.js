@@ -398,13 +398,11 @@ class BCFViewpointsPlugin extends Plugin {
         const xrayedObjectIds = new Set(scene.xrayedObjectIds);
         const colorizedObjectIds = new Set(scene.colorizedObjectIds);
 
-        let authoringComponentsCreated = false;
-        const originalSystemIdMap = {};
         const originalSystemColoringMap = {};
 
-        const authoringSystemColoringMap = Object.values(scene.objects)
+        const coloringMap = Object.values(scene.objects)
             .filter(entity => opacityObjectIds.has(entity.id) || colorizedObjectIds.has(entity.id) || xrayedObjectIds.has(entity.id))
-            .reduce((authoringSystemColoringMap, entity) => {
+            .reduce((coloringMap, entity) => {
 
                 let color = colorizeToRGB(entity.colorize);
                 let alpha;
@@ -423,38 +421,26 @@ class BCFViewpointsPlugin extends Plugin {
                     color = alpha + color;
                 }
 
-                if (!authoringSystemColoringMap[color]) {
-                    authoringSystemColoringMap[color] = [];
-                }
-
-                if (!originalSystemColoringMap[color]) {
-                    originalSystemColoringMap[color] = [];
+                if (!coloringMap[color]) {
+                    coloringMap[color] = [];
                 }
 
                 const objectId = entity.id;
                 const originalSystemId = entity.originalSystemId;
-
-                if (objectId !== originalSystemId) {
-                    authoringSystemColoringMap[color].push({
-                        authoring_tool_id: objectId,
-                        originating_system: this.originatingSystem
-                    });
-                    authoringComponentsCreated = true;
+                const component = {
+                    ifc_guid: originalSystemId,
+                    originating_system: this.originatingSystem
+                };
+                if (originalSystemId !== objectId) {
+                    component.authoring_tool_id = objectId;
                 }
 
-                if ((!authoringComponentsCreated) && (originalSystemIdMap[originalSystemId] === undefined)) {
-                    originalSystemIdMap[originalSystemId] = originalSystemId;
-                    originalSystemColoringMap[color].push({
-                        ifc_guid: originalSystemId,
-                        originating_system: this.originatingSystem
-                    });
-                }
+                coloringMap[color].push(component);
 
-                return authoringSystemColoringMap;
+                return coloringMap;
 
             }, {});
 
-        const coloringMap  = authoringComponentsCreated ? authoringSystemColoringMap : originalSystemColoringMap;
         const coloringArray = Object.entries(coloringMap).map(([color, components]) => {
             return {color, components};
         });
@@ -489,30 +475,22 @@ class BCFViewpointsPlugin extends Plugin {
 
     _createBCFComponents(objectIds) {
         const scene = this.viewer.scene;
-        const originalSystemIdMap = {};
-        const authoringComponents = [];
-        const ifcComponents = [];
+        const components = [];
         for (let i = 0, len = objectIds.length; i < len; i++) {
             const objectId = objectIds[i];
             const entity = scene.objects[objectId];
             if (entity) {
-                const originalSystemId = entity.originalSystemId;
-                if (objectId !== originalSystemId) {
-                    authoringComponents.push({
-                        authoring_tool_id: objectId,
-                        originating_system: this.originatingSystem
-                    });
+                const component = {
+                    ifc_guid: entity.originalSystemId,
+                    originating_system: this.originatingSystem
+                };
+                if (entity.originalSystemId !== objectId) {
+                    component.authoring_tool_id = objectId;
                 }
-                if (authoringComponents.length === 0 && originalSystemIdMap[originalSystemId] === undefined) {
-                    originalSystemIdMap[originalSystemId] = originalSystemId;
-                    ifcComponents.push({
-                        ifc_guid: originalSystemId,
-                        originating_system: this.originatingSystem
-                    });
-                }
+                components.push(component);
             }
         }
-        return (authoringComponents.length > 0) ? authoringComponents : ifcComponents;
+        return components;
     }
 
     /**
