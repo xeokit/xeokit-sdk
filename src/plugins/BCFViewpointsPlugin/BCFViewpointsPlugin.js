@@ -427,12 +427,15 @@ class BCFViewpointsPlugin extends Plugin {
 
                 const objectId = entity.id;
                 const originalSystemId = entity.originalSystemId;
-
-                coloringMap[color].push({
+                const component = {
                     ifc_guid: originalSystemId,
-                    authoring_tool_id: objectId,
                     originating_system: this.originatingSystem
-                });
+                };
+                if (originalSystemId !== objectId) {
+                    component.authoring_tool_id = objectId;
+                }
+
+                coloringMap[color].push(component);
 
                 return coloringMap;
 
@@ -477,11 +480,14 @@ class BCFViewpointsPlugin extends Plugin {
             const objectId = objectIds[i];
             const entity = scene.objects[objectId];
             if (entity) {
-                components.push({
+                const component = {
                     ifc_guid: entity.originalSystemId,
-                    authoring_tool_id: objectId,
                     originating_system: this.originatingSystem
-                });
+                };
+                if (entity.originalSystemId !== objectId) {
+                    component.authoring_tool_id = objectId;
+                }
+                components.push(component);
             }
         }
         return components;
