@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.22
+
+December 10, 2020
+
+* BCFViewpointsPlugin
+    * Simplify BCFViewpointsPlugin#getViewpoint(). [#497](https://github.com/xeokit/xeokit-sdk/pull/497) ([**@amoki**](https://github.com/amoki))
+
 # 1.5.21
 
 December 9, 2020
