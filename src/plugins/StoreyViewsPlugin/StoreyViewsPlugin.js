@@ -353,7 +353,7 @@ class StoreyViewsPlugin extends Plugin {
                     const storey = storeys[storyObjectId];
                     const model = scene.models[storey.modelId];
                     if (model) {
-                        model.off("destroyed", storey._onModelDestroyed);
+                        model.off(storey._onModelDestroyed);
                     }
                     delete this.storeys[storyObjectId];
                 }
