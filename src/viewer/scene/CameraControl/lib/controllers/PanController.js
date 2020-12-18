@@ -2,7 +2,6 @@ import {math} from "../../../math/math.js";
 
 const screenPos = math.vec4();
 const viewPos = math.vec4();
-const worldPos = math.vec4();
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -51,36 +50,65 @@ class PanController {
     }
 
     /**
-     * Dollys the camera towards the given coordinates.
+     * Dollys the Camera towards the given target 2D canvas position.
      *
-     * @param worldPos World position we're dollying towards
-     * @param canvasPos Current mouse canvas position
-     * @param dollyDelta Dollying distance
+     * When the target's corresponding World-space position is also provided, then this function will also test if we've
+     * dollied past the target, and will return ````true```` if that's the case.
+     *
+     * @param [optionalTargetWorldPos] Optional world position of the target
+     * @param targetCanvasPos Canvas position of the target
+     * @param dollyDelta Amount to dolly
+     * @return True if optionalTargetWorldPos was given, and we've dollied past that position.
      */
-    dolly(worldPos, canvasPos, dollyDelta) {
+    dollyToCanvasPos(optionalTargetWorldPos, targetCanvasPos, dollyDelta) {
+
+        let dolliedThroughSurface = false;
 
         const camera = this._scene.camera;
 
-        let dolliedThroughSurface = false;
+        if (optionalTargetWorldPos) {
+            const eyeToWorldPosVec = math.subVec3(optionalTargetWorldPos, camera.eye, tempVec3a);
+            const eyeWorldPosDist = math.lenVec3(eyeToWorldPosVec);
+            dolliedThroughSurface = (eyeWorldPosDist < dollyDelta);
+        }
 
         if (camera.projection === "perspective") {
 
             camera.ortho.scale = camera.ortho.scale - dollyDelta;
 
-            dolliedThroughSurface = this._dollyToWorldPos(worldPos, dollyDelta);
+            const unprojectedWorldPos = this._unprojectPerspective(targetCanvasPos, tempVec4a);
+            const offset = math.subVec3(unprojectedWorldPos, camera.eye, tempVec4c);
+            const moveVec = math.mulVec3Scalar(math.normalizeVec3(offset), -dollyDelta, []);
+
+            camera.eye = [camera.eye[0] - moveVec[0], camera.eye[1] - moveVec[1], camera.eye[2] - moveVec[2]];
+            camera.look = [camera.look[0] - moveVec[0], camera.look[1] - moveVec[1], camera.look[2] - moveVec[2]];
+
+            if (optionalTargetWorldPos) {
+
+                // Subtle UX tweak - if we have a target World position, then set camera eye->look distance to
+                // the same distance as from eye->target. This just gives us a better position for look,
+                // if we subsequently orbit eye about look, so that we don't orbit a position that's
+                // suddenly a lot closer than the point we pivoted about on the surface of the last object
+                // that we click-drag-pivoted on.
+
+                const eyeTargetVec = math.subVec3(optionalTargetWorldPos, camera.eye, tempVec3a);
+                const lenEyeTargetVec = math.lenVec3(eyeTargetVec);
+                const eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3b)), lenEyeTargetVec);
+                camera.look = [camera.eye[0] + eyeLookVec[0], camera.eye[1] + eyeLookVec[1], camera.eye[2] + eyeLookVec[2]];
+            }
 
         } else if (camera.projection === "ortho") {
 
-            // - set ortho scale, getting the unprojected canvasPos before and after, get that difference in a vector;
+            // - set ortho scale, getting the unprojected targetCanvasPos before and after, get that difference in a vector;
             // - get the vector in which we're dollying;
             // - add both vectors to camera eye and look.
 
-            const worldPos1 = this._unprojectOrtho(canvasPos, viewPos, tempVec4a);
+            const worldPos1 = this._unprojectOrtho(targetCanvasPos, tempVec4a);
 
             camera.ortho.scale = camera.ortho.scale - dollyDelta;
             camera.ortho._update(); // HACK
 
-            const worldPos2 = this._unprojectOrtho(canvasPos, viewPos, tempVec4b);
+            const worldPos2 = this._unprojectOrtho(targetCanvasPos, tempVec4b);
             const offset = math.subVec3(worldPos2, worldPos1, tempVec4c);
             const eyeLookMoveVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(camera.look, camera.eye, tempVec3a)), -dollyDelta, tempVec3b);
             const moveVec = math.addVec3(offset, eyeLookMoveVec, tempVec3c);
@@ -136,7 +164,7 @@ class PanController {
         return this._sceneDiagSize;
     }
 
-    _unprojectPerspective(canvasPos, viewPos, worldPos) {
+    _unprojectPerspective(canvasPos, worldPos) {
 
         const canvas = this._scene.canvas.canvas;
         const transposedProjectMat = this._getTransposedProjectMat();
@@ -161,9 +189,11 @@ class PanController {
         viewPos[1] *= -1; // TODO: Why is this reversed?
 
         math.mulMat4v4(inverseViewMat, viewPos, worldPos);
+
+        return worldPos;
     }
 
-    _unprojectOrtho(canvasPos, viewPos, worldPos) {
+    _unprojectOrtho(canvasPos, worldPos) {
 
         const canvas = this._scene.canvas.canvas;
         const transposedProjectMat = this._getTransposedOrthoProjectMat();
@@ -190,33 +220,6 @@ class PanController {
         math.mulMat4v4(inverseViewMat, viewPos, worldPos);
 
         return worldPos;
-    }
-
-    _dollyToWorldPos(worldPos, dollyDelta) {
-
-        const camera = this._scene.camera;
-        const eyeToWorldPosVec = math.subVec3(worldPos, camera.eye, tempVec3a);
-        const eyeWorldPosDist = math.lenVec3(eyeToWorldPosVec);
-
-        let dolliedThroughSurface = false;
-
-        if (eyeWorldPosDist < dollyDelta) {
-            dolliedThroughSurface = true;
-        }
-
-        math.normalizeVec3(eyeToWorldPosVec);
-
-        const px = eyeToWorldPosVec[0] * dollyDelta;
-        const py = eyeToWorldPosVec[1] * dollyDelta;
-        const pz = eyeToWorldPosVec[2] * dollyDelta;
-
-        const eye = camera.eye;
-        const look = camera.look;
-
-        camera.eye = [eye[0] + px, eye[1] + py, eye[2] + pz];
-        camera.look = [look[0] + px, look[1] + py, look[2] + pz];
-
-        return dolliedThroughSurface;
     }
 
     destroy() {

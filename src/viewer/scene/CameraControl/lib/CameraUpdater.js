@@ -21,8 +21,9 @@ class CameraUpdater {
 
         let countDown = SCALE_DOLLY_EACH_FRAME; // Decrements on each tick
         let dollyDistFactor = 1.0; // Calculated when countDown is zero
-
-        this._onTick = scene.on("tick", (e) => {
+        let followPointerWorldPos = null; // Holds the pointer's World position when configs.followPointer is true
+        
+        this._onTick = scene.on("tick", () => {
 
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
@@ -65,9 +66,7 @@ class CameraUpdater {
             // want dolly speed wildly varying depending on how accurately the user avoids the gaps with the pointer.
             //----------------------------------------------------------------------------------------------------------
 
-            if (!configs.followPointer) {
-
-            } else {
+            if (configs.followPointer) {
 
                 if (--countDown <= 0) {
 
@@ -86,8 +85,11 @@ class CameraUpdater {
                                     const worldPos = pickController.pickResult.worldPos;
                                     pivotController.setPivotPos(worldPos);
                                     pivotController.hidePivot();
+                                    followPointerWorldPos = worldPos;
+                                    
                                 } else {
-                                    dollyDistFactor = 1.0
+                                    dollyDistFactor = 1.0;
+                                    followPointerWorldPos = null;
                                 }
 
                                 states.followPointerDirty = false;
@@ -105,7 +107,7 @@ class CameraUpdater {
                 }
             }
 
-            let dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
+            const dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
 
             //----------------------------------------------------------------------------------------------------------
             // Rotation
@@ -247,7 +249,7 @@ class CameraUpdater {
                     }
 
                     if (configs.followPointer) {
-                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        const dolliedThroughSurface = panController.dollyToCanvasPos(followPointerWorldPos, states.pointerCanvasPos, -dollyDeltaForDist);
                         if (dolliedThroughSurface) {
                             states.followPointerDirty = true;
                         }
@@ -276,7 +278,7 @@ class CameraUpdater {
                 } else if (configs.planView) {
 
                     if (configs.followPointer) {
-                        const dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        const dolliedThroughSurface = panController.dollyToCanvasPos(followPointerWorldPos, states.pointerCanvasPos, -dollyDeltaForDist);
                         if (dolliedThroughSurface) {
                             states.followPointerDirty = true;
                         }
@@ -288,9 +290,10 @@ class CameraUpdater {
                 } else { // Orbiting
 
                     if (configs.followPointer) {
-                        let dolliedThroughSurface = panController.dolly(pivotController.getPivotPos(), states.pointerCanvasPos, -dollyDeltaForDist);
+                        const dolliedThroughSurface = panController.dollyToCanvasPos(followPointerWorldPos, states.pointerCanvasPos, -dollyDeltaForDist);
                         if (dolliedThroughSurface) {
                             states.followPointerDirty = true;
+                            console.log("dollied through surface");
                         }
                     } else {
                         camera.ortho.scale = camera.ortho.scale + dollyDeltaForDist;
