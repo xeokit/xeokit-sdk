@@ -21,6 +21,8 @@ const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
 
+const tempVec3fa = new Float32Array(3);
+
 /**
  * @private
  */
@@ -663,10 +665,10 @@ class InstancingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        tempVec3a[0] = offset[0];
-        tempVec3a[1] = offset[1];
-        tempVec3a[2] = offset[2];
-        this._state.offsetsBuf.setData(tempVec3a, portionId * 3, 3);
+        tempVec3fa[0] = offset[0];
+        tempVec3fa[1] = offset[1];
+        tempVec3fa[2] = offset[2];
+        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
