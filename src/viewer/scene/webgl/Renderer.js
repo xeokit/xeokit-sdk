@@ -761,7 +761,6 @@ const Renderer = function (scene, options) {
 
             frameStats.renderTime = (endTime - startTime) / 1000.0;
             frameStats.drawElements = frameCtx.drawElements;
-            frameStats.drawElements = frameCtx.drawElements;
             frameStats.useProgram = frameCtx.useProgram;
             frameStats.bindTexture = frameCtx.bindTexture;
             frameStats.bindArray = frameCtx.bindArray;
