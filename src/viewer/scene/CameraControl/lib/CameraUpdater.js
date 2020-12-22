@@ -293,7 +293,6 @@ class CameraUpdater {
                         const dolliedThroughSurface = panController.dollyToCanvasPos(followPointerWorldPos, states.pointerCanvasPos, -dollyDeltaForDist);
                         if (dolliedThroughSurface) {
                             states.followPointerDirty = true;
-                            console.log("dollied through surface");
                         }
                     } else {
                         camera.ortho.scale = camera.ortho.scale + dollyDeltaForDist;
