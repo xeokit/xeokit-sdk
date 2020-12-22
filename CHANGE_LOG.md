@@ -15,7 +15,7 @@ Unreleased
 * StoreyViewsPlugin
   * Fix memory leak in StoreyViewsPlugin#destroy(). [#499](https://github.com/xeokit/xeokit-sdk/issues/499) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
-  * Fix PerformanceModel batched geometry opaque fill on Android 10 #507. [#507](https://github.com/xeokit/xeokit-sdk/issues/507) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix PerformanceModel batched geometry opaque fill on Android 10. [#507](https://github.com/xeokit/xeokit-sdk/issues/507) ([**@xeolabs**](https://github.com/xeolabs))
 # 1.5.22
 
 December 10, 2020
