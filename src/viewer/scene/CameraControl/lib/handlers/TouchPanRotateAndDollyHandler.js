@@ -63,7 +63,10 @@ class TouchPanRotateAndDollyHandler {
                             }
 
                         } else {
-                            if (!configs.firstPerson && pivotController.startPivot()) { // Continue to use last pivot point
+
+                            pivotController.setPivotPos(scene.camera.look);
+
+                            if (!configs.firstPerson && pivotController.startPivot()) {
                                 pivotController.showPivot();
                             }
                         }
@@ -72,16 +75,6 @@ class TouchPanRotateAndDollyHandler {
 
             } else {
                 tapStartTime = -1;
-            }
-
-            if (touches.length === 2) {
-                const touch0 = touches[0];
-                const touch1 = touches[1];
-                const currentMiddleTouch = math.geometricMeanVec2([touch0.pageX, touch0.pageY], [touch1.pageX, touch1.pageY]);
-
-                pickController.pickCursorPos = currentMiddleTouch;
-                pickController.schedulePickSurface = true;
-                pickController.update();
             }
 
             while (lastTouches.length < touches.length) {
@@ -174,8 +167,6 @@ class TouchPanRotateAndDollyHandler {
 
                 math.subVec2(lastMiddleTouch, currentMiddleTouch, touchDelta);
 
-
-                // PANNING
                 const xPanDelta = touchDelta[0];
                 const yPanDelta = touchDelta[1];
 
