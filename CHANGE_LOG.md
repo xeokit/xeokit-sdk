@@ -2,6 +2,20 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.5.3
+
+Unreleased
+
+* Entity
+  * Fix Entity#offset for PerformanceModel instancing. [#505](https://github.com/xeokit/xeokit-sdk/issues/505) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl
+  * Orbit Camera#look when click-dragging on empty canvas in "orbit" mode. [#503](https://github.com/xeokit/xeokit-sdk/issues/503) ([**@xeolabs**](https://github.com/xeolabs))
+  * Apply followPointer when pointer over empty canvas. [#502](https://github.com/xeokit/xeokit-sdk/issues/502) ([**@xeolabs**](https://github.com/xeolabs))
+  * Apply followPointer in orthographic mode. [#242](https://github.com/xeokit/xeokit-sdk/issues/242) ([**@xeolabs**](https://github.com/xeolabs))
+* StoreyViewsPlugin
+  * Fix memory leak in StoreyViewsPlugin#destroy(). [#499](https://github.com/xeokit/xeokit-sdk/issues/499) ([**@xeolabs**](https://github.com/xeolabs))
+* PerformanceModel
+  * Fix PerformanceModel batched geometry opaque fill on Android 10 #507. [#507](https://github.com/xeokit/xeokit-sdk/issues/507) ([**@xeolabs**](https://github.com/xeolabs))
 # 1.5.22
 
 December 10, 2020
