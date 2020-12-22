@@ -79,7 +79,7 @@ function buildVertex(scene) {
     src.push("bool selected     = (float(flags.w) > 0.0);");
     src.push("bool culled       = (float(flags2.w) > 0.0);");
 
-    src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
+    src.push("bool transparent  = ((float(color.a) / 255.0) < 0.95);");
 
     src.push(`if (
     culled || !visible || 
