@@ -82,10 +82,7 @@ class CameraUpdater {
                                 pickController.update();
 
                                 if (pickController.pickResult && pickController.pickResult.worldPos) {
-                                    const worldPos = pickController.pickResult.worldPos;
-                                    pivotController.setPivotPos(worldPos);
-                                    pivotController.hidePivot();
-                                    followPointerWorldPos = worldPos;
+                                    followPointerWorldPos = pickController.pickResult.worldPos;
                                     
                                 } else {
                                     dollyDistFactor = 1.0;
@@ -96,9 +93,10 @@ class CameraUpdater {
                             }
                         }
 
-                        const dist = Math.abs(math.lenVec3(math.subVec3(pivotController.getPivotPos(), scene.camera.eye, tempVec3)));
-
-                        dollyDistFactor = dist / configs.dollyProximityThreshold;
+                        if (followPointerWorldPos) {
+                            const dist = Math.abs(math.lenVec3(math.subVec3(followPointerWorldPos, scene.camera.eye, tempVec3)));
+                            dollyDistFactor = dist / configs.dollyProximityThreshold;
+                        }
 
                         if (dollyDistFactor < configs.dollyMinSpeed) {
                             dollyDistFactor = configs.dollyMinSpeed;
@@ -161,10 +159,6 @@ class CameraUpdater {
             }
 
             if (updates.panDeltaX !== 0 || updates.panDeltaY !== 0 || updates.panDeltaZ !== 0) {
-
-                if (pivotController.getPivoting() && configs.followPointer) {
-                    pivotController.showPivot();
-                }
 
                 const vec = math.vec3();
 
