@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.5.3
 
-Unreleased
+December 23, 2020
 
 * CameraControl
   * Orbit Camera#look when click-dragging on empty canvas in "orbit" mode. [#503](https://github.com/xeokit/xeokit-sdk/issues/503) ([**@xeolabs**](https://github.com/xeolabs))
@@ -12,6 +12,7 @@ Unreleased
   * Apply followPointer in orthographic mode. [#242](https://github.com/xeokit/xeokit-sdk/issues/242) ([**@xeolabs**](https://github.com/xeolabs))
   * Touch-pivot about Camera#look by default in orbit mode. [#510](https://github.com/xeokit/xeokit-sdk/issues/510) ([**@xeolabs**](https://github.com/xeolabs))
   * Don't show CameraControl pivot position while panning. [#509](https://github.com/xeokit/xeokit-sdk/issues/509) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix unwanted "picked*" events from pinch-to-zoom on touch devices. [#438](https://github.com/xeokit/xeokit-sdk/issues/438) ([**@xeolabs**](https://github.com/xeolabs))
 * Entity
   * Fix Entity#offset for PerformanceModel instancing. [#505](https://github.com/xeokit/xeokit-sdk/issues/505) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
