@@ -36,6 +36,9 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
+            event.stopPropagation();
+            event.preventDefault();
+
             const touches = event.touches;
             const changedTouches = event.changedTouches;
 
@@ -87,15 +90,17 @@ class TouchPanRotateAndDollyHandler {
             }
 
             numTouches = touches.length;
-
-            event.stopPropagation();
-
-        }, {passive: true});
+        });
 
         canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
+
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
+
+            event.stopPropagation();
+            event.preventDefault();
+
             if (waitForTick) {
                 // Limit changes detection to one per frame
                 return;
@@ -203,9 +208,7 @@ class TouchPanRotateAndDollyHandler {
                 lastTouches[i][0] = touches[i].pageX;
                 lastTouches[i][1] = touches[i].pageY;
             }
-            event.stopPropagation();
-
-        }, {passive: true});
+        });
     }
 
     reset() {
