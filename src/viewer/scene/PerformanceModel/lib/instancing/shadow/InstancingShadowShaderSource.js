@@ -12,7 +12,9 @@ function buildVertex(scene) {
     const src = [];
     src.push("// Instancing geometry shadow drawing vertex shader");
     src.push("attribute vec3 position;");
-    src.push("attribute vec3 offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("attribute vec3 offset;");
+    }
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
@@ -35,7 +37,9 @@ function buildVertex(scene) {
     src.push("} else {");
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
     src.push("  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-    src.push("  worldPosition.xyz = worldPosition.xyz + offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+    }
     src.push("  vec4 viewPosition  = shadowViewMatrix * worldPosition; ");
 
     if (clipping) {

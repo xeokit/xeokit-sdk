@@ -22,7 +22,9 @@ function buildVertex(scene) {
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
-    src.push("attribute vec3 offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("attribute vec3 offset;");
+    }
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
     src.push("uniform mat4 worldMatrix;");
@@ -59,7 +61,9 @@ function buildVertex(scene) {
     src.push("} else {");
 
     src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
-    src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+    }
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
