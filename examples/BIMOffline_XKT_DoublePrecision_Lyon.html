@@ -9,7 +9,7 @@
     <style>
 
         #myCanvas {
-            background: #00206d;
+            background: #5f5f5f;
         }
 
         #myNavCubeCanvas {
@@ -65,7 +65,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: false
+        transparent: true
     });
 
     viewer.camera.eye = [1841341.4943041557, 2435.7015793568917, -5182009.256037191];
@@ -97,14 +97,14 @@
     viewer.scene.clearLights();
 
     new AmbientLight(viewer.scene, {
-        color: [0, 0, 0],
-        intensity: 0.9
+        color: [1, 1, 1],
+        intensity: 0.2
     });
 
     new DirLight(viewer.scene, {
-        dir: [0.8, -0.6, -0.8],
+        dir: [0.8, -0.8, 0.8],
         color: [1.0, 1.0, 1.0],
-        intensity: 0.9,
+        intensity: 1.0,
         space: "world"
     });
 
