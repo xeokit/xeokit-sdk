@@ -133,7 +133,8 @@ class BatchingDrawRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        this._uLightAmbient = [];
+
+        this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
         this._uLightDir = [];
         this._uLightPos = [];
@@ -145,9 +146,6 @@ class BatchingDrawRenderer {
         for (let i = 0, len = lights.length; i < len; i++) {
             light = lights[i];
             switch (light.type) {
-                case "ambient":
-                    this._uLightAmbient[i] = program.getLocation("lightAmbient");
-                    break;
                 case "dir":
                     this._uLightColor[i] = program.getLocation("lightColor" + i);
                     this._uLightPos[i] = null;
@@ -204,25 +202,26 @@ class BatchingDrawRenderer {
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
 
+        if (this._uLightAmbient) {
+            const ambientColor = scene._lightsState.getAmbientColor();
+            gl.uniform4f(this._uLightAmbient, ambientColor[0], ambientColor[1], ambientColor[2], 1.0);
+        }
+
         for (let i = 0, len = lights.length; i < len; i++) {
 
             const light = lights[i];
 
-            if (this._uLightAmbient[i]) {
-                gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            } else {
-                if (this._uLightColor[i]) {
-                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+            if (this._uLightColor[i]) {
+                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+            }
+            if (this._uLightPos[i]) {
+                gl.uniform3fv(this._uLightPos[i], light.pos);
+                if (this._uLightAttenuation[i]) {
+                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
                 }
-                if (this._uLightPos[i]) {
-                    gl.uniform3fv(this._uLightPos[i], light.pos);
-                    if (this._uLightAttenuation[i]) {
-                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                    }
-                }
-                if (this._uLightDir[i]) {
-                    gl.uniform3fv(this._uLightDir[i], light.dir);
-                }
+            }
+            if (this._uLightDir[i]) {
+                gl.uniform3fv(this._uLightDir[i], light.dir);
             }
         }
 

@@ -170,7 +170,10 @@ class AmbientLight extends Light {
      * Destroys this AmbientLight.
      */
     destroy() {
+
         super.destroy();
+
+        this.scene._lightDestroyed(this);
     }
 }
 
