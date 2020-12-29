@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TreeViewPlugin - Loading Nine CityGML Models from the File System</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: #00206d;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="info">
+    <h1>XKTLoaderPlugin - Loading Nine CityGML Models from the File System</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>Models provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: false
+    });
+
+    viewer.camera.eye = [1841341.4943041557, 2435.7015793568917, -5182009.256037191];
+    viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
+    viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
+
+    viewer.cameraControl.followPointer = true;
+    viewer.camera.perspective.far = 20000;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Add a NavCube
+    //----------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,           // Initially visible (default)
+        size: 250,               // NavCube size in pixels (default is 200)
+        alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+        topMargin: 170,          // 170 pixels margin from top of Viewer canvas
+        cameraFly: true,       // Fly camera to each selected axis/diagonal
+        cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
+        cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new AmbientLight(viewer.scene, {
+        color: [0, 0, 0],
+        intensity: 0.9
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 0.9,
+        space: "world"
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load seven models and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model 1 of 9";
+
+    xktLoader.load({
+        id: "lyon1",
+        src: "./models/xkt/Lyon/Lyon1.xkt",
+        edges: true
+    }).on("loaded", () => {
+
+        document.getElementById("time").innerHTML = "Loading model 2 of 9";
+
+        xktLoader.load({
+            id: "lyon2",
+            src: "./models/xkt/Lyon/Lyon2.xkt",
+            edges: true
+        }).on("loaded", () => {
+
+            document.getElementById("time").innerHTML = "Loading model 3 of 9";
+
+            xktLoader.load({
+                id: "lyon3",
+                src: "./models/xkt/Lyon/Lyon3.xkt",
+                edges: true
+            }).on("loaded", () => {
+
+                document.getElementById("time").innerHTML = "Loading model 4 of 9";
+
+                xktLoader.load({
+                    id: "lyon4",
+                    src: "./models/xkt/Lyon/Lyon4.xkt",
+                    edges: true
+                }).on("loaded", () => {
+
+                    document.getElementById("time").innerHTML = "Loading model 5 of 9";
+
+                    xktLoader.load({
+                        id: "Lyon5",
+                        src: "./models/xkt/Lyon/Lyon4.xkt",
+                        edges: true
+                    }).on("loaded", () => {
+
+                        document.getElementById("time").innerHTML = "Loading model 6 of 9";
+
+                        xktLoader.load({
+                            id: "Lyon6",
+                            src: "./models/xkt/Lyon/Lyon6.xkt",
+                            edges: true
+                        }).on("loaded", () => {
+
+                            document.getElementById("time").innerHTML = "Loading model 7 of 9";
+
+                            xktLoader.load({
+                                id: "Lyon7",
+                                src: "./models/xkt/Lyon/Lyon7.xkt",
+                                edges: true
+                            }).on("loaded", () => {
+
+                                document.getElementById("time").innerHTML = "Loading model 8 of 9";
+
+                                xktLoader.load({
+                                    id: "Lyon8",
+                                    src: "./models/xkt/Lyon/Lyon8.xkt",
+                                    edges: true
+                                }).on("loaded", () => {
+
+                                    document.getElementById("time").innerHTML = "Loading model 9 of 9";
+
+                                    const lyon9 = xktLoader.load({
+                                        id: "Lyon9",
+                                        src: "./models/xkt/Lyon/Lyon9.xkt",
+                                        edges: true
+                                    });
+
+                                    lyon9.on("loaded", () => {
+
+                                        let numEntities = 0;
+
+                                        for (let id in viewer.scene.models) {
+                                            const model = viewer.scene.models[id];
+                                            numEntities += model.numEntities;
+                                        }
+
+                                        const t1 = performance.now();
+
+                                        document.getElementById("time").innerHTML = "Loaded 9 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+</script>
+</html>
