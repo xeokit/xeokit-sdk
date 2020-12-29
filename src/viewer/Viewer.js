@@ -40,6 +40,7 @@ class Viewer {
      * @param {Boolean} [cfg.antialias=true] Whether to enable anti-aliasing.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      * @param {Boolean} [cfg.alphaDepthMask=true] Whether writing into the depth buffer is enabled or disabled when rendering transparent objects.
+     * @param {Boolean} [cfg.entityOffsetsEnabled=false] Whether to enable {@link Entity#offset}. For best performance, only set this ````true```` when you need to use {@link Entity#offset}.
      */
     constructor(cfg) {
 
@@ -76,7 +77,8 @@ class Viewer {
             scale: cfg.scale,
             origin: cfg.origin,
             saoEnabled: cfg.saoEnabled,
-            alphaDepthMask: (cfg.alphaDepthMask !== false)
+            alphaDepthMask: (cfg.alphaDepthMask !== false),
+            entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled)
         });
 
         /**

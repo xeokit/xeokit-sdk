@@ -14,7 +14,9 @@ function buildVertex(scene) {
     src.push("// Batched geometry normals vertex shader");
 
     src.push("attribute vec3 position;");
-    src.push("attribute vec3 offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("attribute vec3 offset;");
+    }
     src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
@@ -46,7 +48,9 @@ function buildVertex(scene) {
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
     src.push("  } else {");
     src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
-    src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+    if (scene.entityOffsetsEnabled) {
+        src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+    }
     src.push("      vec4 viewPosition   = viewMatrix * worldPosition; ");
     src.push("      vec4 worldNormal    = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
     src.push("      vec3 viewNormal     = normalize((viewNormalMatrix * worldNormal).xyz);");

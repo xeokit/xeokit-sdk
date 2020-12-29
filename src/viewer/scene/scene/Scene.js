@@ -791,6 +791,8 @@ class Scene extends Component {
         this.gammaOutput = cfg.gammaOutput;
         this.gammaFactor = cfg.gammaFactor;
 
+        this._entityOffsetsEnabled = cfg.entityOffsetsEnabled;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -1129,6 +1131,17 @@ class Scene extends Component {
         this._renderer.webglContextRestored(gl);
         //this.loading--;
         this.canvas.spinner.processes--;
+    }
+
+    /**
+     * Whether to enable {@link Entity#offset}.
+     *
+     * This is set via the {@link Viewer} constructor and is ````true```` by default.
+     *
+     * @returns {Boolean} True if {@link Entity#offset} is enabled.
+     */
+    get entityOffsetsEnabled() {
+        return this._entityOffsetsEnabled;
     }
 
     /**
