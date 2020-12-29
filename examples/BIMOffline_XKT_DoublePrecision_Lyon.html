@@ -76,6 +76,18 @@
     viewer.camera.perspective.far = 20000;
 
     //----------------------------------------------------------------------------------------------------------------------
+    // SAO
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true; // Only works if supported (see above)
+    sao.intensity = 0.10;
+    sao.bias = 0.5;
+    sao.scale = 1500.0;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+
+    //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -108,6 +120,13 @@
         space: "world"
     });
 
+    new DirLight(viewer.scene, {
+        dir: [0.0, -0.8, -0.8],
+        color: [0.8, 0.8, 1.0],
+        intensity: 0.4,
+        space: "world"
+    });
+
     //----------------------------------------------------------------------------------------------------------------------
     // Load seven models and fit it to view
     //----------------------------------------------------------------------------------------------------------------------
@@ -121,7 +140,7 @@
     xktLoader.load({
         id: "lyon1",
         src: "./models/xkt/Lyon/Lyon1.xkt",
-        edges: true
+        edges: true, saoEnabled: true
     }).on("loaded", () => {
 
         document.getElementById("time").innerHTML = "Loading model 2 of 9";
@@ -129,7 +148,7 @@
         xktLoader.load({
             id: "lyon2",
             src: "./models/xkt/Lyon/Lyon2.xkt",
-            edges: true
+            edges: true, saoEnabled: true
         }).on("loaded", () => {
 
             document.getElementById("time").innerHTML = "Loading model 3 of 9";
@@ -137,7 +156,7 @@
             xktLoader.load({
                 id: "lyon3",
                 src: "./models/xkt/Lyon/Lyon3.xkt",
-                edges: true
+                edges: true, saoEnabled: true
             }).on("loaded", () => {
 
                 document.getElementById("time").innerHTML = "Loading model 4 of 9";
@@ -145,7 +164,7 @@
                 xktLoader.load({
                     id: "lyon4",
                     src: "./models/xkt/Lyon/Lyon4.xkt",
-                    edges: true
+                    edges: true, saoEnabled: true
                 }).on("loaded", () => {
 
                     document.getElementById("time").innerHTML = "Loading model 5 of 9";
@@ -153,7 +172,7 @@
                     xktLoader.load({
                         id: "Lyon5",
                         src: "./models/xkt/Lyon/Lyon4.xkt",
-                        edges: true
+                        edges: true, saoEnabled: true
                     }).on("loaded", () => {
 
                         document.getElementById("time").innerHTML = "Loading model 6 of 9";
@@ -161,7 +180,7 @@
                         xktLoader.load({
                             id: "Lyon6",
                             src: "./models/xkt/Lyon/Lyon6.xkt",
-                            edges: true
+                            edges: true, saoEnabled: true
                         }).on("loaded", () => {
 
                             document.getElementById("time").innerHTML = "Loading model 7 of 9";
@@ -169,7 +188,7 @@
                             xktLoader.load({
                                 id: "Lyon7",
                                 src: "./models/xkt/Lyon/Lyon7.xkt",
-                                edges: true
+                                edges: true, saoEnabled: true
                             }).on("loaded", () => {
 
                                 document.getElementById("time").innerHTML = "Loading model 8 of 9";
@@ -177,7 +196,7 @@
                                 xktLoader.load({
                                     id: "Lyon8",
                                     src: "./models/xkt/Lyon/Lyon8.xkt",
-                                    edges: true
+                                    edges: true, saoEnabled: true
                                 }).on("loaded", () => {
 
                                     document.getElementById("time").innerHTML = "Loading model 9 of 9";
@@ -185,7 +204,7 @@
                                     const lyon9 = xktLoader.load({
                                         id: "Lyon9",
                                         src: "./models/xkt/Lyon/Lyon9.xkt",
-                                        edges: true
+                                        edges: true, saoEnabled: true
                                     });
 
                                     lyon9.on("loaded", () => {
@@ -209,6 +228,37 @@
             });
         });
     });
-    
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Only enable SAO and normal edge emphasis while camera is not moving
+    //------------------------------------------------------------------------------------------------------------------
+
+    let timeoutDuration = 1000; // Milliseconds
+    let timer = timeoutDuration;
+    let saoAndEdgesDisabled = false;
+
+    viewer.scene.camera.on("matrix", () => {
+        timer = timeoutDuration;
+        if (!saoAndEdgesDisabled) {
+            viewer.scene.sao.enabled = false;
+            viewer.scene.edgeMaterial.edges = false;
+            saoAndEdgesDisabled = true;
+        }
+    });
+
+    viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
+        if (!saoAndEdgesDisabled) {
+            return;
+        }
+        timer -= tickEvent.deltaTime;
+        if (timer <= 0) {
+            if (saoAndEdgesDisabled) {
+                viewer.scene.sao.enabled = true;
+                viewer.scene.edgeMaterial.edges = true;
+                saoAndEdgesDisabled = false;
+            }
+        }
+    });
+
 </script>
 </html>
