@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TreeViewPlugin - Loading Nine CityGML Models from the File System</title>
+    <title>XKTLoaderPlugin - Loading Nine CityGML Models from the File System</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -19,6 +19,20 @@
             bottom: 50px;
             right: 10px;
             z-index: 200000;
+        }
+
+        .camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
         }
 
     </style>
@@ -58,9 +72,15 @@
     import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
     import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
+    import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera
+    // Create a Viewer
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -68,12 +88,30 @@
         transparent: true
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure Camera
+    //------------------------------------------------------------------------------------------------------------------
+
     viewer.camera.eye = [1841341.4943041557, 2435.7015793568917, -5182009.256037191];
     viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
-    viewer.cameraControl.followPointer = true;
+    viewer.camera.perspective.near = 0.5;
     viewer.camera.perspective.far = 20000;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure CameraControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.cameraControl.followPointer = true;
+
+    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    document.body.appendChild(pivotElement);
+    viewer.cameraControl.pivotElement = pivotElement;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Tweak edges color
+    //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.edgeMaterial.edgeColor = [.3, .3, .3];
 
@@ -88,6 +126,22 @@
     sao.scale = 1500.0;
     sao.minResolution = 0.0;
     sao.kernelRadius = 100;
+
+    // //------------------------------------------------------------------------------------------------------------------
+    // // Create a ground plane
+    // //------------------------------------------------------------------------------------------------------------------
+    //
+    // new Mesh(viewer.scene, {
+    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+    //         xSize: 20000,
+    //         zSize: 20000
+    //     })),
+    //     material: new PhongMaterial(viewer.scene, {
+    //         diffuse: [0.2, 0.6, 0.2]
+    //     }),
+    //     position: [1842215.561857325, -98.53293939639616, -5177009.767748618],
+    //     collidable: false
+    // });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
@@ -129,13 +183,44 @@
         space: "world"
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Only enable SAO and normal edge emphasis while camera is not moving
+    //------------------------------------------------------------------------------------------------------------------
+
+    let timeoutDuration = 1000; // Milliseconds
+    let timer = timeoutDuration;
+    let saoAndEdgesDisabled = false;
+
+    viewer.scene.camera.on("matrix", () => {
+        timer = timeoutDuration;
+        if (!saoAndEdgesDisabled) {
+            viewer.scene.sao.enabled = false;
+            viewer.scene.edgeMaterial.edges = false;
+            saoAndEdgesDisabled = true;
+        }
+    });
+
+    viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
+        if (!saoAndEdgesDisabled) {
+            return;
+        }
+        timer -= tickEvent.deltaTime;
+        if (timer <= 0) {
+            if (saoAndEdgesDisabled) {
+                viewer.scene.sao.enabled = true;
+                viewer.scene.edgeMaterial.edges = true;
+                saoAndEdgesDisabled = false;
+            }
+        }
+    });
+
     //----------------------------------------------------------------------------------------------------------------------
-    // Load seven models and fit it to view
+    // Load nine CityGML models
     //----------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    var t0 = performance.now();
+    const t0 = performance.now();
 
     document.getElementById("time").innerHTML = "Loading model 1 of 9";
 
@@ -229,37 +314,6 @@
                 });
             });
         });
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Only enable SAO and normal edge emphasis while camera is not moving
-    //------------------------------------------------------------------------------------------------------------------
-
-    let timeoutDuration = 1000; // Milliseconds
-    let timer = timeoutDuration;
-    let saoAndEdgesDisabled = false;
-
-    viewer.scene.camera.on("matrix", () => {
-        timer = timeoutDuration;
-        if (!saoAndEdgesDisabled) {
-            viewer.scene.sao.enabled = false;
-            viewer.scene.edgeMaterial.edges = false;
-            saoAndEdgesDisabled = true;
-        }
-    });
-
-    viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
-        if (!saoAndEdgesDisabled) {
-            return;
-        }
-        timer -= tickEvent.deltaTime;
-        if (timer <= 0) {
-            if (saoAndEdgesDisabled) {
-                viewer.scene.sao.enabled = true;
-                viewer.scene.edgeMaterial.edges = true;
-                saoAndEdgesDisabled = false;
-            }
-        }
     });
 
 </script>
