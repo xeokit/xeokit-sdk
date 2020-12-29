@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.6.0
+
+Unreleased
+
+* Viewer
+  * Add option to enable or disable Entity#offset. [#514](https://github.com/xeokit/xeokit-sdk/issues/514) ([**@xeolabs**](https://github.com/xeolabs))
+  
 # 1.5.3
 
 December 23, 2020
