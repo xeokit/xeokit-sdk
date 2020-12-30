@@ -437,7 +437,8 @@ class Entity {
     /**
      * Sets the Entity's 3D World-space offset.
      *
-     * Only works when {@link Viewer} is configured with ````entityOffsetsEnabled: true````.
+     * Since offsetting Entities comes with memory and rendering overhead on some systems, this feature
+     * only works when {@link Viewer} is configured with ````entityOffsetsEnabled: true````.
      *
      * The offset dynamically translates the Entity in World-space, which  is useful for creating
      * effects like exploding parts assemblies etc.

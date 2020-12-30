@@ -369,10 +369,12 @@ class BatchingLayer {
             }
         }
 
-        for (let i = 0; i < numVerts; i++) {
-            buffer.offsets.push(0);
-            buffer.offsets.push(0);
-            buffer.offsets.push(0);
+        if (this.model.scene.entityOffsetsEnabled) {
+            for (let i = 0; i < numVerts; i++) {
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+            }
         }
 
         const portionId = this._portions.length / 2;
@@ -440,9 +442,11 @@ class BatchingLayer {
             state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
 
-        if (buffer.offsets.length > 0) {
-            const offsets = new Float32Array(buffer.offsets);
-            state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
+        if (this.model.scene.entityOffsetsEnabled) {
+            if (buffer.offsets.length > 0) {
+                const offsets = new Float32Array(buffer.offsets);
+                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
+            }
         }
 
         const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
@@ -700,6 +704,10 @@ class BatchingLayer {
     setOffset(portionId, offset) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        if (!this.model.scene.entityOffsetsEnabled) {
+            this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
+            return;
         }
         const portionsIdx = portionId * 2;
         const vertexBase = this._portions[portionsIdx];

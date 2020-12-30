@@ -287,9 +287,11 @@ class InstancingLayer {
         this._colors.push(b);
         this._colors.push(opacity);
 
-        this._offsets.push(0);
-        this._offsets.push(0);
-        this._offsets.push(0);
+        if (this.model.scene.entityOffsetsEnabled) {
+            this._offsets.push(0);
+            this._offsets.push(0);
+            this._offsets.push(0);
+        }
 
         this._modelMatrixCol0.push(meshMatrix[0]);
         this._modelMatrixCol0.push(meshMatrix[4]);
@@ -391,10 +393,12 @@ class InstancingLayer {
             this._flags = [];
             this._flags2 = [];
         }
-        if (this._offsets.length > 0) {
-            const normalized = false;
-            this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, normalized);
-            this._offsets = []; // Release memory
+        if (this.model.scene.entityOffsetsEnabled) {
+            if (this._offsets.length > 0) {
+                const normalized = false;
+                this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, normalized);
+                this._offsets = []; // Release memory
+            }
         }
         if (this._modelMatrixCol0.length > 0) {
 
@@ -664,6 +668,10 @@ class InstancingLayer {
     setOffset(portionId, offset) {
         if (!this._finalized) {
             throw "Not finalized";
+        }
+        if (!this.model.scene.entityOffsetsEnabled) {
+            this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
+            return;
         }
         tempVec3fa[0] = offset[0];
         tempVec3fa[1] = offset[1];
