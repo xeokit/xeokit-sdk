@@ -9,7 +9,7 @@
     <style>
 
         #myCanvas {
-            background: #5f5f5f;
+            background: lightblue;
         }
 
         #myNavCubeCanvas {
@@ -96,8 +96,8 @@
     viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
-    viewer.camera.perspective.near = 0.5;
-    viewer.camera.perspective.far = 20000;
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 25000;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure CameraControl
@@ -127,21 +127,40 @@
     sao.minResolution = 0.0;
     sao.kernelRadius = 100;
 
-    // //------------------------------------------------------------------------------------------------------------------
-    // // Create a ground plane
-    // //------------------------------------------------------------------------------------------------------------------
-    //
-    // new Mesh(viewer.scene, {
-    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-    //         xSize: 20000,
-    //         zSize: 20000
-    //     })),
-    //     material: new PhongMaterial(viewer.scene, {
-    //         diffuse: [0.2, 0.6, 0.2]
-    //     }),
-    //     position: [1842215.561857325, -98.53293939639616, -5177009.767748618],
-    //     collidable: false
-    // });
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 700000,
+            zSize: 700000
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0.3, 0.5, 0.1],
+            // alpha: 0.0,
+            alphaMode: "opaque"
+        }),
+        position: [1842215.561857325, -0.53293939639616, -5177009.767748618],
+        collidable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 70000,
+            divisions: 200
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [1842215.561857325, 20, -5177009.767748618],
+        collidable: false
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
