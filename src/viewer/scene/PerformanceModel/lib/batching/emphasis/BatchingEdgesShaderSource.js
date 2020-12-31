@@ -77,7 +77,11 @@ function buildVertex(scene) {
         src.push("  vFlags2 = flags2;");
     }
 
-    src.push("  gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     src.push("}");
     return src;

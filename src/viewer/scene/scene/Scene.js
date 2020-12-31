@@ -792,6 +792,7 @@ class Scene extends Component {
         this.gammaFactor = cfg.gammaFactor;
 
         this._entityOffsetsEnabled = cfg.entityOffsetsEnabled;
+        this._logarithmicDepthBufferEnabled = cfg.logarithmicDepthBufferEnabled;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -1134,14 +1135,25 @@ class Scene extends Component {
     }
 
     /**
-     * Whether to enable {@link Entity#offset}.
+     * Whether {@link Entity#offset} is enabled.
      *
-     * This is set via the {@link Viewer} constructor and is ````true```` by default.
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
      *
      * @returns {Boolean} True if {@link Entity#offset} is enabled.
      */
     get entityOffsetsEnabled() {
         return this._entityOffsetsEnabled;
+    }
+
+    /**
+     * Whether logarithmic depth buffer is enabled.
+     *
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
+     *
+     * @returns {Boolean} True if logarithmic depth buffer is enabled.
+     */
+    get logarithmicDepthBufferEnabled() {
+        return this._logarithmicDepthBufferEnabled;
     }
 
     /**

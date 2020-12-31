@@ -30,7 +30,6 @@ function buildVertex(scene) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
-    src.push("varying vec4 vViewPosition;");
     src.push("void main(void) {");
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
@@ -50,8 +49,11 @@ function buildVertex(scene) {
         src.push("vWorldPosition = worldPosition;");
         src.push("vFlags2 = flags2;");
     }
-    src.push("  vViewPosition = viewPosition;");
-    src.push("  gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     src.push("}");
     return src;
@@ -82,7 +84,6 @@ function buildFragment(scene) {
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
-    src.push("varying vec4 vViewPosition;");
 
     src.push("const float   packUpScale = 256. / 255.;");
     src.push("const float   unpackDownscale = 255. / 256.;");
