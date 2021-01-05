@@ -831,7 +831,7 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, scene.camera.project.far, tempMat4a);
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, scene.camera.project.near, scene.camera.project.far, tempMat4a);
 
                 if (params.matrix) {
 
