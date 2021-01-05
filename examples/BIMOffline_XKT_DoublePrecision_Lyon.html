@@ -101,10 +101,10 @@
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
     viewer.camera.perspective.near = 1.0;
-    viewer.camera.perspective.far = 10000000;
+    viewer.camera.perspective.far = 100000000;
 
     viewer.camera.ortho.near = 1.0;
-    viewer.camera.ortho.far = 100000;
+    viewer.camera.ortho.far = 100000000;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure CameraControl
@@ -129,13 +129,25 @@
     //----------------------------------------------------------------------------------------------------------------------
 
     const sao = viewer.scene.sao;
-    sao.enabled = true;
+    sao.enabled = false;
     sao.bias = 0.5;
     sao.intensity = 0.5;
     sao.scale = ((viewer.camera.perspective.far - viewer.camera.perspective.near) * 0.3);
     sao.minResolution = 0.0;
     sao.kernelRadius = 100;
     sao.blur = true;
+
+    /*
+    // For logarithmic depth buffer:
+    const sao = viewer.scene.sao;
+    sao.enabled = false;
+    sao.bias = 0.5;
+    sao.intensity = 0.1;
+    sao.scale = 500;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+    sao.blur = true;
+     */
 
     //------------------------------------------------------------------------------------------------------------------
     // Replace the Scene's default lights
@@ -166,19 +178,19 @@
     // Create a ground plane
     //------------------------------------------------------------------------------------------------------------------
 
-    new Mesh(viewer.scene, {
-        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-            xSize: 700000,
-            zSize: 700000
-        })),
-        material: new PhongMaterial(viewer.scene, {
-            diffuse: [0.3, 0.5, 0.1],
-            // alpha: 0.0,
-            alphaMode: "opaque"
-        }),
-        position: [1842215.561857325, -0.53293939639616, -5177009.767748618],
-        collidable: false
-    });
+    // new Mesh(viewer.scene, {
+    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+    //         xSize: 700000,
+    //         zSize: 700000
+    //     })),
+    //     material: new PhongMaterial(viewer.scene, {
+    //         diffuse: [0.3, 0.5, 0.1],
+    //         // alpha: 0.0,
+    //         alphaMode: "opaque"
+    //     }),
+    //     position: [1842215.561857325, -5.53293939639616, -5177009.767748618],
+    //     collidable: false
+    // });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
@@ -219,7 +231,7 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-                viewer.scene.sao.enabled = true;
+            //    viewer.scene.sao.enabled = true;
                 viewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }
