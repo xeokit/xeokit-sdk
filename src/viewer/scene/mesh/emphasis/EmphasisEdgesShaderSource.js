@@ -29,6 +29,9 @@ function buildVertex(mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
+    }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
     }
@@ -76,7 +79,11 @@ function buildVertex(mesh) {
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
-    src.push("   gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     return src;
 }

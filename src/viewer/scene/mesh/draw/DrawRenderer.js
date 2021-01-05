@@ -604,11 +604,11 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 };
 
 DrawRenderer.prototype._allocate = function (mesh) {
-
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
     const material = mesh._material;
-    const lightsState = mesh.scene._lightsState;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
+    const lightsState = scene._lightsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
 
     this._program = new Program(gl, this._shaderSource);
@@ -632,6 +632,10 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._uLightAttenuation = [];
     this._uShadowViewMatrix = [];
     this._uShadowProjMatrix = [];
+
+    if (scene.logarithmicDepthBufferEnabled) {
+        this._uZFar = program.getLocation("zFar");
+    }
 
     const lights = lightsState.lights;
     let light;
@@ -883,6 +887,7 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const lightsState = scene._lightsState;
+    const project = scene.camera.project;
     let light;
 
     const program = this._program;
@@ -901,9 +906,11 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastColorize[2] = -1;
     this._lastColorize[3] = -1;
 
-    const camera = scene.camera;
+    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+    if (scene.logarithmicDepthBufferEnabled) {
+        gl.uniform1f(this._uZFar, project.far);
+    }
 
     for (var i = 0, len = lightsState.lights.length; i < len; i++) {
 

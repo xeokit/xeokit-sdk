@@ -102,6 +102,10 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
 
+    if (scene.logarithmicDepthBufferEnabled) {
+        gl.uniform1f(this._uZFar, scene.camera.project.far);
+    }
+
     if (frameCtx.backfaces !== backfaces) {
         if (backfaces) {
             gl.disable(gl.CULL_FACE);
@@ -137,7 +141,8 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 };
 
 PickTriangleRenderer.prototype._allocate = function (mesh) {
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
     this._program = new Program(gl, this._shaderSource);
     this._useCount = 0;
     if (this._program.errors) {
@@ -150,7 +155,7 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
-    const sectionPlanes = mesh.scene._sectionPlanesState.sectionPlanes;
+    const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = sectionPlanes.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
@@ -162,6 +167,9 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._aColor = program.getAttribute("color");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
+    if (scene.logarithmicDepthBufferEnabled) {
+        this._uZFar = program.getLocation("zFar");
+    }
 };
 
 export {PickTriangleRenderer};

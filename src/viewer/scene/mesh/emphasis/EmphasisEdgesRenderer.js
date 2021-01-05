@@ -179,9 +179,9 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 };
 
 EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
-
-    const gl = mesh.scene.canvas.gl;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
+    const sectionPlanesState = scene._sectionPlanesState;
 
     this._program = new Program(gl, this._shaderSource);
 
@@ -210,6 +210,10 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
     this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
 
+    if (scene.logarithmicDepthBufferEnabled) {
+        this._uZFar = program.getLocation("zFar");
+    }
+
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
@@ -221,6 +225,7 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const camera = scene.camera;
+    const project = camera.project;
 
     program.bind();
 
@@ -230,7 +235,11 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
 
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+
+    if (scene.logarithmicDepthBufferEnabled) {
+        gl.uniform1f(this._uZFar, project.far);
+    }
 
     if (this._uGammaFactor) {
         gl.uniform1f(this._uGammaFactor, scene.gammaFactor);

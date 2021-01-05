@@ -165,9 +165,10 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 };
 
 EmphasisFillRenderer.prototype._allocate = function (mesh) {
-    const lightsState = mesh.scene._lightsState;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const lightsState = scene._lightsState;
+    const sectionPlanesState = scene._sectionPlanesState;
+    const gl = scene.canvas.gl;
     this._program = new Program(gl, this._shaderSource);
     if (this._program.errors) {
         this.errors = this._program.errors;
@@ -180,6 +181,9 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
+    if (scene.logarithmicDepthBufferEnabled) {
+        this._uZFar = program.getLocation("zFar");
+    }
     this._uLightAmbient = [];
     this._uLightColor = [];
     this._uLightDir = [];
@@ -228,7 +232,6 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     const gl = scene.canvas.gl;
     const lightsState = scene._lightsState;
     const camera = scene.camera;
-    const cameraState = camera._state;
     let light;
     const program = this._program;
     program.bind();
@@ -238,8 +241,11 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
     this._lastIndicesBufId = null;
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, cameraState.normalMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.normalMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project.matrix);
+    if (scene.logarithmicDepthBufferEnabled) {
+        gl.uniform1f(this._uZFar, camera.project.far);
+    }
     for (var i = 0, len = lightsState.lights.length; i < len; i++) {
         light = lightsState.lights[i];
         if (this._uLightAmbient[i]) {

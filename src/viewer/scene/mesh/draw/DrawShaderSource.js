@@ -76,6 +76,7 @@ function getFragmentFloatPrecision(gl) {
 }
 
 function buildVertexLambert(mesh) {
+    const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const geometryState = mesh._geometry._state;
@@ -96,6 +97,9 @@ function buildVertexLambert(mesh) {
     src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
+    }
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -237,7 +241,11 @@ function buildVertexLambert(mesh) {
     if (geometryState.primitiveName === "points") {
         src.push("gl_PointSize = pointSize;");
     }
-    src.push("   gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     return src;
 }
@@ -337,7 +345,6 @@ function buildVertexDraw(mesh) {
     }
     src.push("// Drawing vertex shader");
     src.push("attribute  vec3 position;");
-
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -348,6 +355,9 @@ function buildVertexDraw(mesh) {
     src.push("uniform  vec3 offset;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+    }
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
     }
     if (lightsState.lightMaps.length > 0) {
         src.push("varying    vec3 vWorldNormal;");
@@ -512,9 +522,13 @@ function buildVertexDraw(mesh) {
         src.push("vWorldPosition = worldPosition;");
     }
     src.push("   vViewPosition = viewPosition.xyz;");
-    src.push("   gl_Position = projMatrix * viewPosition;");
-    src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    }
+    src.push("gl_Position = clipPos;");
     if (receivesShadow) {
+        src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
         src.push("vec4 tempx; ");
         for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
             if (lightsState.lights[i].castsShadow) {
