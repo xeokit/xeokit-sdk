@@ -134,6 +134,10 @@ class BatchingDrawRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
+
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
         this._uLightDir = [];
@@ -196,11 +200,15 @@ class BatchingDrawRenderer {
         const gl = scene.canvas.gl;
         const program = this._program;
         const lights = scene._lightsState.lights;
-        const camera = scene.camera;
+        const project = scene.camera.project;
 
         program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far)
+        }
 
         if (this._uLightAmbient) {
             const ambientColor = scene._lightsState.getAmbientColor();

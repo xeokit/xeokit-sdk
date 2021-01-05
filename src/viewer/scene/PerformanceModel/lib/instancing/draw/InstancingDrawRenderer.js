@@ -6,10 +6,6 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
-const tempMat4a = math.mat4();
-const tempMat4b = math.mat4();
-
-
 /**
  * @private
  */
@@ -170,6 +166,10 @@ class InstancingDrawRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
+
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
         this._uLightDir = [];
@@ -238,11 +238,15 @@ class InstancingDrawRenderer {
         const program = this._program;
         const lightsState = scene._lightsState;
         const lights = lightsState.lights;
-        let light;
+        const project = scene.camera.project;
 
         program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
 
         if (this._uLightAmbient) {
             const ambientColor = scene._lightsState.getAmbientColor();
@@ -251,7 +255,7 @@ class InstancingDrawRenderer {
 
         for (let i = 0, len = lights.length; i < len; i++) {
 
-            light = lights[i];
+            const light = lights[i];
 
             if (this._uLightColor[i]) {
                 gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);

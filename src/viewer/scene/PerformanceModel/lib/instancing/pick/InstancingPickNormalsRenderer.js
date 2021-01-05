@@ -161,6 +161,10 @@ class InstancingPickNormalsRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
+
         this._uSectionPlanes = [];
         const clips = sectionPlanesState.sectionPlanes;
         for (let i = 0, len = clips.length; i < len; i++) {
@@ -187,7 +191,14 @@ class InstancingPickNormalsRenderer {
     }
 
     _bindProgram() {
-        this._program.bind();
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
+        const program = this._program;
+        const project = scene.camera.project;
+        program.bind();
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

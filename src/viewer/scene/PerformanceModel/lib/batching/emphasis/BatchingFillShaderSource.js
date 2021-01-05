@@ -33,6 +33,10 @@ function buildVertex(scene) {
     src.push("uniform mat4 positionsDecodeMatrix;");
     src.push("uniform vec4 color;");
 
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
+    }
+
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");

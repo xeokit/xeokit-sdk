@@ -34,7 +34,8 @@ class BatchingFillRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const projectState = scene.camera.project._state;
+        const rtcCenter = batchingLayer._state.rtcCenter
 
         if (!this._program) {
             this._allocate();
@@ -52,6 +53,10 @@ class BatchingFillRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, projectState.far)
+        }
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -132,6 +137,9 @@ class BatchingFillRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uColor = program.getLocation("color");
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;
@@ -152,9 +160,12 @@ class BatchingFillRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
+        const project = scene.camera.project;
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

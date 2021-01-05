@@ -23,8 +23,11 @@ function buildVertex(scene) {
     src.push("uniform bool pickInvisible;");
     src.push("uniform mat4 worldMatrix;");
     src.push("uniform mat4 viewMatrix;");
-    src.push("uniform mat4 projMatrix;");
+    src.push("uniform mat4 projMatrix;")
     src.push("uniform mat4 positionsDecodeMatrix;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
+    }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");

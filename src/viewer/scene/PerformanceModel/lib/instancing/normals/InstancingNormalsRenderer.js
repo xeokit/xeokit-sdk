@@ -146,7 +146,9 @@ class InstancingNormalsRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uSectionPlanes = [];
         const clips = sectionPlanesState.sectionPlanes;
         for (var i = 0, len = clips.length; i < len; i++) {
@@ -174,9 +176,12 @@ class InstancingNormalsRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
+        const project = scene.camera.project;
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

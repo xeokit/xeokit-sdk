@@ -137,7 +137,6 @@ class BatchingPickDepthRenderer {
 
     _bindProgram() {
         this._program.bind();
-
     }
 
     webglContextRestored() {

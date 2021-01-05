@@ -46,6 +46,10 @@ function buildVertex(scene) {
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
 
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
+    }
+
     src.push("uniform vec4 lightAmbient;");
 
     for (i = 0, len = lightsState.lights.length; i < len; i++) {

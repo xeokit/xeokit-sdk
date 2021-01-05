@@ -119,6 +119,9 @@ class BatchingPickNormalsRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         for (var i = 0, len = sectionPlanes.length; i < len; i++) {
@@ -136,7 +139,13 @@ class BatchingPickNormalsRenderer {
     }
 
     _bindProgram() {
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
+        const project = scene.camera.project;
         this._program.bind();
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far)
+        }
     }
 
     webglContextRestored() {

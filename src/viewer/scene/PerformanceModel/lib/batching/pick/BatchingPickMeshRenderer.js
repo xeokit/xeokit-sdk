@@ -50,7 +50,6 @@ class BatchingPickMeshRenderer {
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
-
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -118,6 +117,11 @@ class BatchingPickMeshRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
+
         this._uSectionPlanes = [];
 
         const sectionPlanes = sectionPlanesState.sectionPlanes;
@@ -138,16 +142,15 @@ class BatchingPickMeshRenderer {
     }
 
     _bindProgram(frameCtx) {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
-        const camera = scene.camera;
-
+        const project = scene.camera.project;
         program.bind();
-
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

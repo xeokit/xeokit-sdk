@@ -50,6 +50,10 @@ class BatchingEdgesRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, scene.camera.project.far)
+        }
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -137,6 +141,9 @@ class BatchingEdgesRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
@@ -147,9 +154,12 @@ class BatchingEdgesRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
+        const project = scene.camera.project;
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

@@ -160,6 +160,9 @@ class InstancingEdgesRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uSectionPlanes = [];
         const clips = sectionPlanesState.sectionPlanes;
         for (var i = 0, len = clips.length; i < len; i++) {
@@ -183,8 +186,11 @@ class InstancingEdgesRenderer {
         const gl = scene.canvas.gl;
         const program = this._program;
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        const project = scene.camera.project;
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

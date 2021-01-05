@@ -53,6 +53,10 @@ class BatchingNormalsRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, camera.project.far)
+        }
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -107,6 +111,9 @@ class BatchingNormalsRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         for (let i = 0, len = sectionPlanes.length; i < len; i++) {
@@ -131,9 +138,12 @@ class BatchingNormalsRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
+        const project = scene.camera.project;
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, project.far);
+        }
     }
 
     webglContextRestored() {

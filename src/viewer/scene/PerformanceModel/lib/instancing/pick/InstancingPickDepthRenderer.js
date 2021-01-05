@@ -151,7 +151,6 @@ class InstancingPickDepthRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
-
         const clips = sectionPlanesState.sectionPlanes;
 
         for (let i = 0, len = clips.length; i < len; i++) {

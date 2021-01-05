@@ -28,7 +28,10 @@ function buildVertex(scene) {
     src.push("uniform mat4 worldMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
-    src.push("uniform mat4 positionsDecodeMatrix;");
+    src.push("uniform mat4 positionsDecodeMatrix;")
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("uniform float zFar;");
+    }
     src.push("vec3 octDecode(vec2 oct) {");
     src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
     src.push("    if (v.z < 0.0) {");
