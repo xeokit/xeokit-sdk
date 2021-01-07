@@ -46,7 +46,7 @@ class KeyboardPanRotateDollyHandler {
             keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
-                canvas.style.cursor = "default";
+                canvas.style.cursor = null;
             }
         });
 
