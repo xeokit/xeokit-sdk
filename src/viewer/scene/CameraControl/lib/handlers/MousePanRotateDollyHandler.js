@@ -79,6 +79,37 @@ class MousePanRotateDollyHandler {
             keyDown[keyCode] = false;
         });
 
+        function setMousedownState(pick = true) {
+            canvas.style.cursor = "move";
+            setMousedownPositions();
+            if (pick) {
+                setMousedownPick();
+            }
+        }
+
+        function setMousedownPositions() {
+            xRotateDelta = 0;
+            yRotateDelta = 0;
+
+            lastX = states.pointerCanvasPos[0];
+            lastY = states.pointerCanvasPos[1];
+            lastXDown = states.pointerCanvasPos[0];
+            lastYDown = states.pointerCanvasPos[1];
+        }
+
+        function setMousedownPick() {
+            pickController.pickCursorPos = states.pointerCanvasPos;
+            pickController.schedulePickSurface = true;
+            pickController.update();
+
+            if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
+                mouseDownPicked = true;
+                pickedWorldPos.set(pickController.pickResult.worldPos);
+            } else {
+                mouseDownPicked = false;
+            }
+        }
+
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
@@ -93,39 +124,14 @@ class MousePanRotateDollyHandler {
 
                     if (keyDown[scene.input.KEY_SHIFT] || configs.planView) {
 
-                        canvas.style.cursor = "move";
-
-                        xRotateDelta = 0;
-                        yRotateDelta = 0;
-
-                        lastX = states.pointerCanvasPos[0];
-                        lastY = states.pointerCanvasPos[1];
-                        lastXDown = states.pointerCanvasPos[0];
-                        lastYDown = states.pointerCanvasPos[1];
-
-                        pickController.pickCursorPos = states.pointerCanvasPos;
-                        pickController.schedulePickSurface = true;
-                        pickController.update();
-
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
-                            mouseDownPicked = true;
-                            pickedWorldPos.set(pickController.pickResult.worldPos);
-                        } else {
-                            mouseDownPicked = false;
-                        }
+                        setMousedownState();
 
                     } else {
 
                         mouseDownLeft = true;
-                        canvas.style.cursor = "move";
 
-                        xRotateDelta = 0;
-                        yRotateDelta = 0;
+                        setMousedownState(false);
 
-                        lastX = states.pointerCanvasPos[0];
-                        lastY = states.pointerCanvasPos[1];
-                        lastXDown = states.pointerCanvasPos[0];
-                        lastYDown = states.pointerCanvasPos[1];
                     }
 
                     break;
@@ -136,26 +142,8 @@ class MousePanRotateDollyHandler {
 
                    if (!configs.panRightClick) {
 
-                        canvas.style.cursor = "move";
+                        setMousedownState();
 
-                        xRotateDelta = 0;
-                        yRotateDelta = 0;
-
-                        lastX = states.pointerCanvasPos[0];
-                        lastY = states.pointerCanvasPos[1];
-                        lastXDown = states.pointerCanvasPos[0];
-                        lastYDown = states.pointerCanvasPos[1];
-
-                        pickController.pickCursorPos = states.pointerCanvasPos;
-                        pickController.schedulePickSurface = true;
-                        pickController.update();
-
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
-                            mouseDownPicked = true;
-                            pickedWorldPos.set(pickController.pickResult.worldPos);
-                        } else {
-                            mouseDownPicked = false;
-                        }
                     }
 
                     break;
@@ -166,26 +154,8 @@ class MousePanRotateDollyHandler {
 
                     if (configs.panRightClick) {
 
-                        canvas.style.cursor = "move";
+                        setMousedownState();
 
-                        xRotateDelta = 0;
-                        yRotateDelta = 0;
-
-                        lastX = states.pointerCanvasPos[0];
-                        lastY = states.pointerCanvasPos[1];
-                        lastXDown = states.pointerCanvasPos[0];
-                        lastYDown = states.pointerCanvasPos[1];
-
-                        pickController.pickCursorPos = states.pointerCanvasPos;
-                        pickController.schedulePickSurface = true;
-                        pickController.update();
-
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
-                            mouseDownPicked = true;
-                            pickedWorldPos.set(pickController.pickResult.worldPos);
-                        } else {
-                            mouseDownPicked = false;
-                        }
                     }
 
                     break;
