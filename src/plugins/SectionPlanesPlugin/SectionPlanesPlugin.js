@@ -100,7 +100,7 @@ class SectionPlanesPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id="SectionPlanes"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} cfg.overviewCanvasId ID of a canvas element to display the overview.
+     * @param {String} [cfg.overviewCanvasId] ID of a canvas element to display the overview.
      * @param {String} [cfg.overviewVisible=true] Initial visibility of the overview canvas.
      */
     constructor(viewer, cfg = {}) {
@@ -112,10 +112,7 @@ class SectionPlanesPlugin extends Plugin {
         this._controls = {};
         this._shownControlId = null;
 
-        if (!cfg.overviewCanvasId) {
-            this.error("Config missing: overviewCanvasId - will create plugin without overview");
-
-        } else {
+        if (cfg.overviewCanvasId) {
 
             const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
 
