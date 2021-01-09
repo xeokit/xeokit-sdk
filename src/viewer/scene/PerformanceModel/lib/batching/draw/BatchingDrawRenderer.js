@@ -115,7 +115,6 @@ class BatchingDrawRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
-        const sectionPlanesState = scene._sectionPlanesState;
 
         this._program = new Program(gl, this._shaderSource);
 
@@ -172,8 +171,7 @@ class BatchingDrawRenderer {
 
         this._uSectionPlanes = [];
 
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -191,6 +189,10 @@ class BatchingDrawRenderer {
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
             this._uSAOParams = program.getLocation("uSAOParams");
+        }
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
 
@@ -246,6 +248,11 @@ class BatchingDrawRenderer {
                 gl.uniform4fv(this._uSAOParams, tempVec4);
                 this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
             }
+        }
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 

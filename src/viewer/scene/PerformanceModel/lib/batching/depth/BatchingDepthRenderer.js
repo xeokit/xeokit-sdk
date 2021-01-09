@@ -97,7 +97,6 @@ class BatchingDepthRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
 
         this._program = new Program(gl, this._shaderSource);
 
@@ -113,13 +112,9 @@ class BatchingDepthRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
         this._uSectionPlanes = [];
 
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -132,16 +127,25 @@ class BatchingDepthRenderer {
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const project = scene.camera.project;
+
         this._program.bind();
+
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far);
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 

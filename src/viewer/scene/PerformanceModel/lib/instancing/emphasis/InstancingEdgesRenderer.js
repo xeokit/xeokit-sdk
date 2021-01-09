@@ -147,31 +147,35 @@ class InstancingEdgesRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const sectionPlanesState = scene._sectionPlanesState;
+
         this._program = new Program(gl, this._shaderSource);
+
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
+
         this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
+
         const program = this._program;
+
         this._uColor = program.getLocation("color");
         this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
         this._uSectionPlanes = [];
+
         const clips = sectionPlanesState.sectionPlanes;
-        for (var i = 0, len = clips.length; i < len; i++) {
+        for (let i = 0, len = clips.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
+
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
@@ -179,17 +183,25 @@ class InstancingEdgesRenderer {
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const program = this._program;
-        program.bind();
         const project = scene.camera.project;
+
+        this._program.bind();
+
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far);
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 

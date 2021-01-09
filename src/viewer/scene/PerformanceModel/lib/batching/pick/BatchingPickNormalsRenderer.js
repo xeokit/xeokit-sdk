@@ -53,6 +53,11 @@ class BatchingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
 
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);  // TODO: Far should be from projection matrix?
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -105,47 +110,47 @@ class BatchingPickNormalsRenderer {
     }
 
     _allocate() {
-        var scene = this._scene;
+
+        const scene = this._scene;
         const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
+
         this._program = new Program(gl, this._shaderSource);
+
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
+
         const program = this._program;
+
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
         this._uSectionPlanes = [];
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
+
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const project = scene.camera.project;
         this._program.bind();
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far)
-        }
     }
 
     webglContextRestored() {

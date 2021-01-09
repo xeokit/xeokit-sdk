@@ -166,6 +166,22 @@ class FrameContext {
         this.pickProjMatrix = null;
 
         /**
+         * Distance to the near clipping plane when rendering depth fragments for GPU-accelerated 3D picking.
+         *
+         * @property pickZNear
+         * @type {Number|*}
+         */
+        this.pickZNear = 0.01;
+
+        /**
+         * Distance to the far clipping plane when rendering depth fragments for GPU-accelerated 3D picking.
+         *
+         * @property pickZFar
+         * @type {Number|*}
+         */
+        this.pickZFar = 5000;
+
+        /**
          * Whether or not the renderer is currently picking invisible objects.
          *
          * @property pickInvisible

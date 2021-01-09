@@ -61,6 +61,11 @@ class InstancingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -161,10 +166,6 @@ class InstancingPickNormalsRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
-
         this._uSectionPlanes = [];
         const clips = sectionPlanesState.sectionPlanes;
         for (let i = 0, len = clips.length; i < len; i++) {
@@ -188,17 +189,14 @@ class InstancingPickNormalsRenderer {
         this._aModelNormalMatrixCol0 = program.getAttribute("modelNormalMatrixCol0");
         this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
         this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const project = scene.camera.project;
-        program.bind();
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far);
-        }
+        this._program.bind();
     }
 
     webglContextRestored() {

@@ -4,7 +4,6 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
-const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -125,6 +124,7 @@ class InstancingNormalsRenderer {
     }
 
     _allocate() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const sectionPlanesState = scene._sectionPlanesState;
@@ -146,12 +146,10 @@ class InstancingNormalsRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
         this._uSectionPlanes = [];
+
         const clips = sectionPlanesState.sectionPlanes;
-        for (var i = 0, len = clips.length; i < len; i++) {
+        for (let i = 0, len = clips.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -164,23 +162,33 @@ class InstancingNormalsRenderer {
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
+
         if (this._aFlags2) {
             this._aFlags2 = program.getAttribute("flags2");
         }
+
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const program = this._program;
         const project = scene.camera.project;
-        program.bind();
+
+        this._program.bind();
+
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far);
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 

@@ -14,7 +14,9 @@ function buildVertex(scene) {
     const src = [];
 
     src.push("// Instancing fill vertex shader");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
@@ -33,8 +35,9 @@ function buildVertex(scene) {
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("uniform float zFar;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
     }
 
     src.push("uniform vec4 color;");
@@ -77,8 +80,8 @@ function buildVertex(scene) {
         src.push("vFlags2 = flags2;");
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
     src.push("}");
@@ -91,7 +94,9 @@ function buildFragment(scene) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Instancing fill fragment shader");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -99,7 +104,10 @@ function buildFragment(scene) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
@@ -122,6 +130,9 @@ function buildFragment(scene) {
         }
         src.push("if (dist > 0.0) { discard; }");
         src.push("}");
+    }
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     src.push("gl_FragColor = color;");
     src.push("}");

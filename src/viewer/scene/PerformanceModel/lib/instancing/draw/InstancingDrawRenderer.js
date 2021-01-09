@@ -140,10 +140,10 @@ class InstancingDrawRenderer {
     }
 
     _allocate() {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
-        const sectionPlanesState = scene._sectionPlanesState;
 
         this._program = new Program(gl, this._shaderSource);
 
@@ -165,10 +165,6 @@ class InstancingDrawRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
 
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
@@ -203,8 +199,8 @@ class InstancingDrawRenderer {
         }
 
         this._uSectionPlanes = [];
-        const clips = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = clips.length; i < len; i++) {
+
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -229,24 +225,23 @@ class InstancingDrawRenderer {
 
         this._uOcclusionTexture = "uOcclusionTexture";
         this._uSAOParams = program.getLocation("uSAOParams");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram(frameCtx) {
+
         const scene = this._scene;
-        const camera = scene.camera;
         const gl = scene.canvas.gl;
-        const program = this._program;
         const lightsState = scene._lightsState;
         const lights = lightsState.lights;
         const project = scene.camera.project;
 
-        program.bind();
+        this._program.bind();
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far);
-        }
 
         if (this._uLightAmbient) {
             const ambientColor = scene._lightsState.getAmbientColor();
@@ -254,9 +249,7 @@ class InstancingDrawRenderer {
         }
 
         for (let i = 0, len = lights.length; i < len; i++) {
-
             const light = lights[i];
-
             if (this._uLightColor[i]) {
                 gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
             }
@@ -284,6 +277,11 @@ class InstancingDrawRenderer {
                 gl.uniform4fv(this._uSAOParams, tempVec4);
                 this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
             }
+        }
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 
