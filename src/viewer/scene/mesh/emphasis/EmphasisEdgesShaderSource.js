@@ -20,6 +20,9 @@ function buildVertex(mesh) {
     const stationary = mesh._state.stationary;
     const src = [];
     src.push("// Edges drawing vertex shader");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("attribute vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
@@ -29,8 +32,9 @@ function buildVertex(mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("uniform float zFar;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -80,8 +84,8 @@ function buildVertex(mesh) {
         src.push("vWorldPosition = worldPosition;");
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("clipPos.z = log2(max(1e-6, 1.0 + clipPos.z)) * (2.0 / log2(zFar + 1.0)) - 1.0;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
     src.push("}");
@@ -89,14 +93,17 @@ function buildVertex(mesh) {
 }
 
 function buildFragment(mesh) {
+
+    const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const gammaOutput = mesh.scene.gammaOutput;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
-    let i;
-    let len;
     const src = [];
-    src.push("// Edges drawing fragment shader");
 
+    src.push("// Edges drawing fragment shader");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -104,7 +111,10 @@ function buildFragment(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
     if (gammaOutput) {
         src.push("uniform float gammaFactor;");
         src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
@@ -114,7 +124,7 @@ function buildFragment(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -125,7 +135,7 @@ function buildFragment(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
@@ -133,7 +143,9 @@ function buildFragment(mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    src.push("gl_FragColor = vColor;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+    }
     if (gammaOutput) {
         src.push("gl_FragColor = linearToGamma(vColor, gammaFactor);");
     } else {

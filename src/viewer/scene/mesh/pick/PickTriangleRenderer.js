@@ -73,12 +73,18 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const rtcCenter = mesh.rtcCenter;
     const backfaces = materialState.backfaces;
     const frontface = materialState.frontface;
+    const project = scene.camera.project;
     const positionsBuf = geometry._getPickTrianglePositions();
     const pickColorsBuf = geometry._getPickTriangleColors();
 
     this._program.bind();
 
     frameCtx.useProgram++;
+
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+    }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
 
@@ -167,8 +173,8 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._aColor = program.getAttribute("color");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled) {
-        this._uZFar = program.getLocation("zFar");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
 };
 

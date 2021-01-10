@@ -633,8 +633,8 @@ DrawRenderer.prototype._allocate = function (mesh) {
     this._uShadowViewMatrix = [];
     this._uShadowProjMatrix = [];
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        this._uZFar = program.getLocation("zFar");
+    if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
 
     const lights = lightsState.lights;
@@ -908,8 +908,9 @@ DrawRenderer.prototype._bindProgram = function (frameCtx) {
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        gl.uniform1f(this._uZFar, project.far);
+    if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }
 
     for (var i = 0, len = lightsState.lights.length; i < len; i++) {
