@@ -61,18 +61,12 @@ class MousePanRotateDollyHandler {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
-            if (!states.mouseover) {
-                return;
-            }
             const keyCode = e.keyCode;
             keyDown[keyCode] = true;
         });
 
         document.addEventListener("keyup", this._documentKeyUpHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
-                return;
-            }
-            if (!states.mouseover) {
                 return;
             }
             const keyCode = e.keyCode;
@@ -163,9 +157,62 @@ class MousePanRotateDollyHandler {
                 default:
                     break;
             }
+
+            document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
+                // Scaling drag-rotate to canvas boundary
+
+                const canvasBoundary = scene.canvas.boundary;
+                const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
+                const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
+                const x = states.pointerCanvasPos[0];
+                const y = states.pointerCanvasPos[1];
+
+                const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
+
+                if (panning) {
+
+                    const xPanDelta = (x - lastX);
+                    const yPanDelta = (y - lastY);
+
+                    const camera = scene.camera;
+
+                    // We use only canvasHeight here so that aspect ratio does not distort speed
+
+                    if (camera.projection === "perspective") {
+
+                        const depth = Math.abs(mouseDownPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
+                        const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
+
+                        updates.panDeltaX += (1.5 * xPanDelta * targetDistance / canvasHeight);
+                        updates.panDeltaY += (1.5 * yPanDelta * targetDistance / canvasHeight);
+
+                    } else {
+
+                        updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
+                        updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
+                    }
+
+                } else if (!mouseDownMiddle && !mouseDownRight) {
+
+                    if (!configs.planView) { // No rotating in plan-view mode
+
+                        if (configs.firstPerson) {
+                            updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2;
+                            updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
+
+                        } else {
+                            updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
+                            updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate);
+                        }
+                    }
+                }
+
+                lastX = x;
+                lastY = y;
+            });
         });
 
-        canvas.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
+        canvas.addEventListener("mousemove", this._canvasMouseMoveHandler = (e) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
@@ -179,60 +226,6 @@ class MousePanRotateDollyHandler {
 
             mouseMovedSinceLastWheel = true;
 
-            if (!this._down) {
-                return;
-            }
-
-            // Scaling drag-rotate to canvas boundary
-
-            const canvasBoundary = scene.canvas.boundary;
-            const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
-            const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
-            const x = states.pointerCanvasPos[0];
-            const y = states.pointerCanvasPos[1];
-
-            const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
-
-            if (panning) {
-
-                const xPanDelta = (x - lastX);
-                const yPanDelta = (y - lastY);
-
-                const camera = scene.camera;
-
-                // We use only canvasHeight here so that aspect ratio does not distort speed
-
-                if (camera.projection === "perspective") {
-
-                    const depth = Math.abs(mouseDownPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
-                    const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
-
-                    updates.panDeltaX += (1.5 * xPanDelta * targetDistance / canvasHeight);
-                    updates.panDeltaY += (1.5 * yPanDelta * targetDistance / canvasHeight);
-
-                } else {
-
-                    updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
-                    updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
-                }
-
-            } else if (!mouseDownMiddle && !mouseDownRight) {
-
-                if (!configs.planView) { // No rotating in plan-view mode
-
-                    if (configs.firstPerson) {
-                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2;
-                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
-
-                    } else {
-                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
-                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate);
-                    }
-                }
-            }
-
-            lastX = x;
-            lastY = y;
         });
 
         document.addEventListener("mouseup", this._documentMouseUpHandler = (e) => {
@@ -255,6 +248,8 @@ class MousePanRotateDollyHandler {
             xRotateDelta = 0;
             yRotateDelta = 0;
             this._down = false;
+
+            document.removeEventListener("mousemove", this._documentMouseMoveHandler);
         });
 
         canvas.addEventListener("mouseup", this._mouseUpHandler = (e) => {
@@ -285,23 +280,6 @@ class MousePanRotateDollyHandler {
             }
             xRotateDelta = 0;
             yRotateDelta = 0;
-
-            this._down = false;
-        });
-
-        canvas.addEventListener("mouseleave", this._mouseLeaveHandler = () => {
-
-            if (!(configs.active && configs.pointerEnabled)) {
-                return;
-            }
-
-            xRotateDelta = 0;
-            yRotateDelta = 0;
-
-            updates.panDeltaX = 0;
-            updates.panDeltaY = 0;
-            updates.rotateDeltaX = 0;
-            updates.rotateDeltaY = 0;
 
             this._down = false;
         });
@@ -351,11 +329,11 @@ class MousePanRotateDollyHandler {
         document.removeEventListener("keydown", this._documentKeyDownHandler);
         document.removeEventListener("keyup", this._documentKeyUpHandler);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
-        canvas.removeEventListener("mousemove", this._mouseMoveHandler);
+        document.removeEventListener("mousemove", this._documentMouseMoveHandler);
+        canvas.removeEventListener("mousemove", this._canvasMouseMoveHandler);
         document.removeEventListener("mouseup", this._documentMouseUpHandler);
         canvas.removeEventListener("mouseup", this._mouseUpHandler);
         canvas.removeEventListener("mouseenter", this._mouseEnterHandler);
-        canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
         canvas.removeEventListener("wheel", this._mouseWheelHandler);
     }
 }

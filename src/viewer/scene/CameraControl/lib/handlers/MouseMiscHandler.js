@@ -18,7 +18,7 @@ class MouseMiscHandler {
             canvas.style.cursor = null;
         });
 
-        canvas.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
+        document.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
             getCanvasPosFromEvent(e, states.pointerCanvasPos);
         });
 
@@ -44,7 +44,7 @@ class MouseMiscHandler {
 
         const canvas = this._scene.canvas.canvas;
 
-        canvas.removeEventListener("mousemove", this._mouseMoveHandler);
+        document.removeEventListener("mousemove", this._mouseMoveHandler);
         canvas.removeEventListener("mouseenter", this._mouseEnterHandler);
         canvas.removeEventListener("mouseleave", this._mouseLeaveHandler);
         canvas.removeEventListener("mousedown", this._mouseDownHandler);
@@ -58,7 +58,7 @@ function getCanvasPosFromEvent(event, canvasPos) {
         canvasPos[0] = event.x;
         canvasPos[1] = event.y;
     } else {
-        let element = event.target;
+        let element = event.currentTarget;
         let totalOffsetLeft = 0;
         let totalOffsetTop = 0;
         while (element.offsetParent) {
