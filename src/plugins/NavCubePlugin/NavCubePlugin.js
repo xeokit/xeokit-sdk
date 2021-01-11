@@ -1,4 +1,4 @@
-import {Plugin} from "././../../viewer/Plugin.js";
+import {Plugin} from "../../viewer/Plugin.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Scene} from "../../viewer/scene/scene/Scene.js";
 import {DirLight} from "./../../viewer/scene/lights/DirLight.js";
@@ -106,7 +106,7 @@ class NavCubePlugin extends Plugin {
         var visible = true;
 
         try {
-            this._navCubeScene = new Scene({
+            this._navCubeScene = new Scene(viewer, {
                 canvasId: cfg.canvasId,
                 canvasElement: cfg.canvasElement,
                 transparent: true

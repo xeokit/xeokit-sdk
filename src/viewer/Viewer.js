@@ -2,6 +2,7 @@ import {Scene} from "./scene/scene/Scene.js";
 import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
+import {WEBGL_INFO} from "./scene/webglInfo.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -59,8 +60,7 @@ class Viewer {
          * @property scene
          * @type {Scene}
          */
-        this.scene = new Scene({
-            viewer: this,
+        this.scene = new Scene(this, {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
             webgl2: false,
@@ -136,6 +136,15 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
+    }
+
+    /**
+     * Returns true if the Viewer ````logarithmicDepthBufferEnabled```` option will work on this system.
+     *
+     * @return {boolean}
+     */
+    get logarithmicDepthBufferSupported() {
+        return (!!WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]);
     }
 
     /**
