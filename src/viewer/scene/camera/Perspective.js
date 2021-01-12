@@ -22,17 +22,28 @@ class Perspective extends Component {
      * @constructor
      * @private
      */
-    constructor(owner, cfg = {}) {
+    constructor(camera, cfg = {}) {
 
-        super(owner, cfg);
+        super(camera, cfg);
+
+        /**
+         * The Camera this Perspective belongs to.
+         *
+         * @property {Camera}
+         */
+        this.camera = camera;
 
         this._state = new RenderState({
             matrix: math.mat4(),
-            near : 0.1,
+            inverseMatrix: math.mat4(),
+            transposedMatrix: math.mat4(),
+            near: 0.1,
             far: 2000.0
         });
 
-        this._dirty = false;
+        this._inverseMatrixDirty = true;
+        this._transposedMatrixDirty = true;
+
         this._fov = 60.0;
 
         // Recompute aspect from change in canvas size
@@ -45,18 +56,26 @@ class Perspective extends Component {
     }
 
     _update() {
+
         const WIDTH_INDEX = 2;
         const HEIGHT_INDEX = 3;
         const boundary = this.scene.viewport.boundary;
         const aspect = boundary[WIDTH_INDEX] / boundary[HEIGHT_INDEX];
-        let fov = this._fov;
         const fovAxis = this._fovAxis;
+
+        let fov = this._fov;
         if (fovAxis === "x" || (fovAxis === "min" && aspect < 1) || (fovAxis === "max" && aspect > 1)) {
             fov = fov / aspect;
         }
         fov = Math.min(fov, 120);
+
         math.perspectiveMat4(fov * (Math.PI / 180.0), aspect, this._state.near, this._state.far, this._state.matrix);
+
+        this._inverseMatrixDirty = true;
+        this._transposedMatrixDirty = true;
+
         this.glRedraw();
+
         this.fire("matrix", this._state.matrix);
     }
 
@@ -72,12 +91,6 @@ class Perspective extends Component {
     set fov(value) {
         this._fov = (value !== undefined && value !== null) ? value : 60.0;
         this._needUpdate(0); // Ensure matrix built on next "tick"
-        /**
-         Fired whenever this Perspective's {@link Perspective/fov} property changes.
-
-         @event fov
-         @param value The property's new value
-         */
         this.fire("fov", this._fov);
     }
 
@@ -114,12 +127,6 @@ class Perspective extends Component {
         }
         this._fovAxis = value;
         this._needUpdate(0); // Ensure matrix built on next "tick"
-        /**
-         Fired whenever this Perspective's {@link Perspective/fovAxis} property changes.
-
-         @event fovAxis
-         @param value The property's new value
-         */
         this.fire("fovAxis", this._fovAxis);
     }
 
@@ -154,11 +161,6 @@ class Perspective extends Component {
         }
         this._state.near = near;
         this._needUpdate(0); // Ensure matrix built on next "tick"
-        /**
-         Fired whenever this Perspective's   {@link Perspective/near} property changes.
-         @event near
-         @param value The property's new value
-         */
         this.fire("near", this._state.near);
     }
 
@@ -169,7 +171,7 @@ class Perspective extends Component {
      *
      * Default value is ````0.1````.
      *
-     * @return {Number} Near frustum plane position.
+     * @returns The Perspective's near plane position.
      */
     get near() {
         return this._state.near;
@@ -180,9 +182,7 @@ class Perspective extends Component {
      *
      * Fires a "far" event on change.
      *
-     * @property far
-     * @default 2000.0
-     * @type {Number}
+     * @param {Number} value New Perspective far plane position.
      */
     set far(value) {
         const far = (value !== undefined && value !== null) ? value : 2000.0;
@@ -191,21 +191,13 @@ class Perspective extends Component {
         }
         this._state.far = far;
         this._needUpdate(0); // Ensure matrix built on next "tick"
-        /**
-         Fired whenever this Perspective's  {@link Perspective/far} property changes.
-
-         @event far
-         @param value The property's new value
-         */
         this.fire("far", this._state.far);
     }
 
     /**
      * Gets the position of this Perspective's far plane on the positive View-space Z-axis.
      *
-     * @property far
-     * @default 10000.0
-     * @type {Number}
+     * @return {Number} The Perspective's far plane position.
      */
     get far() {
         return this._state.far;
@@ -228,12 +220,75 @@ class Perspective extends Component {
     }
 
     /**
-     * Destroys this Perspective.
+     * Gets the inverse of {@link Perspective#matrix}.
+     *
+     * @returns {Number[]} The inverse of {@link Perspective#matrix}.
+     */
+    get inverseMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        if (this._inverseMatrixDirty) {
+            math.inverseMat4(this._state.matrix, this._state.inverseMatrix);
+            this._inverseMatrixDirty = false;
+        }
+        return this._state.inverseMatrix;
+    }
+
+    /**
+     * Gets the transpose of {@link Perspective#matrix}.
+     *
+     * @returns {Number[]} The transpose of {@link Perspective#matrix}.
+     */
+    get transposedMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        if (this._transposedMatrixDirty) {
+            math.transposeMat4(this._state.matrix, this._state.transposedMatrix);
+            this._transposedMatrixDirty = false;
+        }
+        return this._state.transposedMatrix;
+    }
+
+    /**
+     * Un-projects the given Canvas-space coordinates and Screen-space depth, using this Perspective projection.
+     *
+     * @param {Number[]} canvasPos Inputs 2D Canvas-space coordinates.
+     * @param {Number} screenZ Inputs Screen-space Z coordinate.
+     * @param {Number[]} screenPos Outputs 3D Screen/Clip-space coordinates.
+     * @param {Number[]} viewPos Outputs un-projected 3D View-space coordinates.
+     * @param {Number[]} worldPos Outputs un-projected 3D World-space coordinates.
+     */
+    unproject(canvasPos, screenZ, screenPos, viewPos, worldPos) {
+
+        const canvas = this.scene.canvas.canvas;
+
+        const halfCanvasWidth = canvas.offsetWidth / 2.0;
+        const halfCanvasHeight = canvas.offsetHeight / 2.0;
+
+        screenPos[0] = (canvasPos[0] - halfCanvasWidth) / halfCanvasWidth;
+        screenPos[1] = (canvasPos[1] - halfCanvasHeight) / halfCanvasHeight;
+        screenPos[2] = screenZ;
+        screenPos[3] = 1.0;
+
+        math.mulMat4v4(this.inverseMatrix, screenPos, viewPos);
+        math.mulVec3Scalar(viewPos, 1.0 / viewPos[3]);
+
+        viewPos[3] = 1.0;
+        viewPos[1] *= -1;
+
+        math.mulMat4v4(this.camera.inverseViewMatrix, viewPos, worldPos);
+
+        return worldPos;
+    }
+
+    /** @private
+     *
      */
     destroy() {
         super.destroy();
         this._state.destroy();
-        super.destroy();
         this.scene.canvas.off(this._canvasResized);
     }
 }

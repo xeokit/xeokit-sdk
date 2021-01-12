@@ -229,7 +229,8 @@ class Camera extends Component {
             deviceMatrix: math.mat4(),
             hasDeviceMatrix: false, // True when deviceMatrix set to other than identity
             matrix: math.mat4(),
-            normalMatrix: math.mat4()
+            normalMatrix: math.mat4(),
+            inverseMatrix: math.mat4()
         });
 
         this._perspective = new Perspective(this);
@@ -301,8 +302,8 @@ class Camera extends Component {
         } else {
             math.lookAtMat4v(eye, this._look, this._up, state.matrix);
         }
-        math.inverseMat4(this._state.matrix, this._state.normalMatrix);
-        math.transposeMat4(this._state.normalMatrix);
+        math.inverseMat4(this._state.matrix, this._state.inverseMatrix);
+        math.transposeMat4(this._state.inverseMatrix, this._state.normalMatrix);
         this.glRedraw();
         this.fire("matrix", this._state.matrix);
         this.fire("viewMatrix", this._state.matrix);
@@ -508,13 +509,6 @@ class Camera extends Component {
         this._state.deviceMatrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
         this._state.hasDeviceMatrix = !!matrix;
         this._needUpdate(0);
-
-        /**
-         Fired whenever this CustomProjection's {@link CustomProjection/matrix} property changes.
-
-         @event deviceMatrix
-         @param value The property's new value
-         */
         this.fire("deviceMatrix", this._state.deviceMatrix);
     }
 
@@ -552,13 +546,6 @@ class Camera extends Component {
         this._worldForward[0] = this._worldAxis[6];
         this._worldForward[1] = this._worldAxis[7];
         this._worldForward[2] = this._worldAxis[8];
-
-        /**
-         * Fired whenever this Camera's {@link Camera#worldAxis} property changes.
-         *
-         * @event worldAxis
-         * @param axis The property's new axis
-         */
         this.fire("worldAxis", this._worldAxis);
     }
 
@@ -647,13 +634,6 @@ class Camera extends Component {
      */
     set gimbalLock(value) {
         this._gimbalLock = value !== false;
-
-        /**
-         Fired whenever this Camera's  {@link Camera#gimbalLock} property changes.
-
-         @event gimbalLock
-         @param value The property's new value
-         */
         this.fire("gimbalLock", this._gimbalLock);
     }
 
@@ -679,13 +659,6 @@ class Camera extends Component {
      */
     set constrainPitch(value) {
         this._constrainPitch = !!value;
-
-        /**
-         Fired whenever this Camera's  {@link Camera#constrainPitch} property changes.
-
-         @event constrainPitch
-         @param value The property's new value
-         */
         this.fire("constrainPitch", this._constrainPitch);
     }
 
@@ -764,6 +737,20 @@ class Camera extends Component {
             this._doUpdate();
         }
         return this._state.normalMatrix;
+    }
+
+    /**
+     * Gets the inverse of the Camera's viewing transform matrix.
+     *
+     * This has the same value as {@link Camera#normalMatrix}.
+     *
+     * @returns {Number[]} The inverse viewing transform matrix.
+     */
+    get inverseViewMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        return this._state.inverseMatrix;
     }
 
     /**
@@ -853,14 +840,8 @@ class Camera extends Component {
         this.glRedraw();
         this._update(); // Need to rebuild lookat matrix with full eye, look & up
         this.fire("dirty");
-        /**
-         Fired whenever this Camera's  {@link Camera#projection} property changes.
-
-         @event projection
-         @param value The property's new value
-         */
-        this.fire("projection",  this._projectionType);
-        this.fire("projMatrix",  this._project.matrix);
+        this.fire("projection", this._projectionType);
+        this.fire("projMatrix", this._project.matrix);
     }
 
     /**
