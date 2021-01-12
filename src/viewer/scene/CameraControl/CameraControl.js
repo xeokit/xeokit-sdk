@@ -861,17 +861,6 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets a sphere as the representation of the pivot position when {@link CameraControl#followPointer} is true.
-     *
-     * See class comments for an example.
-     *
-     * @param {Booblean} state if the sphere should be shown.
-     */
-    set pivotSphereEnabled(state) {
-        this._controllers.pivotController.setPivotSphereEnabled(state);
-    }
-
-    /**
      *  Sets if this ````CameraControl```` is active or not.
      *
      * When inactive, the ````CameraControl```` will not react to input.
@@ -1575,6 +1564,25 @@ class CameraControl extends Component {
      */
     get keyboardLayout() {
         return this._configs.keyboardLayout;
+    }
+
+    /**
+     * Sets a sphere as the representation of the pivot position.
+     *
+     * @param {Object} [cfg] Sphere configuration.
+     * @param {String} [cfg.size=1] Optional size factor of the sphere. Defaults to 1.
+     * @param {String} [cfg.material=PhongMaterial] Optional size factor of the sphere. Defaults to a red opaque material.
+     */
+    enablePivotSphere(cfg = {}) {
+        this._controllers.pivotController.enablePivotSphere(cfg);
+    }
+
+    /**
+     * Remove the sphere as the representation of the pivot position.
+     *
+     */
+    disablePivotSphere() {
+        this._controllers.pivotController.disablePivotSphere();
     }
 
     /**
