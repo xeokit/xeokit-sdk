@@ -28,7 +28,7 @@ class PivotController {
         this._pivoting = false; // True while pivoting
         this._shown = false;
 
-        this._pivotSphereEnabled = true;
+        this._pivotSphereEnabled = false;
         this._pivotSphere = null;
         this._pivotSphereGeometry = null;
         this._pivotSphereMaterial = new PhongMaterial(scene, { // TODO may be null at start
@@ -57,7 +57,7 @@ class PivotController {
     createPivotSphere(position = [0,0,0], radius = 1) {
         this._pivotSphereGeometry = new VBOGeometry(
             this._scene,
-            buildSphereGeometry({ radius })
+            buildSphereGeometry({ radius, heightSegments: 12, widthSegments: 10})
         );
         this._pivotSphere = new Mesh(this._scene, {
             geometry: this._pivotSphereGeometry,
@@ -94,10 +94,10 @@ class PivotController {
             this._pivotCanvasPos[0] = Math.floor((1 + this._pivotProjPos[0] / this._pivotProjPos[3]) * canvasWidth / 2);
             this._pivotCanvasPos[1] = Math.floor((1 - this._pivotProjPos[1] / this._pivotProjPos[3]) * canvasHeight / 2);
 
-            const canvasElem = canvas.canvas;
-            const canvasBoundingRect = canvasElem.getBoundingClientRect();
-
             if (this._pivotElement) {
+                const canvasElem = canvas.canvas;
+                const canvasBoundingRect = canvasElem.getBoundingClientRect();
+
                 this._pivotElement.style.left = (Math.floor(canvasBoundingRect.left + this._pivotCanvasPos[0]) - (this._pivotElement.clientWidth / 2)) + "px";
                 this._pivotElement.style.top = (Math.floor(canvasBoundingRect.top + this._pivotCanvasPos[1]) - (this._pivotElement.clientHeight / 2)) + "px";
             }
@@ -112,6 +112,15 @@ class PivotController {
      */
     setPivotElement(pivotElement) {
         this._pivotElement = pivotElement;
+    }
+
+    /**
+     * Sets a sphere as the representation of the pivot position.
+     *
+     * @param pivotElement
+     */
+    setPivotSphereEnabled(pivotSphereEnabled) {
+        this._pivotSphereEnabled = pivotSphereEnabled;
     }
 
     /**
@@ -260,10 +269,11 @@ class PivotController {
             this._pivotElement.style.visibility = "visible";
         }
         if (this._pivotSphereEnabled) {
-            const position = [];
-            math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix), position, [], []);
+            const position = math.vec3();
+            math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix, math.mat4()), position, math.vec4(), math.vec3());
             const length = math.distVec3(position, this.getPivotPos());
-            const radius = Math.tan(Math.PI / 200 ) * length;
+            const radius = Math.tan(Math.PI / 200 ) * length / 3;
+            this.destroyPivotSphere();
             this.createPivotSphere(this.getPivotPos(), radius);
         }
         this._shown = true;
