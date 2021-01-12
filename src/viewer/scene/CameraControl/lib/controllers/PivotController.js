@@ -1,4 +1,8 @@
-import {math} from "../../../math/math.js";
+import { math } from "../../../math/math.js";
+import { PhongMaterial } from "../../../materials/PhongMaterial.js";
+import { Mesh } from "../../../mesh/Mesh.js";
+import { VBOGeometry } from "../../../geometry/VBOGeometry.js";
+import { buildSphereGeometry } from "../../../geometry/builders/buildSphereGeometry.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -24,6 +28,14 @@ class PivotController {
         this._pivoting = false; // True while pivoting
         this._shown = false;
 
+        this._pivotSphereEnabled = true;
+        this._pivotSphere = null;
+        this._pivotSphereGeometry = null;
+        this._pivotSphereMaterial = new PhongMaterial(scene, { // TODO may be null at start
+            emissive: [1, 0, 0],
+            diffuse: [0, 0, 0],
+        });
+
         this._pivotViewPos = math.vec4();
         this._pivotProjPos = math.vec4();
         this._pivotCanvasPos = math.vec2();
@@ -40,6 +52,28 @@ class PivotController {
         this._onTick = this._scene.on("tick", () => {
             this.updatePivotElement();
         });
+    }
+
+    createPivotSphere(position = [0,0,0], radius = 1) {
+        this._pivotSphereGeometry = new VBOGeometry(
+            this._scene,
+            buildSphereGeometry({ radius })
+        );
+        this._pivotSphere = new Mesh(this._scene, {
+            geometry: this._pivotSphereGeometry,
+            material: this._pivotSphereMaterial,
+            pickable: false,
+            position
+        });
+    };
+
+    destroyPivotSphere() {
+        if (this._pivotSphere) {
+            this._pivotSphere.destroy();
+        }
+        if (this._pivotSphereGeometry) {
+            this._pivotSphereGeometry.destroy();
+        }
     }
 
     updatePivotElement() {
@@ -209,6 +243,12 @@ class PivotController {
      */
     showPivot() {
         if (this._shown) {
+            if (this._hideTimeout) {
+                window.clearTimeout(this._hideTimeout);
+                this._hideTimeout = window.setTimeout(() => {
+                    this.hidePivot();
+                }, 1000);
+            }
             return;
         }
         if (this._hideTimeout !== null) {
@@ -218,11 +258,18 @@ class PivotController {
         if (this._pivotElement) {
             this.updatePivotElement();
             this._pivotElement.style.visibility = "visible";
-            this._shown = true;
-            this._hideTimeout = window.setTimeout(() => {
-                this.hidePivot();
-            }, 1000);
         }
+        if (this._pivotSphereEnabled) {
+            const position = [];
+            math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix), position, [], []);
+            const length = math.distVec3(position, this.getPivotPos());
+            const radius = Math.tan(Math.PI / 200 ) * length;
+            this.createPivotSphere(this.getPivotPos(), radius);
+        }
+        this._shown = true;
+        this._hideTimeout = window.setTimeout(() => {
+            this.hidePivot();
+        }, 1000);
     }
 
     /**
@@ -240,6 +287,9 @@ class PivotController {
         }
         if (this._pivotElement) {
             this._pivotElement.style.visibility = "hidden";
+        }
+        if (this._pivotSphereEnabled) {
+            this.destroyPivotSphere();
         }
         this._shown = false;
     }
