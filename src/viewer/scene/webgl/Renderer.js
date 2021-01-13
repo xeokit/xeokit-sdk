@@ -946,7 +946,7 @@ const Renderer = function (scene, options) {
 
                 getAABBNearAndFar(origin, pickedEntity.aabb, nearAndFar);
 
-                const distToMove = nearAndFar[0] - 100; // TODO
+                const distToMove = nearAndFar[0] - 1000; // TODO: Automatically derive robust value for this
                 const moveVec = math.mulVec3Scalar(math.normalizeVec3(direction, tempVec3c), distToMove);
                 const closerOrigin = math.addVec3(origin, moveVec, tempVec3d);
 
