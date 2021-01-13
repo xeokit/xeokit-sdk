@@ -946,7 +946,7 @@ const Renderer = function (scene, options) {
 
                 getAABBNearAndFar(origin, pickedEntity.aabb, nearAndFar);
 
-                const distToMove = nearAndFar[0] - 1000; // TODO: Automatically derive robust value for this
+                const distToMove = nearAndFar[0] - 100; // TODO: Automatically derive robust value for this
                 const moveVec = math.mulVec3Scalar(math.normalizeVec3(direction, tempVec3c), distToMove);
                 const closerOrigin = math.addVec3(origin, moveVec, tempVec3d);
 
@@ -956,7 +956,7 @@ const Renderer = function (scene, options) {
                 const look = math.addVec3(closerOrigin, direction, tempVec3e);
 
                 pickViewMatrix = math.lookAtMat4v(closerOrigin, look, up, tempMat4a);
-                pickProjMatrix = math.frustumMat4(-1, 1, -1, 1, nearAndFar[0], nearAndFar[1], tempMat4b);
+                pickProjMatrix = math.frustumMat4(-.1, .1, -.1, .1, nearAndFar[0], nearAndFar[1], tempMat4b);
 
                 pickCanvasX = canvas.clientWidth * 0.5;
                 pickCanvasY = canvas.clientHeight * 0.5;
