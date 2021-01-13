@@ -953,13 +953,13 @@ const Renderer = function (scene, options) {
                 nearAndFar[0] -= distToMove;
                 nearAndFar[1] -= distToMove;
 
-                pickCanvasX = params.canvasPos[0];
-                pickCanvasY = params.canvasPos[1];
-
                 const look = math.addVec3(closerOrigin, direction, tempVec3e);
 
                 pickViewMatrix = math.lookAtMat4v(closerOrigin, look, up, tempMat4a);
                 pickProjMatrix = math.frustumMat4(-1, 1, -1, 1, nearAndFar[0], nearAndFar[1], tempMat4b);
+
+                pickCanvasX = canvas.clientWidth * 0.5;
+                pickCanvasY = canvas.clientHeight * 0.5;
 
                 pickResult.canvasPos = params.canvasPos;
 
