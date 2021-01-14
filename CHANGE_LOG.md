@@ -16,6 +16,10 @@ Unreleased
   * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil)
 * Viewer
   * Logarithmic depth buffer. [#254](https://github.com/xeokit/xeokit-sdk/issues/254) ([**@xeolabs**](https://github.com/xeolabs))
+    
+### Breaking changes
+
+* Viewer
   * Option to enable or disable Entity#offset. [#514](https://github.com/xeokit/xeokit-sdk/issues/514) ([**@xeolabs**](https://github.com/xeolabs))  
   
 # 1.5.3
