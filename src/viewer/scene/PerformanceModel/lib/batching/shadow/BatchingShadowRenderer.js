@@ -39,6 +39,9 @@ class BatchingShadowRenderer {
             this._bindProgram(frameCtx);
         }
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        if (scene.logarithmicDepthBufferEnabled) {
+            gl.uniform1f(this._uZFar, scene.camera.project.far)
+        }
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         if (this._aColor) { // Needed for masking out transparent entities using alpha channel
             this._aColor.bindArrayBuffer(state.colorsBuf);
@@ -95,6 +98,9 @@ class BatchingShadowRenderer {
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
         this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uZFar = program.getLocation("zFar");
+        }
         this._uSectionPlanes = [];
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         for (let i = 0, len = sectionPlanes.length; i < len; i++) {

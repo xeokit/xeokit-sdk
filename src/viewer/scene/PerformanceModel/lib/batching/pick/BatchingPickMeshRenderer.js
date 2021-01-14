@@ -51,6 +51,11 @@ class BatchingPickMeshRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
 
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -102,7 +107,6 @@ class BatchingPickMeshRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
 
         this._program = new Program(gl, this._shaderSource);
 
@@ -118,11 +122,10 @@ class BatchingPickMeshRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+
         this._uSectionPlanes = [];
 
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-
-        for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -135,19 +138,20 @@ class BatchingPickMeshRenderer {
         this._aPickColor = program.getAttribute("pickColor");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+
+        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram(frameCtx) {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const program = this._program;
-        const camera = scene.camera;
 
-        program.bind();
+        this._program.bind();
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
     }
 
     webglContextRestored() {

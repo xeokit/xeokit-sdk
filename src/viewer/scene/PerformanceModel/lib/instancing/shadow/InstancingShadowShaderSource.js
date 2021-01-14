@@ -28,7 +28,6 @@ function buildVertex(scene) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
-    src.push("varying vec4 vViewPosition;");
     src.push("void main(void) {");
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
@@ -46,7 +45,6 @@ function buildVertex(scene) {
         src.push("vWorldPosition = worldPosition;");
         src.push("vFlags2 = flags2;");
     }
-    src.push("  vViewPosition = viewPosition;");
     src.push("  gl_Position = shadowProjMatrix * viewPosition;");
     src.push("}");
     src.push("}");
@@ -78,7 +76,6 @@ function buildFragment(scene) {
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
-    src.push("varying vec4 vViewPosition;");
 
     src.push("vec4 encodeFloat( const in float v ) {");
     src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");

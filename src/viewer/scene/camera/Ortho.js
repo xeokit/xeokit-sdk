@@ -24,15 +24,27 @@ class Ortho extends Component {
      * @constructor
      * @private
      */
-    constructor(owner, cfg = {}) {
+    constructor(camera, cfg = {}) {
 
-        super(owner, cfg);
+        super(camera, cfg);
+
+        /**
+         * The Camera this Ortho belongs to.
+         *
+         * @property {Camera}
+         */
+        this.camera = camera;
 
         this._state = new RenderState({
             matrix: math.mat4(),
+            inverseMatrix: math.mat4(),
+            transposedMatrix: math.mat4(),
             near : 0.1,
             far: 2000.0
         });
+
+        this._inverseMatrixDirty = true;
+        this._transposedMatrixDirty = true;
 
         this.scale = cfg.scale;
         this.near = cfg.near;
@@ -75,6 +87,9 @@ class Ortho extends Component {
 
         math.orthoMat4c(left, right, bottom, top, this._state.near, this._state.far, this._state.matrix);
 
+        this._inverseMatrixDirty = true;
+        this._transposedMatrixDirty = true;
+
         this.glRedraw();
 
         this.fire("matrix", this._state.matrix);
@@ -100,12 +115,6 @@ class Ortho extends Component {
         }
         this._scale = value;
         this._needUpdate(0);
-        /**
-         Fired whenever this Ortho's {@link Ortho#scale} property changes.
-
-         @event scale
-         @param value The property's new value
-         */
         this.fire("scale", this._scale);
     }
 
@@ -138,12 +147,6 @@ class Ortho extends Component {
         }
         this._state.near = near;
         this._needUpdate(0);
-        /**
-         Fired whenever this Ortho's  {@link Ortho#near} property changes.
-
-         @event near
-         @param value The property's new value
-         */
         this.fire("near", this._state.near);
     }
 
@@ -174,12 +177,6 @@ class Ortho extends Component {
         }
         this._state.far = far;
         this._needUpdate(0);
-        /**
-         Fired whenever this Ortho's {@link Ortho#far} property changes.
-
-         @event far
-         @param value The property's new value
-         */
         this.fire("far", this._state.far);
     }
 
@@ -210,6 +207,73 @@ class Ortho extends Component {
         return this._state.matrix;
     }
 
+    /**
+     * Gets the inverse of {@link Ortho#matrix}.
+     *
+     * @returns {Number[]} The inverse of {@link Ortho#matrix}.
+     */
+    inverseMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        if (this._inverseMatrixDirty) {
+            math.inverseMat4(this._state.matrix, this._state.inverseMatrix);
+            this._inverseMatrixDirty = false;
+        }
+        return this._state.inverseMatrix;
+    }
+
+    /**
+     * Gets the transpose of {@link Ortho#matrix}.
+     *
+     * @returns {Number[]} The transpose of {@link Ortho#matrix}.
+     */
+    transposedMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        if (this._transposedMatrixDirty) {
+            math.transposeMat4(this._state.matrix, this._state.transposedMatrix);
+            this._transposedMatrixDirty = false;
+        }
+        return this._state.transposedMatrix;
+    }
+
+    /**
+     * Un-projects the given Canvas-space coordinates, using this Ortho projection.
+     *
+     * @param {Number[]} canvasPos Inputs 2D Canvas-space coordinates.
+     * @param {Number} screenZ Inputs Screen-space Z coordinate.
+     * @param {Number[]} screenPos Outputs 3D Screen/Clip-space coordinates.
+     * @param {Number[]} viewPos Outputs un-projected 3D View-space coordinates.
+     * @param {Number[]} worldPos Outputs un-projected 3D World-space coordinates.
+     */
+    unproject(canvasPos, screenZ, screenPos, viewPos, worldPos) {
+
+        const canvas = this.scene.canvas.canvas;
+
+        const halfCanvasWidth = canvas.offsetWidth / 2.0;
+        const halfCanvasHeight = canvas.offsetHeight / 2.0;
+
+        screenPos[0] = (canvasPos[0] - halfCanvasWidth) / halfCanvasWidth;
+        screenPos[1] = (canvasPos[1] - halfCanvasHeight) / halfCanvasHeight;
+        screenPos[2] = screenZ;
+        screenPos[3] = 1.0;
+
+        math.mulMat4v4(this.inverseMatrix, screenPos, viewPos);
+        math.mulVec3Scalar(viewPos, 1.0 / viewPos[3]);
+
+        viewPos[3] = 1.0;
+        viewPos[1] *= -1;
+
+        math.mulMat4v4(this.camera.inverseViewMatrix, viewPos, worldPos);
+
+        return worldPos;
+    }
+
+    /** @private
+     *
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

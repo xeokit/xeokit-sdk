@@ -165,9 +165,10 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
 };
 
 EmphasisFillRenderer.prototype._allocate = function (mesh) {
-    const lightsState = mesh.scene._lightsState;
-    const sectionPlanesState = mesh.scene._sectionPlanesState;
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const lightsState = scene._lightsState;
+    const sectionPlanesState = scene._sectionPlanesState;
+    const gl = scene.canvas.gl;
     this._program = new Program(gl, this._shaderSource);
     if (this._program.errors) {
         this.errors = this._program.errors;
@@ -180,12 +181,15 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
+    if (scene.logarithmicDepthBufferEnabled) {
+        this._uZFar = program.getLocation("zFar");
+    }
     this._uLightAmbient = [];
     this._uLightColor = [];
     this._uLightDir = [];
     this._uLightPos = [];
     this._uLightAttenuation = [];
-    for (var i = 0, len = lightsState.lights.length; i < len; i++) {
+    for (let i = 0, len = lightsState.lights.length; i < len; i++) {
         const light = lightsState.lights[i];
         switch (light.type) {
             case "ambient":
@@ -205,7 +209,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
         }
     }
     this._uSectionPlanes = [];
-    for (var i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+    for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
@@ -218,6 +222,9 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+    }
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
@@ -228,8 +235,7 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     const gl = scene.canvas.gl;
     const lightsState = scene._lightsState;
     const camera = scene.camera;
-    const cameraState = camera._state;
-    let light;
+    const project = camera.project;
     const program = this._program;
     program.bind();
     frameCtx.useProgram++;
@@ -238,10 +244,14 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
     this._lastIndicesBufId = null;
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, cameraState.normalMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
-    for (var i = 0, len = lightsState.lights.length; i < len; i++) {
-        light = lightsState.lights[i];
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.normalMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+    }
+    for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+        const light = lightsState.lights[i];
         if (this._uLightAmbient[i]) {
             gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);
         } else {

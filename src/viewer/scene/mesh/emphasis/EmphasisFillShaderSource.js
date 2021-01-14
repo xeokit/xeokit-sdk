@@ -13,6 +13,7 @@ class EmphasisFillShaderSource {
 }
 
 function buildVertex(mesh) {
+
     const scene = mesh.scene;
     const lightsState = scene._lightsState;
     const normals = hasNormals(mesh);
@@ -21,10 +22,11 @@ function buildVertex(mesh) {
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
     const src = [];
-    let i;
-    let len;
-    let light;
+
     src.push("// EmphasisFillShaderSource vertex shader");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("attribute vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
@@ -33,6 +35,10 @@ function buildVertex(mesh) {
     src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
+    }
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -43,8 +49,8 @@ function buildVertex(mesh) {
         src.push("attribute vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -130,8 +136,8 @@ function buildVertex(mesh) {
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
     src.push("float lambertian = 1.0;");
     if (normals) {
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -164,7 +170,11 @@ function buildVertex(mesh) {
     if (mesh._geometry._state.primitiveName === "points") {
         src.push("gl_PointSize = pointSize;");
     }
-    src.push("   gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     return src;
 }
@@ -178,13 +188,18 @@ function hasNormals(mesh) {
 }
 
 function buildFragment(mesh) {
+
+    const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const gammaOutput = mesh.scene.gammaOutput;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
-    let i;
-    let len;
     const src = [];
+
     src.push("// Lambertian drawing fragment shader");
+
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
 
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
@@ -193,6 +208,11 @@ function buildFragment(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
+
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
 
     if (gammaOutput) {
         src.push("uniform float gammaFactor;");
@@ -203,7 +223,7 @@ function buildFragment(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -214,7 +234,7 @@ function buildFragment(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
@@ -229,7 +249,9 @@ function buildFragment(mesh) {
         src.push("   discard;");
         src.push("}");
     }
-    src.push("gl_FragColor = vColor;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+    }
     if (gammaOutput) {
         src.push("gl_FragColor = linearToGamma(vColor, gammaFactor);");
     } else {

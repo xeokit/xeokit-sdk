@@ -256,6 +256,10 @@ const Renderer = function (scene, options) {
             gl.getExtension("OES_element_index_uint");
         }
 
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] && scene.logarithmicDepthBufferEnabled) {
+            gl.getExtension('EXT_frag_depth');
+        }
+
         const sao = scene.sao;
 
         if (sao.possible) {
@@ -789,11 +793,24 @@ const Renderer = function (scene, options) {
      */
     this.pick = (function () {
 
+        const defaultOrigin = math.vec3([0, 0, 0]);
+        const defaultDirection = math.vec3([0, 0, 1]);
+
         const tempVec3a = math.vec3();
+        const tempVec3b = math.vec3();
+        const tempVec3c = math.vec3();
+        const tempVec3d = math.vec3();
+        const tempVec3e = math.vec3();
+
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
 
+        const nearAndFar = math.vec2();
+        const screenPos = math.vec4();
+        const viewPos = math.vec4();
+        const worldPos = math.vec4();
         const up = math.vec3([0, 1, 0]);
+
         const _pickResult = new PickResult();
 
         return function (params, pickResult = _pickResult) {
@@ -806,32 +823,39 @@ const Renderer = function (scene, options) {
                 gl.getExtension("OES_element_index_uint");
             }
 
-            let canvasX;
-            let canvasY;
-            let origin;
-            let direction;
-            let look;
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] && scene.logarithmicDepthBufferEnabled) {
+                gl.getExtension('EXT_frag_depth');
+            }
+
+            //----------------------------------------------------------------------------------------------------------
+            // Pick Entity with mouse pointer or ray.
+            //----------------------------------------------------------------------------------------------------------
+
             let pickViewMatrix = null;
             let pickProjMatrix = null;
+
+            let pickCanvasX;
+            let pickCanvasY;
 
             pickResult.pickSurface = params.pickSurface;
 
             if (params.canvasPos) {
 
-                canvasX = params.canvasPos[0];
-                canvasY = params.canvasPos[1];
+                // Pick with mouse pointer
 
                 pickViewMatrix = scene.camera.viewMatrix;
                 pickProjMatrix = scene.camera.projMatrix;
+
+                pickCanvasX = params.canvasPos[0];
+                pickCanvasY = params.canvasPos[1];
 
                 pickResult.canvasPos = params.canvasPos;
 
             } else {
 
-                // Picking with arbitrary World-space ray
-                // Align camera along ray and fire ray through center of canvas
+                // Pick with ray
 
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, scene.camera.project.far, tempMat4a);
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, scene.camera.project.near, scene.camera.project.far, tempMat4a);
 
                 if (params.matrix) {
 
@@ -840,9 +864,9 @@ const Renderer = function (scene, options) {
 
                 } else {
 
-                    origin = params.origin || math.vec3([0, 0, 0]);
-                    direction = params.direction || math.vec3([0, 0, 1]);
-                    look = math.addVec3(origin, direction, tempVec3a);
+                    const origin = params.origin || defaultOrigin;
+                    const direction = params.direction || defaultDirection;
+                    const look = math.addVec3(origin, direction, tempVec3a);
 
                     pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
@@ -851,13 +875,13 @@ const Renderer = function (scene, options) {
                     pickResult.direction = direction;
                 }
 
-                canvasX = canvas.clientWidth * 0.5;
-                canvasY = canvas.clientHeight * 0.5;
+                pickCanvasX = canvas.clientWidth * 0.5;
+                pickCanvasY = canvas.clientHeight * 0.5;
             }
 
             pickBuffer.bind();
 
-            const pickable = pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params);
+            const pickable = pickPickable(pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, params);
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -870,17 +894,90 @@ const Renderer = function (scene, options) {
                 return null;
             }
 
+            //----------------------------------------------------------------------------------------------------------
+            // Ray-pick a position on the surface of the Entity.
+            //
+            // Before ray-picking, we move the ray origin as close as we can to the Entity, and also snugly fit
+            // the near and far picking clipping planes to the Entity boundary.
+            //
+            // These adjustments allow for better accuracy of the RGBA-encoded depth values written by the Z-picking
+            // shader. This allows us more accuracy when picking distant objects; if we just used the camera's clipping
+            // planes, they are likely to be very distant (especially if we're using a logarithmic depth buffer) and
+            // would likely cause the Z-picking shader to significantly lose accuracy.
+            //
+            // IF pickSurface
+            //      IF canvasPos
+            //          Construct ray from canvasPos;
+            //      ELSE IF matrix
+            //          Construct ray from matrix;
+            //      ELSE
+            //          Get ray from params;
+            //
+            //      Move ray origin closer to Entity;
+            //      Set picking near and far clip planes to fit Entity;
+            //      Pick Entity surface position using ray;
+            //----------------------------------------------------------------------------------------------------------
+
             if (params.pickSurface) {
 
+                let origin;
+                let direction;
+
+                if (params.canvasPos) {
+
+                    // Construct ray from canvas coordinates
+
+                    origin = scene.camera.project.unproject(params.canvasPos, -1, screenPos, viewPos, worldPos);
+                    direction = math.subVec3(origin, scene.camera.eye, tempVec3b);
+
+                } else if (params.matrix) {
+
+                    // TODO
+
+                } else {
+
+                    // Ray already provided
+
+                    origin = params.origin;
+                    direction = params.direction;
+                }
+
+                // Move the ray origin as close as we can to the boundary of the Entity
+
+                getAABBNearAndFar(origin, pickedEntity.aabb, nearAndFar);
+
+                const distToMove = nearAndFar[0] - 100; // TODO: Automatically derive robust value for this
+                const moveVec = math.mulVec3Scalar(math.normalizeVec3(direction, tempVec3c), distToMove);
+                const closerOrigin = math.addVec3(origin, moveVec, tempVec3d);
+
+                nearAndFar[0] -= distToMove;
+                nearAndFar[1] -= distToMove;
+
+                const look = math.addVec3(closerOrigin, direction, tempVec3e);
+
+                pickViewMatrix = math.lookAtMat4v(closerOrigin, look, up, tempMat4a);
+                pickProjMatrix = math.frustumMat4(-.1, .1, -.1, .1, nearAndFar[0], nearAndFar[1], tempMat4b);
+
+                pickCanvasX = canvas.clientWidth * 0.5;
+                pickCanvasY = canvas.clientHeight * 0.5;
+
+                pickResult.canvasPos = params.canvasPos;
+
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
-                    pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+
+                    // Ray-pick a triangle on the Entity, using JavScript
+
+                    pickTriangle(pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, pickResult);
                     pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
 
                 } else {
 
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
-                        pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
-                        pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+
+                        // Ray-pick a position  on the surface of the Entity, using shaders
+
+                        pickWorldPos(pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        pickWorldNormal(pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
                     }
                 }
             }
@@ -893,7 +990,44 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    function pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
+    const getAABBNearAndFar = (function () { // Gets the closest and farthest extents of an AABB from a given 3D position
+
+        const tempVec3a = math.vec3();
+        const tempVec3b = math.vec3();
+        const tempOOBB3 = math.OBB3();
+
+        return function (pos, aabb, nearAndFar) {
+
+            const obb = math.AABB3ToOBB3(aabb, tempOOBB3);
+            const p = tempVec3a;
+            const vec = tempVec3b;
+
+            let near = math.MAX_DOUBLE;
+            let far = math.MIN_DOUBLE;
+
+            for (let i = 0, len = obb.length; i < len; i += 4) {
+
+                p[0] = obb[i];
+                p[1] = obb[i + 1];
+                p[2] = obb[i + 2];
+
+                const dist = Math.abs(math.lenVec3(math.subVec3(pos, p, vec)));
+
+                if (dist < near) {
+                    near = dist;
+                }
+
+                if (dist > far) {
+                    far = dist;
+                }
+            }
+
+            nearAndFar[0] = near;
+            nearAndFar[1] = far;
+        };
+    })();
+
+    function pickPickable(pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, params) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -940,7 +1074,7 @@ const Renderer = function (scene, options) {
             }
         }
 
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(pickCanvasX), Math.round(pickCanvasY));
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -952,7 +1086,7 @@ const Renderer = function (scene, options) {
         return pickable;
     }
 
-    function pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function pickTriangle(pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
         if (!pickable.drawPickTriangles) {
             return;
@@ -975,7 +1109,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const pix = pickBuffer.read(canvasX, canvasY);
+        const pix = pickBuffer.read(pickCanvasX, pickCanvasY);
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -995,13 +1129,18 @@ const Renderer = function (scene, options) {
         const tempMat4b = math.mat4();
         const tempMat4c = math.mat4();
 
-        return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+        return function (pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
+            frameCtx.pickZNear = nearAndFar[0];
+            frameCtx.pickZFar = nearAndFar[1];
+
+            // scene.camera.project.near = nearAndFar[0];
+            // scene.camera.project.far = nearAndFar[1];
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1013,13 +1152,13 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+            const pix = pickBuffer.read(Math.round(pickCanvasX), Math.round(pickCanvasY));
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
             // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            const x = (canvasX - canvas.width / 2) / (canvas.width / 2);
-            const y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+            const x = (pickCanvasX - canvas.width / 2) / (canvas.width / 2);
+            const y = -(pickCanvasY - canvas.height / 2) / (canvas.height / 2);
 
             const rtcCenter = pickable.rtcCenter;
             let pvMat;
@@ -1067,13 +1206,15 @@ const Renderer = function (scene, options) {
         return math.dotVec4(vec, bitShift);
     }
 
-    function pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function pickWorldNormal(pickable, pickCanvasX, pickCanvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
+        frameCtx.pickZNear = nearAndFar[0];
+        frameCtx.pickZFar = nearAndFar[1];
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1085,7 +1226,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(pickCanvasX), Math.round(pickCanvasY));
 
         const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
 

@@ -333,12 +333,13 @@ class Scene extends Component {
     /**
      * @private
      * @constructor
+     * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
-    constructor(cfg = {}) {
+    constructor(viewer, cfg = {}) {
 
         super(null, cfg);
 
@@ -352,6 +353,12 @@ class Scene extends Component {
         const alphaDepthMask = (!!cfg.alphaDepthMask);
 
         this._aabbDirty = true;
+
+        /**
+         * The {@link Viewer} this Scene belongs to.
+         * @type {Viewer}
+         */
+        this.viewer = viewer;
 
         /** Decremented each frame, triggers occlusion test for occludable {@link Marker}s when zero.
          * @private
@@ -791,7 +798,8 @@ class Scene extends Component {
         this.gammaOutput = cfg.gammaOutput;
         this.gammaFactor = cfg.gammaFactor;
 
-        this._entityOffsetsEnabled = cfg.entityOffsetsEnabled;
+        this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
+        this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -1134,14 +1142,25 @@ class Scene extends Component {
     }
 
     /**
-     * Whether to enable {@link Entity#offset}.
+     * Whether {@link Entity#offset} is enabled.
      *
-     * This is set via the {@link Viewer} constructor and is ````true```` by default.
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
      *
      * @returns {Boolean} True if {@link Entity#offset} is enabled.
      */
     get entityOffsetsEnabled() {
         return this._entityOffsetsEnabled;
+    }
+
+    /**
+     * Whether logarithmic depth buffer is enabled.
+     *
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
+     *
+     * @returns {Boolean} True if logarithmic depth buffer is enabled.
+     */
+    get logarithmicDepthBufferEnabled() {
+        return this._logarithmicDepthBufferEnabled;
     }
 
     /**

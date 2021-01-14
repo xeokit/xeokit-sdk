@@ -16,6 +16,10 @@ function buildVertex(scene) {
 
     src.push("// Batched geometry edges drawing vertex shader");
 
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
+
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
@@ -29,6 +33,11 @@ function buildVertex(scene) {
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
+
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
 
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -77,7 +86,11 @@ function buildVertex(scene) {
         src.push("  vFlags2 = flags2;");
     }
 
-    src.push("  gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     src.push("}");
     return src;
@@ -85,12 +98,12 @@ function buildVertex(scene) {
 
 function buildFragment(scene) {
     const sectionPlanesState = scene._sectionPlanesState;
-    let i;
-    let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Batched geometry edges drawing fragment shader");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -98,11 +111,14 @@ function buildFragment(scene) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -114,13 +130,16 @@ function buildFragment(scene) {
         src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
         src.push("  if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
+    }
+    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     src.push("gl_FragColor = color;");
     src.push("}");
