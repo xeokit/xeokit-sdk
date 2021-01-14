@@ -6,8 +6,17 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+* CameraControl
+  * Additional Camera properties to support un-projection. [#530](https://github.com/xeokit/xeokit-sdk/issues/530) ([**@xeolabs**](https://github.com/xeolabs))
+  * Pan/Rotate: mousemove event listen on document instead of canvas. [#527](https://github.com/xeokit/xeokit-sdk/pull/527) ([**@Kurtil**](https://github.com/Kurtil))
+  * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil))
+* Scene
+  * Improve surface picking accuracy and performance. [#551](https://github.com/xeokit/xeokit-sdk/issues/531) ([**@xeolabs**](https://github.com/xeolabs))  
+* SectionPlanesPlugin
+  * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil)
 * Viewer
-  * Add option to enable or disable Entity#offset. [#514](https://github.com/xeokit/xeokit-sdk/issues/514) ([**@xeolabs**](https://github.com/xeolabs))
+  * Logarithmic depth buffer. [#254](https://github.com/xeokit/xeokit-sdk/issues/254) ([**@xeolabs**](https://github.com/xeolabs))
+  * Option to enable or disable Entity#offset. [#514](https://github.com/xeokit/xeokit-sdk/issues/514) ([**@xeolabs**](https://github.com/xeolabs))  
   
 # 1.5.3
 
