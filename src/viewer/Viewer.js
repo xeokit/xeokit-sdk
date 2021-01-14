@@ -143,7 +143,7 @@ class Viewer {
      *
      * @return {boolean}
      */
-    static get logarithmicDepthBufferSupported() {
+    get logarithmicDepthBufferSupported() {
         return (!!WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]);
     }
 
