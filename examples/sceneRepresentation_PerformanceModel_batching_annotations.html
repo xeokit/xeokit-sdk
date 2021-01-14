@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PerformanceModel with batched, double-precision geometries, annotations, rendered with logarithmic depth buffer
-        enabled</title>
+    <title>PerformanceModel with batched geometries and annotations </title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -118,18 +117,13 @@
 <canvas id="myNavCubeCanvas"></canvas>
 
 <div id="info" style="visibility:visible">
-    <h1>PerformanceModel with batched, double-precision geometries, annotations, rendered with logarithmic depth buffer enabled</h1>
+    <h1>PerformanceModel with batched geometries and annotations - click to create more annotations</h1>
     <br>
     <ul>
         <li>
             <a target="_other"
                href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
             - xeokit Viewer
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a>
-            - Creates Annotations
         </li>
         <li>
             <a target="_other"
@@ -154,31 +148,28 @@
     import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer with a logarithmic depth buffer
+    // Create a Viewer
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
+        logarithmicDepthBufferEnabled: false
     });
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure Camera
-    //
-    // Since our viewer has a logarithmic depth buffer, 
-    // we can set a huge distance for the Camera's far clipping plane
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.camera.eye = [1841341.4943041557, 2435.7015793568917, -5182009.256037191];
     viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
-    viewer.camera.perspective.near = 1.0;
-    viewer.camera.perspective.far = 1e27;
+    viewer.camera.perspective.near = 0.01;
+    viewer.camera.perspective.far = 2500;
 
-    viewer.camera.ortho.near = 1.0;
-    viewer.camera.ortho.far = 1e27;
+    viewer.camera.ortho.near = 0.1;
+    viewer.camera.ortho.far = 2500;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure CameraControl
@@ -197,6 +188,31 @@
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.edgeMaterial.edgeColor = [.3, .3, .3];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Configure ambient shadows
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const sao = viewer.scene.sao;
+    sao.enabled = false;
+    sao.bias = 0.5;
+    sao.intensity = 0.5;
+    sao.scale = ((viewer.camera.perspective.far - viewer.camera.perspective.near) * 0.3);
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+    sao.blur = true;
+
+    /*
+    // For logarithmic depth buffer:
+    const sao = viewer.scene.sao;
+    sao.enabled = false;
+    sao.bias = 0.5;
+    sao.intensity = 0.1;
+    sao.scale = 500;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+    sao.blur = true;
+     */
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
@@ -239,21 +255,19 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an AnnotationsPlugin, with which we'll programmatically create some annotations
+    // Create an AnnotationsPlugin, with which we'll create annotations
     //------------------------------------------------------------------------------------------------------------------
 
     const annotations = new AnnotationsPlugin(viewer, {
-
         markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
-
         values: {
             markerBGColor: "red",
             glyph: "X",
             title: "Untitled",
             description: "No description"
         },
-        surfaceOffset: 0.1
+        surfaceOffset: 0.8
     });
 
     annotations.on("markerClicked", (annotation) => {
@@ -262,85 +276,93 @@
 
     annotations.createAnnotation({
         id: "myAnnotation1",
-        worldPos: [-5067.961471839821, -250.0000044173721, -5374.59914398724],
-        occludable: true,       // Optional, default is true
-        markerShown: true,      // Optional, default is true
-        labelShown: true,       // Optional, default is true
-        values: {               // HTML template values
-            glyph: "A1",
+        worldPos: [1.0940708002496322, -2.5387523432497545, -46.14440235578945],
+        occludable: true,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A",
             title: "My annotation 1",
-            description: "My description 1"
-        }
+            description: "My description 1",
+            markerBGColor: "lightgreen"
+        },
     });
 
     annotations.createAnnotation({
-        id: "myAnnotation2",
-        worldPos: [2370.2301617494086, -250.00002714159513, -2411.109239155929],
+        id: "myAnnotation1",
+        worldPos: [-21.590675649529196, -6.435134488793537, -30.04863175995513],
         occludable: true,
         markerShown: true,
         labelShown: true,
         values: {
-            glyph: "A2",
+            glyph: "B",
             title: "My annotation 2",
-            description: "My description 2"
-        }
+            description: "My description 1",
+            markerBGColor: "yellow"
+        },
     });
 
     annotations.createAnnotation({
-        id: "myAnnotation3",
-        worldPos:  [-4928.770029692367, -248.04742621837806, 203.85962935103305],
+        id: "myAnnotation1",
+        worldPos: [-29.99432027250174, -6.747949304003697, 4.9634670261688285],
         occludable: true,
         markerShown: true,
         labelShown: true,
         values: {
-            glyph: "A3",
+            glyph: "C",
             title: "My annotation 3",
-            description: "My description 3"
-        }
+            description: "My description 1",
+            markerBGColor: "lightblue"
+        },
     });
 
     annotations.createAnnotation({
-        id: "myAnnotation4",
-        worldPos: [-2091.8285643799104, -722.4263479019601, -3000.0077140932412],
+        id: "myAnnotation1",
+        worldPos: [24.619198412424563, -3.5415836293070555, 26.413496700759424],
         occludable: true,
         markerShown: true,
         labelShown: true,
         values: {
-            glyph: "A4",
+            glyph: "D",
             title: "My annotation 4",
-            description: "My description 4"
+            description: "My description 1",
+            markerBGColor: "yellow"
+        },
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Use the AnnotationsPlugin to create an annotation wherever we click on an object
+    //------------------------------------------------------------------------------------------------------------------
+
+    var i = 1;
+
+    viewer.scene.input.on("mouseclicked", (coords) => {
+
+        const pickResult = viewer.scene.pick({
+            canvasPos: coords,
+            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+        });
+
+        if (pickResult) {
+
+            console.log(pickResult.worldPos);
+
+            const annotation = annotations.createAnnotation({
+                id: "myAnnotation" + i,
+                pickResult: pickResult, // <<------- initializes worldPos and entity from PickResult
+                occludable: true,       // Optional, default is true
+                markerShown: true,      // Optional, default is true
+                labelShown: true,       // Optional, default is true
+                values: {               // HTML template values
+                    glyph: "A" + i,
+                    title: "My annotation " + i,
+                    description: "My description " + i
+                },
+            });
+
+            i++;
         }
     });
-    //
-    //
-    // var i = 10;
-    //
-    // viewer.scene.input.on("mouseclicked", (coords) => {
-    //
-    //     var pickResult = viewer.scene.pick({
-    //         canvasPos: coords,
-    //         pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-    //     });
-    //
-    //     if (pickResult) {
-    //
-    //         const annotation = annotations.createAnnotation({
-    //             id: "myAnnotation" + i,
-    //             pickResult: pickResult, // <<------- initializes worldPos and entity from PickResult
-    //             occludable: true,       // Optional, default is true
-    //             markerShown: true,      // Optional, default is true
-    //             labelShown: true,       // Optional, default is true
-    //             values: {               // HTML template values
-    //                 glyph: "A" + i,
-    //                 title: "My annotation " + i,
-    //                 description: "My description " + i
-    //             },
-    //         });
-    //
-    //         console.log(pickResult.worldPos);
-    //         i++;
-    //     }
-    // });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Programmatically build a PerformanceModel
@@ -357,13 +379,13 @@
         edges: true
     });
 
-    const OFFSET = 5000.0;
-    const SIZE = 100;
+    const OFFSET = 50.0;
+    const SIZE = 1;
 
-    for (let x = -OFFSET; x < OFFSET; x += 2500.0) {
-        for (let z = -OFFSET; z < OFFSET; z += 2500.0) {
-            const rtcCenter = [x, 0, z];
-            buildTable(performanceModel, rtcCenter, SIZE);
+    for (let x = -OFFSET; x < OFFSET; x += 25.0) {
+        for (let z = -OFFSET; z < OFFSET; z += 25.0) {
+            const center = [x, 0, z];
+            buildTable(performanceModel, center, SIZE);
         }
     }
 
@@ -376,13 +398,12 @@
     // without reusing geometry, and centered at the given RTC center
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter, size = 1) {
+    function buildTable(performanceModel, center, size = 1) {
 
         let meshId = math.createUUID();
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -398,7 +419,7 @@
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
                 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
             ],
-            position: [-4 * size, -6 * size, -4 * size],
+            position: [center[0] + (-4 * size), center[1] + (-6 * size), center[2] + (-4 * size)],
             scale: [size, 3 * size, size],
             rotation: [0, 0, 0],
             color: [1, 0.3, 0.3]
@@ -413,7 +434,6 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -428,7 +448,7 @@
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
                 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
             ],
-            position: [4 * size, -6 * size, -4 * size],
+            position: [center[0] + (4 * size), center[1] + (-6 * size), center[2] + (-4 * size)],
             scale: [size, 3 * size, size],
             rotation: [0, 0, 0],
             color: [0.3, 1.0, 0.3]
@@ -443,7 +463,6 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -458,7 +477,7 @@
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
                 20, 21, 22, 20, 22, 23
             ],
-            position: [4 * size, -6 * size, 4 * size],
+            position: [center[0] + (4 * size), center[1] + (-6 * size), center[2] + (4 * size)],
             scale: [size, 3 * size, size],
             rotation: [0, 0, 0],
             color: [0.3, 0.3, 1.0]
@@ -473,7 +492,6 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -487,7 +505,7 @@
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
                 20, 21, 22, 20, 22, 23
             ],
-            position: [-4 * size, -6 * size, 4 * size],
+            position: [center[0] + (-4 * size), center[1] + (-6 * size), center[2] + (4 * size)],
             scale: [size, 3 * size, size],
             rotation: [0, 0, 0],
             color: [1.0, 1.0, 0.0]
@@ -502,7 +520,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -516,7 +534,7 @@
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
                 20, 21, 22, 20, 22, 23
             ],
-            position: [0, -3 * size, 0],
+            position: [center[0], center[1] + (-3 * size), center[2]],
             scale: [6 * size, 0.5 * size, 6 * size],
             rotation: [0, 0, 0],
             color: [1.0, 0.3, 1.0]

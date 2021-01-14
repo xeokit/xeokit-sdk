@@ -166,14 +166,14 @@
     //------------------------------------------------------------------------------------------------------------------
 
     // Get the whole table model
-    var table = viewer.scene.models["table"];
+    const table = viewer.scene.models["table"];
 
     table.edges = true;
 
     // Get some leg objects
-    var redLeg = viewer.scene.objects["redLeg"];
-    var greenLeg = viewer.scene.objects["greenLeg"];
-    var blueLeg = viewer.scene.objects["blueLeg"];
+    const redLeg = viewer.scene.objects["redLeg"];
+    const greenLeg = viewer.scene.objects["greenLeg"];
+    const blueLeg = viewer.scene.objects["blueLeg"];
 
     //------------------------------------------------------------------------------------------------------------------
     // Periodically update transforms on our scene nodes
@@ -195,12 +195,12 @@
     // Display an indicator wherever the pointer picks a surface
     //------------------------------------------------------------------------------------------------------------------
 
-    var hitHelper = new (function () {
+    const hitHelper = new (function () {
 
         const zeroVec = new Float32Array([0, 0, -1]);
         const quat = new Float32Array(4);
 
-        var node = new Node(viewer.scene, {
+        const node = new Node(viewer.scene, {
             pickable: false,
             visible: true,
             position: [0, 0, 0],
@@ -248,7 +248,7 @@
 
     viewer.scene.input.on("mousemove", function (coords) {
 
-        var hit = viewer.scene.pick({
+        const hit = viewer.scene.pick({
             canvasPos: coords,
             pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
         });
@@ -279,5 +279,6 @@
             }
         }
     });
+
 </script>
 </html>

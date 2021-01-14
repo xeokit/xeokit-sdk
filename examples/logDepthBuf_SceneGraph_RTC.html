@@ -111,17 +111,11 @@
     viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
-    // viewer.camera.perspective.near = 1e-6;
-    // viewer.camera.perspective.far = 1e27;
-    //
-    // viewer.camera.ortho.near = 1e-6;
-    // viewer.camera.ortho.far = 1e27;
-
     viewer.camera.perspective.near = 1.0;
-    viewer.camera.perspective.far = 100000000;
+    viewer.camera.perspective.far = 1e27;
 
     viewer.camera.ortho.near = 1.0;
-    viewer.camera.ortho.far = 100000000;
+    viewer.camera.ortho.far = 1e27;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure CameraControl
@@ -140,31 +134,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.edgeMaterial.edgeColor = [.3, .3, .3];
-
-    //----------------------------------------------------------------------------------------------------------------------
-    // Configure ambient shadows
-    //----------------------------------------------------------------------------------------------------------------------
-
-    const sao = viewer.scene.sao;
-    sao.enabled = false;
-    sao.bias = 0.5;
-    sao.intensity = 0.5;
-    sao.scale = ((viewer.camera.perspective.far - viewer.camera.perspective.near) * 0.3);
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
-
-    /*
-    // For logarithmic depth buffer:
-    const sao = viewer.scene.sao;
-    sao.enabled = false;
-    sao.bias = 0.5;
-    sao.intensity = 0.1;
-    sao.scale = 500;
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
-     */
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube

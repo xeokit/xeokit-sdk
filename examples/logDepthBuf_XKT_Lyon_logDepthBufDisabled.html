@@ -44,7 +44,7 @@
 
 <canvas id="myNavCubeCanvas"></canvas>
 
-<div id="info" style="visibility:hidden">
+<div id="info" style="visibility:visible">
     <h1>XKT model with double-precision geometry, rendered without logarithmic buffer enabled.</h1><br>
     <ul>
         <li>
@@ -99,11 +99,11 @@
     viewer.camera.look = [1842215.561857325, -98.53293939639616, -5177009.767748618];
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
-    viewer.camera.perspective.near = 0.01;
-    viewer.camera.perspective.far = 1000000000000;
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 1e27;
 
-    viewer.camera.ortho.near = 0.01;
-    viewer.camera.ortho.far = 1000000000000;
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 1e27;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure CameraControl
@@ -152,19 +152,19 @@
     // Create a ground plane
     //------------------------------------------------------------------------------------------------------------------
 
-    // new Mesh(viewer.scene, {
-    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-    //         xSize: 700000,
-    //         zSize: 700000
-    //     })),
-    //     material: new PhongMaterial(viewer.scene, {
-    //         diffuse: [0.3, 0.5, 0.1],
-    //         // alpha: 0.0,
-    //         alphaMode: "opaque"
-    //     }),
-    //     position: [1842215.561857325, -5.53293939639616, -5177009.767748618],
-    //     collidable: false
-    // });
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 15000,
+            zSize: 15000
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0.3, 0.5, 0.1],
+            // alpha: 0.0,
+            alphaMode: "opaque"
+        }),
+        position: [1842761.9375, -5.53293939639616, -5174733.5],
+        collidable: false
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
