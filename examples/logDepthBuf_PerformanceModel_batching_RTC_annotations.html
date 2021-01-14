@@ -154,6 +154,12 @@
     import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
+    // We can detect if the browser supports xeokit's logarithmic depth buffer, before we instantiate a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const logarithmicDepthBufferSupported = Viewer.logarithmicDepthBufferSupported;
+
+    //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
     //------------------------------------------------------------------------------------------------------------------
 

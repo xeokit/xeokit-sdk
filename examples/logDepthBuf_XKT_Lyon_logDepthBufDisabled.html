@@ -80,6 +80,12 @@
     import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
+    // We can detect if the browser supports xeokit's logarithmic depth buffer, before we instantiate a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const logarithmicDepthBufferSupported = Viewer.logarithmicDepthBufferSupported;
+
+    //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
     //------------------------------------------------------------------------------------------------------------------
 
