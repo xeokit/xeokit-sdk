@@ -150,8 +150,8 @@ class MousePickHandler {
                         pivotController.setPivotPos(pickResult.worldPos);
                         pivotController.startPivot();
                     } else {
-                        pivotController.setPivotPos(scene.camera.look);
-                        pivotController.startPivot(); // Continue to use last pivot point
+                        pivotController.setCanvasPivotPos(states.pointerCanvasPos);
+                        pivotController.startPivot();
                     }
                 }
             }
@@ -351,5 +351,7 @@ class MousePickHandler {
         }
     }
 }
+
+
 
 export {MousePickHandler};

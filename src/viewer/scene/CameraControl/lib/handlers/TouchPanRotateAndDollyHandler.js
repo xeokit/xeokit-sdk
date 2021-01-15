@@ -59,7 +59,7 @@ class TouchPanRotateAndDollyHandler {
 
                         if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
 
-                            pivotController.setPivotPos(pickController.pickResult.worldPos);
+                            pivotController.setCanvasPivotPos(tapStartPos);
 
                             if (!configs.firstPerson && pivotController.startPivot()) {
                                 pivotController.showPivot();
@@ -67,7 +67,7 @@ class TouchPanRotateAndDollyHandler {
 
                         } else {
 
-                            pivotController.setPivotPos(scene.camera.look);
+                            pivotController.setCanvasPivotPos(states.pointerCanvasPos);
 
                             if (!configs.firstPerson && pivotController.startPivot()) {
                                 pivotController.showPivot();

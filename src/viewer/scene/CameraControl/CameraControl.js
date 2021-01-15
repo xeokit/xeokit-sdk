@@ -636,6 +636,7 @@ class CameraControl extends Component {
             showPivot: false,
             pointerEnabled: true,
             constrainVertical: false,
+            defaultPivotSphereRadius: 100,
 
             // Rotation
 
@@ -695,8 +696,8 @@ class CameraControl extends Component {
         this._controllers = {
             cameraControl: this,
             pickController: new PickController(this, this._configs),
-            pivotController: new PivotController(scene),
-            panController: new PanController(this.scene),
+            pivotController: new PivotController(scene, this._configs),
+            panController: new PanController(scene),
             cameraFlight: new CameraFlightAnimation(this, {
                 duration: 0.5
             })
@@ -1564,6 +1565,28 @@ class CameraControl extends Component {
      */
     get keyboardLayout() {
         return this._configs.keyboardLayout;
+    }
+
+    /**
+     * Sets the default pivot sphere radius.
+     *
+     * Default is ````100.0````.
+     *
+     * @param {Number} radius The default pivot sphere radius.
+     */
+    set defaultPivotSphereRadius(radius) {
+        this._configs.defaultPivotSphereRadius = radius || 100;
+    }
+
+    /**
+     * Gets the default pivot sphere radius.
+     *
+     * Default is ````100.0````.
+     *
+     * @returns {Number} The default pivot sphere radius.
+     */
+    get defaultPivotSphereRadius() {
+        return this._configs.defaultPivotSphereRadius;
     }
 
     /**
