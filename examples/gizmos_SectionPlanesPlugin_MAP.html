@@ -2,59 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SectionPlanesPlugin</title>
-    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+    <title>XKTLoaderPlugin - Full-Precision Geometry</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
-
         #myCanvas {
             width: 100%;
             height: 100%;
             background: lightBlue;
         }
-
-        #mySectionPlanesOverviewCanvas {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            bottom: 70px;
-            right: 10px;
-            z-index: 200000;
-            /*border: 1px solid blue;*/
-        }
-
     </style>
 
 </head>
 
 <body>
-
 <canvas id="myCanvas"></canvas>
-
-<canvas id="mySectionPlanesOverviewCanvas"></canvas>
-
 <div id="info">
-    <h1>Section planes</h1><br>
-    <p>This example contains an IFC appartment model with two section planes. At bottom right is an overview of the section planes. Click the planes in
-        the overview to activate an editing gizmo with which you can reposition them.</p>
-    <br>
+    <h1>Rounding Jitter Fixed with XKT V6</h1><br>
+    <p>Model is loaded from XKT V6, which supports full-precision geometry, which fixes rounding jitter</p><br>
     <ul>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Creates section planes
-        </li>
-
+        <li>Model center is [1842022, 10, -5173301]</li>
+        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
     </ul>
 </div>
-
 </body>
-
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
@@ -67,7 +38,7 @@
     import {math} from "../src/viewer/scene/math/math.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer
+    // Create a Viewer, arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -75,22 +46,14 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-5.02, 2.22, 15.09];
-    viewer.camera.look = [4.97, 2.79, 9.89];
-    viewer.camera.up = [-0.05, 0.99, 0.02];
-    viewer.camera.project.fov = 70;
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    viewer.camera.zoom(5);
+    viewer.camera.orbitPitch(20);
+    viewer.camera.orbitYaw(100);
 
-    viewer.cameraControl.followPointer=true;
-
-
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Add a XKTModelsPlugin - we'll use this to load the model geometry
-    //------------------------------------------------------------------------------------------------------------------
-
-    const xktLoader = new XKTLoaderPlugin(viewer);
+    viewer.cameraControl.followPointer = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
@@ -101,18 +64,30 @@
         overviewVisible: true
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Load the .xkt model and IFC metadata
-    //------------------------------------------------------------------------------------------------------------------
-
-    const model = xktLoader.load({
-        id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true,
-        backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1842021.68, 9.16, -5173292.49],
+        dir: [-0.87, 0.00, -0.48]
     });
 
+    sectionPlanes.showControl(sectionPlane.id);
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create a xeokit loader plugin, load a model, fit to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model1 = xktLoader.load({
+        id: "myModel1",
+        src: "./models/xkt/MAP/MAP.v6.xkt",
+        metaModelSrc: "./metaModels/MAP/metaModel.json",
+        edges: true
+    });
+
+    model1.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model1);
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Use the SectionPlanesPlugin to create a SectionPlane wherever we click on an object
@@ -140,8 +115,7 @@
         }
     });
 
-    window.viewer = viewer;
 
+    window.sectionPlanes = sectionPlanes;
 </script>
-
 </html>
