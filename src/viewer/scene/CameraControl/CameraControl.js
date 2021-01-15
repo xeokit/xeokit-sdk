@@ -1570,12 +1570,12 @@ class CameraControl extends Component {
     /**
      * Sets the default pivot sphere radius.
      *
-     * Default is ````100.0````.
+     * Default is ````10.0````.
      *
      * @param {Number} radius The default pivot sphere radius.
      */
     set defaultPivotSphereRadius(radius) {
-        this._configs.defaultPivotSphereRadius = radius || 100;
+        this._configs.defaultPivotSphereRadius = radius || 10;
     }
 
     /**
