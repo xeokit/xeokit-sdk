@@ -153,14 +153,13 @@ class PivotController {
 
     /**
      * Sets the pivot position to the 3D projection of the given 2D canvas coordinates on a sphere centered
-     * at the viewpoint. The radius of the sphere is configured via {@link CameraControl#defaultPivotSphereRadius}.
-     *
+     * at the viewpoint. The radius of the sphere is configured via {@link CameraControl#smartPivot}.
      *
      * @param canvasPos
      */
     setCanvasPivotPos(canvasPos) {
-        const defaultPivotSphereRadius = this._configs.defaultPivotSphereRadius;
         const camera = this._scene.camera;
+        const pivotShereRadius = Math.abs(math.distVec3(this._scene.center, camera.eye));
         const transposedProjectMat = camera.project.transposedMatrix;
         const Pt3 = transposedProjectMat.subarray(8, 12);
         const Pt4 = transposedProjectMat.subarray(12);
@@ -169,7 +168,7 @@ class PivotController {
         const worldPos = tempVec4a;
         camera.project.unproject(canvasPos, screenZ, tempVec4b, tempVec4c, worldPos);
         const eyeWorldPosVec = math.normalizeVec3(math.subVec3(worldPos, camera.eye, tempVec3a));
-        const posOnSphere = math.addVec3(camera.eye, math.mulVec3Scalar(eyeWorldPosVec, defaultPivotSphereRadius, tempVec3b), tempVec3c);
+        const posOnSphere = math.addVec3(camera.eye, math.mulVec3Scalar(eyeWorldPosVec, pivotShereRadius, tempVec3b), tempVec3c);
         this.setPivotPos(posOnSphere);
     }
 

@@ -636,7 +636,7 @@ class CameraControl extends Component {
             showPivot: false,
             pointerEnabled: true,
             constrainVertical: false,
-            defaultPivotSphereRadius: 100,
+            smartPivot: false,
 
             // Rotation
 
@@ -1568,25 +1568,35 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets the default pivot sphere radius.
+     * Sets whether smart default pivoting is enabled.
      *
-     * Default is ````10.0````.
+     * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
+     * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
      *
-     * @param {Number} radius The default pivot sphere radius.
+     * When ````false````, we'll pivot by default about {@link Camera#look}.
+     *
+     * Default is ````false````.
+     *
+     * @param {Boolean} enabled Set ````true```` to pivot by default about the selected point on the virtual sphere, or ````false```` to pivot by default about {@link Camera#look}.
      */
-    set defaultPivotSphereRadius(radius) {
-        this._configs.defaultPivotSphereRadius = radius || 10;
+    set smartPivot(enabled) {
+        this._configs.smartPivot = (enabled !== false);
     }
 
     /**
-     * Gets the default pivot sphere radius.
+     * Gets whether smart default pivoting is enabled.
      *
-     * Default is ````100.0````.
+     * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
+     * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
      *
-     * @returns {Number} The default pivot sphere radius.
+     * When ````false````, we'll pivot by default about {@link Camera#look}.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` when pivoting by default about the selected point on the virtual sphere, or ````false```` when pivoting by default about {@link Camera#look}.
      */
-    get defaultPivotSphereRadius() {
-        return this._configs.defaultPivotSphereRadius;
+    get smartPivot() {
+        return this._configs.smartPivot;
     }
 
     /**
