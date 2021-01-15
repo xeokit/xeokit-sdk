@@ -3477,7 +3477,7 @@ const math = {
      */
     positions3ToAABB3: ((() => {
 
-        const p = new Float32Array(3);
+        const p = new FloatArrayType(3);
 
         return (positions, aabb, positionsDecodeMatrix) => {
             aabb = aabb || math.AABB3();
@@ -3672,7 +3672,7 @@ const math = {
      */
     points3ToSphere3: ((() => {
 
-        const tempVec3 = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (points, sphere) => {
 
@@ -3720,8 +3720,8 @@ const math = {
      */
     positions3ToSphere3: ((() => {
 
-        const tempVec3a = new Float32Array(3);
-        const tempVec3b = new Float32Array(3);
+        const tempVec3a = new FloatArrayType(3);
+        const tempVec3b = new FloatArrayType(3);
 
         return (positions, sphere) => {
 
@@ -3775,8 +3775,8 @@ const math = {
      */
     OBB3ToSphere3: ((() => {
 
-        const point = new Float32Array(3);
-        const tempVec3 = new Float32Array(3);
+        const point = new FloatArrayType(3);
+        const tempVec3 = new FloatArrayType(3);
 
         return (points, sphere) => {
 
@@ -4239,11 +4239,11 @@ const math = {
      */
     rayTriangleIntersect: ((() => {
 
-        const tempVec3 = new Float32Array(3);
-        const tempVec3b = new Float32Array(3);
-        const tempVec3c = new Float32Array(3);
-        const tempVec3d = new Float32Array(3);
-        const tempVec3e = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
+        const tempVec3b = new FloatArrayType(3);
+        const tempVec3c = new FloatArrayType(3);
+        const tempVec3d = new FloatArrayType(3);
+        const tempVec3e = new FloatArrayType(3);
 
         return (origin, dir, a, b, c, isect) => {
 
@@ -4288,10 +4288,10 @@ const math = {
      */
     rayPlaneIntersect: ((() => {
 
-        const tempVec3 = new Float32Array(3);
-        const tempVec3b = new Float32Array(3);
-        const tempVec3c = new Float32Array(3);
-        const tempVec3d = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
+        const tempVec3b = new FloatArrayType(3);
+        const tempVec3c = new FloatArrayType(3);
+        const tempVec3d = new FloatArrayType(3);
 
         return (origin, dir, a, b, c, isect) => {
 
@@ -4325,9 +4325,9 @@ const math = {
      */
     cartesianToBarycentric: ((() => {
 
-        const tempVec3 = new Float32Array(3);
-        const tempVec3b = new Float32Array(3);
-        const tempVec3c = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
+        const tempVec3b = new FloatArrayType(3);
+        const tempVec3c = new FloatArrayType(3);
 
         return (cartesian, a, b, c, dest) => {
 
@@ -4472,12 +4472,12 @@ const math = {
      */
     buildNormals: ((() => {
 
-        const a = new Float32Array(3);
-        const b = new Float32Array(3);
-        const c = new Float32Array(3);
-        const ab = new Float32Array(3);
-        const ac = new Float32Array(3);
-        const crossVec = new Float32Array(3);
+        const a = new FloatArrayType(3);
+        const b = new FloatArrayType(3);
+        const c = new FloatArrayType(3);
+        const ab = new FloatArrayType(3);
+        const ac = new FloatArrayType(3);
+        const crossVec = new FloatArrayType(3);
 
         return (positions, indices, normals) => {
 
@@ -4509,7 +4509,7 @@ const math = {
                 math.subVec3(b, a, ab);
                 math.subVec3(c, a, ac);
 
-                const normVec = new Float32Array(3);
+                const normVec = new FloatArrayType(3);
 
                 math.normalizeVec3(math.cross3Vec3(ab, ac, crossVec), normVec);
 
@@ -4565,13 +4565,13 @@ const math = {
      */
     buildTangents: ((() => {
 
-        const tempVec3 = new Float32Array(3);
-        const tempVec3b = new Float32Array(3);
-        const tempVec3c = new Float32Array(3);
-        const tempVec3d = new Float32Array(3);
-        const tempVec3e = new Float32Array(3);
-        const tempVec3f = new Float32Array(3);
-        const tempVec3g = new Float32Array(3);
+        const tempVec3 = new FloatArrayType(3);
+        const tempVec3b = new FloatArrayType(3);
+        const tempVec3c = new FloatArrayType(3);
+        const tempVec3d = new FloatArrayType(3);
+        const tempVec3e = new FloatArrayType(3);
+        const tempVec3f = new FloatArrayType(3);
+        const tempVec3g = new FloatArrayType(3);
 
         return (positions, indices, uv) => {
 
@@ -4832,12 +4832,12 @@ const math = {
      */
     canvasPosToWorldRay: ((() => {
 
-        const tempMat4b = new Float32Array(16);
-        const tempMat4c = new Float32Array(16);
-        const tempVec4a = new Float32Array(4);
-        const tempVec4b = new Float32Array(4);
-        const tempVec4c = new Float32Array(4);
-        const tempVec4d = new Float32Array(4);
+        const tempMat4b = new FloatArrayType(16);
+        const tempMat4c = new FloatArrayType(16);
+        const tempVec4a = new FloatArrayType(4);
+        const tempVec4b = new FloatArrayType(4);
+        const tempVec4c = new FloatArrayType(4);
+        const tempVec4d = new FloatArrayType(4);
 
         return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
 
@@ -4894,8 +4894,8 @@ const math = {
      */
     canvasPosToLocalRay: ((() => {
 
-        const worldRayOrigin = new Float32Array(3);
-        const worldRayDir = new Float32Array(3);
+        const worldRayOrigin = new FloatArrayType(3);
+        const worldRayDir = new FloatArrayType(3);
 
         return (canvas, viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
             math.canvasPosToWorldRay(canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
@@ -4915,9 +4915,9 @@ const math = {
      */
     worldRayToLocalRay: ((() => {
 
-        const tempMat4 = new Float32Array(16);
-        const tempVec4a = new Float32Array(4);
-        const tempVec4b = new Float32Array(4);
+        const tempMat4 = new FloatArrayType(16);
+        const tempVec4a = new FloatArrayType(4);
+        const tempVec4b = new FloatArrayType(4);
 
         return (worldMatrix, worldRayOrigin, worldRayDir, localRayOrigin, localRayDir) => {
 
@@ -4946,7 +4946,7 @@ const math = {
         const dimLength = new Float32Array();
 
         function buildNode(triangles, indices, positions, depth) {
-            const aabb = new Float32Array(6);
+            const aabb = new FloatArrayType(6);
 
             const node = {
                 triangles: null,
