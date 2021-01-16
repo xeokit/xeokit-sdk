@@ -51,7 +51,7 @@ class Overview {
         // Init scene
         //--------------------------------------------------------------------------------------------------------------
 
-        this._scene = new Scene({
+        this._scene = new Scene(this._viewer, {
             canvasId: this._canvas.id,
             transparent: true
         });
