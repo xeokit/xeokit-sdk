@@ -118,7 +118,9 @@ import {math} from "../math/math.js";
  * cameraControl.followPointer = true;
  * ````
  *
- * When the pointer is over empty space, the target will remain on the last object that the pointer was over.
+ * ## Smart Pivoting
+ *
+ * TODO
  *
  * ## Showing the Pivot Position
  *
