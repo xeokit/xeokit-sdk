@@ -61,7 +61,7 @@ class InstancingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -190,7 +190,7 @@ class InstancingPickNormalsRenderer {
         this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
         this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }

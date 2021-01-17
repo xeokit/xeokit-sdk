@@ -192,16 +192,18 @@ class OcclusionTester {
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("// OcclusionTester vertex shader");
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
         src.push("attribute vec3 position;");
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                src.push("varying float vFragDepth;");
+            }
         }
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
@@ -215,8 +217,13 @@ class OcclusionTester {
         src.push("   vec4 clipPos = projMatrix * viewPosition;");
         src.push("   gl_Position = clipPos;");
         src.push("   gl_PointSize = " + POINT_SIZE + ".0;");
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
-            src.push("vFragDepth = 1.0 + clipPos.w;");
+        if (scene.logarithmicDepthBufferEnabled) {
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                src.push("vFragDepth = 1.0 + clipPos.w;");
+            } else {
+                src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
+                src.push("clipPos.z *= clipPos.w;");
+            }
         }
         src.push("}");
         return src;
@@ -228,7 +235,7 @@ class OcclusionTester {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("// OcclusionTester fragment shader");
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -238,7 +245,7 @@ class OcclusionTester {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("uniform float logDepthBufFC;");
             src.push("varying float vFragDepth;");
         }
@@ -260,7 +267,7 @@ class OcclusionTester {
             }
             src.push("  if (dist > 0.0) { discard; }");
         }
-        if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); ");
@@ -293,7 +300,7 @@ class OcclusionTester {
             });
         }
         this._aPosition = program.getAttribute("position");
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
@@ -318,7 +325,7 @@ class OcclusionTester {
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }

@@ -4,7 +4,6 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
-const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -52,10 +51,6 @@ class BatchingNormalsRenderer {
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, camera.project.far)
-        }
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -135,7 +130,7 @@ class BatchingNormalsRenderer {
             this._aFlags2 = program.getAttribute("flags2");
         }
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if ( scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
@@ -150,7 +145,7 @@ class BatchingNormalsRenderer {
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if ( scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }

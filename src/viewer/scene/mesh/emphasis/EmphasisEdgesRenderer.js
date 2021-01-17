@@ -207,7 +207,7 @@ EmphasisEdgesRenderer.prototype._allocate = function (mesh) {
     this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
 
@@ -234,7 +234,7 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx) {
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }

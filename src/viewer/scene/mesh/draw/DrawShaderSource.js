@@ -75,7 +75,7 @@ function buildVertexLambert(mesh) {
 
     const src = [];
     src.push("// Lambertian drawing vertex shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("attribute vec3 position;");
@@ -87,7 +87,7 @@ function buildVertexLambert(mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -232,7 +232,7 @@ function buildVertexLambert(mesh) {
         src.push("gl_PointSize = pointSize;");
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
@@ -250,7 +250,7 @@ function buildFragmentLambert(mesh) {
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
     src.push("// Lambertian drawing fragment shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -260,7 +260,7 @@ function buildFragmentLambert(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -306,7 +306,7 @@ function buildFragmentLambert(mesh) {
         src.push("}");
 
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     if (gammaOutput) {
@@ -340,7 +340,7 @@ function buildVertexDraw(mesh) {
     if (normals && material._normalMap) {
         src.push("#extension GL_OES_standard_derivatives : enable");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("attribute  vec3 position;");
@@ -355,7 +355,7 @@ function buildVertexDraw(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -523,7 +523,7 @@ function buildVertexDraw(mesh) {
     }
     src.push("   vViewPosition = viewPosition.xyz;");
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
@@ -565,7 +565,7 @@ function buildFragmentDraw(mesh) {
 
     src.push("// Drawing fragment shader");
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
 
@@ -581,7 +581,7 @@ function buildFragmentDraw(mesh) {
     src.push("precision mediump int;");
     src.push("#endif");
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -1556,7 +1556,7 @@ function buildFragmentDraw(mesh) {
         src.push("gl_FragColor = linearToGamma(gl_FragColor, gammaFactor);");
     }
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
 

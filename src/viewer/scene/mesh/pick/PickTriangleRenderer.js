@@ -81,7 +81,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     frameCtx.useProgram++;
 
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }
@@ -173,7 +173,7 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._aColor = program.getAttribute("color");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
 };

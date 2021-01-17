@@ -1,10 +1,8 @@
 /**
- * @author xeolabs / https://github.com/xeolabs
- */
-
-/**
  * @private
  */
+import {WEBGL_INFO} from "../../webglInfo.js";
+
 class PickTriangleShaderSource {
     constructor(mesh) {
         this.vertex = buildVertex(mesh);
@@ -20,7 +18,7 @@ function buildVertex(mesh) {
     const stationary = mesh._state.stationary;
     const src = [];
     src.push("// Surface picking vertex shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("attribute vec3 position;");
@@ -33,9 +31,11 @@ function buildVertex(mesh) {
         src.push("uniform bool clippable;");
         src.push("varying vec4 vWorldPosition;");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
-        src.push("varying float vFragDepth;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float vFragDepth;");
+        }
     }
     src.push("varying vec4 vColor;");
     if (quantizedGeometry) {
@@ -54,8 +54,13 @@ function buildVertex(mesh) {
     }
     src.push("   vColor = color;");
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
+            src.push("clipPos.z *= clipPos.w;");
+        }
     }
     src.push("gl_Position = clipPos;");
     src.push("}");
@@ -68,7 +73,7 @@ function buildFragment(mesh) {
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Surface picking fragment shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -79,7 +84,7 @@ function buildFragment(mesh) {
     src.push("precision mediump int;");
     src.push("#endif");
     src.push("varying vec4 vColor;");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -96,7 +101,7 @@ function buildFragment(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+        for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
@@ -104,7 +109,7 @@ function buildFragment(mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     src.push("   gl_FragColor = vColor;");

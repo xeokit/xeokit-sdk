@@ -1,6 +1,4 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
+import {WEBGL_INFO} from "../../webglInfo.js";
 
 /**
  * @private
@@ -20,7 +18,7 @@ function buildVertex(mesh) {
     const stationary = mesh._state.stationary;
     const src = [];
     src.push("// Edges drawing vertex shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("attribute vec3 position;");
@@ -32,9 +30,11 @@ function buildVertex(mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
-        src.push("varying float vFragDepth;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float vFragDepth;");
+        }
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -84,8 +84,13 @@ function buildVertex(mesh) {
         src.push("vWorldPosition = worldPosition;");
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
+            src.push("clipPos.z *= clipPos.w;");
+        }
     }
     src.push("gl_Position = clipPos;");
     src.push("}");
@@ -101,7 +106,7 @@ function buildFragment(mesh) {
     const src = [];
 
     src.push("// Edges drawing fragment shader");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -111,7 +116,7 @@ function buildFragment(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -143,7 +148,7 @@ function buildFragment(mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     if (gammaOutput) {

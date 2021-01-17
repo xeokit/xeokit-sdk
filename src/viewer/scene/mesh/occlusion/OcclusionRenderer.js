@@ -166,9 +166,6 @@ OcclusionRenderer.prototype._allocate = function (mesh) {
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    if (scene.logarithmicDepthBufferEnabled) {
-        this._uZFar = program.getLocation("zFar");
-    }
     this._uSectionPlanes = [];
     const clips = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = clips.length; i < len; i++) {
@@ -181,7 +178,7 @@ OcclusionRenderer.prototype._allocate = function (mesh) {
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
     this._lastMaterialId = null;
@@ -196,7 +193,7 @@ OcclusionRenderer.prototype._bindProgram = function (frameCtx) {
     this._program.bind();
     frameCtx.useProgram++;
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }

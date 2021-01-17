@@ -133,10 +133,6 @@ class BatchingDrawRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
-
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
         this._uLightDir = [];
@@ -191,7 +187,7 @@ class BatchingDrawRenderer {
             this._uSAOParams = program.getLocation("uSAOParams");
         }
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
@@ -207,10 +203,6 @@ class BatchingDrawRenderer {
         program.bind();
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, project.far)
-        }
 
         if (this._uLightAmbient) {
             const ambientColor = scene._lightsState.getAmbientColor();
@@ -250,7 +242,7 @@ class BatchingDrawRenderer {
             }
         }
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }

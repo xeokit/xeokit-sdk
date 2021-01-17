@@ -181,9 +181,6 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    if (scene.logarithmicDepthBufferEnabled) {
-        this._uZFar = program.getLocation("zFar");
-    }
     this._uLightAmbient = [];
     this._uLightColor = [];
     this._uLightDir = [];
@@ -222,7 +219,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uGammaFactor = program.getLocation("gammaFactor");
     this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
     this._lastMaterialId = null;
@@ -246,7 +243,7 @@ EmphasisFillRenderer.prototype._bindProgram = function (frameCtx) {
     this._lastIndicesBufId = null;
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.normalMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }

@@ -61,7 +61,7 @@ class InstancingPickDepthRenderer {
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
         gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -175,7 +175,7 @@ class InstancingPickDepthRenderer {
         this._uPickZNear = program.getLocation("pickZNear");
         this._uPickZFar = program.getLocation("pickZFar");
 
-        if (scene.viewer.logarithmicDepthBufferSupported && scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }

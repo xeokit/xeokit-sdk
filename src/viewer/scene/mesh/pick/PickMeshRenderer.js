@@ -184,7 +184,7 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uPickColor = program.getLocation("pickColor");
     this._uOffset = program.getLocation("offset");
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
     }
     this._lastMaterialId = null;
@@ -197,7 +197,7 @@ PickMeshRenderer.prototype._bindProgram = function (frameCtx) {
     const project = scene.camera.project;
     this._program.bind();
     frameCtx.useProgram++;
-    if (scene.logarithmicDepthBufferEnabled && scene.viewer.logarithmicDepthBufferSupported) {
+    if (scene.logarithmicDepthBufferEnabled ) {
         const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }

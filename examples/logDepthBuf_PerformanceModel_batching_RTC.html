@@ -76,12 +76,6 @@
     import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // We can detect if the browser supports xeokit's logarithmic depth buffer, before we instantiate a Viewer
-    //------------------------------------------------------------------------------------------------------------------
-
-    const logarithmicDepthBufferSupported = Viewer.logarithmicDepthBufferSupported;
-
-    //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
     //------------------------------------------------------------------------------------------------------------------
 
@@ -181,11 +175,11 @@
         edges: true
     });
 
-    const OFFSET = 50000000.0;
-    const SIZE = 1000000;
+    const OFFSET = 500000.0;
+    const SIZE = 10000;
 
-    for (let x = -OFFSET; x < OFFSET; x += 25000000.0) {
-        for (let z = -OFFSET; z < OFFSET; z += 25000000.0) {
+    for (let x = -OFFSET; x < OFFSET; x += 250000.0) {
+        for (let z = -OFFSET; z < OFFSET; z += 250000.0) {
             const rtcCenter = [x, 0, z];
             buildTable(performanceModel, rtcCenter, SIZE);
         }
