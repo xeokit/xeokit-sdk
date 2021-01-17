@@ -111,6 +111,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.smartPivot = true;
 
     const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
@@ -176,7 +177,7 @@
             // alpha: 0.0,
             alphaMode: "opaque"
         }),
-        position: [1842761.9375,  -5.53293939639616, -5174733.5],
+        position: [1842761.9375, -5.53293939639616, -5174733.5],
         collidable: false
     });
 
@@ -204,7 +205,7 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-            //    viewer.scene.sao.enabled = true;
+                //    viewer.scene.sao.enabled = true;
                 viewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }
@@ -293,6 +294,16 @@
 
                                     lyon9.on("loaded", () => {
 
+                                        // const duplex = xktLoader.load({
+                                        //     id: "myModel",
+                                        //     src: "./models/xkt/duplex/duplex.xkt",
+                                        //     metaModelSrc: "./metaModels/duplex/metaModel.json",
+                                        //     edges: true,
+                                        //     scale: [1000, 1000, 1000]
+                                        // });
+                                        //                                 duplex.on("loaded", () => {
+                                        //                                       viewer.cameraFlight.flyTo(duplex);
+
                                         let numEntities = 0;
 
                                         for (let id in viewer.scene.models) {
@@ -303,6 +314,7 @@
                                         const t1 = performance.now();
 
                                         document.getElementById("time").innerHTML = "Loaded 9 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
+                                        //                               });
                                     });
                                 });
                             });
