@@ -190,6 +190,7 @@
         this.followPointer = cameraControl.followPointer;
         this.doublePickFlyTo = cameraControl.doublePickFlyTo;
         this.panRightClick = cameraControl.panRightClick;
+        this.smartPivot = cameraControl.smartPivot;
 
         this.dragRotationRate = cameraControl.dragRotationRate;
         this.keyboardRotationRate = cameraControl.keyboardRotationRate;
@@ -213,6 +214,7 @@
         cameraControl.followPointer = cameraControlParams.followPointer;
         cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
         cameraControl.panRightClick = cameraControlParams.panRightClick;
+        cameraControl.smartPivot = cameraControlParams.smartPivot;
 
         cameraControl.dragRotationRate = cameraControlParams.dragRotationRate;
         cameraControl.keyboardRotationRate = cameraControlParams.keyboardRotationRate;
@@ -241,6 +243,7 @@
     cameraControlFolder.add(cameraControlParams, 'followPointer');
     cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
     cameraControlFolder.add(cameraControlParams, 'panRightClick');
+    cameraControlFolder.add(cameraControlParams, 'smartPivot');
     cameraControlFolder.open();
 
     const rotationFolder = gui.addFolder('Rotation');
