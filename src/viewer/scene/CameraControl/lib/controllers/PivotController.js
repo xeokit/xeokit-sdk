@@ -377,6 +377,7 @@ class PivotController {
     }
 
     destroy() {
+        this.destroyPivotSphere();
         this._scene.camera.off(this._onViewMatrix);
         this._scene.camera.off(this._onProjMatrix);
         this._scene.off(this._onTick);
