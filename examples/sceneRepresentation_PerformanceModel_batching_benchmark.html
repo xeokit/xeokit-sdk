@@ -81,6 +81,9 @@
     viewer.scene.camera.look = [-977.5, 17.14933204650879, -397.5];
     viewer.scene.camera.up = [-0.17806679010391235, 0.9044896960258484, 0.33330681920051575];
 
+    viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.smartPivot = true;
+
     //------------------------------------------------------------------------------------------------------------------
     // Generate the buildings
     //------------------------------------------------------------------------------------------------------------------
@@ -193,33 +196,33 @@
     // Mouse over Entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
+    // var lastEntity = null;
+    //
+    // viewer.scene.input.on("mousemove", function (coords) {
+    //
+    //     var hit = viewer.scene.pick({
+    //         canvasPos: coords
+    //     });
+    //
+    //     if (hit) {
+    //
+    //         if (!lastEntity || hit.entity.id !== lastEntity.id) {
+    //
+    //             if (lastEntity) {
+    //                 lastEntity.highlighted = false;
+    //             }
+    //
+    //             lastEntity = hit.entity;
+    //             hit.entity.highlighted = true;
+    //         }
+    //     } else {
+    //
+    //         if (lastEntity) {
+    //             lastEntity.highlighted = false;
+    //             lastEntity = null;
+    //         }
+    //     }
+    // });
 
     window.model = performanceModel;
 
