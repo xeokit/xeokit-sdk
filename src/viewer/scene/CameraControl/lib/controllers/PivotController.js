@@ -124,7 +124,8 @@ class PivotController {
 
     updatePivotSphere() {
         if (this._pivoting && this._pivotSphere) {
-            if(!math.compareVec3(this.getPivotPos(), this._pivotSphere.position)) {
+            worldToRTCPos(this.getPivotPos(), this._rtcCenter, this._rtcPos);
+            if(!math.compareVec3(this._rtcPos, this._pivotSphere.position)) {
                 this.destroyPivotSphere();
                 this.createPivotSphere();
             }
@@ -367,6 +368,7 @@ class PivotController {
             this.destroyPivotSphere();
         }
         this._shown = false;
+        this.endPivot();
     }
 
     /**
