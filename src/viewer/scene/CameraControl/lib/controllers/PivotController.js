@@ -380,9 +380,6 @@ class PivotController {
         this._scene.camera.off(this._onViewMatrix);
         this._scene.camera.off(this._onProjMatrix);
         this._scene.off(this._onTick);
-        if (this._rootNode) {
-            this._rootNode.destroy();
-        }
     }
 }
 
