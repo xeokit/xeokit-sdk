@@ -3,6 +3,8 @@ import { PhongMaterial } from "../../../materials/PhongMaterial.js";
 import { Mesh } from "../../../mesh/Mesh.js";
 import { VBOGeometry } from "../../../geometry/VBOGeometry.js";
 import { buildSphereGeometry } from "../../../geometry/builders/buildSphereGeometry.js";
+import { worldToRTCPos } from "../../../math/rtcCoords.js";
+import { Node } from "../../../nodes/Node.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -39,6 +41,8 @@ class PivotController {
         this._pivotSphereSize = 1;
         this._pivotSphereGeometry = null;
         this._pivotSphereMaterial = null;
+        this._rtcCenter = math.vec3();
+        this._rtcPos = math.vec3();
 
         this._pivotViewPos = math.vec4();
         this._pivotProjPos = math.vec4();
@@ -65,6 +69,8 @@ class PivotController {
         math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
         const length = math.distVec3(cameraPos, currentPos);
         const radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+
+        worldToRTCPos(currentPos, this._rtcCenter, this._rtcPos);
         this._pivotSphereGeometry = new VBOGeometry(
             this._scene,
             buildSphereGeometry({ radius })
@@ -73,7 +79,8 @@ class PivotController {
             geometry: this._pivotSphereGeometry,
             material: this._pivotSphereMaterial,
             pickable: false,
-            position: currentPos,
+            position: this._rtcPos,
+            rtcCenter: this._rtcCenter
         });
     };
 
@@ -137,7 +144,7 @@ class PivotController {
      *
      * @param {Object} [cfg] Sphere configuration.
      * @param {String} [cfg.size=1] Optional size factor of the sphere. Defaults to 1.
-     * @param {String} [cfg.material=PhongMaterial] Optional size factor of the sphere. Defaults to a red opaque material.
+     * @param {String} [cfg.color=Array] Optional maretial color. Defaults to a red.
      */
     enablePivotSphere(cfg = {}) {
         this.destroyPivotSphere();
@@ -145,10 +152,12 @@ class PivotController {
         if (cfg.size) {
             this._pivotSphereSize = cfg.size;
         }
-
-        this._pivotSphereMaterial = cfg.material || new PhongMaterial(this._scene, {
-            emissive: [1, 0, 0],
-            diffuse: [0, 0, 0],
+        const color = cfg.color || [1, 0, 0];
+        this._pivotSphereMaterial = new PhongMaterial(this._scene, {
+            emissive: color,
+            ambient: color,
+            specular: [0,0,0],
+            diffuse: [0,0,0],
         });
     }
 
@@ -229,6 +238,7 @@ class PivotController {
     /**
      * Sets the pivot position to the 3D projection of the given 2D canvas coordinates on a sphere centered
      * at the viewpoint. The radius of the sphere is configured via {@link CameraControl#smartPivot}.
+     *
      *
      * @param canvasPos
      */
@@ -370,6 +380,9 @@ class PivotController {
         this._scene.camera.off(this._onViewMatrix);
         this._scene.camera.off(this._onProjMatrix);
         this._scene.off(this._onTick);
+        if (this._rootNode) {
+            this._rootNode.destroy();
+        }
     }
 }
 
