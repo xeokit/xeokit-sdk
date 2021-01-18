@@ -11,8 +11,7 @@ Unreleased
   * Pan/Rotate: mousemove event listen on document instead of canvas. [#527](https://github.com/xeokit/xeokit-sdk/pull/527) ([**@Kurtil**](https://github.com/Kurtil))
   * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil))
   * Smart Pivot. [#533](https://github.com/xeokit/xeokit-sdk/pull/533) ([**@xeolabs**](https://github.com/xeolabs), [**@amoki**](https://github.com/amoki))
-* Scene
-  * Improve surface picking accuracy and performance. [#551](https://github.com/xeokit/xeokit-sdk/issues/531) ([**@xeolabs**](https://github.com/xeolabs))  
+  * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil)) 
 * SectionPlanesPlugin
   * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil)
 * Viewer
