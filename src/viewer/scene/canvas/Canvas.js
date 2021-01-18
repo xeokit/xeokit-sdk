@@ -314,9 +314,14 @@ class Canvas extends Component {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
-            } else if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]) {
-                const ext = this.gl.getExtension("OES_standard_derivatives");
-                this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
+            } else {
+                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]) {
+                    const ext = this.gl.getExtension("OES_standard_derivatives");
+                    this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
+                }
+                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                    const ext = this.gl.getExtension('EXT_frag_depth');
+                }
             }
         }
     }

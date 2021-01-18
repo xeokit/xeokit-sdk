@@ -159,7 +159,8 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 };
 
 PickMeshRenderer.prototype._allocate = function (mesh) {
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
     this._program = new Program(gl, this._shaderSource);
     if (this._program.errors) {
         this.errors = this._program.errors;
@@ -171,7 +172,7 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
-    const clips = mesh.scene._sectionPlanesState.sectionPlanes;
+    const clips = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = clips.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
@@ -183,13 +184,23 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._uClippable = program.getLocation("clippable");
     this._uPickColor = program.getLocation("pickColor");
     this._uOffset = program.getLocation("offset");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+    }
     this._lastMaterialId = null;
     this._lastGeometryId = null;
 };
 
 PickMeshRenderer.prototype._bindProgram = function (frameCtx) {
+    const scene = this._scene;
+    const gl = scene.canvas.gl;
+    const project = scene.camera.project;
     this._program.bind();
     frameCtx.useProgram++;
+    if (scene.logarithmicDepthBufferEnabled ) {
+        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+    }
     this._lastMaterialId = null;
     this._lastGeometryId = null;
 };

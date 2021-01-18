@@ -73,12 +73,18 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const rtcCenter = mesh.rtcCenter;
     const backfaces = materialState.backfaces;
     const frontface = materialState.frontface;
+    const project = scene.camera.project;
     const positionsBuf = geometry._getPickTrianglePositions();
     const pickColorsBuf = geometry._getPickTriangleColors();
 
     this._program.bind();
 
     frameCtx.useProgram++;
+
+    if (scene.logarithmicDepthBufferEnabled ) {
+        const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+        gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+    }
 
     gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
 
@@ -101,6 +107,10 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     }
 
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
+
+    if (scene.logarithmicDepthBufferEnabled) {
+        gl.uniform1f(this._uZFar, scene.camera.project.far);
+    }
 
     if (frameCtx.backfaces !== backfaces) {
         if (backfaces) {
@@ -137,7 +147,8 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 };
 
 PickTriangleRenderer.prototype._allocate = function (mesh) {
-    const gl = mesh.scene.canvas.gl;
+    const scene = mesh.scene;
+    const gl = scene.canvas.gl;
     this._program = new Program(gl, this._shaderSource);
     this._useCount = 0;
     if (this._program.errors) {
@@ -150,7 +161,7 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
-    const sectionPlanes = mesh.scene._sectionPlanesState.sectionPlanes;
+    const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = sectionPlanes.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
@@ -162,6 +173,9 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     this._aColor = program.getAttribute("color");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+    }
 };
 
 export {PickTriangleRenderer};

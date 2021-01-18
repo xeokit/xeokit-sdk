@@ -67,7 +67,11 @@ class TouchPanRotateAndDollyHandler {
 
                         } else {
 
-                            pivotController.setPivotPos(scene.camera.look);
+                            if (configs.smartPivot) {
+                                pivotController.setCanvasPivotPos(states.pointerCanvasPos);
+                            } else {
+                                pivotController.setPivotPos(scene.camera.look);
+                            }
 
                             if (!configs.firstPerson && pivotController.startPivot()) {
                                 pivotController.showPivot();

@@ -97,7 +97,7 @@ class AxisGizmoPlugin extends Plugin {
             });
 
         // The scene containing this helper
-        var scene = new Scene({
+        var scene = new Scene(viewer, {
             canvasId: canvasId,
             transparent: true
         });

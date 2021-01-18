@@ -6,19 +6,25 @@ import { buildSphereGeometry } from "../../../geometry/builders/buildSphereGeome
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+
+const tempVec4a = math.vec4();
+const tempVec4b = math.vec4();
+const tempVec4c = math.vec4();
+
 
 /** @private */
 class PivotController {
 
     /**
-     * Constructs a Pivoter.
-     * @param scene
+     * @private
      */
-    constructor(scene) {
+    constructor(scene, configs) {
 
         // Pivot math by: http://www.derschmale.com/
 
         this._scene = scene;
+        this._configs = configs;
         this._pivotWorldPos = math.vec3();
         this._cameraOffset = math.vec3();
         this._azimuth = 0;
@@ -211,13 +217,34 @@ class PivotController {
     }
 
     /**
-     * Sets the position we're pivoting about.
+     * Sets a 3D World-space position to pivot about.
      *
      * @param {Number[]} worldPos The new World-space pivot position.
      */
     setPivotPos(worldPos) {
         this._pivotWorldPos.set(worldPos);
         this._pivotPosSet = true;
+    }
+
+    /**
+     * Sets the pivot position to the 3D projection of the given 2D canvas coordinates on a sphere centered
+     * at the viewpoint. The radius of the sphere is configured via {@link CameraControl#smartPivot}.
+     *
+     * @param canvasPos
+     */
+    setCanvasPivotPos(canvasPos) {
+        const camera = this._scene.camera;
+        const pivotShereRadius = Math.abs(math.distVec3(this._scene.center, camera.eye));
+        const transposedProjectMat = camera.project.transposedMatrix;
+        const Pt3 = transposedProjectMat.subarray(8, 12);
+        const Pt4 = transposedProjectMat.subarray(12);
+        const D = [0, 0, -1.0, 1];
+        const screenZ = math.dotVec4(D, Pt3) / math.dotVec4(D, Pt4);
+        const worldPos = tempVec4a;
+        camera.project.unproject(canvasPos, screenZ, tempVec4b, tempVec4c, worldPos);
+        const eyeWorldPosVec = math.normalizeVec3(math.subVec3(worldPos, camera.eye, tempVec3a));
+        const posOnSphere = math.addVec3(camera.eye, math.mulVec3Scalar(eyeWorldPosVec, pivotShereRadius, tempVec3b), tempVec3c);
+        this.setPivotPos(posOnSphere);
     }
 
     /**

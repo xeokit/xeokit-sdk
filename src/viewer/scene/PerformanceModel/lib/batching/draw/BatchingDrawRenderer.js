@@ -115,7 +115,6 @@ class BatchingDrawRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
-        const sectionPlanesState = scene._sectionPlanesState;
 
         this._program = new Program(gl, this._shaderSource);
 
@@ -168,8 +167,7 @@ class BatchingDrawRenderer {
 
         this._uSectionPlanes = [];
 
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -188,6 +186,10 @@ class BatchingDrawRenderer {
             this._uOcclusionTexture = "uOcclusionTexture";
             this._uSAOParams = program.getLocation("uSAOParams");
         }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram(frameCtx) {
@@ -196,11 +198,11 @@ class BatchingDrawRenderer {
         const gl = scene.canvas.gl;
         const program = this._program;
         const lights = scene._lightsState.lights;
-        const camera = scene.camera;
+        const project = scene.camera.project;
 
         program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
 
         if (this._uLightAmbient) {
             const ambientColor = scene._lightsState.getAmbientColor();
@@ -238,6 +240,11 @@ class BatchingDrawRenderer {
                 gl.uniform4fv(this._uSAOParams, tempVec4);
                 this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
             }
+        }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
     }
 

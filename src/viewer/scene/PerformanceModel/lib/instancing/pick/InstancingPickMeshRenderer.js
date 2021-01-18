@@ -54,6 +54,14 @@ class InstancingPickMeshRenderer {
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+
+        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -167,15 +175,20 @@ class InstancingPickMeshRenderer {
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+        }
     }
 
     _bindProgram(frameCtx) {
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
+
         program.bind();
-        const camera = scene.camera;
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     }
 

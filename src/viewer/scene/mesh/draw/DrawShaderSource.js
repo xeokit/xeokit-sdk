@@ -62,20 +62,9 @@ function hasNormals(mesh) {
     return false;
 }
 
-function getFragmentFloatPrecision(gl) {
-    if (!gl.getShaderPrecisionFormat) {
-        return "mediump";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
-        return "highp";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0) {
-        return "mediump";
-    }
-    return "lowp";
-}
-
 function buildVertexLambert(mesh) {
+
+    const scene = mesh.scene;
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const geometryState = mesh._geometry._state;
@@ -83,11 +72,12 @@ function buildVertexLambert(mesh) {
     const stationary = mesh._state.stationary;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!geometryState.compressGeometry;
-    let i;
-    let len;
-    let light;
+
     const src = [];
     src.push("// Lambertian drawing vertex shader");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("attribute vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
@@ -96,6 +86,10 @@ function buildVertexLambert(mesh) {
     src.push("uniform vec3 offset;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
+    }
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -107,8 +101,8 @@ function buildVertexLambert(mesh) {
         src.push("attribute vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -199,8 +193,8 @@ function buildVertexLambert(mesh) {
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
     src.push("float lambertian = 1.0;");
     if (geometryState.normalsBuf) {
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -237,7 +231,11 @@ function buildVertexLambert(mesh) {
     if (geometryState.primitiveName === "points") {
         src.push("gl_PointSize = pointSize;");
     }
-    src.push("   gl_Position = projMatrix * viewPosition;");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
+    }
+    src.push("gl_Position = clipPos;");
     src.push("}");
     return src;
 }
@@ -247,14 +245,14 @@ function buildFragmentLambert(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
-    let i;
-    let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const solid = false && materialState.backfaces;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
     src.push("// Lambertian drawing fragment shader");
-
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -262,11 +260,14 @@ function buildFragmentLambert(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -283,7 +284,7 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
@@ -304,6 +305,9 @@ function buildFragmentLambert(mesh) {
         src.push("   discard;");
         src.push("}");
 
+    }
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     if (gammaOutput) {
         src.push("gl_FragColor = linearToGamma(vColor, gammaFactor);");
@@ -332,12 +336,14 @@ function buildVertexDraw(mesh) {
     const receivesShadow = getReceivesShadow(mesh);
     const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
+    src.push("// Drawing vertex shader");
     if (normals && material._normalMap) {
         src.push("#extension GL_OES_standard_derivatives : enable");
     }
-    src.push("// Drawing vertex shader");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
     src.push("attribute  vec3 position;");
-
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -349,6 +355,10 @@ function buildVertexDraw(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
     }
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
     if (lightsState.lightMaps.length > 0) {
         src.push("varying    vec3 vWorldNormal;");
     }
@@ -357,7 +367,7 @@ function buildVertexDraw(mesh) {
         src.push("uniform    mat4 modelNormalMatrix;");
         src.push("uniform    mat4 viewNormalMatrix;");
         src.push("varying    vec3 vViewNormal;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -417,7 +427,7 @@ function buildVertexDraw(mesh) {
     }
     if (receivesShadow) {
         src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
             if (lightsState.lights[i].castsShadow) {
                 src.push("uniform mat4 shadowViewMatrix" + i + ";");
                 src.push("uniform mat4 shadowProjMatrix" + i + ";");
@@ -472,7 +482,7 @@ function buildVertexDraw(mesh) {
         src.push("vViewNormal = normalize((viewNormalMatrix2 * vec4(worldNormal, 1.0)).xyz);");
         src.push("vec3 tmpVec3;");
         src.push("float lightDist;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) { // Lights
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Lights
             light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -512,11 +522,15 @@ function buildVertexDraw(mesh) {
         src.push("vWorldPosition = worldPosition;");
     }
     src.push("   vViewPosition = viewPosition.xyz;");
-    src.push("   gl_Position = projMatrix * viewPosition;");
-    src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
+    src.push("vec4 clipPos = projMatrix * viewPosition;");
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("vFragDepth = 1.0 + clipPos.w;");
+    }
+    src.push("gl_Position = clipPos;");
     if (receivesShadow) {
+        src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
         src.push("vec4 tempx; ");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
             if (lightsState.lights[i].castsShadow) {
                 src.push("vShadowPosFromLight" + i + " = texUnitConverter * shadowProjMatrix" + i + " * (shadowViewMatrix" + i + " * worldPosition); ");
             }
@@ -545,18 +559,32 @@ function buildFragmentDraw(mesh) {
     const receivesShadow = getReceivesShadow(mesh);
     const gammaInput = scene.gammaInput; // If set, then it expects that all textures and colors are premultiplied gamma. Default is false.
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-    var i;
-    let len;
+
     let light;
     const src = [];
 
     src.push("// Drawing fragment shader");
 
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("#extension GL_EXT_frag_depth : enable");
+    }
+
     if (normals && material._normalMap) {
         src.push("#extension GL_OES_standard_derivatives : enable");
     }
 
-    src.push("precision " + getFragmentFloatPrecision(gl) + " float;");
+    src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+    src.push("precision highp float;");
+    src.push("precision highp int;");
+    src.push("#else");
+    src.push("precision mediump float;");
+    src.push("precision mediump int;");
+    src.push("#endif");
+
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("uniform float logDepthBufFC;");
+        src.push("varying float vFragDepth;");
+    }
 
     if (receivesShadow) {
         src.push("float unpackDepth (vec4 color) {");
@@ -1025,8 +1053,8 @@ function buildFragmentDraw(mesh) {
     src.push("uniform vec4   lightAmbient;");
 
     if (normals) {
-        for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            light = lightsState.lights[i];
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -1062,7 +1090,7 @@ function buildFragmentDraw(mesh) {
         // src.push("      return clamp(max(p, p_max), 0.0, 1.0);");
         // src.push("}");
 
-        for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
             if (lightsState.lights[i].castsShadow) {
                 src.push("varying vec4 vShadowPosFromLight" + i + ";");
                 src.push("uniform sampler2D shadowMap" + i + ";");
@@ -1417,9 +1445,9 @@ function buildFragmentDraw(mesh) {
         // }
 
         const numShadows = 0;
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
 
-            light = lightsState.lights[i];
+            const light = lightsState.lights[i];
 
             if (light.type === "ambient") {
                 continue;
@@ -1526,6 +1554,10 @@ function buildFragmentDraw(mesh) {
 
     if (gammaOutput) {
         src.push("gl_FragColor = linearToGamma(gl_FragColor, gammaFactor);");
+    }
+
+    if (scene.logarithmicDepthBufferEnabled ) {
+        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
 
     src.push("}");

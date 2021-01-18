@@ -19,14 +19,14 @@ class MouseMiscHandler {
         });
 
         document.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
-            getCanvasPosFromEvent(e, states.pointerCanvasPos);
+            getCanvasPosFromEvent(e, canvas, states.pointerCanvasPos);
         });
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-            getCanvasPosFromEvent(e, states.pointerCanvasPos);
+            getCanvasPosFromEvent(e, canvas, states.pointerCanvasPos);
             states.mouseover = true;
         });
 
@@ -52,22 +52,15 @@ class MouseMiscHandler {
     }
 }
 
-function getCanvasPosFromEvent(event, canvasPos) {
+function getCanvasPosFromEvent(event, canvas, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
         canvasPos[1] = event.y;
     } else {
-        let element = event.currentTarget;
-        let totalOffsetLeft = 0;
-        let totalOffsetTop = 0;
-        while (element.offsetParent) {
-            totalOffsetLeft += element.offsetLeft;
-            totalOffsetTop += element.offsetTop;
-            element = element.offsetParent;
-        }
-        canvasPos[0] = event.pageX - totalOffsetLeft;
-        canvasPos[1] = event.pageY - totalOffsetTop;
+        const { x, y } = canvas.getBoundingClientRect();
+        canvasPos[0] = event.clientX - x;
+        canvasPos[1] = event.clientY - y;
     }
     return canvasPos;
 }

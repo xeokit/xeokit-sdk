@@ -118,7 +118,9 @@ import {math} from "../math/math.js";
  * cameraControl.followPointer = true;
  * ````
  *
- * When the pointer is over empty space, the target will remain on the last object that the pointer was over.
+ * ## Smart Pivoting
+ *
+ * TODO
  *
  * ## Showing the Pivot Position
  *
@@ -636,6 +638,7 @@ class CameraControl extends Component {
             showPivot: false,
             pointerEnabled: true,
             constrainVertical: false,
+            smartPivot: false,
 
             // Rotation
 
@@ -695,8 +698,8 @@ class CameraControl extends Component {
         this._controllers = {
             cameraControl: this,
             pickController: new PickController(this, this._configs),
-            pivotController: new PivotController(scene),
-            panController: new PanController(this.scene),
+            pivotController: new PivotController(scene, this._configs),
+            panController: new PanController(scene),
             cameraFlight: new CameraFlightAnimation(this, {
                 duration: 0.5
             })
@@ -1583,6 +1586,38 @@ class CameraControl extends Component {
      */
     disablePivotSphere() {
         this._controllers.pivotController.disablePivotSphere();
+    }
+    
+    /**
+     * Sets whether smart default pivoting is enabled.
+     *
+     * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
+     * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
+     *
+     * When ````false````, we'll pivot by default about {@link Camera#look}.
+     *
+     * Default is ````false````.
+     *
+     * @param {Boolean} enabled Set ````true```` to pivot by default about the selected point on the virtual sphere, or ````false```` to pivot by default about {@link Camera#look}.
+     */
+    set smartPivot(enabled) {
+        this._configs.smartPivot = (enabled !== false);
+    }
+
+    /**
+     * Gets whether smart default pivoting is enabled.
+     *
+     * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
+     * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
+     *
+     * When ````false````, we'll pivot by default about {@link Camera#look}.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` when pivoting by default about the selected point on the virtual sphere, or ````false```` when pivoting by default about {@link Camera#look}.
+     */
+    get smartPivot() {
+        return this._configs.smartPivot;
     }
 
     /**
