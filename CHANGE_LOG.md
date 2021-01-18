@@ -13,7 +13,9 @@ Unreleased
   * Smart Pivot. [#533](https://github.com/xeokit/xeokit-sdk/pull/533) ([**@xeolabs**](https://github.com/xeolabs), [**@amoki**](https://github.com/amoki))
   * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil)) 
 * SectionPlanesPlugin
-  * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil)
+  * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil))
+* TreeViewPlugin
+  * Don't group TreeViewPlugin "types" hierarchies by IfcBuilding parents. [#539](https://github.com/xeokit/xeokit-sdk/issues/539) ([**@xeolabs**](https://github.com/xeolabs))
 * Viewer
   * Logarithmic depth buffer. [#254](https://github.com/xeokit/xeokit-sdk/issues/254) ([**@xeolabs**](https://github.com/xeolabs))
     
