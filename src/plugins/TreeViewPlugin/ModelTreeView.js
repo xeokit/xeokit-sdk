@@ -321,7 +321,7 @@ class ModelTreeView {
         }
     }
 
-    _createTypesNodes(metaObject = this._rootMetaObject, buildingNode, typeNodes) {
+    _createTypesNodes(metaObject = this._rootMetaObject, rootNode, typeNodes) {
         if (this._pruneEmptyNodes && (metaObject._countEntities === 0)) {
             return;
         }
@@ -329,8 +329,8 @@ class ModelTreeView {
         const metaObjectName = metaObject.name;
         const children = metaObject.children;
         const objectId = metaObject.id;
-        if (metaObjectType === "IfcBuilding") {
-            buildingNode = {
+        if (metaObject.id === this._rootMetaObject.id) {
+            rootNode = {
                 nodeId: this._objectToNodeID(objectId),
                 objectId: objectId,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
@@ -341,28 +341,28 @@ class ModelTreeView {
                 checked: false,
                 children: []
             };
-            this._rootNodes.push(buildingNode);
-            this._objectNodes[buildingNode.objectId] = buildingNode;
+            this._rootNodes.push(rootNode);
+            this._objectNodes[rootNode.objectId] = rootNode;
             typeNodes = {};
         } else {
-            if (buildingNode) {
+            if (rootNode) {
                 const objects = this._viewer.scene.objects;
                 const object = objects[objectId];
                 if (object) {
                     let typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
                         typeNode = {
-                            nodeId: this._objectToNodeID(buildingNode.objectId + "." + metaObjectType),
-                            objectId: buildingNode.objectId + "." + metaObjectType,
+                            nodeId: this._objectToNodeID(rootNode.objectId + "." + metaObjectType),
+                            objectId: rootNode.objectId + "." + metaObjectType,
                             title: metaObjectType,
                             type: metaObjectType,
-                            parent: buildingNode,
+                            parent: rootNode,
                             numEntities: 0,
                             numVisibleEntities: 0,
                             checked: false,
                             children: []
                         };
-                        buildingNode.children.push(typeNode);
+                        rootNode.children.push(typeNode);
                         this._objectNodes[typeNode.objectId] = typeNode;
                         typeNodes[metaObjectType] = typeNode;
                     }
@@ -385,7 +385,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createTypesNodes(childMetaObject, buildingNode, typeNodes);
+                this._createTypesNodes(childMetaObject, rootNode, typeNodes);
             }
         }
     }
