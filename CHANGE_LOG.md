@@ -4,14 +4,13 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.6.0
 
-Unreleased
+January 19, 2021
 
 * CameraControl
+  * Smart Pivot. [#533](https://github.com/xeokit/xeokit-sdk/pull/533) ([**@xeolabs**](https://github.com/xeolabs), [**@amoki**](https://github.com/amoki))
   * Additional Camera properties to support un-projection. [#530](https://github.com/xeokit/xeokit-sdk/issues/530) ([**@xeolabs**](https://github.com/xeolabs))
   * Pan/Rotate: mousemove event listen on document instead of canvas. [#527](https://github.com/xeokit/xeokit-sdk/pull/527) ([**@Kurtil**](https://github.com/Kurtil))
   * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil))
-  * Smart Pivot. [#533](https://github.com/xeokit/xeokit-sdk/pull/533) ([**@xeolabs**](https://github.com/xeolabs), [**@amoki**](https://github.com/amoki))
-  * Remove default CameraControl cursor style. [#522](https://github.com/xeokit/xeokit-sdk/pull/522) ([**@Kurtil**](https://github.com/Kurtil)) 
 * SectionPlanesPlugin
   * Make SectionPlanesPlugin overviewCanvasId optional. [#524](https://github.com/xeokit/xeokit-sdk/pull/524) ([**@Kurtil**](https://github.com/Kurtil))
 * TreeViewPlugin
