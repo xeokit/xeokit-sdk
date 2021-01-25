@@ -535,7 +535,7 @@ const Renderer = function (scene, options) {
                             if (saoPossible && drawable.saoEnabled) {
                                 normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
                             } else {
-                                drawable.drawNormalFillOpaque(frameCtx);
+                                drawable.drawNormalOpaqueFill(frameCtx);
                             }
                         }
 
@@ -609,25 +609,25 @@ const Renderer = function (scene, options) {
             if (normalDrawSAOBinLen > 0) {
                 frameCtx.withSAO = true;
                 for (i = 0; i < normalDrawSAOBinLen; i++) {
-                    normalDrawSAOBin[i].drawNormalFillOpaque(frameCtx);
+                    normalDrawSAOBin[i].drawNormalOpaqueFill(frameCtx);
                 }
             }
 
             if (normalEdgesOpaqueBinLen > 0) {
                 for (i = 0; i < normalEdgesOpaqueBinLen; i++) {
-                    normalEdgesOpaqueBin[i].drawNormalEdgesOpaque(frameCtx);
+                    normalEdgesOpaqueBin[i].drawNormalOpaqueEdges(frameCtx);
                 }
             }
 
             if (xrayedFillOpaqueBinLen > 0) {
                 for (i = 0; i < xrayedFillOpaqueBinLen; i++) {
-                    xrayedFillOpaqueBin[i].drawXRayedFillOpaque(frameCtx);
+                    xrayedFillOpaqueBin[i].drawXRayedFill(frameCtx);
                 }
             }
 
             if (xrayEdgesOpaqueBinLen > 0) {
                 for (i = 0; i < xrayEdgesOpaqueBinLen; i++) {
-                    xrayEdgesOpaqueBin[i].drawXRayedEdgesOpaque(frameCtx);
+                    xrayEdgesOpaqueBin[i].drawXRayedEdges(frameCtx);
                 }
             }
 
@@ -649,12 +649,12 @@ const Renderer = function (scene, options) {
                 }
                 if (xrayEdgesTransparentBinLen > 0) {
                     for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawXRayedEdgesTransparent(frameCtx);
+                        xrayEdgesTransparentBin[i].drawXRayedEdges(frameCtx);
                     }
                 }
                 if (xrayedFillTransparentBinLen > 0) {
                     for (i = 0; i < xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawXRayedFillTransparent(frameCtx);
+                        xrayedFillTransparentBin[i].drawXRayedFill(frameCtx);
                     }
                 }
                 if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
@@ -663,13 +663,13 @@ const Renderer = function (scene, options) {
                 if (normalEdgesTransparentBinLen > 0) {
                     for (i = 0; i < normalEdgesTransparentBinLen; i++) {
                         drawable = normalEdgesTransparentBin[i];
-                        drawable.drawNormalEdgesTransparent(frameCtx);
+                        drawable.drawNormalTransparentEdges(frameCtx);
                     }
                 }
                 if (normalFillTransparentBinLen > 0) {
                     for (i = 0; i < normalFillTransparentBinLen; i++) {
                         drawable = normalFillTransparentBin[i];
-                        drawable.drawNormalFillTransparent(frameCtx);
+                        drawable.drawNormalTransparentFill(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
@@ -683,12 +683,12 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 if (highlightedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
-                        highlightedEdgesOpaqueBin[i].drawHighlightedEdgesOpaque(frameCtx);
+                        highlightedEdgesOpaqueBin[i].drawHighlightedEdges(frameCtx);
                     }
                 }
                 if (highlightedFillOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedFillOpaqueBinLen; i++) {
-                        highlightedFillOpaqueBin[i].drawHighlightedFillOpaque(frameCtx);
+                        highlightedFillOpaqueBin[i].drawHighlightedFill(frameCtx);
                     }
                 }
             }
@@ -708,12 +708,12 @@ const Renderer = function (scene, options) {
 
                 if (highlightedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
-                        highlightedEdgesTransparentBin[i].drawHighlightedEdgesTransparent(frameCtx);
+                        highlightedEdgesTransparentBin[i].drawHighlightedEdges(frameCtx);
                     }
                 }
                 if (highlightedFillTransparentBinLen > 0) {
                     for (i = 0; i < highlightedFillTransparentBinLen; i++) {
-                        highlightedFillTransparentBin[i].drawHighlightedFillTransparent(frameCtx);
+                        highlightedFillTransparentBin[i].drawHighlightedFill(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
@@ -724,12 +724,12 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 if (selectedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
-                        selectedEdgesOpaqueBin[i].drawSelectedEdgesOpaque(frameCtx);
+                        selectedEdgesOpaqueBin[i].drawSelectedEdges(frameCtx);
                     }
                 }
                 if (selectedFillOpaqueBinLen > 0) {
                     for (i = 0; i < selectedFillOpaqueBinLen; i++) {
-                        selectedFillOpaqueBin[i].drawSelectedFillOpaque(frameCtx);
+                        selectedFillOpaqueBin[i].drawSelectedFill(frameCtx);
                     }
                 }
             }
@@ -749,12 +749,12 @@ const Renderer = function (scene, options) {
 
                 if (selectedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < selectedEdgesTransparentBinLen; i++) {
-                        selectedEdgesTransparentBin[i].drawSelectedEdgesTransparent(frameCtx);
+                        selectedEdgesTransparentBin[i].drawSelectedEdges(frameCtx);
                     }
                 }
                 if (selectedFillTransparentBinLen > 0) {
                     for (i = 0; i < selectedFillTransparentBinLen; i++) {
-                        selectedFillTransparentBin[i].drawSelectedFillTransparent(frameCtx);
+                        selectedFillTransparentBin[i].drawSelectedFill(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);

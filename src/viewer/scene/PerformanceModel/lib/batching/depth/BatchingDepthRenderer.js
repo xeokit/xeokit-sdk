@@ -26,7 +26,7 @@ class BatchingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const model = batchingLayer.model;
         const scene = model.scene;
@@ -46,6 +46,8 @@ class BatchingDepthRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
@@ -79,8 +81,6 @@ class BatchingDepthRenderer {
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
-
-        this._aColor.bindArrayBuffer(state.colorsBuf); // Needed for masking out transparent entities using alpha channel
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
 
@@ -124,7 +124,6 @@ class BatchingDepthRenderer {
 
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
-        this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
 

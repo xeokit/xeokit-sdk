@@ -1,14 +1,12 @@
+import {WEBGL_INFO} from "../../../webglInfo.js";
+import {ENTITY_FLAGS} from '../entityFlags.js';
+import {RENDER_PASSES} from '../renderPasses.js';
+
 import {math} from "../../../math/math.js";
 import {buildEdgeIndices} from '../../../math/buildEdgeIndices.js';
-import {WEBGL_INFO} from "../../../webglInfo.js";
-
 import {RenderState} from "../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
-
 import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
-
-import {RENDER_FLAGS} from '../renderFlags.js';
-import {RENDER_PASSES} from '../renderPasses.js';
 import {getInstancingRenderers} from "./InstancingRenderers.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
@@ -16,7 +14,7 @@ const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
 const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
 const compressedNormals = new Int8Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
-const tempVec3a = math.vec3();
+
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
@@ -165,8 +163,6 @@ class InstancingLayer {
         this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
 
         // Vertex arrays
-        this._flags = [];
-        this._flags2 = [];
         this._colors = [];
         this._pickColors = [];
         this._offsets = [];
@@ -201,9 +197,8 @@ class InstancingLayer {
      *
      * The portion will instance this InstancingLayer's geometry.
      *
-     * Gives the portion the specified flags, color and matrix.
+     * Gives the portion the specified color and matrix.
      *
-     * @param flags Unsigned long int
      * @param rgbaInt Quantized RGBA color
      * @param opacity Opacity [0..255]
      * @param meshMatrix Flat float 4x4 matrix
@@ -212,7 +207,7 @@ class InstancingLayer {
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(flags, rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
+    createPortion(rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
@@ -220,67 +215,10 @@ class InstancingLayer {
 
         // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
-        const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
-        const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        const selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-        const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
-        const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-        const culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
-
-        this._flags.push(visible);
-        this._flags.push(xrayed);
-        this._flags.push(highlighted);
-        this._flags.push(selected);
-
-        this._flags2.push(clippable);
-        this._flags2.push(edges);
-        this._flags2.push(pickable);
-        this._flags2.push(culled);
-
-        if (visible) {
-            this._numVisibleLayerPortions++;
-            this.model.numVisibleLayerPortions++;
-        }
-        if (xrayed) {
-            this._numXRayedLayerPortions++;
-            this.model.numXRayedLayerPortions++;
-        }
-        if (highlighted) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
-        }
-        if (selected) {
-            this._numSelectedLayerPortions++;
-            this.model.numSelectedLayerPortions++;
-        }
-        if (clippable) {
-            this._numClippableLayerPortions++;
-            this.model.numClippableLayerPortions++;
-        }
-        if (edges) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        }
-        if (pickable) {
-            this._numPickableLayerPortions++;
-            this.model.numPickableLayerPortions++;
-        }
-        if (culled) {
-            this._numCulledLayerPortions++;
-            this.model.numCulledLayerPortions++;
-        }
-
         const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
         const g = rgbaInt[1];
         const b = rgbaInt[2];
         const a = rgbaInt[3];
-
-        if (opacity < 255) {
-            this._numTransparentLayerPortions++;
-            this.model.numTransparentLayerPortions++;
-        }
 
         this._colors.push(r);
         this._colors.push(g);
@@ -381,22 +319,25 @@ class InstancingLayer {
             throw "Already finalized";
         }
         const gl = this.model.scene.canvas.gl;
-        if (this._colors.length > 0) {
-            const normalized = false;
-            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, normalized);
+        const colorsLength = this._colors.length;
+        const flagsLength = colorsLength;
+        if (colorsLength > 0) {
+            let notNormalized = false;
+            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, notNormalized);
             this._colors = []; // Release memory
         }
-        if (this._flags.length > 0) {
-            const normalized = true;
-            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags), this._flags.length, 4, gl.DYNAMIC_DRAW, normalized);
-            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
-            this._flags = [];
-            this._flags2 = [];
+        if (flagsLength > 0) {
+            // Because we only build flags arrays here, 
+            // get their length from the colors array
+            let notNormalized = false;
+            let normalized = true;
+            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, notNormalized);
+            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, normalized);
         }
         if (this.model.scene.entityOffsetsEnabled) {
             if (this._offsets.length > 0) {
-                const normalized = false;
-                this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, normalized);
+                const notNormalized = false;
+                this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
                 this._offsets = []; // Release memory
             }
         }
@@ -429,118 +370,122 @@ class InstancingLayer {
     // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
-    initFlags(portionId, flags) {
-        if (flags & RENDER_FLAGS.VISIBLE) {
+    initFlags(portionId, flags, meshTransparent) {
+        if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.XRAYED) {
+        if (flags & ENTITY_FLAGS.XRAYED) {
             this._numXRayedLayerPortions++;
             this.model.numXRayedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.SELECTED) {
+        if (flags & ENTITY_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.CLIPPABLE) {
+        if (flags & ENTITY_FLAGS.CLIPPABLE) {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.EDGES) {
+        if (flags & ENTITY_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.PICKABLE) {
+        if (flags & ENTITY_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.CULLED) {
+        if (flags & ENTITY_FLAGS.CULLED) {
             this._numCulledLayerPortions++;
             this.model.numCulledLayerPortions++;
         }
-        this._setFlags(portionId, flags);
+        if (meshTransparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
         this._setFlags2(portionId, flags);
     }
 
-    setVisible(portionId, flags) {
+    setVisible(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.VISIBLE) {
+        if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
         } else {
             this._numVisibleLayerPortions--;
             this.model.numVisibleLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
-    setHighlighted(portionId, flags) {
+    setHighlighted(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
         } else {
             this._numHighlightedLayerPortions--;
             this.model.numHighlightedLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
-    setXRayed(portionId, flags) {
+    setXRayed(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.XRAYED) {
+        if (flags & ENTITY_FLAGS.XRAYED) {
             this._numXRayedLayerPortions++;
             this.model.numXRayedLayerPortions++;
         } else {
             this._numXRayedLayerPortions--;
             this.model.numXRayedLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
-    setSelected(portionId, flags) {
+    setSelected(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.SELECTED) {
+        if (flags & ENTITY_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
             this.model.numSelectedLayerPortions++;
         } else {
             this._numSelectedLayerPortions--;
             this.model.numSelectedLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
-    setEdges(portionId, flags) {
+    setEdges(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.EDGES) {
+        if (flags & ENTITY_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         } else {
             this._numEdgesLayerPortions--;
             this.model.numEdgesLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.CLIPPABLE) {
+        if (flags & ENTITY_FLAGS.CLIPPABLE) {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
         } else {
@@ -556,35 +501,35 @@ class InstancingLayer {
         }
     }
 
-    setPickable(portionId, flags) {
+    setPickable(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.PICKABLE) {
+        if (flags & ENTITY_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
         } else {
             this._numPickableLayerPortions--;
             this.model.numPickableLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags2(portionId, flags, meshTransparent);
     }
 
-    setCulled(portionId, flags) {
+    setCulled(portionId, flags, meshTransparent) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.CULLED) {
+        if (flags & ENTITY_FLAGS.CULLED) {
             this._numCulledLayerPortions++;
             this.model.numCulledLayerPortions++;
         } else {
             this._numCulledLayerPortions--;
             this.model.numCulledLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
-    setColor(portionId, color, setOpacity = false) { // RGBA color is normalized as ints
+    setColor(portionId, color) { // RGBA color is normalized as ints
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -592,17 +537,17 @@ class InstancingLayer {
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
         tempUint8Vec4[3] = color[3];
-        if (setOpacity) {
-            const opacity = color[3];
-            if (opacity < 255) {
-                this._numTransparentLayerPortions++;
-                this.model.numTransparentLayerPortions++;
-            } else {
-                this._numTransparentLayerPortions--;
-                this.model.numTransparentLayerPortions--;
-            }
-        }
         this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
+
+    setTransparent(portionId, meshTransparent) {
+        if (meshTransparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        } else {
+            this._numTransparentLayerPortions--;
+            this.model.numTransparentLayerPortions--;
+        }
     }
 
     // setMatrix(portionId, matrix) {
@@ -635,33 +580,90 @@ class InstancingLayer {
     //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
     // }
 
-    _setFlags(portionId, flags) {
+    _setFlags(portionId, flags, meshTransparent) {
+
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
-        const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        const selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
-        tempUint8Vec4[0] = visible;
-        tempUint8Vec4[1] = xrayed;
-        tempUint8Vec4[2] = highlighted;
-        tempUint8Vec4[3] = selected;
+
+        const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
+        const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
+        const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
+        const selected = !!(flags & ENTITY_FLAGS.SELECTED);
+        const edges = !!(flags & ENTITY_FLAGS.EDGES);
+        const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
+        const culled = !!(flags & ENTITY_FLAGS.CULLED);
+
+        // Normal fill
+
+        let f0;
+        if (!visible || culled || xrayed) {
+            f0 = RENDER_PASSES.NOT_RENDERED;
+        } else {
+            if (meshTransparent) {
+                f0 = RENDER_PASSES.TRANSPARENT_FILL;
+            } else {
+                f0 = RENDER_PASSES.OPAQUE_FILL;
+            }
+        }
+
+        // Emphasis fill
+
+        let f1;
+        if (!visible || culled) {
+            f1 = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            f1 = RENDER_PASSES.SELECTED_FILL;
+        } else if (highlighted) {
+            f1 = RENDER_PASSES.HIGHLIGHTED_FILL;
+        } else if (xrayed) {
+            f1 = RENDER_PASSES.XRAYED_FILL;
+        } else {
+            f1 = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        // Edges
+
+        let f2 = 0;
+        if (!visible || culled) {
+            f2 = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            f2 = RENDER_PASSES.SELECTED_EDGES;
+        } else if (highlighted) {
+            f2 = RENDER_PASSES.HIGHLIGHTED_EDGES;
+        } else if (xrayed) {
+            f2 = RENDER_PASSES.XRAYED_EDGES;
+        } else if (edges) {
+            if (meshTransparent) {
+                f2 = RENDER_PASSES.TRANSPARENT_EDGES;
+            } else {
+                f2 = RENDER_PASSES.OPAQUE_EDGES;
+            }
+        } else {
+            f2 = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        // Pick
+
+        let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+
+        tempUint8Vec4[0] = f0; // x - normal fill
+        tempUint8Vec4[1] = f1; // y - emphasis fill
+        tempUint8Vec4[2] = f2; // z - edges
+        tempUint8Vec4[3] = f3; // w - pick
+
         this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
     _setFlags2(portionId, flags) {
+
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-        const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
-        const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-        const culled = !!(flags & RENDER_FLAGS.CULLED) ? 255 : 0;
+
+        const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
         tempUint8Vec4[0] = clippable;
-        tempUint8Vec4[1] = edges;
-        tempUint8Vec4[2] = pickable;
-        tempUint8Vec4[3] = culled;
+
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
@@ -679,58 +681,40 @@ class InstancingLayer {
         this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
     }
 
-    //-- NORMAL --------------------------------------------------------------------------------------------------------
+    // ---------------------- NORMAL RENDERING -----------------------------------
 
-    drawNormalFillOpaque(frameCtx) {
+    drawNormalOpaqueFill(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (frameCtx.withSAO) {
             if (this._instancingRenderers.drawRendererWithSAO) {
-                this._instancingRenderers.drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
+                this._instancingRenderers.drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL);
             }
         } else {
             if (this._instancingRenderers.drawRenderer) {
-                this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
+                this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL);
             }
         }
     }
 
-    drawNormalEdgesOpaque(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
-        }
-    }
-
-    drawNormalFillTransparent(frameCtx) {
+    drawNormalTransparentFill(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._instancingRenderers.drawRenderer) {
-            this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
+            this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT_FILL);
         }
     }
 
-    drawNormalEdgesTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
-        }
-    }
-
-    //--  Post effects support -----------------------------------------------------------------------------------------
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     drawDepth(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._instancingRenderers.depthRenderer) {
-            this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this);
+            this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
         }
     }
 
@@ -739,121 +723,106 @@ class InstancingLayer {
             return;
         }
         if (this._instancingRenderers.normalsRenderer) {
-            this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this);
+            this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
     }
 
-    //-- XRAYED--------------------------------------------------------------------------------------------------------
+    // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawXRayedFillOpaque(frameCtx) {
+    drawXRayedFill(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED); // TODO: pass in transparent flag
+            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED_FILL);
         }
     }
 
-    drawXRayedEdgesOpaque(frameCtx) {
+    drawHighlightedFill(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.fillRenderer) {
+            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED_FILL);
+        }
+    }
+
+    drawSelectedFill(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.fillRenderer) {
+            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED_FILL);
+        }
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    drawNormalOpaqueEdges(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_EDGES);
+        }
+    }
+
+    drawNormalTransparentEdges(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT_EDGES);
+        }
+    }
+
+    drawXRayedEdges(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED_EDGES);
         }
     }
 
-    drawXRayedFillTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED); // TODO: pass in transparent flag
-        }
-    }
-
-    drawXRayedEdgesTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
-        }
-    }
-
-    //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
-
-    drawHighlightedFillOpaque(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
-        }
-    }
-
-    drawHighlightedEdgesOpaque(frameCtx) {
+    drawHighlightedEdges(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED_EDGES);
         }
     }
 
-    drawHighlightedFillTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
-        }
-    }
-
-    drawHighlightedEdgesTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
-        }
-    }
-
-    //-- SELECTED ------------------------------------------------------------------------------------------------------
-
-    drawSelectedFillOpaque(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
-        }
-    }
-
-    drawSelectedEdgesOpaque(frameCtx) {
+    drawSelectedEdges(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED_EDGES);
         }
     }
 
-    drawSelectedFillTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.fillRenderer) {
-            this._instancingRenderers.fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
+        if (this._instancingRenderers.occlusionRenderer) {
+            // Only opaque, filled objects can be occluders
+            this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL);
         }
     }
 
-    drawSelectedEdgesTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
+        if (this._instancingRenderers.shadowRenderer) {
+            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE_FILL);
         }
     }
 
@@ -864,7 +833,7 @@ class InstancingLayer {
             return;
         }
         if (this._instancingRenderers.pickMeshRenderer) {
-            this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this);
+            this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
@@ -873,7 +842,7 @@ class InstancingLayer {
             return;
         }
         if (this._instancingRenderers.pickDepthRenderer) {
-            this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this);
+            this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
@@ -882,31 +851,10 @@ class InstancingLayer {
             return;
         }
         if (this._instancingRenderers.pickNormalsRenderer) {
-            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this);
+            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
-    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
-
-    drawOcclusion(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.occlusionRenderer) {
-            this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this);
-        }
-    }
-
-    //---- SHADOWS -----------------------------------------------------------------------------------------------------
-
-    drawShadow(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.shadowRenderer) {
-            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this);
-        }
-    }
 
     destroy() {
         const state = this._state;

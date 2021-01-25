@@ -51,6 +51,8 @@ class BatchingDrawRenderer {
             this._bindProgram(frameCtx);
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
@@ -78,8 +80,6 @@ class BatchingDrawRenderer {
                 }
             }
         }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 

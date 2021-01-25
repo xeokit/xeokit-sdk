@@ -25,7 +25,7 @@ class InstancingPickNormalsRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer, renderPass) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -49,6 +49,8 @@ class InstancingPickNormalsRenderer {
 
         // In practice, these binds will only happen once per frame
         // because we pick normals on a single previously-picked mesh
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
@@ -158,6 +160,8 @@ class InstancingPickNormalsRenderer {
         this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
+
+        this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");

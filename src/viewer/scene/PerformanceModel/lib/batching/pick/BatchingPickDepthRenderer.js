@@ -25,14 +25,13 @@ class BatchingPickDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const model = batchingLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const projectState = scene.camera.project._state;
         const rtcCenter = batchingLayer._state.rtcCenter;
 
         if (!this._program) {
@@ -43,6 +42,8 @@ class BatchingPickDepthRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
@@ -122,6 +123,7 @@ class BatchingPickDepthRenderer {
 
         const program = this._program;
 
+        this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");

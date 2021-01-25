@@ -20,7 +20,7 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Configures the appearance of this Drawable when xrayed.
+     * Configures the appearance of this Drawable when x-rayed.
      *
      * Set to {@link Scene#xrayMaterial} by default.
      *
@@ -108,6 +108,8 @@ class Drawable {
 
     }
 
+    // ---------------------- NORMAL RENDERING -----------------------------------
+
     /**
      * Renders opaque edges using {@link Drawable#edgeMaterial}.
      *
@@ -116,173 +118,133 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalFillOpaque(frameCtx) {
-    }
-
-    /**
-     * Renders opaque edges using {@link Drawable#edgeMaterial}.
-     *
-     * See {@link RenderFlags#normalEdgesOpaque}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawNormalEdgesOpaque(frameCtx) {
+    drawNormalOpaqueFill(frameCtx) {
     }
 
     /**
      * Renders transparent filled surfaces using normal appearance attributes.
      *
+     * See {@link RenderFlags#normalFillTransparent}.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawNormalTransparentFill(frameCtx) {
+    }
+
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
+
+    /**
+     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawDepth(frameCtx) {
+    }
+
+    /**
+     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawNormals(frameCtx) {
+    }
+
+    // ---------------------- EMPHASIS RENDERING -----------------------------------
+
+    /**
+     * Renders x-ray fill using {@link Drawable#xrayMaterial}.
+     *
+     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawXRayedFill(frameCtx) {
+    }
+
+    /**
+     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.
+     *
+     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawHighlightedFill(frameCtx) {
+    }
+
+    /**
+     * Renders selected fill using {@link Drawable#selectedMaterial}.
+     *
+     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawSelectedFill(frameCtx) {
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    /**
+     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.
+     *
      * See {@link RenderFlags#normalEdgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalFillTransparent(frameCtx) {
+    drawNormalOpaqueEdges(frameCtx) {
     }
 
     /**
-     * Renders opaque edges using {@link Drawable#edgeMaterial}.
+     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.
      *
      * See {@link RenderFlags#normalEdgesTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalEdgesTransparent(frameCtx) {
+    drawNormalTransparentEdges(frameCtx) {
     }
 
     /**
-     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#xrayedFillOpaque}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawXRayedFillOpaque(frameCtx) {
-    }
-
-    /**
-     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.
+     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#xrayedEdgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawXRayedEdgesOpaque(frameCtx) {
+    drawXRayedEdges(frameCtx) {
     }
 
     /**
-     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#xrayedFillTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawXRayedFillTransparent(frameCtx) {
-    }
-
-    /**
-     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#xrayedEdgesTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawXRayedEdgesTransparent(frameCtx) {
-    }
-
-    /**
-     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#highlightedFillOpaque}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawHighlightedFillOpaque(frameCtx) {
-    }
-
-    /**
-     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.
+     * Renders highlighted edges using {@link Drawable#highlightMaterial}.
      *
      * See {@link RenderFlags#highlightedEdgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawHighlightedEdgesOpaque(frameCtx) {
+    drawHighlightedEdges(frameCtx) {
     }
 
     /**
-     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#highlightedFillTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawHighlightedFillTransparent(frameCtx) {
-    }
-
-    /**
-     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#highlightedEdgesTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawHighlightedEdgesTransparent(frameCtx) {
-    }
-
-    /**
-     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#highlightedFillOpaque}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawSelectedFillOpaque(frameCtx) {
-    }
-
-    /**
-     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.
+     * Renders selected edges using {@link Drawable#selectedMaterial}.
      *
      * See {@link RenderFlags#selectedEdgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSelectedEdgesOpaque(frameCtx) {
+    drawSelectedEdges(frameCtx) {
     }
 
-    /**
-     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#selectedFillTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawSelectedFillTransparent(frameCtx) {
-    }
-
-    /**
-     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.
-     *
-     * See {@link RenderFlags#selectedEdgesTransparent}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawSelectedEdgesTransparent(frameCtx) {
-    }
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /**
      * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.
@@ -292,6 +254,8 @@ class Drawable {
      */
     drawOcclusion(frameCtx) {
     }
+
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     /**
      * Renders depths to a shadow map buffer..

@@ -25,7 +25,7 @@ class BatchingNormalsRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const model = batchingLayer.model;
         const scene = model.scene;
@@ -45,6 +45,8 @@ class BatchingNormalsRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(batchingLayer);
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
