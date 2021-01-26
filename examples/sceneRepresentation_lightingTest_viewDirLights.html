@@ -304,7 +304,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModelBatched = new PerformanceModel(viewer.scene, {
-        id: "table",
+        id: "tableBatched",
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
         position: [20, 0, 0],
         scale: [1, 1, 1],
@@ -313,7 +313,7 @@
     });
 
     performanceModelBatched.createMesh({
-        id: "redLegMesh",
+        id: "redLegMeshBatched",
         primitive: "triangles",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
@@ -346,13 +346,13 @@
     });
 
     performanceModelBatched.createEntity({
-        id: "redLeg",
-        meshIds: ["redLegMesh"],
+        id: "redLegBatched",
+        meshIds: ["redLegMeshBatched"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelBatched.createMesh({
-        id: "greenLegMesh",
+        id: "greenLegMeshBatched",
         primitive: "triangles",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -374,13 +374,13 @@
     });
 
     performanceModelBatched.createEntity({
-        id: "greenLeg",
-        meshIds: ["greenLegMesh"],
+        id: "greenLegBatched",
+        meshIds: ["greenLegMeshBatched"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelBatched.createMesh({
-        id: "blueLegMesh",
+        id: "blueLegMeshBatched",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
             -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -402,13 +402,13 @@
     });
 
     performanceModelBatched.createEntity({
-        id: "blueLeg",
-        meshIds: ["blueLegMesh"],
+        id: "blueLegBatched",
+        meshIds: ["blueLegMeshBatched"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelBatched.createMesh({
-        id: "yellowLegMesh",
+        id: "yellowLegMeshBatched",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
             -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -429,13 +429,13 @@
     });
 
     performanceModelBatched.createEntity({
-        id: "yellowLeg",
-        meshIds: ["yellowLegMesh"],
+        id: "yellowLegBatched",
+        meshIds: ["yellowLegMeshBatched"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelBatched.createMesh({
-        id: "purpleTableTopMesh",
+        id: "purpleTableTopMeshBatched",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
             -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -456,8 +456,8 @@
     });
 
     performanceModelBatched.createEntity({
-        id: "purpleTableTop",
-        meshIds: ["purpleTableTopMesh"],
+        id: "purpleTableTopBatched",
+        meshIds: ["purpleTableTopMeshBatched"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
@@ -468,7 +468,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModelInstanced = new PerformanceModel(viewer.scene, {
-        id: "table",
+        id: "tableInstancedInstanced",
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
         position: [20, 0, 20],
         scale: [1, 1, 1],
@@ -477,7 +477,7 @@
     });
 
     performanceModelInstanced.createGeometry({
-        id: "myBoxGeometry",
+        id: "myBoxGeometryInstanced",
         primitive: "triangles",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
@@ -506,8 +506,8 @@
     });
 
     performanceModelInstanced.createMesh({
-        id: "redLegMesh",
-        geometryId: "myBoxGeometry",
+        id: "redLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
         position: [-4, -6, -4],
         scale: [1, 3, 1],
         rotation: [0, 0, 0],
@@ -515,14 +515,14 @@
     });
 
     performanceModelInstanced.createEntity({
-        id: "redLeg",
-        meshIds: ["redLegMesh"],
+        id: "redLegInstanced",
+        meshIds: ["redLegMeshInstanced"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelInstanced.createMesh({
-        id: "greenLegMesh",
-        geometryId: "myBoxGeometry",
+        id: "greenLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
         position: [4, -6, -4],
         scale: [1, 3, 1],
         rotation: [0, 0, 0],
@@ -530,14 +530,14 @@
     });
 
     performanceModelInstanced.createEntity({
-        id: "greenLeg",
-        meshIds: ["greenLegMesh"],
+        id: "greenLegInstanced",
+        meshIds: ["greenLegMeshInstanced"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelInstanced.createMesh({
-        id: "blueLegMesh",
-        geometryId: "myBoxGeometry",
+        id: "blueLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
         position: [4, -6, 4],
         scale: [1, 3, 1],
         rotation: [0, 0, 0],
@@ -545,14 +545,14 @@
     });
 
     performanceModelInstanced.createEntity({
-        id: "blueLeg",
-        meshIds: ["blueLegMesh"],
+        id: "blueLegInstanced",
+        meshIds: ["blueLegMeshInstanced"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelInstanced.createMesh({
-        id: "yellowLegMesh",
-        geometryId: "myBoxGeometry",
+        id: "yellowLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
         position: [-4, -6, 4],
         scale: [1, 3, 1],
         rotation: [0, 0, 0],
@@ -560,14 +560,14 @@
     });
 
     performanceModelInstanced.createEntity({
-        id: "yellowLeg",
-        meshIds: ["yellowLegMesh"],
+        id: "yellowLegInstanced",
+        meshIds: ["yellowLegMeshInstanced"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     performanceModelInstanced.createMesh({
-        id: "purpleTableTopMesh",
-        geometryId: "myBoxGeometry",
+        id: "purpleTableTopMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
         position: [0, -3, 0],
         scale: [6, 0.5, 6],
         rotation: [0, 0, 0],
@@ -575,8 +575,8 @@
     });
 
     performanceModelInstanced.createEntity({
-        id: "purpleTableTop",
-        meshIds: ["purpleTableTopMesh"],
+        id: "purpleTableTopInstanced",
+        meshIds: ["purpleTableTopMeshInstanced"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
