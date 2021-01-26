@@ -1,4 +1,3 @@
-import {RENDER_PASSES} from '../../renderPasses.js';
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 
 /**
