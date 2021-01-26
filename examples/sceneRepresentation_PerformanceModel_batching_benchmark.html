@@ -75,7 +75,7 @@
         transparent: true
     });
 
-    viewer.scene.camera.perspective.far = 10000;
+    viewer.scene.camera.perspective.far = 100000; // 100 km
 
     viewer.scene.camera.eye = [450.9527587890625, 1281.239990234375, -3042.414306640625];
     viewer.scene.camera.look = [-977.5, 17.14933204650879, -397.5];
@@ -174,7 +174,7 @@
         }
     }
 
-    var extent = 2000;
+    var extent = 1500;
 
     for (var x = -extent; x <= extent; x += 20) {
         for (var z = -extent; z <= extent; z += 20) {
