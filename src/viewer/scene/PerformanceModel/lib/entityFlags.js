@@ -2,7 +2,7 @@
  * @private
  * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}
  */
-const RENDER_FLAGS = {
+const ENTITY_FLAGS = {
     VISIBLE: 1,
     CULLED: 1 << 2,
     PICKABLE: 1 << 3,
@@ -14,7 +14,8 @@ const RENDER_FLAGS = {
     HIGHLIGHTED: 1 << 9,
     SELECTED: 1 << 10,
     EDGES: 1 << 11,
-    BACKFACES: 1 << 12
+    BACKFACES: 1 << 12,
+    TRANSPARENT: 1 << 13
 };
 
-export {RENDER_FLAGS};
+export {ENTITY_FLAGS};

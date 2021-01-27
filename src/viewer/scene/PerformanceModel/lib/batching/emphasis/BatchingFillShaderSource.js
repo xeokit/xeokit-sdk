@@ -1,4 +1,3 @@
-import {RENDER_PASSES} from '../../renderPasses.js';
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 
 /**
@@ -47,23 +46,10 @@ function buildVertex(scene) {
 
     src.push("void main(void) {");
 
-    src.push("bool visible      = (float(flags.x) > 0.0);");
-    src.push("bool xrayed       = (float(flags.y) > 0.0);");
-    src.push("bool highlighted  = (float(flags.z) > 0.0);");
-    src.push("bool selected     = (float(flags.w) > 0.0);");
-    src.push("bool clippable    = (float(flags2.x) > 0.0);");
-    src.push("bool culled       = (float(flags2.w) > 0.0);");
+    // flags.y = NOT_RENDERED | HIGHLIGHTED_FILL | SELECTED_FILL | XRAYED_FILL
+    // renderPass = HIGHLIGHTED_FILL | SELECTED_FILL | | XRAYED_FILL
 
-    src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EmphasisMaterial.fillColor, so is not quantized
-
-    src.push(`if (
-    culled || !visible ||
-    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
-    (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
-    (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted) ||
-    (renderPass == ${RENDER_PASSES.SELECTED} && !selected)) {`);
-
+    src.push(`if (int(flags.y) != renderPass) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
 

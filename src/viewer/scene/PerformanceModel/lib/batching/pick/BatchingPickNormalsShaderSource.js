@@ -17,6 +17,9 @@ function buildVertex(scene) {
     if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
+
+    src.push("uniform int renderPass;");
+
     src.push("attribute vec3 position;");
     if (scene.entityOffsetsEnabled) {
         src.push("attribute vec3 offset;");
@@ -50,11 +53,13 @@ function buildVertex(scene) {
     }
     src.push("varying vec3 vWorldNormal;");
     src.push("void main(void) {");
-    src.push("  bool visible   = (float(flags.x) > 0.0);");
-    src.push("  bool pickable  = (float(flags2.z) > 0.0);");
-    src.push("  bool culled    = (float(flags2.w) > 0.0);");
-    src.push("  if (culled || (!pickInvisible && !visible) ||  !pickable) {");
+
+    // flags.w = NOT_RENDERED | PICK
+    // renderPass = PICK
+
+    src.push(`if (int(flags.w) != renderPass) {`);
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+
     src.push("  } else {");
     src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
     if (scene.entityOffsetsEnabled) {

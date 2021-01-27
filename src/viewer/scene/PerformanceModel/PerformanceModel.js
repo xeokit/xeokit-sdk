@@ -7,7 +7,7 @@ import {PerformanceNode} from './lib/PerformanceNode.js';
 import {getBatchingLayerScratchMemory} from "./lib/batching/BatchingLayerScratchMemory.js";
 import {BatchingLayer} from './lib/batching/BatchingLayer.js';
 import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
-import {RENDER_FLAGS} from './lib/renderFlags.js';
+import {ENTITY_FLAGS} from './lib/entityFlags.js';
 import {utils} from "../../../viewer/scene/utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 
@@ -1224,7 +1224,6 @@ class PerformanceModel extends Component {
             }
         }
 
-        let flags = 0;
         let layer;
         let portionId;
 
@@ -1265,7 +1264,7 @@ class PerformanceModel extends Component {
 
             const instancingLayer = this._instancingLayers[geometryId];
             layer = instancingLayer;
-            portionId = instancingLayer.createPortion(flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
+            portionId = instancingLayer.createPortion(color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
 
             const numTriangles = Math.round(instancingLayer.numIndices / 3);
@@ -1378,7 +1377,7 @@ class PerformanceModel extends Component {
                 }
             }
 
-            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
+            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
 
             math.expandAABB3(this._aabb, aabb);
 
@@ -1437,14 +1436,10 @@ class PerformanceModel extends Component {
             this.error("Config missing: meshIds");
             return;
         }
-        let i;
-        let len;
-        let meshId;
-        let mesh;
         let meshes = [];
-        for (i = 0, len = meshIds.length; i < len; i++) {
-            meshId = meshIds[i];
-            mesh = this._meshes[meshId];
+        for (let i = 0, len = meshIds.length; i < len; i++) {
+            const meshId = meshIds[i];
+            const mesh = this._meshes[meshId];
             if (!mesh) {
                 this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
                 continue;
@@ -1458,31 +1453,31 @@ class PerformanceModel extends Component {
         // Create PerformanceModelNode flags
         let flags = 0;
         if (this._visible && cfg.visible !== false) {
-            flags = flags | RENDER_FLAGS.VISIBLE;
+            flags = flags | ENTITY_FLAGS.VISIBLE;
         }
         if (this._pickable && cfg.pickable !== false) {
-            flags = flags | RENDER_FLAGS.PICKABLE;
+            flags = flags | ENTITY_FLAGS.PICKABLE;
         }
         if (this._culled && cfg.culled !== false) {
-            flags = flags | RENDER_FLAGS.CULLED;
+            flags = flags | ENTITY_FLAGS.CULLED;
         }
         if (this._clippable && cfg.clippable !== false) {
-            flags = flags | RENDER_FLAGS.CLIPPABLE;
+            flags = flags | ENTITY_FLAGS.CLIPPABLE;
         }
         if (this._collidable && cfg.collidable !== false) {
-            flags = flags | RENDER_FLAGS.COLLIDABLE;
+            flags = flags | ENTITY_FLAGS.COLLIDABLE;
         }
         if (this._edges && cfg.edges !== false) {
-            flags = flags | RENDER_FLAGS.EDGES;
+            flags = flags | ENTITY_FLAGS.EDGES;
         }
         if (this._xrayed && cfg.xrayed !== false) {
-            flags = flags | RENDER_FLAGS.XRAYED;
+            flags = flags | ENTITY_FLAGS.XRAYED;
         }
         if (this._highlighted && cfg.highlighted !== false) {
-            flags = flags | RENDER_FLAGS.HIGHLIGHTED;
+            flags = flags | ENTITY_FLAGS.HIGHLIGHTED;
         }
         if (this._selected && cfg.selected !== false) {
-            flags = flags | RENDER_FLAGS.SELECTED;
+            flags = flags | ENTITY_FLAGS.SELECTED;
         }
 
         // Create PerformanceModelNode AABB
@@ -1491,7 +1486,7 @@ class PerformanceModel extends Component {
             aabb = meshes[0].aabb;
         } else {
             aabb = math.collapseAABB3();
-            for (i = 0, len = meshes.length; i < len; i++) {
+            for (let i = 0, len = meshes.length; i < len; i++) {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
@@ -2069,7 +2064,11 @@ class PerformanceModel extends Component {
 
         const renderFlags = this.renderFlags;
 
-        renderFlags.normalFillOpaque = true;
+        renderFlags.normalFillOpaque = (this.numTransparentLayerPortions < this.numPortions);
+
+        if (this.numTransparentLayerPortions > 0) {
+            renderFlags.normalFillTransparent = true;
+        }
 
         if (this.numXRayedLayerPortions > 0) {
             const xrayMaterial = this.scene.xrayMaterial._state;
@@ -2092,16 +2091,11 @@ class PerformanceModel extends Component {
         if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
             if (edgeMaterial.edges) {
-                if (edgeMaterial.edgeAlpha < 1.0) {
+                renderFlags.normalEdgesOpaque = (this.numTransparentLayerPortions < this.numPortions);
+                if (this.numTransparentLayerPortions > 0) {
                     renderFlags.normalEdgesTransparent = true;
-                } else {
-                    renderFlags.normalEdgesOpaque = true;
                 }
             }
-        }
-
-        if (this.numTransparentLayerPortions > 0) {
-            renderFlags.normalFillTransparent = true;
         }
 
         if (this.numSelectedLayerPortions > 0) {
@@ -2185,8 +2179,10 @@ class PerformanceModel extends Component {
         return this.scene.edgeMaterial;
     }
 
+    // ---------------------- NORMAL RENDERING -----------------------------------
+
     /** @private */
-    drawNormalFillOpaque(frameCtx) {
+    drawNormalOpaqueFill(frameCtx) {
         if (frameCtx.backfaces !== this.backfaces) {
             const gl = this.scene.canvas.gl;
             if (this.backfaces) {
@@ -2199,9 +2195,20 @@ class PerformanceModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalFillOpaque(frameCtx);
+            this._layerList[layerIndex].drawNormalOpaqueFill(frameCtx);
         }
     }
+
+    /** @private */
+    drawNormalTransparentFill(frameCtx) {
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalTransparentFill(frameCtx);
+        }
+    }
+
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     /** @private */
     drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
@@ -2239,140 +2246,133 @@ class PerformanceModel extends Component {
         }
     }
 
+    // ---------------------- EMPHASIS RENDERING -----------------------------------
+
     /** @private */
-    drawNormalEdgesOpaque(frameCtx) {
+    drawXRayedFill(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalEdgesOpaque(frameCtx);
+            this._layerList[layerIndex].drawXRayedFill(frameCtx);
         }
     }
 
     /** @private */
-    drawNormalFillTransparent(frameCtx) {
+    drawHighlightedFill(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalFillTransparent(frameCtx);
+            this._layerList[layerIndex].drawHighlightedFill(frameCtx);
         }
     }
 
     /** @private */
-    drawNormalEdgesTransparent(frameCtx) {
+    drawSelectedFill(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalEdgesTransparent(frameCtx);
+            this._layerList[layerIndex].drawSelectedFill(frameCtx);
+        }
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    /** @private */
+    drawNormalOpaqueEdges(frameCtx) {
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawNormalOpaqueEdges(frameCtx);
         }
     }
 
     /** @private */
-    drawXRayedFillOpaque(frameCtx) {
+    drawNormalTransparentEdges(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedFillOpaque(frameCtx);
+            this._layerList[layerIndex].drawNormalTransparentEdges(frameCtx);
         }
     }
 
     /** @private */
-    drawXRayedEdgesOpaque(frameCtx) {
+    drawXRayedEdges(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedEdgesOpaque(frameCtx);
+            this._layerList[layerIndex].drawXRayedEdges(frameCtx);
         }
     }
 
     /** @private */
-    drawXRayedFillTransparent(frameCtx) {
+    drawHighlightedEdges(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedFillTransparent(frameCtx);
+            this._layerList[layerIndex].drawHighlightedEdges(frameCtx);
         }
     }
 
     /** @private */
-    drawXRayedEdgesTransparent(frameCtx) {
+    drawSelectedEdges(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedEdgesTransparent(frameCtx);
+            this._layerList[layerIndex].drawSelectedEdges(frameCtx);
         }
     }
 
-    /** @private */
-    drawHighlightedFillOpaque(frameCtx) {
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
+
+    /**
+     * @private
+     */
+    drawOcclusion(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedFillOpaque(frameCtx);
+            this._layerList[layerIndex].drawOcclusion(frameCtx);
         }
     }
 
-    /** @private */
-    drawHighlightedEdgesOpaque(frameCtx) {
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    /**
+     * @private
+     */
+    drawShadow(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (frameCtx.backfaces !== this.backfaces) {
+            const gl = this.scene.canvas.gl;
+            if (this.backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = this.backfaces;
+        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedEdgesOpaque(frameCtx);
+            this._layerList[layerIndex].drawShadow(frameCtx);
         }
     }
 
-    /** @private */
-    drawHighlightedFillTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedFillTransparent(frameCtx);
-        }
-    }
-
-    /** @private */
-    drawHighlightedEdgesTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedEdgesTransparent(frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSelectedFillOpaque(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedFillOpaque(frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSelectedEdgesOpaque(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedEdgesOpaque(frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSelectedFillTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedFillTransparent(frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSelectedEdgesTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedEdgesTransparent(frameCtx);
-        }
-    }
+    // ---------------------- PICKING RENDERING -----------------------------------
 
     /** @private */
     drawPickMesh(frameCtx) {
@@ -2440,52 +2440,6 @@ class PerformanceModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this._layerList[layerIndex].drawPickNormals(frameCtx);
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawOcclusion(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawOcclusion(frameCtx);
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawShadow(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawShadow(frameCtx);
         }
     }
 

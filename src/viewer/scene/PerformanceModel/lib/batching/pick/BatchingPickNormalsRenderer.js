@@ -25,7 +25,7 @@ class BatchingPickNormalsRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const model = batchingLayer.model;
         const scene = model.scene;
@@ -43,6 +43,7 @@ class BatchingPickNormalsRenderer {
             this._bindProgram();
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -123,6 +124,7 @@ class BatchingPickNormalsRenderer {
 
         const program = this._program;
 
+        this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");

@@ -25,7 +25,7 @@ class InstancingPickDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer, renderPass) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -47,6 +47,8 @@ class InstancingPickDepthRenderer {
         }
 
         const camera = scene.camera;
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
@@ -149,6 +151,7 @@ class InstancingPickDepthRenderer {
 
         const program = this._program;
 
+        this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");

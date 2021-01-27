@@ -27,7 +27,7 @@ class InstancingPickMeshRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer, renderPass) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -48,6 +48,8 @@ class InstancingPickMeshRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
@@ -167,6 +169,7 @@ class InstancingPickMeshRenderer {
             });
         }
 
+        this._uRenderPass = program.getLocation("renderPass");
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aPickColor = program.getAttribute("pickColor");

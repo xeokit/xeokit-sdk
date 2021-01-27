@@ -50,6 +50,8 @@ class InstancingDrawRenderer {
             this._bindProgram(frameCtx);
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
@@ -77,8 +79,6 @@ class InstancingDrawRenderer {
                 }
             }
         }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
@@ -155,6 +155,7 @@ class InstancingDrawRenderer {
         this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
+
         this._uRenderPass = program.getLocation("renderPass");
 
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");

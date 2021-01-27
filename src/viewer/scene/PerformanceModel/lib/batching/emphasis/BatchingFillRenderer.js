@@ -34,7 +34,6 @@ class BatchingFillRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const projectState = scene.camera.project._state;
         const rtcCenter = batchingLayer._state.rtcCenter
 
         if (!this._program) {
@@ -47,6 +46,30 @@ class BatchingFillRenderer {
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
+        }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
+
+        if (renderPass === RENDER_PASSES.XRAYED_FILL) {
+            const material = scene.xrayMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED_FILL) {
+            const material = scene.highlightMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else if (renderPass === RENDER_PASSES.SELECTED_FILL) {
+            const material = scene.selectedMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else {
+            gl.uniform4fv(this._uColor, defaultColor);
         }
 
         const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
@@ -74,27 +97,6 @@ class BatchingFillRenderer {
                     gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        if (renderPass === RENDER_PASSES.XRAYED) {
-            const material = scene.xrayMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
-            const material = scene.highlightMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-        } else if (renderPass === RENDER_PASSES.SELECTED) {
-            const material = scene.selectedMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-        } else {
-            gl.uniform4fv(this._uColor, defaultColor);
         }
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);

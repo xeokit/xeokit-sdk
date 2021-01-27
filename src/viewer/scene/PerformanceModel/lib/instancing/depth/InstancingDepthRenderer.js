@@ -25,7 +25,7 @@ class InstancingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, instancingLayer) {
+    drawLayer(frameCtx, instancingLayer, renderPass) {
 
         const model = instancingLayer.model;
         const scene = model.scene;
@@ -46,6 +46,8 @@ class InstancingDepthRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
@@ -89,9 +91,6 @@ class InstancingDepthRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        this._aColor.bindArrayBuffer(state.colorsBuf); // Needed for masking out transparent entities using alpha channel
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
-
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
 
@@ -107,7 +106,6 @@ class InstancingDepthRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
         if (this._aFlags2) { // Won't be in shader when not clipping
@@ -135,6 +133,8 @@ class InstancingDepthRenderer {
 
         const program = this._program;
 
+        this._uRenderPass = program.getLocation("renderPass");
+
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -152,7 +152,6 @@ class InstancingDepthRenderer {
 
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
-        this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");

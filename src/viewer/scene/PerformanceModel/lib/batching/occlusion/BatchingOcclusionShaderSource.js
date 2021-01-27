@@ -17,6 +17,7 @@ function buildVertex(scene) {
     if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
+    src.push("uniform int renderPass;");
     src.push("attribute vec3 position;");
     if (scene.entityOffsetsEnabled) {
         src.push("attribute vec3 offset;");
@@ -40,17 +41,20 @@ function buildVertex(scene) {
         src.push("varying vec4 vFlags2;");
     }
     src.push("void main(void) {");
-    src.push("  bool visible   = (float(flags.x) > 0.0);");
-    src.push("  bool culled   = (float(flags2.w) > 0.0);");
-    src.push("  bool transparent  = ((float(color.a) / 255.0) < 1.0);");
-    src.push("  if (culled || !visible || transparent) {");
+
+    // flags.x = NOT_RENDERED | OPAQUE_FILL | TRANSPARENT_FILL
+    // renderPass = OPAQUE_FILL
+    // Only opaque objects can be occluders
+
+    src.push(`if (int(flags.x) != renderPass) {`);
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+
     src.push("  } else {");
     src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
     if (scene.entityOffsetsEnabled) {
         src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
     }
-    ;
+
     src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("      vWorldPosition = worldPosition;");

@@ -76,6 +76,8 @@ class PerformanceMesh {
         this._colorize = [color[0], color[1], color[2], opacity]; // [0..255]
         this._colorizing = false;
 
+        this._transparent = (opacity < 255);
+
         this.numTriangles = 0;
 
         /**
@@ -92,15 +94,15 @@ class PerformanceMesh {
     /**
      * @private
      */
-    _initFlags(flags) {
-        this._layer.initFlags(this._portionId, flags);
+    _finalize(entityFlags) {
+        this._layer.initFlags(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setVisible(flags) {
-        this._layer.setVisible(this._portionId, flags);
+    _setVisible(entityFlags) {
+        this._layer.setVisible(this._portionId, entityFlags, this._transparent);
     }
 
     /**
@@ -131,14 +133,20 @@ class PerformanceMesh {
     }
 
     /** @private */
-    _setOpacity(opacity) {
+    _setOpacity(opacity, entityFlags) {
+        const newTransparent = (opacity < 255);
+        const lastTransparent = this._transparent;
+        const changingTransparency = (lastTransparent !== newTransparent);
         this._color[3] = opacity;
         this._colorize[3] = opacity;
-        const setOpacity = true;
+        this._transparent = newTransparent;
         if (this._colorizing) {
-            this._layer.setColor(this._portionId, this._colorize, setOpacity);
+            this._layer.setColor(this._portionId, this._colorize);
         } else {
-            this._layer.setColor(this._portionId, this._color, setOpacity);
+            this._layer.setColor(this._portionId, this._color);
+        }
+        if (changingTransparency) {
+            this._layer.setTransparent(this._portionId, entityFlags, newTransparent);
         }
     }
 
@@ -152,57 +160,57 @@ class PerformanceMesh {
     /**
      * @private
      */
-    _setHighlighted(flags) {
-        this._layer.setHighlighted(this._portionId, flags);
+    _setHighlighted(entityFlags) {
+        this._layer.setHighlighted(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setXRayed(flags) {
-        this._layer.setXRayed(this._portionId, flags);
+    _setXRayed(entityFlags) {
+        this._layer.setXRayed(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setSelected(flags) {
-        this._layer.setSelected(this._portionId, flags);
+    _setSelected(entityFlags) {
+        this._layer.setSelected(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setEdges(flags) {
-        this._layer.setEdges(this._portionId, flags);
+    _setEdges(entityFlags) {
+        this._layer.setEdges(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setClippable(flags) {
-        this._layer.setClippable(this._portionId, flags);
+    _setClippable(entityFlags) {
+        this._layer.setClippable(this._portionId, entityFlags, this._transparent);
     }
 
     /**
      * @private
      */
-    _setCollidable(flags) {
-        this._layer.setCollidable(this._portionId, flags);
+    _setCollidable(entityFlags) {
+        this._layer.setCollidable(this._portionId, entityFlags);
     }
 
     /**
      * @private
      */
     _setPickable(flags2) {
-        this._layer.setPickable(this._portionId, flags2);
+        this._layer.setPickable(this._portionId, flags2, this._transparent);
     }
 
     /**
      * @private
      */
     _setCulled(flags2) {
-        this._layer.setCulled(this._portionId, flags2);
+        this._layer.setCulled(this._portionId, flags2, this._transparent);
     }
 
     /** @private */
