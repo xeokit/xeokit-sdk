@@ -164,7 +164,7 @@ const Renderer = function (scene, options) {
         if (bindOutputFrameBuffer) {
             bindOutputFrameBuffer(params.pass);
         }
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         if (unbindOutputFrameBuffer) {
             unbindOutputFrameBuffer(params.pass);
         }
@@ -321,7 +321,7 @@ const Renderer = function (scene, options) {
         gl.depthMask(true);
 
         if (params.clear !== false) {
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
 
         for (let type in drawableTypeInfo) {
@@ -472,6 +472,7 @@ const Renderer = function (scene, options) {
             gl.enable(gl.CULL_FACE);
             gl.depthMask(true);
             gl.lineWidth(1);
+
             frameCtx.lineWidth = 1;
 
             const saoPossible = scene.sao.possible;
@@ -488,7 +489,7 @@ const Renderer = function (scene, options) {
             }
 
             if (params.clear !== false) {
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             }
 
             let normalDrawSAOBinLen = 0;
