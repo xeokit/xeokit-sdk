@@ -894,7 +894,9 @@ const Renderer = function (scene, options) {
                         nearAndFar[1] = scene.camera.project.far;
 
                         pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
-                        pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        if (params.pickSurfaceNormal !== false) {
+                            pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        }
                     }
                 }
             }

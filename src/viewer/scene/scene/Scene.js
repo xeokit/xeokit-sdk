@@ -1988,7 +1988,7 @@ class Scene extends Component {
         pickResult = this._renderer.pick(params, pickResult);
 
         if (pickResult) {
-            if (pickResult.entity.fire) {
+            if (pickResult.entity && pickResult.entity.fire) {
                 pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doesn't fire events
             }
             return pickResult;
