@@ -591,7 +591,7 @@ class BatchingLayer {
         this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
     }
 
-    setTransparent(transparent) {
+    setTransparent(portionId, flags, transparent) {
         if (transparent) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
@@ -599,6 +599,7 @@ class BatchingLayer {
             this._numTransparentLayerPortions--;
             this.model.numTransparentLayerPortions--;
         }
+        this._setFlags(portionId, flags, transparent);
     }
 
     _setFlags(portionId, flags, transparent) {

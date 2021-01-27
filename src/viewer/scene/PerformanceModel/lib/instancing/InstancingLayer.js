@@ -540,14 +540,15 @@ class InstancingLayer {
         this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
-    setTransparent(portionId, meshTransparent) {
-        if (meshTransparent) {
+    setTransparent(portionId, flags, transparent) {
+        if (transparent) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         } else {
             this._numTransparentLayerPortions--;
             this.model.numTransparentLayerPortions--;
         }
+        this._setFlags(portionId, flags, transparent);
     }
 
     // setMatrix(portionId, matrix) {

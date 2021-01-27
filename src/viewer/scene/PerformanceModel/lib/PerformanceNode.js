@@ -502,25 +502,26 @@ class PerformanceNode {
             return;
         }
         const opacityUpdated = (opacity !== null && opacity !== undefined);
-        const lastOpacity = this.meshes[0]._colorize[3];
+        const lastOpacityQuantized = this.meshes[0]._colorize[3];
+        let opacityQuantized = 255;
         if (opacityUpdated) {
             if (opacity < 0) {
                 opacity = 0;
             } else if (opacity > 1) {
                 opacity = 1;
             }
-            opacity = Math.floor(opacity * 255.0); // Quantize
-            if (lastOpacity === opacity) {
+            opacityQuantized = Math.floor(opacity * 255.0); // Quantize
+            if (lastOpacityQuantized === opacityQuantized) {
                 return;
             }
         } else {
-            opacity = 255.0;
-            if (lastOpacity === opacity) {
+            opacityQuantized = 255.0;
+            if (lastOpacityQuantized === opacityQuantized) {
                 return;
             }
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setOpacity(opacity);
+            this.meshes[i]._setOpacity(opacityQuantized, this._flags);
         }
         if (this._isObject) {
             this.scene._objectOpacityUpdated(this, opacityUpdated);

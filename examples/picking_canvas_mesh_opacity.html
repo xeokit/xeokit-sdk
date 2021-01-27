@@ -63,7 +63,7 @@
     var lastEntity = null;
     var lastOpacity = null;
 
-    viewer.scene.input.on("mousemove", function (coords) {
+    viewer.scene.input.on("mousedown", function (coords) {
 
         var hit = viewer.scene.pick({
             canvasPos: coords
@@ -76,7 +76,7 @@
             if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
                 if (lastEntity) {
-                    lastEntity.opacity = null;
+                    lastEntity.opacity = lastOpacity;
                 }
 
                 lastEntity = hit.entity;
@@ -87,7 +87,7 @@
         } else {
 
             if (lastEntity) {
-                lastEntity.opacity = null;
+                lastEntity.opacity = lastOpacity;
                 lastEntity = null;
             }
         }

@@ -133,7 +133,7 @@ class PerformanceMesh {
     }
 
     /** @private */
-    _setOpacity(opacity) {
+    _setOpacity(opacity, entityFlags) {
         const newTransparent = (opacity < 255);
         const lastTransparent = this._transparent;
         const changingTransparency = (lastTransparent !== newTransparent);
@@ -146,7 +146,7 @@ class PerformanceMesh {
             this._layer.setColor(this._portionId, this._color);
         }
         if (changingTransparency) {
-            this._layer.setTransparent(this._portionId, newTransparent);
+            this._layer.setTransparent(this._portionId, entityFlags, newTransparent);
         }
     }
 
