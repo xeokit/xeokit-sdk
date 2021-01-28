@@ -48,6 +48,30 @@ class InstancingFillRenderer {
             this._bindProgram();
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
+
+        if (renderPass === RENDER_PASSES.XRAYED_FILL) {
+            const material = scene.xrayMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED_FILL) {
+            const material = scene.highlightMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else if (renderPass === RENDER_PASSES.SELECTED_FILL) {
+            const material = scene.selectedMaterial._state;
+            const fillColor = material.fillColor;
+            const fillAlpha = material.fillAlpha;
+            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+        } else {
+            gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
+        }
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -73,7 +97,6 @@ class InstancingFillRenderer {
             }
         }
 
-        gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -100,28 +123,6 @@ class InstancingFillRenderer {
         }
 
         state.indicesBuf.bind();
-
-        if (renderPass === RENDER_PASSES.XRAYED) {
-            const material = scene.xrayMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
-            const material = scene.highlightMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.SELECTED) {
-            const material = scene.selectedMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else {
-            gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
-        }
 
         instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 

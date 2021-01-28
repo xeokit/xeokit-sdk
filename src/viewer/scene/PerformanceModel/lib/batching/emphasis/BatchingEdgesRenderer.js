@@ -47,6 +47,8 @@ class BatchingEdgesRenderer {
             this._bindProgram();
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -74,11 +76,11 @@ class BatchingEdgesRenderer {
 
         let material;
 
-        if (renderPass === RENDER_PASSES.XRAYED) {
+        if (renderPass === RENDER_PASSES.XRAYED_EDGES) {
             material = scene.xrayMaterial._state;
-        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
+        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED_EDGES) {
             material = scene.highlightMaterial._state;
-        } else if (renderPass === RENDER_PASSES.SELECTED) {
+        } else if (renderPass === RENDER_PASSES.SELECTED_EDGES) {
             material = scene.selectedMaterial._state;
         } else {
             material = scene.edgeMaterial._state;
@@ -94,8 +96,6 @@ class BatchingEdgesRenderer {
         }
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
-
-        gl.uniform1i(this._uRenderPass, renderPass);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         if (this._aOffset) {
@@ -126,8 +126,8 @@ class BatchingEdgesRenderer {
 
         const program = this._program;
 
-        this._uColor = program.getLocation("color");
         this._uRenderPass = program.getLocation("renderPass");
+        this._uColor = program.getLocation("color");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");

@@ -48,6 +48,19 @@ class InstancingEdgesRenderer {
             this._bindProgram();
         }
 
+        gl.uniform1i(this._uRenderPass, renderPass);
+
+        let material;
+        if (renderPass === RENDER_PASSES.XRAYED_EDGES) {
+            material = scene.xrayMaterial._state;
+        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED_EDGES) {
+            material = scene.highlightMaterial._state;
+        } else if (renderPass === RENDER_PASSES.SELECTED_EDGES) {
+            material = scene.selectedMaterial._state;
+        } else {
+            material = scene.edgeMaterial._state;
+        }
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -73,17 +86,6 @@ class InstancingEdgesRenderer {
             }
         }
 
-        let material;
-        if (renderPass === RENDER_PASSES.XRAYED) {
-            material = scene.xrayMaterial._state;
-        } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
-            material = scene.highlightMaterial._state;
-        } else if (renderPass === RENDER_PASSES.SELECTED) {
-            material = scene.selectedMaterial._state;
-        } else {
-            material = scene.edgeMaterial._state;
-        }
-
         const edgeColor = material.edgeColor;
         const edgeAlpha = material.edgeAlpha;
 
@@ -94,7 +96,6 @@ class InstancingEdgesRenderer {
             frameCtx.lineWidth = material.edgeWidth;
         }
 
-        gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -159,8 +160,8 @@ class InstancingEdgesRenderer {
 
         const program = this._program;
 
-        this._uColor = program.getLocation("color");
         this._uRenderPass = program.getLocation("renderPass");
+        this._uColor = program.getLocation("color");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");

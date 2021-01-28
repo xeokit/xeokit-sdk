@@ -1,4 +1,4 @@
-import {RENDER_FLAGS} from './renderFlags.js';
+import {ENTITY_FLAGS} from './entityFlags.js';
 import {math} from "../../math/math.js";
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
@@ -141,15 +141,15 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set visible(visible) {
-        if (!!(this._flags & RENDER_FLAGS.VISIBLE) === visible) {
+        if (!!(this._flags & ENTITY_FLAGS.VISIBLE) === visible) {
             return; // Redundant update
         }
         if (visible) {
-            this._flags = this._flags | RENDER_FLAGS.VISIBLE;
+            this._flags = this._flags | ENTITY_FLAGS.VISIBLE;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.VISIBLE;
+            this._flags = this._flags & ~ENTITY_FLAGS.VISIBLE;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setVisible(this._flags);
         }
         if (this._isObject) {
@@ -169,7 +169,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get visible() {
-        return this._getFlag(RENDER_FLAGS.VISIBLE);
+        return this._getFlag(ENTITY_FLAGS.VISIBLE);
     }
 
     _getFlag(flag) {
@@ -185,13 +185,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set highlighted(highlighted) {
-        if (!!(this._flags & RENDER_FLAGS.HIGHLIGHTED) === highlighted) {
+        if (!!(this._flags & ENTITY_FLAGS.HIGHLIGHTED) === highlighted) {
             return; // Redundant update
         }
         if (highlighted) {
-            this._flags = this._flags | RENDER_FLAGS.HIGHLIGHTED;
+            this._flags = this._flags | ENTITY_FLAGS.HIGHLIGHTED;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.HIGHLIGHTED;
+            this._flags = this._flags & ~ENTITY_FLAGS.HIGHLIGHTED;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setHighlighted(this._flags);
@@ -211,7 +211,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get highlighted() {
-        return this._getFlag(RENDER_FLAGS.HIGHLIGHTED);
+        return this._getFlag(ENTITY_FLAGS.HIGHLIGHTED);
     }
 
     /**
@@ -223,15 +223,15 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set xrayed(xrayed) {
-        if (!!(this._flags & RENDER_FLAGS.XRAYED) === xrayed) {
+        if (!!(this._flags & ENTITY_FLAGS.XRAYED) === xrayed) {
             return; // Redundant update
         }
         if (xrayed) {
-            this._flags = this._flags | RENDER_FLAGS.XRAYED;
+            this._flags = this._flags | ENTITY_FLAGS.XRAYED;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.XRAYED;
+            this._flags = this._flags & ~ENTITY_FLAGS.XRAYED;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setXRayed(this._flags);
         }
         if (this._isObject) {
@@ -243,13 +243,13 @@ class PerformanceNode {
     /**
      * Gets if this PerformanceNode is xrayed.
      *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
     get xrayed() {
-        return this._getFlag(RENDER_FLAGS.XRAYED);
+        return this._getFlag(ENTITY_FLAGS.XRAYED);
     }
 
     /**
@@ -261,15 +261,15 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set selected(selected) {
-        if (!!(this._flags & RENDER_FLAGS.SELECTED) === selected) {
+        if (!!(this._flags & ENTITY_FLAGS.SELECTED) === selected) {
             return; // Redundant update
         }
         if (selected) {
-            this._flags = this._flags | RENDER_FLAGS.SELECTED;
+            this._flags = this._flags | ENTITY_FLAGS.SELECTED;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.SELECTED;
+            this._flags = this._flags & ~ENTITY_FLAGS.SELECTED;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setSelected(this._flags);
         }
         if (this._isObject) {
@@ -287,7 +287,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get selected() {
-        return this._getFlag(RENDER_FLAGS.SELECTED);
+        return this._getFlag(ENTITY_FLAGS.SELECTED);
     }
 
     /**
@@ -296,13 +296,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set edges(edges) {
-        if (!!(this._flags & RENDER_FLAGS.EDGES) === edges) {
+        if (!!(this._flags & ENTITY_FLAGS.EDGES) === edges) {
             return; // Redundant update
         }
         if (edges) {
-            this._flags = this._flags | RENDER_FLAGS.EDGES;
+            this._flags = this._flags | ENTITY_FLAGS.EDGES;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.EDGES;
+            this._flags = this._flags & ~ENTITY_FLAGS.EDGES;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setEdges(this._flags);
@@ -316,7 +316,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get edges() {
-        return this._getFlag(RENDER_FLAGS.EDGES);
+        return this._getFlag(ENTITY_FLAGS.EDGES);
     }
 
     /**
@@ -327,13 +327,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set culled(culled) {
-        if (!!(this._flags & RENDER_FLAGS.CULLED) === culled) {
+        if (!!(this._flags & ENTITY_FLAGS.CULLED) === culled) {
             return; // Redundant update
         }
         if (culled) {
-            this._flags = this._flags | RENDER_FLAGS.CULLED;
+            this._flags = this._flags | ENTITY_FLAGS.CULLED;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.CULLED;
+            this._flags = this._flags & ~ENTITY_FLAGS.CULLED;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setCulled(this._flags);
@@ -349,7 +349,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get culled() {
-        return this._getFlag(RENDER_FLAGS.CULLED);
+        return this._getFlag(ENTITY_FLAGS.CULLED);
     }
 
     /**
@@ -360,13 +360,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set clippable(clippable) {
-        if ((!!(this._flags & RENDER_FLAGS.CLIPPABLE)) === clippable) {
+        if ((!!(this._flags & ENTITY_FLAGS.CLIPPABLE)) === clippable) {
             return; // Redundant update
         }
         if (clippable) {
-            this._flags = this._flags | RENDER_FLAGS.CLIPPABLE;
+            this._flags = this._flags | ENTITY_FLAGS.CLIPPABLE;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.CLIPPABLE;
+            this._flags = this._flags & ~ENTITY_FLAGS.CLIPPABLE;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setClippable(this._flags);
@@ -382,7 +382,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get clippable() {
-        return this._getFlag(RENDER_FLAGS.CLIPPABLE);
+        return this._getFlag(ENTITY_FLAGS.CLIPPABLE);
     }
 
     /**
@@ -391,13 +391,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set collidable(collidable) {
-        if (!!(this._flags & RENDER_FLAGS.COLLIDABLE) === collidable) {
+        if (!!(this._flags & ENTITY_FLAGS.COLLIDABLE) === collidable) {
             return; // Redundant update
         }
         if (collidable) {
-            this._flags = this._flags | RENDER_FLAGS.COLLIDABLE;
+            this._flags = this._flags | ENTITY_FLAGS.COLLIDABLE;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.COLLIDABLE;
+            this._flags = this._flags & ~ENTITY_FLAGS.COLLIDABLE;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setCollidable(this._flags);
@@ -410,7 +410,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get collidable() {
-        return this._getFlag(RENDER_FLAGS.COLLIDABLE);
+        return this._getFlag(ENTITY_FLAGS.COLLIDABLE);
     }
 
     /**
@@ -421,13 +421,13 @@ class PerformanceNode {
      * @type {Boolean}
      */
     set pickable(pickable) {
-        if (!!(this._flags & RENDER_FLAGS.PICKABLE) === pickable) {
+        if (!!(this._flags & ENTITY_FLAGS.PICKABLE) === pickable) {
             return; // Redundant update
         }
         if (pickable) {
-            this._flags = this._flags | RENDER_FLAGS.PICKABLE;
+            this._flags = this._flags | ENTITY_FLAGS.PICKABLE;
         } else {
-            this._flags = this._flags & ~RENDER_FLAGS.PICKABLE;
+            this._flags = this._flags & ~ENTITY_FLAGS.PICKABLE;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setPickable(this._flags);
@@ -442,7 +442,7 @@ class PerformanceNode {
      * @type {Boolean}
      */
     get pickable() {
-        return this._getFlag(RENDER_FLAGS.PICKABLE);
+        return this._getFlag(ENTITY_FLAGS.PICKABLE);
     }
 
     /**
@@ -502,25 +502,26 @@ class PerformanceNode {
             return;
         }
         const opacityUpdated = (opacity !== null && opacity !== undefined);
-        const lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
+        const lastOpacityQuantized = this.meshes[0]._colorize[3];
+        let opacityQuantized = 255;
         if (opacityUpdated) {
             if (opacity < 0) {
                 opacity = 0;
             } else if (opacity > 1) {
                 opacity = 1;
             }
-            opacity = Math.floor(opacity * 255.0); // Quantize
-            if (lastOpacity === opacity) {
+            opacityQuantized = Math.floor(opacity * 255.0); // Quantize
+            if (lastOpacityQuantized === opacityQuantized) {
                 return;
             }
         } else {
-            opacity = 255.0;
-            if (lastOpacity === opacity) {
+            opacityQuantized = 255.0;
+            if (lastOpacityQuantized === opacityQuantized) {
                 return;
             }
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setOpacity(opacity);
+            this.meshes[i]._setOpacity(opacityQuantized, this._flags);
         }
         if (this._isObject) {
             this.scene._objectOpacityUpdated(this, opacityUpdated);
@@ -654,8 +655,8 @@ class PerformanceNode {
                 scene._objectSelectedUpdated(this);
             }
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._initFlags(this._flags);
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._finalize(this._flags);
         }
     }
 
@@ -679,7 +680,7 @@ class PerformanceNode {
             this.scene._objectOpacityUpdated(this, false);
             this.scene._objectOffsetUpdated(this, false);
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();
         }
         scene._aabbDirty = true;

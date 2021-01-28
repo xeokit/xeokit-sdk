@@ -111,7 +111,7 @@ class PickController {
 
             this.pickResult = this._scene.pick({
                 pickSurface: true,
-                pickSurfaceNormal: true,
+                pickSurfaceNormal: false,
                 canvasPos: this.pickCursorPos
             });
 

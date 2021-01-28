@@ -25,7 +25,7 @@ class BatchingOcclusionRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const model = batchingLayer.model;
         const scene = model.scene;
@@ -45,6 +45,8 @@ class BatchingOcclusionRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -108,6 +110,7 @@ class BatchingOcclusionRenderer {
 
         const program = this._program;
 
+        this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");

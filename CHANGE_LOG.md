@@ -2,6 +2,22 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.7.0-alpha.1
+
+January 27, 2021
+
+Pre-release containing rendering optimizations, plus fixes. 
+
+* CameraControl
+  * Fix dollying exception for ortho and frustum projections. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
+* DirLight, PointLight
+  * Fix lighting for PerformanceModel with instanced geometry. [#545](https://github.com/xeokit/xeokit-sdk/pull/545) ([**@xeolabs**](https://github.com/xeolabs))
+  * Minimal default lights for better performance. [#543](https://github.com/xeokit/xeokit-sdk/pull/543) ([**@xeolabs**](https://github.com/xeolabs))
+* PerformanceModel
+  * Optimize PerformanceModel shaders. [#542](https://github.com/xeokit/xeokit-sdk/pull/542) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+  * Fix surface picking option to not pick surface normal. [#550](https://github.com/xeokit/xeokit-sdk/pull/550) ([**@xeolabs**](https://github.com/xeolabs))
+  
 # 1.6.0
 
 January 19, 2021

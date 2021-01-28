@@ -1,4 +1,3 @@
-import {RENDER_PASSES} from '../../renderPasses.js';
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 
 /**
@@ -92,22 +91,12 @@ function buildVertex(scene) {
 
     src.push("void main(void) {");
 
-    src.push("bool visible      = (float(flags.x) > 0.0);");
-    src.push("bool xrayed       = (float(flags.y) > 0.0);");
-    src.push("bool highlighted  = (float(flags.z) > 0.0);");
-    src.push("bool selected     = (float(flags.w) > 0.0);");
-    src.push("bool culled       = (float(flags2.w) > 0.0);");
-    src.push("bool transparent  = (float(color.a) < 255.0);");
+    // flags.x = NOT_RENDERED | OPAQUE_FILL | TRANSPARENT_FILL
+    // renderPass = OPAQUE_FILL | TRANSPARENT_FILL
 
-    src.push(`if 
-    (culled || !visible || 
-    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
-    (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
-    (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted) ||
-    (renderPass == ${RENDER_PASSES.SELECTED} && !selected)) {`);
-
+    src.push(`if (int(flags.x) != renderPass) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+
     src.push("} else {");
 
     src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
@@ -120,7 +109,7 @@ function buildVertex(scene) {
 
     src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
     src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-    src.push("vec3 viewNormal = normalize(vec4(worldNormal * viewNormalMatrix).xyz);");
+    src.push("vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);");
 
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
