@@ -68,7 +68,11 @@ class PivotController {
         const cameraPos = math.vec3();
         math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
         const length = math.distVec3(cameraPos, currentPos);
-        const radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+        let radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+
+        if (this._camera.projection == "ortho") {
+            radius /= (this._camera.ortho.scale / 2);
+        }
 
         worldToRTCPos(currentPos, this._rtcCenter, this._rtcPos);
         this._pivotSphereGeometry = new VBOGeometry(
