@@ -401,11 +401,18 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Object} [cfg.dataSource] A custom data source through which the XKTLoaderPlugin can load model and metadata files. Defaults to an instance of {@link XKTDefaultDataSource}, which loads uover HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
-     * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
+     * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
+     * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
+     * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
+     * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
+     * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
      */
     constructor(viewer, cfg = {}) {
 
         super("XKTLoader", viewer, cfg);
+
+        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -615,7 +622,8 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+            isModel: true,
+            maxGeometryBatchSize: this._maxGeometryBatchSize
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated

@@ -830,10 +830,17 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Boolean} [cfg.backfaces=false] Indicates if backfaces are visible.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
+     * to limit the size of the batched geometry arrays that PerformanceModel internally creates for batched geometries.
+     * A lower value means less heap allocation/de-allocation while creating/loading batched geometries, but more draw calls and
+     * slower rendering speed. A high value means larger heap allocation/de-allocation while creating/loading, but less draw calls
+     * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this._aabb = math.collapseAABB3();
         this._aabbDirty = false;
@@ -1350,7 +1357,8 @@ class PerformanceModel extends Component {
                     primitive: "triangles",
                     scratchMemory: this._batchingScratchMemory,
                     positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                    rtcCenter: cfg.rtcCenter // Can be undefined
+                    rtcCenter: cfg.rtcCenter, // Can be undefined
+                    maxGeometryBatchSize: this._maxGeometryBatchSize
                 });
                 this._layerList.push(this._currentBatchingLayer);
             }
