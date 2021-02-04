@@ -31,7 +31,9 @@ class Ortho extends Component {
         /**
          * The Camera this Ortho belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 

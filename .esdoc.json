@@ -19,7 +19,7 @@
         "brand": {
           "logo": "./images/logo.jpg",
           "title": "xeokit-sdk",
-          "description": "SDK for developing custom 3D viewers on xeogl",
+          "description": "SDK for developing custom 3D viewers",
           "repository": "https://github.com/xeokit/xeokit-sdk",
           "site": "http://xeokit.io",
           "author": "http://xeolabs.com",
