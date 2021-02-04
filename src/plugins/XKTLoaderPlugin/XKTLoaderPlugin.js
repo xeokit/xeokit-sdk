@@ -780,7 +780,7 @@ class XKTLoaderPlugin extends Plugin {
 
             } else if (params.metaModelData) {
 
-                if (processMetaModelData(params.metaModelData)) {
+                if (!processMetaModelData(params.metaModelData)) {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
 
