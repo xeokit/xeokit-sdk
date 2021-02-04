@@ -6,6 +6,8 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+* XKTLoaderPlugin
+  * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, MetaScene, TreeViewPlugin
   * Add client-side metadata validation functions. [#560](https://github.com/xeokit/xeokit-sdk/issues/560) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel, XKTLoaderPlugin
