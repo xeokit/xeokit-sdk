@@ -756,6 +756,10 @@ class XKTLoaderPlugin extends Plugin {
 
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
+                    if (performanceModel.destroyed) {
+                        return;
+                    }
+
                     if (!processMetaModelData(metaModelData)) {
 
                         this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
@@ -814,6 +818,10 @@ class XKTLoaderPlugin extends Plugin {
 
     _parseModel(arrayBuffer, params, options, performanceModel) {
 
+        if (performanceModel.destroyed) {
+            return;
+        }
+
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
         const xktVersion = dataView.getUint32(0, true);
@@ -840,6 +848,9 @@ class XKTLoaderPlugin extends Plugin {
         performanceModel.finalize();
 
         performanceModel.scene.once("tick", () => {
+            if (performanceModel.destroyed) {
+                return;
+            }
             performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
             performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });

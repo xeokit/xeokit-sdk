@@ -1515,6 +1515,10 @@ class PerformanceModel extends Component {
      */
     finalize() {
 
+        if (this.destroyed) {
+            return;
+        }
+
         if (this._currentBatchingLayer) {
             this._currentBatchingLayer.finalize();
             this._currentBatchingLayer = null;
