@@ -210,6 +210,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html",
+    "<span>IFCHelpersDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html",
+    "<span>IFCHelpersPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaults.js~ifcobjectdefaults",
     "variable/index.html#static-variable-IFCObjectDefaults",
     "<span>IFCObjectDefaults</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaults.js</span>",
@@ -249,6 +261,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/lightmap.js~lightmap",
     "class/src/viewer/scene/lights/LightMap.js~LightMap.html",
     "<span>LightMap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/LightMap.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html",
+    "<span>LogDepthBuf</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/logDepthBuf/LogDepthBuf.js</span>",
     "class"
   ],
   [
@@ -375,6 +393,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/webgl/pickresult.js~pickresult",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html",
     "<span>PickResult</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/PickResult.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource",
+    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html",
+    "<span>PickTriangleShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js</span>",
     "class"
   ],
   [
@@ -627,6 +651,24 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewcontainmenthierarchy",
+    "function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy",
+    "<span>validateMetaModelForTreeViewContainmentHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewstoreyshierarchy",
+    "function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy",
+    "<span>validateMetaModelForTreeViewStoreysHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewtypeshierarchy",
+    "function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy",
+    "<span>validateMetaModelForTreeViewTypesHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
     "function"
   ],
   [
@@ -2280,6 +2322,96 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/ifchelpersplugin/gltfperformanceloader.js",
+    "file/src/plugins/IFCHelpersPlugin/GLTFPerformanceLoader.js.html",
+    "src/plugins/IFCHelpersPlugin/GLTFPerformanceLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/gltfqualityloader.js",
+    "file/src/plugins/IFCHelpersPlugin/GLTFQualityLoader.js.html",
+    "src/plugins/IFCHelpersPlugin/GLTFQualityLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js",
+    "file/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js.html",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#constructor",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getarraybuffer",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getArrayBuffer",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getArrayBuffer",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getgltf",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getGLTF",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getGLTF",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getmetamodel",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getMetaModel",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getMetaModel",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js",
+    "file/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js.html",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#constructor",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-constructor-constructor",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#datasource",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-set-dataSource",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#datasource",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-get-dataSource",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#destroy",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-method-destroy",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#load",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-method-load",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#objectdefaults",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-set-objectDefaults",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#objectdefaults",
+    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-get-objectDefaults",
+    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#objectDefaults",
+    "member"
+  ],
+  [
     "src/plugins/navcubeplugin/cubetexturecanvas.js",
     "file/src/plugins/NavCubePlugin/CubeTextureCanvas.js.html",
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js",
@@ -2872,6 +3004,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-withNodeTree",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#withNodeTree",
     "method"
+  ],
+  [
+    "src/plugins/treeviewplugin/modelvalidation.js",
+    "file/src/plugins/TreeViewPlugin/modelValidation.js.html",
+    "src/plugins/TreeViewPlugin/modelValidation.js",
+    "file"
   ],
   [
     "src/plugins/viewcullplugin/viewcullplugin.js",
@@ -3939,6 +4077,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#rotationinertia",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-rotationInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#rotationInertia",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#smartpivot",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-smartPivot",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#smartPivot",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#smartpivot",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-smartPivot",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#smartPivot",
     "member"
   ],
   [
@@ -5022,6 +5172,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/entityflags.js",
+    "file/src/viewer/scene/PerformanceModel/lib/entityFlags.js.html",
+    "src/viewer/scene/PerformanceModel/lib/entityFlags.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/instancing/instancinglayer.js",
     "file/src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js.html",
     "src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js",
@@ -5154,12 +5310,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/renderflags.js",
-    "file/src/viewer/scene/PerformanceModel/lib/renderFlags.js.html",
-    "src/viewer/scene/PerformanceModel/lib/renderFlags.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/performancemodel/lib/renderpasses.js",
     "file/src/viewer/scene/PerformanceModel/lib/renderPasses.js.html",
     "src/viewer/scene/PerformanceModel/lib/renderPasses.js",
@@ -5235,6 +5385,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/camera/camera.js~camera#gimballock",
     "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
     "src/viewer/scene/camera/Camera.js~Camera#gimbalLock",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/camera.js~camera#inverseviewmatrix",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-inverseViewMatrix",
+    "src/viewer/scene/camera/Camera.js~Camera#inverseViewMatrix",
     "member"
   ],
   [
@@ -5664,10 +5820,16 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/camera/customprojection.js~customprojection#destroy",
-    "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-method-destroy",
-    "src/viewer/scene/camera/CustomProjection.js~CustomProjection#destroy",
-    "method"
+    "src/viewer/scene/camera/customprojection.js~customprojection#camera",
+    "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-member-camera",
+    "src/viewer/scene/camera/CustomProjection.js~CustomProjection#camera",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/customprojection.js~customprojection#inversematrix",
+    "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-inverseMatrix",
+    "src/viewer/scene/camera/CustomProjection.js~CustomProjection#inverseMatrix",
+    "member"
   ],
   [
     "src/viewer/scene/camera/customprojection.js~customprojection#matrix",
@@ -5680,6 +5842,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-matrix",
     "src/viewer/scene/camera/CustomProjection.js~CustomProjection#matrix",
     "member"
+  ],
+  [
+    "src/viewer/scene/camera/customprojection.js~customprojection#transposedmatrix",
+    "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-transposedMatrix",
+    "src/viewer/scene/camera/CustomProjection.js~CustomProjection#transposedMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/customprojection.js~customprojection#unproject",
+    "class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html#instance-method-unproject",
+    "src/viewer/scene/camera/CustomProjection.js~CustomProjection#unproject",
+    "method"
   ],
   [
     "src/viewer/scene/camera/frustum.js",
@@ -5700,10 +5874,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/camera/frustum.js~frustum#destroy",
-    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-method-destroy",
-    "src/viewer/scene/camera/Frustum.js~Frustum#destroy",
-    "method"
+    "src/viewer/scene/camera/frustum.js~frustum#camera",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-member-camera",
+    "src/viewer/scene/camera/Frustum.js~Frustum#camera",
+    "member"
   ],
   [
     "src/viewer/scene/camera/frustum.js~frustum#far",
@@ -5715,6 +5889,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/camera/frustum.js~frustum#far",
     "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-far",
     "src/viewer/scene/camera/Frustum.js~Frustum#far",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/frustum.js~frustum#inversematrix",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-inverseMatrix",
+    "src/viewer/scene/camera/Frustum.js~Frustum#inverseMatrix",
     "member"
   ],
   [
@@ -5772,16 +5952,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/camera/frustum.js~frustum#transposedmatrix",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-get-transposedMatrix",
+    "src/viewer/scene/camera/Frustum.js~Frustum#transposedMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/frustum.js~frustum#unproject",
+    "class/src/viewer/scene/camera/Frustum.js~Frustum.html#instance-method-unproject",
+    "src/viewer/scene/camera/Frustum.js~Frustum#unproject",
+    "method"
+  ],
+  [
     "src/viewer/scene/camera/ortho.js",
     "file/src/viewer/scene/camera/Ortho.js.html",
     "src/viewer/scene/camera/Ortho.js",
     "file"
   ],
   [
-    "src/viewer/scene/camera/ortho.js~ortho#destroy",
-    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-method-destroy",
-    "src/viewer/scene/camera/Ortho.js~Ortho#destroy",
-    "method"
+    "src/viewer/scene/camera/ortho.js~ortho#camera",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-member-camera",
+    "src/viewer/scene/camera/Ortho.js~Ortho#camera",
+    "member"
   ],
   [
     "src/viewer/scene/camera/ortho.js~ortho#far",
@@ -5793,6 +5985,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/camera/ortho.js~ortho#far",
     "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-get-far",
     "src/viewer/scene/camera/Ortho.js~Ortho#far",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/ortho.js~ortho#inversematrix",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-get-inverseMatrix",
+    "src/viewer/scene/camera/Ortho.js~Ortho#inverseMatrix",
     "member"
   ],
   [
@@ -5826,16 +6024,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/camera/ortho.js~ortho#transposedmatrix",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-get-transposedMatrix",
+    "src/viewer/scene/camera/Ortho.js~Ortho#transposedMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/ortho.js~ortho#unproject",
+    "class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-method-unproject",
+    "src/viewer/scene/camera/Ortho.js~Ortho#unproject",
+    "method"
+  ],
+  [
     "src/viewer/scene/camera/perspective.js",
     "file/src/viewer/scene/camera/Perspective.js.html",
     "src/viewer/scene/camera/Perspective.js",
     "file"
   ],
   [
-    "src/viewer/scene/camera/perspective.js~perspective#destroy",
-    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-method-destroy",
-    "src/viewer/scene/camera/Perspective.js~Perspective#destroy",
-    "method"
+    "src/viewer/scene/camera/perspective.js~perspective#camera",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-member-camera",
+    "src/viewer/scene/camera/Perspective.js~Perspective#camera",
+    "member"
   ],
   [
     "src/viewer/scene/camera/perspective.js~perspective#far",
@@ -5874,6 +6084,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/camera/perspective.js~perspective#inversematrix",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-inverseMatrix",
+    "src/viewer/scene/camera/Perspective.js~Perspective#inverseMatrix",
+    "member"
+  ],
+  [
     "src/viewer/scene/camera/perspective.js~perspective#matrix",
     "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-matrix",
     "src/viewer/scene/camera/Perspective.js~Perspective#matrix",
@@ -5890,6 +6106,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-near",
     "src/viewer/scene/camera/Perspective.js~Perspective#near",
     "member"
+  ],
+  [
+    "src/viewer/scene/camera/perspective.js~perspective#transposedmatrix",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-get-transposedMatrix",
+    "src/viewer/scene/camera/Perspective.js~Perspective#transposedMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/camera/perspective.js~perspective#unproject",
+    "class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-method-unproject",
+    "src/viewer/scene/camera/Perspective.js~Perspective#unproject",
+    "method"
   ],
   [
     "src/viewer/scene/canvas/canvas.js",
@@ -7233,6 +7461,108 @@ window.esdocSearchIndex = [
     "src/viewer/scene/lights/shadow.js~shadow#resolution",
     "class/src/viewer/scene/lights/Shadow.js~Shadow.html#instance-get-resolution",
     "src/viewer/scene/lights/Shadow.js~Shadow#resolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js",
+    "file/src/viewer/scene/logDepthBuf/LogDepthBuf.js.html",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-bias",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-bias",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-blur",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-blur",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#destroy",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-method-destroy",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-enabled",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-enabled",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-intensity",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-intensity",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-kernelRadius",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-kernelRadius",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-minResolution",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-minResolution",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-scale",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-scale",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#supported",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-supported",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#supported",
     "member"
   ],
   [
@@ -9174,6 +9504,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#constructor",
+    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-constructor-constructor",
+    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#fragment",
+    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-member-fragment",
+    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#fragment",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#vertex",
+    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-member-vertex",
+    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#vertex",
+    "member"
+  ],
+  [
     "src/viewer/scene/mesh/shadow/shadowrenderer.js",
     "file/src/viewer/scene/mesh/shadow/ShadowRenderer.js.html",
     "src/viewer/scene/mesh/shadow/ShadowRenderer.js",
@@ -10206,6 +10554,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#entityoffsetsenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-entityOffsetsEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#entityOffsetsEnabled",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#gammafactor",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-gammaFactor",
     "src/viewer/scene/scene/Scene.js~Scene#gammaFactor",
@@ -10293,6 +10647,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#loading",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-loading",
     "src/viewer/scene/scene/Scene.js~Scene#loading",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#logarithmicdepthbufferenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-logarithmicDepthBufferEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#logarithmicDepthBufferEnabled",
     "member"
   ],
   [
@@ -10557,6 +10917,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#types",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-types",
     "src/viewer/scene/scene/Scene.js~Scene#types",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#viewer",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-viewer",
+    "src/viewer/scene/scene/Scene.js~Scene#viewer",
     "member"
   ],
   [
