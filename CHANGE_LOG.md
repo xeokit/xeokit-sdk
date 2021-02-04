@@ -2,7 +2,7 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.7.0
+# 1.7.0-alpha.2
 
 Unreleased
 
