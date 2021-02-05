@@ -382,68 +382,6 @@ parsers[ParserV6.version] = ParserV6;
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
- * ## Validating the Metadata
- *
- * As mentioned, XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a
- * {@link MetaModel} corresponding to the model {@link Entity} and a {@link MetaObject} corresponding to each
- * object {@link Entity}.
- *
- * When loading metadata, we have the option to supply a callback to validate it. Ideally, our metadata should
- * be fully validated further up the data pipeline, but this callback gives us one more chance to ensure that the
- * metadata is going to work properly with other functionality, such as that provided by {@link TreeViewPlugin}.
- *
- * The example below shows how we can use the callback to quickly check if our metadata is going to work properly
- * with {@link TreeViewPlugin}, and abort the load:
- *
- * ````javascript
- * import {
- *   isModelValidForContainmentHierarchy,
- *   isModelValidForStoreysHierarchy,
- *   isModelValidForTypesHierarchy
- * } from "../src/plugins/TreeViewPlugin/modelValidation.js";
- *
- * const metaModelValidationErrors = [];
- *
- * const model = xktLoader.load({
- *
- *      id: "Widget",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaanWithErrors/metaModelWithoutIfcBuilding.json",
- *      edges: true,
- *
- *      validateMetaModel: (metaModel) => {
- *          const valid =
- *              validateMetaModelForTreeViewContainmentHierarchy(metaModel, metaModelValidationErrors) &&
- *              validateMetaModelForTreeViewStoreysHierarchy(metaModel, metaModelValidationErrors) &&
- *              validateMetaModelForTreeViewTypesHierarchy(metaModel, metaModelValidationErrors);
- *          return valid;
- *      }
- *  });
- *
- * model.on("loaded", () => {
- *      const t1 = performance.now();
- *      document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
- *  });
- *
- * model.on("error", (e) => {
- *
- *      if (metaModelValidationErrors.length > 0) {
- *
- *          // We only get validation errors if all else went OK and there
- *          // are no other errors (ie. the metamodel JSON loaded and parsed OK)
- *
- *          console.error("Error loading model - metadata validation errors:<br><br> " + metaModelValidationErrors.join("<br>"));
- *
- *      } else {
- *          console.error("Error loading model: " + e);
- *      }
- *
- *      model.destroy();
- * });
- * ````
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_validateMetaModel)]
- *
  * @class XKTLoaderPlugin
  */
 class XKTLoaderPlugin extends Plugin {
@@ -669,7 +607,6 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Boolean} [params.backfaces=false] Indicates if backfaces are visible on the model. Making this ````true```` will reduce rendering performance.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
-     * @param {Function} [params.validateMetaModel] Optional callback to validate the {@link MetaModel}, before loading the *````.xkt````*. The callback should return ````true```` if the MetaModel is valid, otherwise ````false````, in which case this function then aborts loading and returns an empty {@link PerformanceModel}, on which it fires an "error" event.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -725,8 +662,7 @@ class XKTLoaderPlugin extends Plugin {
                 const metaModel = this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: includeTypes,
                     excludeTypes: excludeTypes,
-                    globalizeObjectIds: this.globalizeObjectIds,
-                    validateMetaModel: params.validateMetaModel
+                    globalizeObjectIds: this.globalizeObjectIds
                 });
 
                 this.viewer.scene.canvas.spinner.processes--;
