@@ -26,8 +26,8 @@ class BatchingLayer {
      * @param cfg
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
+     * @param cfg.maxGeometryBatchSize
      * @param cfg.rtcCenter
-     * @param cfg.buffer
      * @param cfg.scratchMemory
      * @param cfg.primitive
      */
@@ -41,7 +41,7 @@ class BatchingLayer {
 
         this._batchingRenderers = getBatchingRenderers(model.scene);
         this.model = model;
-        this._buffer = new BatchingBuffer();
+        this._buffer = new BatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
         var primitiveName = cfg.primitive || "triangles";
         var primitive;

@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">CameraFlightAnimation | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CameraFlightAnimation} from &apos;<span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber103">@xeokit/xeokit-sdk/camera/CameraFlightAnimation.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber103">source</a></span></span>
+</div>
+
+<div class="self-detail detail">
+  <h1 data-ice="name">CameraFlightAnimation</h1>
+
+  
+
+  
+  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>Component.js~Component</span> &#x2192; CameraFlightAnimation</div></div>
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <div class="description" data-ice="description"><p>Jumps or flies the <span>Scene</span>&apos;s <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to a given target.</p>
+<ul>
+<li>Located at <span>Viewer#cameraFlight</span></li>
+<li>Can fly or jump to its target.</li>
+<li>While flying, can be stopped, or redirected to a different target.</li>
+<li>Can also smoothly transition between ortho and perspective projections.</li>
+</ul>
+<p>A CameraFlightAnimation&apos;s target can be:</p>
+<ul>
+<li>specific <code>eye</code>, <code>look</code> and <code>up</code> positions,</li>
+<li>an axis-aligned World-space bounding box (AABB), or</li>
+<li>an instance or ID of any <span>Component</span> subtype that provides a World-space AABB.</li>
+</ul>
+<p>A target can also contain a <code>projection</code> type to transition into. For example, if your <span><a href="class/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is
+currently <code>&quot;perspective&quot;</code> and you supply <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span> with a <code>projection</code> property
+equal to &quot;ortho&quot;, then CameraFlightAnimation will smoothly transition the Camera into an orthographic projection.</p>
+<p>Configure <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit">CameraFlightAnimation#fit</a></span> and <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV">CameraFlightAnimation#fitFOV</a></span> to make it stop at the point
+where the target occupies a certain amount of the field-of-view.</p>
+<h2 id="flying-to-an-entity">Flying to an Entity</h2><p>Flying to an <span>Entity</span>:</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">var entity = new Mesh(viewer.scene);
+
+// Fly to the Entity&apos;s World-space AABB
+viewer.cameraFlight.flyTo(entity);</code>
+</code></pre>
+<h2 id="flying-to-a-position">Flying to a Position</h2><p>Flying the CameraFlightAnimation from the previous example to specified eye, look and up positions:</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">viewer.cameraFlight.flyTo({
+   eye: [-5,-5,-5],
+   look: [0,0,0]
+   up: [0,1,0],
+   duration: 1 // Default, seconds
+},() =&gt; {
+     // Done
+});</code>
+</code></pre>
+<h2 id="flying-to-an-aabb">Flying to an AABB</h2><p>Flying the CameraFlightAnimation from the previous two examples explicitly to the {@link Boundary3D&quot;}}Boundary3D&apos;s{{/crossLink}}
+axis-aligned bounding box:</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">viewer.cameraFlight.flyTo(entity.aabb);</code>
+</code></pre>
+<h2 id="transitioning-between-projections">Transitioning Between Projections</h2><p>CameraFlightAnimation also allows us to smoothly transition between Camera projections. We can do that by itself, or
+in addition to flying the Camera to a target.</p>
+<p>Let&apos;s transition the Camera to orthographic projection:</p>
+<p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraFlightAnimation_projection">Run example</a>]</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">viewer.cameraFlight.flyTo({ projection: &quot;ortho&quot;, () =&gt; {
+     // Done
+});</code>
+</code></pre>
+<p>Now let&apos;s transition the Camera back to perspective projection:</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">viewer.cameraFlight.flyTo({ projection: &quot;perspective&quot;}, () =&gt; {
+     // Done
+});</code>
+</code></pre>
+<p>Fly Camera to a position, while transitioning to orthographic projection:</p>
+<pre><code class="lang-Javascript"><code class="source-code prettyprint">viewer.cameraFlight.flyTo({
+    eye: [-100,20,2],
+    look: [0,0,-40],
+    up: [0,1,0],
+    projection: &quot;ortho&quot;, () =&gt; {
+       // Done
+});</code>
+</code></pre>
+</div>
+  
+
+  
+
+  
+
+  
+
+  
+</div>
+
+
+
+
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">duration</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the flight duration, in seconds, when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-duration">duration</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the flight duration, in seconds, when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-member-easing">easing</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit">fit</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
+<span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> so as to ensure that the target boundary is always filling the view volume.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit">fit</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
+<span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> so as to ensure that the target boundary is always filling the view volume.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV">fitFOV</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets how much of the perspective field-of-view, in degrees, that a target <span>Entity#aabb</span> should
+fill the canvas when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span> or <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo">CameraFlightAnimation#jumpTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fitFOV">fitFOV</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets how much of the perspective field-of-view, in degrees, that a target <span>Entity#aabb</span> should
+fill the canvas when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span> or <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo">CameraFlightAnimation#jumpTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail">trail</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if this CameraFlightAnimation to point the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span>
+in the direction that it is travelling when flying to a target after calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail">trail</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if this CameraFlightAnimation points the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span>
+in the direction that it is travelling when flying to a target after calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-cancel">cancel</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Cancels an earlier flyTo without calling the arrival callback.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">flyTo</a></span></span><span class="code" data-ice="signature">(params: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span>Component</span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, scope: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Flies the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to a target.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo">jumpTo</a></span></span><span class="code" data-ice="signature">(params: <span>*</span> | <span>Component</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Jumps the <span>Scene</span>&apos;s <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to the given target.</p>
+<ul>
+<li>When the target is a boundary, this CameraFlightAnimation will position the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> at where the target fills most of the canvas.</li>
+<li>When the target is an explicit <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> position, given as <code>eye</code>, <code>look</code> and <code>up</code> vectors, then this CameraFlightAnimation will jump the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to that target.</li>
+</ul>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-stop">stop</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Stops an earlier flyTo, fires arrival callback.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+
+
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-duration">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">duration</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber568">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the flight duration, in seconds, when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+<p>Stops any flight currently in progress.</p>
+<p>default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-duration">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">duration</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber580">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the flight duration, in seconds, when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+<p>default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>New duration value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-easing">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">easing</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber136">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-fit">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">fit</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber594">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
+<span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> so as to ensure that the target boundary is always filling the view volume.</p>
+<p>When false, the eye will remain at its current distance from the look position.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-fit">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">fit</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber608">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if, when CameraFlightAnimation is flying to a boundary, it will always adjust the distance between the
+<span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> so as to ensure that the target boundary is always filling the view volume.</p>
+<p>When false, the eye will remain at its current distance from the look position.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>value Set <code>true</code> to activate this behaviour.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-fitFOV">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">fitFOV</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber620">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets how much of the perspective field-of-view, in degrees, that a target <span>Entity#aabb</span> should
+fill the canvas when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span> or <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo">CameraFlightAnimation#jumpTo</a></span>.</p>
+<p>Default value is <code>45</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-fitFOV">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">fitFOV</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber632">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets how much of the perspective field-of-view, in degrees, that a target <span>Entity#aabb</span> should
+fill the canvas when calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span> or <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo">CameraFlightAnimation#jumpTo</a></span>.</p>
+<p>Default value is <code>45</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Current FOV value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-trail">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">trail</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber644">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if this CameraFlightAnimation to point the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span>
+in the direction that it is travelling when flying to a target after calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-trail">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">trail</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber656">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if this CameraFlightAnimation points the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span>
+in the direction that it is travelling when flying to a target after calling <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo">CameraFlightAnimation#flyTo</a></span>.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>True if trailing behaviour is active.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-cancel">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">cancel</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber546">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Cancels an earlier flyTo without calling the arrival callback.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-flyTo">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">flyTo</span><span class="code" data-ice="signature">(params: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span>Component</span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, scope: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber168">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Flies the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to a target.</p>
+<ul>
+<li>When the target is a boundary, the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> will fly towards the target and stop when the target fills most of the canvas.</li>
+<li>When the target is an explicit <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> position, given as <code>eye</code>, <code>look</code> and <code>up</code>, then CameraFlightAnimation will interpolate the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to that target and stop there.</li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">params</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span>Component</span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Scene</li></ul></td>
+      <td data-ice="description"><p>Either a parameters object or a <span>Component</span> subtype that has
+an AABB. Defaults to the <span>Scene</span>, which causes the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to fit the Scene in view.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.arc</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Factor in range <code>[0..1]</code> indicating how much the <span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> position
+will swing away from its <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> position as it flies to the target.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.component</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span>Component</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID or instance of a component to fly to. Defaults to the entire <span>Scene</span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.aabb</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>World-space axis-aligned bounding box (AABB) target to fly to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.eye</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the eye position to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.look</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the look position to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.up</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the up vector to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.projection</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Projection type to transition into as we fly. Can be any of the values of <span><a href="class/camera/Camera.js~Camera.html#instance-set-projection">Camera.projection</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.fit</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Whether to fit the target to the view volume. Overrides <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit">CameraFlightAnimation#fit</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.fitFOV</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>How much of field-of-view, in degrees, that a target <span>Entity</span> or its AABB should
+fill the canvas on arrival. Overrides <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV">CameraFlightAnimation#fitFOV</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.duration</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Flight duration in seconds.  Overrides <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration">CameraFlightAnimation#duration</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.orthoScale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Animate the Camera&apos;s orthographic scale to this target value. See <span><a href="class/camera/Ortho.js~Ortho.html#instance-set-scale">Ortho#scale</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">callback</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Callback fired on arrival.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">scope</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional scope for callback.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-jumpTo">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">jumpTo</span><span class="code" data-ice="signature">(params: <span>*</span> | <span>Component</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber358">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Jumps the <span>Scene</span>&apos;s <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to the given target.</p>
+<ul>
+<li>When the target is a boundary, this CameraFlightAnimation will position the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> at where the target fills most of the canvas.</li>
+<li>When the target is an explicit <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> position, given as <code>eye</code>, <code>look</code> and <code>up</code> vectors, then this CameraFlightAnimation will jump the <span><a href="class/camera/Camera.js~Camera.html">Camera</a></span> to that target.</li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">params</td>
+      <td data-ice="type" class="code"><span>*</span> | <span>Component</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Either a parameters object or a <span>Component</span> subtype that has a World-space AABB.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.arc</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Factor in range [0..1] indicating how much the <span><a href="class/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> will swing away from its <span><a href="class/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> as it flies to the target.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.component</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span>Component</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID or instance of a component to fly to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.aabb</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>World-space axis-aligned bounding box (AABB) target to fly to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.eye</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the eye position to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.look</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the look position to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.up</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Position to fly the up vector to.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.projection</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Projection type to transition into. Can be any of the values of <span><a href="class/camera/Camera.js~Camera.html#instance-set-projection">Camera.projection</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.fitFOV</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>How much of field-of-view, in degrees, that a target <span>Entity</span> or its AABB should fill the canvas on arrival. Overrides <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV">CameraFlightAnimation#fitFOV</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.fit</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Whether to fit the target to the view volume. Overrides <span><a href="class/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit">CameraFlightAnimation#fit</a></span>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-stop">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">stop</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/camera/CameraFlightAnimation.js.html#lineNumber521">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Stops an earlier flyTo, fires arrival callback.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -2,6 +2,17 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.7.0-alpha.2
+
+Unreleased
+
+* XKTLoaderPlugin
+  * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin, MetaScene, TreeViewPlugin
+  * Add client-side metadata validation functions. [#560](https://github.com/xeokit/xeokit-sdk/issues/560) ([**@xeolabs**](https://github.com/xeolabs))
+* PerformanceModel, XKTLoaderPlugin
+  * Configurable max geometry batching size for PerformanceModel and XKTLoaderPlugin. [#559](https://github.com/xeokit/xeokit-sdk/issues/559) ([**@xeolabs**](https://github.com/xeolabs))
+  
 # 1.7.0-alpha.1
 
 January 27, 2021

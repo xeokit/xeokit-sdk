@@ -29,7 +29,9 @@ class Perspective extends Component {
         /**
          * The Camera this Perspective belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 

@@ -111,10 +111,10 @@ class MetaScene {
      * @param {Object} [options] Options for creating the {@link MetaModel}.
      * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
      * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
-     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set
-     * this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between
-     * the meta objects in the different instances.
-     * @returns {MetaModel} The new MetaModel.
+     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
+     * @param {Function} [options.validateMetaModel] Optional callback to validate the {@link MetaModel}. The callback should return ````true```` if it determines the MetaModel to be valid. Otherwise, the callback should return ````false````, in which case ````createMetaModel```` will then return ````null````.
+     * @returns {MetaModel} The new MetaModel, or ````null```` if the ````options.validateMetaModel```` callback was
+     * supplied, and that callback returned ````false````.
      */
     createMetaModel(modelId, metaModelData, options = {}) {
 
@@ -195,6 +195,13 @@ class MetaScene {
             }
         }
 
+        if (options.validateMetaModel) {
+            if (options.validateMetaModel(metaModel) === false) {
+                this._removeMetaModel(metaModel);
+                return null;
+            }
+        }
+
         this.fire("metaModelCreated", modelId);
         return metaModel;
     }
@@ -211,9 +218,13 @@ class MetaScene {
         if (!metaModel) {
             return;
         }
+        this._removeMetaModel(metaModel);
+        this.fire("metaModelDestroyed", id);
+    }
+
+    _removeMetaModel(metaModel) {
         const metaObjects = this.metaObjects;
         const metaObjectsByType = this.metaObjectsByType;
-
         let visit = (metaObject) => {
             delete metaObjects[metaObject.id];
             const types = metaObjectsByType[metaObject.type];
@@ -232,10 +243,8 @@ class MetaScene {
                 }
             }
         };
-
         visit(metaModel.rootMetaObject);
-        delete this.metaModels[id];
-        this.fire("metaModelDestroyed", id);
+        delete this.metaModels[metaModel.id];
     }
 
     /**

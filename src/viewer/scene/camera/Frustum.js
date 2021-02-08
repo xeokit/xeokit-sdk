@@ -29,7 +29,9 @@ class Frustum extends Component {
         /**
          * The Camera this Frustum belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 

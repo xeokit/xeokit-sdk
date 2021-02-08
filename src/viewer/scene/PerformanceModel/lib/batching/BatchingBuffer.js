@@ -1,16 +1,26 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
-const MAX_INDICES = MAX_VERTS * 3; // Rough rule-of-thumb
 
 /**
  * @private
  */
 class BatchingBuffer {
-    constructor() {
-        this.maxVerts = MAX_VERTS;
-        this.maxIndices = MAX_INDICES;
+
+    constructor(maxGeometryBatchSize = 5000000) {
+
+        if (bigIndicesSupported) {
+            if (maxGeometryBatchSize > 5000000) {
+                maxGeometryBatchSize = 5000000;
+            }
+        } else {
+            if (maxGeometryBatchSize > 65530) {
+                maxGeometryBatchSize = 65530;
+            }
+        }
+
+        this.maxVerts = maxGeometryBatchSize;
+        this.maxIndices = maxGeometryBatchSize * 3; // Rough rule-of-thumb
         this.positions = [];
         this.colors = [];
         this.normals = [];
