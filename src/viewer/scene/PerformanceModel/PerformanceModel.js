@@ -4,10 +4,13 @@ import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
-import {getBatchingLayerScratchMemory} from "./lib/batching/BatchingLayerScratchMemory.js";
-import {BatchingLayer} from './lib/batching/BatchingLayer.js';
-import {InstancingLayer} from './lib/instancing/InstancingLayer.js';
-import {ENTITY_FLAGS} from './lib/entityFlags.js';
+import {getScratchMemory} from "./lib/layers/trianglesBatching/TrianglesBatchingLayerScratchMemory.js";
+import {TrianglesBatchingLayer} from './lib/layers/trianglesBatching/TrianglesBatchingLayer.js';
+import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
+import {LinesBatchingLayer} from './lib/layers/linesBatching/LinesBatchingLayer.js';
+import {LinesInstancingLayer} from './lib/layers/linesInstancing/LinesInstancingLayer.js';
+import {PointCloudLayer} from './lib/layers/pointCloud/PointCloudLayer.js';
+import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../../../viewer/scene/utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 
@@ -847,11 +850,13 @@ class PerformanceModel extends Component {
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
 
+        this._lastPrimitive = null;
+        this._lastRTCCenter = null;
         this._lastDecodeMatrix = null;
 
         this._instancingLayers = {};
         this._currentBatchingLayer = null;
-        this._batchingScratchMemory = getBatchingLayerScratchMemory(this);
+        this._scratchMemory = getScratchMemory(this);
 
         this._meshes = {};
         this._nodes = {};
@@ -1128,7 +1133,7 @@ class PerformanceModel extends Component {
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
      * @param {String} [cfg.primitive="triangles"] The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} cfg.positions Flat array of positions.
-     * @param {Number[]} cfg.normals Flat array of normal vectors.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors.
      * @param {Number[]} cfg.indices Array of triangle indices.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
@@ -1148,10 +1153,28 @@ class PerformanceModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        const instancingLayer = new InstancingLayer(this, utils.apply({
-            layerIndex: 0, // This is set in #finalize()
-            edgeThreshold: this._edgeThreshold
-        }, cfg));
+        let instancingLayer;
+        switch (primitive) {
+            case "triangles":
+            case "triangle-strip":
+            case "triangle-fan":
+                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    primitive: primitive,
+                    layerIndex: 0
+                }, cfg));
+                break;
+            case "lines":
+            case "line-strip":
+            case "line-loop":
+                instancingLayer = new LinesInstancingLayer(this, utils.apply({
+                    primitive: primitive,
+                    layerIndex: 0
+                }, cfg));
+                break;
+            case "points":
+                this.error("createGeometry() cannot be used with points - use createMesh() instead");
+                return;
+        }
         this._instancingLayers[geometryId] = instancingLayer;
         this._layerList.push(instancingLayer);
         this.numGeometries++;
@@ -1190,8 +1213,9 @@ class PerformanceModel extends Component {
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.colors] Flat array of vertex colors. Ignored when ````geometryId```` is given, overriden by ````color````.
+     * @param {Number[]} [cfg.normals] Flat array of vertex normals. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
@@ -1202,7 +1226,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
-     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
@@ -1299,19 +1323,22 @@ class PerformanceModel extends Component {
                 return null;
             }
 
-            let normals = cfg.normals;
-
-            if (!normals) {
-                this.error("Config missing: normals (no meshIds provided, so expecting geometry arrays instead)");
-                return null;
-            }
-
             if (!edgeIndices && !indices) {
                 this.error("Config missing: must have one or both of indices and edgeIndices  (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
             let needNewBatchingLayer = false;
+
+            if (!this._lastPrimitive) {
+                needNewBatchingLayer = true;
+                this._lastPrimitive = primitive;
+            } else {
+                if (primitive !== this._lastPrimitive) {
+                    needNewBatchingLayer = true;
+                    this._lastPrimitive = primitive;
+                }
+            }
 
             if (cfg.rtcCenter) {
                 if (!this._lastRTCCenter) {
@@ -1324,6 +1351,7 @@ class PerformanceModel extends Component {
                     }
                 }
             }
+
             if (cfg.positionsDecodeMatrix) {
                 if (!this._lastDecodeMatrix) {
                     needNewBatchingLayer = true;
@@ -1338,32 +1366,32 @@ class PerformanceModel extends Component {
             }
 
             if (needNewBatchingLayer) {
-                if (this._currentBatchingLayer) {
-                    this._currentBatchingLayer.finalize();
-                    this._currentBatchingLayer = null;
+                if (this._curentTrianglesBatchingLayer) {
+                    this._curentTrianglesBatchingLayer.finalize();
+                    this._curentTrianglesBatchingLayer = null;
                 }
             }
 
-            if (this._currentBatchingLayer) {
-                if (!this._currentBatchingLayer.canCreatePortion(positions.length, indices.length)) {
-                    this._currentBatchingLayer.finalize();
-                    this._currentBatchingLayer = null;
+            if (this._curentTrianglesBatchingLayer) {
+                if (!this._curentTrianglesBatchingLayer.canCreatePortion(positions.length, indices.length)) {
+                    this._curentTrianglesBatchingLayer.finalize();
+                    this._curentTrianglesBatchingLayer = null;
                 }
             }
 
-            if (!this._currentBatchingLayer) {
-                this._currentBatchingLayer = new BatchingLayer(this, {
+            if (!this._curentTrianglesBatchingLayer) {
+                this._curentTrianglesBatchingLayer = new TrianglesBatchingLayer(this, {
                     layerIndex: 0, // This is set in #finalize()
-                    primitive: "triangles",
-                    scratchMemory: this._batchingScratchMemory,
+                    primitive: primitive,
+                    scratchMemory: this._scratchMemory,
                     positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                     rtcCenter: cfg.rtcCenter, // Can be undefined
                     maxGeometryBatchSize: this._maxGeometryBatchSize
                 });
-                this._layerList.push(this._currentBatchingLayer);
+                this._layerList.push(this._curentTrianglesBatchingLayer);
             }
 
-            layer = this._currentBatchingLayer;
+            layer = this._curentTrianglesBatchingLayer;
 
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
@@ -1385,7 +1413,19 @@ class PerformanceModel extends Component {
                 }
             }
 
-            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
+            portionId = this._curentTrianglesBatchingLayer.createPortion({
+                positions: positions,
+                normals: cfg.normals,
+                indices: indices,
+                edgeIndices: edgeIndices,
+                color: color,
+                colors: cfg.colors,
+                opacity: opacity,
+                meshMatrix: meshMatrix,
+                worldMatrix: worldMatrix,
+                worldAABB: aabb,
+                pickColor: pickColor
+            });
 
             math.expandAABB3(this._aabb, aabb);
 
@@ -1519,9 +1559,19 @@ class PerformanceModel extends Component {
             return;
         }
 
-        if (this._currentBatchingLayer) {
-            this._currentBatchingLayer.finalize();
-            this._currentBatchingLayer = null;
+        if (this._curentTrianglesBatchingLayer) {
+            this._curentTrianglesBatchingLayer.finalize();
+            this._curentTrianglesBatchingLayer = null;
+        }
+
+        if (this._curentLinesBatchingLayer) {
+            this._curentLinesBatchingLayer.finalize();
+            this._curentLinesBatchingLayer = null;
+        }
+
+        if (this._curentPointsBatchingLayer) {
+            this._curentPointsBatchingLayer.finalize();
+            this._curentPointsBatchingLayer = null;
         }
 
         for (const geometryId in this._instancingLayers) {
@@ -2076,19 +2126,19 @@ class PerformanceModel extends Component {
 
         const renderFlags = this.renderFlags;
 
-        renderFlags.normalFillOpaque = (this.numTransparentLayerPortions < this.numPortions);
+        renderFlags.colorOpaque = (this.numTransparentLayerPortions < this.numPortions);
 
         if (this.numTransparentLayerPortions > 0) {
-            renderFlags.normalFillTransparent = true;
+            renderFlags.colorTransparent = true;
         }
 
         if (this.numXRayedLayerPortions > 0) {
             const xrayMaterial = this.scene.xrayMaterial._state;
             if (xrayMaterial.fill) {
                 if (xrayMaterial.fillAlpha < 1.0) {
-                    renderFlags.xrayedFillTransparent = true;
+                    renderFlags.xrayedSilhouetteTransparent = true;
                 } else {
-                    renderFlags.xrayedFillOpaque = true;
+                    renderFlags.xrayedSilhouetteOpaque = true;
                 }
             }
             if (xrayMaterial.edges) {
@@ -2103,9 +2153,9 @@ class PerformanceModel extends Component {
         if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
             if (edgeMaterial.edges) {
-                renderFlags.normalEdgesOpaque = (this.numTransparentLayerPortions < this.numPortions);
+                renderFlags.edgesOpaque = (this.numTransparentLayerPortions < this.numPortions);
                 if (this.numTransparentLayerPortions > 0) {
-                    renderFlags.normalEdgesTransparent = true;
+                    renderFlags.edgesTransparent = true;
                 }
             }
         }
@@ -2114,9 +2164,9 @@ class PerformanceModel extends Component {
             const selectedMaterial = this.scene.selectedMaterial._state;
             if (selectedMaterial.fill) {
                 if (selectedMaterial.fillAlpha < 1.0) {
-                    renderFlags.selectedFillTransparent = true;
+                    renderFlags.selectedSilhouetteTransparent = true;
                 } else {
-                    renderFlags.selectedFillOpaque = true;
+                    renderFlags.selectedSilhouetteOpaque = true;
                 }
             }
             if (selectedMaterial.edges) {
@@ -2132,9 +2182,9 @@ class PerformanceModel extends Component {
             const highlightMaterial = this.scene.highlightMaterial._state;
             if (highlightMaterial.fill) {
                 if (highlightMaterial.fillAlpha < 1.0) {
-                    renderFlags.highlightedFillTransparent = true;
+                    renderFlags.highlightedSilhouetteTransparent = true;
                 } else {
-                    renderFlags.highlightedFillOpaque = true;
+                    renderFlags.highlightedSilhouetteOpaque = true;
                 }
             }
             if (highlightMaterial.edges) {
@@ -2191,10 +2241,10 @@ class PerformanceModel extends Component {
         return this.scene.edgeMaterial;
     }
 
-    // ---------------------- NORMAL RENDERING -----------------------------------
+    // -------------- RENDERING ---------------------------------------------------------------------------------------
 
     /** @private */
-    drawNormalOpaqueFill(frameCtx) {
+    drawColorOpaque(frameCtx) {
         if (frameCtx.backfaces !== this.backfaces) {
             const gl = this.scene.canvas.gl;
             if (this.backfaces) {
@@ -2207,20 +2257,18 @@ class PerformanceModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalOpaqueFill(frameCtx);
+            this._layerList[layerIndex].drawColorOpaque(frameCtx);
         }
     }
 
     /** @private */
-    drawNormalTransparentFill(frameCtx) {
+    drawColorTransparent(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalTransparentFill(frameCtx);
+            this._layerList[layerIndex].drawColorTransparent(frameCtx);
         }
     }
-
-    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     /** @private */
     drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
@@ -2258,52 +2306,48 @@ class PerformanceModel extends Component {
         }
     }
 
-    // ---------------------- EMPHASIS RENDERING -----------------------------------
-
     /** @private */
-    drawXRayedFill(frameCtx) {
+    drawXRayedSilhouette(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedFill(frameCtx);
+            this._layerList[layerIndex].drawXRayedSilhouette(frameCtx);
         }
     }
 
     /** @private */
-    drawHighlightedFill(frameCtx) {
+    drawHighlightedSilhouette(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedFill(frameCtx);
+            this._layerList[layerIndex].drawHighlightedSilhouette(frameCtx);
         }
     }
 
     /** @private */
-    drawSelectedFill(frameCtx) {
+    drawSelectedSilhouette(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedFill(frameCtx);
-        }
-    }
-
-    // ---------------------- EDGES RENDERING -----------------------------------
-
-    /** @private */
-    drawNormalOpaqueEdges(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalOpaqueEdges(frameCtx);
+            this._layerList[layerIndex].drawSelectedSilhouette(frameCtx);
         }
     }
 
     /** @private */
-    drawNormalTransparentEdges(frameCtx) {
+    drawEdgesOpaque(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormalTransparentEdges(frameCtx);
+            this._layerList[layerIndex].drawEdgesOpaque(frameCtx);
+        }
+    }
+
+    /** @private */
+    drawEdgesTransparent(frameCtx) {
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawEdgesTransparent(frameCtx);
         }
     }
 
@@ -2334,8 +2378,6 @@ class PerformanceModel extends Component {
         }
     }
 
-    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
-
     /**
      * @private
      */
@@ -2359,8 +2401,6 @@ class PerformanceModel extends Component {
         }
     }
 
-    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
-
     /**
      * @private
      */
@@ -2383,8 +2423,6 @@ class PerformanceModel extends Component {
             this._layerList[layerIndex].drawShadow(frameCtx);
         }
     }
-
-    // ---------------------- PICKING RENDERING -----------------------------------
 
     /** @private */
     drawPickMesh(frameCtx) {
@@ -2463,9 +2501,9 @@ class PerformanceModel extends Component {
      * Destroys this PerformanceModel.
      */
     destroy() {
-        if (this._currentBatchingLayer) {
-            this._currentBatchingLayer.destroy();
-            this._currentBatchingLayer = null;
+        if (this._curentTrianglesBatchingLayer) {
+            this._curentTrianglesBatchingLayer.destroy();
+            this._curentTrianglesBatchingLayer = null;
         }
         this.scene.camera.off(this._onCameraViewMatrix);
         for (let i = 0, len = this._layerList.length; i < len; i++) {

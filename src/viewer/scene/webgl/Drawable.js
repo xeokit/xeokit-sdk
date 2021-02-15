@@ -113,23 +113,23 @@ class Drawable {
     /**
      * Renders opaque edges using {@link Drawable#edgeMaterial}.
      *
-     * See {@link RenderFlags#normalFillOpaque}.
+     * See {@link RenderFlags#colorOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalOpaqueFill(frameCtx) {
+    drawColorOpaque(frameCtx) {
     }
 
     /**
      * Renders transparent filled surfaces using normal appearance attributes.
      *
-     * See {@link RenderFlags#normalFillTransparent}.
+     * See {@link RenderFlags#colorTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalTransparentFill(frameCtx) {
+    drawColorTransparent(frameCtx) {
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -157,34 +157,34 @@ class Drawable {
     /**
      * Renders x-ray fill using {@link Drawable#xrayMaterial}.
      *
-     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.
+     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawXRayedFill(frameCtx) {
+    drawXRayedSilhouette(frameCtx) {
     }
 
     /**
      * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.
      *
-     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.
+     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawHighlightedFill(frameCtx) {
+    drawHighlightedSilhouette(frameCtx) {
     }
 
     /**
      * Renders selected fill using {@link Drawable#selectedMaterial}.
      *
-     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.
+     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSelectedFill(frameCtx) {
+    drawSelectedSilhouette(frameCtx) {
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
@@ -192,23 +192,23 @@ class Drawable {
     /**
      * Renders opaque normal edges using {@link Drawable#edgeMaterial}.
      *
-     * See {@link RenderFlags#normalEdgesOpaque}.
+     * See {@link RenderFlags#edgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalOpaqueEdges(frameCtx) {
+    drawEdgesOpaque(frameCtx) {
     }
 
     /**
      * Renders transparent normal edges using {@link Drawable#edgeMaterial}.
      *
-     * See {@link RenderFlags#normalEdgesTransparent}.
+     * See {@link RenderFlags#edgesTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormalTransparentEdges(frameCtx) {
+    drawEdgesTransparent(frameCtx) {
     }
 
     /**
