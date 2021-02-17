@@ -253,7 +253,7 @@ class TrianglesInstancingEdgesRenderer {
 
         src.push("void main(void) {");
 
-        // flags.z = NOT_RENDERED | EDGES_OPAQUE | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
+        // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
 
         src.push(`if (int(flags.z) != renderPass) {`);
@@ -325,7 +325,7 @@ class TrianglesInstancingEdgesRenderer {
 
         src.push("void main(void) {");
 
-        // flags.z = NOT_RENDERED | EDGES_OPAQUE | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
+        // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
 
         src.push(`if (int(flags.z) != renderPass) {`);

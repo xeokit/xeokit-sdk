@@ -7,12 +7,12 @@ import {buildEdgeIndices} from '../../../../math/buildEdgeIndices.js';
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
-import {getInstancingRenderers} from "./PointsInstancingRenderers.js";
+import {getPointsInstancingRenderers} from "./PointsInstancingRenderers.js";
+import {quantizePositions} from "../../compression.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
 const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
-const compressedNormals = new Int8Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
 
 const tempVec4a = math.vec4([0, 0, 0, 1]);
@@ -32,10 +32,7 @@ class PointsInstancingLayer {
      * @param cfg.layerIndex
      * @param cfg.primitive
      * @param cfg.positions Flat float Local-space positions array.
-     * @param [cfg.normals] Flat float normals array.
      * @param cfg.indices Flat int indices array.
-     * @param [cfg.edgeIndices] Flat int edges indices array.
-     * @param cfg.edgeThreshold
      * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
@@ -46,7 +43,7 @@ class PointsInstancingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._instancingRenderers = getInstancingRenderers(model.scene);
+        this._pointsInstancingRenderers = getPointsInstancingRenderers(model.scene);
         this.model = model;
         this._aabb = math.collapseAABB3();
 
@@ -59,26 +56,8 @@ class PointsInstancingLayer {
             case "points":
                 primitive = gl.POINTS;
                 break;
-            case "lines":
-                primitive = gl.LINES;
-                break;
-            case "line-loop":
-                primitive = gl.LINE_LOOP;
-                break;
-            case "line-strip":
-                primitive = gl.LINE_STRIP;
-                break;
-            case "triangles":
-                primitive = gl.TRIANGLES;
-                break;
-            case "triangle-strip":
-                primitive = gl.TRIANGLE_STRIP;
-                break;
-            case "triangle-fan":
-                primitive = gl.TRIANGLE_FAN;
-                break;
             default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
+                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points'. Defaulting to 'points'.`);
                 primitive = gl.TRIANGLES;
                 primitiveName = "triangles";
         }
@@ -119,26 +98,11 @@ class PointsInstancingLayer {
             }
         }
 
-        if (cfg.normals) {
-
-            if (preCompressed) {
-
-                const normalized = true; // For oct-encoded UInt8
-                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
-
-            } else {
-
-                const lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
-                const normalized = true; // For oct-encoded UInt8
-                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
-            }
-        }
-
         if (cfg.indices) {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
 
-        if (primitiveName === "triangles" || primitiveName === "triangle-strip"|| primitiveName === "triangle-fan") {
+        if (primitiveName === "triangles" || primitiveName === "triangle-strip" || primitiveName === "triangle-fan") {
             let edgeIndices = cfg.edgeIndices;
             if (!edgeIndices) {
                 edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
@@ -172,11 +136,6 @@ class PointsInstancingLayer {
         this._modelMatrixCol0 = [];
         this._modelMatrixCol1 = [];
         this._modelMatrixCol2 = [];
-
-        // Modeling normal matrix per instance, array for each column
-        this._modelNormalMatrixCol0 = [];
-        this._modelNormalMatrixCol1 = [];
-        this._modelNormalMatrixCol2 = [];
 
         this._portions = [];
 
@@ -246,26 +205,6 @@ class PointsInstancingLayer {
         this._modelMatrixCol2.push(meshMatrix[6]);
         this._modelMatrixCol2.push(meshMatrix[10]);
         this._modelMatrixCol2.push(meshMatrix[14]);
-
-        // Note: order of inverse and transpose doesn't matter
-
-        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-        let normalMatrix = math.inverseMat4(transposedMat);
-
-        this._modelNormalMatrixCol0.push(normalMatrix[0]);
-        this._modelNormalMatrixCol0.push(normalMatrix[4]);
-        this._modelNormalMatrixCol0.push(normalMatrix[8]);
-        this._modelNormalMatrixCol0.push(normalMatrix[12]);
-
-        this._modelNormalMatrixCol1.push(normalMatrix[1]);
-        this._modelNormalMatrixCol1.push(normalMatrix[5]);
-        this._modelNormalMatrixCol1.push(normalMatrix[9]);
-        this._modelNormalMatrixCol1.push(normalMatrix[13]);
-
-        this._modelNormalMatrixCol2.push(normalMatrix[2]);
-        this._modelNormalMatrixCol2.push(normalMatrix[6]);
-        this._modelNormalMatrixCol2.push(normalMatrix[10]);
-        this._modelNormalMatrixCol2.push(normalMatrix[14]);
 
         // Per-vertex pick colors
 
@@ -352,13 +291,6 @@ class PointsInstancingLayer {
             this._modelMatrixCol0 = [];
             this._modelMatrixCol1 = [];
             this._modelMatrixCol2 = [];
-
-            this._state.modelNormalMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol0), this._modelNormalMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelNormalMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol1), this._modelNormalMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelNormalMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol2), this._modelNormalMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
-            this._modelNormalMatrixCol0 = [];
-            this._modelNormalMatrixCol1 = [];
-            this._modelNormalMatrixCol2 = [];
         }
         if (this._pickColors.length > 0) {
             const normalized = false;
@@ -637,9 +569,9 @@ class PointsInstancingLayer {
             f2 = RENDER_PASSES.EDGES_XRAYED;
         } else if (edges) {
             if (meshTransparent) {
-                f2 = RENDER_PASSES.EDGES_TRANSPARENT;
+                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
             } else {
-                f2 = RENDER_PASSES.EDGES_OPAQUE;
+                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
             }
         } else {
             f2 = RENDER_PASSES.NOT_RENDERED;
@@ -689,14 +621,8 @@ class PointsInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (frameCtx.withSAO) {
-            if (this._instancingRenderers.drawRendererWithSAO) {
-                this._instancingRenderers.drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-            }
-        } else {
-            if (this._instancingRenderers.drawRenderer) {
-                this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-            }
+        if (this._pointsInstancingRenderers.colorRenderer) {
+            this._pointsInstancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
@@ -704,105 +630,63 @@ class PointsInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._instancingRenderers.drawRenderer) {
-            this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (this._pointsInstancingRenderers.colorRenderer) {
+            this._pointsInstancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
         }
     }
 
-    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
+    // -- RENDERING SAO POST EFFECT TARGETS ----------------------------------------------------------------------------
 
     drawDepth(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if (this._instancingRenderers.depthRenderer) {
-            this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        }
     }
 
     drawNormals(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if (this._instancingRenderers.normalsRenderer) {
-            this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
-        }
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.silhouetteRenderer) {
-            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
+        if (this._pointsInstancingRenderers.silhouetteRenderer) {
+            this._pointsInstancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.silhouetteRenderer) {
-            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        if (this._pointsInstancingRenderers.silhouetteRenderer) {
+            this._pointsInstancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.silhouetteRenderer) {
-            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
+        if (this._pointsInstancingRenderers.silhouetteRenderer) {
+            this._pointsInstancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
 
-    // ---------------------- EDGES RENDERING -----------------------------------
+    //-- EDGES RENDERING -----------------------------------------------------------------------------------------------
 
-    drawEdgesOpaque(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_OPAQUE);
-        }
+    drawEdgesColorOpaque(frameCtx) {
     }
 
-    drawEdgesTransparent(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_TRANSPARENT);
-        }
+    drawEdgesColorTransparent(frameCtx) {
     }
 
-    drawXRayedEdges(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_XRAYED);
-        }
+    drawEdgesHighlighted(frameCtx) {
     }
 
-    drawHighlightedEdges(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_HIGHLIGHTED);
-        }
+    drawEdgesSelected(frameCtx) {
     }
 
-    drawSelectedEdges(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_SELECTED);
-        }
+    drawEdgesXRayed(frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
@@ -811,21 +695,15 @@ class PointsInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.occlusionRenderer) {
+        if (this._pointsInstancingRenderers.occlusionRenderer) {
             // Only opaque, filled objects can be occluders
-            this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            this._pointsInstancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     drawShadow(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.shadowRenderer) {
-            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-        }
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
@@ -834,8 +712,8 @@ class PointsInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.pickMeshRenderer) {
-            this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._pointsInstancingRenderers.pickMeshRenderer) {
+            this._pointsInstancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
@@ -843,30 +721,16 @@ class PointsInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.pickDepthRenderer) {
-            this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._pointsInstancingRenderers.pickDepthRenderer) {
+            this._pointsInstancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
-
-    drawPickNormals(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._instancingRenderers.pickNormalsRenderer) {
-            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
-    }
-
 
     destroy() {
         const state = this._state;
         if (state.positionsBuf) {
             state.positionsBuf.destroy();
             state.positionsBuf = null;
-        }
-        if (state.normalsBuf) {
-            state.normalsBuf.destroy();
-            state.normalsBuf = null;
         }
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
@@ -896,25 +760,9 @@ class PointsInstancingLayer {
             state.modelMatrixCol2Buf.destroy();
             state.modelMatrixCol2Buf = null;
         }
-        if (state.modelNormalMatrixCol0Buf) {
-            state.modelNormalMatrixCol0Buf.destroy();
-            state.modelNormalMatrixCol0Buf = null;
-        }
-        if (state.modelNormalMatrixCol1Buf) {
-            state.modelNormalMatrixCol1Buf.destroy();
-            state.modelNormalMatrixCol1Buf = null;
-        }
-        if (state.modelNormalMatrixCol2Buf) {
-            state.modelNormalMatrixCol2Buf.destroy();
-            state.modelNormalMatrixCol2Buf = null;
-        }
         if (state.indicesBuf) {
             state.indicesBuf.destroy();
             state.indicessBuf = null;
-        }
-        if (state.edgeIndicesBuf) {
-            state.edgeIndicesBuf.destroy();
-            state.edgeIndicessBuf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();

@@ -213,12 +213,14 @@ class PointsInstancingSilhouetteRenderer {
     }
 
     _buildVertexShader() {
+
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Instancing fill vertex shader");
+        src.push("// Points instancing silhouette vertex shader");
+
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -298,7 +300,7 @@ class PointsInstancingSilhouetteRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Instancing fill fragment shader");
+        src.push("// Points instancing silhouette fragment shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }

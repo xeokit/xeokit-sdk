@@ -206,7 +206,7 @@ class PointsInstancingOcclusionRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Instancing occlusion vertex shader");
+        src.push("// Points instancing occlusion vertex shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
@@ -289,7 +289,7 @@ class PointsInstancingOcclusionRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Instancing occlusion fragment shader");
+        src.push("// Points instancing occlusion vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }

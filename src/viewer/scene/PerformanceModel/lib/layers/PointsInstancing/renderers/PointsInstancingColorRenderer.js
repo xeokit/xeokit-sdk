@@ -180,8 +180,6 @@ class PointsInstancingColorRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
-        const lights = lightsState.lights;
         const project = scene.camera.project;
 
         this._program.bind();
@@ -207,7 +205,7 @@ class PointsInstancingColorRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Instancing geometry drawing vertex shader");
+        src.push("// Points instancing color vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -292,11 +290,9 @@ class PointsInstancingColorRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        let i;
-        let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Instancing geometry drawing fragment shader");
+        src.push("// Points instancing color fragment shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -316,7 +312,7 @@ class PointsInstancingColorRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
-            for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -333,7 +329,7 @@ class PointsInstancingColorRenderer {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
-            for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("if (sectionPlaneActive" + i + ") {");
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");

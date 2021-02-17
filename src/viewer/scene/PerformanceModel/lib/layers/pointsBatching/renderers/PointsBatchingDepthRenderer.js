@@ -25,14 +25,14 @@ class PointsBatchingDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, pointCloudLayer, renderPass) {
+    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
 
-        const model = pointCloudLayer.model;
+        const model = pointsBatchingLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
         const gl = scene.canvas.gl;
-        const state = pointCloudLayer._state;
-        const rtcCenter = pointCloudLayer._state.rtcCenter;
+        const state = pointsBatchingLayer._state;
+        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
 
         if (!this._program) {
             this._allocate();
@@ -54,7 +54,7 @@ class PointsBatchingDepthRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = pointCloudLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -73,7 +73,7 @@ class PointsBatchingDepthRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointCloudLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 

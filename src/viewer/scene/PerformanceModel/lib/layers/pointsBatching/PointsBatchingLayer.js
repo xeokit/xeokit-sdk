@@ -39,7 +39,7 @@ class PointsBatchingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._pointCloudRenderers = getPointsBatchingRenderers(model.scene);
+        this._pointsBatchingRenderers = getPointsBatchingRenderers(model.scene);
         this.model = model;
         this._buffer = new PointsBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
@@ -47,12 +47,10 @@ class PointsBatchingLayer {
         this._state = new RenderState({
             positionsBuf: null,
             offsetsBuf: null,
-            normalsBuf: null,
             colorsBuf: null,
             flagsBuf: null,
             flags2Buf: null,
             indicesBuf: null,
-            edgeIndicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
             rtcCenter: null
         });
@@ -684,8 +682,8 @@ class PointsBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._pointCloudRenderers.drawPointsRenderer) {
-            this._pointCloudRenderers.drawPointsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        if (this._pointsBatchingRenderers.colorRenderer) {
+            this._pointsBatchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
@@ -693,8 +691,8 @@ class PointsBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._pointCloudRenderers.drawPointsRenderer) {
-            this._pointCloudRenderers.drawPointsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (this._pointsBatchingRenderers.colorRenderer) {
+            this._pointsBatchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
         }
     }
 
@@ -708,48 +706,48 @@ class PointsBatchingLayer {
 
     // -- EMPHASIS RENDERING -------------------------------------------------------------------------------------------
 
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.silhouetteRenderer) {
-            this._pointCloudRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
+        if (this._pointsBatchingRenderers.silhouetteRenderer) {
+            this._pointsBatchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.silhouetteRenderer) {
-            this._pointCloudRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        if (this._pointsBatchingRenderers.silhouetteRenderer) {
+            this._pointsBatchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.silhouetteRenderer) {
-            this._pointCloudRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
+        if (this._pointsBatchingRenderers.silhouetteRenderer) {
+            this._pointsBatchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
 
     //-- EDGES RENDERING -----------------------------------------------------------------------------------------------
 
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
     }
 
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
     }
 
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
     }
 
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
     }
 
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
@@ -758,8 +756,8 @@ class PointsBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.pickMeshRenderer) {
-            this._pointCloudRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._pointsBatchingRenderers.pickMeshRenderer) {
+            this._pointsBatchingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
@@ -767,17 +765,8 @@ class PointsBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.pickDepthRenderer) {
-            this._pointCloudRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
-    }
-
-    drawPickNormals(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._pointCloudRenderers.pickNormalsRenderer) {
-            this._pointCloudRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._pointsBatchingRenderers.pickDepthRenderer) {
+            this._pointsBatchingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
@@ -787,8 +776,8 @@ class PointsBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._pointCloudRenderers.occlusionRenderer) {
-            this._pointCloudRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        if (this._pointsBatchingRenderers.occlusionRenderer) {
+            this._pointsBatchingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 

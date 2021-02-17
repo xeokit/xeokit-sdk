@@ -14,9 +14,9 @@ class PointsBatchingRenderers {
     }
 
     _compile() {
-        if (this._drawRenderer && (!this._drawRenderer.getValid())) {
-            this._drawRenderer.destroy();
-            this._drawRenderer = null;
+        if (this._colorRenderer && (!this._colorRenderer.getValid())) {
+            this._colorRenderer.destroy();
+            this._colorRenderer = null;
         }
         if (this._silhouetteRenderer && (!this._silhouetteRenderer.getValid())) {
             this._silhouetteRenderer.destroy();
@@ -36,11 +36,11 @@ class PointsBatchingRenderers {
         }
     }
 
-    get drawRenderer() {
-        if (!this._drawRenderer) {
-            this._drawRenderer = new PointsBatchingColorRenderer(this._scene);
+    get colorRenderer() {
+        if (!this._colorRenderer) {
+            this._colorRenderer = new PointsBatchingColorRenderer(this._scene);
         }
-        return this._drawRenderer;
+        return this._colorRenderer;
     }
 
     get silhouetteRenderer() {
@@ -72,8 +72,8 @@ class PointsBatchingRenderers {
     }
 
     _destroy() {
-        if (this._drawRenderer) {
-            this._drawRenderer.destroy();
+        if (this._colorRenderer) {
+            this._colorRenderer.destroy();
         }
         if (this._silhouetteRenderer) {
             this._silhouetteRenderer.destroy();

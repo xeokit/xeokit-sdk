@@ -26,14 +26,14 @@ class PointsBatchingSilhouetteRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
+    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
 
-        const model = batchingLayer.model;
+        const model = pointsBatchingLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
         const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter
+        const state = pointsBatchingLayer._state;
+        const rtcCenter = pointsBatchingLayer._state.rtcCenter
 
         if (!this._program) {
             this._allocate();
@@ -79,7 +79,7 @@ class PointsBatchingSilhouetteRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -98,7 +98,7 @@ class PointsBatchingSilhouetteRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -194,7 +194,7 @@ class PointsBatchingSilhouetteRenderer {
 
         const src = [];
 
-        src.push("// Point cloud emphasis fill vertex shader");
+        src.push("// Points batching silhouette vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -267,7 +267,7 @@ class PointsBatchingSilhouetteRenderer {
         let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Point cloud emphasis fill fragment shader");
+        src.push("// Points batching silhouette vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }

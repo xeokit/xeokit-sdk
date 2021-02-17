@@ -122,7 +122,7 @@ class PointsInstancingRenderers {
 
 const cachedRenderers = {};
 
-function getInstancingRenderers(scene) {
+function getPointsInstancingRenderers(scene) {
     const sceneId = scene.id;
     let instancingRenderers = cachedRenderers[sceneId];
     if (!instancingRenderers) {
@@ -140,4 +140,4 @@ function getInstancingRenderers(scene) {
     return instancingRenderers;
 }
 
-export {getInstancingRenderers};
+export {getPointsInstancingRenderers};

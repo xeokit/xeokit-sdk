@@ -637,9 +637,9 @@ class TrianglesInstancingLayer {
             f2 = RENDER_PASSES.EDGES_XRAYED;
         } else if (edges) {
             if (meshTransparent) {
-                f2 = RENDER_PASSES.EDGES_TRANSPARENT;
+                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
             } else {
-                f2 = RENDER_PASSES.EDGES_OPAQUE;
+                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
             }
         } else {
             f2 = RENDER_PASSES.NOT_RENDERED;
@@ -731,7 +731,7 @@ class TrianglesInstancingLayer {
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -740,7 +740,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -749,7 +749,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -760,25 +760,25 @@ class TrianglesInstancingLayer {
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_OPAQUE);
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_TRANSPARENT);
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
         }
     }
 
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -787,7 +787,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -796,7 +796,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }

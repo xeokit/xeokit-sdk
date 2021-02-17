@@ -162,7 +162,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
     }
 
     /**
@@ -173,7 +173,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
     }
 
     /**
@@ -184,7 +184,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
@@ -197,7 +197,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
     }
 
     /**
@@ -208,7 +208,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
     }
 
     /**
@@ -219,7 +219,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
     }
 
     /**
@@ -230,7 +230,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
     }
 
     /**
@@ -241,7 +241,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------

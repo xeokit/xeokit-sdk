@@ -685,7 +685,7 @@ class LinesBatchingLayer {
     drawNormals(frameCtx) {
     }
 
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -694,7 +694,7 @@ class LinesBatchingLayer {
         }
     }
 
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -703,7 +703,7 @@ class LinesBatchingLayer {
         }
     }
 
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -712,19 +712,19 @@ class LinesBatchingLayer {
         }
     }
 
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
     }
 
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
     }
 
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
     }
 
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
     }
 
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
     }
 
     drawPickMesh(frameCtx) {

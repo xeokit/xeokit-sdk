@@ -3,7 +3,7 @@
  */
 const RENDER_PASSES = {
 
-    // Skipped
+    // Skipped - suppress rendering
 
     NOT_RENDERED: 0,
 
@@ -12,7 +12,7 @@ const RENDER_PASSES = {
     COLOR_OPAQUE: 1,
     COLOR_TRANSPARENT: 2,
 
-    // Emphasis rendering - mutually exclusive modes
+    // Emphasis silhouette rendering - mutually exclusive modes
 
     SILHOUETTE_HIGHLIGHTED: 3,
     SILHOUETTE_SELECTED: 4,
@@ -20,8 +20,8 @@ const RENDER_PASSES = {
 
     // Edges rendering - mutually exclusive modes
 
-    EDGES_OPAQUE: 6,
-    EDGES_TRANSPARENT: 7,
+    EDGES_COLOR_OPAQUE: 6,
+    EDGES_COLOR_TRANSPARENT: 7,
     EDGES_HIGHLIGHTED: 8,
     EDGES_SELECTED: 9,
     EDGES_XRAYED: 10,

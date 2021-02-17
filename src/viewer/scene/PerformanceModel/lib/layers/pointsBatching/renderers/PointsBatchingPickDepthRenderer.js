@@ -24,14 +24,14 @@ class PointsBatchingPickDepthRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
+    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
 
-        const model = batchingLayer.model;
+        const model = pointsBatchingLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
         const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const state = pointsBatchingLayer._state;
+        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
 
         if (!this._program) {
             this._allocate();
@@ -64,7 +64,7 @@ class PointsBatchingPickDepthRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -87,7 +87,7 @@ class PointsBatchingPickDepthRenderer {
         // TODO: Use drawElements count and offset to draw only one entity
         //=============================================================
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -170,7 +170,7 @@ class PointsBatchingPickDepthRenderer {
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Batched geometry depth vertex shader");
+        src.push("// Points batched pick depth vertex shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
@@ -245,7 +245,7 @@ class PointsBatchingPickDepthRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Batched geometry depth fragment shader");
+        src.push("// Points batched pick depth fragment shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");

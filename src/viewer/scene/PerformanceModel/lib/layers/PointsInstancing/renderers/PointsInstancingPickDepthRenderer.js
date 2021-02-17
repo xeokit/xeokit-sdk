@@ -204,7 +204,7 @@ class PointsInstancingPickDepthRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Instancing geometry depth vertex shader");
+        src.push("// Points instancing pick depth vertex shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
@@ -286,7 +286,7 @@ class PointsInstancingPickDepthRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Batched geometry depth fragment shader");
+        src.push("// Points instancing pick depth fragment shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");

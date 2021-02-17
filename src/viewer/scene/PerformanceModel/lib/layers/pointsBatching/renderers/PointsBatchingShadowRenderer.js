@@ -5,7 +5,7 @@ import {getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 const tempVec3a = math.vec3();
 
 /**
- * Renders BatchingLayer fragment depths to a shadow map.
+ * Renders pointsBatchingLayer fragment depths to a shadow map.
  *
  * @private
  */
@@ -25,10 +25,10 @@ class PointsBatchingShadowRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer( frameCtx, batchingLayer) {
+    drawLayer(frameCtx, pointsBatchingLayer) {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
+        const state = pointsBatchingLayer._state;
         if (!this._program) {
             this._allocate();
         }
@@ -36,7 +36,7 @@ class PointsBatchingShadowRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
         if (scene.logarithmicDepthBufferEnabled) {
             gl.uniform1f(this._uZFar, scene.camera.project.far)
         }
@@ -60,9 +60,9 @@ class PointsBatchingShadowRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            const rtcCenter = batchingLayer._state.rtcCenter;
+            const rtcCenter = pointsBatchingLayer._state.rtcCenter;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];

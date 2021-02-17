@@ -676,9 +676,9 @@ class TrianglesBatchingLayer {
             f2 = RENDER_PASSES.EDGES_XRAYED;
         } else if (edges) {
             if (transparent) {
-                f2 = RENDER_PASSES.EDGES_TRANSPARENT;
+                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
             } else {
-                f2 = RENDER_PASSES.EDGES_OPAQUE;
+                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
             }
         } else {
             f2 = RENDER_PASSES.NOT_RENDERED;
@@ -789,7 +789,7 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -798,7 +798,7 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -807,7 +807,7 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -816,25 +816,25 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
-            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_OPAQUE);
+            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._batchingRenderers.edgesRenderer) {
-            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_TRANSPARENT);
+            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
         }
     }
 
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -843,7 +843,7 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -852,7 +852,7 @@ class TrianglesBatchingLayer {
         }
     }
 
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }

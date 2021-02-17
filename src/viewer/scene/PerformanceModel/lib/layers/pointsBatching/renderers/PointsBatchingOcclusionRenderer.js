@@ -24,17 +24,17 @@ class PointsBatchingOcclusionRenderer {
         return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
+    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
 
-        const model = batchingLayer.model;
+        const model = pointsBatchingLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
+        const state = pointsBatchingLayer._state;
         const camera = scene.camera;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
 
         if (!this._program) {
-            this._allocate(batchingLayer);
+            this._allocate(pointsBatchingLayer);
             if (this.errors) {
                 return;
             }
@@ -53,7 +53,7 @@ class PointsBatchingOcclusionRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -72,7 +72,7 @@ class PointsBatchingOcclusionRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -161,7 +161,7 @@ class PointsBatchingOcclusionRenderer {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Point cloud occlusion vertex shader");
+        src.push("// Points batching occlusion vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -231,7 +231,7 @@ class PointsBatchingOcclusionRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Point cloud occlusion fragment shader");
+        src.push("// Points batching occlusion fragment shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }

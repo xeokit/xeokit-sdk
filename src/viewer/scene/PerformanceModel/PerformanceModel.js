@@ -2307,74 +2307,74 @@ class PerformanceModel extends Component {
     }
 
     /** @private */
-    drawXRayedSilhouette(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedSilhouette(frameCtx);
+            this._layerList[layerIndex].drawSilhouetteXRayed(frameCtx);
         }
     }
 
     /** @private */
-    drawHighlightedSilhouette(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedSilhouette(frameCtx);
+            this._layerList[layerIndex].drawSilhouetteHighlighted(frameCtx);
         }
     }
 
     /** @private */
-    drawSelectedSilhouette(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedSilhouette(frameCtx);
+            this._layerList[layerIndex].drawSilhouetteSelected(frameCtx);
         }
     }
 
     /** @private */
-    drawEdgesOpaque(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesOpaque(frameCtx);
+            this._layerList[layerIndex].drawEdgesColorOpaque(frameCtx);
         }
     }
 
     /** @private */
-    drawEdgesTransparent(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesTransparent(frameCtx);
+            this._layerList[layerIndex].drawEdgesColorTransparent(frameCtx);
         }
     }
 
     /** @private */
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawXRayedEdges(frameCtx);
+            this._layerList[layerIndex].drawEdgesXRayed(frameCtx);
         }
     }
 
     /** @private */
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawHighlightedEdges(frameCtx);
+            this._layerList[layerIndex].drawEdgesHighlighted(frameCtx);
         }
     }
 
     /** @private */
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSelectedEdges(frameCtx);
+            this._layerList[layerIndex].drawEdgesSelected(frameCtx);
         }
     }
 

@@ -21,18 +21,17 @@ class PointsBatchingColorRenderer {
     };
 
     _getHash() {
-        const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash()].join(";");
+        return this._scene._sectionPlanesState.getHash();
     }
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
+    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
 
         const scene = this._scene;
         const camera = scene.camera;
-        const model = batchingLayer.model;
+        const model = pointsBatchingLayer.model;
         const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const state = pointsBatchingLayer._state;
+        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
 
         if (!this._program) {
             this._allocate();
@@ -54,7 +53,7 @@ class PointsBatchingColorRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -73,7 +72,7 @@ class PointsBatchingColorRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -168,12 +167,13 @@ class PointsBatchingColorRenderer {
     }
 
     _buildVertexShader() {
+
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Point cloud drawing vertex shader");
+        src.push("// Points batching color vertex shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
@@ -227,7 +227,6 @@ class PointsBatchingColorRenderer {
         }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-
         src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0), float(color.a) / 255.0);");
 
         if (clipping) {
@@ -251,13 +250,14 @@ class PointsBatchingColorRenderer {
     }
 
     _buildFragmentShader() {
+
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        let i;
-        let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Point cloud drawing fragment shader");
+
+        src.push("// Points batching color fragment shader");
+
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -276,7 +276,7 @@ class PointsBatchingColorRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
-            for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -293,7 +293,7 @@ class PointsBatchingColorRenderer {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
-            for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("if (sectionPlaneActive" + i + ") {");
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
@@ -301,7 +301,7 @@ class PointsBatchingColorRenderer {
             src.push("  if (dist > 0.0) { discard; }");
             src.push("}");
         }
-        src.push("   gl_FragColor            = vColor;");
+        src.push("   gl_FragColor = vColor;");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
