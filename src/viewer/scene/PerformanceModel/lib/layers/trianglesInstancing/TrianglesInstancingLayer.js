@@ -8,6 +8,7 @@ import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
+import {quantizePositions, octEncodeNormals} from "../../compression.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
@@ -694,8 +695,8 @@ class TrianglesInstancingLayer {
                 this._instancingRenderers.drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else {
-            if (this._instancingRenderers.drawRenderer) {
-                this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (this._instancingRenderers.colorRenderer) {
+                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         }
     }
@@ -704,8 +705,8 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._instancingRenderers.drawRenderer) {
-            this._instancingRenderers.drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (this._instancingRenderers.colorRenderer) {
+            this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
         }
     }
 

@@ -1588,9 +1588,9 @@ class Mesh extends Component {
             const xrayMaterial = this._xrayMaterial._state;
             if (xrayMaterial.fill) {
                 if (xrayMaterial.fillAlpha < 1.0) {
-                    renderFlags.xrayedFillTransparent = true;
+                    renderFlags.xrayedSilhouetteTransparent = true;
                 } else {
-                    renderFlags.xrayedFillOpaque = true;
+                    renderFlags.xrayedSilhouetteOpaque = true;
                 }
             }
             if (xrayMaterial.edges) {
@@ -1603,25 +1603,25 @@ class Mesh extends Component {
         } else {
             const normalMaterial = this._material._state;
             if (normalMaterial.alpha < 1.0 || state.colorize[3] < 1.0) {
-                renderFlags.normalFillTransparent = true;
+                renderFlags.colorTransparent = true;
             } else {
-                renderFlags.normalFillOpaque = true;
+                renderFlags.colorOpaque = true;
             }
             if (state.edges) {
                 const edgeMaterial = this._edgeMaterial._state;
                 if (edgeMaterial.alpha < 1.0) {
-                    renderFlags.normalEdgesTransparent = true;
+                    renderFlags.edgesTransparent = true;
                 } else {
-                    renderFlags.normalEdgesOpaque = true;
+                    renderFlags.edgesOpaque = true;
                 }
             }
             if (state.selected) {
                 const selectedMaterial = this._selectedMaterial._state;
                 if (selectedMaterial.fill) {
                     if (selectedMaterial.fillAlpha < 1.0) {
-                        renderFlags.selectedFillTransparent = true;
+                        renderFlags.selectedSilhouetteTransparent = true;
                     } else {
-                        renderFlags.selectedFillOpaque = true;
+                        renderFlags.selectedSilhouetteOpaque = true;
                     }
                 }
                 if (selectedMaterial.edges) {
@@ -1635,9 +1635,9 @@ class Mesh extends Component {
                 const highlightMaterial = this._highlightMaterial._state;
                 if (highlightMaterial.fill) {
                     if (highlightMaterial.fillAlpha < 1.0) {
-                        renderFlags.highlightedFillTransparent = true;
+                        renderFlags.highlightedSilhouetteTransparent = true;
                     } else {
-                        renderFlags.highlightedFillOpaque = true;
+                        renderFlags.highlightedSilhouetteOpaque = true;
                     }
                 }
                 if (highlightMaterial.edges) {
@@ -1747,14 +1747,14 @@ class Mesh extends Component {
     // ---------------------- NORMAL RENDERING -----------------------------------
 
     /** @private  */
-    drawNormalOpaqueFill(frameCtx) {
+    drawColorOpaque(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
             this._drawRenderer.drawMesh(frameCtx, this);
         }
     }
 
     /** @private  */
-    drawNormalTransparentFill(frameCtx) {
+    drawColorTransparent(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
             this._drawRenderer.drawMesh(frameCtx, this);
         }
@@ -1767,21 +1767,21 @@ class Mesh extends Component {
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
     /** @private  */
-    drawXRayedFill(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawHighlightedFill(frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
         }
     }
 
     /** @private  */
-    drawSelectedFill(frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
             this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
         }
@@ -1790,35 +1790,35 @@ class Mesh extends Component {
     // ---------------------- EDGES RENDERING -----------------------------------
 
     /** @private  */
-    drawNormalOpaqueEdges(frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
-    drawNormalTransparentEdges(frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
-    drawXRayedEdges(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawHighlightedEdges(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
         }
     }
 
     /** @private  */
-    drawSelectedEdges(frameCtx) {
+    drawEdgesSelected(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
         }

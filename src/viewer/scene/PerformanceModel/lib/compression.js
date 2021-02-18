@@ -1,3 +1,5 @@
+import {math} from "../../math/math.js";
+
 var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
     const translate = math.mat4();
     const scale = math.mat4();
@@ -73,6 +75,43 @@ function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, co
     return lenCompressedNormals;
 }
 
+
+function octEncodeNormals(normals, lenNormals, compressedNormals, lenCompressedNormals) { // http://jcgt.org/published/0003/02/01/
+    let oct, dec, best, currentCos, bestCos;
+    for (let i = 0; i < lenNormals; i += 3) {
+        // Test various combinations of ceil and floor to minimize rounding errors
+        best = oct = octEncodeNormal(normals, i, "floor", "floor");
+        dec = octDecodeVec2(oct);
+        currentCos = bestCos = dot(normals, i, dec);
+        oct = octEncodeNormal(normals, i, "ceil", "floor");
+        dec = octDecodeVec2(oct);
+        currentCos = dot(normals, i, dec);
+        if (currentCos > bestCos) {
+            best = oct;
+            bestCos = currentCos;
+        }
+        oct = octEncodeNormal(normals, i, "floor", "ceil");
+        dec = octDecodeVec2(oct);
+        currentCos = dot(normals, i, dec);
+        if (currentCos > bestCos) {
+            best = oct;
+            bestCos = currentCos;
+        }
+        oct = octEncodeNormal(normals, i, "ceil", "ceil");
+        dec = octDecodeVec2(oct);
+        currentCos = dot(normals, i, dec);
+        if (currentCos > bestCos) {
+            best = oct;
+            bestCos = currentCos;
+        }
+        compressedNormals[lenCompressedNormals + i + 0] = best[0];
+        compressedNormals[lenCompressedNormals + i + 1] = best[1];
+        compressedNormals[lenCompressedNormals + i + 2] = 0.0; // Unused
+    }
+    lenCompressedNormals += lenNormals;
+    return lenCompressedNormals;
+}
+
 function octEncodeVec3(p, xfunc, yfunc) { // Oct-encode single normal vector in 2 bytes
     let x = p[0] / (Math.abs(p[0]) + Math.abs(p[1]) + Math.abs(p[2]));
     let y = p[1] / (Math.abs(p[0]) + Math.abs(p[1]) + Math.abs(p[2]));
@@ -81,6 +120,24 @@ function octEncodeVec3(p, xfunc, yfunc) { // Oct-encode single normal vector in 
         let tempy = y;
         tempx = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
         tempy = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
+        x = tempx;
+        y = tempy;
+    }
+    return new Int8Array([
+        Math[xfunc](x * 127.5 + (x < 0 ? -1 : 0)),
+        Math[yfunc](y * 127.5 + (y < 0 ? -1 : 0))
+    ]);
+}
+
+/**
+ * @private
+ */
+function octEncodeNormal(array, i, xfunc, yfunc) { // Oct-encode single normal vector in 2 bytes
+    let x = array[i] / (Math.abs(array[i]) + Math.abs(array[i + 1]) + Math.abs(array[i + 2]));
+    let y = array[i + 1] / (Math.abs(array[i]) + Math.abs(array[i + 1]) + Math.abs(array[i + 2]));
+    if (array[i + 2] < 0) {
+        let tempx = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
+        let tempy = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
         x = tempx;
         y = tempy;
     }
@@ -112,4 +169,4 @@ function dot(p, vec3) { // Dot product of a normal in an array against a candida
     return p[0] * vec3[0] + p[1] * vec3[1] + p[2] * vec3[2];
 }
 
-export {quantizePositions, transformAndOctEncodeNormals, octEncodeVec3, octDecodeVec2};
+export {quantizePositions, octEncodeNormals, transformAndOctEncodeNormals, octEncodeVec3, octDecodeVec2};

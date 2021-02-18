@@ -27,6 +27,5 @@ npm i @xeokit/xeokit-sdk
  * [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
  * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
  * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
- * [Contact](http://xeolabs.com/contact/)
 
 

@@ -8,6 +8,7 @@ import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getBatchingRenderers} from "./TrianglesBatchingRenderers.js";
 import {TrianglesBatchingBuffer} from "./TrianglesBatchingBuffer.js";
+import {quantizePositions, transformAndOctEncodeNormals} from "../../compression.js";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
