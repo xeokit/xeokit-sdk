@@ -87,7 +87,7 @@ class TrianglesBatchingNormalsRenderer {
         }
         state.indicesBuf.bind();
 
-        gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
     }
 
     _allocate() {

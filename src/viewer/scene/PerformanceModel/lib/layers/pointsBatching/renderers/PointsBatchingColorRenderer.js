@@ -94,9 +94,7 @@ class PointsBatchingColorRenderer {
 
         gl.uniform1f(this._uPointSize, 10);
 
-        state.indicesBuf.bind();
-
-        gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
     _allocate() {
@@ -227,7 +225,7 @@ class PointsBatchingColorRenderer {
         }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0), float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");

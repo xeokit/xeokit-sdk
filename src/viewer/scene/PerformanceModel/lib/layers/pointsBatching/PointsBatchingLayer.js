@@ -1,4 +1,3 @@
-import {WEBGL_INFO} from "../../../../webglInfo.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 
@@ -8,9 +7,10 @@ import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getPointsBatchingRenderers} from "./PointsBatchingRenderers.js";
 import {PointsBatchingBuffer} from "./PointsBatchingBuffer.js";
+import {quantizePositions} from "../../compression.js";
 
-const tempMat4 = math.mat4();
-const tempMat4b = math.mat4();
+const tempVec3a = math.vec4();
+const tempVec3b = math.vec4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
@@ -29,9 +29,14 @@ class PointsBatchingLayer {
      * @param cfg.maxGeometryBatchSize
      * @param cfg.rtcCenter
      * @param cfg.scratchMemory
-     * @param cfg.primitive
      */
     constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "PointsBatchingLayer";
 
         /**
          * Index of this PointCloudLayer in {@link PerformanceModel#_layerList}.
@@ -50,7 +55,6 @@ class PointsBatchingLayer {
             colorsBuf: null,
             flagsBuf: null,
             flags2Buf: null,
-            indicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
             rtcCenter: null
         });
@@ -88,14 +92,13 @@ class PointsBatchingLayer {
      * Tests if there is room for another portion in this PointCloudLayer.
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
-     * @param lenIndices Number of indices we'd like to create in this portion.
      * @returns {boolean} True if OK to create another portion.
      */
-    canCreatePortion(lenPositions, lenIndices) {
+    canCreatePortion(lenPositions) {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3) && (this._buffer.indices.length + lenIndices) < (this._buffer.maxIndices));
+        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3));
     }
 
     /**
@@ -104,10 +107,7 @@ class PointsBatchingLayer {
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param cfg.positions Flat float Local-space positions array.
-     * @param [cfg.normals] Flat float normals array.
-     * @param [cfg.colors] Flat float colors array. Only used when this PointCloudLayer's primitive is "points", overrides ````color````.
-     * @param cfg.indices  Flat int indices array.
-     * @param [cfg.edgeIndices] Flat int edges indices array.
+     * @param [cfg.colors] Flat float colors array.
      * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
      * @param cfg.opacity Opacity [0..255]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
@@ -123,8 +123,6 @@ class PointsBatchingLayer {
         }
 
         const positions = cfg.positions;
-        const normals = cfg.normals;
-        const indices = cfg.indices;
         const color = cfg.color;
         const colors = cfg.colors;
         const opacity = cfg.opacity;
@@ -147,8 +145,8 @@ class PointsBatchingLayer {
 
             const bounds = geometryCompressionUtils.getPositionsBounds(positions);
 
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, []);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, []);
+            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, tempVec3a);
+            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, tempVec3b);
 
             worldAABB[0] = min[0];
             worldAABB[1] = min[1];
@@ -227,29 +225,6 @@ class PointsBatchingLayer {
 
         math.expandAABB3(this.aabb, worldAABB);
 
-        if (normals) {
-
-            if (this._preCompressed) {
-
-                for (let i = 0, len = normals.length; i < len; i++) {
-                    buffer.normals.push(normals[i]);
-                }
-
-            } else {
-
-                const worldNormalMatrix = tempMat4;
-
-                if (meshMatrix) {
-                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
-
-                } else {
-                    math.identityMat4(worldNormalMatrix, worldNormalMatrix);
-                }
-
-                transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
-            }
-        }
-
         if (colors) {
 
             for (let i = 0, len = colors.length; i < len; i += 3) {
@@ -271,12 +246,6 @@ class PointsBatchingLayer {
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
-            }
-        }
-
-        if (indices) {
-            for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(indices[i] + vertsIndex);
             }
         }
 
@@ -338,13 +307,6 @@ class PointsBatchingLayer {
             }
         }
 
-        if (buffer.normals.length > 0) {
-            const normals = new Int8Array(buffer.normals);
-            let normalized = true; // For oct encoded UInts
-            //let normalized = false; // For scaled
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
-        }
-
         if (buffer.colors.length > 0) {
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
@@ -372,13 +334,6 @@ class PointsBatchingLayer {
                 const offsets = new Float32Array(buffer.offsets);
                 state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
             }
-        }
-
-        const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-
-        if (buffer.indices.length > 0) {
-            const indices = bigIndicesSupported ? new Uint32Array(buffer.indices) : new Uint16Array(buffer.indices);
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
         }
 
         this._buffer = null;
@@ -811,10 +766,6 @@ class PointsBatchingLayer {
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();
             state.pickColorsBuf = null;
-        }
-        if (state.indicesBuf) {
-            state.indicesBuf.destroy();
-            state.indicessBuf = null;
         }
         state.destroy();
     }

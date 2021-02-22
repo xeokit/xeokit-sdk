@@ -30,9 +30,14 @@ class TrianglesBatchingLayer {
      * @param cfg.maxGeometryBatchSize
      * @param cfg.rtcCenter
      * @param cfg.scratchMemory
-     * @param cfg.primitive
      */
     constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "TrianglesBatchingLayer";
 
         /**
          * Index of this TrianglesBatchingLayer in {@link PerformanceModel#_layerList}.
@@ -44,29 +49,8 @@ class TrianglesBatchingLayer {
         this.model = model;
         this._buffer = new TrianglesBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
-        let primitiveName = cfg.primitive || "triangles";
-        let primitive;
-        const gl = model.scene.canvas.gl;
-        switch (primitiveName) {
-            case "points":
-                case "triangles":
-                primitive = gl.TRIANGLES;
-                break;
-            case "triangle-strip":
-                primitive = gl.TRIANGLE_STRIP;
-                break;
-            case "triangle-fan":
-                primitive = gl.TRIANGLE_FAN;
-                break;
-            default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
-                primitive = gl.TRIANGLES;
-                primitiveName = "triangles";
-        }
 
         this._state = new RenderState({
-            primitiveName: primitiveName,
-            primitive: primitive,
             positionsBuf: null,
             offsetsBuf: null,
             normalsBuf: null,
@@ -130,7 +114,7 @@ class TrianglesBatchingLayer {
      *
      * @param cfg.positions Flat float Local-space positions array.
      * @param [cfg.normals] Flat float normals array.
-     * @param [cfg.colors] Flat float colors array. Only used when this TrianglesBatchingLayer's primitive is "points", overrides ````color````.
+     * @param [cfg.colors] Flat float colors array.
      * @param cfg.indices  Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]

@@ -3,7 +3,6 @@ import {math} from "../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
-const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
 /**
@@ -85,7 +84,6 @@ class LinesInstancingColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aNormal.bindArrayBuffer(state.normalsBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
@@ -105,14 +103,11 @@ class LinesInstancingColorRenderer {
 
         state.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol0.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
@@ -129,7 +124,6 @@ class LinesInstancingColorRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
 
         this._program = new Program(gl, this._buildShader());
 

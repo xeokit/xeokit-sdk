@@ -115,7 +115,7 @@ class TrianglesInstancingPickMeshRenderer {
             }
         }
 
-        instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
         // Cleanup
 

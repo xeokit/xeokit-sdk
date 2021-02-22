@@ -53,7 +53,6 @@ class PointsBatchingShadowRenderer {
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
-        state.indicesBuf.bind();
 
         // TODO: Section planes need to be set if RTC center has changed since last RTC center recorded on frameCtx
 
@@ -80,7 +79,7 @@ class PointsBatchingShadowRenderer {
             }
         }
 
-        gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
     _allocate() {

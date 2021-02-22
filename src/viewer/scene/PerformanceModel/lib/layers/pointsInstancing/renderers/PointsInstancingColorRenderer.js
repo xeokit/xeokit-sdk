@@ -52,6 +52,9 @@ class PointsInstancingColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
+        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aColor.bindArrayBuffer(state.colorsBuf);
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -84,11 +87,6 @@ class PointsInstancingColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-
-        this._aColor.bindArrayBuffer(state.colorsBuf);
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
-
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
 
@@ -104,14 +102,11 @@ class PointsInstancingColorRenderer {
 
         gl.uniform1f(this._uPointSize, 10);
 
-        state.indicesBuf.bind();
-
-        instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems/3, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
         if (this._aFlags2) { // Won't be in shader when not clipping
@@ -262,7 +257,7 @@ class PointsInstancingColorRenderer {
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0), float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
@@ -337,6 +332,7 @@ class PointsInstancingColorRenderer {
             src.push("if (dist > 0.0) { discard; }");
             src.push("}");
         }
+        src.push("   gl_FragColor = vColor;");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }

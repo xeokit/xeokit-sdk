@@ -1,17 +1,14 @@
-import {WEBGL_INFO} from "../../../../webglInfo.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 
 import {math} from "../../../../math/math.js";
-import {buildEdgeIndices} from '../../../../math/buildEdgeIndices.js';
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getPointsInstancingRenderers} from "./PointsInstancingRenderers.js";
 import {quantizePositions} from "../../compression.js";
 
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
+const MAX_VERTS = 5000000;
 const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
 
@@ -30,12 +27,16 @@ class PointsInstancingLayer {
      * @param model
      * @param cfg
      * @param cfg.layerIndex
-     * @param cfg.primitive
      * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.indices Flat int indices array.
      * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "PointsInstancingLayer";
 
         /**
          * Index of this InstancingLayer in PerformanceModel#_layerList
@@ -47,24 +48,9 @@ class PointsInstancingLayer {
         this.model = model;
         this._aabb = math.collapseAABB3();
 
-        let primitiveName = cfg.primitive || "triangles";
-        let primitive;
-
         const gl = model.scene.canvas.gl;
 
-        switch (primitiveName) {
-            case "points":
-                primitive = gl.POINTS;
-                break;
-            default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points'. Defaulting to 'points'.`);
-                primitive = gl.TRIANGLES;
-                primitiveName = "triangles";
-        }
-
         const stateCfg = {
-            primitiveName: primitiveName,
-            primitive: primitive,
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
@@ -94,20 +80,21 @@ class PointsInstancingLayer {
                 math.AABB3ToOBB3(localAABB, stateCfg.obb);
                 quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
                 let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions.slice(0, lenPositions), lenPositions, 3, gl.STATIC_DRAW, normalized);
             }
         }
 
-        if (cfg.indices) {
-            stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
-        }
-
-        if (primitiveName === "triangles" || primitiveName === "triangle-strip" || primitiveName === "triangle-fan") {
-            let edgeIndices = cfg.edgeIndices;
-            if (!edgeIndices) {
-                edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
+        if (cfg.colors) {
+            const colors = cfg.colors;
+            const compressedColors = new Uint8Array((colors.length / 3) * 4);
+            for (let i = 0, j = 0, len = colors.length; i < len; i += 3, j += 4) {
+                compressedColors[i + 0] = colors[j + 0] * 255;
+                compressedColors[j + 1] = colors[i + 1] * 255;
+                compressedColors[j + 2] = colors[i + 2] * 255;
+                compressedColors[j + 3] = 255;
             }
-            stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+            let notNormalized = false;
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedColors, compressedColors.length, 4, gl.STATIC_DRAW, notNormalized);
         }
 
         this._state = new RenderState(stateCfg);
@@ -124,11 +111,7 @@ class PointsInstancingLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        /** @private */
-        this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
-
         // Vertex arrays
-        this._colors = [];
         this._pickColors = [];
         this._offsets = [];
 
@@ -159,7 +142,6 @@ class PointsInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
-     * @param rgbaInt Quantized RGBA color
      * @param opacity Opacity [0..255]
      * @param meshMatrix Flat float 4x4 matrix
      * @param [worldMatrix] Flat float 4x4 matrix
@@ -167,23 +149,11 @@ class PointsInstancingLayer {
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
+    createPortion(opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
         }
-
-        // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
-
-        const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
-        const g = rgbaInt[1];
-        const b = rgbaInt[2];
-        const a = rgbaInt[3];
-
-        this._colors.push(r);
-        this._colors.push(g);
-        this._colors.push(b);
-        this._colors.push(opacity);
 
         if (this.model.scene.entityOffsetsEnabled) {
             this._offsets.push(0);
@@ -259,13 +229,7 @@ class PointsInstancingLayer {
             throw "Already finalized";
         }
         const gl = this.model.scene.canvas.gl;
-        const colorsLength = this._colors.length;
-        const flagsLength = colorsLength;
-        if (colorsLength > 0) {
-            let notNormalized = false;
-            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, notNormalized);
-            this._colors = []; // Release memory
-        }
+        const flagsLength = this._pickColors.length;
         if (flagsLength > 0) {
             // Because we only build flags arrays here, 
             // get their length from the colors array
@@ -282,9 +246,7 @@ class PointsInstancingLayer {
             }
         }
         if (this._modelMatrixCol0.length > 0) {
-
             const normalized = false;
-
             this._state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
             this._state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
             this._state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
@@ -759,10 +721,6 @@ class PointsInstancingLayer {
         if (state.modelMatrixCol2Buf) {
             state.modelMatrixCol2Buf.destroy();
             state.modelMatrixCol2Buf = null;
-        }
-        if (state.indicesBuf) {
-            state.indicesBuf.destroy();
-            state.indicessBuf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();

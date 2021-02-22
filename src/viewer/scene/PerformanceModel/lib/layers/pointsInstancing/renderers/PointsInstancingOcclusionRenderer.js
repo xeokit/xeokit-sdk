@@ -105,9 +105,7 @@ class PointsInstancingOcclusionRenderer {
 
         gl.uniform1i(this._uPointSize, 10);
 
-        state.indicesBuf.bind();
-
-        instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
 
         // Cleanup
 

@@ -27,7 +27,6 @@ class PointsBatchingBuffer {
         this.flags = [];
         this.flags2 = [];
         this.offsets = [];
-        this.indices = [];
     }
 }
 

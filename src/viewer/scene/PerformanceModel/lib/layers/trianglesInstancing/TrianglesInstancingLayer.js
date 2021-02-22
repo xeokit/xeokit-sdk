@@ -31,7 +31,6 @@ class TrianglesInstancingLayer {
      * @param model
      * @param cfg
      * @param cfg.layerIndex
-     * @param cfg.primitive
      * @param cfg.positions Flat float Local-space positions array.
      * @param [cfg.normals] Flat float normals array.
      * @param cfg.indices Flat int indices array.
@@ -40,6 +39,12 @@ class TrianglesInstancingLayer {
      * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "TrianglesInstancingLayer";
 
         /**
          * Index of this InstancingLayer in PerformanceModel#_layerList
@@ -51,42 +56,7 @@ class TrianglesInstancingLayer {
         this.model = model;
         this._aabb = math.collapseAABB3();
 
-        let primitiveName = cfg.primitive || "triangles";
-        let primitive;
-
-        const gl = model.scene.canvas.gl;
-
-        switch (primitiveName) {
-            case "points":
-                primitive = gl.POINTS;
-                break;
-            case "lines":
-                primitive = gl.LINES;
-                break;
-            case "line-loop":
-                primitive = gl.LINE_LOOP;
-                break;
-            case "line-strip":
-                primitive = gl.LINE_STRIP;
-                break;
-            case "triangles":
-                primitive = gl.TRIANGLES;
-                break;
-            case "triangle-strip":
-                primitive = gl.TRIANGLE_STRIP;
-                break;
-            case "triangle-fan":
-                primitive = gl.TRIANGLE_FAN;
-                break;
-            default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
-                primitive = gl.TRIANGLES;
-                primitiveName = "triangles";
-        }
-
         const stateCfg = {
-            primitiveName: primitiveName,
-            primitive: primitive,
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
@@ -94,6 +64,7 @@ class TrianglesInstancingLayer {
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
+        const gl = this.model.scene.canvas.gl;
 
         if (cfg.positions) {
 
@@ -139,13 +110,12 @@ class TrianglesInstancingLayer {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
 
-        if (primitiveName === "triangles" || primitiveName === "triangle-strip"|| primitiveName === "triangle-fan") {
-            let edgeIndices = cfg.edgeIndices;
-            if (!edgeIndices) {
-                edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
-            }
-            stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+        let edgeIndices = cfg.edgeIndices;
+        if (!edgeIndices) {
+            edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
         }
+        stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+
 
         this._state = new RenderState(stateCfg);
 
@@ -691,8 +661,8 @@ class TrianglesInstancingLayer {
             return;
         }
         if (frameCtx.withSAO) {
-            if (this._instancingRenderers.drawRendererWithSAO) {
-                this._instancingRenderers.drawRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (this._instancingRenderers.colorRendererWithSAO) {
+                this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else {
             if (this._instancingRenderers.colorRenderer) {

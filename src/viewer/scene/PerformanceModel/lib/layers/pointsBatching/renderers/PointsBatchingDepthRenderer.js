@@ -89,9 +89,7 @@ class PointsBatchingDepthRenderer {
 
         gl.uniform1f(this._uPointSize, 10);
 
-        state.indicesBuf.bind();
-
-        gl.drawElements(gl.POINTS, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
     _allocate() {

@@ -30,12 +30,17 @@ class LinesInstancingLayer {
      * @param model
      * @param cfg
      * @param cfg.layerIndex
-     * @param cfg.primitive
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.indices Flat int indices array.
      * @param cfg.rtcCenter
      */
     constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "LinesInstancingLayer";
 
         /**
          * Index of this InstancingLayer in PerformanceModel#_layerList
@@ -47,33 +52,9 @@ class LinesInstancingLayer {
         this.model = model;
         this._aabb = math.collapseAABB3();
 
-        let primitiveName = cfg.primitive || "triangles";
-        let primitive;
-
         const gl = model.scene.canvas.gl;
 
-        switch (primitiveName) {
-            case "points":
-                primitive = gl.POINTS;
-                break;
-            case "lines":
-                primitive = gl.LINES;
-                break;
-            case "line-loop":
-                primitive = gl.LINE_LOOP;
-                break;
-            case "line-strip":
-                primitive = gl.LINE_STRIP;
-                break;
-            default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'lines', 'line-loop' and 'line-strip'. Defaulting to 'lines'.`);
-                primitive = gl.TRIANGLES;
-                primitiveName = "triangles";
-        }
-
         const stateCfg = {
-            primitiveName: primitiveName,
-            primitive: primitive,
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
@@ -468,36 +449,6 @@ class LinesInstancingLayer {
         }
         this._setFlags(portionId, flags, transparent);
     }
-
-    // setMatrix(portionId, matrix) {
-    //
-    //     if (!this._finalized) {
-    //         throw "Not finalized";
-    //     }
-    //
-    //     var offset = portionId * 4;
-    //
-    //     tempFloat32Vec4[0] = matrix[0];
-    //     tempFloat32Vec4[1] = matrix[4];
-    //     tempFloat32Vec4[2] = matrix[8];
-    //     tempFloat32Vec4[3] = matrix[12];
-    //
-    //     this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset, 4);
-    //
-    //     tempFloat32Vec4[0] = matrix[1];
-    //     tempFloat32Vec4[1] = matrix[5];
-    //     tempFloat32Vec4[2] = matrix[9];
-    //     tempFloat32Vec4[3] = matrix[13];
-    //
-    //     this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset, 4);
-    //
-    //     tempFloat32Vec4[0] = matrix[2];
-    //     tempFloat32Vec4[1] = matrix[6];
-    //     tempFloat32Vec4[2] = matrix[10];
-    //     tempFloat32Vec4[3] = matrix[14];
-    //
-    //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
-    // }
 
     _setFlags(portionId, flags, meshTransparent) {
 

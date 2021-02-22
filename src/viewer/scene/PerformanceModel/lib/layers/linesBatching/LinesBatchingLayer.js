@@ -28,7 +28,6 @@ class LinesBatchingLayer {
      * @param cfg.maxGeometryBatchSize
      * @param cfg.rtcCenter
      * @param cfg.scratchMemory
-     * @param cfg.primitive
      */
     constructor(model, cfg) {
 
@@ -42,28 +41,8 @@ class LinesBatchingLayer {
         this.model = model;
         this._buffer = new LinesBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
-        const gl = model.scene.canvas.gl;
-        let primitiveName = cfg.primitive || "lines";
-        let primitive;
-        switch (primitiveName) {
-            case "lines":
-                primitive = gl.LINES;
-                break;
-            case "line-strip":
-                primitive = gl.LINE_STRIP;
-                break;
-            case "line-loop":
-                primitive = gl.LINE_LOOP;
-                break;
-            default:
-                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'lines', 'line-strip' and 'line-loop'. Defaulting to 'lines'.`);
-                primitive = gl.LINES;
-                primitiveName = "lines";
-        }
 
         this._state = new RenderState({
-            primitiveName: primitiveName,
-            primitive: primitive,
             positionsBuf: null,
             offsetsBuf: null,
             colorsBuf: null,

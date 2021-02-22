@@ -4,14 +4,18 @@ import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
-import {getScratchMemory} from "./lib/layers/trianglesBatching/TrianglesBatchingLayerScratchMemory.js";
+import {getScratchMemory} from "./lib/ScratchMemory.js";
 import {TrianglesBatchingLayer} from './lib/layers/trianglesBatching/TrianglesBatchingLayer.js';
 import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
 import {LinesBatchingLayer} from './lib/layers/linesBatching/LinesBatchingLayer.js';
 import {LinesInstancingLayer} from './lib/layers/linesInstancing/LinesInstancingLayer.js';
-import {PointCloudLayer} from './lib/layers/pointCloud/PointCloudLayer.js';
+
+import {PointsBatchingLayer} from './lib/layers/pointsBatching/PointsBatchingLayer.js';
+import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstancingLayer.js';
+
+
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
-import {utils} from "../../../viewer/scene/utils.js";
+import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
@@ -138,9 +142,8 @@ const defaultQuaternion = math.identityQuaternion();
  *
  *     id: "myBoxGeometry",
  *
- *     // The primitive type - allowed values are "points", "lines",
- *     // "line-loop", "line-strip", "triangles", "triangle-strip"
- *     // and "triangle-fan".  See the OpenGL/WebGL specification docs
+ *     // The primitive type - allowed values are "points", "lines" and "triangles".
+ *     // See the OpenGL/WebGL specification docs
  *     // for how the coordinate arrays are supposed to be laid out.
  *     primitive: "triangles",
  *
@@ -850,12 +853,12 @@ class PerformanceModel extends Component {
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
 
-        this._lastPrimitive = null;
         this._lastRTCCenter = null;
         this._lastDecodeMatrix = null;
 
         this._instancingLayers = {};
-        this._currentBatchingLayer = null;
+        this._currentBatchingLayers = {};
+
         this._scratchMemory = getScratchMemory(this);
 
         this._meshes = {};
@@ -926,6 +929,12 @@ class PerformanceModel extends Component {
 
         /** @private */
         this._numTriangles = 0;
+
+        /** @private */
+        this._numLines = 0;
+
+        /** @private */
+        this._numPoints = 0;
 
         this._edgeThreshold = cfg.edgeThreshold || 10;
 
@@ -1131,11 +1140,11 @@ class PerformanceModel extends Component {
      *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
-     * @param {String} [cfg.primitive="triangles"] The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines' and 'triangles'.
      * @param {Number[]} cfg.positions Flat array of positions.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors.
-     * @param {Number[]} cfg.indices Array of triangle indices.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Required for 'triangles' primitives.
+     * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
      */
@@ -1154,31 +1163,34 @@ class PerformanceModel extends Component {
             return;
         }
         let instancingLayer;
+        const primitive = cfg.primitive;
+        if (primitive === undefined || primitive === null) {
+            this.error("Config missing: primitive");
+            return;
+        }
         switch (primitive) {
             case "triangles":
-            case "triangle-strip":
-            case "triangle-fan":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
-                    primitive: primitive,
                     layerIndex: 0
                 }, cfg));
+                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
                 break;
             case "lines":
-            case "line-strip":
-            case "line-loop":
                 instancingLayer = new LinesInstancingLayer(this, utils.apply({
-                    primitive: primitive,
                     layerIndex: 0
                 }, cfg));
+                this._numLines += (cfg.indices ? Math.round(cfg.indices.length / 2) : 0);
                 break;
             case "points":
-                this.error("createGeometry() cannot be used with points - use createMesh() instead");
-                return;
+                instancingLayer = new PointsInstancingLayer(this, utils.apply({
+                    layerIndex: 0
+                }, cfg));
+                this._numPoints += (cfg.positions ? Math.round(cfg.positions.length / 3) : 0);
+                break;
         }
         this._instancingLayers[geometryId] = instancingLayer;
         this._layerList.push(instancingLayer);
         this.numGeometries++;
-        this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
     }
 
     /**
@@ -1212,7 +1224,7 @@ class PerformanceModel extends Component {
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
-     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
      * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.colors] Flat array of vertex colors. Ignored when ````geometryId```` is given, overriden by ````color````.
      * @param {Number[]} [cfg.normals] Flat array of vertex normals. Ignored when ````geometryId```` is given.
@@ -1307,14 +1319,11 @@ class PerformanceModel extends Component {
         } else { // Batching
 
             let primitive = cfg.primitive || "triangles";
-            if (primitive !== "points" && primitive !== "lines" && primitive !== "line-loop" &&
-                primitive !== "line-strip" && primitive !== "triangles" && primitive !== "triangle-strip" && primitive !== "triangle-fan") {
-                this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
+
+            if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles") {
+                this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines' and 'triangles'. Defaulting to 'triangles'.`);
                 primitive = "triangles";
             }
-
-            let indices = cfg.indices;
-            let edgeIndices = cfg.edgeIndices;
 
             let positions = cfg.positions;
 
@@ -1323,30 +1332,23 @@ class PerformanceModel extends Component {
                 return null;
             }
 
-            if (!edgeIndices && !indices) {
-                this.error("Config missing: must have one or both of indices and edgeIndices  (no meshIds provided, so expecting geometry arrays instead)");
+            let indices = cfg.indices;
+            let edgeIndices = cfg.edgeIndices;
+
+            if (!cfg.indices && primitive === "triangles") {
+                this.error("Config missing for triangles primitive: indices (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
-            let needNewBatchingLayer = false;
-
-            if (!this._lastPrimitive) {
-                needNewBatchingLayer = true;
-                this._lastPrimitive = primitive;
-            } else {
-                if (primitive !== this._lastPrimitive) {
-                    needNewBatchingLayer = true;
-                    this._lastPrimitive = primitive;
-                }
-            }
+            let needNewBatchingLayers = false;
 
             if (cfg.rtcCenter) {
                 if (!this._lastRTCCenter) {
-                    needNewBatchingLayer = true;
+                    needNewBatchingLayers = true;
                     this._lastRTCCenter = math.vec3(cfg.rtcCenter);
                 } else {
                     if (!math.compareVec3(this._lastRTCCenter, cfg.rtcCenter)) {
-                        needNewBatchingLayer = true;
+                        needNewBatchingLayers = true;
                         this._lastRTCCenter.set(cfg.rtcCenter)
                     }
                 }
@@ -1354,54 +1356,30 @@ class PerformanceModel extends Component {
 
             if (cfg.positionsDecodeMatrix) {
                 if (!this._lastDecodeMatrix) {
-                    needNewBatchingLayer = true;
+                    needNewBatchingLayers = true;
                     this._lastDecodeMatrix = math.mat4(cfg.positionsDecodeMatrix);
 
                 } else {
                     if (!math.compareMat4(this._lastDecodeMatrix, cfg.positionsDecodeMatrix)) {
-                        needNewBatchingLayer = true;
+                        needNewBatchingLayers = true;
                         this._lastDecodeMatrix.set(cfg.positionsDecodeMatrix)
                     }
                 }
             }
 
-            if (needNewBatchingLayer) {
-                if (this._curentTrianglesBatchingLayer) {
-                    this._curentTrianglesBatchingLayer.finalize();
-                    this._curentTrianglesBatchingLayer = null;
+            if (needNewBatchingLayers) {
+                for (let prim in this._currentBatchingLayers) {
+                    if (this._currentBatchingLayers.hasOwnProperty(prim)) {
+                        this._currentBatchingLayers[prim].finalize();
+                    }
                 }
+                this._currentBatchingLayers = {};
             }
 
-            if (this._curentTrianglesBatchingLayer) {
-                if (!this._curentTrianglesBatchingLayer.canCreatePortion(positions.length, indices.length)) {
-                    this._curentTrianglesBatchingLayer.finalize();
-                    this._curentTrianglesBatchingLayer = null;
-                }
-            }
-
-            if (!this._curentTrianglesBatchingLayer) {
-                this._curentTrianglesBatchingLayer = new TrianglesBatchingLayer(this, {
-                    layerIndex: 0, // This is set in #finalize()
-                    primitive: primitive,
-                    scratchMemory: this._scratchMemory,
-                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                    rtcCenter: cfg.rtcCenter, // Can be undefined
-                    maxGeometryBatchSize: this._maxGeometryBatchSize
-                });
-                this._layerList.push(this._curentTrianglesBatchingLayer);
-            }
-
-            layer = this._curentTrianglesBatchingLayer;
-
-            if (!edgeIndices && indices) {
-                edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
-            }
-
+            const worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
             let meshMatrix;
-            let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
 
             if (!cfg.positionsDecodeMatrix) {
-
                 if (cfg.matrix) {
                     meshMatrix = cfg.matrix;
                 } else {
@@ -1413,27 +1391,135 @@ class PerformanceModel extends Component {
                 }
             }
 
-            portionId = this._curentTrianglesBatchingLayer.createPortion({
-                positions: positions,
-                normals: cfg.normals,
-                indices: indices,
-                edgeIndices: edgeIndices,
-                color: color,
-                colors: cfg.colors,
-                opacity: opacity,
-                meshMatrix: meshMatrix,
-                worldMatrix: worldMatrix,
-                worldAABB: aabb,
-                pickColor: pickColor
-            });
+            layer = this._currentBatchingLayers[primitive];
+
+            switch (primitive) {
+
+                case "triangles":
+
+                    if (layer) {
+                        if (!layer.canCreatePortion(positions.length, indices.length)) {
+                            layer.finalize();
+                            delete this._currentBatchingLayers[primitive];
+                            layer = null;
+                        }
+                    }
+
+                    if (!layer) {
+                        layer = new TrianglesBatchingLayer(this, {
+                            layerIndex: 0, // This is set in #finalize()
+                            scratchMemory: this._scratchMemory,
+                            positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            maxGeometryBatchSize: this._maxGeometryBatchSize
+                        });
+                        this._layerList.push(layer);
+                        this._currentBatchingLayers[primitive] = layer;
+                    }
+
+                    if (!edgeIndices) {
+                        edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
+                    }
+
+                    portionId = layer.createPortion({
+                        positions: positions,
+                        normals: cfg.normals,
+                        indices: indices,
+                        edgeIndices: edgeIndices,
+                        color: color,
+                        colors: cfg.colors,
+                        opacity: opacity,
+                        meshMatrix: meshMatrix,
+                        worldMatrix: worldMatrix,
+                        worldAABB: aabb,
+                        pickColor: pickColor
+                    });
+
+                    const numTriangles = Math.round(indices.length / 3);
+                    this._numTriangles += numTriangles;
+                    mesh.numTriangles = numTriangles;
+
+                    break;
+
+                case "lines":
+
+                    if (layer) {
+                        if (!layer.canCreatePortion(positions.length, indices.length)) {
+                            layer.finalize();
+                            delete this._currentBatchingLayers[primitive];
+                            layer = null;
+                        }
+                    }
+
+                    if (!layer) {
+                        layer = new LinesBatchingLayer(this, {
+                            layerIndex: 0, // This is set in #finalize()
+                            scratchMemory: this._scratchMemory,
+                            positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            maxGeometryBatchSize: this._maxGeometryBatchSize
+                        });
+                        this._layerList.push(layer);
+                        this._currentBatchingLayers[primitive] = layer;
+                    }
+
+                    portionId = layer.createPortion({
+                        positions: positions,
+                        indices: indices,
+                        color: color,
+                        colors: cfg.colors,
+                        opacity: opacity,
+                        meshMatrix: meshMatrix,
+                        worldMatrix: worldMatrix,
+                        worldAABB: aabb,
+                        pickColor: pickColor
+                    });
+
+                    this._numLines += Math.round(indices.length / 2);
+
+                    break;
+
+                case "points":
+
+                    if (layer) {
+                        if (!layer.canCreatePortion(positions.length)) {
+                            layer.finalize();
+                            delete this._currentBatchingLayers[primitive];
+                            layer = null;
+                        }
+                    }
+
+                    if (!layer) {
+                        layer = new PointsBatchingLayer(this, {
+                            layerIndex: 0, // This is set in #finalize()
+                            scratchMemory: this._scratchMemory,
+                            positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            maxGeometryBatchSize: this._maxGeometryBatchSize
+                        });
+                        this._layerList.push(layer);
+                        this._currentBatchingLayers[primitive] = layer;
+                    }
+
+                    portionId = layer.createPortion({
+                        positions: positions,
+                        color: color,
+                        colors: cfg.colors,
+                        opacity: opacity,
+                        meshMatrix: meshMatrix,
+                        worldMatrix: worldMatrix,
+                        worldAABB: aabb,
+                        pickColor: pickColor
+                    });
+
+                    this._numPoints += Math.round(positions.length / 3);
+
+                    break;
+            }
 
             math.expandAABB3(this._aabb, aabb);
 
             this.numGeometries++;
-
-            const numTriangles = Math.round(indices.length / 3);
-            this._numTriangles += numTriangles;
-            mesh.numTriangles = numTriangles;
 
             mesh.rtcCenter = cfg.rtcCenter;
         }
@@ -1559,46 +1645,38 @@ class PerformanceModel extends Component {
             return;
         }
 
-        if (this._curentTrianglesBatchingLayer) {
-            this._curentTrianglesBatchingLayer.finalize();
-            this._curentTrianglesBatchingLayer = null;
-        }
-
-        if (this._curentLinesBatchingLayer) {
-            this._curentLinesBatchingLayer.finalize();
-            this._curentLinesBatchingLayer = null;
-        }
-
-        if (this._curentPointsBatchingLayer) {
-            this._curentPointsBatchingLayer.finalize();
-            this._curentPointsBatchingLayer = null;
-        }
-
         for (const geometryId in this._instancingLayers) {
             if (this._instancingLayers.hasOwnProperty(geometryId)) {
                 this._instancingLayers[geometryId].finalize();
             }
         }
 
+        for (let primitive in this._currentBatchingLayers) {
+            if (this._currentBatchingLayers.hasOwnProperty(primitive)) {
+                this._currentBatchingLayers[primitive].finalize();
+            }
+        }
+        this._currentBatchingLayers = {};
+
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
             const node = this._nodeList[i];
             node._finalize();
         }
 
-        // Support WebGL batching by grouping BatchingLayers and InstancingLayers into two runs within layerList
+        // Sort layers to reduce WebGL shader switching when rendering them
 
-        const sortedLayerList = [];
+        this._layerList.sort((a, b) => {
+            if (a.sortId < b.sortId) {
+                return -1;
+            }
+            if (a.sortId > b.sortId) {
+                return 1;
+            }
+            return 0;
+        });
+
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
-            if (layer instanceof BatchingLayer) {
-                sortedLayerList.push(layer);
-            } else {
-                sortedLayerList.unshift(layer);
-            }
-        }
-        for (let i = 0, len = sortedLayerList.length; i < len; i++) {
-            const layer = sortedLayerList[i];
-            this._layerList[i] = layer;
             layer.layerIndex = i;
         }
 
@@ -1702,12 +1780,30 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * The approximate number of triangles in this PerformanceModel.
+     * The approximate number of triangle primitives in this PerformanceModel.
      *
      * @type {Number}
      */
     get numTriangles() {
         return this._numTriangles;
+    }
+
+    /**
+     * The approximate number of line primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numLines() {
+        return this._numLines;
+    }
+
+    /**
+     * The approximate number of point primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numPoints() {
+        return this._numPoints;
     }
 
     /**
@@ -2501,10 +2597,12 @@ class PerformanceModel extends Component {
      * Destroys this PerformanceModel.
      */
     destroy() {
-        if (this._curentTrianglesBatchingLayer) {
-            this._curentTrianglesBatchingLayer.destroy();
-            this._curentTrianglesBatchingLayer = null;
+        for (let primitive in this._currentBatchingLayers) {
+            if (this._currentBatchingLayers.hasOwnProperty(primitive)) {
+                this._currentBatchingLayers[primitive].destroy();
+            }
         }
+        this._currentBatchingLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].destroy();
