@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel Geometry instancing points</title>
+    <title>PerformanceModel Geometry instancing lines</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -19,7 +19,7 @@
 
 <div id="info">
     <h1>PerformanceModel</h1>
-    <p>Geometry instancing points example</p>
+    <p>Geometry instancing lines example</p>
     <ul>
         <li>
             <a target="_other"
@@ -40,7 +40,7 @@
 </div>
 </body>
 
-<script type="module">
+<script type="module" id="source">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
@@ -48,6 +48,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {buildVectorTextGeometry} from "../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -58,9 +59,9 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
-    viewer.scene.camera.look = [0, -5.75, 0];
-    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+    viewer.camera.eye = [-509.19560097326735, 184.48459001736833, 382.03046897156173];
+    viewer.camera.look = [-74.63999999999982, -106.96000000000012, -200];
+    viewer.camera.up = [0.22278361728549367, 0.9280792704116594, -0.29838955695759983];
 
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
@@ -81,41 +82,29 @@
         //edges: true
     });
 
-    const positions = [];
-    const colors = [];
-
-    for (let i = 0; i < 100000; i++) {
-
-        const x = (Math.random() * 1000) - 500;
-        const y = (Math.random() * 1000) - 500;
-        const z = (Math.random() * 1000) - 500;
-
-        positions.push(x);
-        positions.push(y);
-        positions.push(z);
-
-        colors.push(Math.random());
-        colors.push(Math.random());
-        colors.push(Math.random());
-    }
-
-    performanceModel.createGeometry({
-        id: "pointsGeometry",
-        primitive: "points",
-        positions: positions,
-        colors: colors
+    const geometry = buildVectorTextGeometry({
+        text: document.getElementById("source").innerText,
+        size: 2
     });
 
-    for (let x = -1500; x < 1500; x += 1500) {
-        for (let z = -1500; z < 1500; z += 1500) {
+    performanceModel.createGeometry({
+        id: "linesGeometry",
+        primitive: "lines",
+        positions: geometry.positions,
+        indices: geometry.indices
+    });
 
-            const meshId = ("pointsMesh" + x + "." + z);
-            const entityId = ("pointsEntity" + x + "." + z);
+    for (let x = -400; x < 400; x += 400) {
+        for (let z = -400; z < 400; z += 400) {
+
+            const meshId = ("linesMesh" + x + "." + z);
+            const entityId = ("linesEntity" + x + "." + z);
 
             performanceModel.createMesh({
                 id: meshId,
-                geometryId: "pointsGeometry",
-                position: [x, 0, z]
+                geometryId: "linesGeometry",
+                position: [x, 0, z],
+                color: [Math.random(), 0, Math.random()]
             });
 
             performanceModel.createEntity({
@@ -126,6 +115,8 @@
     }
 
     performanceModel.finalize();
+
+    window.viewer = viewer;
 
 </script>
 </html>

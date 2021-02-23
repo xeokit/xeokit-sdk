@@ -58,13 +58,15 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
-    viewer.scene.camera.look = [0, -5.75, 0];
-    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+    viewer.camera.eye = [-9146.27, 4094.80, 2752.23];
+    viewer.camera.look = [-0.00, -0.042, -0.03];
+    viewer.camera.up = [0.37, 0.91, -0.11];
 
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
+
+    viewer.camera.perspective.far = 15000000;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel containing a point cloud
@@ -81,13 +83,21 @@
 
     const positions = [];
     const colors = [];
-    const indices = [];
 
-    for (let i = 0; i < 100000; i++) {
+    const map = {};
 
-        const x = (Math.random() * 1000) - 500;
-        const y = (Math.random() * 1000) - 500;
-        const z = (Math.random() * 1000) - 500;
+    for (let i = 0; i < 100000;) {
+
+        const x = (Math.random() * 6000) - 3000;
+        const y = (Math.random() * 6000) - 3000;
+        const z = (Math.random() * 6000) - 3000;
+
+        const hash = "" + x + "." + y + "." + z;
+        if (map[hash]) {
+            continue;
+        }
+
+        map[hash] = true;
 
         positions.push(x);
         positions.push(y);
@@ -97,18 +107,14 @@
         colors.push(Math.random());
         colors.push(Math.random());
 
-        indices.push(i);
+        i++;
     }
 
     performanceModel.createMesh({
         id: "pointsMesh",
         primitive: "points",
         positions: positions,
-        colors: colors,
-        indices: indices,
-        position: [0, 0, 0],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 0]
+        colors: colors
     });
 
     performanceModel.createEntity({

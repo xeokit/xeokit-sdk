@@ -242,17 +242,6 @@ class LinesBatchingLayer {
             }
         }
 
-        {
-            const pickColorsBase = buffer.pickColors.length;
-            const lenPickColors = numVerts * 4;
-            for (let i = pickColorsBase, len = pickColorsBase + lenPickColors; i < len; i += 4) {
-                buffer.pickColors.push(pickColor[0]);
-                buffer.pickColors.push(pickColor[1]);
-                buffer.pickColors.push(pickColor[2]);
-                buffer.pickColors.push(pickColor[3]);
-            }
-        }
-
         if (this.model.scene.entityOffsetsEnabled) {
             for (let i = 0; i < numVerts; i++) {
                 buffer.offsets.push(0);
@@ -314,12 +303,6 @@ class LinesBatchingLayer {
             let normalized = true;
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 4, gl.DYNAMIC_DRAW, notNormalized);
             state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags2, flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
-        }
-
-        if (buffer.pickColors.length > 0) {
-            const pickColors = new Uint8Array(buffer.pickColors);
-            let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
 
         if (this.model.scene.entityOffsetsEnabled) {
@@ -742,10 +725,6 @@ class LinesBatchingLayer {
         if (state.flags2Buf) {
             state.flags2Buf.destroy();
             state.flags2Buf = null;
-        }
-        if (state.pickColorsBuf) {
-            state.pickColorsBuf.destroy();
-            state.pickColorsBuf = null;
         }
         if (state.indicesBuf) {
             state.indicesBuf.destroy();

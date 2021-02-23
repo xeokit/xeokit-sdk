@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel Geometry instancing points</title>
+    <title>PerformanceModel Geometry batching lines</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -19,7 +19,7 @@
 
 <div id="info">
     <h1>PerformanceModel</h1>
-    <p>Geometry instancing points example</p>
+    <p>Geometry batching lines example</p>
     <ul>
         <li>
             <a target="_other"
@@ -40,7 +40,7 @@
 </div>
 </body>
 
-<script type="module">
+<script type="module" id="source">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
@@ -48,6 +48,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {buildVectorTextGeometry} from "../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -58,9 +59,9 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
-    viewer.scene.camera.look = [0, -5.75, 0];
-    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+    viewer.camera.eye = [-106.16998852126801, -88.44624803486873, 177.46678954352672];
+    viewer.camera.look = [125.06083575423614, -87.92127166812855, -4.7906070577323305];
+    viewer.camera.up = [-0.0014003563601624482, 0.9999984103472968, 0.00110376851925732];
 
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
@@ -69,7 +70,7 @@
     viewer.camera.perspective.far = 15000000;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a PerformanceModel containing a point cloud
+    // Create a PerformanceModel containing lines
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
@@ -77,55 +78,29 @@
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
-        rotation: [0, 0, 0],
-        //edges: true
+        rotation: [0, 0, 0]
     });
 
-    const positions = [];
-    const colors = [];
-
-    for (let i = 0; i < 100000; i++) {
-
-        const x = (Math.random() * 1000) - 500;
-        const y = (Math.random() * 1000) - 500;
-        const z = (Math.random() * 1000) - 500;
-
-        positions.push(x);
-        positions.push(y);
-        positions.push(z);
-
-        colors.push(Math.random());
-        colors.push(Math.random());
-        colors.push(Math.random());
-    }
-
-    performanceModel.createGeometry({
-        id: "pointsGeometry",
-        primitive: "points",
-        positions: positions,
-        colors: colors
+    const geometry = buildVectorTextGeometry({
+        text: document.getElementById("source").innerText,
+        size: 2
     });
 
-    for (let x = -1500; x < 1500; x += 1500) {
-        for (let z = -1500; z < 1500; z += 1500) {
+    performanceModel.createMesh({
+        id: "linesMesh",
+        primitive: "lines",
+        color: [0, 0, 1],
+        positions: geometry.positions,
+        indices: geometry.indices
+    });
 
-            const meshId = ("pointsMesh" + x + "." + z);
-            const entityId = ("pointsEntity" + x + "." + z);
-
-            performanceModel.createMesh({
-                id: meshId,
-                geometryId: "pointsGeometry",
-                position: [x, 0, z]
-            });
-
-            performanceModel.createEntity({
-                id: entityId,
-                meshIds: [meshId]
-            });
-        }
-    }
+    performanceModel.createEntity({
+        id: "lines",
+        meshIds: ["linesMesh"]
+    });
 
     performanceModel.finalize();
 
+    window.viewer = viewer;
 </script>
 </html>
