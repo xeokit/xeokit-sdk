@@ -11,15 +11,11 @@ import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
 import {quantizePositions, octEncodeNormals} from "../../compression.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
-const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
-const compressedNormals = new Int8Array(MAX_VERTS * 3);
-const tempUint8Vec4 = new Uint8Array(4);
 
+const tempUint8Vec4 = new Uint8Array(4);
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
-
 const tempVec3fa = new Float32Array(3);
 
 /**
@@ -85,7 +81,7 @@ class TrianglesInstancingLayer {
                 let localAABB = math.collapseAABB3();
                 math.expandAABB3Points3(localAABB, cfg.positions);
                 math.AABB3ToOBB3(localAABB, stateCfg.obb);
-                quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
+                const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
                 let normalized = false;
                 stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
             }
@@ -100,9 +96,9 @@ class TrianglesInstancingLayer {
 
             } else {
 
-                const lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
+                const compressedNormals = octEncodeNormals(cfg.normals);
                 const normalized = true; // For oct-encoded UInt8
-                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, compressedNormals.length, 3, gl.STATIC_DRAW, normalized);
             }
         }
 

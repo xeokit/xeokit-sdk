@@ -3,7 +3,6 @@ import {math} from "../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
-const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
 /**
@@ -107,6 +106,7 @@ class PointsInstancingColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
         if (this._aFlags2) { // Won't be in shader when not clipping

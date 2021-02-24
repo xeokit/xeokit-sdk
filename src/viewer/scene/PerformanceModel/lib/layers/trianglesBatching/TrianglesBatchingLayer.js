@@ -348,9 +348,7 @@ class TrianglesBatchingLayer {
                 const positions = new Uint16Array(buffer.positions);
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
             } else {
-                const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = new Uint16Array(positions.length);
-                quantizePositions(positions, buffer.positions.length, this._modelAABB, quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
+                const quantizedPositions = quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix); // BOTTLENECK
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }

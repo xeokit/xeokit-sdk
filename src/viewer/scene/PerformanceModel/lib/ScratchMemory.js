@@ -37,15 +37,27 @@ class ScratchMemory {
 
 const batchingLayerScratchMemory = new ScratchMemory();
 
+let countUsers = 0;
+
 /**
  * @private
  */
-function getScratchMemory(performanceModel) {
-    performanceModel.once("destroyed", () => {
-        batchingLayerScratchMemory._clear();
-    });
+function getScratchMemory() {
+    countUsers++;
     return batchingLayerScratchMemory;
 }
 
+/**
+ * @private
+ */
+function putScratchMemory() {
+    if (countUsers === 0) {
+        return;
+    }
+    countUsers--;
+    if (countUsers === 0) {
+        batchingLayerScratchMemory._clear();
+    }
+}
 
-export {getScratchMemory};
+export {getScratchMemory, putScratchMemory};

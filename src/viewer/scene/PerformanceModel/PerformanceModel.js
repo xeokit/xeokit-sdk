@@ -4,7 +4,7 @@ import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {PerformanceMesh} from './lib/PerformanceMesh.js';
 import {PerformanceNode} from './lib/PerformanceNode.js';
-import {getScratchMemory} from "./lib/ScratchMemory.js";
+import {getScratchMemory, putScratchMemory} from "./lib/ScratchMemory.js";
 import {TrianglesBatchingLayer} from './lib/layers/trianglesBatching/TrianglesBatchingLayer.js';
 import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
 import {LinesBatchingLayer} from './lib/layers/linesBatching/LinesBatchingLayer.js';
@@ -859,7 +859,7 @@ class PerformanceModel extends Component {
         this._instancingLayers = {};
         this._currentBatchingLayers = {};
 
-        this._scratchMemory = getScratchMemory(this);
+        this._scratchMemory = getScratchMemory();
 
         this._meshes = {};
         this._nodes = {};
@@ -2614,6 +2614,7 @@ class PerformanceModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
+        putScratchMemory();
         super.destroy();
     }
 }

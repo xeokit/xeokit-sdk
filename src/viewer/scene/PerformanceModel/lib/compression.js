@@ -1,32 +1,35 @@
 import {math} from "../../math/math.js";
+import {WEBGL_INFO} from "../../webglInfo.js";
 
-var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
-    const translate = math.mat4();
-    const scale = math.mat4();
-    return function (positions, lenPositions, aabb, quantizedPositions, positionsDecodeMatrix) {
-        const xmin = aabb[0];
-        const ymin = aabb[1];
-        const zmin = aabb[2];
-        const xwid = aabb[3] - xmin;
-        const ywid = aabb[4] - ymin;
-        const zwid = aabb[5] - zmin;
-        // const maxInt = 2000000;
-        const maxInt = 65525;
-        const xMultiplier = maxInt / xwid;
-        const yMultiplier = maxInt / ywid;
-        const zMultiplier = maxInt / zwid;
-        for (let i = 0; i < lenPositions; i += 3) {
-            quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
-            quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
-            quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);
-        }
-        math.identityMat4(translate);
-        math.translationMat4v(aabb, translate);
-        math.identityMat4(scale);
-        math.scalingMat4v([xwid / maxInt, ywid / maxInt, zwid / maxInt], scale);
-        math.mulMat4(translate, scale, positionsDecodeMatrix);
-    };
-})();
+const translate = math.mat4();
+const scale = math.mat4();
+
+function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
+    const lenPositions = positions.length;
+    const quantizedPositions = new Uint16Array(lenPositions);
+    const xmin = aabb[0];
+    const ymin = aabb[1];
+    const zmin = aabb[2];
+    const xwid = aabb[3] - xmin;
+    const ywid = aabb[4] - ymin;
+    const zwid = aabb[5] - zmin;
+    // const maxInt = 2000000;
+    const maxInt = 65525;
+    const xMultiplier = maxInt / xwid;
+    const yMultiplier = maxInt / ywid;
+    const zMultiplier = maxInt / zwid;
+    for (let i = 0; i < lenPositions; i += 3) {
+        quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
+        quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
+        quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);
+    }
+    math.identityMat4(translate);
+    math.translationMat4v(aabb, translate);
+    math.identityMat4(scale);
+    math.scalingMat4v([xwid / maxInt, ywid / maxInt, zwid / maxInt], scale);
+    math.mulMat4(translate, scale, positionsDecodeMatrix);
+    return quantizedPositions;
+}
 
 function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
     // http://jcgt.org/published/0003/02/01/
@@ -76,7 +79,9 @@ function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, co
 }
 
 
-function octEncodeNormals(normals, lenNormals, compressedNormals, lenCompressedNormals) { // http://jcgt.org/published/0003/02/01/
+function octEncodeNormals(normals) { // http://jcgt.org/published/0003/02/01/
+    const lenNormals = normals.length;
+    const compressedNormals = new Int8Array(lenNormals)
     let oct, dec, best, currentCos, bestCos;
     for (let i = 0; i < lenNormals; i += 3) {
         // Test various combinations of ceil and floor to minimize rounding errors
@@ -104,12 +109,11 @@ function octEncodeNormals(normals, lenNormals, compressedNormals, lenCompressedN
             best = oct;
             bestCos = currentCos;
         }
-        compressedNormals[lenCompressedNormals + i + 0] = best[0];
-        compressedNormals[lenCompressedNormals + i + 1] = best[1];
-        compressedNormals[lenCompressedNormals + i + 2] = 0.0; // Unused
+        compressedNormals[i + 0] = best[0];
+        compressedNormals[i + 1] = best[1];
+        compressedNormals[i + 2] = 0.0; // Unused
     }
-    lenCompressedNormals += lenNormals;
-    return lenCompressedNormals;
+    return new Int8Array(compressedNormals)
 }
 
 function octEncodeVec3(p, xfunc, yfunc) { // Oct-encode single normal vector in 2 bytes
@@ -169,4 +173,11 @@ function dot(p, vec3) { // Dot product of a normal in an array against a candida
     return p[0] * vec3[0] + p[1] * vec3[1] + p[2] * vec3[2];
 }
 
-export {quantizePositions, octEncodeNormals, transformAndOctEncodeNormals, octEncodeVec3, octDecodeVec2};
+export {
+    quantizePositions,
+    octEncodeNormals,
+    transformAndOctEncodeNormals,
+    octEncodeVec3,
+    octDecodeVec2
+
+};

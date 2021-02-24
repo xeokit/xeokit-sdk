@@ -10,8 +10,6 @@ import {getInstancingRenderers} from "./LinesInstancingRenderers.js";
 import {quantizePositions} from "../../compression.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
-const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
 
 const tempUint8Vec4 = new Uint8Array(4);
 
@@ -82,7 +80,7 @@ class LinesInstancingLayer {
                 let localAABB = math.collapseAABB3();
                 math.expandAABB3Points3(localAABB, cfg.positions);
                 math.AABB3ToOBB3(localAABB, stateCfg.obb);
-                quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
+                const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
                 let normalized = false;
                 stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
             }
