@@ -76,7 +76,7 @@ class PointsInstancingLayer {
                 math.AABB3ToOBB3(localAABB, stateCfg.obb);
                 const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
                 let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions.slice(0, lenPositions), lenPositions, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
             }
         }
 

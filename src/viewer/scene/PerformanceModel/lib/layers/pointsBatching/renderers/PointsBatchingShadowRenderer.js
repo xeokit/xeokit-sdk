@@ -29,6 +29,7 @@ class PointsBatchingShadowRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
+        const pointsMaterial = scene.pointsMaterial._state;
         if (!this._program) {
             this._allocate();
         }

@@ -21,7 +21,7 @@ class PointsBatchingPickMeshRenderer {
     };
 
     _getHash() {
-        return this._scene._sectionPlanesState.getHash();
+        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
     }
 
     drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
@@ -32,6 +32,7 @@ class PointsBatchingPickMeshRenderer {
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
         const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
             this._allocate(pointsBatchingLayer);
@@ -98,7 +99,9 @@ class PointsBatchingPickMeshRenderer {
             this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
         }
 
-        gl.uniform1f(this._uPointSize, 10);
+        gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
+        const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+        gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
         gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
@@ -124,8 +127,6 @@ class PointsBatchingPickMeshRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
-        this._uPointSize = program.getLocation("pointSize");
-
         this._uSectionPlanes = [];
 
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
@@ -141,6 +142,9 @@ class PointsBatchingPickMeshRenderer {
         this._aPickColor = program.getAttribute("pickColor");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+
+        this._uPointSize = program.getLocation("pointSize");
+        this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -162,8 +166,10 @@ class PointsBatchingPickMeshRenderer {
     }
 
     _buildVertexShader() {
+
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+        const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
 
         src.push("// Points batching pick mesh vertex shader");
@@ -190,6 +196,9 @@ class PointsBatchingPickMeshRenderer {
         src.push("uniform mat4 positionsDecodeMatrix;");
 
         src.push("uniform float pointSize;");
+        if (pointsMaterial.perspectivePoints) {
+            src.push("uniform float nearPlaneHeight;");
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -234,8 +243,15 @@ class PointsBatchingPickMeshRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
+        if (pointsMaterial.perspectivePoints) {
+            src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
+            src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
+            src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
+        } else {
+            src.push("gl_PointSize = pointSize;");
+        }
+        src.push("gl_PointSize += 10.0;");
         src.push("  }");
-        src.push("gl_PointSize = pointSize;");
         src.push("}");
         return src;
     }
@@ -271,11 +287,13 @@ class PointsBatchingPickMeshRenderer {
         }
         src.push("varying vec4 vPickColor;");
         src.push("void main(void) {");
-        src.push("  vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        src.push("  float r = dot(cxy, cxy);");
-        src.push("  if (r > 1.0) {");
-        src.push("       discard;");
-        src.push("  }");
+        if (scene.pointsMaterial.roundPoints) {
+            src.push("  vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
+            src.push("  float r = dot(cxy, cxy);");
+            src.push("  if (r > 1.0) {");
+            src.push("       discard;");
+            src.push("  }");
+        }
         if (clipping) {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
             src.push("  if (clippable) {");

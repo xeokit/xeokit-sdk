@@ -51,6 +51,8 @@ class LinesInstancingColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
+        gl.lineWidth(scene.linesMaterial.lineWidth);
+
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -108,6 +110,7 @@ class LinesInstancingColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 

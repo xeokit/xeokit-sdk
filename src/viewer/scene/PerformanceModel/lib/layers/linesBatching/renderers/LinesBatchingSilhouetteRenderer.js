@@ -33,7 +33,7 @@ class LinesBatchingSilhouetteRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter
+        const rtcCenter = batchingLayer._state.rtcCenter;
 
         if (!this._program) {
             this._allocate();
@@ -75,6 +75,8 @@ class LinesBatchingSilhouetteRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+
+        gl.lineWidth(scene.linesMaterial.lineWidth);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
