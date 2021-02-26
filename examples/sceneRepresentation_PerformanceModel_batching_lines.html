@@ -32,8 +32,9 @@
             - high-performance model representation
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User
-                Guide</a>
+            <a target="_other"
+               href="./../docs/function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry()</a>
+            - creates the vector text
         </li>
 
     </ul>
@@ -68,6 +69,12 @@
     cameraControl.followPointer = true;
 
     viewer.camera.perspective.far = 15000000;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure lines appearance
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.linesMaterial.lineWidth = 1;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel containing lines

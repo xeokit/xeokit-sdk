@@ -31,11 +31,6 @@
                href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
             - high-performance model representation
         </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User
-                Guide</a>
-        </li>
-
     </ul>
 </div>
 </body>
@@ -69,16 +64,24 @@
     viewer.camera.perspective.far = 15000000;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a PerformanceModel containing a point cloud
+    // Configure points material
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.pointsMaterial.pointSize = 3;
+    viewer.scene.pointsMaterial.roundPoints = true;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 3;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 10;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel containing a randomly-generated point cloud.
+    // In this example, we'll create our point cloud in a single Entity.
+    // We can also split our point cloud up into multiple Entities, if required.
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
-        position: [0, 0, 0],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 0],
-        //edges: true
+        isModel: true // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
     });
 
     const positions = [];

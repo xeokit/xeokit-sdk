@@ -31,11 +31,6 @@
                href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
             - high-performance model representation
         </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User
-                Guide</a>
-        </li>
-
     </ul>
 </div>
 </body>
@@ -66,19 +61,29 @@
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
 
-    viewer.camera.perspective.far = 15000000;
+    viewer.camera.ortho.far = 1500000;
+    viewer.camera.perspective.far = 1500000;
+
+    // viewer.camera.projection="ortho";
+    viewer.camera.projection = "perspective";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a PerformanceModel containing a point cloud
+    // Configure points material
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.pointsMaterial.pointSize = 3;
+    viewer.scene.pointsMaterial.roundPoints = true;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 3;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 10;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel containing a randomly-generated point cloud
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
-        position: [0, 0, 0],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 0],
-        //edges: true
+        isModel: true // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
     });
 
     const positions = [];
@@ -86,7 +91,7 @@
 
     const map = {};
 
-    for (let i = 0; i < 100000;) {
+    for (let i = 0; i < 1000000;) {
 
         const x = (Math.random() * 6000) - 3000;
         const y = (Math.random() * 6000) - 3000;
@@ -124,5 +129,7 @@
 
     performanceModel.finalize();
 
+
+    window.viewer = viewer;
 </script>
 </html>
