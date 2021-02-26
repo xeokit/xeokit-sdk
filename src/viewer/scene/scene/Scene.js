@@ -16,6 +16,8 @@ import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
+import {PointsMaterial} from "../materials/PointsMaterial.js";
+import {LinesMaterial} from "../materials/LinesMaterial.js";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -1731,6 +1733,32 @@ class Scene extends Component {
             edgeColor: [0.0, 0.0, 0.0],
             edgeAlpha: 1.0,
             edgeWidth: 1,
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link PointsMaterial} for this Scene.
+     *
+     * @type {PointsMaterial}
+     */
+    get pointsMaterial() {
+        return this.components["default.pointsMaterial"] || new PointsMaterial(this, {
+            id: "default.pointsMaterial",
+            preset: "default",
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link LinesMaterial} for this Scene.
+     *
+     * @type {LinesMaterial}
+     */
+    get linesMaterial() {
+        return this.components["default.linesMaterial"] || new LinesMaterial(this, {
+            id: "default.linesMaterial",
+            preset: "default",
             dontClear: true
         });
     }
