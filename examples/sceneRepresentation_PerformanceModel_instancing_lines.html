@@ -9,13 +9,24 @@
         #myCanvas {
             background: lightblue;
         }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
     </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
 
 </head>
 
 <body>
 
 <canvas id="myCanvas"></canvas>
+
+<div id="my-gui-container"></div>
 
 <div id="info">
     <h1>PerformanceModel</h1>
@@ -120,7 +131,31 @@
 
     performanceModel.finalize();
 
-    window.viewer = viewer;
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with lines material properties
+    //------------------------------------------------------------------------------------------------------------------
+
+    const linesMaterial = viewer.scene.linesMaterial;
+
+    const guiParams = new function () {
+        this.lineWidth = linesMaterial.lineWidth;
+    }();
+
+    var update = function () {
+        linesMaterial.lineWidth = guiParams.lineWidth;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const linesMaterialFolder = gui.addFolder('LinesMaterial');
+    linesMaterialFolder.add(guiParams, 'lineWidth', 1, 15);
+    linesMaterialFolder.open();
+
+    const customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
 
 </script>
 </html>

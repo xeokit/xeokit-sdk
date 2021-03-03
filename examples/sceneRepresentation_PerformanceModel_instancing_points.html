@@ -9,6 +9,13 @@
         #myCanvas {
             background: lightblue;
         }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
     </style>
 
 </head>
@@ -17,9 +24,11 @@
 
 <canvas id="myCanvas"></canvas>
 
+<div id="my-gui-container"></div>
+
 <div id="info">
-    <h1>PerformanceModel</h1>
-    <p>Geometry instancing points example</p>
+    <h1>PerformanceModel</h1><br>
+    <p>Geometry instancing points example</p><br>
     <ul>
         <li>
             <a target="_other"
@@ -30,6 +39,11 @@
             <a target="_other"
                href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
             - high-performance model representation
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a>
+            - configures point cloud appearance
         </li>
     </ul>
 </div>
@@ -129,6 +143,53 @@
     }
 
     performanceModel.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with points material properties
+    //------------------------------------------------------------------------------------------------------------------
+
+    const pointsMaterial = viewer.scene.pointsMaterial;
+    const camera = viewer.camera;
+
+    var guiParams = new function () {
+        this.roundPoints = pointsMaterial.roundPoints;
+        this.perspectivePoints = pointsMaterial.perspectivePoints;
+        this.pointSize = pointsMaterial.pointSize;
+        this.minPerspectivePointSize = pointsMaterial.minPerspectivePointSize;
+        this.maxPerspectivePointSize = pointsMaterial.maxPerspectivePointSize;
+        this.perspective = (camera.projection === "perspective");
+    }();
+
+    var update = function () {
+        pointsMaterial.roundPoints = guiParams.roundPoints;
+        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
+        pointsMaterial.pointSize = guiParams.pointSize;
+        pointsMaterial.minPerspectivePointSize = guiParams.minPerspectivePointSize;
+        pointsMaterial.maxPerspectivePointSize = guiParams.maxPerspectivePointSize;
+        camera.projection = guiParams.perspective ? "perspective" : "ortho";
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const pointsMaterialFolder = gui.addFolder('PointsMaterial');
+    pointsMaterialFolder.add(guiParams, 'roundPoints');
+    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
+    pointsMaterialFolder.add(guiParams, 'pointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'minPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'maxPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(guiParams, 'perspective');
+    cameraFolder.open();
+
+    var customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
+    window.viewer = viewer;
 
 </script>
 </html>

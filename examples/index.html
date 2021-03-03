@@ -184,7 +184,7 @@
 
         "Loaders": [
 
-            "#Loading models from xeokit .XKT format",
+            "#Loading models from .XKT format",
             "loading_XKT_Duplex",
             "loading_XKT_Duplex_originalIFCColors",
             "loading_XKT_Duplex_transform",
@@ -195,7 +195,10 @@
             "loading_XKT_GearboxPropellorTurbine",
             "loading_XKT_APHS",
 
-            "#Opions for loading from .XKT format",
+            "#Loading point cloud models from .XKT",
+            "loading_XKT_MAP_pointCloud",
+
+            "#Opions for loading from .XKT",
             "loading_XKT_dataSource",
             "loading_XKT_concurrently",
             "loading_XKT_maxGeometryBatchSize_50M",
@@ -258,7 +261,13 @@
             "materials_Texture",
 
             "#Fresnel effects",
-            "materials_Fresnel"
+            "materials_Fresnel",
+
+            "#Point clouds",
+            "materials_PointsMaterial",
+
+            "#Lines",
+            "materials_LinesMaterial"
         ],
 
         "Measurements": [
