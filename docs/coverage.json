@@ -1,7 +1,7 @@
 {
-  "coverage": "43.28%",
-  "expectCount": 4902,
-  "actualCount": 2122,
+  "coverage": "44.38%",
+  "expectCount": 4639,
+  "actualCount": 2059,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -174,294 +174,6 @@
         682
       ]
     },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
-      "expectCount": 11,
-      "actualCount": 1,
-      "undocumentLines": [
-        5,
-        6,
-        7,
-        8,
-        9,
-        12,
-        29,
-        36,
-        47,
-        64
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapiwebsocket.js": {
-      "expectCount": 22,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        20,
-        43,
-        57,
-        62,
-        72,
-        80,
-        89,
-        95,
-        140,
-        146
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js": {
-      "expectCount": 73,
-      "actualCount": 1,
-      "undocumentLines": [
-        11,
-        15,
-        16,
-        17,
-        31,
-        34,
-        37,
-        43,
-        46,
-        61,
-        64,
-        68,
-        71,
-        73,
-        78,
-        81,
-        84,
-        87,
-        90,
-        93,
-        96,
-        117,
-        133,
-        143,
-        149,
-        166,
-        183,
-        189,
-        193,
-        197,
-        235,
-        244,
-        251,
-        255,
-        259,
-        265,
-        271,
-        289,
-        302,
-        318,
-        331,
-        344,
-        356,
-        367,
-        376,
-        391,
-        401,
-        415,
-        424,
-        440,
-        452,
-        467,
-        481,
-        493,
-        512,
-        520,
-        534,
-        549,
-        588,
-        638,
-        726,
-        735,
-        741,
-        745,
-        749,
-        753,
-        757,
-        785,
-        798,
-        839,
-        887,
-        899
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/geometry.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/ifc2x3tc1.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/ifc4.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/model.js": {
-      "expectCount": 43,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        14,
-        15,
-        16,
-        18,
-        19,
-        20,
-        23,
-        24,
-        25,
-        26,
-        27,
-        29,
-        30,
-        33,
-        37,
-        82,
-        86,
-        92,
-        99,
-        117,
-        121,
-        133,
-        144,
-        148,
-        155,
-        421,
-        454,
-        498,
-        521,
-        529,
-        539,
-        632,
-        641,
-        665,
-        674,
-        764
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerClient/translations_en.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js": {
-      "expectCount": 10,
-      "actualCount": 9,
-      "undocumentLines": [
-        166
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/BIMServerPerformanceGeometryLoader.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/DataInputStreamReader.js": {
-      "expectCount": 19,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        11,
-        14,
-        23,
-        27,
-        36,
-        45,
-        51,
-        57,
-        63,
-        69,
-        75,
-        85,
-        91,
-        101,
-        107
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/EventHandler.js": {
-      "expectCount": 4,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        12,
-        27
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/MetaDataReader.js": {
-      "expectCount": 4,
-      "actualCount": 2,
-      "undocumentLines": [
-        28,
-        64
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/Notifier.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/StringView.js": {
-      "expectCount": 16,
-      "actualCount": 1,
-      "undocumentLines": [
-        330,
-        350,
-        393,
-        397,
-        408,
-        425,
-        431,
-        448,
-        467,
-        488,
-        510,
-        523,
-        574,
-        592,
-        629
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/defaultMaterials.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/loadBIMServerMetaModel.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/preloadQuery.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/request.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
       "expectCount": 58,
       "actualCount": 17,
@@ -555,7 +267,7 @@
         245
       ]
     },
-    "src/plugins/GLTFLoaderPlugin/GLTFPerformanceLoader.js": {
+    "src/plugins/GLTFLoaderPlugin/GLTFPerformanceModelLoader.js": {
       "expectCount": 7,
       "actualCount": 1,
       "undocumentLines": [
@@ -567,7 +279,7 @@
         35
       ]
     },
-    "src/plugins/GLTFLoaderPlugin/GLTFQualityLoader.js": {
+    "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js": {
       "expectCount": 6,
       "actualCount": 1,
       "undocumentLines": [
@@ -576,46 +288,6 @@
         18,
         22,
         46
-      ]
-    },
-    "src/plugins/IFCHelpersPlugin/GLTFPerformanceLoader.js": {
-      "expectCount": 7,
-      "actualCount": 1,
-      "undocumentLines": [
-        54,
-        56,
-        74,
-        11,
-        15,
-        35
-      ]
-    },
-    "src/plugins/IFCHelpersPlugin/GLTFQualityLoader.js": {
-      "expectCount": 6,
-      "actualCount": 1,
-      "undocumentLines": [
-        70,
-        85,
-        18,
-        22,
-        46
-      ]
-    },
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js": {
-      "expectCount": 7,
-      "actualCount": 4,
-      "undocumentLines": [
-        69,
-        117,
-        10
-      ]
-    },
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js": {
-      "expectCount": 12,
-      "actualCount": 10,
-      "undocumentLines": [
-        223,
-        245
       ]
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {
@@ -654,7 +326,12 @@
         677
       ]
     },
-    "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
+    "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js": {
+      "expectCount": 5,
+      "actualCount": 5,
+      "undocumentLines": []
+    },
+    "src/plugins/OBJLoaderPlugin/OBJSceneGraphLoader.js": {
       "expectCount": 10,
       "actualCount": 3,
       "undocumentLines": [
@@ -663,28 +340,38 @@
         493,
         510,
         521,
-        670,
-        740
+        671,
+        737
       ]
     },
-    "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js": {
-      "expectCount": 5,
-      "actualCount": 5,
+    "src/plugins/STLLoaderPlugin/STLDefaultDataSource.js": {
+      "expectCount": 2,
+      "actualCount": 2,
       "undocumentLines": []
-    },
-    "src/plugins/STLLoaderPlugin/STLLoader.js": {
-      "expectCount": 4,
-      "actualCount": 1,
-      "undocumentLines": [
-        37,
-        60,
-        13
-      ]
     },
     "src/plugins/STLLoaderPlugin/STLLoaderPlugin.js": {
-      "expectCount": 4,
-      "actualCount": 4,
-      "undocumentLines": []
+      "expectCount": 7,
+      "actualCount": 6,
+      "undocumentLines": [
+        208
+      ]
+    },
+    "src/plugins/STLLoaderPlugin/STLSceneGraphLoader.js": {
+      "expectCount": 12,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        78,
+        91,
+        108,
+        197,
+        247,
+        283,
+        290,
+        302,
+        15,
+        57
+      ]
     },
     "src/plugins/SectionPlanesPlugin/Control.js": {
       "expectCount": 36,
@@ -922,15 +609,15 @@
       "actualCount": 16,
       "undocumentLines": [
         14,
-        472,
-        497,
-        519,
-        544,
-        572,
-        601,
-        636,
-        798,
-        815
+        410,
+        435,
+        457,
+        482,
+        510,
+        539,
+        574,
+        738,
+        755
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -999,7 +686,14 @@
         71
       ]
     },
-    "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
+    "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        178
+      ]
+    },
+    "src/plugins/XML3DLoaderPlugin/XML3DSceneGraphLoader.js": {
       "expectCount": 28,
       "actualCount": 4,
       "undocumentLines": [
@@ -1027,13 +721,6 @@
         52,
         53,
         56
-      ]
-    },
-    "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js": {
-      "expectCount": 6,
-      "actualCount": 5,
-      "undocumentLines": [
-        178
       ]
     },
     "src/plugins/lib/culling/ObjectCullStates.js": {
@@ -1156,8 +843,8 @@
       "expectCount": 19,
       "actualCount": 17,
       "undocumentLines": [
-        315,
-        225
+        303,
+        213
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
@@ -1422,19 +1109,19 @@
         969,
         974,
         1319,
-        1569,
-        1641,
-        1668,
-        1693,
-        1716,
-        1739,
-        1762,
-        1787,
-        1814,
-        1839,
-        1863,
-        1940,
-        1962
+        1573,
+        1645,
+        1672,
+        1697,
+        1720,
+        1743,
+        1766,
+        1791,
+        1818,
+        1843,
+        1867,
+        1944,
+        1966
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js": {
@@ -3079,22 +2766,6 @@
         132
       ]
     },
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js": {
-      "expectCount": 34,
-      "actualCount": 24,
-      "undocumentLines": [
-        184,
-        222,
-        285,
-        314,
-        343,
-        372,
-        401,
-        428,
-        460,
-        495
-      ]
-    },
     "src/viewer/scene/marker/Marker.js": {
       "expectCount": 32,
       "actualCount": 14,
@@ -3288,10 +2959,11 @@
       ]
     },
     "src/viewer/scene/math/rtcCoords.js": {
-      "expectCount": 5,
-      "actualCount": 4,
+      "expectCount": 7,
+      "actualCount": 5,
       "undocumentLines": [
-        3
+        3,
+        4
       ]
     },
     "src/viewer/scene/mementos/CameraMemento.js": {
