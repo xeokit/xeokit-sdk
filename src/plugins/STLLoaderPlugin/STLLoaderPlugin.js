@@ -13,6 +13,8 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
  * * Supports both binary and ASCII formats.
+ * * Supports double-precision vertex positions.
+ * * Supports custom data source configuration.
  *
  * ## Smoothing STL Normals
  *
@@ -80,7 +82,7 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * model.destroy();
  * ````
  *
- * ## Loading STL an from in-memory STL file
+ * ## Loading from a Pre-Loaded STL File
  *
  * If we already have our STL file in memory (perhaps pre-loaded, or even generated in-client), then we can just pass that
  * file data straight into the {@link STLLoaderPlugin#load} method. In the example below, to show how it's done, we'll pre-load
@@ -123,7 +125,7 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * }
  *````
  *
- * ## Configuring a custom data source
+ * ## Configuring a Custom Data Source
  *
  * In the example below, we'll create the STLLoaderPlugin again, this time configuring it with a
  * custom data source object, through which it can load STL files. For this example, our data source just loads

@@ -353,7 +353,7 @@
       "expectCount": 7,
       "actualCount": 6,
       "undocumentLines": [
-        208
+        210
       ]
     },
     "src/plugins/STLLoaderPlugin/STLSceneGraphLoader.js": {

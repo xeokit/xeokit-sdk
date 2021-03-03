@@ -145,13 +145,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {STLLoaderPlugin} from &apos;<span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber178">@xeokit/xeokit-sdk/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {STLLoaderPlugin} from &apos;<span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber180">@xeokit/xeokit-sdk/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber178">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber180">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -177,6 +177,8 @@
 <li>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the model, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</li>
 <li>When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
 <li>Supports both binary and ASCII formats.</li>
+<li>Supports double-precision vertex positions.</li>
+<li>Supports custom data source configuration.</li>
 </ul>
 <h2 id="smoothing-stl-normals">Smoothing STL Normals</h2><p>STL models are normally flat-shaded, however providing a <code>smoothNormals</code> parameter when loading gives a smooth
 appearance. Triangles in STL are disjoint, where each triangle has its own separate vertex positions, normals and
@@ -232,7 +234,7 @@ model.highlight = [1,0,0];
 // Destroy the model Entity
 model.destroy();</code>
 </code></pre>
-<h2 id="loading-stl-an-from-in-memory-stl-file">Loading STL an from in-memory STL file</h2><p>If we already have our STL file in memory (perhaps pre-loaded, or even generated in-client), then we can just pass that
+<h2 id="loading-from-a-pre-loaded-stl-file">Loading from a Pre-Loaded STL File</h2><p>If we already have our STL file in memory (perhaps pre-loaded, or even generated in-client), then we can just pass that
 file data straight into the <span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-load">STLLoaderPlugin#load</a></span> method. In the example below, to show how it&apos;s done, we&apos;ll pre-load
 our STL file data, then pass it straight into that method.</p>
 <ul>
@@ -271,7 +273,7 @@ function loadSTL(src, ok, error) {
     request.send(null);
 }</code>
 </code></pre>
-<h2 id="configuring-a-custom-data-source">Configuring a custom data source</h2><p>In the example below, we&apos;ll create the STLLoaderPlugin again, this time configuring it with a
+<h2 id="configuring-a-custom-data-source">Configuring a Custom Data Source</h2><p>In the example below, we&apos;ll create the STLLoaderPlugin again, this time configuring it with a
 custom data source object, through which it can load STL files. For this example, our data source just loads
 them via HTTP, for simplicity. Once we&apos;ve created the STLLoaderPlugin, we&apos;ll load our STL file as before.</p>
 <ul>
@@ -724,7 +726,7 @@ var model = plugin.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber188">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber190">source</a></span></span>
     </span>
   </h3>
 
@@ -810,7 +812,7 @@ var model = plugin.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -855,7 +857,7 @@ var model = plugin.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -903,7 +905,7 @@ var model = plugin.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber243">source</a></span></span>
     </span>
   </h3>
 
