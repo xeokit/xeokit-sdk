@@ -1,7 +1,8 @@
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {STLLoader} from "./STLLoader.js";
+import {STLSceneGraphLoader} from "./STLSceneGraphLoader.js";
 import {utils} from "../../viewer/scene/utils.js";
+import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
 
 /**
  * {@link Viewer} plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
@@ -49,9 +50,7 @@ import {utils} from "../../viewer/scene/utils.js";
  * });
  *
  * // Add an STLLoaderPlugin to the Viewer
- * var plugin = new STLLoaderPlugin(viewer, {
- *      id: "STLModels"  // Default value
- * });
+ * var plugin = new STLLoaderPlugin(viewer);
  *
  * // Load the STL model
  * var model = plugin.load({ // Model is an Entity
@@ -81,6 +80,99 @@ import {utils} from "../../viewer/scene/utils.js";
  * model.destroy();
  * ````
  *
+ * ## Loading STL an from in-memory STL file
+ *
+ * If we already have our STL file in memory (perhaps pre-loaded, or even generated in-client), then we can just pass that
+ * file data straight into the {@link STLLoaderPlugin#load} method. In the example below, to show how it's done, we'll pre-load
+ * our STL file data, then pass it straight into that method.
+ *
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataAsParam)]
+ *
+ * ````javascript
+ * loadSTL("./models/stl/binary/spurGear.stl", (stlData) =>{
+ *
+ *      const model = stlLoader.load({
+ *          id: "myModel",
+ *          stl: stlData,
+ *          smoothNormals: true
+ *      });
+ *
+ *      model.on("loaded", () => {
+ *          viewer.cameraFlight.jumpTo(model);
+ *          viewer.scene.on("tick", () => {
+ *              viewer.camera.orbitYaw(0.4);
+ *          })
+ *      });
+ *  })
+ *
+ * function loadSTL(src, ok, error) {
+ *     const request = new XMLHttpRequest();
+ *     request.overrideMimeType("application/json");
+ *     request.open('GET', src, true);
+ *     request.responseType = 'arraybuffer';
+ *     request.onreadystatechange = function () {
+ *         if (request.readyState === 4) {
+ *             if (request.status === 200) {
+ *                 ok(request.response);
+ *             } else if (error) {
+ *                     error(request.statusText);
+ *             }
+ *         }
+ *     };
+ *     request.send(null);
+ * }
+ *````
+ *
+ * ## Configuring a custom data source
+ *
+ * In the example below, we'll create the STLLoaderPlugin again, this time configuring it with a
+ * custom data source object, through which it can load STL files. For this example, our data source just loads
+ * them via HTTP, for simplicity. Once we've created the STLLoaderPlugin, we'll load our STL file as before.
+ *
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataSource)]
+ *
+ * ````javascript
+ * // Our custom STL data access strategy - implementation happens to be the same as STLDefaultDataSource
+ *
+ * class MyDataSource {
+ *      getSTL(src, ok, error) {
+ *          const request = new XMLHttpRequest();
+ *          request.overrideMimeType("application/json");
+ *          request.open('GET', src, true);
+ *          request.responseType = 'arraybuffer';
+ *          request.onreadystatechange = function () {
+ *              if (request.readyState === 4) {
+ *                  if (request.status === 200) {
+ *                      ok(request.response);
+ *                  } else {
+ *                      error(request.statusText);
+ *                  }
+ *              }
+ *          };
+ *          request.send(null);
+ *      }
+ *  }
+ *
+ * const stlLoader = new STLLoaderPlugin(viewer, {
+ *      dataSource: new MyDataSource()
+ *  });
+ *
+ * // Load the STL model as before
+ * var model = plugin.load({
+ *      id: "myModel",
+ *      src: "./models/stl/binary/spurGear.stl",
+ *      scale: [0.1, 0.1, 0.1],
+ *      rotate: [90, 0, 0],
+ *      translate: [100,0,0],
+ *      edges: true,
+ *      smoothNormals: true,                // Default
+ *      smoothNormalsAngleThreshold: 20,    // Default
+ *      splitMeshes: true                   // Default
+ * });
+ *
+ * //...
+ *````
+ *
  * @class STLLoaderPlugin
  */
 class STLLoaderPlugin extends Plugin {
@@ -89,17 +181,42 @@ class STLLoaderPlugin extends Plugin {
      * @constructor
      *
      * @param {Viewer} viewer The Viewer.
-     * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Object} [cfg]  Plugin configuration.
+     * @param {String} [cfg.id="STLLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Object} [cfg.dataSource] A custom data source through which the STLLoaderPlugin can load STL files. Defaults to an instance of {@link STLDefaultDataSource}, which loads over HTTP.
      */
-    constructor(viewer, cfg) {
+    constructor(viewer, cfg = {}) {
 
         super("STLLoader", viewer, cfg);
 
         /**
          * @private
          */
-        this._loader = new STLLoader(this, cfg);
+        this._sceneGraphLoader = new STLSceneGraphLoader();
+
+        this.dataSource = cfg.dataSource;
+    }
+
+    /**
+     * Sets a custom data source through which the STLLoaderPlugin can load STL files.
+     *
+     * Default value is {@link STLDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    set dataSource(value) {
+        this._dataSource = value || new STLDefaultDataSource();
+    }
+
+    /**
+     * Gets the custom data source through which the STLLoaderPlugin can load STL files.
+     *
+     * Default value is {@link STLDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    get dataSource() {
+        return this._dataSource;
     }
 
     /**
@@ -107,8 +224,9 @@ class STLLoaderPlugin extends Plugin {
      *
      * @param {*} params Loading parameters.
      * @param {String} params.id ID to assign to the model's root {@link Entity}, unique among all components in the Viewer's {@link Scene}.
-     * @param {String} params.src Path to an STL file.
-     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the model with edges emphasized.
+     * @param {String} [params.src] Path to an STL file. Overrides the ````stl```` parameter.
+     * @param {String} [params.stl] Contents of an STL file, either binary of ASCII. Overridden by the ````src```` parameter.
+     * @param {Boolean} [params.edges=false] Whether or not to renders the model with edges emphasized.
      * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
      * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -127,18 +245,23 @@ class STLLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        var modelNode = new Node(this.viewer.scene, utils.apply(params, {
+        const modelNode = new Node(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 
         const src = params.src;
+        const stl = params.stl;
 
-        if (!src) {
-            this.error("load() param expected: src");
+        if (!src && !stl) {
+            this.error("load() param expected: either 'src' or 'stl'");
             return modelNode;
         }
 
-        this._loader.load(this, modelNode, src, params);
+        if (src) {
+            this._sceneGraphLoader.load(this, modelNode, src, params);
+        } else {
+            this._sceneGraphLoader.parse(this, modelNode, stl, params);
+        }
 
         return modelNode;
     }
