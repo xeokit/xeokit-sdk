@@ -18,6 +18,7 @@ Faster rendering, more features for XKT and STL loading, lighting and camera con
 * Scene
   * Fix surface picking option to not pick surface normal. [#550](https://github.com/xeokit/xeokit-sdk/pull/550) ([**@xeolabs**](https://github.com/xeolabs))
 * STLLoaderPlugin
+  * Extend STLLoaderPlugin to support double-precision geometry. [#579](https://github.com/xeokit/xeokit-sdk/issues/579) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to load via optional, custom data source object. [#578](https://github.com/xeokit/xeokit-sdk/issues/578) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to handle data directly, not only loaded from file. [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, PerformanceModel
