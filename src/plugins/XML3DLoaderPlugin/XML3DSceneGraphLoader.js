@@ -18,7 +18,7 @@ const supportedSchemas = ["4.2"];
 /**
  * @private
  */
-class XML3DLoader {
+class XML3DSceneGraphLoader {
 
     constructor(plugin, cfg = {}) {
 
@@ -1276,4 +1276,4 @@ getIDFromURI(str) {
     return hashIdx !== -1 ? str.substring(hashIdx + 1) : str;
 }
 
-export {XML3DLoader};
+export {XML3DSceneGraphLoader};

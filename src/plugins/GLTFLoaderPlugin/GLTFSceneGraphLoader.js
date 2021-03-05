@@ -13,7 +13,7 @@ import {core} from "../../viewer/scene/core.js";
 /**
  * @private
  */
-class GLTFQualityLoader {
+class GLTFSceneGraphLoader {
 
     constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
@@ -919,4 +919,4 @@ var parseGLTF = (function () {
     }
 })();
 
-export {GLTFQualityLoader}
+export {GLTFSceneGraphLoader}
