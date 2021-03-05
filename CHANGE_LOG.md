@@ -6,9 +6,9 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
-Faster rendering, more features for XKT and STL loading, lighting and camera control fixes.    
+Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera control fixes.    
 
-* BIMServerPluin
+* BIMServerPlugin
   * Remove BIMServer support. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
 * CameraControl
   * Fix dollying exception for ortho and frustum projections. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
