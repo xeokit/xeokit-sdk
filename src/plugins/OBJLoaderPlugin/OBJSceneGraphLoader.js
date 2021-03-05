@@ -3,11 +3,15 @@ import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js"
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../viewer/scene/materials/Texture.js";
 import {core} from "../../viewer/scene/core.js";
+import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
+import {math} from "../../viewer/scene/math/math.js";
+
+const tempVec3a = math.vec3();
 
 /**
  * @private
  */
-class OBJLoader  {
+class OBJSceneGraphLoader {
 
     /**
      * Loads OBJ and MTL from file(s) into a {@link Node}.
@@ -654,7 +658,7 @@ var parseMTL = (function () {
     }
 
     function createMaterial(modelNode, materialCfg) {
-       new PhongMaterial(modelNode, materialCfg);
+        new PhongMaterial(modelNode, materialCfg);
     }
 
     function parseRGB(value) {
@@ -667,75 +671,77 @@ var parseMTL = (function () {
 // Creates meshes from parsed state
 //--------------------------------------------------------------------------------------------
 
-var createMeshes = (function () {
 
-    return function (modelNode, state) {
+function createMeshes(modelNode, state) {
 
-        for (var j = 0, k = state.objects.length; j < k; j++) {
+    for (var j = 0, k = state.objects.length; j < k; j++) {
 
-            var object = state.objects[j];
-            var geometry = object.geometry;
-            var isLine = (geometry.type === 'Line');
+        var object = state.objects[j];
+        var geometry = object.geometry;
+        var isLine = (geometry.type === 'Line');
 
-            if (geometry.positions.length === 0) {
-                // Skip o/g line declarations that did not follow with any faces
-                continue;
+        if (geometry.positions.length === 0) {
+            // Skip o/g line declarations that did not follow with any faces
+            continue;
+        }
+
+        var geometryCfg = {
+            primitive: "triangles",
+            compressGeometry: false
+        };
+
+        geometryCfg.positions = geometry.positions;
+
+        if (geometry.normals.length > 0) {
+            geometryCfg.normals = geometry.normals;
+        }
+
+        if (geometry.uv.length > 0) {
+            geometryCfg.uv = geometry.uv;
+        }
+
+        var indices = new Array(geometryCfg.positions.length / 3); // Triangle soup
+        for (var idx = 0; idx < indices.length; idx++) {
+            indices[idx] = idx;
+        }
+        geometryCfg.indices = indices;
+
+        const rtcCenter = tempVec3a;
+
+        worldToRTCPositions(geometry.positions, geometry.positions, rtcCenter);
+
+        var readableGeometry = new ReadableGeometry(modelNode, geometryCfg);
+
+        var materialId = object.material.id;
+        var material;
+        if (materialId && materialId !== "") {
+            material = modelNode.scene.components[materialId];
+            if (!material) {
+                modelNode.error("Material not found: " + materialId);
             }
-
-            var geometryCfg = {
-                primitive: "triangles",
-                compressGeometry: false
-            };
-
-            geometryCfg.positions = geometry.positions;
-
-            if (geometry.normals.length > 0) {
-                geometryCfg.normals = geometry.normals;
-            }
-
-            if (geometry.uv.length > 0) {
-                geometryCfg.uv = geometry.uv;
-            }
-
-            var indices = new Array(geometryCfg.positions.length / 3); // Triangle soup
-            for (var idx = 0; idx < indices.length; idx++) {
-                indices[idx] = idx;
-            }
-            geometryCfg.indices = indices;
-
-            //var geometry = new ReadableGeometry(modelNode, geometryCfg);
-            var geometry = new ReadableGeometry(modelNode, geometryCfg);
-
-            var materialId = object.material.id;
-            var material;
-            if (materialId && materialId !== "") {
-                material = modelNode.scene.components[materialId];
-                if (!material) {
-                    modelNode.error("Material not found: " + materialId);
-                }
-            } else {
-                material = new PhongMaterial(modelNode, {
-                    //emissive: [0.6, 0.6, 0.0],
-                    diffuse: [0.6, 0.6, 0.6],
-                    backfaces: true
-                });
-
-            }
-
-            // material.emissive = [Math.random(), Math.random(), Math.random()];
-
-            var mesh = new Mesh(modelNode, {
-                id: modelNode.id + "#" + object.id,
-                isObject: true,
-                geometry: geometry,
-                material: material,
-                pickable: true
+        } else {
+            material = new PhongMaterial(modelNode, {
+                //emissive: [0.6, 0.6, 0.0],
+                diffuse: [0.6, 0.6, 0.6],
+                backfaces: true
             });
 
-            modelNode.addChild(mesh);
         }
-    };
-})();
+
+        // material.emissive = [Math.random(), Math.random(), Math.random()];
+
+        var mesh = new Mesh(modelNode, {
+            id: modelNode.id + "#" + object.id,
+            rtcCenter: (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0) ? rtcCenter : null,
+            isObject: true,
+            geometry: readableGeometry,
+            material: material,
+            pickable: true
+        });
+
+        modelNode.addChild(mesh);
+    }
+}
 
 function loadFile(url, ok, err) {
     var request = new XMLHttpRequest();
@@ -768,4 +774,4 @@ function loadFile(url, ok, err) {
     request.send(null);
 }
 
-export {OBJLoader};
+export {OBJSceneGraphLoader};

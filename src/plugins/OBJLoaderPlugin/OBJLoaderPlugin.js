@@ -1,7 +1,7 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {utils} from "../../viewer/scene/utils.js";
-import {OBJLoader} from "./OBJLoader.js";
+import {OBJSceneGraphLoader} from "./OBJSceneGraphLoader.js";
 
 /**
  * {@link Viewer} plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
@@ -78,7 +78,7 @@ class OBJLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new OBJLoader();
+        this._sceneGraphLoader = new OBJSceneGraphLoader();
     }
 
     /**
@@ -119,13 +119,13 @@ class OBJLoaderPlugin extends Plugin {
             utils.loadJSON(metaModelSrc,
                 (modelMetadata) => {
                     this.viewer.metaScene.createMetaModel(modelId, modelMetadata);
-                    this._loader.load(modelNode, src, params);
+                    this._sceneGraphLoader.load(modelNode, src, params);
                 },
                 (errMsg) => {
                     this.error(`load(): Failed to load model modelMetadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 });
         } else {
-            this._loader.load(modelNode, src, params);
+            this._sceneGraphLoader.load(modelNode, src, params);
         }
 
         modelNode.once("destroyed", () => {

@@ -79,9 +79,9 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
 
     const center = math.getPositionsCenter(worldPositions, tempVec3a);
 
-    const rtcCenterX = Math.floor(center[0] / cellSize) * cellSize;
-    const rtcCenterY = Math.floor(center[1] / cellSize) * cellSize;
-    const rtcCenterZ = Math.floor(center[2] / cellSize) * cellSize;
+    const rtcCenterX = Math.round(center[0] / cellSize) * cellSize;
+    const rtcCenterY = Math.round(center[1] / cellSize) * cellSize;
+    const rtcCenterZ = Math.round(center[2] / cellSize) * cellSize;
 
     for (let i = 0, len = worldPositions.length; i < len; i += 3) {
         rtcPositions[i + 0] = worldPositions[i + 0] - rtcCenterX;
