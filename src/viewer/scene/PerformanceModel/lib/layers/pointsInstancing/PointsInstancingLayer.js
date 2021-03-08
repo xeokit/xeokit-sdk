@@ -138,6 +138,7 @@ class PointsInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
+     * @param rgbInt Not used
      * @param opacity Opacity [0..255]
      * @param meshMatrix Flat float 4x4 matrix
      * @param [worldMatrix] Flat float 4x4 matrix
@@ -145,7 +146,7 @@ class PointsInstancingLayer {
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
+    createPortion(rgbaInt,opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
