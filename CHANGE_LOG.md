@@ -6,19 +6,27 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
-Improved rendering performance and interaction.
+Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera control fixes.    
 
+* BIMServerPlugin
+  * Remove BIMServer support. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
 * CameraControl
   * Fix dollying exception for ortho and frustum projections. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
 * DirLight, PointLight
   * Fix lighting for PerformanceModel with instanced geometry. [#545](https://github.com/xeokit/xeokit-sdk/pull/545) ([**@xeolabs**](https://github.com/xeolabs))
   * Minimal default lights for better performance. [#543](https://github.com/xeokit/xeokit-sdk/pull/543) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+  * Fix surface picking option to not pick surface normal. [#550](https://github.com/xeokit/xeokit-sdk/pull/550) ([**@xeolabs**](https://github.com/xeolabs))
+* OBJLoaderPlugin    
+  * Extend OBJLoaderPlugin to support double-precision geometry. [#580](https://github.com/xeokit/xeokit-sdk/issues/580) ([**@xeolabs**](https://github.com/xeolabs))
+* STLLoaderPlugin
+  * Extend STLLoaderPlugin to support double-precision geometry. [#579](https://github.com/xeokit/xeokit-sdk/issues/579) ([**@xeolabs**](https://github.com/xeolabs))
+  * Extend STLLoaderPlugin to load via optional, custom data source object. [#578](https://github.com/xeokit/xeokit-sdk/issues/578) ([**@xeolabs**](https://github.com/xeolabs))
+  * Extend STLLoaderPlugin to handle data directly, not only loaded from file. [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, PerformanceModel
   * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
   * Configurable max geometry batching size for PerformanceModel and XKTLoaderPlugin. [#559](https://github.com/xeokit/xeokit-sdk/issues/559) ([**@xeolabs**](https://github.com/xeolabs))
   * Optimize PerformanceModel shaders. [#542](https://github.com/xeokit/xeokit-sdk/pull/542) ([**@xeolabs**](https://github.com/xeolabs))
-* Scene
-  * Fix surface picking option to not pick surface normal. [#550](https://github.com/xeokit/xeokit-sdk/pull/550) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.6.0
 

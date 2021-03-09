@@ -6,7 +6,7 @@ import {buildEdgeIndices} from '../../viewer/scene/math/buildEdgeIndices.js';
 /**
  * @private
  */
-class GLTFPerformanceLoader {
+class GLTFPerformanceModelLoader {
 
     constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
@@ -505,4 +505,4 @@ const parseGLTF = (function () {
     }
 })();
 
-export {GLTFPerformanceLoader}
+export {GLTFPerformanceModelLoader}

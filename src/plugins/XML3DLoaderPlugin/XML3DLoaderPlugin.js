@@ -1,7 +1,7 @@
 import {utils} from "../../viewer/scene/utils.js"
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {XML3DLoader} from "./XML3DLoader.js";
+import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
 
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
@@ -180,7 +180,7 @@ class XML3DLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new XML3DLoader(this, cfg);
+        this._loader = new XML3DSceneGraphLoader(this, cfg);
 
         /**
          * Supported 3DXML schema versions

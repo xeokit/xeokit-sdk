@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>STLLoaderPlugin - creating model directly from pre-loaded STL data</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>STLLoaderPlugin - creating model directly from pre-loaded STL data</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a>
+            - Loads STL model from file system
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {STLLoaderPlugin} from "../src/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load STL model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const stlLoader = new STLLoaderPlugin(viewer);
+
+    loadSTL("./models/stl/binary/spurGear.stl", (stlData) => {
+
+        const model = stlLoader.load({
+            id: "myModel",
+            stl: stlData,
+            smoothNormals: true
+        });
+
+        model.on("loaded", () => {
+            viewer.cameraFlight.jumpTo(model);
+            viewer.scene.on("tick", () => {
+                viewer.camera.orbitYaw(0.4);
+            })
+        });
+    })
+
+    function loadSTL(src, ok, error) {
+        const request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', src, true);
+        request.responseType = 'arraybuffer';
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    ok(request.response);
+                } else if (error) {
+                    error(request.statusText);
+                }
+
+            }
+        };
+        request.send(null);
+    }
+
+</script>
+</html>
