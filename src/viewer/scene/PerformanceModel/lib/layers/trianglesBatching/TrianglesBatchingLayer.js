@@ -728,19 +728,31 @@ class TrianglesBatchingLayer {
         this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
     }
 
-    //-- RENDERING ----------------------------------------------------------------------------------------------
+    // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (frameCtx.withSAO) {
-            if (this._batchingRenderers.colorRendererWithSAO) {
-                this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (frameCtx.quality) {
+                if (this._batchingRenderers.colorQualityRendererWithSAO) {
+                    this._batchingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._batchingRenderers.colorRendererWithSAO) {
+                    this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         } else {
-            if (this._batchingRenderers.colorRenderer) {
-                this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (frameCtx.quality) {
+                if (this._batchingRenderers.colorQualityRenderer) {
+                    this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._batchingRenderers.colorRenderer) {
+                    this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         }
     }
@@ -749,10 +761,18 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._batchingRenderers.colorRenderer) {
-            this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (frameCtx.quality) {
+            if (this._batchingRenderers.colorQualityRenderer) {
+                this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        } else {
+            if (this._batchingRenderers.colorRenderer) {
+                this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
         }
     }
+
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     drawDepth(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
@@ -771,6 +791,8 @@ class TrianglesBatchingLayer {
             this._batchingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);  // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
     }
+
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
@@ -798,6 +820,8 @@ class TrianglesBatchingLayer {
             this._batchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
@@ -844,6 +868,30 @@ class TrianglesBatchingLayer {
         }
     }
 
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._batchingRenderers.occlusionRenderer) {
+            this._batchingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._batchingRenderers.shadowRenderer) {
+            this._batchingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    //---- PICKING ----------------------------------------------------------------------------------------------------
+
     drawPickMesh(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
@@ -868,24 +916,6 @@ class TrianglesBatchingLayer {
         }
         if (this._batchingRenderers.pickNormalsRenderer) {
             this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
-    }
-
-    drawOcclusion(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._batchingRenderers.occlusionRenderer) {
-            this._batchingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-        }
-    }
-
-    drawShadow(frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._batchingRenderers.shadowRenderer) {
-            this._batchingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 

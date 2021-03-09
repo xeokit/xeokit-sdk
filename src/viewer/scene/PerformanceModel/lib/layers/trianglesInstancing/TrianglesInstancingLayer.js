@@ -167,15 +167,23 @@ class TrianglesInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
-     * @param rgbaInt Quantized RGBA color
-     * @param opacity Opacity [0..255]
-     * @param meshMatrix Flat float 4x4 matrix
-     * @param [worldMatrix] Flat float 4x4 matrix
-     * @param worldAABB Flat float AABB
-     * @param pickColor Quantized pick color
-     * @returns {number} Portion ID
+     * @param cfg Portion params
+     * @param cfg.color Color [0..255,0..255,0..255]
+     * @param cfg.opacity Opacity [0..255].
+     * @param cfg.meshMatrix Flat float 4x4 matrix.
+     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
+     * @param cfg.worldAABB Flat float AABB.
+     * @param cfg.pickColor Quantized pick color
+     * @returns {number} Portion ID.
      */
-    createPortion(rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
+    createPortion(cfg) {
+
+        const color = cfg.color;
+        const opacity = cfg.opacity;
+        const meshMatrix = cfg.meshMatrix;
+        const worldMatrix = cfg.worldMatrix;
+        const worldAABB = cfg.aabb;
+        const pickColor = cfg.pickColor;
 
         if (this._finalized) {
             throw "Already finalized";
@@ -183,10 +191,10 @@ class TrianglesInstancingLayer {
 
         // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
-        const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
-        const g = rgbaInt[1];
-        const b = rgbaInt[2];
-        const a = rgbaInt[3];
+        const r = color[0]; // Color is pre-quantized by PerformanceModel
+        const g = color[1];
+        const b = color[2];
+        const a = color[3];
 
         this._colors.push(r);
         this._colors.push(g);
@@ -650,19 +658,31 @@ class TrianglesInstancingLayer {
         this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
     }
 
-    // ---------------------- NORMAL RENDERING -----------------------------------
+    // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (frameCtx.withSAO) {
-            if (this._instancingRenderers.colorRendererWithSAO) {
-                this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (frameCtx.quality) {
+                if (this._instancingRenderers.colorQualityRendererWithSAO) {
+                    this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._instancingRenderers.colorRendererWithSAO) {
+                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         } else {
-            if (this._instancingRenderers.colorRenderer) {
-                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (frameCtx.quality) {
+                if (this._instancingRenderers.colorQualityRenderer) {
+                    this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._instancingRenderers.colorRenderer) {
+                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         }
     }
@@ -671,8 +691,14 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (this._instancingRenderers.colorRenderer) {
-            this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (frameCtx.quality) {
+            if (this._instancingRenderers.colorQualityRenderer) {
+                this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        } else {
+            if (this._instancingRenderers.colorRenderer) {
+                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
         }
     }
 
@@ -696,7 +722,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    // ---------------------- EMPHASIS RENDERING -----------------------------------
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     drawSilhouetteXRayed(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {

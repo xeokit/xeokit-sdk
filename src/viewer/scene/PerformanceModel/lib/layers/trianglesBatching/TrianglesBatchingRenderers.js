@@ -8,6 +8,7 @@ import {TrianglesBatchingOcclusionRenderer} from "./renderers/TrianglesBatchingO
 import {TrianglesBatchingDepthRenderer} from "./renderers/TrianglesBatchingDepthRenderer.js";
 import {TrianglesBatchingNormalsRenderer} from "./renderers/TrianglesBatchingNormalsRenderer.js";
 import {TrianglesBatchingShadowRenderer} from "./renderers/TrianglesBatchingShadowRenderer.js";
+import {TrianglesBatchingColorQualityRenderer} from "./renderers/TrianglesBatchingColorQualityRenderer.js";
 
 /**
  * @private
@@ -26,6 +27,14 @@ class TrianglesBatchingRenderers {
         if (this._colorRendererWithSAO && (!this._colorRendererWithSAO.getValid())) {
             this._colorRendererWithSAO.destroy();
             this._colorRendererWithSAO = null;
+        }
+        if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
+            this._colorQualityRenderer.destroy();
+            this._colorQualityRenderer = null;
+        }
+        if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
+            this._colorQualityRendererWithSAO.destroy();
+            this._colorQualityRendererWithSAO = null;
         }
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
@@ -77,6 +86,20 @@ class TrianglesBatchingRenderers {
             this._colorRendererWithSAO = new TrianglesBatchingColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
+    }
+
+    get colorQualityRenderer() {
+        if (!this._colorQualityRenderer) {
+            this._colorQualityRenderer = new TrianglesBatchingColorQualityRenderer(this._scene, false);
+        }
+        return this._colorQualityRenderer;
+    }
+
+    get colorQualityRendererWithSAO() {
+        if (!this._colorQualityRendererWithSAO) {
+            this._colorQualityRendererWithSAO = new TrianglesBatchingColorQualityRenderer(this._scene, true);
+        }
+        return this._colorQualityRendererWithSAO;
     }
 
     get silhouetteRenderer() {
@@ -148,6 +171,12 @@ class TrianglesBatchingRenderers {
         }
         if (this._colorRendererWithSAO) {
             this._colorRendererWithSAO.destroy();
+        }
+        if (this._colorQualityRenderer) {
+            this._colorQualityRenderer.destroy();
+        }
+        if (this._colorQualityRendererWithSAO) {
+            this._colorQualityRendererWithSAO.destroy();
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();
