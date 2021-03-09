@@ -70,9 +70,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-9146.27, 4094.80, 2752.23];
-    viewer.camera.look = [-0.00, -0.042, -0.03];
-    viewer.camera.up = [0.37, 0.91, -0.11];
+    viewer.scene.camera.eye = [-3983.6938536352986, 1447.739261179317, 223.0671333022666];
+    viewer.scene.camera.look = [-749.9959046802564, -0.008077435417277457, -750.0089467502598];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
@@ -108,11 +108,11 @@
 
     const map = {};
 
-    for (let i = 0; i < 1000000;) {
+    for (let i = 0; i < 100000;) {
 
-        const x = (Math.random() * 6000) - 3000;
-        const y = (Math.random() * 6000) - 3000;
-        const z = (Math.random() * 6000) - 3000;
+        const x = (Math.random() * 1000) - 500;
+        const y = (Math.random() * 1000) - 500;
+        const z = (Math.random() * 1000) - 500;
 
         const hash = "" + x + "." + y + "." + z;
         if (map[hash]) {
@@ -132,17 +132,26 @@
         i++;
     }
 
-    performanceModel.createMesh({
-        id: "pointsMesh",
-        primitive: "points",
-        positions: positions,
-        colors: colors
-    });
+    for (let x = -1500; x < 1500; x += 1500) {
+        for (let z = -1500; z < 1500; z += 1500) {
 
-    performanceModel.createEntity({
-        id: "points",
-        meshIds: ["pointsMesh"]
-    });
+            const meshId = ("pointsMesh" + x + "." + z);
+            const entityId = ("pointsEntity" + x + "." + z);
+
+            performanceModel.createMesh({
+                id: meshId,
+                primitive: "points",
+                positions: positions,
+                colors: colors,
+                position: [x, 0, z]
+            });
+
+            performanceModel.createEntity({
+                id: entityId,
+                meshIds: [meshId]
+            });
+        }
+    }
 
     performanceModel.finalize();
 
