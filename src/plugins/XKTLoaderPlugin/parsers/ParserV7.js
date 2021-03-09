@@ -65,7 +65,7 @@ function inflate(deflatedData) {
     return {
         positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
         normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
-        colors: new Int8Array(pako.inflate(deflatedData.colors).buffer),
+        colors: new Uint8Array(pako.inflate(deflatedData.colors).buffer),
 
         indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
         edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices).buffer),
@@ -253,12 +253,12 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 const meshId = nextMeshId++;
 
-                const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
-                const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
-
                 if (isReusedGeometry) {
 
                     // Create mesh for multi-use geometry - create (or reuse) geometry, create mesh using that geometry
+
+                    const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
+                    const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
                     const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
 
