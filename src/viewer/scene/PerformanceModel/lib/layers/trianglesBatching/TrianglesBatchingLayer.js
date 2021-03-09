@@ -621,7 +621,7 @@ class TrianglesBatchingLayer {
         // Color
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {

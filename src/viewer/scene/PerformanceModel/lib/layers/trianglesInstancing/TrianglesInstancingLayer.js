@@ -574,7 +574,7 @@ class TrianglesInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -667,11 +667,11 @@ class TrianglesInstancingLayer {
         if (frameCtx.withSAO) {
             if (frameCtx.quality) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
-                    this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
                 if (this._instancingRenderers.colorRendererWithSAO) {
-                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             }
         } else {
