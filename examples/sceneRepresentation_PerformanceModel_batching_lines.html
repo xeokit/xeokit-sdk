@@ -71,9 +71,10 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-106.16998852126801, -88.44624803486873, 177.46678954352672];
-    viewer.camera.look = [125.06083575423614, -87.92127166812855, -4.7906070577323305];
-    viewer.camera.up = [-0.0014003563601624482, 0.9999984103472968, 0.00110376851925732];
+    viewer.camera.eye = [-509.19560097326735, 184.48459001736833, 382.03046897156173];
+    viewer.camera.look = [-74.63999999999982, -106.96000000000012, -200];
+    viewer.camera.up = [0.22278361728549367, 0.9280792704116594, -0.29838955695759983];
+
 
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
@@ -101,21 +102,30 @@
 
     const geometry = buildVectorTextGeometry({
         text: document.getElementById("source").innerText,
-        size: 2
+        size: 1
     });
 
-    performanceModel.createMesh({
-        id: "linesMesh",
-        primitive: "lines",
-        color: [0, 0, 1],
-        positions: geometry.positions,
-        indices: geometry.indices
-    });
+    for (let x = -400; x < 400; x += 400) {
+        for (let z = -400; z < 400; z += 400) {
 
-    performanceModel.createEntity({
-        id: "lines",
-        meshIds: ["linesMesh"]
-    });
+            const meshId = ("linesMesh" + x + "." + z);
+            const entityId = ("linesEntity" + x + "." + z);
+
+            performanceModel.createMesh({
+                id: meshId,
+                primitive: "lines",
+                positions: geometry.positions,
+                indices: geometry.indices,
+                position: [x, 0, z],
+                color: [Math.random(), 0, Math.random()]
+            });
+
+            performanceModel.createEntity({
+                id: entityId,
+                meshIds: [meshId]
+            });
+        }
+    }
 
     performanceModel.finalize();
 
