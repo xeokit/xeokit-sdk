@@ -47,11 +47,11 @@ const PRESETS = {
  * viewer.scene.camera.look = [0, 0, 0];
  * viewer.scene.camera.up = [0, 1, 0];
  *
- * viewer.scene.pointsMaterial.pointSize = 3;
+ * viewer.scene.pointsMaterial.pointSize = 2;
  * viewer.scene.pointsMaterial.roundPoints = true;
  * viewer.scene.pointsMaterial.perspectivePoints = true;
- * viewer.scene.pointsMaterial.minPerspectivePointSize = 3;
- * viewer.scene.pointsMaterial.maxPerspectivePointSize = 10;
+ * viewer.scene.pointsMaterial.minPerspectivePointSize = 1;
+ * viewer.scene.pointsMaterial.maxPerspectivePointSize = 6;
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
@@ -85,11 +85,11 @@ class PointsMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] The PointsMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Number} [cfg.pointSize=1] Point size in pixels.
+     * @param {Number} [cfg.pointSize=2] Point size in pixels.
      * @param {Boolean} [cfg.roundPoints=false] Whether points are round (````true````) or square (````false````).
-     * @param {Boolean} [cfg.perspectivePoints=false] Whether apparent point size reduces with distance when {@link Camera#projection} is set to "perspective".
+     * @param {Boolean} [cfg.perspectivePoints=true] Whether apparent point size reduces with distance when {@link Camera#projection} is set to "perspective".
      * @param {Number} [cfg.minPerspectivePointSize=1] When ````perspectivePoints```` is ````true````, this is the minimum rendered size of each point in pixels.
-     * @param {Number} [cfg.maxPerspectivePointSize=1] When ````perspectivePoints```` is ````true````, this is the maximum rendered size of each point in pixels.
+     * @param {Number} [cfg.maxPerspectivePointSize=6] When ````perspectivePoints```` is ````true````, this is the maximum rendered size of each point in pixels.
      * @param {String} [cfg.preset] Selects a preset PointsMaterial configuration - see {@link PointsMaterial#presets}.
      */
     constructor(owner, cfg = {}) {
@@ -135,19 +135,19 @@ class PointsMaterial extends Material {
     /**
      * Sets point size.
      *
-     * Default value is ````1.0```` pixels.
+     * Default value is ````2.0```` pixels.
      *
      * @type {Number}
      */
     set pointSize(value) {
-        this._state.pointSize = value || 1.0;
+        this._state.pointSize = value || 2.0;
         this.glRedraw();
     }
 
     /**
      * Gets point size.
      *
-     * Default value is ````1.0```` pixels.
+     * Default value is ````2.0```` pixels.
      *
      * @type {Number}
      */
@@ -187,12 +187,12 @@ class PointsMaterial extends Material {
     /**
      * Sets if rendered point size reduces with distance when {@link Camera#projection} is set to ````"perspective"````.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * @type {Boolean}
      */
     set perspectivePoints(value) {
-        value = !!value;
+        value = (value !== false);
         if (this._state.perspectivePoints === value) {
             return;
         }
@@ -239,12 +239,12 @@ class PointsMaterial extends Material {
     /**
      * Sets the maximum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
      *
-     * Default value is ````20.0```` pixels.
+     * Default value is ````6```` pixels.
      *
      * @type {Number}
      */
     set maxPerspectivePointSize(value) {
-        this._state.maxPerspectivePointSize = value || 20.0;
+        this._state.maxPerspectivePointSize = value || 6;
         this.scene._needRecompile = true;
         this.glRedraw();
     }
@@ -252,7 +252,7 @@ class PointsMaterial extends Material {
     /**
      * Gets the maximum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
      *
-     * Default value is ````20.0```` pixels.
+     * Default value is ````6```` pixels.
      *
      * @type {Number}
      */
