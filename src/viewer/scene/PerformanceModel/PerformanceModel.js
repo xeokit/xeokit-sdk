@@ -1306,8 +1306,18 @@ class PerformanceModel extends Component {
             }
 
             const instancingLayer = this._instancingLayers[geometryId];
+
             layer = instancingLayer;
-            portionId = instancingLayer.createPortion(color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
+
+            portionId = instancingLayer.createPortion({
+                color: color,
+                opacity: opacity,
+                meshMatrix: meshMatrix,
+                worldMatrix: worldMatrix,
+                aabb: aabb,
+                pickColor: pickColor
+            });
+
             math.expandAABB3(this._aabb, aabb);
 
             const numTriangles = Math.round(instancingLayer.numIndices / 3);

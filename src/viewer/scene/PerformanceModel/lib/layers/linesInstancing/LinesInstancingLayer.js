@@ -138,14 +138,21 @@ class LinesInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
-     * @param rgbaInt Quantized RGBA color
-     * @param opacity Opacity [0..255]
-     * @param meshMatrix Flat float 4x4 matrix
-     * @param [worldMatrix] Flat float 4x4 matrix
-     * @param worldAABB Flat float AABB
-     * @returns {number} Portion ID
+     * @param cfg Portion params
+     * @param cfg.color Color [0..255,0..255,0..255]
+     * @param cfg.opacity Opacity [0..255].
+     * @param cfg.meshMatrix Flat float 4x4 matrix.
+     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
+     * @param cfg.aabb Flat float AABB.
+     * @returns {number} Portion ID.
      */
-    createPortion(rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB) {
+    createPortion(cfg) {
+
+        const color = cfg.color;
+        const opacity = cfg.opacity;
+        const meshMatrix = cfg.meshMatrix;
+        const worldMatrix = cfg.worldMatrix;
+        const worldAABB = cfg.aabb;
 
         if (this._finalized) {
             throw "Already finalized";
@@ -153,10 +160,10 @@ class LinesInstancingLayer {
 
         // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
-        const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
-        const g = rgbaInt[1];
-        const b = rgbaInt[2];
-        const a = rgbaInt[3];
+        const r = color[0]; // Color is pre-quantized by PerformanceModel
+        const g = color[1];
+        const b = color[2];
+        const a = color[3];
 
         this._colors.push(r);
         this._colors.push(g);

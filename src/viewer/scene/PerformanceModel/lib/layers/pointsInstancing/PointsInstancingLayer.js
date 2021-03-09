@@ -138,15 +138,19 @@ class PointsInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
-     * @param rgbInt Not used
-     * @param opacity Opacity [0..255]
-     * @param meshMatrix Flat float 4x4 matrix
-     * @param [worldMatrix] Flat float 4x4 matrix
-     * @param worldAABB Flat float AABB
-     * @param pickColor Quantized pick color
-     * @returns {number} Portion ID
+     * @param cfg Portion params
+     * @param cfg.meshMatrix Flat float 4x4 matrix.
+     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
+     * @param cfg.aabb Flat float AABB.
+     * @param cfg.pickColor Quantized pick color
+     * @returns {number} Portion ID.
      */
-    createPortion(rgbaInt,opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
+    createPortion(cfg) {
+
+        const meshMatrix = cfg.meshMatrix;
+        const worldMatrix = cfg.worldMatrix;
+        const worldAABB = cfg.aabb;
+        const pickColor = cfg.pickColor;
 
         if (this._finalized) {
             throw "Already finalized";
