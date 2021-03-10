@@ -1558,6 +1558,7 @@ class Scene extends Component {
         }
         this._renderer.gammaInput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1585,6 +1586,7 @@ class Scene extends Component {
         }
         this._renderer.gammaOutput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
