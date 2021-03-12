@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XKTLoaderPlugin - Loading an IFC Model from the File System</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #treeViewContainer {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 550px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+        }
+
+        #treeViewContainer ul li {
+            position: relative;
+            width: 500px;
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+            width: calc(100% - 50px);
+        }
+
+        #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="treeViewContainer"></div>
+
+<div id="info">
+    <h1>XKTLoaderPlugin - Loading an IFC Model from the File System</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
+            - HTML tree view of IFC containment hierarchy
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
+            - Camera navigation cube gizmo
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/christine-lappe">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.cameraControl.followPointer = true;
+
+    viewer.camera.eye = [199.7902714075737, 63.69812045017034, 29.46432842133499];
+    viewer.camera.look = [133.4211396073894, 19.035768257624326, -12.405978701615107];
+    viewer.camera.up = [-0.4183477563201278, 0.8690970808287062, -0.2639231306212778];
+
+    viewer.scene.sao.enabled = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        hierarchy: "types",
+        autoExpandDepth: 1
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/WaterLock/geometry.xkt",
+        metaModelSrc: "./metaModels/WaterLock/metadata.json",
+        saoEnabled: true,
+        edges: true
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+    });
+
+
+    window.viewer = viewer;
+
+</script>
+</html>

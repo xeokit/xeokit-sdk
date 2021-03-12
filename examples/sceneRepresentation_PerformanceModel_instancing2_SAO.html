@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PerformanceModel with Geometry Instancing and SAO</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>PerformanceModel with Geometry Instancing and SAO</h1>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Enable and configure Scalable Ambient Obscurance (SAO)
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sao = viewer.scene.sao;
+
+    sao.enabled = true; // Only works if supported
+    sao.intensity = 0.20;
+    sao.bias = 0.5;
+    sao.scale = 230.0; // <<------- Scale the SAO effect for this model
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+    sao.blur = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Build a PerformanceModel with a single red box, that instances a single geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "table",
+        isModel: true,
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true,
+        saoEnabled: true
+    });
+
+    performanceModel.createGeometry({
+        id: "myBoxGeometry",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+            16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+        ]
+    });
+
+    performanceModel.createMesh({
+        id: "redLegMesh",
+        geometryId: "myBoxGeometry",
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        color: [1, 0.3, 0.3]
+    });
+
+    performanceModel.createEntity({
+        id: "redLeg",
+        meshIds: ["redLegMesh"],
+        isObject: true
+    });
+
+    performanceModel.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+
+    window.model = performanceModel;
+
+</script>
+</html>

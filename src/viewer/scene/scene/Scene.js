@@ -16,6 +16,8 @@ import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
+import {PointsMaterial} from "../materials/PointsMaterial.js";
+import {LinesMaterial} from "../materials/LinesMaterial.js";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -801,6 +803,8 @@ class Scene extends Component {
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._pbrEnabled = !!cfg.pbrEnabled;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -1149,6 +1153,29 @@ class Scene extends Component {
         return this._logarithmicDepthBufferEnabled;
     }
 
+    /**
+     * Sets whether physically-based rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    set pbrEnabled(pbrEnabled) {
+        this._pbrEnabled = !!pbrEnabled;
+        this.glRedraw();
+    }
+    
+    /**
+     * Sets whether quality rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled;
+    }
+    
     /**
      * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
      *
@@ -1556,6 +1583,7 @@ class Scene extends Component {
         }
         this._renderer.gammaInput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1583,6 +1611,7 @@ class Scene extends Component {
         }
         this._renderer.gammaOutput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1731,6 +1760,32 @@ class Scene extends Component {
             edgeColor: [0.0, 0.0, 0.0],
             edgeAlpha: 1.0,
             edgeWidth: 1,
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link PointsMaterial} for this Scene.
+     *
+     * @type {PointsMaterial}
+     */
+    get pointsMaterial() {
+        return this.components["default.pointsMaterial"] || new PointsMaterial(this, {
+            id: "default.pointsMaterial",
+            preset: "default",
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link LinesMaterial} for this Scene.
+     *
+     * @type {LinesMaterial}
+     */
+    get linesMaterial() {
+        return this.components["default.linesMaterial"] || new LinesMaterial(this, {
+            id: "default.linesMaterial",
+            preset: "default",
             dontClear: true
         });
     }

@@ -76,15 +76,14 @@ class SAOOcclusionRenderer {
                     }`],
 
             fragment: [
-                `#ifdef GL_FRAGMENT_PRECISION_HIGH
-                    precision highp float;
-                    precision highp int;
-                    #else
-                    precision mediump float;
-                    precision mediump int;
-                    #endif
-                    
-                    #extension GL_OES_standard_derivatives : require
+                `#extension GL_OES_standard_derivatives : require
+                #ifdef GL_FRAGMENT_PRECISION_HIGH
+                precision highp float;
+                precision highp int;
+                #else
+                precision mediump float;
+                precision mediump int;
+                #endif                   
                 
                 #define NORMAL_TEXTURE 0
                 #define PI 3.14159265359

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PerformanceModel Geometry instancing points</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
+    </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="my-gui-container"></div>
+
+<div id="info">
+    <h1>PerformanceModel</h1><br>
+    <p>Geometry instancing points example</p><br>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
+            - xeokit Viewer
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
+            - high-performance model representation
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a>
+            - configures point cloud appearance
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-3983.6938536352986, 1447.739261179317, 223.0671333022666];
+    viewer.scene.camera.look = [-749.9959046802564, -0.008077435417277457, -750.0089467502598];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    const cameraControl = viewer.cameraControl;
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    viewer.camera.perspective.far = 15000000;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure points material
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.pointsMaterial.pointSize = 3;
+    viewer.scene.pointsMaterial.roundPoints = true;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 3;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 10;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel containing a randomly-generated point cloud.
+    // In this example, we'll create our point cloud in a single Entity.
+    // We can also split our point cloud up into multiple Entities, if required.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "table",
+        isModel: true // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+    });
+
+    const positions = [];
+    const colors = [];
+
+    for (let i = 0; i < 100000; i++) {
+
+        const x = (Math.random() * 1000) - 500;
+        const y = (Math.random() * 1000) - 500;
+        const z = (Math.random() * 1000) - 500;
+
+        positions.push(x);
+        positions.push(y);
+        positions.push(z);
+
+        colors.push(Math.random());
+        colors.push(Math.random());
+        colors.push(Math.random());
+    }
+
+    performanceModel.createGeometry({
+        id: "pointsGeometry",
+        primitive: "points",
+        positions: positions,
+        colors: colors
+    });
+
+    for (let x = -1500; x < 1500; x += 1500) {
+        for (let z = -1500; z < 1500; z += 1500) {
+
+            const meshId = ("pointsMesh" + x + "." + z);
+            const entityId = ("pointsEntity" + x + "." + z);
+
+            performanceModel.createMesh({
+                id: meshId,
+                geometryId: "pointsGeometry",
+                position: [x, 0, z]
+            });
+
+            performanceModel.createEntity({
+                id: entityId,
+                meshIds: [meshId]
+            });
+        }
+    }
+
+    performanceModel.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with points material properties
+    //------------------------------------------------------------------------------------------------------------------
+
+    const pointsMaterial = viewer.scene.pointsMaterial;
+    const camera = viewer.camera;
+
+    var guiParams = new function () {
+        this.roundPoints = pointsMaterial.roundPoints;
+        this.perspectivePoints = pointsMaterial.perspectivePoints;
+        this.pointSize = pointsMaterial.pointSize;
+        this.minPerspectivePointSize = pointsMaterial.minPerspectivePointSize;
+        this.maxPerspectivePointSize = pointsMaterial.maxPerspectivePointSize;
+        this.perspective = (camera.projection === "perspective");
+    }();
+
+    var update = function () {
+        pointsMaterial.roundPoints = guiParams.roundPoints;
+        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
+        pointsMaterial.pointSize = guiParams.pointSize;
+        pointsMaterial.minPerspectivePointSize = guiParams.minPerspectivePointSize;
+        pointsMaterial.maxPerspectivePointSize = guiParams.maxPerspectivePointSize;
+        camera.projection = guiParams.perspective ? "perspective" : "ortho";
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const pointsMaterialFolder = gui.addFolder('PointsMaterial');
+    pointsMaterialFolder.add(guiParams, 'roundPoints');
+    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
+    pointsMaterialFolder.add(guiParams, 'pointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'minPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'maxPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(guiParams, 'perspective');
+    cameraFolder.open();
+
+    var customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
+    window.viewer = viewer;
+
+</script>
+</html>

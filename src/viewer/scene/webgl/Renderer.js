@@ -256,7 +256,7 @@ const Renderer = function (scene, options) {
             gl.getExtension("OES_element_index_uint");
         }
 
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] ) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             gl.getExtension('EXT_frag_depth');
         }
 
@@ -338,7 +338,7 @@ const Renderer = function (scene, options) {
                         continue;
                     }
 
-                    if (drawable.renderFlags.normalFillOpaque) {
+                    if (drawable.renderFlags.colorOpaque) {
                         drawable.drawDepth(frameCtx);
                     }
                 }
@@ -418,7 +418,7 @@ const Renderer = function (scene, options) {
                         continue;
                     }
 
-                    if (drawable.renderFlags.normalFillOpaque) { // Transparent objects don't cast shadows (yet)
+                    if (drawable.renderFlags.colorOpaque) { // Transparent objects don't cast shadows (yet)
                         drawable.drawShadow(frameCtx);
                     }
                 }
@@ -457,6 +457,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
             frameCtx.withSAO = false;
+            frameCtx.pbrEnabled = !!scene.pbrEnabled;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -532,32 +533,56 @@ const Renderer = function (scene, options) {
 
                         const renderFlags = drawable.renderFlags;
 
-                        if (renderFlags.normalFillOpaque) {
+                        if (renderFlags.colorOpaque) {
                             if (saoPossible && drawable.saoEnabled) {
                                 normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
                             } else {
-                                drawable.drawNormalOpaqueFill(frameCtx);
+                                drawable.drawColorOpaque(frameCtx);
                             }
                         }
 
-                        if (renderFlags.normalEdgesOpaque) {
-                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.normalFillTransparent) {
+                        if (renderFlags.colorTransparent) {
                             normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
                         }
 
-                        if (renderFlags.normalEdgesTransparent) {
-                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.xrayedFillTransparent) {
+                        if (renderFlags.xrayedSilhouetteTransparent) {
                             xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
                         }
 
-                        if (renderFlags.xrayedFillOpaque) {
+                        if (renderFlags.xrayedSilhouetteOpaque) {
                             xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedSilhouetteTransparent) {
+                            highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedSilhouetteOpaque) {
+                            highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedSilhouetteTransparent) {
+                            selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedSilhouetteOpaque) {
+                            selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.edgesOpaque) {
+                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.edgesTransparent) {
+                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedEdgesTransparent) {
+                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedEdgesOpaque) {
+                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
                         }
 
                         if (renderFlags.xrayedEdgesTransparent) {
@@ -568,36 +593,12 @@ const Renderer = function (scene, options) {
                             xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
                         }
 
-                        if (renderFlags.highlightedFillTransparent) {
-                            highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedFillOpaque) {
-                            highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
-                        }
-
                         if (renderFlags.highlightedEdgesTransparent) {
                             highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
                         }
 
                         if (renderFlags.highlightedEdgesOpaque) {
                             highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.selectedFillTransparent) {
-                            selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.selectedFillOpaque) {
-                            selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.selectedEdgesTransparent) {
-                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.selectedEdgesOpaque) {
-                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
                         }
                     }
                 }
@@ -610,25 +611,25 @@ const Renderer = function (scene, options) {
             if (normalDrawSAOBinLen > 0) {
                 frameCtx.withSAO = true;
                 for (i = 0; i < normalDrawSAOBinLen; i++) {
-                    normalDrawSAOBin[i].drawNormalOpaqueFill(frameCtx);
+                    normalDrawSAOBin[i].drawColorOpaque(frameCtx);
                 }
             }
 
             if (normalEdgesOpaqueBinLen > 0) {
                 for (i = 0; i < normalEdgesOpaqueBinLen; i++) {
-                    normalEdgesOpaqueBin[i].drawNormalOpaqueEdges(frameCtx);
+                    normalEdgesOpaqueBin[i].drawEdgesColorOpaque(frameCtx);
                 }
             }
 
             if (xrayedFillOpaqueBinLen > 0) {
                 for (i = 0; i < xrayedFillOpaqueBinLen; i++) {
-                    xrayedFillOpaqueBin[i].drawXRayedFill(frameCtx);
+                    xrayedFillOpaqueBin[i].drawSilhouetteXRayed(frameCtx);
                 }
             }
 
             if (xrayEdgesOpaqueBinLen > 0) {
                 for (i = 0; i < xrayEdgesOpaqueBinLen; i++) {
-                    xrayEdgesOpaqueBin[i].drawXRayedEdges(frameCtx);
+                    xrayEdgesOpaqueBin[i].drawEdgesXRayed(frameCtx);
                 }
             }
 
@@ -650,12 +651,12 @@ const Renderer = function (scene, options) {
                 }
                 if (xrayEdgesTransparentBinLen > 0) {
                     for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawXRayedEdges(frameCtx);
+                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
                     }
                 }
                 if (xrayedFillTransparentBinLen > 0) {
                     for (i = 0; i < xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawXRayedFill(frameCtx);
+                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
                     }
                 }
                 if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
@@ -664,13 +665,13 @@ const Renderer = function (scene, options) {
                 if (normalEdgesTransparentBinLen > 0) {
                     for (i = 0; i < normalEdgesTransparentBinLen; i++) {
                         drawable = normalEdgesTransparentBin[i];
-                        drawable.drawNormalTransparentEdges(frameCtx);
+                        drawable.drawEdgesColorTransparent(frameCtx);
                     }
                 }
                 if (normalFillTransparentBinLen > 0) {
                     for (i = 0; i < normalFillTransparentBinLen; i++) {
                         drawable = normalFillTransparentBin[i];
-                        drawable.drawNormalTransparentFill(frameCtx);
+                        drawable.drawColorTransparent(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
@@ -684,12 +685,12 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 if (highlightedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
-                        highlightedEdgesOpaqueBin[i].drawHighlightedEdges(frameCtx);
+                        highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
                     }
                 }
                 if (highlightedFillOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedFillOpaqueBinLen; i++) {
-                        highlightedFillOpaqueBin[i].drawHighlightedFill(frameCtx);
+                        highlightedFillOpaqueBin[i].drawSilhouetteHighlighted(frameCtx);
                     }
                 }
             }
@@ -709,12 +710,12 @@ const Renderer = function (scene, options) {
 
                 if (highlightedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
-                        highlightedEdgesTransparentBin[i].drawHighlightedEdges(frameCtx);
+                        highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
                     }
                 }
                 if (highlightedFillTransparentBinLen > 0) {
                     for (i = 0; i < highlightedFillTransparentBinLen; i++) {
-                        highlightedFillTransparentBin[i].drawHighlightedFill(frameCtx);
+                        highlightedFillTransparentBin[i].drawSilhouetteHighlighted(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
@@ -725,12 +726,12 @@ const Renderer = function (scene, options) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
                 if (selectedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
-                        selectedEdgesOpaqueBin[i].drawSelectedEdges(frameCtx);
+                        selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
                     }
                 }
                 if (selectedFillOpaqueBinLen > 0) {
                     for (i = 0; i < selectedFillOpaqueBinLen; i++) {
-                        selectedFillOpaqueBin[i].drawSelectedFill(frameCtx);
+                        selectedFillOpaqueBin[i].drawSilhouetteSelected(frameCtx);
                     }
                 }
             }
@@ -750,12 +751,12 @@ const Renderer = function (scene, options) {
 
                 if (selectedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < selectedEdgesTransparentBinLen; i++) {
-                        selectedEdgesTransparentBin[i].drawSelectedEdges(frameCtx);
+                        selectedEdgesTransparentBin[i].drawEdgesSelected(frameCtx);
                     }
                 }
                 if (selectedFillTransparentBinLen > 0) {
                     for (i = 0; i < selectedFillTransparentBinLen; i++) {
-                        selectedFillTransparentBin[i].drawSelectedFill(frameCtx);
+                        selectedFillTransparentBin[i].drawSilhouetteSelected(frameCtx);
                     }
                 }
                 gl.disable(gl.BLEND);
@@ -813,7 +814,7 @@ const Renderer = function (scene, options) {
                 gl.getExtension("OES_element_index_uint");
             }
 
-            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] ) {
+            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 gl.getExtension('EXT_frag_depth');
             }
 
