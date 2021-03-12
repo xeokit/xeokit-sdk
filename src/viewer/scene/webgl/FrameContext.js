@@ -53,7 +53,7 @@ class FrameContext {
          * @default false
          * @type {Boolean}
          */
-        this.quality = false;
+        this.pbrEnabled = false;
 
         /**
          * Whether SAO is currently enabled during the current frame.

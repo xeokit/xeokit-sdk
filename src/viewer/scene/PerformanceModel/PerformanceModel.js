@@ -1272,6 +1272,8 @@ class PerformanceModel extends Component {
 
         const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
         const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
+        const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
+        const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
         if (opacity < 255) {
             this.numTransparentLayerPortions++;
@@ -1311,6 +1313,8 @@ class PerformanceModel extends Component {
 
             portionId = instancingLayer.createPortion({
                 color: color,
+                metallic: metallic,
+                roughness: roughness,
                 opacity: opacity,
                 meshMatrix: meshMatrix,
                 worldMatrix: worldMatrix,
@@ -1437,6 +1441,8 @@ class PerformanceModel extends Component {
                         indices: indices,
                         edgeIndices: edgeIndices,
                         color: color,
+                        metallic: metallic,
+                        roughness: roughness,
                         colors: cfg.colors,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
@@ -2139,7 +2145,6 @@ class PerformanceModel extends Component {
      * SAO is configured by the Scene's {@link SAO} component.
      *
      * @type {Boolean}
-     * @abstract
      */
     get saoEnabled() {
         return this._saoEnabled;

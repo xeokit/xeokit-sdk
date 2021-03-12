@@ -803,6 +803,8 @@ class Scene extends Component {
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._pbrEnabled = !!cfg.pbrEnabled;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -1151,6 +1153,29 @@ class Scene extends Component {
         return this._logarithmicDepthBufferEnabled;
     }
 
+    /**
+     * Sets whether physically-based rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    set pbrEnabled(pbrEnabled) {
+        this._pbrEnabled = !!pbrEnabled;
+        this.glRedraw();
+    }
+    
+    /**
+     * Sets whether quality rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled;
+    }
+    
     /**
      * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
      *

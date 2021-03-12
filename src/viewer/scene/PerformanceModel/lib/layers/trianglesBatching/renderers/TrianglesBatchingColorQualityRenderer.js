@@ -96,6 +96,10 @@ class TrianglesBatchingColorQualityRenderer {
             this._aColor.bindArrayBuffer(state.colorsBuf);
         }
 
+        if (this._aMetallicRoughness) {
+            this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
+        }
+
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
@@ -192,6 +196,7 @@ class TrianglesBatchingColorQualityRenderer {
         this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
+        this._aMetallicRoughness = program.getAttribute("metallicRoughness");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
 
@@ -308,6 +313,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("attribute vec3 position;");
         src.push("attribute vec3 normal;");
         src.push("attribute vec4 color;");
+        src.push("attribute vec2 metallicRoughness;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
 
@@ -341,6 +347,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("varying vec3 vWorldNormal;");
@@ -385,6 +392,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("vViewPosition = viewPosition;");
         src.push("vViewNormal = viewNormal;");
         src.push("vColor = color;");
+        src.push("vMetallicRoughness = metallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("vWorldNormal = worldNormal.xyz;");
@@ -428,6 +436,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("varying vec3 vWorldNormal;");
@@ -620,10 +629,10 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
 
             if (lightsState.lightMaps.length > 0) {
-                src.push("   vec3 irradiance = sRGBToLinear(textureCube(lightMap, geometry.worldNormal)).rgb;");
+                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(textureCube(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
+                src.push("   reflectedLight.diffuse +=  irradiance * diffuseBRDFContrib;");
             }
 
             if (lightsState.reflectionMaps.length > 0) {
@@ -672,8 +681,8 @@ class TrianglesBatchingColorQualityRenderer {
 
         src.push("vec3  diffuseColor = rgb;");
         src.push("float specularF0 = 1.0;");
-        src.push("float roughness = 1.0;");
-        src.push("float metallic = 0.0;");
+        src.push("float metallic = float(vMetallicRoughness.r) / 255.0;");
+        src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
         src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");

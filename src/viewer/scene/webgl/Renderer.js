@@ -256,7 +256,7 @@ const Renderer = function (scene, options) {
             gl.getExtension("OES_element_index_uint");
         }
 
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] ) {
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             gl.getExtension('EXT_frag_depth');
         }
 
@@ -457,6 +457,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.pass = params.pass;
             frameCtx.withSAO = false;
+            frameCtx.pbrEnabled = !!scene.pbrEnabled;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -813,7 +814,7 @@ const Renderer = function (scene, options) {
                 gl.getExtension("OES_element_index_uint");
             }
 
-            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] ) {
+            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 gl.getExtension('EXT_frag_depth');
             }
 

@@ -132,6 +132,7 @@ class TrianglesInstancingLayer {
 
         // Vertex arrays
         this._colors = [];
+        this._metallicRoughness = [];
         this._pickColors = [];
         this._offsets = [];
 
@@ -169,6 +170,8 @@ class TrianglesInstancingLayer {
      *
      * @param cfg Portion params
      * @param cfg.color Color [0..255,0..255,0..255]
+     * @param cfg.metallic Metalness factor [0..255]
+     * @param cfg.roughness Roughness factor [0..255]
      * @param cfg.opacity Opacity [0..255].
      * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param [cfg.worldMatrix] Flat float 4x4 matrix.
@@ -179,6 +182,8 @@ class TrianglesInstancingLayer {
     createPortion(cfg) {
 
         const color = cfg.color;
+        const metallic = cfg.metallic;
+        const roughness = cfg.roughness;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
         const worldMatrix = cfg.worldMatrix;
@@ -200,6 +205,9 @@ class TrianglesInstancingLayer {
         this._colors.push(g);
         this._colors.push(b);
         this._colors.push(opacity);
+
+        this._metallicRoughness.push((metallic !== null && metallic !== undefined) ? metallic : 0);
+        this._metallicRoughness.push((roughness !== null && roughness !== undefined) ? roughness : 255);
 
         if (this.model.scene.entityOffsetsEnabled) {
             this._offsets.push(0);
@@ -301,6 +309,11 @@ class TrianglesInstancingLayer {
             let notNormalized = false;
             this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, notNormalized);
             this._colors = []; // Release memory
+        }
+        if (this._metallicRoughness.length > 0) {
+            const metallicRoughness = new Uint8Array(this._metallicRoughness);
+            let normalized = false;
+            this._state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, this._metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
         }
         if (flagsLength > 0) {
             // Because we only build flags arrays here, 
@@ -665,7 +678,7 @@ class TrianglesInstancingLayer {
             return;
         }
         if (frameCtx.withSAO) {
-            if (frameCtx.quality) {
+            if (frameCtx.pbrEnabled) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
                     this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -675,7 +688,7 @@ class TrianglesInstancingLayer {
                 }
             }
         } else {
-            if (frameCtx.quality) {
+            if (frameCtx.pbrEnabled) {
                 if (this._instancingRenderers.colorQualityRenderer) {
                     this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -691,7 +704,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (frameCtx.quality) {
+        if (frameCtx.pbrEnabled) {
             if (this._instancingRenderers.colorQualityRenderer) {
                 this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
@@ -864,6 +877,10 @@ class TrianglesInstancingLayer {
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
+        }
+        if (state.metallicRoughnessBuf) {
+            state.metallicRoughnessBuf.destroy();
+            state.metallicRoughnessBuf = null;
         }
         if (state.flagsBuf) {
             state.flagsBuf.destroy();

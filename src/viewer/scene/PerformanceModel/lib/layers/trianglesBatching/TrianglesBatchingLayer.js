@@ -55,6 +55,7 @@ class TrianglesBatchingLayer {
             offsetsBuf: null,
             normalsBuf: null,
             colorsBuf: null,
+            metallicRoughnessBuf: null,
             flagsBuf: null,
             flags2Buf: null,
             indicesBuf: null,
@@ -118,6 +119,8 @@ class TrianglesBatchingLayer {
      * @param cfg.indices  Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
+     * @param cfg.metallic Metalness factor [0..255]
+     * @param cfg.roughness Roughness factor [0..255]
      * @param cfg.opacity Opacity [0..255]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
      * @param [cfg.worldMatrix] Flat float 4x4 matrix
@@ -136,6 +139,8 @@ class TrianglesBatchingLayer {
         const indices = cfg.indices;
         const edgeIndices = cfg.edgeIndices;
         const color = cfg.color;
+        const metallic = cfg.metallic;
+        const roughness = cfg.roughness;
         const colors = cfg.colors;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
@@ -263,25 +268,31 @@ class TrianglesBatchingLayer {
         if (colors) {
 
             for (let i = 0, len = colors.length; i < len; i += 3) {
-                buffer.colors.push(colors[i]*255);
-                buffer.colors.push(colors[i + 1]*255);
-                buffer.colors.push(colors[i + 2]*255);
+                buffer.colors.push(colors[i] * 255);
+                buffer.colors.push(colors[i + 1] * 255);
+                buffer.colors.push(colors[i + 2] * 255);
                 buffer.colors.push(255);
             }
 
-        } else
-            if (color) {
+        } else if (color) {
 
             const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
             const b = color[2];
             const a = opacity;
 
+            const metallicValue = (metallic !== null && metallic !== undefined) ? metallic : 0;
+            const roughnessValue = (roughness !== null && roughness !== undefined) ? roughness : 255;
+
             for (let i = 0; i < numVerts; i++) {
+
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
+
+                buffer.metallicRoughness.push(metallicValue);
+                buffer.metallicRoughness.push(roughnessValue);
             }
         }
 
@@ -364,6 +375,12 @@ class TrianglesBatchingLayer {
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
             state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
+        }
+
+        if (buffer.metallicRoughness.length > 0) {
+            const metallicRoughness = new Uint8Array(buffer.metallicRoughness);
+            let normalized = false;
+            state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
         }
 
         if (buffer.colors.length > 0) { // Because we build flags arrays here, get their length from the colors array
@@ -735,7 +752,7 @@ class TrianglesBatchingLayer {
             return;
         }
         if (frameCtx.withSAO) {
-            if (frameCtx.quality) {
+            if (frameCtx.pbrEnabled) {
                 if (this._batchingRenderers.colorQualityRendererWithSAO) {
                     this._batchingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -745,7 +762,7 @@ class TrianglesBatchingLayer {
                 }
             }
         } else {
-            if (frameCtx.quality) {
+            if (frameCtx.pbrEnabled) {
                 if (this._batchingRenderers.colorQualityRenderer) {
                     this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -761,7 +778,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        if (frameCtx.quality) {
+        if (frameCtx.pbrEnabled) {
             if (this._batchingRenderers.colorQualityRenderer) {
                 this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
@@ -936,6 +953,10 @@ class TrianglesBatchingLayer {
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
+        }
+        if (state.metallicRoughnessBuf) {
+            state.metallicRoughnessBuf.destroy();
+            state.metallicRoughnessBuf = null;
         }
         if (state.flagsBuf) {
             state.flagsBuf.destroy();

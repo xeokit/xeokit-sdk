@@ -109,6 +109,9 @@ class TrianglesInstancingColorQualityRenderer {
         this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
+        this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aMetallicRoughness.location, 1);
+
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
 
@@ -133,6 +136,7 @@ class TrianglesInstancingColorQualityRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
+        instanceExt.vertexAttribDivisorANGLE(this._aMetallicRoughness.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
         if (this._aFlags2) { // Won't be in shader when not clipping
@@ -227,6 +231,7 @@ class TrianglesInstancingColorQualityRenderer {
         this._aPosition = program.getAttribute("position");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
+        this._aMetallicRoughness = program.getAttribute("metallicRoughness");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
         this._aOffset = program.getAttribute("offset");
@@ -345,6 +350,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("attribute vec3 position;");
         src.push("attribute vec2 normal;");
         src.push("attribute vec4 color;");
+        src.push("attribute vec2 metallicRoughness;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
 
@@ -385,6 +391,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("varying vec3 vWorldNormal;");
@@ -434,6 +441,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("vViewPosition = viewPosition;");
         src.push("vViewNormal = viewNormal;");
         src.push("vColor = color;");
+        src.push("vMetallicRoughness = metallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("vWorldNormal = worldNormal.xyz;");
@@ -546,6 +554,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
             src.push("varying vec3 vWorldNormal;");
@@ -670,7 +679,7 @@ class TrianglesInstancingColorQualityRenderer {
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
 
             if (lightsState.lightMaps.length > 0) {
-                src.push("   vec3 irradiance = sRGBToLinear(textureCube(lightMap, geometry.worldNormal)).rgb;");
+                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(textureCube(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
@@ -722,8 +731,8 @@ class TrianglesInstancingColorQualityRenderer {
 
         src.push("vec3  diffuseColor = rgb;");
         src.push("float specularF0 = 1.0;");
-        src.push("float roughness = 0.9;");
-        src.push("float metallic = 0.1;");
+        src.push("float metallic = float(vMetallicRoughness.r) / 255.0;");
+        src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
         src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
