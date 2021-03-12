@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PerformanceModel with Instanced Geometries and PBR</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>PerformanceModel with Instanced Geometries and PBR</h1>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
+    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
+    import {buildSphereGeometry} from "../src/viewer/scene/geometry/builders/buildSphereGeometry.js";
+    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
+    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {buildVectorTextGeometry} from "../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        pbrEnabled: true
+    });
+
+    viewer.scene.camera.eye = [0, 0, 35];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure lighting
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.gammaOutput = true;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [0.4, 0.4, 0.5],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "textures/reflect/desertRoad/px.png",
+            "textures/reflect/desertRoad/nx.png",
+            "textures/reflect/desertRoad/py.png",
+            "textures/reflect/desertRoad/ny.png",
+            "textures/reflect/desertRoad/pz.png",
+            "textures/reflect/desertRoad/nz.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    new LightMap(viewer.scene, {
+        src: [
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel representing a chart of roughness vs Metallic
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "pbrMetalRoughness"
+    });
+
+    let numObjects = 0;
+    let metallic = 0;
+    let roughness = 0;
+    const steps = 4;
+    const inc = 4;
+    const width = steps * inc;
+    const halfSide = width / 2;
+    const min = -halfSide;
+    const max = halfSide;
+    const metallicInc = 1.0 / steps;
+    const roughnessInc = 1.0 / steps;
+
+    const sphere = buildSphereGeometry({
+        radius: 1.5,
+        heightSegments: 60,
+        widthSegments: 60
+    });
+
+    performanceModel.createGeometry({
+        id: "sphereGeometry",
+        primitive: "triangles",
+        positions: sphere.positions,
+        normals: sphere.normals,
+        indices: sphere.indices
+    });
+
+    for (let x = min; x <= max; x += inc) {
+
+        metallic = 0;
+
+        for (let y = max; y >= min; y -= inc) {
+
+            const meshId = "mesh" + numObjects++;
+
+            performanceModel.createMesh({
+                id: meshId,
+                geometryId: "sphereGeometry",
+                color: [0.6, 0.6, 0.6],
+                metallic: metallic,
+                roughness: roughness,
+                position: [x, y, 0]
+            });
+
+            performanceModel.createEntity({
+                entityId: "" + x + "." + y,
+                meshIds: [meshId]
+            });
+
+            metallic += metallicInc;
+        }
+
+        roughness += roughnessInc;
+    }
+
+    performanceModel.finalize();
+
+    //--------------------------------------------------------------------------------------
+    //  Axis labels
+    //--------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "PerformanceGeometry Batching\nPBR Metallic vs Roughness",
+            size: .7
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [1.0, 1.0, 1.0],
+            lineWidth: 2
+        }),
+        position: [min, max + inc, 0]
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "0 ---------- Metallic -----------> 1",
+            size: .5
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [1.0, 1.0, 1.0],
+            lineWidth: 2
+        }),
+        rotation: [0, 0, 270],
+        position: [min - inc, max, 0],
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "0 ----------- Roughness -----------> 1",
+            size: .5
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [1.0, 1.0, 1.0],
+            lineWidth: 2
+        }),
+        position: [min, min - inc, 0]
+    });
+
+</script>
+</html>
