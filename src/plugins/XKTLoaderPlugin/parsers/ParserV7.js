@@ -48,7 +48,7 @@ function extract(elements) {
 
         eachMeshGeometriesPortion: elements[13],
         eachMeshMatricesPortion: elements[14],
-        eachMeshColorAndOpacity: elements[15],
+        eachMeshMaterial: elements[15],
 
         // Entity elements in the following arrays are grouped in runs that are shared by the same tiles
 
@@ -83,7 +83,7 @@ function inflate(deflatedData) {
 
         eachMeshGeometriesPortion: new Uint32Array(pako.inflate(deflatedData.eachMeshGeometriesPortion).buffer),
         eachMeshMatricesPortion: new Uint32Array(pako.inflate(deflatedData.eachMeshMatricesPortion).buffer),
-        eachMeshColorAndOpacity: new Uint8Array(pako.inflate(deflatedData.eachMeshColorAndOpacity).buffer),
+        eachMeshMaterial: new Uint8Array(pako.inflate(deflatedData.eachMeshMaterial).buffer),
 
         eachEntityId: pako.inflate(deflatedData.eachEntityId, {to: 'string'}),
         eachEntityMeshesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityMeshesPortion).buffer),
@@ -125,7 +125,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
     const eachMeshGeometriesPortion = inflatedData.eachMeshGeometriesPortion;
     const eachMeshMatricesPortion = inflatedData.eachMeshMatricesPortion;
-    const eachMeshColorAndOpacity = inflatedData.eachMeshColorAndOpacity;
+    const eachMeshMaterial = inflatedData.eachMeshMaterial;
 
     const eachEntityId = JSON.parse(inflatedData.eachEntityId);
     const eachEntityMeshesPortion = inflatedData.eachEntityMeshesPortion;
@@ -248,8 +248,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 const atLastGeometry = (geometryIndex === (numGeometries - 1));
 
-                const meshColor = decompressColor(eachMeshColorAndOpacity.subarray((meshIndex * 4), (meshIndex * 4) + 3));
-                const meshOpacity = eachMeshColorAndOpacity[(meshIndex * 4) + 3] / 255.0;
+                const meshColor = decompressColor(eachMeshMaterial.subarray((meshIndex * 6), (meshIndex * 6) + 3));
+                const meshOpacity = eachMeshMaterial[(meshIndex * 6) + 3] / 255.0;
+                const meshMetallic = eachMeshMaterial[(meshIndex * 6) + 4] / 255.0;
+                const meshRoughness = eachMeshMaterial[(meshIndex * 6) + 5] / 255.0;
 
                 const meshId = nextMeshId++;
 
@@ -322,6 +324,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         geometryId: geometryId,
                         matrix: meshMatrix,
                         color: meshColor,
+                        metallic: meshMetallic,
+                        roughness: meshRoughness,
                         opacity: meshOpacity
                     }));
 
@@ -378,6 +382,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         edgeIndices: geometryEdgeIndices,
                         positionsDecodeMatrix: tileDecodeMatrix,
                         color: meshColor,
+                        metallic: meshMetallic,
+                        roughness: meshRoughness,
                         opacity: meshOpacity
                     }));
 
