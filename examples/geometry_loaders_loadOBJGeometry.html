@@ -9,7 +9,7 @@
         #myCanvas {
             width: 100%;
             height: 100%;
-            background: lightBlue;
+            background: black;
         }
     </style>
 </head>
@@ -63,9 +63,10 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
     import {loadOBJGeometry} from "../src/viewer/scene/geometry/loaders/loadOBJGeometry.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
     import {MetallicMaterial} from "../src/viewer/scene/materials/MetallicMaterial.js";
     import {Texture} from "../src/viewer/scene/materials/Texture.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -79,6 +80,32 @@
     viewer.scene.camera.eye = [0.57, 1.37, 1.14];
     viewer.scene.camera.look = [0.04, 0.58, 0.00];
     viewer.scene.camera.up = [-0.22, 0.84, -0.48];
+
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.0;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a mesh with torus shape
