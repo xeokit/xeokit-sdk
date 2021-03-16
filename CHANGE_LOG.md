@@ -27,6 +27,8 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
   * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
   * Configurable max geometry batching size for PerformanceModel and XKTLoaderPlugin. [#559](https://github.com/xeokit/xeokit-sdk/issues/559) ([**@xeolabs**](https://github.com/xeolabs))
   * Optimize PerformanceModel shaders. [#542](https://github.com/xeokit/xeokit-sdk/pull/542) ([**@xeolabs**](https://github.com/xeolabs))
+  * Support point clouds and line segments in PerformanceModel. [#569](https://github.com/xeokit/xeokit-sdk/issues/569) ([**@xeolabs**](https://github.com/xeolabs))
+  * Extend XKTLoaderPlugin to load XKT 1.0.0. [#586](https://github.com/xeokit/xeokit-sdk/issues/586) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.6.0
 
