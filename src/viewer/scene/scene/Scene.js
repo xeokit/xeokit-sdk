@@ -1600,12 +1600,12 @@ class Scene extends Component {
     /**
      * Sets whether or not to render pixels with pre-multiplied gama.
      *
-     * Default value is ````true````.
+     * Default value is ````false````.
      *
      * @type {Boolean}
      */
     set gammaOutput(value) {
-        value = value !== false;
+        value = !!value;
         if (value === this._renderer.gammaOutput) {
             return;
         }
