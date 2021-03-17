@@ -29,6 +29,7 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
   * Optimize PerformanceModel shaders. [#542](https://github.com/xeokit/xeokit-sdk/pull/542) ([**@xeolabs**](https://github.com/xeolabs))
   * Support point clouds and line segments in PerformanceModel. [#569](https://github.com/xeokit/xeokit-sdk/issues/569) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend XKTLoaderPlugin to load XKT 1.0.0. [#586](https://github.com/xeokit/xeokit-sdk/issues/586) ([**@xeolabs**](https://github.com/xeolabs))
+  * Make XKTLoaderPlugin robust for empty arrays in XKT. [#587](https://github.com/xeokit/xeokit-sdk/issues/587) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.6.0
 
