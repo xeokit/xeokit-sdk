@@ -15,6 +15,8 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
 * DirLight, PointLight
   * Fix lighting for PerformanceModel with instanced geometry. [#545](https://github.com/xeokit/xeokit-sdk/pull/545) ([**@xeolabs**](https://github.com/xeolabs))
   * Minimal default lights for better performance. [#543](https://github.com/xeokit/xeokit-sdk/pull/543) ([**@xeolabs**](https://github.com/xeolabs))
+* DistanceMeasurementsPlugin
+  * Fix disappearing DistanceMeasurement length label. [#583](https://github.com/xeokit/xeokit-sdk/pull/583) ([**@xeolabs**](https://github.com/xeolabs))
 * Scene
   * Fix surface picking option to not pick surface normal. [#550](https://github.com/xeokit/xeokit-sdk/pull/550) ([**@xeolabs**](https://github.com/xeolabs))
 * OBJLoaderPlugin    
