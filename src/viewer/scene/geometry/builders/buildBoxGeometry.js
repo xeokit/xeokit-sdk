@@ -1,7 +1,7 @@
 import {utils} from '../../utils.js';
 
 /**
- * @desc Creates a box-shaped {@link Geometry}.
+ * @desc Creates box-shaped {@link Geometry}.
  *
  * ## Usage
  *
