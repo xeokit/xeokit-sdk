@@ -62,34 +62,38 @@ function extract(elements) {
 
 function inflate(deflatedData) {
 
+    function inflate(array, options) {
+        return (array.length === 0) ? [] : pako.inflate(array, options).buffer;
+    }
+
     return {
-        positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
-        normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
-        colors: new Uint8Array(pako.inflate(deflatedData.colors).buffer),
+        positions: new Uint16Array(inflate(deflatedData.positions)),
+        normals: new Int8Array(inflate(deflatedData.normals)),
+        colors: new Uint8Array(inflate(deflatedData.colors)),
 
-        indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
-        edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices).buffer),
+        indices: new Uint32Array(inflate(deflatedData.indices)),
+        edgeIndices: new Uint32Array(inflate(deflatedData.edgeIndices)),
 
-        matrices: new Float32Array(pako.inflate(deflatedData.matrices).buffer),
+        matrices: new Float32Array(inflate(deflatedData.matrices)),
 
-        reusedGeometriesDecodeMatrix: new Float32Array(pako.inflate(deflatedData.reusedGeometriesDecodeMatrix).buffer),
+        reusedGeometriesDecodeMatrix: new Float32Array(inflate(deflatedData.reusedGeometriesDecodeMatrix)),
 
-        eachGeometryPrimitiveType: new Uint8Array(pako.inflate(deflatedData.eachGeometryPrimitiveType).buffer),
-        eachGeometryPositionsPortion: new Uint32Array(pako.inflate(deflatedData.eachGeometryPositionsPortion).buffer),
-        eachGeometryNormalsPortion: new Uint32Array(pako.inflate(deflatedData.eachGeometryNormalsPortion).buffer),
-        eachGeometryColorsPortion: new Uint32Array(pako.inflate(deflatedData.eachGeometryColorsPortion).buffer),
-        eachGeometryIndicesPortion: new Uint32Array(pako.inflate(deflatedData.eachGeometryIndicesPortion).buffer),
-        eachGeometryEdgeIndicesPortion: new Uint32Array(pako.inflate(deflatedData.eachGeometryEdgeIndicesPortion).buffer),
+        eachGeometryPrimitiveType: new Uint8Array(inflate(deflatedData.eachGeometryPrimitiveType)),
+        eachGeometryPositionsPortion: new Uint32Array(inflate(deflatedData.eachGeometryPositionsPortion)),
+        eachGeometryNormalsPortion: new Uint32Array(inflate(deflatedData.eachGeometryNormalsPortion)),
+        eachGeometryColorsPortion: new Uint32Array(inflate(deflatedData.eachGeometryColorsPortion)),
+        eachGeometryIndicesPortion: new Uint32Array(inflate(deflatedData.eachGeometryIndicesPortion)),
+        eachGeometryEdgeIndicesPortion: new Uint32Array(inflate(deflatedData.eachGeometryEdgeIndicesPortion)),
 
-        eachMeshGeometriesPortion: new Uint32Array(pako.inflate(deflatedData.eachMeshGeometriesPortion).buffer),
-        eachMeshMatricesPortion: new Uint32Array(pako.inflate(deflatedData.eachMeshMatricesPortion).buffer),
-        eachMeshMaterial: new Uint8Array(pako.inflate(deflatedData.eachMeshMaterial).buffer),
+        eachMeshGeometriesPortion: new Uint32Array(inflate(deflatedData.eachMeshGeometriesPortion)),
+        eachMeshMatricesPortion: new Uint32Array(inflate(deflatedData.eachMeshMatricesPortion)),
+        eachMeshMaterial: new Uint8Array(inflate(deflatedData.eachMeshMaterial)),
 
         eachEntityId: pako.inflate(deflatedData.eachEntityId, {to: 'string'}),
-        eachEntityMeshesPortion: new Uint32Array(pako.inflate(deflatedData.eachEntityMeshesPortion).buffer),
+        eachEntityMeshesPortion: new Uint32Array(inflate(deflatedData.eachEntityMeshesPortion)),
 
-        eachTileAABB: new Float64Array(pako.inflate(deflatedData.eachTileAABB).buffer),
-        eachTileEntitiesPortion: new Uint32Array(pako.inflate(deflatedData.eachTileEntitiesPortion).buffer),
+        eachTileAABB: new Float64Array(inflate(deflatedData.eachTileAABB)),
+        eachTileEntitiesPortion: new Uint32Array(inflate(deflatedData.eachTileEntitiesPortion)),
     };
 }
 
