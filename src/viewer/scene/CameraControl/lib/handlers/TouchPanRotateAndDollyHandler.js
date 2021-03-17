@@ -1,5 +1,25 @@
 import {math} from "../../../math/math.js";
 
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
+
 /**
  * @private
  */
@@ -39,6 +59,7 @@ class TouchPanRotateAndDollyHandler {
             event.stopPropagation();
             event.preventDefault();
 
+            const canvasBoundingRect = canvas.getBoundingClientRect();
             const touches = event.touches;
             const changedTouches = event.changedTouches;
 
@@ -46,8 +67,7 @@ class TouchPanRotateAndDollyHandler {
 
             if (touches.length === 1 && changedTouches.length === 1) {
                 tapStartTime = states.touchStartTime;
-                tapStartPos[0] = touches[0].pageX;
-                tapStartPos[1] = touches[0].pageY;
+                getCanvasPosFromEvent(touches[0], tapStartPos);
 
                 if (configs.followPointer) {
 
@@ -55,7 +75,7 @@ class TouchPanRotateAndDollyHandler {
                     pickController.schedulePickSurface = true;
                     pickController.update();
 
-                    if (!configs.planView ) {
+                    if (!configs.planView) {
 
                         if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
 
