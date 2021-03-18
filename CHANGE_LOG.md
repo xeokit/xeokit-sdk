@@ -13,6 +13,7 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
 * CameraControl
   * Fix dollying exception for ortho and frustum projections. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix canvas position for touch events on canvas with margins. [#588](https://github.com/xeokit/xeokit-sdk/issues/588) ([**@xeolabs**](https://github.com/xeolabs))
+  * Enable CameraControl follow pointer mode by default. [#585](https://github.com/xeokit/xeokit-sdk/issues/585) ([**@xeolabs**](https://github.com/xeolabs))
 * DirLight, PointLight
   * Fix lighting for PerformanceModel with instanced geometry. [#545](https://github.com/xeokit/xeokit-sdk/pull/545) ([**@xeolabs**](https://github.com/xeolabs))
   * Minimal default lights for better performance. [#543](https://github.com/xeokit/xeokit-sdk/pull/543) ([**@xeolabs**](https://github.com/xeolabs))
