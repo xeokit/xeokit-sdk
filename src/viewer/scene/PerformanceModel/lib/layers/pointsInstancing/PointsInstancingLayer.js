@@ -689,6 +689,9 @@ class PointsInstancingLayer {
         }
     }
 
+    drawPickNormals(frameCtx) {
+    }
+
     destroy() {
         const state = this._state;
         if (state.positionsBuf) {

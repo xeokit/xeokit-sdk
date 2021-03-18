@@ -724,6 +724,9 @@ class PointsBatchingLayer {
         }
     }
 
+    drawPickNormals(frameCtx) {
+    }
+
     //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
 
     drawOcclusion(frameCtx) {
