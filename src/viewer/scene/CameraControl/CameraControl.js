@@ -656,7 +656,7 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 100,
-            touchDollyRate: 0.05,
+            touchDollyRate: 0.2,
             dollyInertia: 0,
             dollyProximityThreshold: 30.0,
             dollyMinSpeed: 0.04
@@ -1382,18 +1382,18 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys with touch input.
      *
-     * Default is ````0.05````
+     * Default is ````0.2````
      *
      * @param {Number} touchDollyRate The new touch dolly rate.
      */
     set touchDollyRate(touchDollyRate) {
-        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.05;
+        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.2;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second with touch input.
      *
-     * Default is ````0.05````.
+     * Default is ````0.2````.
      *
      * @returns {Number} The current touch dolly rate.
      */
