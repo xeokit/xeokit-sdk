@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.7.0
 
-Unreleased
+March 18, 2021
 
 Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera control fixes.    
 
