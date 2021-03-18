@@ -12,6 +12,20 @@
             background: lightBlue;
         }
 
+        .camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
         #my-gui-container {
             position: absolute;
             top: 350px;
@@ -72,6 +86,10 @@
 
     viewer.cameraControl.navMode = "orbit";
     viewer.cameraControl.followPointer = true;
+
+    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    document.body.appendChild(pivotElement);
+    viewer.cameraControl.pivotElement = pivotElement;
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure points material
