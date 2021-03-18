@@ -275,7 +275,7 @@ import {math} from "../math/math.js";
  *
  * ````javascript
  * cameraControl.navMode = "planView";
- * cameraControl.followPointer = true;
+ * cameraControl.followPointer = true; // Default
  * ````
  *
  * When the pointer is over empty space, the target will remain the last object that the pointer was over.
@@ -632,7 +632,7 @@ class CameraControl extends Component {
             navMode: "orbit",
             planView: false,
             firstPerson: false,
-            followPointer: false,
+            followPointer: true,
             doublePickFlyTo: true,
             panRightClick: true,
             showPivot: false,
@@ -971,7 +971,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether the {@link Camera} follows the mouse or touch pointer.
+     * Sets whether the {@link Camera} follows the mouse/touch pointer.
      *
      * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
@@ -979,18 +979,18 @@ class CameraControl extends Component {
      *
      * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * See class comments for more info.
      *
      * @param {Boolean} value Set ````true```` to enable the Camera to follow the pointer.
      */
     set followPointer(value) {
-        this._configs.followPointer = !!value;
+        this._configs.followPointer = (value !== false);
     }
 
     /**
-     * Sets whether the {@link Camera} follows the mouse or touch pointer.
+     * Sets whether the {@link Camera} follows the mouse/touch pointer.
      *
      * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
@@ -998,7 +998,7 @@ class CameraControl extends Component {
      *
      * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * See class comments for more info.
      *
@@ -1045,7 +1045,7 @@ class CameraControl extends Component {
      */
     get dollyToPointer() {
         this.warn("dollyToPointer property is deprecated - replaced with followPointer");
-        return this.followPointer = value;
+        return this.followPointer;
     }
 
     /**
