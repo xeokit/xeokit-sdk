@@ -28,9 +28,6 @@
                href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Node</a>
             - Creates the ground plane
         </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
-        </li>
     </ul>
 </div>
 </body>
@@ -42,11 +39,14 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {OBJLoaderPlugin} from "../src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {STLLoaderPlugin} from "../src/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
     import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
     import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
     import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
     import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -60,12 +60,44 @@
     viewer.camera.look = [-5.32, -0.70, 1.99];
     viewer.camera.up = [0.15, 0.94, -0.20];
 
+    viewer.camera.eye = [-12.272295369363157, 2.1858831617907373, 7.8397003205359015]
+    viewer.camera.look = [-7.49320095488547, -0.010042619924785622, 0.637325798554962]
+    viewer.camera.up = [0.13613834956096418, 0.9692121842127455, -0.20516844726315914]
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new AmbientLight(viewer.scene, {
+        color: [1, 1, 1],
+        intensity: 0.5
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -1.0, -1.0],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.0, -0.8, 0.8],
+        color: [0.8, 0.8, 1.0],
+        intensity: 0.4,
+        space: "world"
+    });
+
     //------------------------------------------------------------------------------------------------------------------
     // Build a scene graph containing a bunch of models
     //------------------------------------------------------------------------------------------------------------------
 
     const objLoader = new OBJLoaderPlugin(viewer);
     const xktLoader = new XKTLoaderPlugin(viewer);
+    const stlLoader = new STLLoaderPlugin(viewer);
 
     // Car
 
@@ -73,7 +105,8 @@
         id: "myModel",
         src: "./models/obj/sportsCar/sportsCar.obj",
         position: [-5, -1, 0],
-        scale: [1.5, 1.5, 1.5]
+        scale: [1.5, 1.5, 1.5],
+        edges: true
     });
 
     // House
@@ -86,6 +119,18 @@
         edges: true
     });
 
+    // Spur gear
+
+    stlLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
+        id: "myModel3",
+        src: "./models/stl/binary/spurGear.stl",
+        position: [-8, -1, 0],
+        scale: [0.07, 0.07, 0.07],
+        rotation: [0, 180, 0],
+        smoothNormals: true,
+        edges: true
+    });
+
     // Ground plane
 
     new Mesh(viewer.scene, {
@@ -94,8 +139,9 @@
             zSize: 500
         })),
         material: new PhongMaterial(viewer.scene, {
-            diffuse: [0.4, 1.0, 0.4],
-            backfaces: true
+            diffuse: [0.3, 1.0, 0.1],
+            // alpha: 0.0,
+            alphaMode: "opaque"
         }),
         position: [0, -1.0, 0],
         pickable: false,

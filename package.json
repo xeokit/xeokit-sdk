@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.7.0-alpha.2",
+  "version": "1.7.0",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "index.js",
   "scripts": {
@@ -20,9 +20,9 @@
     "ifc",
     "bim",
     "cad",
-    "bimserver",
     "buildingsmart",
     "openbim",
+    "opensource",
     "solidworks",
     "gltf",
     "3dxml",

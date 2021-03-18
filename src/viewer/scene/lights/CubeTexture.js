@@ -127,13 +127,8 @@ class CubeTexture extends Component {
                         }
                         texture.setImage(self._images, self._state);
                         texture.setProps(self._state);
-                        /**
-                         * Fired whenever this CubeTexture has loaded the
-                         * image files that its {@link CubeTexture/src} property currently points to.
-                         * @event loaded
-                         * @param value {HTML Image} The value of the {@link CubeTexture/src} property
-                         */
                         self.fire("loaded", self._src, false);
+                        self.glRedraw();
                     }
                 };
             })();

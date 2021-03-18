@@ -43,7 +43,7 @@
             "annotations_occlusionDisabled",
         ],
 
-        "Serverless BIM": [
+        "Self-Hosted BIM": [
 
             "#Loading IFC models from .xkt files (recommended)",
             "BIMOffline_XKT_HolterTower",
@@ -59,6 +59,7 @@
             "BIMOffline_XKT_authorMetadata",
             "BIMOffline_XKT_DoublePrecision_MAP",
             "BIMOffline_XKT_DoublePrecision_Lyon",
+            "BIMOffline_XKT_WaterLock",
 
             "#Loading BIM models from glTF files",
             "BIMOffline_glTF_Duplex",
@@ -67,21 +68,6 @@
             "BIMOffline_glTF_includeTypes_PlanView",
             "BIMOffline_glTF_objectDefaults",
             "BIMOffline_glTF_metadata_Schependomlaan"
-        ],
-
-        "BIMServer": [
-
-            "#Loading models from your own BIMServer instance",
-
-            "BIMServer_loadYourModel",
-
-            "#Loading models from the xeolabs BIMServer instance ",
-
-            "BIMServer_Schependomlaan",
-
-            "#Custom initial object states",
-
-            "BIMServer_objectDefaults"
         ],
 
         "BCF": [
@@ -142,6 +128,7 @@
 
             "#Geometry builders",
             "geometry_builders_buildBoxGeometry",
+            "geometry_builders_buildBoxLinesGeometry",
             "geometry_builders_buildGridGeometry",
             "geometry_builders_buildCylinderGeometry",
             "geometry_builders_buildSphereGeometry",
@@ -179,7 +166,7 @@
 
         "Loaders": [
 
-            "#Loading models from xeokit .XKT format",
+            "#Loading models from .XKT format",
             "loading_XKT_Duplex",
             "loading_XKT_Duplex_originalIFCColors",
             "loading_XKT_Duplex_transform",
@@ -188,12 +175,15 @@
             "loading_XKT_OTCConferenceCenter",
             "loading_XKT_WestRiverSideHospital",
             "loading_XKT_GearboxPropellorTurbine",
+            "loading_XKT_GearboxPropellorTurbine_PBR",
             "loading_XKT_APHS",
 
-            "#Opions for loading from .XKT format",
+            "#Loading point cloud models from .XKT",
+            "loading_XKT_MAP_pointCloud",
+
+            "#Opions for loading from .XKT",
             "loading_XKT_dataSource",
             "loading_XKT_concurrently",
-            "loading_XKT_validateMetaModel",
             "loading_XKT_maxGeometryBatchSize_50M",
             "loading_XKT_maxGeometryBatchSize_20K",
 
@@ -209,13 +199,19 @@
             "loading_3DXML_materialType_Phong",
             "loading_3DXML_TreeView",
 
+            "#Loading models from STL",
+            "loading_STL_SpurGear",
+            "loading_STL_dataSource",
+            "loading_STL_dataAsParam",
+            "loading_STL_doublePrecision",
+
             "#Loading models from various formats",
             "loading_glTF_Duplex_transform",
             "loading_glTF_Schependomlaan",
             "loading_glTF_Schependomlaan_lowPerf",
             "loading_glTF_dataSource",
             "loading_OBJ_SportsCar",
-            "loading_STL_SpurGear",
+
 
             "#Loading multiple models, from various formats",
             "loading_MultipleModels"
@@ -254,7 +250,13 @@
             "materials_Texture",
 
             "#Fresnel effects",
-            "materials_Fresnel"
+            "materials_Fresnel",
+
+            "#Point clouds",
+            "materials_PointsMaterial",
+
+            "#Lines",
+            "materials_LinesMaterial"
         ],
 
         "Measurements": [
@@ -321,14 +323,29 @@
 
             "#High-performance representation",
             "sceneRepresentation_PerformanceModel_instancing",
+            "sceneRepresentation_PerformanceModel_instancing_geometries",
+            "sceneRepresentation_PerformanceModel_instancing_points",
+            "sceneRepresentation_PerformanceModel_instancing_lines",
+            // "sceneRepresentation_PerformanceModel_instancing_annotations",
             "sceneRepresentation_PerformanceModel_instancing_transform",
             "sceneRepresentation_PerformanceModel_instancing_benchmark",
             "sceneRepresentation_PerformanceModel_instancing_rtcCenter",
+            "sceneRepresentation_PerformanceModel_instancing_rtcCenter_SAO",
+            "sceneRepresentation_PerformanceModel_instancing_SAO",
+            "sceneRepresentation_PerformanceModel_instancing_PBR",
+            "sceneRepresentation_PerformanceModel_instancing_PBR_spheres",
+
             "sceneRepresentation_PerformanceModel_batching",
+            "sceneRepresentation_PerformanceModel_batching_points",
+            "sceneRepresentation_PerformanceModel_batching_lines",
             "sceneRepresentation_PerformanceModel_batching_annotations",
             "sceneRepresentation_PerformanceModel_batching_transform",
             "sceneRepresentation_PerformanceModel_batching_benchmark",
             "sceneRepresentation_PerformanceModel_batching_rtcCenter",
+            "sceneRepresentation_PerformanceModel_batching_rtcCenter_SAO",
+            "sceneRepresentation_PerformanceModel_batching_SAO",
+            "sceneRepresentation_PerformanceModel_batching_PBR",
+
             "sceneRepresentation_PerformanceModel_metadata",
 
             "#Lighting tests",

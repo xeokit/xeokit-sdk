@@ -3836,6 +3836,27 @@ const math = {
     },
 
     /**
+     * Gets the 3D center of the given flat array of 3D positions.
+     *
+     * @private
+     */
+    getPositionsCenter(positions, center = math.vec3()) {
+        let xCenter = 0;
+        let yCenter = 0;
+        let zCenter = 0;
+        for (var i = 0, len = positions.length; i < len; i += 3) {
+            xCenter += positions[i + 0];
+            yCenter += positions[i + 1];
+            zCenter += positions[i + 2];
+        }
+        const numPositions = positions.length / 3;
+        center[0] = xCenter / numPositions;
+        center[1] = yCenter / numPositions;
+        center[2] = zCenter / numPositions;
+        return center;
+    },
+
+    /**
      * Expands the first axis-aligned 3D boundary to enclose the second, if required.
      *
      * @private

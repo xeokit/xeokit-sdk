@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>STLLoaderPlugin - Loading a model with double-precision geometry</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>STLLoaderPlugin - Loading a model with double-precision geometry</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a>
+            - Loads STL model from file system
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {STLLoaderPlugin} from "../src/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
+    import {generateTestSTL} from "./js/generateTestSTL.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [0, 0, -100];
+    viewer.camera.look = [0, 0, 0];
+    viewer.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights with three custom world-space DirLights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        id: "keyLight",
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 0.3, 0.3],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        id: "fillLight",
+        dir: [-0.8, -0.4, -0.4],
+        color: [0.3, 1.0, 0.3],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        id: "rimLight",
+        dir: [0.2, -0.8, 0.8],
+        color: [0.6, 0.6, 0.6],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load three double-precision STL models
+    //
+    // For this demo, we're dynamically generating our STL models, so that we can ensure
+    // that they have huge double-precision values for their vertex positions.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const stlLoader = new STLLoaderPlugin(viewer);
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000000]
+        })
+    });
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000070]
+        })
+    });
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000140]
+        })
+    });
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+    viewer.scene.on("tick", () => {
+        viewer.camera.orbitYaw(0.4);
+    })
+
+</script>
+</html>

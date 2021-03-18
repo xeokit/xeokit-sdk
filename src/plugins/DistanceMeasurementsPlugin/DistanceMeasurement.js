@@ -318,6 +318,7 @@ class DistanceMeasurement extends Component {
             this._yAxisWire.setVisible(true);
             this._zAxisWire.setVisible(true);
             this._lengthWire.setVisible(true);
+            this._lengthLabel.setVisible(true);
 
             this._cpDirty = false;
         }

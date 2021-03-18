@@ -61,6 +61,9 @@
     viewer.scene.camera.look = [0, -5.75, 0];
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
+    viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.smartPivot = true;
+
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
@@ -82,8 +85,7 @@
     performanceModel.createMesh({
         id: "redLegMesh",
 
-        // The primitive type - allowed values are "points", "lines", "line-loop", "line-strip",
-        // "triangles", "triangle-strip" and "triangle-fan".
+        // The primitive type - allowed values are "points", "lines" and "triangles".
         // See the OpenGL/WebGL specification docs for how the coordinate arrays are supposed to be laid out.
         primitive: "triangles",
 

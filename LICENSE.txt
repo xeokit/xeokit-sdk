@@ -1,9 +1,8 @@
 -------------------------------------------------------------------------
-The xeokit SDK is licensed under the Affero GPL V3 license with the option to buy
-a license for commercial use. For more information on pricing and what is included
-in the xeokit SDK, see:
+The xeokit SDK is licensed under the Affero GPL V3 license.
 
-https://xeokit.io/index.html#pricing
+Custom licenses are also available for enterprises that wish to avoid the
+copy-left restrictions of the AGPL3 - see: https://xeokit.io/index.html#pricing
 
 xeokit also contains the following components with MIT and GNU Lesser
 General Public License v3.0:
@@ -15,11 +14,6 @@ MIT License [http://www.opensource.org/licenses/mit-license.php]
 K3D.js V1.0
 Copyright (c) 2012 Ivan Kuckir
 MIT License [http://www.opensource.org/licenses/mit-license.php]
-
-BIMserver-JavaScript-API
-Copyright (c) The open source BIM collective
-GNU Lesser General Public License v3.0
-[https://github.com/opensourceBIM/BIMserver-JavaScript-API/blob/master/license.txt]
 
 Pako
 Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn

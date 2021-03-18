@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XKTLoaderPlugin - MAP model from XKT</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 350px;
+            right: 20px;
+            z-index: 10;
+        }
+    </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="my-gui-container"></div>
+<div id="info">
+    <h1>XKTLoaderPlugin - Double-precision MAP model loaded from XKT 7</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads xeokit XKT model from the file system
+        </li>
+        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-33.39, 19.86, 16.48];
+    viewer.scene.camera.look = [8.29, 8.28, 0.31];
+    viewer.scene.camera.up = [0.23, 0.96, -0.09];
+
+    viewer.cameraControl.navMode = "orbit";
+    viewer.cameraControl.followPointer = true;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create a xeokit loader plugin, load a model, fit to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/MAP/MAP.v7.xkt",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+    });
+
+    window.viewer = viewer;
+</script>
+</html>

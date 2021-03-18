@@ -2,8 +2,8 @@ import {utils} from "../../viewer/scene/utils.js"
 import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {GLTFQualityLoader} from "./GLTFQualityLoader.js";
-import {GLTFPerformanceLoader} from "./GLTFPerformanceLoader.js";
+import {GLTFSceneGraphLoader} from "./GLTFSceneGraphLoader.js";
+import {GLTFPerformanceModelLoader} from "./GLTFPerformanceModelLoader.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
 
@@ -192,7 +192,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
-     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads uover HTTP.
+     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads over HTTP.
      */
     constructor(viewer, cfg = {}) {
 
@@ -201,12 +201,12 @@ class GLTFLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._glTFQualityLoader = new GLTFQualityLoader(this, cfg);
+        this._sceneGraphLoader = new GLTFSceneGraphLoader(this, cfg);
 
         /**
          * @private
          */
-        this._glTFPerformanceLoader = new GLTFPerformanceLoader(this, cfg);
+        this._performanceModelLoader = new GLTFPerformanceModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -309,7 +309,7 @@ class GLTFLoaderPlugin extends Plugin {
             return model; // Return new empty model
         }
 
-        const loader = performance ? this._glTFPerformanceLoader : this._glTFQualityLoader;
+        const loader = performance ? this._performanceModelLoader : this._sceneGraphLoader;
 
         if (params.metaModelSrc || params.metaModelData) {
 

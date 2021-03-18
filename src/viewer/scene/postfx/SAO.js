@@ -220,7 +220,6 @@ class SAO extends Component {
             return;
         }
         this._enabled = value;
-        this.scene._needRecompile = true;
         this.glRedraw();
     }
 

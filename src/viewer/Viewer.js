@@ -45,6 +45,7 @@ class Viewer {
      * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
+     * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      */
     constructor(cfg) {
 
@@ -82,7 +83,8 @@ class Viewer {
             saoEnabled: cfg.saoEnabled,
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
-            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled)
+            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
+            pbrEnabled: (!!cfg.pbrEnabled)
         });
 
         /**

@@ -112,14 +112,9 @@ class MetaScene {
      * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
      * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
      * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
-     * @param {Function} [options.validateMetaModel] Optional callback to validate the {@link MetaModel}. The callback should return ````true```` if it determines the MetaModel to be valid. Otherwise, the callback should return ````false````, in which case ````createMetaModel```` will then return ````null````.
-     * @returns {MetaModel} The new MetaModel, or ````null```` if the ````options.validateMetaModel```` callback was
-     * supplied, and that callback returned ````false````.
+     * @returns {MetaModel} The new MetaModel.
      */
     createMetaModel(modelId, metaModelData, options = {}) {
-
-        // TODO: validate metadata
-        // TODO: replace MetaModel if ID already used
 
         const projectId = metaModelData.projectId || "none";
         const revisionId = metaModelData.revisionId || "none";
@@ -192,13 +187,6 @@ class MetaScene {
                     parentMetaObject.children = parentMetaObject.children || [];
                     parentMetaObject.children.push(metaObject);
                 }
-            }
-        }
-
-        if (options.validateMetaModel) {
-            if (options.validateMetaModel(metaModel) === false) {
-                this._removeMetaModel(metaModel);
-                return null;
             }
         }
 

@@ -1,4 +1,4 @@
-import {ENTITY_FLAGS} from './entityFlags.js';
+import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {math} from "../../math/math.js";
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
