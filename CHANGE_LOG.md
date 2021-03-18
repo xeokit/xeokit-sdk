@@ -27,6 +27,8 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
   * Extend STLLoaderPlugin to support double-precision geometry. [#579](https://github.com/xeokit/xeokit-sdk/issues/579) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to load via optional, custom data source object. [#578](https://github.com/xeokit/xeokit-sdk/issues/578) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to handle data directly, not only loaded from file. [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
+* TreeViewPlugin 
+  * Make TreeViewPlugin robust for invalid metadata.  [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, PerformanceModel
   * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
   * Configurable max geometry batching size for PerformanceModel and XKTLoaderPlugin. [#559](https://github.com/xeokit/xeokit-sdk/issues/559) ([**@xeolabs**](https://github.com/xeolabs))
