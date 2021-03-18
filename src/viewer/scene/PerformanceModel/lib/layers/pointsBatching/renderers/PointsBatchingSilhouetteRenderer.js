@@ -302,11 +302,6 @@ class PointsBatchingSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        src.push("float r = dot(cxy, cxy);");
-        src.push("if (r > 1.0) {");
-        src.push("   discard;");
-        src.push("}");
         src.push("uniform vec4 color;");
         src.push("void main(void) {");
         if (scene.pointsMaterial.roundPoints) {
