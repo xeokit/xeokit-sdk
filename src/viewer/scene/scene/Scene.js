@@ -832,7 +832,7 @@ class Scene extends Component {
         });
 
         new DirLight(this, {
-            dir: [0.8, -1.0, -0.8],
+            dir: [0.5, -1.0, -1.0],
             color: [1.0, 1.0, 1.0],
             intensity: 1.0,
             space: "view"
