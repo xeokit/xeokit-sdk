@@ -1,5 +1,247 @@
 [
   {
+    "name": "LinesBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 99,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 100,
+        "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 101,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 102,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 103,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 104,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 105,
+        "line": "     * @param cfg.indices  Flat int indices array."
+      },
+      {
+        "lineNumber": 106,
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 107,
+        "line": "     * @param cfg.opacity Opacity [0..255]"
+      },
+      {
+        "lineNumber": 108,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 109,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 110,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 111,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 112,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 113,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 114,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
+    "name": "PointsBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 103,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 104,
+        "line": "     * Creates a new portion within this PointCloudLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 105,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 106,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 107,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 108,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 109,
+        "line": "     * @param [cfg.colors] Flat float colors array."
+      },
+      {
+        "lineNumber": 110,
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 111,
+        "line": "     * @param cfg.opacity Opacity [0..255]"
+      },
+      {
+        "lineNumber": 112,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 113,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 114,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 116,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 117,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 118,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
+    "name": "TrianglesBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 110,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 111,
+        "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 112,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 113,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 114,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 116,
+        "line": "     * @param [cfg.normals] Flat float normals array."
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param [cfg.colors] Flat float colors array."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     * @param cfg.indices  Flat int indices array."
+      },
+      {
+        "lineNumber": 119,
+        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
+      },
+      {
+        "lineNumber": 120,
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 121,
+        "line": "     * @param cfg.metallic Metalness factor [0..255]"
+      },
+      {
+        "lineNumber": 122,
+        "line": "     * @param cfg.roughness Roughness factor [0..255]"
+      },
+      {
+        "lineNumber": 123,
+        "line": "     * @param cfg.opacity Opacity [0..255]"
+      },
+      {
+        "lineNumber": 124,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 127,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 128,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 129,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 130,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
     "name": "PickResult#reset",
     "filePath": "src/viewer/scene/webgl/PickResult.js",
     "lines": [

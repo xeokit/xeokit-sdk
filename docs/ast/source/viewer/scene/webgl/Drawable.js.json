@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 7473,
+  "end": 7493,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 7473,
+    "end": 7493,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 7453,
+        "end": 7473,
         "loc": {
           "start": {
             "line": 8,
@@ -64,7 +64,7 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 7453,
+          "end": 7473,
           "loc": {
             "start": {
               "line": 8,
@@ -1178,9 +1178,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 3190,
-                  "end": 3408,
+                  "end": 3403,
                   "loc": {
                     "start": {
                       "line": 113,
@@ -1196,8 +1196,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 3413,
-              "end": 3451,
+              "start": 3408,
+              "end": 3441,
               "loc": {
                 "start": {
                   "line": 121,
@@ -1212,8 +1212,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 3413,
-                "end": 3433,
+                "start": 3408,
+                "end": 3423,
                 "loc": {
                   "start": {
                     "line": 121,
@@ -1221,11 +1221,11 @@
                   },
                   "end": {
                     "line": 121,
-                    "column": 24
+                    "column": 19
                   },
-                  "identifierName": "drawNormalOpaqueFill"
+                  "identifierName": "drawColorOpaque"
                 },
-                "name": "drawNormalOpaqueFill",
+                "name": "drawColorOpaque",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1236,16 +1236,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 3434,
-                  "end": 3442,
+                  "start": 3424,
+                  "end": 3432,
                   "loc": {
                     "start": {
                       "line": 121,
-                      "column": 25
+                      "column": 20
                     },
                     "end": {
                       "line": 121,
-                      "column": 33
+                      "column": 28
                     },
                     "identifierName": "frameCtx"
                   },
@@ -1254,12 +1254,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 3444,
-                "end": 3451,
+                "start": 3434,
+                "end": 3441,
                 "loc": {
                   "start": {
                     "line": 121,
-                    "column": 35
+                    "column": 30
                   },
                   "end": {
                     "line": 122,
@@ -1290,9 +1290,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 3190,
-                  "end": 3408,
+                  "end": 3403,
                   "loc": {
                     "start": {
                       "line": 113,
@@ -1308,9 +1308,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 3457,
-                  "end": 3694,
+                  "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 3447,
+                  "end": 3679,
                   "loc": {
                     "start": {
                       "line": 124,
@@ -1326,8 +1326,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 3699,
-              "end": 3742,
+              "start": 3684,
+              "end": 3722,
               "loc": {
                 "start": {
                   "line": 132,
@@ -1342,8 +1342,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 3699,
-                "end": 3724,
+                "start": 3684,
+                "end": 3704,
                 "loc": {
                   "start": {
                     "line": 132,
@@ -1351,11 +1351,11 @@
                   },
                   "end": {
                     "line": 132,
-                    "column": 29
+                    "column": 24
                   },
-                  "identifierName": "drawNormalTransparentFill"
+                  "identifierName": "drawColorTransparent"
                 },
-                "name": "drawNormalTransparentFill",
+                "name": "drawColorTransparent",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1366,16 +1366,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 3725,
-                  "end": 3733,
+                  "start": 3705,
+                  "end": 3713,
                   "loc": {
                     "start": {
                       "line": 132,
-                      "column": 30
+                      "column": 25
                     },
                     "end": {
                       "line": 132,
-                      "column": 38
+                      "column": 33
                     },
                     "identifierName": "frameCtx"
                   },
@@ -1384,12 +1384,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 3735,
-                "end": 3742,
+                "start": 3715,
+                "end": 3722,
                 "loc": {
                   "start": {
                     "line": 132,
-                    "column": 40
+                    "column": 35
                   },
                   "end": {
                     "line": 133,
@@ -1404,9 +1404,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 3457,
-                  "end": 3694,
+                  "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 3447,
+                  "end": 3679,
                   "loc": {
                     "start": {
                       "line": 124,
@@ -1423,8 +1423,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-                  "start": 3748,
-                  "end": 3822,
+                  "start": 3728,
+                  "end": 3802,
                   "loc": {
                     "start": {
                       "line": 135,
@@ -1439,8 +1439,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 3828,
-                  "end": 4027,
+                  "start": 3808,
+                  "end": 4007,
                   "loc": {
                     "start": {
                       "line": 137,
@@ -1456,8 +1456,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 4032,
-              "end": 4059,
+              "start": 4012,
+              "end": 4039,
               "loc": {
                 "start": {
                   "line": 143,
@@ -1472,8 +1472,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 4032,
-                "end": 4041,
+                "start": 4012,
+                "end": 4021,
                 "loc": {
                   "start": {
                     "line": 143,
@@ -1496,8 +1496,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 4042,
-                  "end": 4050,
+                  "start": 4022,
+                  "end": 4030,
                   "loc": {
                     "start": {
                       "line": 143,
@@ -1514,8 +1514,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 4052,
-                "end": 4059,
+                "start": 4032,
+                "end": 4039,
                 "loc": {
                   "start": {
                     "line": 143,
@@ -1535,8 +1535,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-                  "start": 3748,
-                  "end": 3822,
+                  "start": 3728,
+                  "end": 3802,
                   "loc": {
                     "start": {
                       "line": 135,
@@ -1551,8 +1551,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 3828,
-                  "end": 4027,
+                  "start": 3808,
+                  "end": 4007,
                   "loc": {
                     "start": {
                       "line": 137,
@@ -1569,8 +1569,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4065,
-                  "end": 4259,
+                  "start": 4045,
+                  "end": 4239,
                   "loc": {
                     "start": {
                       "line": 146,
@@ -1586,8 +1586,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 4264,
-              "end": 4293,
+              "start": 4244,
+              "end": 4273,
               "loc": {
                 "start": {
                   "line": 152,
@@ -1602,8 +1602,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 4264,
-                "end": 4275,
+                "start": 4244,
+                "end": 4255,
                 "loc": {
                   "start": {
                     "line": 152,
@@ -1626,8 +1626,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 4276,
-                  "end": 4284,
+                  "start": 4256,
+                  "end": 4264,
                   "loc": {
                     "start": {
                       "line": 152,
@@ -1644,8 +1644,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 4286,
-                "end": 4293,
+                "start": 4266,
+                "end": 4273,
                 "loc": {
                   "start": {
                     "line": 152,
@@ -1665,8 +1665,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4065,
-                  "end": 4259,
+                  "start": 4045,
+                  "end": 4239,
                   "loc": {
                     "start": {
                       "line": 146,
@@ -1683,8 +1683,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-                  "start": 4299,
-                  "end": 4379,
+                  "start": 4279,
+                  "end": 4359,
                   "loc": {
                     "start": {
                       "line": 155,
@@ -1698,9 +1698,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4385,
-                  "end": 4647,
+                  "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 4365,
+                  "end": 4639,
                   "loc": {
                     "start": {
                       "line": 157,
@@ -1716,8 +1716,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 4652,
-              "end": 4684,
+              "start": 4644,
+              "end": 4682,
               "loc": {
                 "start": {
                   "line": 165,
@@ -1732,8 +1732,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 4652,
-                "end": 4666,
+                "start": 4644,
+                "end": 4664,
                 "loc": {
                   "start": {
                     "line": 165,
@@ -1741,11 +1741,11 @@
                   },
                   "end": {
                     "line": 165,
-                    "column": 18
+                    "column": 24
                   },
-                  "identifierName": "drawXRayedFill"
+                  "identifierName": "drawSilhouetteXRayed"
                 },
-                "name": "drawXRayedFill",
+                "name": "drawSilhouetteXRayed",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1756,16 +1756,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 4667,
-                  "end": 4675,
+                  "start": 4665,
+                  "end": 4673,
                   "loc": {
                     "start": {
                       "line": 165,
-                      "column": 19
+                      "column": 25
                     },
                     "end": {
                       "line": 165,
-                      "column": 27
+                      "column": 33
                     },
                     "identifierName": "frameCtx"
                   },
@@ -1774,12 +1774,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 4677,
-                "end": 4684,
+                "start": 4675,
+                "end": 4682,
                 "loc": {
                   "start": {
                     "line": 165,
-                    "column": 29
+                    "column": 35
                   },
                   "end": {
                     "line": 166,
@@ -1795,8 +1795,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-                  "start": 4299,
-                  "end": 4379,
+                  "start": 4279,
+                  "end": 4359,
                   "loc": {
                     "start": {
                       "line": 155,
@@ -1810,9 +1810,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4385,
-                  "end": 4647,
+                  "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 4365,
+                  "end": 4639,
                   "loc": {
                     "start": {
                       "line": 157,
@@ -1828,9 +1828,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4690,
-                  "end": 4985,
+                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 4688,
+                  "end": 4995,
                   "loc": {
                     "start": {
                       "line": 168,
@@ -1846,8 +1846,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 4990,
-              "end": 5027,
+              "start": 5000,
+              "end": 5043,
               "loc": {
                 "start": {
                   "line": 176,
@@ -1862,8 +1862,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 4990,
-                "end": 5009,
+                "start": 5000,
+                "end": 5025,
                 "loc": {
                   "start": {
                     "line": 176,
@@ -1871,11 +1871,11 @@
                   },
                   "end": {
                     "line": 176,
-                    "column": 23
+                    "column": 29
                   },
-                  "identifierName": "drawHighlightedFill"
+                  "identifierName": "drawSilhouetteHighlighted"
                 },
-                "name": "drawHighlightedFill",
+                "name": "drawSilhouetteHighlighted",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1886,16 +1886,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 5010,
-                  "end": 5018,
+                  "start": 5026,
+                  "end": 5034,
                   "loc": {
                     "start": {
                       "line": 176,
-                      "column": 24
+                      "column": 30
                     },
                     "end": {
                       "line": 176,
-                      "column": 32
+                      "column": 38
                     },
                     "identifierName": "frameCtx"
                   },
@@ -1904,12 +1904,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 5020,
-                "end": 5027,
+                "start": 5036,
+                "end": 5043,
                 "loc": {
                   "start": {
                     "line": 176,
-                    "column": 34
+                    "column": 40
                   },
                   "end": {
                     "line": 177,
@@ -1924,9 +1924,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 4690,
-                  "end": 4985,
+                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 4688,
+                  "end": 4995,
                   "loc": {
                     "start": {
                       "line": 168,
@@ -1942,9 +1942,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5033,
-                  "end": 5306,
+                  "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5049,
+                  "end": 5334,
                   "loc": {
                     "start": {
                       "line": 179,
@@ -1960,8 +1960,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 5311,
-              "end": 5345,
+              "start": 5339,
+              "end": 5379,
               "loc": {
                 "start": {
                   "line": 187,
@@ -1976,8 +1976,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 5311,
-                "end": 5327,
+                "start": 5339,
+                "end": 5361,
                 "loc": {
                   "start": {
                     "line": 187,
@@ -1985,11 +1985,11 @@
                   },
                   "end": {
                     "line": 187,
-                    "column": 20
+                    "column": 26
                   },
-                  "identifierName": "drawSelectedFill"
+                  "identifierName": "drawSilhouetteSelected"
                 },
-                "name": "drawSelectedFill",
+                "name": "drawSilhouetteSelected",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2000,16 +2000,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 5328,
-                  "end": 5336,
+                  "start": 5362,
+                  "end": 5370,
                   "loc": {
                     "start": {
                       "line": 187,
-                      "column": 21
+                      "column": 27
                     },
                     "end": {
                       "line": 187,
-                      "column": 29
+                      "column": 35
                     },
                     "identifierName": "frameCtx"
                   },
@@ -2018,12 +2018,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 5338,
-                "end": 5345,
+                "start": 5372,
+                "end": 5379,
                 "loc": {
                   "start": {
                     "line": 187,
-                    "column": 31
+                    "column": 37
                   },
                   "end": {
                     "line": 188,
@@ -2038,9 +2038,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5033,
-                  "end": 5306,
+                  "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5049,
+                  "end": 5334,
                   "loc": {
                     "start": {
                       "line": 179,
@@ -2057,8 +2057,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- EDGES RENDERING -----------------------------------",
-                  "start": 5351,
-                  "end": 5428,
+                  "start": 5385,
+                  "end": 5462,
                   "loc": {
                     "start": {
                       "line": 190,
@@ -2072,9 +2072,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5434,
-                  "end": 5660,
+                  "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5468,
+                  "end": 5688,
                   "loc": {
                     "start": {
                       "line": 192,
@@ -2090,8 +2090,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 5665,
-              "end": 5704,
+              "start": 5693,
+              "end": 5731,
               "loc": {
                 "start": {
                   "line": 200,
@@ -2106,8 +2106,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 5665,
-                "end": 5686,
+                "start": 5693,
+                "end": 5713,
                 "loc": {
                   "start": {
                     "line": 200,
@@ -2115,11 +2115,11 @@
                   },
                   "end": {
                     "line": 200,
-                    "column": 25
+                    "column": 24
                   },
-                  "identifierName": "drawNormalOpaqueEdges"
+                  "identifierName": "drawEdgesColorOpaque"
                 },
-                "name": "drawNormalOpaqueEdges",
+                "name": "drawEdgesColorOpaque",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2130,16 +2130,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 5687,
-                  "end": 5695,
+                  "start": 5714,
+                  "end": 5722,
                   "loc": {
                     "start": {
                       "line": 200,
-                      "column": 26
+                      "column": 25
                     },
                     "end": {
                       "line": 200,
-                      "column": 34
+                      "column": 33
                     },
                     "identifierName": "frameCtx"
                   },
@@ -2148,12 +2148,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 5697,
-                "end": 5704,
+                "start": 5724,
+                "end": 5731,
                 "loc": {
                   "start": {
                     "line": 200,
-                    "column": 36
+                    "column": 35
                   },
                   "end": {
                     "line": 201,
@@ -2169,8 +2169,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- EDGES RENDERING -----------------------------------",
-                  "start": 5351,
-                  "end": 5428,
+                  "start": 5385,
+                  "end": 5462,
                   "loc": {
                     "start": {
                       "line": 190,
@@ -2184,9 +2184,9 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5434,
-                  "end": 5660,
+                  "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5468,
+                  "end": 5688,
                   "loc": {
                     "start": {
                       "line": 192,
@@ -2202,9 +2202,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5710,
-                  "end": 5946,
+                  "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5737,
+                  "end": 5967,
                   "loc": {
                     "start": {
                       "line": 203,
@@ -2220,8 +2220,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 5951,
-              "end": 5995,
+              "start": 5972,
+              "end": 6015,
               "loc": {
                 "start": {
                   "line": 211,
@@ -2236,8 +2236,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 5951,
-                "end": 5977,
+                "start": 5972,
+                "end": 5997,
                 "loc": {
                   "start": {
                     "line": 211,
@@ -2245,11 +2245,11 @@
                   },
                   "end": {
                     "line": 211,
-                    "column": 30
+                    "column": 29
                   },
-                  "identifierName": "drawNormalTransparentEdges"
+                  "identifierName": "drawEdgesColorTransparent"
                 },
-                "name": "drawNormalTransparentEdges",
+                "name": "drawEdgesColorTransparent",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2260,16 +2260,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 5978,
-                  "end": 5986,
+                  "start": 5998,
+                  "end": 6006,
                   "loc": {
                     "start": {
                       "line": 211,
-                      "column": 31
+                      "column": 30
                     },
                     "end": {
                       "line": 211,
-                      "column": 39
+                      "column": 38
                     },
                     "identifierName": "frameCtx"
                   },
@@ -2278,12 +2278,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 5988,
-                "end": 5995,
+                "start": 6008,
+                "end": 6015,
                 "loc": {
                   "start": {
                     "line": 211,
-                    "column": 41
+                    "column": 40
                   },
                   "end": {
                     "line": 212,
@@ -2298,9 +2298,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 5710,
-                  "end": 5946,
+                  "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 5737,
+                  "end": 5967,
                   "loc": {
                     "start": {
                       "line": 203,
@@ -2317,8 +2317,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6001,
-                  "end": 6221,
+                  "start": 6021,
+                  "end": 6241,
                   "loc": {
                     "start": {
                       "line": 214,
@@ -2334,8 +2334,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6226,
-              "end": 6259,
+              "start": 6246,
+              "end": 6279,
               "loc": {
                 "start": {
                   "line": 222,
@@ -2350,8 +2350,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6226,
-                "end": 6241,
+                "start": 6246,
+                "end": 6261,
                 "loc": {
                   "start": {
                     "line": 222,
@@ -2361,9 +2361,9 @@
                     "line": 222,
                     "column": 19
                   },
-                  "identifierName": "drawXRayedEdges"
+                  "identifierName": "drawEdgesXRayed"
                 },
-                "name": "drawXRayedEdges",
+                "name": "drawEdgesXRayed",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2374,8 +2374,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6242,
-                  "end": 6250,
+                  "start": 6262,
+                  "end": 6270,
                   "loc": {
                     "start": {
                       "line": 222,
@@ -2392,8 +2392,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6252,
-                "end": 6259,
+                "start": 6272,
+                "end": 6279,
                 "loc": {
                   "start": {
                     "line": 222,
@@ -2413,8 +2413,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6001,
-                  "end": 6221,
+                  "start": 6021,
+                  "end": 6241,
                   "loc": {
                     "start": {
                       "line": 214,
@@ -2431,8 +2431,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6265,
-                  "end": 6499,
+                  "start": 6285,
+                  "end": 6519,
                   "loc": {
                     "start": {
                       "line": 225,
@@ -2448,8 +2448,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6504,
-              "end": 6542,
+              "start": 6524,
+              "end": 6562,
               "loc": {
                 "start": {
                   "line": 233,
@@ -2464,8 +2464,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6504,
-                "end": 6524,
+                "start": 6524,
+                "end": 6544,
                 "loc": {
                   "start": {
                     "line": 233,
@@ -2475,9 +2475,9 @@
                     "line": 233,
                     "column": 24
                   },
-                  "identifierName": "drawHighlightedEdges"
+                  "identifierName": "drawEdgesHighlighted"
                 },
-                "name": "drawHighlightedEdges",
+                "name": "drawEdgesHighlighted",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2488,8 +2488,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6525,
-                  "end": 6533,
+                  "start": 6545,
+                  "end": 6553,
                   "loc": {
                     "start": {
                       "line": 233,
@@ -2506,8 +2506,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6535,
-                "end": 6542,
+                "start": 6555,
+                "end": 6562,
                 "loc": {
                   "start": {
                     "line": 233,
@@ -2527,8 +2527,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6265,
-                  "end": 6499,
+                  "start": 6285,
+                  "end": 6519,
                   "loc": {
                     "start": {
                       "line": 225,
@@ -2545,8 +2545,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6548,
-                  "end": 6775,
+                  "start": 6568,
+                  "end": 6795,
                   "loc": {
                     "start": {
                       "line": 236,
@@ -2562,8 +2562,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6780,
-              "end": 6815,
+              "start": 6800,
+              "end": 6835,
               "loc": {
                 "start": {
                   "line": 244,
@@ -2578,8 +2578,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6780,
-                "end": 6797,
+                "start": 6800,
+                "end": 6817,
                 "loc": {
                   "start": {
                     "line": 244,
@@ -2589,9 +2589,9 @@
                     "line": 244,
                     "column": 21
                   },
-                  "identifierName": "drawSelectedEdges"
+                  "identifierName": "drawEdgesSelected"
                 },
-                "name": "drawSelectedEdges",
+                "name": "drawEdgesSelected",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2602,8 +2602,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6798,
-                  "end": 6806,
+                  "start": 6818,
+                  "end": 6826,
                   "loc": {
                     "start": {
                       "line": 244,
@@ -2620,8 +2620,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6808,
-                "end": 6815,
+                "start": 6828,
+                "end": 6835,
                 "loc": {
                   "start": {
                     "line": 244,
@@ -2641,8 +2641,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6548,
-                  "end": 6775,
+                  "start": 6568,
+                  "end": 6795,
                   "loc": {
                     "start": {
                       "line": 236,
@@ -2659,8 +2659,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-                  "start": 6821,
-                  "end": 6907,
+                  "start": 6841,
+                  "end": 6927,
                   "loc": {
                     "start": {
                       "line": 247,
@@ -2675,8 +2675,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6913,
-                  "end": 7141,
+                  "start": 6933,
+                  "end": 7161,
                   "loc": {
                     "start": {
                       "line": 249,
@@ -2692,8 +2692,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7146,
-              "end": 7177,
+              "start": 7166,
+              "end": 7197,
               "loc": {
                 "start": {
                   "line": 255,
@@ -2708,8 +2708,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7146,
-                "end": 7159,
+                "start": 7166,
+                "end": 7179,
                 "loc": {
                   "start": {
                     "line": 255,
@@ -2732,8 +2732,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 7160,
-                  "end": 7168,
+                  "start": 7180,
+                  "end": 7188,
                   "loc": {
                     "start": {
                       "line": 255,
@@ -2750,8 +2750,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 7170,
-                "end": 7177,
+                "start": 7190,
+                "end": 7197,
                 "loc": {
                   "start": {
                     "line": 255,
@@ -2771,8 +2771,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-                  "start": 6821,
-                  "end": 6907,
+                  "start": 6841,
+                  "end": 6927,
                   "loc": {
                     "start": {
                       "line": 247,
@@ -2787,8 +2787,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 6913,
-                  "end": 7141,
+                  "start": 6933,
+                  "end": 7161,
                   "loc": {
                     "start": {
                       "line": 249,
@@ -2805,8 +2805,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-                  "start": 7183,
-                  "end": 7268,
+                  "start": 7203,
+                  "end": 7288,
                   "loc": {
                     "start": {
                       "line": 258,
@@ -2821,8 +2821,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 7274,
-                  "end": 7418,
+                  "start": 7294,
+                  "end": 7438,
                   "loc": {
                     "start": {
                       "line": 260,
@@ -2838,8 +2838,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7423,
-              "end": 7451,
+              "start": 7443,
+              "end": 7471,
               "loc": {
                 "start": {
                   "line": 266,
@@ -2854,8 +2854,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7423,
-                "end": 7433,
+                "start": 7443,
+                "end": 7453,
                 "loc": {
                   "start": {
                     "line": 266,
@@ -2878,8 +2878,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 7434,
-                  "end": 7442,
+                  "start": 7454,
+                  "end": 7462,
                   "loc": {
                     "start": {
                       "line": 266,
@@ -2896,8 +2896,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 7444,
-                "end": 7451,
+                "start": 7464,
+                "end": 7471,
                 "loc": {
                   "start": {
                     "line": 266,
@@ -2915,8 +2915,8 @@
                 {
                   "type": "CommentLine",
                   "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-                  "start": 7183,
-                  "end": 7268,
+                  "start": 7203,
+                  "end": 7288,
                   "loc": {
                     "start": {
                       "line": 258,
@@ -2931,8 +2931,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                  "start": 7274,
-                  "end": 7418,
+                  "start": 7294,
+                  "end": 7438,
                   "loc": {
                     "start": {
                       "line": 260,
@@ -2954,8 +2954,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7455,
-        "end": 7473,
+        "start": 7475,
+        "end": 7493,
         "loc": {
           "start": {
             "line": 270,
@@ -2970,8 +2970,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 7463,
-            "end": 7471,
+            "start": 7483,
+            "end": 7491,
             "loc": {
               "start": {
                 "line": 270,
@@ -2984,8 +2984,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 7463,
-              "end": 7471,
+              "start": 7483,
+              "end": 7491,
               "loc": {
                 "start": {
                   "line": 270,
@@ -3001,8 +3001,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 7463,
-              "end": 7471,
+              "start": 7483,
+              "end": 7491,
               "loc": {
                 "start": {
                   "line": 270,
@@ -3022,8 +3022,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7455,
-        "end": 7473,
+        "start": 7475,
+        "end": 7493,
         "loc": {
           "start": {
             "line": 270,
@@ -3037,7 +3037,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 7453,
+          "end": 7473,
           "loc": {
             "start": {
               "line": 8,
@@ -3070,7 +3070,7 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 7453,
+            "end": 7473,
             "loc": {
               "start": {
                 "line": 8,
@@ -4184,9 +4184,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 3190,
-                    "end": 3408,
+                    "end": 3403,
                     "loc": {
                       "start": {
                         "line": 113,
@@ -4202,8 +4202,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3413,
-                "end": 3451,
+                "start": 3408,
+                "end": 3441,
                 "loc": {
                   "start": {
                     "line": 121,
@@ -4218,8 +4218,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3413,
-                  "end": 3433,
+                  "start": 3408,
+                  "end": 3423,
                   "loc": {
                     "start": {
                       "line": 121,
@@ -4227,11 +4227,11 @@
                     },
                     "end": {
                       "line": 121,
-                      "column": 24
+                      "column": 19
                     },
-                    "identifierName": "drawNormalOpaqueFill"
+                    "identifierName": "drawColorOpaque"
                   },
-                  "name": "drawNormalOpaqueFill",
+                  "name": "drawColorOpaque",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -4242,16 +4242,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 3434,
-                    "end": 3442,
+                    "start": 3424,
+                    "end": 3432,
                     "loc": {
                       "start": {
                         "line": 121,
-                        "column": 25
+                        "column": 20
                       },
                       "end": {
                         "line": 121,
-                        "column": 33
+                        "column": 28
                       },
                       "identifierName": "frameCtx"
                     },
@@ -4260,12 +4260,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3444,
-                  "end": 3451,
+                  "start": 3434,
+                  "end": 3441,
                   "loc": {
                     "start": {
                       "line": 121,
-                      "column": 35
+                      "column": 30
                     },
                     "end": {
                       "line": 122,
@@ -4296,9 +4296,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 3190,
-                    "end": 3408,
+                    "end": 3403,
                     "loc": {
                       "start": {
                         "line": 113,
@@ -4314,9 +4314,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 3457,
-                    "end": 3694,
+                    "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 3447,
+                    "end": 3679,
                     "loc": {
                       "start": {
                         "line": 124,
@@ -4332,8 +4332,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3699,
-                "end": 3742,
+                "start": 3684,
+                "end": 3722,
                 "loc": {
                   "start": {
                     "line": 132,
@@ -4348,8 +4348,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3699,
-                  "end": 3724,
+                  "start": 3684,
+                  "end": 3704,
                   "loc": {
                     "start": {
                       "line": 132,
@@ -4357,11 +4357,11 @@
                     },
                     "end": {
                       "line": 132,
-                      "column": 29
+                      "column": 24
                     },
-                    "identifierName": "drawNormalTransparentFill"
+                    "identifierName": "drawColorTransparent"
                   },
-                  "name": "drawNormalTransparentFill",
+                  "name": "drawColorTransparent",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -4372,16 +4372,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 3725,
-                    "end": 3733,
+                    "start": 3705,
+                    "end": 3713,
                     "loc": {
                       "start": {
                         "line": 132,
-                        "column": 30
+                        "column": 25
                       },
                       "end": {
                         "line": 132,
-                        "column": 38
+                        "column": 33
                       },
                       "identifierName": "frameCtx"
                     },
@@ -4390,12 +4390,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3735,
-                  "end": 3742,
+                  "start": 3715,
+                  "end": 3722,
                   "loc": {
                     "start": {
                       "line": 132,
-                      "column": 40
+                      "column": 35
                     },
                     "end": {
                       "line": 133,
@@ -4410,9 +4410,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 3457,
-                    "end": 3694,
+                    "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 3447,
+                    "end": 3679,
                     "loc": {
                       "start": {
                         "line": 124,
@@ -4429,8 +4429,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-                    "start": 3748,
-                    "end": 3822,
+                    "start": 3728,
+                    "end": 3802,
                     "loc": {
                       "start": {
                         "line": 135,
@@ -4445,8 +4445,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 3828,
-                    "end": 4027,
+                    "start": 3808,
+                    "end": 4007,
                     "loc": {
                       "start": {
                         "line": 137,
@@ -4462,8 +4462,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 4032,
-                "end": 4059,
+                "start": 4012,
+                "end": 4039,
                 "loc": {
                   "start": {
                     "line": 143,
@@ -4478,8 +4478,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 4032,
-                  "end": 4041,
+                  "start": 4012,
+                  "end": 4021,
                   "loc": {
                     "start": {
                       "line": 143,
@@ -4502,8 +4502,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 4042,
-                    "end": 4050,
+                    "start": 4022,
+                    "end": 4030,
                     "loc": {
                       "start": {
                         "line": 143,
@@ -4520,8 +4520,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 4052,
-                  "end": 4059,
+                  "start": 4032,
+                  "end": 4039,
                   "loc": {
                     "start": {
                       "line": 143,
@@ -4541,8 +4541,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-                    "start": 3748,
-                    "end": 3822,
+                    "start": 3728,
+                    "end": 3802,
                     "loc": {
                       "start": {
                         "line": 135,
@@ -4557,8 +4557,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 3828,
-                    "end": 4027,
+                    "start": 3808,
+                    "end": 4007,
                     "loc": {
                       "start": {
                         "line": 137,
@@ -4575,8 +4575,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4065,
-                    "end": 4259,
+                    "start": 4045,
+                    "end": 4239,
                     "loc": {
                       "start": {
                         "line": 146,
@@ -4592,8 +4592,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 4264,
-                "end": 4293,
+                "start": 4244,
+                "end": 4273,
                 "loc": {
                   "start": {
                     "line": 152,
@@ -4608,8 +4608,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 4264,
-                  "end": 4275,
+                  "start": 4244,
+                  "end": 4255,
                   "loc": {
                     "start": {
                       "line": 152,
@@ -4632,8 +4632,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 4276,
-                    "end": 4284,
+                    "start": 4256,
+                    "end": 4264,
                     "loc": {
                       "start": {
                         "line": 152,
@@ -4650,8 +4650,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 4286,
-                  "end": 4293,
+                  "start": 4266,
+                  "end": 4273,
                   "loc": {
                     "start": {
                       "line": 152,
@@ -4671,8 +4671,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4065,
-                    "end": 4259,
+                    "start": 4045,
+                    "end": 4239,
                     "loc": {
                       "start": {
                         "line": 146,
@@ -4689,8 +4689,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-                    "start": 4299,
-                    "end": 4379,
+                    "start": 4279,
+                    "end": 4359,
                     "loc": {
                       "start": {
                         "line": 155,
@@ -4704,9 +4704,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4385,
-                    "end": 4647,
+                    "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 4365,
+                    "end": 4639,
                     "loc": {
                       "start": {
                         "line": 157,
@@ -4722,8 +4722,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 4652,
-                "end": 4684,
+                "start": 4644,
+                "end": 4682,
                 "loc": {
                   "start": {
                     "line": 165,
@@ -4738,8 +4738,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 4652,
-                  "end": 4666,
+                  "start": 4644,
+                  "end": 4664,
                   "loc": {
                     "start": {
                       "line": 165,
@@ -4747,11 +4747,11 @@
                     },
                     "end": {
                       "line": 165,
-                      "column": 18
+                      "column": 24
                     },
-                    "identifierName": "drawXRayedFill"
+                    "identifierName": "drawSilhouetteXRayed"
                   },
-                  "name": "drawXRayedFill",
+                  "name": "drawSilhouetteXRayed",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -4762,16 +4762,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 4667,
-                    "end": 4675,
+                    "start": 4665,
+                    "end": 4673,
                     "loc": {
                       "start": {
                         "line": 165,
-                        "column": 19
+                        "column": 25
                       },
                       "end": {
                         "line": 165,
-                        "column": 27
+                        "column": 33
                       },
                       "identifierName": "frameCtx"
                     },
@@ -4780,12 +4780,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 4677,
-                  "end": 4684,
+                  "start": 4675,
+                  "end": 4682,
                   "loc": {
                     "start": {
                       "line": 165,
-                      "column": 29
+                      "column": 35
                     },
                     "end": {
                       "line": 166,
@@ -4801,8 +4801,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-                    "start": 4299,
-                    "end": 4379,
+                    "start": 4279,
+                    "end": 4359,
                     "loc": {
                       "start": {
                         "line": 155,
@@ -4816,9 +4816,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4385,
-                    "end": 4647,
+                    "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 4365,
+                    "end": 4639,
                     "loc": {
                       "start": {
                         "line": 157,
@@ -4834,9 +4834,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4690,
-                    "end": 4985,
+                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 4688,
+                    "end": 4995,
                     "loc": {
                       "start": {
                         "line": 168,
@@ -4852,8 +4852,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 4990,
-                "end": 5027,
+                "start": 5000,
+                "end": 5043,
                 "loc": {
                   "start": {
                     "line": 176,
@@ -4868,8 +4868,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 4990,
-                  "end": 5009,
+                  "start": 5000,
+                  "end": 5025,
                   "loc": {
                     "start": {
                       "line": 176,
@@ -4877,11 +4877,11 @@
                     },
                     "end": {
                       "line": 176,
-                      "column": 23
+                      "column": 29
                     },
-                    "identifierName": "drawHighlightedFill"
+                    "identifierName": "drawSilhouetteHighlighted"
                   },
-                  "name": "drawHighlightedFill",
+                  "name": "drawSilhouetteHighlighted",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -4892,16 +4892,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 5010,
-                    "end": 5018,
+                    "start": 5026,
+                    "end": 5034,
                     "loc": {
                       "start": {
                         "line": 176,
-                        "column": 24
+                        "column": 30
                       },
                       "end": {
                         "line": 176,
-                        "column": 32
+                        "column": 38
                       },
                       "identifierName": "frameCtx"
                     },
@@ -4910,12 +4910,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 5020,
-                  "end": 5027,
+                  "start": 5036,
+                  "end": 5043,
                   "loc": {
                     "start": {
                       "line": 176,
-                      "column": 34
+                      "column": 40
                     },
                     "end": {
                       "line": 177,
@@ -4930,9 +4930,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 4690,
-                    "end": 4985,
+                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 4688,
+                    "end": 4995,
                     "loc": {
                       "start": {
                         "line": 168,
@@ -4948,9 +4948,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5033,
-                    "end": 5306,
+                    "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5049,
+                    "end": 5334,
                     "loc": {
                       "start": {
                         "line": 179,
@@ -4966,8 +4966,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 5311,
-                "end": 5345,
+                "start": 5339,
+                "end": 5379,
                 "loc": {
                   "start": {
                     "line": 187,
@@ -4982,8 +4982,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 5311,
-                  "end": 5327,
+                  "start": 5339,
+                  "end": 5361,
                   "loc": {
                     "start": {
                       "line": 187,
@@ -4991,11 +4991,11 @@
                     },
                     "end": {
                       "line": 187,
-                      "column": 20
+                      "column": 26
                     },
-                    "identifierName": "drawSelectedFill"
+                    "identifierName": "drawSilhouetteSelected"
                   },
-                  "name": "drawSelectedFill",
+                  "name": "drawSilhouetteSelected",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5006,16 +5006,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 5328,
-                    "end": 5336,
+                    "start": 5362,
+                    "end": 5370,
                     "loc": {
                       "start": {
                         "line": 187,
-                        "column": 21
+                        "column": 27
                       },
                       "end": {
                         "line": 187,
-                        "column": 29
+                        "column": 35
                       },
                       "identifierName": "frameCtx"
                     },
@@ -5024,12 +5024,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 5338,
-                  "end": 5345,
+                  "start": 5372,
+                  "end": 5379,
                   "loc": {
                     "start": {
                       "line": 187,
-                      "column": 31
+                      "column": 37
                     },
                     "end": {
                       "line": 188,
@@ -5044,9 +5044,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5033,
-                    "end": 5306,
+                    "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5049,
+                    "end": 5334,
                     "loc": {
                       "start": {
                         "line": 179,
@@ -5063,8 +5063,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- EDGES RENDERING -----------------------------------",
-                    "start": 5351,
-                    "end": 5428,
+                    "start": 5385,
+                    "end": 5462,
                     "loc": {
                       "start": {
                         "line": 190,
@@ -5078,9 +5078,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5434,
-                    "end": 5660,
+                    "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5468,
+                    "end": 5688,
                     "loc": {
                       "start": {
                         "line": 192,
@@ -5096,8 +5096,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 5665,
-                "end": 5704,
+                "start": 5693,
+                "end": 5731,
                 "loc": {
                   "start": {
                     "line": 200,
@@ -5112,8 +5112,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 5665,
-                  "end": 5686,
+                  "start": 5693,
+                  "end": 5713,
                   "loc": {
                     "start": {
                       "line": 200,
@@ -5121,11 +5121,11 @@
                     },
                     "end": {
                       "line": 200,
-                      "column": 25
+                      "column": 24
                     },
-                    "identifierName": "drawNormalOpaqueEdges"
+                    "identifierName": "drawEdgesColorOpaque"
                   },
-                  "name": "drawNormalOpaqueEdges",
+                  "name": "drawEdgesColorOpaque",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5136,16 +5136,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 5687,
-                    "end": 5695,
+                    "start": 5714,
+                    "end": 5722,
                     "loc": {
                       "start": {
                         "line": 200,
-                        "column": 26
+                        "column": 25
                       },
                       "end": {
                         "line": 200,
-                        "column": 34
+                        "column": 33
                       },
                       "identifierName": "frameCtx"
                     },
@@ -5154,12 +5154,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 5697,
-                  "end": 5704,
+                  "start": 5724,
+                  "end": 5731,
                   "loc": {
                     "start": {
                       "line": 200,
-                      "column": 36
+                      "column": 35
                     },
                     "end": {
                       "line": 201,
@@ -5175,8 +5175,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- EDGES RENDERING -----------------------------------",
-                    "start": 5351,
-                    "end": 5428,
+                    "start": 5385,
+                    "end": 5462,
                     "loc": {
                       "start": {
                         "line": 190,
@@ -5190,9 +5190,9 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5434,
-                    "end": 5660,
+                    "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5468,
+                    "end": 5688,
                     "loc": {
                       "start": {
                         "line": 192,
@@ -5208,9 +5208,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5710,
-                    "end": 5946,
+                    "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5737,
+                    "end": 5967,
                     "loc": {
                       "start": {
                         "line": 203,
@@ -5226,8 +5226,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 5951,
-                "end": 5995,
+                "start": 5972,
+                "end": 6015,
                 "loc": {
                   "start": {
                     "line": 211,
@@ -5242,8 +5242,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 5951,
-                  "end": 5977,
+                  "start": 5972,
+                  "end": 5997,
                   "loc": {
                     "start": {
                       "line": 211,
@@ -5251,11 +5251,11 @@
                     },
                     "end": {
                       "line": 211,
-                      "column": 30
+                      "column": 29
                     },
-                    "identifierName": "drawNormalTransparentEdges"
+                    "identifierName": "drawEdgesColorTransparent"
                   },
-                  "name": "drawNormalTransparentEdges",
+                  "name": "drawEdgesColorTransparent",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5266,16 +5266,16 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 5978,
-                    "end": 5986,
+                    "start": 5998,
+                    "end": 6006,
                     "loc": {
                       "start": {
                         "line": 211,
-                        "column": 31
+                        "column": 30
                       },
                       "end": {
                         "line": 211,
-                        "column": 39
+                        "column": 38
                       },
                       "identifierName": "frameCtx"
                     },
@@ -5284,12 +5284,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 5988,
-                  "end": 5995,
+                  "start": 6008,
+                  "end": 6015,
                   "loc": {
                     "start": {
                       "line": 211,
-                      "column": 41
+                      "column": 40
                     },
                     "end": {
                       "line": 212,
@@ -5304,9 +5304,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 5710,
-                    "end": 5946,
+                    "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 5737,
+                    "end": 5967,
                     "loc": {
                       "start": {
                         "line": 203,
@@ -5323,8 +5323,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6001,
-                    "end": 6221,
+                    "start": 6021,
+                    "end": 6241,
                     "loc": {
                       "start": {
                         "line": 214,
@@ -5340,8 +5340,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6226,
-                "end": 6259,
+                "start": 6246,
+                "end": 6279,
                 "loc": {
                   "start": {
                     "line": 222,
@@ -5356,8 +5356,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6226,
-                  "end": 6241,
+                  "start": 6246,
+                  "end": 6261,
                   "loc": {
                     "start": {
                       "line": 222,
@@ -5367,9 +5367,9 @@
                       "line": 222,
                       "column": 19
                     },
-                    "identifierName": "drawXRayedEdges"
+                    "identifierName": "drawEdgesXRayed"
                   },
-                  "name": "drawXRayedEdges",
+                  "name": "drawEdgesXRayed",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5380,8 +5380,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6242,
-                    "end": 6250,
+                    "start": 6262,
+                    "end": 6270,
                     "loc": {
                       "start": {
                         "line": 222,
@@ -5398,8 +5398,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6252,
-                  "end": 6259,
+                  "start": 6272,
+                  "end": 6279,
                   "loc": {
                     "start": {
                       "line": 222,
@@ -5419,8 +5419,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6001,
-                    "end": 6221,
+                    "start": 6021,
+                    "end": 6241,
                     "loc": {
                       "start": {
                         "line": 214,
@@ -5437,8 +5437,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6265,
-                    "end": 6499,
+                    "start": 6285,
+                    "end": 6519,
                     "loc": {
                       "start": {
                         "line": 225,
@@ -5454,8 +5454,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6504,
-                "end": 6542,
+                "start": 6524,
+                "end": 6562,
                 "loc": {
                   "start": {
                     "line": 233,
@@ -5470,8 +5470,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6504,
-                  "end": 6524,
+                  "start": 6524,
+                  "end": 6544,
                   "loc": {
                     "start": {
                       "line": 233,
@@ -5481,9 +5481,9 @@
                       "line": 233,
                       "column": 24
                     },
-                    "identifierName": "drawHighlightedEdges"
+                    "identifierName": "drawEdgesHighlighted"
                   },
-                  "name": "drawHighlightedEdges",
+                  "name": "drawEdgesHighlighted",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5494,8 +5494,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6525,
-                    "end": 6533,
+                    "start": 6545,
+                    "end": 6553,
                     "loc": {
                       "start": {
                         "line": 233,
@@ -5512,8 +5512,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6535,
-                  "end": 6542,
+                  "start": 6555,
+                  "end": 6562,
                   "loc": {
                     "start": {
                       "line": 233,
@@ -5533,8 +5533,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6265,
-                    "end": 6499,
+                    "start": 6285,
+                    "end": 6519,
                     "loc": {
                       "start": {
                         "line": 225,
@@ -5551,8 +5551,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6548,
-                    "end": 6775,
+                    "start": 6568,
+                    "end": 6795,
                     "loc": {
                       "start": {
                         "line": 236,
@@ -5568,8 +5568,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6780,
-                "end": 6815,
+                "start": 6800,
+                "end": 6835,
                 "loc": {
                   "start": {
                     "line": 244,
@@ -5584,8 +5584,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6780,
-                  "end": 6797,
+                  "start": 6800,
+                  "end": 6817,
                   "loc": {
                     "start": {
                       "line": 244,
@@ -5595,9 +5595,9 @@
                       "line": 244,
                       "column": 21
                     },
-                    "identifierName": "drawSelectedEdges"
+                    "identifierName": "drawEdgesSelected"
                   },
-                  "name": "drawSelectedEdges",
+                  "name": "drawEdgesSelected",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5608,8 +5608,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6798,
-                    "end": 6806,
+                    "start": 6818,
+                    "end": 6826,
                     "loc": {
                       "start": {
                         "line": 244,
@@ -5626,8 +5626,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6808,
-                  "end": 6815,
+                  "start": 6828,
+                  "end": 6835,
                   "loc": {
                     "start": {
                       "line": 244,
@@ -5647,8 +5647,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6548,
-                    "end": 6775,
+                    "start": 6568,
+                    "end": 6795,
                     "loc": {
                       "start": {
                         "line": 236,
@@ -5665,8 +5665,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-                    "start": 6821,
-                    "end": 6907,
+                    "start": 6841,
+                    "end": 6927,
                     "loc": {
                       "start": {
                         "line": 247,
@@ -5681,8 +5681,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6913,
-                    "end": 7141,
+                    "start": 6933,
+                    "end": 7161,
                     "loc": {
                       "start": {
                         "line": 249,
@@ -5698,8 +5698,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7146,
-                "end": 7177,
+                "start": 7166,
+                "end": 7197,
                 "loc": {
                   "start": {
                     "line": 255,
@@ -5714,8 +5714,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7146,
-                  "end": 7159,
+                  "start": 7166,
+                  "end": 7179,
                   "loc": {
                     "start": {
                       "line": 255,
@@ -5738,8 +5738,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 7160,
-                    "end": 7168,
+                    "start": 7180,
+                    "end": 7188,
                     "loc": {
                       "start": {
                         "line": 255,
@@ -5756,8 +5756,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7170,
-                  "end": 7177,
+                  "start": 7190,
+                  "end": 7197,
                   "loc": {
                     "start": {
                       "line": 255,
@@ -5777,8 +5777,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-                    "start": 6821,
-                    "end": 6907,
+                    "start": 6841,
+                    "end": 6927,
                     "loc": {
                       "start": {
                         "line": 247,
@@ -5793,8 +5793,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 6913,
-                    "end": 7141,
+                    "start": 6933,
+                    "end": 7161,
                     "loc": {
                       "start": {
                         "line": 249,
@@ -5811,8 +5811,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-                    "start": 7183,
-                    "end": 7268,
+                    "start": 7203,
+                    "end": 7288,
                     "loc": {
                       "start": {
                         "line": 258,
@@ -5827,8 +5827,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 7274,
-                    "end": 7418,
+                    "start": 7294,
+                    "end": 7438,
                     "loc": {
                       "start": {
                         "line": 260,
@@ -5844,8 +5844,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7423,
-                "end": 7451,
+                "start": 7443,
+                "end": 7471,
                 "loc": {
                   "start": {
                     "line": 266,
@@ -5860,8 +5860,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7423,
-                  "end": 7433,
+                  "start": 7443,
+                  "end": 7453,
                   "loc": {
                     "start": {
                       "line": 266,
@@ -5884,8 +5884,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 7434,
-                    "end": 7442,
+                    "start": 7454,
+                    "end": 7462,
                     "loc": {
                       "start": {
                         "line": 266,
@@ -5902,8 +5902,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7444,
-                  "end": 7451,
+                  "start": 7464,
+                  "end": 7471,
                   "loc": {
                     "start": {
                       "line": 266,
@@ -5921,8 +5921,8 @@
                   {
                     "type": "CommentLine",
                     "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-                    "start": 7183,
-                    "end": 7268,
+                    "start": 7203,
+                    "end": 7288,
                     "loc": {
                       "start": {
                         "line": 258,
@@ -5937,8 +5937,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-                    "start": 7274,
-                    "end": 7418,
+                    "start": 7294,
+                    "end": 7438,
                     "loc": {
                       "start": {
                         "line": 260,
@@ -6257,9 +6257,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 3190,
-      "end": 3408,
+      "end": 3403,
       "loc": {
         "start": {
           "line": 113,
@@ -6273,9 +6273,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 3457,
-      "end": 3694,
+      "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 3447,
+      "end": 3679,
       "loc": {
         "start": {
           "line": 124,
@@ -6290,8 +6290,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-      "start": 3748,
-      "end": 3822,
+      "start": 3728,
+      "end": 3802,
       "loc": {
         "start": {
           "line": 135,
@@ -6306,8 +6306,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 3828,
-      "end": 4027,
+      "start": 3808,
+      "end": 4007,
       "loc": {
         "start": {
           "line": 137,
@@ -6322,8 +6322,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4065,
-      "end": 4259,
+      "start": 4045,
+      "end": 4239,
       "loc": {
         "start": {
           "line": 146,
@@ -6338,8 +6338,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-      "start": 4299,
-      "end": 4379,
+      "start": 4279,
+      "end": 4359,
       "loc": {
         "start": {
           "line": 155,
@@ -6353,9 +6353,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4385,
-      "end": 4647,
+      "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 4365,
+      "end": 4639,
       "loc": {
         "start": {
           "line": 157,
@@ -6369,9 +6369,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4690,
-      "end": 4985,
+      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 4688,
+      "end": 4995,
       "loc": {
         "start": {
           "line": 168,
@@ -6385,9 +6385,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5033,
-      "end": 5306,
+      "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5049,
+      "end": 5334,
       "loc": {
         "start": {
           "line": 179,
@@ -6402,8 +6402,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- EDGES RENDERING -----------------------------------",
-      "start": 5351,
-      "end": 5428,
+      "start": 5385,
+      "end": 5462,
       "loc": {
         "start": {
           "line": 190,
@@ -6417,9 +6417,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5434,
-      "end": 5660,
+      "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5468,
+      "end": 5688,
       "loc": {
         "start": {
           "line": 192,
@@ -6433,9 +6433,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5710,
-      "end": 5946,
+      "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5737,
+      "end": 5967,
       "loc": {
         "start": {
           "line": 203,
@@ -6450,8 +6450,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6001,
-      "end": 6221,
+      "start": 6021,
+      "end": 6241,
       "loc": {
         "start": {
           "line": 214,
@@ -6466,8 +6466,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6265,
-      "end": 6499,
+      "start": 6285,
+      "end": 6519,
       "loc": {
         "start": {
           "line": 225,
@@ -6482,8 +6482,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6548,
-      "end": 6775,
+      "start": 6568,
+      "end": 6795,
       "loc": {
         "start": {
           "line": 236,
@@ -6498,8 +6498,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-      "start": 6821,
-      "end": 6907,
+      "start": 6841,
+      "end": 6927,
       "loc": {
         "start": {
           "line": 247,
@@ -6514,8 +6514,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6913,
-      "end": 7141,
+      "start": 6933,
+      "end": 7161,
       "loc": {
         "start": {
           "line": 249,
@@ -6530,8 +6530,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-      "start": 7183,
-      "end": 7268,
+      "start": 7203,
+      "end": 7288,
       "loc": {
         "start": {
           "line": 258,
@@ -6546,8 +6546,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 7274,
-      "end": 7418,
+      "start": 7294,
+      "end": 7438,
       "loc": {
         "start": {
           "line": 260,
@@ -8334,9 +8334,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders opaque edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#colorOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 3190,
-      "end": 3408,
+      "end": 3403,
       "loc": {
         "start": {
           "line": 113,
@@ -8360,9 +8360,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawNormalOpaqueFill",
-      "start": 3413,
-      "end": 3433,
+      "value": "drawColorOpaque",
+      "start": 3408,
+      "end": 3423,
       "loc": {
         "start": {
           "line": 121,
@@ -8370,7 +8370,7 @@
         },
         "end": {
           "line": 121,
-          "column": 24
+          "column": 19
         }
       }
     },
@@ -8386,16 +8386,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3433,
-      "end": 3434,
+      "start": 3423,
+      "end": 3424,
       "loc": {
         "start": {
           "line": 121,
-          "column": 24
+          "column": 19
         },
         "end": {
           "line": 121,
-          "column": 25
+          "column": 20
         }
       }
     },
@@ -8412,16 +8412,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 3434,
-      "end": 3442,
+      "start": 3424,
+      "end": 3432,
       "loc": {
         "start": {
           "line": 121,
-          "column": 25
+          "column": 20
         },
         "end": {
           "line": 121,
-          "column": 33
+          "column": 28
         }
       }
     },
@@ -8437,16 +8437,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3442,
-      "end": 3443,
+      "start": 3432,
+      "end": 3433,
       "loc": {
         "start": {
           "line": 121,
-          "column": 33
+          "column": 28
         },
         "end": {
           "line": 121,
-          "column": 34
+          "column": 29
         }
       }
     },
@@ -8462,16 +8462,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3444,
-      "end": 3445,
+      "start": 3434,
+      "end": 3435,
       "loc": {
         "start": {
           "line": 121,
-          "column": 35
+          "column": 30
         },
         "end": {
           "line": 121,
-          "column": 36
+          "column": 31
         }
       }
     },
@@ -8487,8 +8487,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3450,
-      "end": 3451,
+      "start": 3440,
+      "end": 3441,
       "loc": {
         "start": {
           "line": 122,
@@ -8502,9 +8502,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#normalFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 3457,
-      "end": 3694,
+      "value": "*\n     * Renders transparent filled surfaces using normal appearance attributes.\n     *\n     * See {@link RenderFlags#colorTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 3447,
+      "end": 3679,
       "loc": {
         "start": {
           "line": 124,
@@ -8528,9 +8528,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawNormalTransparentFill",
-      "start": 3699,
-      "end": 3724,
+      "value": "drawColorTransparent",
+      "start": 3684,
+      "end": 3704,
       "loc": {
         "start": {
           "line": 132,
@@ -8538,7 +8538,7 @@
         },
         "end": {
           "line": 132,
-          "column": 29
+          "column": 24
         }
       }
     },
@@ -8554,16 +8554,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3724,
-      "end": 3725,
+      "start": 3704,
+      "end": 3705,
       "loc": {
         "start": {
           "line": 132,
-          "column": 29
+          "column": 24
         },
         "end": {
           "line": 132,
-          "column": 30
+          "column": 25
         }
       }
     },
@@ -8580,16 +8580,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 3725,
-      "end": 3733,
+      "start": 3705,
+      "end": 3713,
       "loc": {
         "start": {
           "line": 132,
-          "column": 30
+          "column": 25
         },
         "end": {
           "line": 132,
-          "column": 38
+          "column": 33
         }
       }
     },
@@ -8605,16 +8605,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3733,
-      "end": 3734,
+      "start": 3713,
+      "end": 3714,
       "loc": {
         "start": {
           "line": 132,
-          "column": 38
+          "column": 33
         },
         "end": {
           "line": 132,
-          "column": 39
+          "column": 34
         }
       }
     },
@@ -8630,16 +8630,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3735,
-      "end": 3736,
+      "start": 3715,
+      "end": 3716,
       "loc": {
         "start": {
           "line": 132,
-          "column": 40
+          "column": 35
         },
         "end": {
           "line": 132,
-          "column": 41
+          "column": 36
         }
       }
     },
@@ -8655,8 +8655,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3741,
-      "end": 3742,
+      "start": 3721,
+      "end": 3722,
       "loc": {
         "start": {
           "line": 133,
@@ -8671,8 +8671,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- RENDERING SAO POST EFFECT TARGETS --------------",
-      "start": 3748,
-      "end": 3822,
+      "start": 3728,
+      "end": 3802,
       "loc": {
         "start": {
           "line": 135,
@@ -8687,8 +8687,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 3828,
-      "end": 4027,
+      "start": 3808,
+      "end": 4007,
       "loc": {
         "start": {
           "line": 137,
@@ -8713,8 +8713,8 @@
         "binop": null
       },
       "value": "drawDepth",
-      "start": 4032,
-      "end": 4041,
+      "start": 4012,
+      "end": 4021,
       "loc": {
         "start": {
           "line": 143,
@@ -8738,8 +8738,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4041,
-      "end": 4042,
+      "start": 4021,
+      "end": 4022,
       "loc": {
         "start": {
           "line": 143,
@@ -8764,8 +8764,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 4042,
-      "end": 4050,
+      "start": 4022,
+      "end": 4030,
       "loc": {
         "start": {
           "line": 143,
@@ -8789,8 +8789,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4050,
-      "end": 4051,
+      "start": 4030,
+      "end": 4031,
       "loc": {
         "start": {
           "line": 143,
@@ -8814,8 +8814,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4052,
-      "end": 4053,
+      "start": 4032,
+      "end": 4033,
       "loc": {
         "start": {
           "line": 143,
@@ -8839,8 +8839,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4058,
-      "end": 4059,
+      "start": 4038,
+      "end": 4039,
       "loc": {
         "start": {
           "line": 144,
@@ -8855,8 +8855,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO).\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4065,
-      "end": 4259,
+      "start": 4045,
+      "end": 4239,
       "loc": {
         "start": {
           "line": 146,
@@ -8881,8 +8881,8 @@
         "binop": null
       },
       "value": "drawNormals",
-      "start": 4264,
-      "end": 4275,
+      "start": 4244,
+      "end": 4255,
       "loc": {
         "start": {
           "line": 152,
@@ -8906,8 +8906,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4275,
-      "end": 4276,
+      "start": 4255,
+      "end": 4256,
       "loc": {
         "start": {
           "line": 152,
@@ -8932,8 +8932,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 4276,
-      "end": 4284,
+      "start": 4256,
+      "end": 4264,
       "loc": {
         "start": {
           "line": 152,
@@ -8957,8 +8957,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4284,
-      "end": 4285,
+      "start": 4264,
+      "end": 4265,
       "loc": {
         "start": {
           "line": 152,
@@ -8982,8 +8982,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4286,
-      "end": 4287,
+      "start": 4266,
+      "end": 4267,
       "loc": {
         "start": {
           "line": 152,
@@ -9007,8 +9007,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4292,
-      "end": 4293,
+      "start": 4272,
+      "end": 4273,
       "loc": {
         "start": {
           "line": 153,
@@ -9023,8 +9023,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- EMPHASIS RENDERING -----------------------------------",
-      "start": 4299,
-      "end": 4379,
+      "start": 4279,
+      "end": 4359,
       "loc": {
         "start": {
           "line": 155,
@@ -9038,9 +9038,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque} and {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4385,
-      "end": 4647,
+      "value": "*\n     * Renders x-ray fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 4365,
+      "end": 4639,
       "loc": {
         "start": {
           "line": 157,
@@ -9064,9 +9064,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawXRayedFill",
-      "start": 4652,
-      "end": 4666,
+      "value": "drawSilhouetteXRayed",
+      "start": 4644,
+      "end": 4664,
       "loc": {
         "start": {
           "line": 165,
@@ -9074,7 +9074,7 @@
         },
         "end": {
           "line": 165,
-          "column": 18
+          "column": 24
         }
       }
     },
@@ -9090,16 +9090,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4666,
-      "end": 4667,
+      "start": 4664,
+      "end": 4665,
       "loc": {
         "start": {
           "line": 165,
-          "column": 18
+          "column": 24
         },
         "end": {
           "line": 165,
-          "column": 19
+          "column": 25
         }
       }
     },
@@ -9116,16 +9116,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 4667,
-      "end": 4675,
+      "start": 4665,
+      "end": 4673,
       "loc": {
         "start": {
           "line": 165,
-          "column": 19
+          "column": 25
         },
         "end": {
           "line": 165,
-          "column": 27
+          "column": 33
         }
       }
     },
@@ -9141,16 +9141,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4675,
-      "end": 4676,
+      "start": 4673,
+      "end": 4674,
       "loc": {
         "start": {
           "line": 165,
-          "column": 27
+          "column": 33
         },
         "end": {
           "line": 165,
-          "column": 28
+          "column": 34
         }
       }
     },
@@ -9166,16 +9166,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4677,
-      "end": 4678,
+      "start": 4675,
+      "end": 4676,
       "loc": {
         "start": {
           "line": 165,
-          "column": 29
+          "column": 35
         },
         "end": {
           "line": 165,
-          "column": 30
+          "column": 36
         }
       }
     },
@@ -9191,8 +9191,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4683,
-      "end": 4684,
+      "start": 4681,
+      "end": 4682,
       "loc": {
         "start": {
           "line": 166,
@@ -9206,9 +9206,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque} and {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 4690,
-      "end": 4985,
+      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 4688,
+      "end": 4995,
       "loc": {
         "start": {
           "line": 168,
@@ -9232,9 +9232,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawHighlightedFill",
-      "start": 4990,
-      "end": 5009,
+      "value": "drawSilhouetteHighlighted",
+      "start": 5000,
+      "end": 5025,
       "loc": {
         "start": {
           "line": 176,
@@ -9242,7 +9242,7 @@
         },
         "end": {
           "line": 176,
-          "column": 23
+          "column": 29
         }
       }
     },
@@ -9258,16 +9258,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5009,
-      "end": 5010,
+      "start": 5025,
+      "end": 5026,
       "loc": {
         "start": {
           "line": 176,
-          "column": 23
+          "column": 29
         },
         "end": {
           "line": 176,
-          "column": 24
+          "column": 30
         }
       }
     },
@@ -9284,16 +9284,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 5010,
-      "end": 5018,
+      "start": 5026,
+      "end": 5034,
       "loc": {
         "start": {
           "line": 176,
-          "column": 24
+          "column": 30
         },
         "end": {
           "line": 176,
-          "column": 32
+          "column": 38
         }
       }
     },
@@ -9309,16 +9309,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5018,
-      "end": 5019,
+      "start": 5034,
+      "end": 5035,
       "loc": {
         "start": {
           "line": 176,
-          "column": 32
+          "column": 38
         },
         "end": {
           "line": 176,
-          "column": 33
+          "column": 39
         }
       }
     },
@@ -9334,16 +9334,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5020,
-      "end": 5021,
+      "start": 5036,
+      "end": 5037,
       "loc": {
         "start": {
           "line": 176,
-          "column": 34
+          "column": 40
         },
         "end": {
           "line": 176,
-          "column": 35
+          "column": 41
         }
       }
     },
@@ -9359,8 +9359,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5026,
-      "end": 5027,
+      "start": 5042,
+      "end": 5043,
       "loc": {
         "start": {
           "line": 177,
@@ -9374,9 +9374,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillOpaque} and {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5033,
-      "end": 5306,
+      "value": "*\n     * Renders selected fill using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5049,
+      "end": 5334,
       "loc": {
         "start": {
           "line": 179,
@@ -9400,9 +9400,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawSelectedFill",
-      "start": 5311,
-      "end": 5327,
+      "value": "drawSilhouetteSelected",
+      "start": 5339,
+      "end": 5361,
       "loc": {
         "start": {
           "line": 187,
@@ -9410,7 +9410,7 @@
         },
         "end": {
           "line": 187,
-          "column": 20
+          "column": 26
         }
       }
     },
@@ -9426,16 +9426,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5327,
-      "end": 5328,
+      "start": 5361,
+      "end": 5362,
       "loc": {
         "start": {
           "line": 187,
-          "column": 20
+          "column": 26
         },
         "end": {
           "line": 187,
-          "column": 21
+          "column": 27
         }
       }
     },
@@ -9452,16 +9452,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 5328,
-      "end": 5336,
+      "start": 5362,
+      "end": 5370,
       "loc": {
         "start": {
           "line": 187,
-          "column": 21
+          "column": 27
         },
         "end": {
           "line": 187,
-          "column": 29
+          "column": 35
         }
       }
     },
@@ -9477,16 +9477,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5336,
-      "end": 5337,
+      "start": 5370,
+      "end": 5371,
       "loc": {
         "start": {
           "line": 187,
-          "column": 29
+          "column": 35
         },
         "end": {
           "line": 187,
-          "column": 30
+          "column": 36
         }
       }
     },
@@ -9502,16 +9502,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5338,
-      "end": 5339,
+      "start": 5372,
+      "end": 5373,
       "loc": {
         "start": {
           "line": 187,
-          "column": 31
+          "column": 37
         },
         "end": {
           "line": 187,
-          "column": 32
+          "column": 38
         }
       }
     },
@@ -9527,8 +9527,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5344,
-      "end": 5345,
+      "start": 5378,
+      "end": 5379,
       "loc": {
         "start": {
           "line": 188,
@@ -9543,8 +9543,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- EDGES RENDERING -----------------------------------",
-      "start": 5351,
-      "end": 5428,
+      "start": 5385,
+      "end": 5462,
       "loc": {
         "start": {
           "line": 190,
@@ -9558,9 +9558,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5434,
-      "end": 5660,
+      "value": "*\n     * Renders opaque normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5468,
+      "end": 5688,
       "loc": {
         "start": {
           "line": 192,
@@ -9584,9 +9584,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawNormalOpaqueEdges",
-      "start": 5665,
-      "end": 5686,
+      "value": "drawEdgesColorOpaque",
+      "start": 5693,
+      "end": 5713,
       "loc": {
         "start": {
           "line": 200,
@@ -9594,7 +9594,7 @@
         },
         "end": {
           "line": 200,
-          "column": 25
+          "column": 24
         }
       }
     },
@@ -9610,16 +9610,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5686,
-      "end": 5687,
+      "start": 5713,
+      "end": 5714,
       "loc": {
         "start": {
           "line": 200,
-          "column": 25
+          "column": 24
         },
         "end": {
           "line": 200,
-          "column": 26
+          "column": 25
         }
       }
     },
@@ -9636,16 +9636,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 5687,
-      "end": 5695,
+      "start": 5714,
+      "end": 5722,
       "loc": {
         "start": {
           "line": 200,
-          "column": 26
+          "column": 25
         },
         "end": {
           "line": 200,
-          "column": 34
+          "column": 33
         }
       }
     },
@@ -9661,16 +9661,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5695,
-      "end": 5696,
+      "start": 5722,
+      "end": 5723,
       "loc": {
         "start": {
           "line": 200,
-          "column": 34
+          "column": 33
         },
         "end": {
           "line": 200,
-          "column": 35
+          "column": 34
         }
       }
     },
@@ -9686,16 +9686,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5697,
-      "end": 5698,
+      "start": 5724,
+      "end": 5725,
       "loc": {
         "start": {
           "line": 200,
-          "column": 36
+          "column": 35
         },
         "end": {
           "line": 200,
-          "column": 37
+          "column": 36
         }
       }
     },
@@ -9711,8 +9711,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5703,
-      "end": 5704,
+      "start": 5730,
+      "end": 5731,
       "loc": {
         "start": {
           "line": 201,
@@ -9726,9 +9726,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#normalEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 5710,
-      "end": 5946,
+      "value": "*\n     * Renders transparent normal edges using {@link Drawable#edgeMaterial}.\n     *\n     * See {@link RenderFlags#edgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 5737,
+      "end": 5967,
       "loc": {
         "start": {
           "line": 203,
@@ -9752,9 +9752,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawNormalTransparentEdges",
-      "start": 5951,
-      "end": 5977,
+      "value": "drawEdgesColorTransparent",
+      "start": 5972,
+      "end": 5997,
       "loc": {
         "start": {
           "line": 211,
@@ -9762,7 +9762,7 @@
         },
         "end": {
           "line": 211,
-          "column": 30
+          "column": 29
         }
       }
     },
@@ -9778,16 +9778,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5977,
-      "end": 5978,
+      "start": 5997,
+      "end": 5998,
       "loc": {
         "start": {
           "line": 211,
-          "column": 30
+          "column": 29
         },
         "end": {
           "line": 211,
-          "column": 31
+          "column": 30
         }
       }
     },
@@ -9804,16 +9804,16 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 5978,
-      "end": 5986,
+      "start": 5998,
+      "end": 6006,
       "loc": {
         "start": {
           "line": 211,
-          "column": 31
+          "column": 30
         },
         "end": {
           "line": 211,
-          "column": 39
+          "column": 38
         }
       }
     },
@@ -9829,16 +9829,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5986,
-      "end": 5987,
+      "start": 6006,
+      "end": 6007,
       "loc": {
         "start": {
           "line": 211,
-          "column": 39
+          "column": 38
         },
         "end": {
           "line": 211,
-          "column": 40
+          "column": 39
         }
       }
     },
@@ -9854,16 +9854,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5988,
-      "end": 5989,
+      "start": 6008,
+      "end": 6009,
       "loc": {
         "start": {
           "line": 211,
-          "column": 41
+          "column": 40
         },
         "end": {
           "line": 211,
-          "column": 42
+          "column": 41
         }
       }
     },
@@ -9879,8 +9879,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5994,
-      "end": 5995,
+      "start": 6014,
+      "end": 6015,
       "loc": {
         "start": {
           "line": 212,
@@ -9895,8 +9895,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders x-rayed edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6001,
-      "end": 6221,
+      "start": 6021,
+      "end": 6241,
       "loc": {
         "start": {
           "line": 214,
@@ -9920,9 +9920,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawXRayedEdges",
-      "start": 6226,
-      "end": 6241,
+      "value": "drawEdgesXRayed",
+      "start": 6246,
+      "end": 6261,
       "loc": {
         "start": {
           "line": 222,
@@ -9946,8 +9946,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6241,
-      "end": 6242,
+      "start": 6261,
+      "end": 6262,
       "loc": {
         "start": {
           "line": 222,
@@ -9972,8 +9972,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 6242,
-      "end": 6250,
+      "start": 6262,
+      "end": 6270,
       "loc": {
         "start": {
           "line": 222,
@@ -9997,8 +9997,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6250,
-      "end": 6251,
+      "start": 6270,
+      "end": 6271,
       "loc": {
         "start": {
           "line": 222,
@@ -10022,8 +10022,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6252,
-      "end": 6253,
+      "start": 6272,
+      "end": 6273,
       "loc": {
         "start": {
           "line": 222,
@@ -10047,8 +10047,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6258,
-      "end": 6259,
+      "start": 6278,
+      "end": 6279,
       "loc": {
         "start": {
           "line": 223,
@@ -10063,8 +10063,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders highlighted edges using {@link Drawable#highlightMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6265,
-      "end": 6499,
+      "start": 6285,
+      "end": 6519,
       "loc": {
         "start": {
           "line": 225,
@@ -10088,9 +10088,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawHighlightedEdges",
-      "start": 6504,
-      "end": 6524,
+      "value": "drawEdgesHighlighted",
+      "start": 6524,
+      "end": 6544,
       "loc": {
         "start": {
           "line": 233,
@@ -10114,8 +10114,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6524,
-      "end": 6525,
+      "start": 6544,
+      "end": 6545,
       "loc": {
         "start": {
           "line": 233,
@@ -10140,8 +10140,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 6525,
-      "end": 6533,
+      "start": 6545,
+      "end": 6553,
       "loc": {
         "start": {
           "line": 233,
@@ -10165,8 +10165,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6533,
-      "end": 6534,
+      "start": 6553,
+      "end": 6554,
       "loc": {
         "start": {
           "line": 233,
@@ -10190,8 +10190,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6535,
-      "end": 6536,
+      "start": 6555,
+      "end": 6556,
       "loc": {
         "start": {
           "line": 233,
@@ -10215,8 +10215,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6541,
-      "end": 6542,
+      "start": 6561,
+      "end": 6562,
       "loc": {
         "start": {
           "line": 234,
@@ -10231,8 +10231,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders selected edges using {@link Drawable#selectedMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6548,
-      "end": 6775,
+      "start": 6568,
+      "end": 6795,
       "loc": {
         "start": {
           "line": 236,
@@ -10256,9 +10256,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawSelectedEdges",
-      "start": 6780,
-      "end": 6797,
+      "value": "drawEdgesSelected",
+      "start": 6800,
+      "end": 6817,
       "loc": {
         "start": {
           "line": 244,
@@ -10282,8 +10282,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6797,
-      "end": 6798,
+      "start": 6817,
+      "end": 6818,
       "loc": {
         "start": {
           "line": 244,
@@ -10308,8 +10308,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 6798,
-      "end": 6806,
+      "start": 6818,
+      "end": 6826,
       "loc": {
         "start": {
           "line": 244,
@@ -10333,8 +10333,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6806,
-      "end": 6807,
+      "start": 6826,
+      "end": 6827,
       "loc": {
         "start": {
           "line": 244,
@@ -10358,8 +10358,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6808,
-      "end": 6809,
+      "start": 6828,
+      "end": 6829,
       "loc": {
         "start": {
           "line": 244,
@@ -10383,8 +10383,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6814,
-      "end": 6815,
+      "start": 6834,
+      "end": 6835,
       "loc": {
         "start": {
           "line": 245,
@@ -10399,8 +10399,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- OCCLUSION CULL RENDERING -----------------------------------",
-      "start": 6821,
-      "end": 6907,
+      "start": 6841,
+      "end": 6927,
       "loc": {
         "start": {
           "line": 247,
@@ -10415,8 +10415,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 6913,
-      "end": 7141,
+      "start": 6933,
+      "end": 7161,
       "loc": {
         "start": {
           "line": 249,
@@ -10441,8 +10441,8 @@
         "binop": null
       },
       "value": "drawOcclusion",
-      "start": 7146,
-      "end": 7159,
+      "start": 7166,
+      "end": 7179,
       "loc": {
         "start": {
           "line": 255,
@@ -10466,8 +10466,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7159,
-      "end": 7160,
+      "start": 7179,
+      "end": 7180,
       "loc": {
         "start": {
           "line": 255,
@@ -10492,8 +10492,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 7160,
-      "end": 7168,
+      "start": 7180,
+      "end": 7188,
       "loc": {
         "start": {
           "line": 255,
@@ -10517,8 +10517,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7168,
-      "end": 7169,
+      "start": 7188,
+      "end": 7189,
       "loc": {
         "start": {
           "line": 255,
@@ -10542,8 +10542,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7170,
-      "end": 7171,
+      "start": 7190,
+      "end": 7191,
       "loc": {
         "start": {
           "line": 255,
@@ -10567,8 +10567,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7176,
-      "end": 7177,
+      "start": 7196,
+      "end": 7197,
       "loc": {
         "start": {
           "line": 256,
@@ -10583,8 +10583,8 @@
     {
       "type": "CommentLine",
       "value": " ---------------------- SHADOW BUFFER RENDERING -----------------------------------",
-      "start": 7183,
-      "end": 7268,
+      "start": 7203,
+      "end": 7288,
       "loc": {
         "start": {
           "line": 258,
@@ -10599,8 +10599,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders depths to a shadow map buffer..\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
-      "start": 7274,
-      "end": 7418,
+      "start": 7294,
+      "end": 7438,
       "loc": {
         "start": {
           "line": 260,
@@ -10625,8 +10625,8 @@
         "binop": null
       },
       "value": "drawShadow",
-      "start": 7423,
-      "end": 7433,
+      "start": 7443,
+      "end": 7453,
       "loc": {
         "start": {
           "line": 266,
@@ -10650,8 +10650,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7433,
-      "end": 7434,
+      "start": 7453,
+      "end": 7454,
       "loc": {
         "start": {
           "line": 266,
@@ -10676,8 +10676,8 @@
         "binop": null
       },
       "value": "frameCtx",
-      "start": 7434,
-      "end": 7442,
+      "start": 7454,
+      "end": 7462,
       "loc": {
         "start": {
           "line": 266,
@@ -10701,8 +10701,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7442,
-      "end": 7443,
+      "start": 7462,
+      "end": 7463,
       "loc": {
         "start": {
           "line": 266,
@@ -10726,8 +10726,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7444,
-      "end": 7445,
+      "start": 7464,
+      "end": 7465,
       "loc": {
         "start": {
           "line": 266,
@@ -10751,8 +10751,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7450,
-      "end": 7451,
+      "start": 7470,
+      "end": 7471,
       "loc": {
         "start": {
           "line": 267,
@@ -10776,8 +10776,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7452,
-      "end": 7453,
+      "start": 7472,
+      "end": 7473,
       "loc": {
         "start": {
           "line": 268,
@@ -10804,8 +10804,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 7455,
-      "end": 7461,
+      "start": 7475,
+      "end": 7481,
       "loc": {
         "start": {
           "line": 270,
@@ -10829,8 +10829,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7462,
-      "end": 7463,
+      "start": 7482,
+      "end": 7483,
       "loc": {
         "start": {
           "line": 270,
@@ -10855,8 +10855,8 @@
         "binop": null
       },
       "value": "Drawable",
-      "start": 7463,
-      "end": 7471,
+      "start": 7483,
+      "end": 7491,
       "loc": {
         "start": {
           "line": 270,
@@ -10880,8 +10880,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7471,
-      "end": 7472,
+      "start": 7491,
+      "end": 7492,
       "loc": {
         "start": {
           "line": 270,
@@ -10906,8 +10906,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7472,
-      "end": 7473,
+      "start": 7492,
+      "end": 7493,
       "loc": {
         "start": {
           "line": 270,
@@ -10932,8 +10932,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7473,
-      "end": 7473,
+      "start": 7493,
+      "end": 7493,
       "loc": {
         "start": {
           "line": 270,

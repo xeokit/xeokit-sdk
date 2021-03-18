@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../../../../">
+  <title data-ice="title">src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifchelpersplugin">plugins/IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html">ModelTreeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy">validateMetaModelForTreeViewContainmentHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy">validateMetaModelForTreeViewStoreysHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy">validateMetaModelForTreeViewTypesHierarchy</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib">viewer/scene/PerformanceModel/lib</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-octDecodeVec2">octDecodeVec2</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-octEncodeNormals">octEncodeNormals</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-octEncodeVec3">octEncodeVec3</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-quantizePositions">quantizePositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-transformAndOctEncodeNormals">transformAndOctEncodeNormals</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-linesbatching">viewer/scene/PerformanceModel/lib/layers/linesBatching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-linesinstancing">viewer/scene/PerformanceModel/lib/layers/linesInstancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-pointsbatching">viewer/scene/PerformanceModel/lib/layers/pointsBatching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPointsBatchingRenderers">getPointsBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-pointsinstancing">viewer/scene/PerformanceModel/lib/layers/pointsInstancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPointsInstancingRenderers">getPointsInstancingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-trianglesbatching">viewer/scene/PerformanceModel/lib/layers/trianglesBatching</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBatchingRenderers">getBatchingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel-lib-layers-trianglesinstancing">viewer/scene/PerformanceModel/lib/layers/trianglesInstancing</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getInstancingRenderers">getInstancingRenderers</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html">LinesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPlaneRTCPos">getPlaneRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rtcToWorldPos">rtcToWorldPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPos">worldToRTCPos</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-worldToRTCPositions">worldToRTCPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {WEBGL_INFO} from &quot;../../../../webglInfo.js&quot;;
+import {ENTITY_FLAGS} from &apos;../../ENTITY_FLAGS.js&apos;;
+import {RENDER_PASSES} from &apos;../../RENDER_PASSES.js&apos;;
+
+import {math} from &quot;../../../../math/math.js&quot;;
+import {buildEdgeIndices} from &apos;../../../../math/buildEdgeIndices.js&apos;;
+import {RenderState} from &quot;../../../../webgl/RenderState.js&quot;;
+import {ArrayBuf} from &quot;../../../../webgl/ArrayBuf.js&quot;;
+import {geometryCompressionUtils} from &quot;../../../../math/geometryCompressionUtils.js&quot;;
+import {getInstancingRenderers} from &quot;./TrianglesInstancingRenderers.js&quot;;
+import {quantizePositions, octEncodeNormals} from &quot;../../compression.js&quot;;
+
+const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;OES_element_index_uint&quot;];
+
+const tempUint8Vec4 = new Uint8Array(4);
+const tempVec4a = math.vec4([0, 0, 0, 1]);
+const tempVec4b = math.vec4([0, 0, 0, 1]);
+const tempVec4c = math.vec4([0, 0, 0, 1]);
+const tempVec3fa = new Float32Array(3);
+
+/**
+ * @private
+ */
+class TrianglesInstancingLayer {
+
+    /**
+     * @param model
+     * @param cfg
+     * @param cfg.layerIndex
+     * @param cfg.positions Flat float Local-space positions array.
+     * @param [cfg.normals] Flat float normals array.
+     * @param cfg.indices Flat int indices array.
+     * @param [cfg.edgeIndices] Flat int edges indices array.
+     * @param cfg.edgeThreshold
+     * @param cfg.rtcCenter
+     */
+    constructor(model, cfg) {
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = &quot;TrianglesInstancingLayer&quot;;
+
+        /**
+         * Index of this InstancingLayer in PerformanceModel#_layerList
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
+        this._instancingRenderers = getInstancingRenderers(model.scene);
+        this.model = model;
+        this._aabb = math.collapseAABB3();
+
+        const stateCfg = {
+            positionsDecodeMatrix: math.mat4(),
+            numInstances: 0,
+            obb: math.OBB3(),
+            rtcCenter: null
+        };
+
+        const preCompressed = (!!cfg.positionsDecodeMatrix);
+        const gl = this.model.scene.canvas.gl;
+
+        if (cfg.positions) {
+
+            if (preCompressed) {
+
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
+
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+
+            } else {
+
+                let lenPositions = cfg.positions.length;
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+                const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+            }
+        }
+
+        if (cfg.normals) {
+
+            if (preCompressed) {
+
+                const normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
+
+            } else {
+
+                const compressedNormals = octEncodeNormals(cfg.normals);
+                const normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, compressedNormals.length, 3, gl.STATIC_DRAW, normalized);
+            }
+        }
+
+        if (cfg.indices) {
+            stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
+        }
+
+        let edgeIndices = cfg.edgeIndices;
+        if (!edgeIndices) {
+            edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
+        }
+        stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+
+
+        this._state = new RenderState(stateCfg);
+
+        // These counts are used to avoid unnecessary render passes
+        this._numPortions = 0;
+        this._numVisibleLayerPortions = 0;
+        this._numTransparentLayerPortions = 0;
+        this._numXRayedLayerPortions = 0;
+        this._numHighlightedLayerPortions = 0;
+        this._numSelectedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
+        this._numEdgesLayerPortions = 0;
+        this._numPickableLayerPortions = 0;
+        this._numCulledLayerPortions = 0;
+
+        /** @private */
+        this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
+
+        // Vertex arrays
+        this._colors = [];
+        this._metallicRoughness = [];
+        this._pickColors = [];
+        this._offsets = [];
+
+        // Modeling matrix per instance, array for each column
+        this._modelMatrixCol0 = [];
+        this._modelMatrixCol1 = [];
+        this._modelMatrixCol2 = [];
+
+        // Modeling normal matrix per instance, array for each column
+        this._modelNormalMatrixCol0 = [];
+        this._modelNormalMatrixCol1 = [];
+        this._modelNormalMatrixCol2 = [];
+
+        this._portions = [];
+
+        if (cfg.rtcCenter) {
+            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        }
+
+        this._finalized = false;
+
+        /**
+         * The axis-aligned World-space boundary of this InstancingLayer&apos;s positions.
+         * @type {*|Float64Array}
+         */
+        this.aabb = math.collapseAABB3();
+    }
+
+    /**
+     * Creates a new portion within this InstancingLayer, returns the new portion ID.
+     *
+     * The portion will instance this InstancingLayer&apos;s geometry.
+     *
+     * Gives the portion the specified color and matrix.
+     *
+     * @param cfg Portion params
+     * @param cfg.color Color [0..255,0..255,0..255]
+     * @param cfg.metallic Metalness factor [0..255]
+     * @param cfg.roughness Roughness factor [0..255]
+     * @param cfg.opacity Opacity [0..255].
+     * @param cfg.meshMatrix Flat float 4x4 matrix.
+     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
+     * @param cfg.worldAABB Flat float AABB.
+     * @param cfg.pickColor Quantized pick color
+     * @returns {number} Portion ID.
+     */
+    createPortion(cfg) {
+
+        const color = cfg.color;
+        const metallic = cfg.metallic;
+        const roughness = cfg.roughness;
+        const opacity = cfg.opacity;
+        const meshMatrix = cfg.meshMatrix;
+        const worldMatrix = cfg.worldMatrix;
+        const worldAABB = cfg.aabb;
+        const pickColor = cfg.pickColor;
+
+        if (this._finalized) {
+            throw &quot;Already finalized&quot;;
+        }
+
+        // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
+
+        const r = color[0]; // Color is pre-quantized by PerformanceModel
+        const g = color[1];
+        const b = color[2];
+        const a = color[3];
+
+        this._colors.push(r);
+        this._colors.push(g);
+        this._colors.push(b);
+        this._colors.push(opacity);
+
+        this._metallicRoughness.push((metallic !== null &amp;&amp; metallic !== undefined) ? metallic : 0);
+        this._metallicRoughness.push((roughness !== null &amp;&amp; roughness !== undefined) ? roughness : 255);
+
+        if (this.model.scene.entityOffsetsEnabled) {
+            this._offsets.push(0);
+            this._offsets.push(0);
+            this._offsets.push(0);
+        }
+
+        this._modelMatrixCol0.push(meshMatrix[0]);
+        this._modelMatrixCol0.push(meshMatrix[4]);
+        this._modelMatrixCol0.push(meshMatrix[8]);
+        this._modelMatrixCol0.push(meshMatrix[12]);
+
+        this._modelMatrixCol1.push(meshMatrix[1]);
+        this._modelMatrixCol1.push(meshMatrix[5]);
+        this._modelMatrixCol1.push(meshMatrix[9]);
+        this._modelMatrixCol1.push(meshMatrix[13]);
+
+        this._modelMatrixCol2.push(meshMatrix[2]);
+        this._modelMatrixCol2.push(meshMatrix[6]);
+        this._modelMatrixCol2.push(meshMatrix[10]);
+        this._modelMatrixCol2.push(meshMatrix[14]);
+
+        // Note: order of inverse and transpose doesn&apos;t matter
+
+        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
+        let normalMatrix = math.inverseMat4(transposedMat);
+
+        this._modelNormalMatrixCol0.push(normalMatrix[0]);
+        this._modelNormalMatrixCol0.push(normalMatrix[4]);
+        this._modelNormalMatrixCol0.push(normalMatrix[8]);
+        this._modelNormalMatrixCol0.push(normalMatrix[12]);
+
+        this._modelNormalMatrixCol1.push(normalMatrix[1]);
+        this._modelNormalMatrixCol1.push(normalMatrix[5]);
+        this._modelNormalMatrixCol1.push(normalMatrix[9]);
+        this._modelNormalMatrixCol1.push(normalMatrix[13]);
+
+        this._modelNormalMatrixCol2.push(normalMatrix[2]);
+        this._modelNormalMatrixCol2.push(normalMatrix[6]);
+        this._modelNormalMatrixCol2.push(normalMatrix[10]);
+        this._modelNormalMatrixCol2.push(normalMatrix[14]);
+
+        // Per-vertex pick colors
+
+        this._pickColors.push(pickColor[0]);
+        this._pickColors.push(pickColor[1]);
+        this._pickColors.push(pickColor[2]);
+        this._pickColors.push(pickColor[3]);
+
+        // Expand AABB
+
+        math.collapseAABB3(worldAABB);
+        const obb = this._state.obb;
+        const lenPositions = obb.length;
+        for (let i = 0; i &lt; lenPositions; i += 4) {
+            tempVec4a[0] = obb[i + 0];
+            tempVec4a[1] = obb[i + 1];
+            tempVec4a[2] = obb[i + 2];
+            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
+            if (worldMatrix) {
+                math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
+                math.expandAABB3Point3(worldAABB, tempVec4c);
+            } else {
+                math.expandAABB3Point3(worldAABB, tempVec4b);
+            }
+        }
+
+        if (this._state.rtcCenter) {
+            const rtcCenter = this._state.rtcCenter;
+            worldAABB[0] += rtcCenter[0];
+            worldAABB[1] += rtcCenter[1];
+            worldAABB[2] += rtcCenter[2];
+            worldAABB[3] += rtcCenter[0];
+            worldAABB[4] += rtcCenter[1];
+            worldAABB[5] += rtcCenter[2];
+        }
+
+        math.expandAABB3(this.aabb, worldAABB);
+
+        this._state.numInstances++;
+
+        const portionId = this._portions.length;
+        this._portions.push({});
+
+        this._numPortions++;
+        this.model.numPortions++;
+
+        return portionId;
+    }
+
+    finalize() {
+        if (this._finalized) {
+            throw &quot;Already finalized&quot;;
+        }
+        const gl = this.model.scene.canvas.gl;
+        const colorsLength = this._colors.length;
+        const flagsLength = colorsLength;
+        if (colorsLength &gt; 0) {
+            let notNormalized = false;
+            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, notNormalized);
+            this._colors = []; // Release memory
+        }
+        if (this._metallicRoughness.length &gt; 0) {
+            const metallicRoughness = new Uint8Array(this._metallicRoughness);
+            let normalized = false;
+            this._state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, this._metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
+        }
+        if (flagsLength &gt; 0) {
+            // Because we only build flags arrays here, 
+            // get their length from the colors array
+            let notNormalized = false;
+            let normalized = true;
+            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, notNormalized);
+            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, normalized);
+        }
+        if (this.model.scene.entityOffsetsEnabled) {
+            if (this._offsets.length &gt; 0) {
+                const notNormalized = false;
+                this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
+                this._offsets = []; // Release memory
+            }
+        }
+        if (this._modelMatrixCol0.length &gt; 0) {
+
+            const normalized = false;
+
+            this._state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
+            this._modelMatrixCol0 = [];
+            this._modelMatrixCol1 = [];
+            this._modelMatrixCol2 = [];
+
+            this._state.modelNormalMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol0), this._modelNormalMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.modelNormalMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol1), this._modelNormalMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.modelNormalMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol2), this._modelNormalMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
+            this._modelNormalMatrixCol0 = [];
+            this._modelNormalMatrixCol1 = [];
+            this._modelNormalMatrixCol2 = [];
+        }
+        if (this._pickColors.length &gt; 0) {
+            const normalized = false;
+            this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
+            this._pickColors = []; // Release memory
+        }
+        this._finalized = true;
+    }
+
+    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
+    // It&apos;s important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
+
+    initFlags(portionId, flags, meshTransparent) {
+        if (flags &amp; ENTITY_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        }
+        if (flags &amp; ENTITY_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        }
+        if (meshTransparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+        this._setFlags2(portionId, flags);
+    }
+
+    setVisible(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        } else {
+            this._numVisibleLayerPortions--;
+            this.model.numVisibleLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setHighlighted(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        } else {
+            this._numHighlightedLayerPortions--;
+            this.model.numHighlightedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setXRayed(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
+        } else {
+            this._numXRayedLayerPortions--;
+            this.model.numXRayedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setSelected(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        } else {
+            this._numSelectedLayerPortions--;
+            this.model.numSelectedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setEdges(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        } else {
+            this._numEdgesLayerPortions--;
+            this.model.numEdgesLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setClippable(portionId, flags) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
+        }
+        this._setFlags2(portionId, flags);
+    }
+
+    setCollidable(portionId, flags) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+    }
+
+    setPickable(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        } else {
+            this._numPickableLayerPortions--;
+            this.model.numPickableLayerPortions--;
+        }
+        this._setFlags2(portionId, flags, meshTransparent);
+    }
+
+    setCulled(portionId, flags, meshTransparent) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (flags &amp; ENTITY_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        } else {
+            this._numCulledLayerPortions--;
+            this.model.numCulledLayerPortions--;
+        }
+        this._setFlags(portionId, flags, meshTransparent);
+    }
+
+    setColor(portionId, color) { // RGBA color is normalized as ints
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        tempUint8Vec4[0] = color[0];
+        tempUint8Vec4[1] = color[1];
+        tempUint8Vec4[2] = color[2];
+        tempUint8Vec4[3] = color[3];
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
+
+    setTransparent(portionId, flags, transparent) {
+        if (transparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        } else {
+            this._numTransparentLayerPortions--;
+            this.model.numTransparentLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    // setMatrix(portionId, matrix) {
+    //
+    //     if (!this._finalized) {
+    //         throw &quot;Not finalized&quot;;
+    //     }
+    //
+    //     var offset = portionId * 4;
+    //
+    //     tempFloat32Vec4[0] = matrix[0];
+    //     tempFloat32Vec4[1] = matrix[4];
+    //     tempFloat32Vec4[2] = matrix[8];
+    //     tempFloat32Vec4[3] = matrix[12];
+    //
+    //     this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset, 4);
+    //
+    //     tempFloat32Vec4[0] = matrix[1];
+    //     tempFloat32Vec4[1] = matrix[5];
+    //     tempFloat32Vec4[2] = matrix[9];
+    //     tempFloat32Vec4[3] = matrix[13];
+    //
+    //     this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset, 4);
+    //
+    //     tempFloat32Vec4[0] = matrix[2];
+    //     tempFloat32Vec4[1] = matrix[6];
+    //     tempFloat32Vec4[2] = matrix[10];
+    //     tempFloat32Vec4[3] = matrix[14];
+    //
+    //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
+    // }
+
+    _setFlags(portionId, flags, meshTransparent) {
+
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+
+        const visible = !!(flags &amp; ENTITY_FLAGS.VISIBLE);
+        const xrayed = !!(flags &amp; ENTITY_FLAGS.XRAYED);
+        const highlighted = !!(flags &amp; ENTITY_FLAGS.HIGHLIGHTED);
+        const selected = !!(flags &amp; ENTITY_FLAGS.SELECTED);
+        const edges = !!(flags &amp; ENTITY_FLAGS.EDGES);
+        const pickable = !!(flags &amp; ENTITY_FLAGS.PICKABLE);
+        const culled = !!(flags &amp; ENTITY_FLAGS.CULLED);
+
+        // Normal fill
+
+        let f0;
+        if (!visible || culled || xrayed) { // Highlight &amp; select are layered on top of color - not mutually exclusive
+            f0 = RENDER_PASSES.NOT_RENDERED;
+        } else {
+            if (meshTransparent) {
+                f0 = RENDER_PASSES.COLOR_TRANSPARENT;
+            } else {
+                f0 = RENDER_PASSES.COLOR_OPAQUE;
+            }
+        }
+
+        // Emphasis fill
+
+        let f1;
+        if (!visible || culled) {
+            f1 = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            f1 = RENDER_PASSES.SILHOUETTE_SELECTED;
+        } else if (highlighted) {
+            f1 = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+        } else if (xrayed) {
+            f1 = RENDER_PASSES.SILHOUETTE_XRAYED;
+        } else {
+            f1 = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        // Edges
+
+        let f2 = 0;
+        if (!visible || culled) {
+            f2 = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            f2 = RENDER_PASSES.EDGES_SELECTED;
+        } else if (highlighted) {
+            f2 = RENDER_PASSES.EDGES_HIGHLIGHTED;
+        } else if (xrayed) {
+            f2 = RENDER_PASSES.EDGES_XRAYED;
+        } else if (edges) {
+            if (meshTransparent) {
+                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+            } else {
+                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+            }
+        } else {
+            f2 = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        // Pick
+
+        let f3 = (visible &amp;&amp; !culled &amp;&amp; pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+
+        tempUint8Vec4[0] = f0; // x - normal fill
+        tempUint8Vec4[1] = f1; // y - emphasis fill
+        tempUint8Vec4[2] = f2; // z - edges
+        tempUint8Vec4[3] = f3; // w - pick
+
+        this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
+
+    _setFlags2(portionId, flags) {
+
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+
+        const clippable = !!(flags &amp; ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
+        tempUint8Vec4[0] = clippable;
+
+        this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
+
+    setOffset(portionId, offset) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        if (!this.model.scene.entityOffsetsEnabled) {
+            this.model.error(&quot;Entity#offset not enabled for this Viewer&quot;); // See Viewer entityOffsetsEnabled
+            return;
+        }
+        tempVec3fa[0] = offset[0];
+        tempVec3fa[1] = offset[1];
+        tempVec3fa[2] = offset[2];
+        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+    }
+
+    // ---------------------- COLOR RENDERING -----------------------------------
+
+    drawColorOpaque(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (frameCtx.withSAO) {
+            if (frameCtx.pbrEnabled) {
+                if (this._instancingRenderers.colorQualityRendererWithSAO) {
+                    this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._instancingRenderers.colorRendererWithSAO) {
+                    this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            }
+        } else {
+            if (frameCtx.pbrEnabled) {
+                if (this._instancingRenderers.colorQualityRenderer) {
+                    this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._instancingRenderers.colorRenderer) {
+                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            }
+        }
+    }
+
+    drawColorTransparent(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (frameCtx.pbrEnabled) {
+            if (this._instancingRenderers.colorQualityRenderer) {
+                this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        } else {
+            if (this._instancingRenderers.colorRenderer) {
+                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        }
+    }
+
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
+
+    drawDepth(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (this._instancingRenderers.depthRenderer) {
+            this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
+        }
+    }
+
+    drawNormals(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (this._instancingRenderers.normalsRenderer) {
+            this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
+        }
+    }
+
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
+
+    drawSilhouetteXRayed(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.silhouetteRenderer) {
+            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
+        }
+    }
+
+    drawSilhouetteHighlighted(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.silhouetteRenderer) {
+            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        }
+    }
+
+    drawSilhouetteSelected(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.silhouetteRenderer) {
+            this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
+        }
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    drawEdgesColorOpaque(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        }
+    }
+
+    drawEdgesColorTransparent(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        }
+    }
+
+    drawEdgesXRayed(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_XRAYED);
+        }
+    }
+
+    drawEdgesHighlighted(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_HIGHLIGHTED);
+        }
+    }
+
+    drawEdgesSelected(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.edgesRenderer) {
+            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_SELECTED);
+        }
+    }
+
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.occlusionRenderer) {
+            // Only opaque, filled objects can be occluders
+            this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    drawShadow(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.shadowRenderer) {
+            this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    //---- PICKING ----------------------------------------------------------------------------------------------------
+
+    drawPickMesh(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.pickMeshRenderer) {
+            this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawPickDepths(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.pickDepthRenderer) {
+            this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawPickNormals(frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._instancingRenderers.pickNormalsRenderer) {
+            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+
+    destroy() {
+        const state = this._state;
+        if (state.positionsBuf) {
+            state.positionsBuf.destroy();
+            state.positionsBuf = null;
+        }
+        if (state.normalsBuf) {
+            state.normalsBuf.destroy();
+            state.normalsBuf = null;
+        }
+        if (state.colorsBuf) {
+            state.colorsBuf.destroy();
+            state.colorsBuf = null;
+        }
+        if (state.metallicRoughnessBuf) {
+            state.metallicRoughnessBuf.destroy();
+            state.metallicRoughnessBuf = null;
+        }
+        if (state.flagsBuf) {
+            state.flagsBuf.destroy();
+            state.flagsBuf = null;
+        }
+        if (state.flags2Buf) {
+            state.flags2Buf.destroy();
+            state.flags2Buf = null;
+        }
+        if (state.offsetsBuf) {
+            state.offsetsBuf.destroy();
+            state.offsetsBuf = null;
+        }
+        if (state.modelMatrixCol0Buf) {
+            state.modelMatrixCol0Buf.destroy();
+            state.modelMatrixCol0Buf = null;
+        }
+        if (state.modelMatrixCol1Buf) {
+            state.modelMatrixCol1Buf.destroy();
+            state.modelMatrixCol1Buf = null;
+        }
+        if (state.modelMatrixCol2Buf) {
+            state.modelMatrixCol2Buf.destroy();
+            state.modelMatrixCol2Buf = null;
+        }
+        if (state.modelNormalMatrixCol0Buf) {
+            state.modelNormalMatrixCol0Buf.destroy();
+            state.modelNormalMatrixCol0Buf = null;
+        }
+        if (state.modelNormalMatrixCol1Buf) {
+            state.modelNormalMatrixCol1Buf.destroy();
+            state.modelNormalMatrixCol1Buf = null;
+        }
+        if (state.modelNormalMatrixCol2Buf) {
+            state.modelNormalMatrixCol2Buf.destroy();
+            state.modelNormalMatrixCol2Buf = null;
+        }
+        if (state.indicesBuf) {
+            state.indicesBuf.destroy();
+            state.indicessBuf = null;
+        }
+        if (state.edgeIndicesBuf) {
+            state.edgeIndicesBuf.destroy();
+            state.edgeIndicessBuf = null;
+        }
+        if (state.pickColorsBuf) {
+            state.pickColorsBuf.destroy();
+            state.pickColorsBuf = null;
+        }
+        state.destroy();
+    }
+}
+
+export {TrianglesInstancingLayer};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
