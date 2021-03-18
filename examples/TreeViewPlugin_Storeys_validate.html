@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TreeViewPlugin - Storeys Hierarchy Validation</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* TreeViewPlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #treeViewContainer {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 550px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+        }
+
+        #treeViewContainer ul.error {
+            background: orange;
+        }
+
+        #treeViewContainer ul li {
+            position: relative;
+            width: 500px;
+
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+            width: calc(100% - 50px);
+            padding-left: 2px;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+        }
+
+        #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
+        }
+
+        #treeViewContainer .warn,
+        #treeViewContainer .warn::before,
+        #treeViewContainer .warn::after {
+            /*position: relative;*/
+            padding: 0;
+            margin: 0;
+        }
+
+        #treeViewContainer .warn {
+            font-size: 20px;
+            color: transparent;
+        }
+
+        #treeViewContainer .warn.warning {
+            display: inline-block;
+            top: 0.225em;
+            width: 1.15em;
+            height: 1.15em;
+            overflow: hidden;
+            border: none;
+            background-color: transparent;
+            border-radius: 0.625em;
+        }
+
+        #treeViewContainer .warn.warning::before {
+            content: "";
+            display: block;
+            top: 0.0em;
+            left: 0.0em;
+            position: absolute;
+            border: transparent 0.6em solid;
+            border-bottom-color: #fd3;
+            border-bottom-width: 1em;
+            border-top-width: 0;
+            box-shadow: #999 0 1px 1px;
+        }
+
+        #treeViewContainer .warn.warning::after {
+            display: block;
+            position: absolute;
+            top: 0.3em;
+            left: 0;
+            width: 100%;
+            padding: 0 1px;
+            text-align: center;
+            font-family: "Garamond";
+            content: "!";
+            font-size: 0.65em;
+            font-weight: bold;
+            color: #333;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="treeViewContainer"></div>
+
+<div id="info">
+    <h1>TreeViewPlugin - Storeys Hierarchy Validation</h1><br>
+    <p>This example tests TreeViewPlugin's automatic recovery from invalid metadata. Note the warning icon at the root
+        of the tree vew, indicating that the tree is not available for this model, due to (simulated) errors found in the metedata.</p>
+    <br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+
+    cameraControl.followPointer = true;
+    cameraControl.doublePickFlyTo = true;
+    cameraFlight.duration = 1.0;
+    cameraFlight.fitFOV = 25;
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        autoExpandDepth: 1, // Initially expand tree one level deep
+        hierarchy: "storeys",
+        sortNodes: true,
+        validate: true // <<-- Default is true
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaanWithErrors/metaModelWithoutIfcBuilding.json",
+        edges: true
+    });
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    model.on("loaded", function () {
+
+        const t1 = performance.now();
+
+        const modelTreeView = treeView.modelTreeViews[model.id];
+
+        document.getElementById("time").innerHTML =
+            "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds" +
+            "<br>Objects: " + model.numEntities +
+            "<br><br>TreeViewPlugin validation errors:<br>" + (modelTreeView.errors || []).join("\n");
+    });
+
+</script>
+</html>
