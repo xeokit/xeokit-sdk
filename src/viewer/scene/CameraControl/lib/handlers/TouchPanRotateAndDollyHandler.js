@@ -152,12 +152,12 @@ class TouchPanRotateAndDollyHandler {
                 // Drag rotation
                 //-----------------------------------------------------------------------------------------------
 
+                math.subVec2(tapCanvasPos0, lastCanvasTouchPosList[0], touch0Vec);
+
+                const xPanDelta = touch0Vec[0];
+                const yPanDelta = touch0Vec[1];
+                
                 if (configs.planView) { // No rotating in plan-view mode
-
-                    math.subVec2(tapCanvasPos0, lastCanvasTouchPosList[0], touch0Vec);
-
-                    const xPanDelta = touch0Vec[0];
-                    const yPanDelta = touch0Vec[1];
 
                     const camera = scene.camera;
 
@@ -181,8 +181,8 @@ class TouchPanRotateAndDollyHandler {
                     }
 
                 } else {
-                    updates.rotateDeltaY -= ((tapCanvasPos0[0] - lastCanvasTouchPosList[0][0]) / canvasWidth) * (configs.dragRotationRate * 2.0); // Full horizontal rotation
-                    updates.rotateDeltaX += ((tapCanvasPos0[1] - lastCanvasTouchPosList[0][1]) / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
+                    updates.rotateDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
+                    updates.rotateDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
                 }
 
             } else if (numTouches === 2) {
