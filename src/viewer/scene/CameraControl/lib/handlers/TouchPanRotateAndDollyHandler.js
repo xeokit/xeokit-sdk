@@ -181,8 +181,8 @@ class TouchPanRotateAndDollyHandler {
                     }
 
                 } else {
-                    updates.rotateDeltaY -= ((tapCanvasPos0[0] - lastCanvasTouchPosList[0][0]) / canvasWidth) * configs.dragRotationRate / 2; // Full horizontal rotation
-                    updates.rotateDeltaX += ((tapCanvasPos0[1] - lastCanvasTouchPosList[0][1]) / canvasHeight) * (configs.dragRotationRate / 4); // Half vertical rotation
+                    updates.rotateDeltaY -= ((tapCanvasPos0[0] - lastCanvasTouchPosList[0][0]) / canvasWidth) * (configs.dragRotationRate * 2.0); // Full horizontal rotation
+                    updates.rotateDeltaX += ((tapCanvasPos0[1] - lastCanvasTouchPosList[0][1]) / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
                 }
 
             } else if (numTouches === 2) {

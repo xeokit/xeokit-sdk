@@ -201,8 +201,8 @@ class MousePanRotateDollyHandler {
                             updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
 
                         } else {
-                            updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate;
-                            updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate);
+                            updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * (configs.dragRotationRate * 2.0);
+                            updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate * 1.5);
                         }
                     }
                 }
