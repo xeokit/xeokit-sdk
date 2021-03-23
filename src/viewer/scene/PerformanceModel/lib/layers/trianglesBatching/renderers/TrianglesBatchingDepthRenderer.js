@@ -175,7 +175,7 @@ class TrianglesBatchingDepthRenderer {
         src.push("uniform mat4 positionsDecodeMatrix;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            if (this.WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 src.push("varying float vFragDepth;");
             }
         }
