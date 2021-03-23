@@ -2,7 +2,14 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.7.0
+# 1.7.2
+
+Unreleased
+
+* PerformanceModel
+  * Fix PerformanceModel SAO shader breakage with logarithmic depth buffer. [#592](https://github.com/xeokit/xeokit-sdk/issues/292) ([**@xeolabs**](https://github.com/xeolabs))
+  
+# 1.7.1
 
 March 18, 2021
 
