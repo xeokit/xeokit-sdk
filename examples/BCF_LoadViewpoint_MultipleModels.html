@@ -18,30 +18,9 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Loading a BCF Viewpoint with Multiple Instances of Same Model</h1>
+    <h1>Loading a BCF Viewpoint with Multiple Instances of Same Model</h1><br>
     <ul>
-        <li>
-            <div id="time">Loading JavaScript modules...</div>
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads BIM model from the file system
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
-            - Saves and loads BCF viewpoints
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Creates section planes
-        </li>
-        <li>See source code to examine the BCF JSON record</li>
-        <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        <li id="downloadLink">
         </li>
     </ul>
 </div>
@@ -95,10 +74,6 @@
         excludeUnclassifiedObjects: false
     });
 
-    const t0 = performance.now();
-    document.getElementById("time").innerHTML = "Loading two copies of same model...";
-
-
     model.on("loaded", function () {
 
         const model2 = xktLoader.load({
@@ -112,10 +87,6 @@
 
         model2.on("loaded", () => {
 
-            const t1 = performance.now();
-            document.getElementById("time").innerHTML = "Two model copies loaded in "
-                + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + (model.numEntities = model2.numEntities);
-
             const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
             const bcfViewpoint = getBCFViewpoint();
@@ -124,8 +95,16 @@
         });
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Create link to download our JSON BCF viewpoint
+    // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+    //------------------------------------------------------------------------------------------------------------------
 
-    window.viewer = viewer;
+    const pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(getBCFViewpoint()));
+    pom.setAttribute('download', "bcfViewpoint.json");
+    pom.innerText = "Download BCF Viewpoint JSON";
+    document.getElementById("downloadLink").appendChild(pom)
 
     //------------------------------------------------------------------------------------------------------------------
     // Returns the JSON BCF viewpoint we'll load

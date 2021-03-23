@@ -18,29 +18,9 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Saving a BCF Viewpoint, for Orthographic Camera</h1>
-    <br>
+    <h1>Saving a BCF Viewpoint, for Orthographic Camera</h1><br>
     <ul>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads BIM model from the file system
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
-            - Saves and loads BCF viewpoints
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Creates section planes
-        </li>
-        <li>See source code to examine the BCF JSON record</li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/BCF-Viewpoints">User Guide</a>
-        </li>
-
+        <li id="downloadLink"></li>
     </ul>
 </div>
 
@@ -66,7 +46,6 @@
         transparent: true
     });
 
-
     //------------------------------------------------------------------------------------------------------------------
     // Arrange the camera
     //------------------------------------------------------------------------------------------------------------------
@@ -79,7 +58,7 @@
     camera.eye = [-2.37, 18.97, -26.12];
     camera.look = [10.97, 5.82, -11.22];
     camera.up = [0.36, 0.83, 0.40];
-    
+
     viewer.cameraControl.followPointer = true;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -146,6 +125,15 @@
         const viewpointStr = JSON.stringify(viewpoint, null, 4);
 
         console.log(viewpointStr);
+
+        // Create download link
+        // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+
+        const pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+        pom.setAttribute('download', "bcfViewpoint.json");
+        pom.innerText = "Download BCF Viewpoint JSON";
+        document.getElementById("downloadLink").appendChild(pom);
     });
 
 </script>

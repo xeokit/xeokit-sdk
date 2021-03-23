@@ -18,23 +18,9 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Loading a BCF Viewpoint</h1>
+    <h1>Loading a BCF Viewpoint</h1><br>
     <ul>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads BIM model from the file system
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
-            - Saves and loads BCF viewpoints
-        </li>
-        <li>See source code to examine the BCF JSON record</li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/BCF-Viewpoints">User Guide</a>
-        </li>
-
+        <li id="downloadLink"></li>
     </ul>
 </div>
 </body>
@@ -94,12 +80,20 @@
     //------------------------------------------------------------------------------------------------------------------
 
     model.on("loaded", () => {
-
         const bcfViewpoint = getBCFViewpoint();
-
         bcfViewpoints.setViewpoint(bcfViewpoint);
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Create link to download our JSON BCF viewpoint
+    // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+    //------------------------------------------------------------------------------------------------------------------
+
+    const pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(getBCFViewpoint()));
+    pom.setAttribute('download', "bcfViewpoint.json");
+    pom.innerText = "Download BCF Viewpoint JSON";
+    document.getElementById("downloadLink").appendChild(pom)
 
     //------------------------------------------------------------------------------------------------------------------
     // Returns the JSON BCF viewpoint we'll load
