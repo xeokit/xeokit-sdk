@@ -1,5 +1,4 @@
 import {Program} from "../../../../../webgl/Program.js";
-import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {math} from "../../../../../math/math.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
@@ -73,30 +72,10 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
 
-        let material;
-
-        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-            material = scene.xrayMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-            material = scene.highlightMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-            material = scene.selectedMaterial._state;
-        } else {
-            material = scene.edgeMaterial._state;
-        }
-
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        if (frameCtx.lineWidth !== material.edgeWidth) {
-            gl.lineWidth(material.edgeWidth);
-            frameCtx.lineWidth = material.edgeWidth;
-        }
-
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aColor.bindArrayBuffer(state.colorsBuf);
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
@@ -126,7 +105,6 @@ class TrianglesBatchingEdgesRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
-        this._uColor = program.getLocation("color");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
@@ -142,6 +120,7 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
+        this._aColor = program.getAttribute("color");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
@@ -190,6 +169,7 @@ class TrianglesBatchingEdgesRenderer {
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
+        src.push("attribute vec4 color;");
         if (scene.entityOffsetsEnabled) {
             src.push("attribute vec3 offset;");
         }
@@ -213,8 +193,7 @@ class TrianglesBatchingEdgesRenderer {
             src.push("varying vec4 vFlags2;");
         }
 
-        src.push("uniform vec4 color;");
-
+        src.push("varying vec4 vColor;");
         src.push("void main(void) {");
 
         // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
@@ -246,6 +225,7 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
+        src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
         src.push("}");
         src.push("}");
         return src;
@@ -280,7 +260,7 @@ class TrianglesBatchingEdgesRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("varying vec4 vColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
@@ -297,7 +277,7 @@ class TrianglesBatchingEdgesRenderer {
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("gl_FragColor = color;");
+        src.push("gl_FragColor = vColor;");
         src.push("}");
         return src;
     }

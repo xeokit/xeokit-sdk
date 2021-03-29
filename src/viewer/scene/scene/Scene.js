@@ -608,6 +608,8 @@ class Scene extends Component {
 
             this.sectionPlanes = [];
 
+            this.clippingCaps = false;
+
             let hash = null;
 
             this.getHash = function () {

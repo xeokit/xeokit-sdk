@@ -49,17 +49,6 @@ class TrianglesInstancingEdgesRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        let material;
-        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-            material = scene.xrayMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-            material = scene.highlightMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-            material = scene.selectedMaterial._state;
-        } else {
-            material = scene.edgeMaterial._state;
-        }
-
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -85,16 +74,6 @@ class TrianglesInstancingEdgesRenderer {
             }
         }
 
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        if (frameCtx.lineWidth !== material.edgeWidth) {
-            gl.lineWidth(material.edgeWidth);
-            frameCtx.lineWidth = material.edgeWidth;
-        }
-
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -106,6 +85,9 @@ class TrianglesInstancingEdgesRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+
+        this._aColor.bindArrayBuffer(state.colorsBuf);
+        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
@@ -129,6 +111,7 @@ class TrianglesInstancingEdgesRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
 
         if (this._aOffset) {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
@@ -160,7 +143,6 @@ class TrianglesInstancingEdgesRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
-        this._uColor = program.getLocation("color");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -177,6 +159,7 @@ class TrianglesInstancingEdgesRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
+        this._aColor = program.getAttribute("color");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
@@ -223,6 +206,7 @@ class TrianglesInstancingEdgesRenderer {
         }
         src.push("uniform int renderPass;");
         src.push("attribute vec3 position;");
+        src.push("attribute vec4 color;");
         if (scene.entityOffsetsEnabled) {
             src.push("attribute vec3 offset;");
         }
@@ -248,7 +232,7 @@ class TrianglesInstancingEdgesRenderer {
             src.push("varying vec4 vFlags2;");
         }
 
-        src.push("uniform vec4 color;");
+        src.push("varying vec4 vColor;");
 
         src.push("void main(void) {");
 
@@ -279,6 +263,7 @@ class TrianglesInstancingEdgesRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
+        src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
         src.push("}");
         src.push("}");
         return src;
@@ -313,7 +298,7 @@ class TrianglesInstancingEdgesRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("varying vec4 vColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
@@ -330,7 +315,7 @@ class TrianglesInstancingEdgesRenderer {
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("gl_FragColor = color;");
+        src.push("gl_FragColor = vColor;");
         src.push("}");
         return src;
     }

@@ -50,13 +50,7 @@
 
     const sao = viewer.scene.sao;
 
-    sao.enabled = true; // Only works if supported
-    sao.intensity = 0.20;
-    sao.bias = 0.5;
-    sao.scale = 230.0; // <<------- Scale the SAO effect for this model
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
+    sao.enabled = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a PerformanceModel representing a table with four legs, using geometry instancing

@@ -1,6 +1,7 @@
 import {TrianglesInstancingColorRenderer} from "./renderers/TrianglesInstancingColorRenderer.js";
 import {TrianglesInstancingSilhouetteRenderer} from "./renderers/TrianglesInstancingSilhouetteRenderer.js";
 import {TrianglesInstancingEdgesRenderer} from "./renderers/TrianglesInstancingEdgesRenderer.js";
+import {TrianglesInstancingEdgesColorRenderer} from "./renderers/TrianglesInstancingEdgesColorRenderer.js";
 import {TrianglesInstancingPickMeshRenderer} from "./renderers/TrianglesInstancingPickMeshRenderer.js";
 import {TrianglesInstancingPickDepthRenderer} from "./renderers/TrianglesInstancingPickDepthRenderer.js";
 import {TrianglesInstancingPickNormalsRenderer} from "./renderers/TrianglesInstancingPickNormalsRenderer.js";
@@ -51,6 +52,10 @@ class TrianglesInstancingRenderers {
         if (this._edgesRenderer && (!this._edgesRenderer.getValid())) {
             this._edgesRenderer.destroy();
             this._edgesRenderer = null;
+        }
+        if (this._edgesColorRenderer && (!this._edgesColorRenderer.getValid())) {
+            this._edgesColorRenderer.destroy();
+            this._edgesColorRenderer = null;
         }
         if (this._pickMeshRenderer && (!this._pickMeshRenderer.getValid())) {
             this._pickMeshRenderer.destroy();
@@ -130,6 +135,13 @@ class TrianglesInstancingRenderers {
         return this._edgesRenderer;
     }
 
+    get edgesColorRenderer() {
+        if (!this._edgesColorRenderer) {
+            this._edgesColorRenderer = new TrianglesInstancingEdgesColorRenderer(this._scene);
+        }
+        return this._edgesColorRenderer;
+    }
+
     get pickMeshRenderer() {
         if (!this._pickMeshRenderer) {
             this._pickMeshRenderer = new TrianglesInstancingPickMeshRenderer(this._scene);
@@ -189,6 +201,9 @@ class TrianglesInstancingRenderers {
         }
         if (this._edgesRenderer) {
             this._edgesRenderer.destroy();
+        }
+        if (this._edgesColorRenderer) {
+            this._edgesColorRenderer.destroy();
         }
         if (this._pickMeshRenderer) {
             this._pickMeshRenderer.destroy();

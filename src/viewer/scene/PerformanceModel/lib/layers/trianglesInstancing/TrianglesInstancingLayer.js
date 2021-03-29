@@ -33,6 +33,7 @@ class TrianglesInstancingLayer {
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.edgeThreshold
      * @param cfg.rtcCenter
+     * @params cfg.solid
      */
     constructor(model, cfg) {
 
@@ -40,7 +41,7 @@ class TrianglesInstancingLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesInstancingLayer";
+        this.sortId = "TrianglesInstancingLayer" + cfg.solid ? "-solid" : "-surface";
 
         /**
          * Index of this InstancingLayer in PerformanceModel#_layerList
@@ -159,6 +160,12 @@ class TrianglesInstancingLayer {
          * @type {*|Float64Array}
          */
         this.aabb = math.collapseAABB3();
+
+        /**
+         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
+         * @type {boolean}
+         */
+        this.solid = !!cfg.solid;
     }
 
     /**
@@ -677,6 +684,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (frameCtx.withSAO) {
             if (frameCtx.pbrEnabled) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
@@ -700,10 +708,24 @@ class TrianglesInstancingLayer {
         }
     }
 
+    _updateBackfaceCull(frameCtx) {
+        const backfaces = (!this.solid);
+        if (frameCtx.backfaces !== backfaces) {
+            const gl = frameCtx.gl;
+            if (backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = backfaces;
+        }
+    }
+
     drawColorTransparent(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (frameCtx.pbrEnabled) {
             if (this._instancingRenderers.colorQualityRenderer) {
                 this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
@@ -721,6 +743,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.depthRenderer) {
             this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
         }
@@ -730,6 +753,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.normalsRenderer) {
             this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
@@ -741,6 +765,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
@@ -750,6 +775,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
@@ -759,6 +785,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
@@ -770,8 +797,8 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        if (this._instancingRenderers.edgesColorRenderer) {
+            this._instancingRenderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
@@ -779,8 +806,8 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
-        if (this._instancingRenderers.edgesRenderer) {
-            this._instancingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        if (this._instancingRenderers.edgesColorRenderer) {
+            this._instancingRenderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
         }
     }
 
@@ -817,6 +844,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.occlusionRenderer) {
             // Only opaque, filled objects can be occluders
             this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
@@ -829,6 +857,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.shadowRenderer) {
             this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
@@ -840,6 +869,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.pickMeshRenderer) {
             this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
@@ -849,6 +879,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.pickDepthRenderer) {
             this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
@@ -858,6 +889,7 @@ class TrianglesInstancingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._instancingRenderers.pickNormalsRenderer) {
             this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }

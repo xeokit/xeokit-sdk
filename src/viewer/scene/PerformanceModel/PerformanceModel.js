@@ -834,7 +834,6 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
-     * @param {Boolean} [cfg.backfaces=false] Indicates if backfaces are visible.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
      * to limit the size of the batched geometry arrays that PerformanceModel internally creates for batched geometries.
@@ -951,7 +950,6 @@ class PerformanceModel extends Component {
         this.edges = cfg.edges;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
-        this.backfaces = cfg.backfaces;
 
         // Build static matrix
 
@@ -1140,7 +1138,7 @@ class PerformanceModel extends Component {
      *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
-     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines' and 'triangles'.
+     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Required for 'triangles' primitives.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
@@ -1171,7 +1169,22 @@ class PerformanceModel extends Component {
         switch (primitive) {
             case "triangles":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
-                    layerIndex: 0
+                    layerIndex: 0,
+                    solid: true
+                }, cfg));
+                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
+                break;
+            case "solid":
+                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    layerIndex: 0,
+                    solid: true
+                }, cfg));
+                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
+                break;
+            case "surface":
+                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    layerIndex: 0,
+                    solid: false
                 }, cfg));
                 this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
                 break;
@@ -1334,8 +1347,8 @@ class PerformanceModel extends Component {
 
             let primitive = cfg.primitive || "triangles";
 
-            if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles") {
-                this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines' and 'triangles'. Defaulting to 'triangles'.`);
+            if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
+                this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
                 primitive = "triangles";
             }
 
@@ -1410,6 +1423,8 @@ class PerformanceModel extends Component {
             switch (primitive) {
 
                 case "triangles":
+                case "solid":
+                case "surface":
 
                     if (layer) {
                         if (!layer.canCreatePortion(positions.length, indices.length)) {
@@ -1425,7 +1440,8 @@ class PerformanceModel extends Component {
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                             rtcCenter: cfg.rtcCenter, // Can be undefined
-                            maxGeometryBatchSize: this._maxGeometryBatchSize
+                            maxGeometryBatchSize: this._maxGeometryBatchSize,
+                            solid: (primitive === "solid")
                         });
                         this._layerList.push(layer);
                         this._currentBatchingLayers[primitive] = layer;
@@ -1711,6 +1727,7 @@ class PerformanceModel extends Component {
      * Default is ````false````.
      *
      * @type {Boolean}
+     * @deprecated
      */
     set backfaces(backfaces) {
         backfaces = !!backfaces;
@@ -1724,6 +1741,7 @@ class PerformanceModel extends Component {
      * Default is ````false````.
      *
      * @type {Boolean}
+     * @deprecated
      */
     get backfaces() {
         return this._backfaces;
@@ -2356,15 +2374,6 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawColorOpaque(frameCtx) {
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2383,15 +2392,6 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2401,15 +2401,6 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2496,15 +2487,6 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2519,15 +2501,6 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2539,15 +2512,6 @@ class PerformanceModel extends Component {
     drawPickMesh(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
-        }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
         }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
@@ -2564,15 +2528,6 @@ class PerformanceModel extends Component {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
-        }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
@@ -2587,15 +2542,6 @@ class PerformanceModel extends Component {
     drawPickNormals(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
-        }
-        if (frameCtx.backfaces !== this.backfaces) {
-            const gl = this.scene.canvas.gl;
-            if (this.backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = this.backfaces;
         }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {

@@ -7,9 +7,8 @@ import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
 import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
-import {SAOBlendRenderer} from "./sao/SAOBlendRenderer.js";
-import {SAOBlurRenderer} from "./sao/SAOBlurRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
+import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 
 /**
  * @private
@@ -47,8 +46,7 @@ const Renderer = function (scene, options) {
     const unbindOutputFrameBuffer = null;
 
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
-    const saoBlurRenderer = new SAOBlurRenderer(scene);
-    const saoBlendRenderer = new SAOBlendRenderer(scene);
+    const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
 
@@ -76,8 +74,7 @@ const Renderer = function (scene, options) {
         occlusionBuffer2.webglContextRestored(gl);
 
         saoOcclusionRenderer.init();
-        saoBlurRenderer.init();
-        saoBlendRenderer.init();
+        saoDepthLimitedBlurRenderer.init();
 
         imageDirty = true;
     };
@@ -295,14 +292,14 @@ const Renderer = function (scene, options) {
 
             occlusionBuffer2.bind();
             occlusionBuffer2.clear();
-            saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
+            saoDepthLimitedBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
             occlusionBuffer2.unbind();
 
             // Vertically blur occlusion buffer 2 back into occlusion buffer 1
 
             occlusionBuffer1.bind();
             occlusionBuffer1.clear();
-            saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
+            saoDepthLimitedBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
             occlusionBuffer1.unbind();
         }
     }
@@ -1280,8 +1277,7 @@ const Renderer = function (scene, options) {
         occlusionBuffer2.destroy();
 
         saoOcclusionRenderer.destroy();
-        saoBlurRenderer.destroy();
-        saoBlendRenderer.destroy();
+        saoDepthLimitedBlurRenderer.destroy();
 
         if (this._occlusionTester) {
             this._occlusionTester.destroy();

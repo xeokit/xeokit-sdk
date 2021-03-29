@@ -299,6 +299,7 @@ class TrianglesBatchingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
 
         const src = [];
 
@@ -356,6 +357,9 @@ class TrianglesBatchingColorQualityRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
+            if (clippingCaps) {
+                src.push("varying vec4 vClipPosition;");
+            }
         }
 
         src.push("void main(void) {");
@@ -376,10 +380,6 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("vec4 worldNormal =  worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
         src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
-        }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -389,6 +389,15 @@ class TrianglesBatchingColorQualityRenderer {
                 src.push("clipPos.z *= clipPos.w;");
             }
         }
+
+        if (clipping) {
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags2 = flags2;");
+            if (clippingCaps) {
+                src.push("vClipPosition = clipPos;");
+            }
+        }
+
         src.push("vViewPosition = viewPosition;");
         src.push("vViewNormal = viewNormal;");
         src.push("vColor = color;");
@@ -412,6 +421,7 @@ class TrianglesBatchingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
         src.push("// Triangles batching quality draw fragment shader");
@@ -505,6 +515,9 @@ class TrianglesBatchingColorQualityRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
+            if (clippingCaps) {
+                src.push("varying vec4 vClipPosition;");
+            }
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -667,7 +680,22 @@ class TrianglesBatchingColorQualityRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { discard; }");
+            if (clippingCaps) {
+                src.push("  if (dist > (0.002 * vClipPosition.w)) {");
+                src.push("      discard;");
+                src.push("  }");
+                src.push("  if (dist > 0.0) { ");
+                src.push("      gl_FragColor=vec4(1.0, 0.0, 0.0, 1.0);");
+                if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                    src.push("  gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+                }
+                src.push("  return;");
+                src.push("}");
+            } else {
+                src.push("  if (dist > 0.0) { ");
+                src.push("      discard;")
+                src.push("  }");
+            }
             src.push("}");
         }
 
@@ -746,7 +774,7 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   fragColor            = vec4(outgoingLight.rgb * ambient, alpha);");
+            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient, alpha);");
         } else {
             src.push("   fragColor            = vec4(outgoingLight.rgb, alpha);");
         }

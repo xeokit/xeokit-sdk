@@ -30,6 +30,7 @@ class TrianglesBatchingLayer {
      * @param cfg.maxGeometryBatchSize
      * @param cfg.rtcCenter
      * @param cfg.scratchMemory
+     * @param cfg.solid
      */
     constructor(model, cfg) {
 
@@ -37,7 +38,7 @@ class TrianglesBatchingLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesBatchingLayer";
+        this.sortId = "TrianglesBatchingLayer" + cfg.solid ? "-solid" : "-surface";
 
         /**
          * Index of this TrianglesBatchingLayer in {@link PerformanceModel#_layerList}.
@@ -92,6 +93,12 @@ class TrianglesBatchingLayer {
          * @type {*|Float64Array}
          */
         this.aabb = math.collapseAABB3();
+
+        /**
+         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
+         * @type {boolean}
+         */
+        this.solid = !!cfg.solid;
     }
 
     /**
@@ -751,6 +758,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (frameCtx.withSAO) {
             if (frameCtx.pbrEnabled) {
                 if (this._batchingRenderers.colorQualityRendererWithSAO) {
@@ -774,10 +782,24 @@ class TrianglesBatchingLayer {
         }
     }
 
+    _updateBackfaceCull(frameCtx) {
+        const backfaces = (!this.solid);
+        if (frameCtx.backfaces !== backfaces) {
+            const gl = frameCtx.gl;
+            if (backfaces) {
+                gl.disable(gl.CULL_FACE);
+            } else {
+                gl.enable(gl.CULL_FACE);
+            }
+            frameCtx.backfaces = backfaces;
+        }
+    }
+
     drawColorTransparent(frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (frameCtx.pbrEnabled) {
             if (this._batchingRenderers.colorQualityRenderer) {
                 this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
@@ -795,6 +817,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.depthRenderer) {
             this._batchingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
         }
@@ -804,6 +827,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.normalsRenderer) {
             this._batchingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);  // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
@@ -815,6 +839,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.silhouetteRenderer) {
             this._batchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
@@ -824,6 +849,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.silhouetteRenderer) {
             this._batchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
@@ -833,6 +859,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.silhouetteRenderer) {
             this._batchingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
@@ -844,8 +871,8 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
-        if (this._batchingRenderers.edgesRenderer) {
-            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        if (this._batchingRenderers.edgesColorRenderer) {
+            this._batchingRenderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
@@ -853,8 +880,8 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
-        if (this._batchingRenderers.edgesRenderer) {
-            this._batchingRenderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        if (this._batchingRenderers.edgesColorRenderer) {
+            this._batchingRenderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
         }
     }
 
@@ -891,6 +918,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.occlusionRenderer) {
             this._batchingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
@@ -902,6 +930,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.shadowRenderer) {
             this._batchingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
@@ -913,6 +942,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.pickMeshRenderer) {
             this._batchingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
@@ -922,6 +952,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.pickDepthRenderer) {
             this._batchingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
@@ -931,6 +962,7 @@ class TrianglesBatchingLayer {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
+        this._updateBackfaceCull(frameCtx);
         if (this._batchingRenderers.pickNormalsRenderer) {
             this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }

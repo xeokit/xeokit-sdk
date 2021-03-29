@@ -98,10 +98,6 @@
 
     const sao = viewer.scene.sao;
     sao.enabled = true;
-    sao.intensity = 0.2;
-    sao.bias = 0.5;
-    sao.scale = 1000.0;
-    sao.minResolution = 0.0;
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry
@@ -160,16 +156,22 @@
     // GUI to play with imagePlane parameters
     //------------------------------------------------------------------------------------------------------------------
 
-    var imagePlaneParams = new function () {
+    const imagePlaneParams = new function () {
         this.visible = imagePlane.visible;
         this.gridVisible = imagePlane.gridVisible;
         this.opacity = imagePlane.opacity;
     }();
 
-    var update = function () {
-        imagePlane.visible = imagePlaneParams.visible;
-        imagePlane.gridVisible = imagePlaneParams.gridVisible;
-        imagePlane.opacity = imagePlaneParams.opacity;
+    const update = function () {
+        if (imagePlane.visible !== imagePlaneParams.visible) {
+            imagePlane.visible = imagePlaneParams.visible;
+        }
+        if (imagePlane.gridVisible !== imagePlaneParams.gridVisible) {
+            imagePlane.gridVisible = imagePlaneParams.gridVisible;
+        }
+        if (imagePlane.opacity !== imagePlaneParams.opacity) {
+            imagePlane.opacity = imagePlaneParams.opacity;
+        }
         requestAnimationFrame(update);
     };
 
@@ -184,7 +186,7 @@
     imagePlaneFolder.add(imagePlaneParams, 'gridVisible');
     imagePlaneFolder.open();
 
-    var customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('my-gui-container');
     customContainer.appendChild(gui.domElement);
 
 </script>

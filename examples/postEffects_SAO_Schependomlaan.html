@@ -89,11 +89,6 @@
     const camera = scene.camera;
 
     sao.enabled = true; // Only works if supported (see above)
-    sao.intensity = 0.20;
-    sao.bias = 0.5;
-    sao.scale = 1000.0;
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
 
     cameraControl.followPointer = true;
 
@@ -137,29 +132,37 @@
     // GUI to play with SAO parameters
     //------------------------------------------------------------------------------------------------------------------
 
-    var saoParams = new function () {
+    const saoParams = new function () {
         this.enabled = sao.enabled;
         this.kernelRadius = sao.kernelRadius;
         this.intensity = sao.intensity;
         this.bias = sao.bias;
         this.scale = sao.scale;
         this.minResolution = sao.minResolution;
+        this.numSamples = sao.numSamples;
+        this.blendFactor = sao.blendFactor;
+        this.blendCutoff = sao.blendCutoff;
         this.blur = sao.blur;
         this.perspective = (camera.projection === "perspective");
         this.far = camera.perspective.far;
+        this.fov = camera.perspective.fov;
     }();
 
-    var update = function () {
+    const update = function () {
         sao.enabled = saoParams.enabled;
         sao.kernelRadius = saoParams.kernelRadius;
         sao.intensity = saoParams.intensity;
         sao.bias = saoParams.bias;
         sao.scale = saoParams.scale;
         sao.minResolution = saoParams.minResolution;
+        sao.numSamples = saoParams.numSamples;
+        sao.blendFactor = saoParams.blendFactor;
+        sao.blendCutoff = saoParams.blendCutoff;
         sao.blur = saoParams.blur;
         camera.projection = saoParams.perspective ? "perspective" : "ortho";
         camera.perspective.far = saoParams.far;
         camera.ortho.far = saoParams.far;
+        camera.perspective.fov = saoParams.fov;
         requestAnimationFrame(update);
     };
 
@@ -171,18 +174,22 @@
     saoFolder.add(saoParams, 'enabled');
     saoFolder.add(saoParams, 'bias', -2, 2);
     saoFolder.add(saoParams, 'intensity', 0, 1.0);
-    saoFolder.add(saoParams, 'scale', 0, 2000);
+    saoFolder.add(saoParams, 'scale', .05, 5);
     saoFolder.add(saoParams, 'kernelRadius', 1, 200);
-    saoFolder.add(saoParams, 'minResolution', 0, 1);
+    saoFolder.add(saoParams, 'minResolution', 0, 0.001);
+    saoFolder.add(saoParams, 'numSamples', 4, 100);
+    saoFolder.add(saoParams, 'blendFactor', 0, 2);
+    saoFolder.add(saoParams, 'blendCutoff', 0, 2);
     saoFolder.add(saoParams, 'blur');
     saoFolder.open();
 
     const cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(saoParams, 'perspective');
-    cameraFolder.add(saoParams, 'far', 100, 5000);
+    cameraFolder.add(saoParams, 'far', 100, 20000);
+    cameraFolder.add(saoParams, 'fov', 10, 120);
     cameraFolder.open();
 
-    var customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('my-gui-container');
     customContainer.appendChild(gui.domElement);
 
 </script>

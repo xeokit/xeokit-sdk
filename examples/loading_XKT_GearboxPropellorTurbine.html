@@ -62,7 +62,8 @@
 
     viewer.cameraControl.followPointer = true;
 
-    const sao = viewer.scene.sao.enabled = true;
+    const sao = viewer.scene.sao;
+    sao.enabled = true; // Only works if supported (see above)
 
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
