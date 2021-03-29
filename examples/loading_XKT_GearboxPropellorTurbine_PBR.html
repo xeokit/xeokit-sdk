@@ -11,8 +11,17 @@
             height: 100%;
             background: black;
         }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
+
     </style>
 
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
 </head>
 
 <body>
@@ -34,6 +43,8 @@
         </li>
     </ul>
 </div>
+
+<div id="my-gui-container"></div>
 </body>
 <script type="module">
 
@@ -64,9 +75,8 @@
 
     viewer.cameraControl.followPointer = true;
 
-    const sao = viewer.scene.sao.enabled = true;
-
-    viewer.scene.edgeMaterial.edgeColor = [.6, .6, .6];
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Replace the Scene's default lights with three custom world-space DirLights
@@ -129,8 +139,7 @@
     const model = xktLoader.load({
         id: "myModel",
         src: "./models/xkt/gearboxPropellorTurbine/gearboxPropellorTurbine.xkt",
-        scale: [8, 8, 8],
-        edges: false,
+        edges: true,
         saoEnabled: true
     });
 
@@ -139,7 +148,71 @@
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
 
-    window.viewer = viewer;
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with SAO parameters
+    //------------------------------------------------------------------------------------------------------------------
+
+    const camera = viewer.scene.camera;
+
+    const saoParams = new function () {
+        this.enabled = sao.enabled;
+        this.kernelRadius = sao.kernelRadius;
+        this.intensity = sao.intensity;
+        this.bias = sao.bias;
+        this.scale = sao.scale;
+        this.minResolution = sao.minResolution;
+        this.numSamples = sao.numSamples;
+        this.blendFactor = sao.blendFactor;
+        this.blendCutoff = sao.blendCutoff;
+        this.blur = sao.blur;
+        this.perspective = (camera.projection === "perspective");
+        this.far = camera.perspective.far;
+        this.fov = camera.perspective.fov;
+    }();
+
+    const update = function () {
+        sao.enabled = saoParams.enabled;
+        sao.kernelRadius = saoParams.kernelRadius;
+        sao.intensity = saoParams.intensity;
+        sao.bias = saoParams.bias;
+        sao.scale = saoParams.scale;
+        sao.minResolution = saoParams.minResolution;
+        sao.numSamples = saoParams.numSamples;
+        sao.blendFactor = saoParams.blendFactor;
+        sao.blendCutoff = saoParams.blendCutoff;
+        sao.blur = saoParams.blur;
+        camera.projection = saoParams.perspective ? "perspective" : "ortho";
+        camera.perspective.far = saoParams.far;
+        camera.ortho.far = saoParams.far;
+        camera.perspective.fov = saoParams.fov;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const saoFolder = gui.addFolder('SAO');
+    saoFolder.add(saoParams, 'enabled');
+    saoFolder.add(saoParams, 'bias', -2, 2);
+    saoFolder.add(saoParams, 'intensity', 0, 1.0);
+    saoFolder.add(saoParams, 'scale', .05, 5);
+    saoFolder.add(saoParams, 'kernelRadius', 1, 200);
+    saoFolder.add(saoParams, 'minResolution', 0, 0.001);
+    saoFolder.add(saoParams, 'numSamples', 4, 100);
+    saoFolder.add(saoParams, 'blendFactor', 0, 2);
+    saoFolder.add(saoParams, 'blendCutoff', 0, 2);
+    saoFolder.add(saoParams, 'blur');
+    saoFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(saoParams, 'perspective');
+    cameraFolder.add(saoParams, 'far', 100, 20000);
+    cameraFolder.add(saoParams, 'fov', 10, 120);
+    cameraFolder.open();
+
+    const customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
 
 </script>
 </html>
