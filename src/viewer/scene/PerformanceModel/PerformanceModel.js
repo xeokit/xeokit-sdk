@@ -833,6 +833,9 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Number} [cfg.backfaces=false] When we set this ````true````, then we force rendering of backfaces for this PerformanceModel. When
+     * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
+     * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the PerformanceModel. Only works when {@link Scene#pbrEnabled} is also ````true````.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
@@ -951,6 +954,7 @@ class PerformanceModel extends Component {
         this.edges = cfg.edges;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
+        this.backfaces = cfg.backfaces;
 
         // Build static matrix
 
@@ -1729,8 +1733,16 @@ class PerformanceModel extends Component {
      *
      * Default is ````false````.
      *
+     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
+     *
+     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
+     * the Viewer will:
+     *
+     *  * hide backfaces on watertight meshes,
+     *  * show backfaces on open meshes, and
+     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
+     *
      * @type {Boolean}
-     * @deprecated
      */
     set backfaces(backfaces) {
         backfaces = !!backfaces;
@@ -1744,7 +1756,6 @@ class PerformanceModel extends Component {
      * Default is ````false````.
      *
      * @type {Boolean}
-     * @deprecated
      */
     get backfaces() {
         return this._backfaces;

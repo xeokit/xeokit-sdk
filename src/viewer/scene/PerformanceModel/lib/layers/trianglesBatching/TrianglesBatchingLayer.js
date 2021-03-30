@@ -783,7 +783,7 @@ class TrianglesBatchingLayer {
     }
 
     _updateBackfaceCull(renderFlags, frameCtx) {
-        const backfaces = (!this.solid) || renderFlags.sectioned;
+        const backfaces = this.model.backfaces || (!this.solid) || renderFlags.sectioned;
         if (frameCtx.backfaces !== backfaces) {
             const gl = frameCtx.gl;
             if (backfaces) {
