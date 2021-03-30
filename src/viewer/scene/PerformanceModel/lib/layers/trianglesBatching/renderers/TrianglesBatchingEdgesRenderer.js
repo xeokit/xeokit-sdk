@@ -2,8 +2,10 @@ import {Program} from "../../../../../webgl/Program.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {math} from "../../../../../math/math.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
+import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 
 const tempVec3a = math.vec3();
+const defaultColor = new Float32Array([0,0,0,1]);
 
 /**
  * @private
@@ -47,6 +49,28 @@ class TrianglesBatchingEdgesRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+            const material = scene.xrayMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+            const material = scene.highlightMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+            const material = scene.selectedMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else {
+            gl.uniform4fv(this._uColor, defaultColor);
+        }
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -75,7 +99,6 @@ class TrianglesBatchingEdgesRenderer {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aColor.bindArrayBuffer(state.colorsBuf);
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
@@ -105,6 +128,7 @@ class TrianglesBatchingEdgesRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
+        this._uColor = program.getLocation("color");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
@@ -120,7 +144,6 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
-        this._aColor = program.getAttribute("color");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
@@ -167,9 +190,9 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         src.push("uniform int renderPass;");
+        src.push("uniform vec4 color;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec4 color;");
         if (scene.entityOffsetsEnabled) {
             src.push("attribute vec3 offset;");
         }
@@ -225,7 +248,7 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
         src.push("}");
         src.push("}");
         return src;
