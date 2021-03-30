@@ -2,12 +2,27 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.7.2
+# 1.8
 
-Unreleased
+March 30, 2021
 
-* PerformanceModel
-  * Fix PerformanceModel SAO shader breakage with logarithmic depth buffer. [#592](https://github.com/xeokit/xeokit-sdk/issues/292) ([**@xeolabs**](https://github.com/xeolabs))
+Rendering and performance improvements.
+
+* AnnotationsPlugin
+  * Add AnnotationsPlugin "annotationCreated" and "annotationDestroyed" events. [#597](https://github.com/xeokit/xeokit-sdk/issues/597) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl
+  * Fix CameraControl double-click. [#602](https://github.com/xeokit/xeokit-sdk/issues/602) ([**@xeolabs**](https://github.com/xeolabs))
+* FastNavPlugin
+  * FastNavPlugin - disables SAO and PBR while camera moving. [#601](https://github.com/xeokit/xeokit-sdk/issues/598) ([**@xeolabs**](https://github.com/xeolabs))
+* SAO  
+  * Make SAO automatically work for all far clipping plane distances #598. [#598](https://github.com/xeokit/xeokit-sdk/issues/598) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix halo artifacts in SAO blur. [#594](https://github.com/xeokit/xeokit-sdk/issues/594) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix PerformanceModel SAO shader breakage with logarithmic depth buffer. [#592](https://github.com/xeokit/xeokit-sdk/issues/592) ([**@xeolabs**](https://github.com/xeolabs))
+* SectionPlane, SectionPlanesPlugin
+  * Show backfaces on solid meshes when sliced by SectionPlanes. [#600](https://github.com/xeokit/xeokit-sdk/issues/600) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin, PerformanceModel
+  * Fix missing backfaces. [#596](https://github.com/xeokit/xeokit-sdk/issues/596) ([**@xeolabs**](https://github.com/xeolabs))
+  * Improved edge coloring. [#595](https://github.com/xeokit/xeokit-sdk/issues/595) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.7.1
 
