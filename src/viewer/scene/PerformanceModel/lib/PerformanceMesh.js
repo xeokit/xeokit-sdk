@@ -219,7 +219,7 @@ class PerformanceMesh {
     }
 
     /** @private */
-    drawPickTriangles(frameCtx) {
+    drawPickTriangles(renderFlags, frameCtx) {
         // NOP
     }
 

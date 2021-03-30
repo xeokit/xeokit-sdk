@@ -680,13 +680,13 @@ class TrianglesInstancingLayer {
 
     // ---------------------- COLOR RENDERING -----------------------------------
 
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
-        if (frameCtx.withSAO) {
-            if (frameCtx.pbrEnabled) {
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (frameCtx.withSAO && this.model.saoEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
                     this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -696,7 +696,7 @@ class TrianglesInstancingLayer {
                 }
             }
         } else {
-            if (frameCtx.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
                 if (this._instancingRenderers.colorQualityRenderer) {
                     this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
@@ -708,8 +708,8 @@ class TrianglesInstancingLayer {
         }
     }
 
-    _updateBackfaceCull(frameCtx) {
-        const backfaces = (!this.solid);
+    _updateBackfaceCull(renderFlags, frameCtx) {
+        const backfaces = (!this.solid) || renderFlags.sectioned;
         if (frameCtx.backfaces !== backfaces) {
             const gl = frameCtx.gl;
             if (backfaces) {
@@ -721,12 +721,12 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawColorTransparent(frameCtx) {
+    drawColorTransparent(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
-        if (frameCtx.pbrEnabled) {
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
             if (this._instancingRenderers.colorQualityRenderer) {
                 this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
@@ -739,21 +739,21 @@ class TrianglesInstancingLayer {
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
-    drawDepth(frameCtx) {
+    drawDepth(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.depthRenderer) {
             this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
         }
     }
 
-    drawNormals(frameCtx) {
+    drawNormals(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.normalsRenderer) {
             this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
@@ -761,31 +761,31 @@ class TrianglesInstancingLayer {
 
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
-    drawSilhouetteXRayed(frameCtx) {
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
-    drawSilhouetteHighlighted(frameCtx) {
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
-    drawSilhouetteSelected(frameCtx) {
+    drawSilhouetteSelected(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.silhouetteRenderer) {
             this._instancingRenderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
@@ -793,7 +793,7 @@ class TrianglesInstancingLayer {
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
-    drawEdgesColorOpaque(frameCtx) {
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
@@ -802,7 +802,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawEdgesColorTransparent(frameCtx) {
+    drawEdgesColorTransparent(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
@@ -811,7 +811,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawEdgesXRayed(frameCtx) {
+    drawEdgesXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -820,7 +820,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawEdgesHighlighted(frameCtx) {
+    drawEdgesHighlighted(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -829,7 +829,7 @@ class TrianglesInstancingLayer {
         }
     }
 
-    drawEdgesSelected(frameCtx) {
+    drawEdgesSelected(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -840,11 +840,11 @@ class TrianglesInstancingLayer {
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
-    drawOcclusion(frameCtx) {
+    drawOcclusion(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.occlusionRenderer) {
             // Only opaque, filled objects can be occluders
             this._instancingRenderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
@@ -853,11 +853,11 @@ class TrianglesInstancingLayer {
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
-    drawShadow(frameCtx) {
+    drawShadow(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.shadowRenderer) {
             this._instancingRenderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
@@ -865,31 +865,31 @@ class TrianglesInstancingLayer {
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
-    drawPickMesh(frameCtx) {
+    drawPickMesh(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.pickMeshRenderer) {
             this._instancingRenderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
-    drawPickDepths(frameCtx) {
+    drawPickDepths(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.pickDepthRenderer) {
             this._instancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
-    drawPickNormals(frameCtx) {
+    drawPickNormals(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
-        this._updateBackfaceCull(frameCtx);
+        this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.pickNormalsRenderer) {
             this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }

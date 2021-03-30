@@ -811,7 +811,7 @@ class TrianglesInstancingColorQualityRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 outgoingLight = (reflectedLight.diffuse) + (reflectedLight.specular);");
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
 
         src.push("vec4 fragColor;");
 

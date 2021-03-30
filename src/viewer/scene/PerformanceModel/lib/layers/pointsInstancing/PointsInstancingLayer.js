@@ -580,7 +580,7 @@ class PointsInstancingLayer {
 
     // ---------------------- NORMAL RENDERING -----------------------------------
 
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -589,7 +589,7 @@ class PointsInstancingLayer {
         }
     }
 
-    drawColorTransparent(frameCtx) {
+    drawColorTransparent(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -600,15 +600,15 @@ class PointsInstancingLayer {
 
     // -- RENDERING SAO POST EFFECT TARGETS ----------------------------------------------------------------------------
 
-    drawDepth(frameCtx) {
+    drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(frameCtx) {
+    drawNormals(renderFlags, frameCtx) {
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawSilhouetteXRayed(frameCtx) {
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -617,7 +617,7 @@ class PointsInstancingLayer {
         }
     }
 
-    drawSilhouetteHighlighted(frameCtx) {
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }

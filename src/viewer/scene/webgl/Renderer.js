@@ -921,7 +921,7 @@ const Renderer = function (scene, options) {
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
+        gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -984,7 +984,7 @@ const Renderer = function (scene, options) {
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
+        gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -1024,7 +1024,7 @@ const Renderer = function (scene, options) {
 
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
-            gl.enable(gl.CULL_FACE);
+            gl.disable(gl.CULL_FACE);
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -1098,7 +1098,7 @@ const Renderer = function (scene, options) {
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
+        gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -1158,7 +1158,7 @@ const Renderer = function (scene, options) {
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
-            gl.enable(gl.CULL_FACE);
+            gl.disable(gl.CULL_FACE);
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

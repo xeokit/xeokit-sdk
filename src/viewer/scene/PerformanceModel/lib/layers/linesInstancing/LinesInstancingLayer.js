@@ -558,7 +558,7 @@ class LinesInstancingLayer {
 
     // ---------------------- NORMAL RENDERING -----------------------------------
 
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -568,7 +568,7 @@ class LinesInstancingLayer {
         }
     }
 
-    drawColorTransparent(frameCtx) {
+    drawColorTransparent(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -579,15 +579,15 @@ class LinesInstancingLayer {
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
-    drawDepth(frameCtx) {
+    drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(frameCtx) {
+    drawNormals(renderFlags, frameCtx) {
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawSilhouetteXRayed(frameCtx) {
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -596,7 +596,7 @@ class LinesInstancingLayer {
         }
     }
 
-    drawSilhouetteHighlighted(frameCtx) {
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -605,7 +605,7 @@ class LinesInstancingLayer {
         }
     }
 
-    drawSilhouetteSelected(frameCtx) {
+    drawSilhouetteSelected(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -616,40 +616,40 @@ class LinesInstancingLayer {
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
-    drawEdgesColorOpaque(frameCtx) {
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
     }
 
-    drawEdgesColorTransparent(frameCtx) {
+    drawEdgesColorTransparent(renderFlags, frameCtx) {
     }
 
-    drawEdgesXRayed(frameCtx) {
+    drawEdgesXRayed(renderFlags, frameCtx) {
     }
 
-    drawEdgesHighlighted(frameCtx) {
+    drawEdgesHighlighted(renderFlags, frameCtx) {
     }
 
-    drawEdgesSelected(frameCtx) {
+    drawEdgesSelected(renderFlags, frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
-    drawOcclusion(frameCtx) {
+    drawOcclusion(renderFlags, frameCtx) {
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
-    drawShadow(frameCtx) {
+    drawShadow(renderFlags, frameCtx) {
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
-    drawPickMesh(frameCtx) {
+    drawPickMesh(renderFlags, frameCtx) {
     }
 
-    drawPickDepths(frameCtx) {
+    drawPickDepths(renderFlags, frameCtx) {
     }
 
-    drawPickNormals(frameCtx) {
+    drawPickNormals(renderFlags, frameCtx) {
     }
 
 
