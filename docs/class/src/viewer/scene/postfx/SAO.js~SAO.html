@@ -40,10 +40,11 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifchelpersplugin">plugins/IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-groundshadowplugin">plugins/GroundShadowPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html">GroundShadowPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html">ModelGroundShadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -161,13 +162,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber178">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber178">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -225,10 +226,11 @@ if (!sao.supported) {
 sao.enabled = true; // Enable SAO - only works if supported (see above)
 sao.intensity = 0.20;
 sao.bias = 0.5;
-sao.scale = 500.0;
+sao.scale = 1.0;
 sao.minResolution = 0.0;
+sao.numSamples = 10;
 sao.kernelRadius = 100;
-sao.blendCutoff = 0.2;
+sao.blendCutoff = 0.1;
 
 const camera = viewer.scene.camera;
 
@@ -392,6 +394,122 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
         
         
         <div data-ice="description"><p>Gets the SAO bias.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendCutoff">blendCutoff</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the SAO blend cutoff.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendCutoff">blendCutoff</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the SAO blend cutoff.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendFactor">blendFactor</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the SAO blend factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendFactor">blendFactor</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the SAO blend scale.</p>
 </div>
       </div>
     </td>
@@ -594,7 +712,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
       <div>
         
         
-        <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+        <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.</p>
 </div>
       </div>
     </td>
@@ -623,7 +741,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
       <div>
         
         
-        <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+        <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.</p>
 </div>
       </div>
     </td>
@@ -682,6 +800,64 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
         
         
         <div data-ice="description"><p>Gets the SAO minimum resolution.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-numSamples">numSamples</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the number of SAO samples.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-numSamples">numSamples</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the number of SAO samples.</p>
 </div>
       </div>
     </td>
@@ -1335,7 +1511,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber337">source</a></span></span>
     </span>
   </h3>
 
@@ -1380,7 +1556,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber355">source</a></span></span>
     </span>
   </h3>
 
@@ -1389,6 +1565,190 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
   
   <div data-ice="description"><p>Gets the SAO bias.</p>
 <p>Default value is <code>0.5</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-blendCutoff">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">blendCutoff</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber484">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the SAO blend cutoff.</p>
+<p>Default value is <code>0.3</code>.</p>
+<p>Normally you don&apos;t need to alter this.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-blendCutoff">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">blendCutoff</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber504">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the SAO blend cutoff.</p>
+<p>Default value is <code>0.3</code>.</p>
+<p>Normally you don&apos;t need to alter this.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-blendFactor">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">blendFactor</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber517">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the SAO blend factor.</p>
+<p>Default value is <code>1.0</code>.</p>
+<p>Normally you don&apos;t need to alter this.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-blendFactor">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">blendFactor</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber537">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the SAO blend scale.</p>
+<p>Default value is <code>1.0</code>.</p>
+<p>Normally you don&apos;t need to alter this.</p>
 </div>
 
   
@@ -1425,7 +1785,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber422">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber455">source</a></span></span>
     </span>
   </h3>
 
@@ -1470,7 +1830,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber471">source</a></span></span>
     </span>
   </h3>
 
@@ -1515,7 +1875,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1561,7 +1921,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -1607,7 +1967,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber306">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -1652,7 +2012,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber326">source</a></span></span>
     </span>
   </h3>
 
@@ -1697,14 +2057,14 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber277">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber279">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+  <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.</p>
 <p>Default value is <code>100.0</code>.</p>
 </div>
 
@@ -1742,14 +2102,14 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+  <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.</p>
 <p>Default value is <code>100.0</code>.</p>
 </div>
 
@@ -1787,7 +2147,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber393">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber395">source</a></span></span>
     </span>
   </h3>
 
@@ -1832,7 +2192,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber413">source</a></span></span>
     </span>
   </h3>
 
@@ -1841,6 +2201,97 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
   
   <div data-ice="description"><p>Gets the SAO minimum resolution.</p>
 <p>Default value is <code>0.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-numSamples">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">numSamples</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber426">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the number of SAO samples.</p>
+<p>Default value is <code>10</code>.</p>
+<p>Update this sparingly, since it causes a shader recompile.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-numSamples">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">numSamples</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber444">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the number of SAO samples.</p>
+<p>Default value is <code>10</code>.</p>
 </div>
 
   
@@ -1877,7 +2328,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber364">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber366">source</a></span></span>
     </span>
   </h3>
 
@@ -1885,7 +2336,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
   
   
   <div data-ice="description"><p>Sets the SAO occlusion scale.</p>
-<p>Default value is <code>500.0</code>.</p>
+<p>Default value is <code>1.0</code>.</p>
 </div>
 
   
@@ -1922,7 +2373,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber384">source</a></span></span>
     </span>
   </h3>
 
@@ -1930,7 +2381,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
   
   
   <div data-ice="description"><p>Gets the SAO occlusion scale.</p>
-<p>Default value is <code>500.0</code>.</p>
+<p>Default value is <code>1.0</code>.</p>
 </div>
 
   
@@ -1967,7 +2418,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -2015,7 +2466,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber544">source</a></span></span>
     </span>
   </h3>
 

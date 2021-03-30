@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2205,
+  "end": 2231,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2205,
+    "end": 2231,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 2185,
+        "end": 2211,
         "loc": {
           "start": {
             "line": 8,
@@ -64,7 +64,7 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 2185,
+          "end": 2211,
           "loc": {
             "start": {
               "line": 8,
@@ -175,7 +175,7 @@
             {
               "type": "ClassMethod",
               "start": 320,
-              "end": 355,
+              "end": 368,
               "loc": {
                 "start": {
                   "line": 19,
@@ -215,7 +215,7 @@
                 {
                   "type": "Identifier",
                   "start": 338,
-                  "end": 346,
+                  "end": 349,
                   "loc": {
                     "start": {
                       "line": 19,
@@ -223,7 +223,24 @@
                     },
                     "end": {
                       "line": 19,
-                      "column": 30
+                      "column": 33
+                    },
+                    "identifierName": "renderFlags"
+                  },
+                  "name": "renderFlags"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 351,
+                  "end": 359,
+                  "loc": {
+                    "start": {
+                      "line": 19,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 19,
+                      "column": 43
                     },
                     "identifierName": "frameCtx"
                   },
@@ -232,12 +249,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 348,
-                "end": 355,
+                "start": 361,
+                "end": 368,
                 "loc": {
                   "start": {
                     "line": 19,
-                    "column": 32
+                    "column": 45
                   },
                   "end": {
                     "line": 20,
@@ -271,8 +288,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                  "start": 361,
-                  "end": 1262,
+                  "start": 374,
+                  "end": 1275,
                   "loc": {
                     "start": {
                       "line": 22,
@@ -288,8 +305,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1267,
-              "end": 1306,
+              "start": 1280,
+              "end": 1319,
               "loc": {
                 "start": {
                   "line": 33,
@@ -304,8 +321,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1267,
-                "end": 1286,
+                "start": 1280,
+                "end": 1299,
                 "loc": {
                   "start": {
                     "line": 33,
@@ -328,8 +345,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1287,
-                  "end": 1297,
+                  "start": 1300,
+                  "end": 1310,
                   "loc": {
                     "start": {
                       "line": 33,
@@ -346,8 +363,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1299,
-                "end": 1306,
+                "start": 1312,
+                "end": 1319,
                 "loc": {
                   "start": {
                     "line": 33,
@@ -367,8 +384,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                  "start": 361,
-                  "end": 1262,
+                  "start": 374,
+                  "end": 1275,
                   "loc": {
                     "start": {
                       "line": 22,
@@ -385,8 +402,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-                  "start": 1312,
-                  "end": 1493,
+                  "start": 1325,
+                  "end": 1506,
                   "loc": {
                     "start": {
                       "line": 36,
@@ -402,8 +419,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1498,
-              "end": 1523,
+              "start": 1511,
+              "end": 1536,
               "loc": {
                 "start": {
                   "line": 40,
@@ -418,8 +435,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1498,
-                "end": 1513,
+                "start": 1511,
+                "end": 1526,
                 "loc": {
                   "start": {
                     "line": 40,
@@ -442,8 +459,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1516,
-                "end": 1523,
+                "start": 1529,
+                "end": 1536,
                 "loc": {
                   "start": {
                     "line": 40,
@@ -463,8 +480,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-                  "start": 1312,
-                  "end": 1493,
+                  "start": 1325,
+                  "end": 1506,
                   "loc": {
                     "start": {
                       "line": 36,
@@ -481,8 +498,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-                  "start": 1529,
-                  "end": 1626,
+                  "start": 1542,
+                  "end": 1639,
                   "loc": {
                     "start": {
                       "line": 43,
@@ -498,8 +515,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1631,
-              "end": 1663,
+              "start": 1644,
+              "end": 1689,
               "loc": {
                 "start": {
                   "line": 47,
@@ -514,8 +531,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1631,
-                "end": 1645,
+                "start": 1644,
+                "end": 1658,
                 "loc": {
                   "start": {
                     "line": 47,
@@ -538,8 +555,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1646,
-                  "end": 1654,
+                  "start": 1659,
+                  "end": 1670,
                   "loc": {
                     "start": {
                       "line": 47,
@@ -547,7 +564,24 @@
                     },
                     "end": {
                       "line": 47,
-                      "column": 27
+                      "column": 30
+                    },
+                    "identifierName": "renderFlags"
+                  },
+                  "name": "renderFlags"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 1672,
+                  "end": 1680,
+                  "loc": {
+                    "start": {
+                      "line": 47,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 47,
+                      "column": 40
                     },
                     "identifierName": "frameCtx"
                   },
@@ -556,12 +590,12 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1656,
-                "end": 1663,
+                "start": 1682,
+                "end": 1689,
                 "loc": {
                   "start": {
                     "line": 47,
-                    "column": 29
+                    "column": 42
                   },
                   "end": {
                     "line": 48,
@@ -577,8 +611,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-                  "start": 1529,
-                  "end": 1626,
+                  "start": 1542,
+                  "end": 1639,
                   "loc": {
                     "start": {
                       "line": 43,
@@ -595,8 +629,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                  "start": 1669,
-                  "end": 1817,
+                  "start": 1695,
+                  "end": 1843,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -612,8 +646,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1822,
-              "end": 1880,
+              "start": 1848,
+              "end": 1906,
               "loc": {
                 "start": {
                   "line": 54,
@@ -628,8 +662,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1822,
-                "end": 1842,
+                "start": 1848,
+                "end": 1868,
                 "loc": {
                   "start": {
                     "line": 54,
@@ -652,8 +686,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1845,
-                "end": 1880,
+                "start": 1871,
+                "end": 1906,
                 "loc": {
                   "start": {
                     "line": 54,
@@ -667,8 +701,8 @@
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 1855,
-                    "end": 1874,
+                    "start": 1881,
+                    "end": 1900,
                     "loc": {
                       "start": {
                         "line": 55,
@@ -681,8 +715,8 @@
                     },
                     "argument": {
                       "type": "MemberExpression",
-                      "start": 1862,
-                      "end": 1873,
+                      "start": 1888,
+                      "end": 1899,
                       "loc": {
                         "start": {
                           "line": 55,
@@ -695,8 +729,8 @@
                       },
                       "object": {
                         "type": "ThisExpression",
-                        "start": 1862,
-                        "end": 1866,
+                        "start": 1888,
+                        "end": 1892,
                         "loc": {
                           "start": {
                             "line": 55,
@@ -710,8 +744,8 @@
                       },
                       "property": {
                         "type": "Identifier",
-                        "start": 1867,
-                        "end": 1873,
+                        "start": 1893,
+                        "end": 1899,
                         "loc": {
                           "start": {
                             "line": 55,
@@ -736,8 +770,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                  "start": 1669,
-                  "end": 1817,
+                  "start": 1695,
+                  "end": 1843,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -754,8 +788,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                  "start": 1886,
-                  "end": 2155,
+                  "start": 1912,
+                  "end": 2181,
                   "loc": {
                     "start": {
                       "line": 58,
@@ -771,8 +805,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 2160,
-              "end": 2183,
+              "start": 2186,
+              "end": 2209,
               "loc": {
                 "start": {
                   "line": 65,
@@ -787,8 +821,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 2164,
-                "end": 2173,
+                "start": 2190,
+                "end": 2199,
                 "loc": {
                   "start": {
                     "line": 65,
@@ -810,8 +844,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 2176,
-                "end": 2183,
+                "start": 2202,
+                "end": 2209,
                 "loc": {
                   "start": {
                     "line": 65,
@@ -829,8 +863,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                  "start": 1886,
-                  "end": 2155,
+                  "start": 1912,
+                  "end": 2181,
                   "loc": {
                     "start": {
                       "line": 58,
@@ -852,8 +886,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2187,
-        "end": 2205,
+        "start": 2213,
+        "end": 2231,
         "loc": {
           "start": {
             "line": 69,
@@ -868,8 +902,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 2195,
-            "end": 2203,
+            "start": 2221,
+            "end": 2229,
             "loc": {
               "start": {
                 "line": 69,
@@ -882,8 +916,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 2195,
-              "end": 2203,
+              "start": 2221,
+              "end": 2229,
               "loc": {
                 "start": {
                   "line": 69,
@@ -899,8 +933,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 2195,
-              "end": 2203,
+              "start": 2221,
+              "end": 2229,
               "loc": {
                 "start": {
                   "line": 69,
@@ -920,8 +954,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2187,
-        "end": 2205,
+        "start": 2213,
+        "end": 2231,
         "loc": {
           "start": {
             "line": 69,
@@ -935,7 +969,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 2185,
+          "end": 2211,
           "loc": {
             "start": {
               "line": 8,
@@ -968,7 +1002,7 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 2185,
+            "end": 2211,
             "loc": {
               "start": {
                 "line": 8,
@@ -1079,7 +1113,7 @@
               {
                 "type": "ClassMethod",
                 "start": 320,
-                "end": 355,
+                "end": 368,
                 "loc": {
                   "start": {
                     "line": 19,
@@ -1119,7 +1153,7 @@
                   {
                     "type": "Identifier",
                     "start": 338,
-                    "end": 346,
+                    "end": 349,
                     "loc": {
                       "start": {
                         "line": 19,
@@ -1127,7 +1161,24 @@
                       },
                       "end": {
                         "line": 19,
-                        "column": 30
+                        "column": 33
+                      },
+                      "identifierName": "renderFlags"
+                    },
+                    "name": "renderFlags"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 351,
+                    "end": 359,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 43
                       },
                       "identifierName": "frameCtx"
                     },
@@ -1136,12 +1187,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 348,
-                  "end": 355,
+                  "start": 361,
+                  "end": 368,
                   "loc": {
                     "start": {
                       "line": 19,
-                      "column": 32
+                      "column": 45
                     },
                     "end": {
                       "line": 20,
@@ -1175,8 +1226,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                    "start": 361,
-                    "end": 1262,
+                    "start": 374,
+                    "end": 1275,
                     "loc": {
                       "start": {
                         "line": 22,
@@ -1192,8 +1243,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1267,
-                "end": 1306,
+                "start": 1280,
+                "end": 1319,
                 "loc": {
                   "start": {
                     "line": 33,
@@ -1208,8 +1259,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1267,
-                  "end": 1286,
+                  "start": 1280,
+                  "end": 1299,
                   "loc": {
                     "start": {
                       "line": 33,
@@ -1232,8 +1283,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1287,
-                    "end": 1297,
+                    "start": 1300,
+                    "end": 1310,
                     "loc": {
                       "start": {
                         "line": 33,
@@ -1250,8 +1301,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1299,
-                  "end": 1306,
+                  "start": 1312,
+                  "end": 1319,
                   "loc": {
                     "start": {
                       "line": 33,
@@ -1271,8 +1322,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                    "start": 361,
-                    "end": 1262,
+                    "start": 374,
+                    "end": 1275,
                     "loc": {
                       "start": {
                         "line": 22,
@@ -1289,8 +1340,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-                    "start": 1312,
-                    "end": 1493,
+                    "start": 1325,
+                    "end": 1506,
                     "loc": {
                       "start": {
                         "line": 36,
@@ -1306,8 +1357,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1498,
-                "end": 1523,
+                "start": 1511,
+                "end": 1536,
                 "loc": {
                   "start": {
                     "line": 40,
@@ -1322,8 +1373,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1498,
-                  "end": 1513,
+                  "start": 1511,
+                  "end": 1526,
                   "loc": {
                     "start": {
                       "line": 40,
@@ -1346,8 +1397,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1516,
-                  "end": 1523,
+                  "start": 1529,
+                  "end": 1536,
                   "loc": {
                     "start": {
                       "line": 40,
@@ -1367,8 +1418,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-                    "start": 1312,
-                    "end": 1493,
+                    "start": 1325,
+                    "end": 1506,
                     "loc": {
                       "start": {
                         "line": 36,
@@ -1385,8 +1436,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-                    "start": 1529,
-                    "end": 1626,
+                    "start": 1542,
+                    "end": 1639,
                     "loc": {
                       "start": {
                         "line": 43,
@@ -1402,8 +1453,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1631,
-                "end": 1663,
+                "start": 1644,
+                "end": 1689,
                 "loc": {
                   "start": {
                     "line": 47,
@@ -1418,8 +1469,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1631,
-                  "end": 1645,
+                  "start": 1644,
+                  "end": 1658,
                   "loc": {
                     "start": {
                       "line": 47,
@@ -1442,8 +1493,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1646,
-                    "end": 1654,
+                    "start": 1659,
+                    "end": 1670,
                     "loc": {
                       "start": {
                         "line": 47,
@@ -1451,7 +1502,24 @@
                       },
                       "end": {
                         "line": 47,
-                        "column": 27
+                        "column": 30
+                      },
+                      "identifierName": "renderFlags"
+                    },
+                    "name": "renderFlags"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 1672,
+                    "end": 1680,
+                    "loc": {
+                      "start": {
+                        "line": 47,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 47,
+                        "column": 40
                       },
                       "identifierName": "frameCtx"
                     },
@@ -1460,12 +1528,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1656,
-                  "end": 1663,
+                  "start": 1682,
+                  "end": 1689,
                   "loc": {
                     "start": {
                       "line": 47,
-                      "column": 29
+                      "column": 42
                     },
                     "end": {
                       "line": 48,
@@ -1481,8 +1549,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-                    "start": 1529,
-                    "end": 1626,
+                    "start": 1542,
+                    "end": 1639,
                     "loc": {
                       "start": {
                         "line": 43,
@@ -1499,8 +1567,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                    "start": 1669,
-                    "end": 1817,
+                    "start": 1695,
+                    "end": 1843,
                     "loc": {
                       "start": {
                         "line": 50,
@@ -1516,8 +1584,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1822,
-                "end": 1880,
+                "start": 1848,
+                "end": 1906,
                 "loc": {
                   "start": {
                     "line": 54,
@@ -1532,8 +1600,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1822,
-                  "end": 1842,
+                  "start": 1848,
+                  "end": 1868,
                   "loc": {
                     "start": {
                       "line": 54,
@@ -1556,8 +1624,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1845,
-                  "end": 1880,
+                  "start": 1871,
+                  "end": 1906,
                   "loc": {
                     "start": {
                       "line": 54,
@@ -1571,8 +1639,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 1855,
-                      "end": 1874,
+                      "start": 1881,
+                      "end": 1900,
                       "loc": {
                         "start": {
                           "line": 55,
@@ -1585,8 +1653,8 @@
                       },
                       "argument": {
                         "type": "MemberExpression",
-                        "start": 1862,
-                        "end": 1873,
+                        "start": 1888,
+                        "end": 1899,
                         "loc": {
                           "start": {
                             "line": 55,
@@ -1599,8 +1667,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1862,
-                          "end": 1866,
+                          "start": 1888,
+                          "end": 1892,
                           "loc": {
                             "start": {
                               "line": 55,
@@ -1614,8 +1682,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1867,
-                          "end": 1873,
+                          "start": 1893,
+                          "end": 1899,
                           "loc": {
                             "start": {
                               "line": 55,
@@ -1640,8 +1708,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-                    "start": 1669,
-                    "end": 1817,
+                    "start": 1695,
+                    "end": 1843,
                     "loc": {
                       "start": {
                         "line": 50,
@@ -1658,8 +1726,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                    "start": 1886,
-                    "end": 2155,
+                    "start": 1912,
+                    "end": 2181,
                     "loc": {
                       "start": {
                         "line": 58,
@@ -1675,8 +1743,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2160,
-                "end": 2183,
+                "start": 2186,
+                "end": 2209,
                 "loc": {
                   "start": {
                     "line": 65,
@@ -1691,8 +1759,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2164,
-                  "end": 2173,
+                  "start": 2190,
+                  "end": 2199,
                   "loc": {
                     "start": {
                       "line": 65,
@@ -1714,8 +1782,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2176,
-                  "end": 2183,
+                  "start": 2202,
+                  "end": 2209,
                   "loc": {
                     "start": {
                       "line": 65,
@@ -1733,8 +1801,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-                    "start": 1886,
-                    "end": 2155,
+                    "start": 1912,
+                    "end": 2181,
                     "loc": {
                       "start": {
                         "line": 58,
@@ -1830,8 +1898,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-      "start": 361,
-      "end": 1262,
+      "start": 374,
+      "end": 1275,
       "loc": {
         "start": {
           "line": 22,
@@ -1846,8 +1914,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-      "start": 1312,
-      "end": 1493,
+      "start": 1325,
+      "end": 1506,
       "loc": {
         "start": {
           "line": 36,
@@ -1862,8 +1930,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-      "start": 1529,
-      "end": 1626,
+      "start": 1542,
+      "end": 1639,
       "loc": {
         "start": {
           "line": 43,
@@ -1878,8 +1946,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-      "start": 1669,
-      "end": 1817,
+      "start": 1695,
+      "end": 1843,
       "loc": {
         "start": {
           "line": 50,
@@ -1894,8 +1962,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-      "start": 1886,
-      "end": 2155,
+      "start": 1912,
+      "end": 2181,
       "loc": {
         "start": {
           "line": 58,
@@ -2225,9 +2293,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "frameCtx",
+      "value": "renderFlags",
       "start": 338,
-      "end": 346,
+      "end": 349,
       "loc": {
         "start": {
           "line": 19,
@@ -2235,7 +2303,59 @@
         },
         "end": {
           "line": 19,
-          "column": 30
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 349,
+      "end": 350,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 33
+        },
+        "end": {
+          "line": 19,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "frameCtx",
+      "start": 351,
+      "end": 359,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 35
+        },
+        "end": {
+          "line": 19,
+          "column": 43
         }
       }
     },
@@ -2251,16 +2371,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 346,
-      "end": 347,
+      "start": 359,
+      "end": 360,
       "loc": {
         "start": {
           "line": 19,
-          "column": 30
+          "column": 43
         },
         "end": {
           "line": 19,
-          "column": 31
+          "column": 44
         }
       }
     },
@@ -2276,16 +2396,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 348,
-      "end": 349,
+      "start": 361,
+      "end": 362,
       "loc": {
         "start": {
           "line": 19,
-          "column": 32
+          "column": 45
         },
         "end": {
           "line": 19,
-          "column": 33
+          "column": 46
         }
       }
     },
@@ -2301,8 +2421,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 354,
-      "end": 355,
+      "start": 367,
+      "end": 368,
       "loc": {
         "start": {
           "line": 20,
@@ -2317,8 +2437,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Pickable, then add more information to the PickResult about the picked position on the surface of the Pickable.\n     *\n     * Architecturally, this delegates collection of that Pickable-specific info to the Pickable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-      "start": 361,
-      "end": 1262,
+      "start": 374,
+      "end": 1275,
       "loc": {
         "start": {
           "line": 22,
@@ -2343,8 +2463,8 @@
         "binop": null
       },
       "value": "pickTriangleSurface",
-      "start": 1267,
-      "end": 1286,
+      "start": 1280,
+      "end": 1299,
       "loc": {
         "start": {
           "line": 33,
@@ -2368,8 +2488,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1286,
-      "end": 1287,
+      "start": 1299,
+      "end": 1300,
       "loc": {
         "start": {
           "line": 33,
@@ -2394,8 +2514,8 @@
         "binop": null
       },
       "value": "pickResult",
-      "start": 1287,
-      "end": 1297,
+      "start": 1300,
+      "end": 1310,
       "loc": {
         "start": {
           "line": 33,
@@ -2419,8 +2539,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1297,
-      "end": 1298,
+      "start": 1310,
+      "end": 1311,
       "loc": {
         "start": {
           "line": 33,
@@ -2444,8 +2564,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1299,
-      "end": 1300,
+      "start": 1312,
+      "end": 1313,
       "loc": {
         "start": {
           "line": 33,
@@ -2469,8 +2589,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1305,
-      "end": 1306,
+      "start": 1318,
+      "end": 1319,
       "loc": {
         "start": {
           "line": 34,
@@ -2485,8 +2605,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Called by xeokit to get if it's possible to pick a 3D point on the surface of this Pickable.\n     * Returns false if canPickTriangle returns true, and vice-versa.\n     ",
-      "start": 1312,
-      "end": 1493,
+      "start": 1325,
+      "end": 1506,
       "loc": {
         "start": {
           "line": 36,
@@ -2511,8 +2631,8 @@
         "binop": null
       },
       "value": "canPickWorldPos",
-      "start": 1498,
-      "end": 1513,
+      "start": 1511,
+      "end": 1526,
       "loc": {
         "start": {
           "line": 40,
@@ -2536,8 +2656,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1513,
-      "end": 1514,
+      "start": 1526,
+      "end": 1527,
       "loc": {
         "start": {
           "line": 40,
@@ -2561,8 +2681,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1514,
-      "end": 1515,
+      "start": 1527,
+      "end": 1528,
       "loc": {
         "start": {
           "line": 40,
@@ -2586,8 +2706,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1516,
-      "end": 1517,
+      "start": 1529,
+      "end": 1530,
       "loc": {
         "start": {
           "line": 40,
@@ -2611,8 +2731,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1522,
-      "end": 1523,
+      "start": 1535,
+      "end": 1536,
       "loc": {
         "start": {
           "line": 41,
@@ -2627,8 +2747,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Renders color-encoded fragment depths of this Pickable.\n     * @param frameCtx\n     ",
-      "start": 1529,
-      "end": 1626,
+      "start": 1542,
+      "end": 1639,
       "loc": {
         "start": {
           "line": 43,
@@ -2653,8 +2773,8 @@
         "binop": null
       },
       "value": "drawPickDepths",
-      "start": 1631,
-      "end": 1645,
+      "start": 1644,
+      "end": 1658,
       "loc": {
         "start": {
           "line": 47,
@@ -2678,8 +2798,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1645,
-      "end": 1646,
+      "start": 1658,
+      "end": 1659,
       "loc": {
         "start": {
           "line": 47,
@@ -2703,9 +2823,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "frameCtx",
-      "start": 1646,
-      "end": 1654,
+      "value": "renderFlags",
+      "start": 1659,
+      "end": 1670,
       "loc": {
         "start": {
           "line": 47,
@@ -2713,7 +2833,59 @@
         },
         "end": {
           "line": 47,
-          "column": 27
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1670,
+      "end": 1671,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 30
+        },
+        "end": {
+          "line": 47,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "frameCtx",
+      "start": 1672,
+      "end": 1680,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 32
+        },
+        "end": {
+          "line": 47,
+          "column": 40
         }
       }
     },
@@ -2729,16 +2901,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1654,
-      "end": 1655,
+      "start": 1680,
+      "end": 1681,
       "loc": {
         "start": {
           "line": 47,
-          "column": 27
+          "column": 40
         },
         "end": {
           "line": 47,
-          "column": 28
+          "column": 41
         }
       }
     },
@@ -2754,16 +2926,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1656,
-      "end": 1657,
+      "start": 1682,
+      "end": 1683,
       "loc": {
         "start": {
           "line": 47,
-          "column": 29
+          "column": 42
         },
         "end": {
           "line": 47,
-          "column": 30
+          "column": 43
         }
       }
     },
@@ -2779,8 +2951,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1662,
-      "end": 1663,
+      "start": 1688,
+      "end": 1689,
       "loc": {
         "start": {
           "line": 48,
@@ -2795,8 +2967,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Delegates an {@link Entity} as representing what was actually picked in place of this Pickable.\n     * @returns {PerformanceNode}\n     ",
-      "start": 1669,
-      "end": 1817,
+      "start": 1695,
+      "end": 1843,
       "loc": {
         "start": {
           "line": 50,
@@ -2821,8 +2993,8 @@
         "binop": null
       },
       "value": "delegatePickedEntity",
-      "start": 1822,
-      "end": 1842,
+      "start": 1848,
+      "end": 1868,
       "loc": {
         "start": {
           "line": 54,
@@ -2846,8 +3018,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1842,
-      "end": 1843,
+      "start": 1868,
+      "end": 1869,
       "loc": {
         "start": {
           "line": 54,
@@ -2871,8 +3043,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1843,
-      "end": 1844,
+      "start": 1869,
+      "end": 1870,
       "loc": {
         "start": {
           "line": 54,
@@ -2896,8 +3068,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1845,
-      "end": 1846,
+      "start": 1871,
+      "end": 1872,
       "loc": {
         "start": {
           "line": 54,
@@ -2924,8 +3096,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1855,
-      "end": 1861,
+      "start": 1881,
+      "end": 1887,
       "loc": {
         "start": {
           "line": 55,
@@ -2952,8 +3124,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1862,
-      "end": 1866,
+      "start": 1888,
+      "end": 1892,
       "loc": {
         "start": {
           "line": 55,
@@ -2978,8 +3150,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1866,
-      "end": 1867,
+      "start": 1892,
+      "end": 1893,
       "loc": {
         "start": {
           "line": 55,
@@ -3004,8 +3176,8 @@
         "binop": null
       },
       "value": "parent",
-      "start": 1867,
-      "end": 1873,
+      "start": 1893,
+      "end": 1899,
       "loc": {
         "start": {
           "line": 55,
@@ -3030,8 +3202,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1873,
-      "end": 1874,
+      "start": 1899,
+      "end": 1900,
       "loc": {
         "start": {
           "line": 55,
@@ -3055,8 +3227,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1879,
-      "end": 1880,
+      "start": 1905,
+      "end": 1906,
       "loc": {
         "start": {
           "line": 56,
@@ -3071,8 +3243,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * 3D origin of the Pickable's vertex positions, if they are in relative-to-center (RTC) coordinates.\n     *\n     * When this is defined, then the positions are RTC, which means that they are relative to this position.\n     *\n     * @type {Float64Array}\n     ",
-      "start": 1886,
-      "end": 2155,
+      "start": 1912,
+      "end": 2181,
       "loc": {
         "start": {
           "line": 58,
@@ -3097,8 +3269,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 2160,
-      "end": 2163,
+      "start": 2186,
+      "end": 2189,
       "loc": {
         "start": {
           "line": 65,
@@ -3123,8 +3295,8 @@
         "binop": null
       },
       "value": "rtcCenter",
-      "start": 2164,
-      "end": 2173,
+      "start": 2190,
+      "end": 2199,
       "loc": {
         "start": {
           "line": 65,
@@ -3148,8 +3320,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2173,
-      "end": 2174,
+      "start": 2199,
+      "end": 2200,
       "loc": {
         "start": {
           "line": 65,
@@ -3173,8 +3345,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2174,
-      "end": 2175,
+      "start": 2200,
+      "end": 2201,
       "loc": {
         "start": {
           "line": 65,
@@ -3198,8 +3370,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2176,
-      "end": 2177,
+      "start": 2202,
+      "end": 2203,
       "loc": {
         "start": {
           "line": 65,
@@ -3223,8 +3395,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2182,
-      "end": 2183,
+      "start": 2208,
+      "end": 2209,
       "loc": {
         "start": {
           "line": 66,
@@ -3248,8 +3420,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2184,
-      "end": 2185,
+      "start": 2210,
+      "end": 2211,
       "loc": {
         "start": {
           "line": 67,
@@ -3276,8 +3448,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 2187,
-      "end": 2193,
+      "start": 2213,
+      "end": 2219,
       "loc": {
         "start": {
           "line": 69,
@@ -3301,8 +3473,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2194,
-      "end": 2195,
+      "start": 2220,
+      "end": 2221,
       "loc": {
         "start": {
           "line": 69,
@@ -3327,8 +3499,8 @@
         "binop": null
       },
       "value": "Pickable",
-      "start": 2195,
-      "end": 2203,
+      "start": 2221,
+      "end": 2229,
       "loc": {
         "start": {
           "line": 69,
@@ -3352,8 +3524,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2203,
-      "end": 2204,
+      "start": 2229,
+      "end": 2230,
       "loc": {
         "start": {
           "line": 69,
@@ -3378,8 +3550,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2204,
-      "end": 2205,
+      "start": 2230,
+      "end": 2231,
       "loc": {
         "start": {
           "line": 69,
@@ -3404,8 +3576,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2205,
-      "end": 2205,
+      "start": 2231,
+      "end": 2231,
       "loc": {
         "start": {
           "line": 69,

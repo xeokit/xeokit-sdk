@@ -40,10 +40,11 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifchelpersplugin">plugins/IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-groundshadowplugin">plugins/GroundShadowPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html">GroundShadowPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html">ModelGroundShadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -501,6 +502,7 @@ class TrianglesInstancingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
         src.push(&quot;// Instancing geometry quality drawing vertex shader&quot;);
@@ -563,6 +565,9 @@ class TrianglesInstancingColorQualityRenderer {
         if (clipping) {
             src.push(&quot;varying vec4 vWorldPosition;&quot;);
             src.push(&quot;varying vec4 vFlags2;&quot;);
+            if (clippingCaps) {
+                src.push(&quot;varying vec4 vClipPosition;&quot;);
+            }
         }
 
         src.push(&quot;void main(void) {&quot;);
@@ -587,10 +592,6 @@ class TrianglesInstancingColorQualityRenderer {
         src.push(&quot;vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);&quot;);
         src.push(&quot;vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);&quot;);
 
-        if (clipping) {
-            src.push(&quot;vWorldPosition = worldPosition;&quot;);
-            src.push(&quot;vFlags2 = flags2;&quot;);
-        }
         src.push(&quot;vec4 clipPos = projMatrix * viewPosition;&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
@@ -598,6 +599,14 @@ class TrianglesInstancingColorQualityRenderer {
             } else {
                 src.push(&quot;clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;&quot;);
                 src.push(&quot;clipPos.z *= clipPos.w;&quot;);
+            }
+        }
+
+        if (clipping) {
+            src.push(&quot;vWorldPosition = worldPosition;&quot;);
+            src.push(&quot;vFlags2 = flags2;&quot;);
+            if (clippingCaps) {
+                src.push(&quot;vClipPosition = clipPos;&quot;);
             }
         }
 
@@ -623,6 +632,7 @@ class TrianglesInstancingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
         src.push(&quot;// Instancing geometry quality drawing fragment shader&quot;);
@@ -707,6 +717,9 @@ class TrianglesInstancingColorQualityRenderer {
         if (clipping) {
             src.push(&quot;varying vec4 vWorldPosition;&quot;);
             src.push(&quot;varying vec4 vFlags2;&quot;);
+            if (clippingCaps) {
+                src.push(&quot;varying vec4 vClipPosition;&quot;);
+            }
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
                 src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
                 src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
@@ -880,7 +893,22 @@ class TrianglesInstancingColorQualityRenderer {
                 src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
                 src.push(&quot;}&quot;);
             }
-            src.push(&quot;if (dist &gt; 0.0) { discard; }&quot;);
+            if (clippingCaps) {
+                src.push(&quot;  if (dist &gt; (0.002 * vClipPosition.w)) {&quot;);
+                src.push(&quot;      discard;&quot;);
+                src.push(&quot;  }&quot;);
+                src.push(&quot;  if (dist &gt; 0.0) { &quot;);
+                src.push(&quot;      gl_FragColor=vec4(1.0, 0.0, 0.0, 1.0);&quot;);
+                if (scene.logarithmicDepthBufferEnabled &amp;&amp; WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
+                    src.push(&quot;  gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+                }
+                src.push(&quot;  return;&quot;);
+                src.push(&quot;}&quot;);
+            } else {
+                src.push(&quot;  if (dist &gt; 0.0) { &quot;);
+                src.push(&quot;      discard;&quot;)
+                src.push(&quot;  }&quot;);
+            }
             src.push(&quot;}&quot;);
         }
 
@@ -947,7 +975,7 @@ class TrianglesInstancingColorQualityRenderer {
             src.push(&quot;computePBRLighting(light, geometry, material, reflectedLight);&quot;);
         }
 
-        src.push(&quot;vec3 outgoingLight = (reflectedLight.diffuse) + (reflectedLight.specular);&quot;);
+        src.push(&quot;vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);&quot;);
 
         src.push(&quot;vec4 fragColor;&quot;);
 

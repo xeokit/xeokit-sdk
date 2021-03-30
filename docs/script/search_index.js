@@ -168,6 +168,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html",
+    "<span>FastNavPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/fresnel.js~fresnel",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html",
     "<span>Fresnel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/Fresnel.js</span>",
@@ -198,15 +204,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html",
-    "<span>IFCHelpersDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html",
-    "<span>IFCHelpersPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html",
+    "<span>GroundShadowPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js</span>",
     "class"
   ],
   [
@@ -309,6 +309,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/metriqs/metriqs.js~metrics",
     "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html",
     "<span>Metrics</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/metriqs/Metriqs.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html",
+    "<span>ModelGroundShadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/ModelGroundShadow.js</span>",
     "class"
   ],
   [
@@ -1728,6 +1734,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/fastnavplugin/fastnavplugin.js",
+    "file/src/plugins/FastNavPlugin/FastNavPlugin.js.html",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#constructor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-constructor-constructor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#destroy",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-method-destroy",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#destroy",
+    "method"
+  ],
+  [
     "src/plugins/gltfloaderplugin/gltfdefaultdatasource.js",
     "file/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js",
@@ -1818,93 +1842,51 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/ifchelpersplugin/gltfperformanceloader.js",
-    "file/src/plugins/IFCHelpersPlugin/GLTFPerformanceLoader.js.html",
-    "src/plugins/IFCHelpersPlugin/GLTFPerformanceLoader.js",
+    "src/plugins/groundshadowplugin/groundshadowplugin.js",
+    "file/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js.html",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js",
     "file"
   ],
   [
-    "src/plugins/ifchelpersplugin/gltfqualityloader.js",
-    "file/src/plugins/IFCHelpersPlugin/GLTFQualityLoader.js.html",
-    "src/plugins/IFCHelpersPlugin/GLTFQualityLoader.js",
-    "file"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js",
-    "file/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js.html",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js",
-    "file"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#constructor",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-constructor-constructor",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#constructor",
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#constructor",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-constructor-constructor",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#constructor",
     "method"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getarraybuffer",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getArrayBuffer",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getArrayBuffer",
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#destroy",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-method-destroy",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#destroy",
     "method"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getgltf",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getGLTF",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getGLTF",
-    "method"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersdefaultdatasource.js~ifchelpersdefaultdatasource#getmetamodel",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html#instance-method-getMetaModel",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource#getMetaModel",
-    "method"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js",
-    "file/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js.html",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#constructor",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-constructor-constructor",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#datasource",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-set-dataSource",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#dataSource",
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#groundshadows",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-member-groundShadows",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#groundShadows",
     "member"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#datasource",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-get-dataSource",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#dataSource",
-    "member"
+    "src/plugins/groundshadowplugin/modelgroundshadow.js",
+    "file/src/plugins/GroundShadowPlugin/ModelGroundShadow.js.html",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js",
+    "file"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#destroy",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-method-destroy",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#destroy",
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#constructor",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-constructor-constructor",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#constructor",
     "method"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#load",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-method-load",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#load",
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#destroy",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-method-destroy",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#destroy",
     "method"
   ],
   [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#objectdefaults",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-set-objectDefaults",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#objectDefaults",
-    "member"
-  ],
-  [
-    "src/plugins/ifchelpersplugin/ifchelpersplugin.js~ifchelpersplugin#objectdefaults",
-    "class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html#instance-get-objectDefaults",
-    "src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin#objectDefaults",
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#image",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-set-image",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#image",
     "member"
   ],
   [
@@ -3738,12 +3720,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/cameracontrol/lib/handlers/touchpanrotateanddollyhandler.new.js",
-    "file/src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.new.js.html",
-    "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.new.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/component.js",
     "file/src/viewer/scene/Component.js.html",
     "src/viewer/scene/Component.js",
@@ -4482,6 +4458,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#pbrenabled",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-pbrEnabled",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#pbrEnabled",
+    "member"
+  ],
+  [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#pickable",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-pickable",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#pickable",
@@ -4830,6 +4812,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgescolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgesrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js",
@@ -4905,6 +4893,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingdepthrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingedgescolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js",
     "file"
   ],
   [
@@ -10164,6 +10158,30 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/postfx/sao.js~sao#blendcutoff",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendCutoff",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendCutoff",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendcutoff",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendCutoff",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendCutoff",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendfactor",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendFactor",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendFactor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendfactor",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendFactor",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendFactor",
+    "member"
+  ],
+  [
     "src/viewer/scene/postfx/sao.js~sao#blur",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blur",
     "src/viewer/scene/postfx/SAO.js~SAO#blur",
@@ -10227,6 +10245,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/postfx/sao.js~sao#minresolution",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-minResolution",
     "src/viewer/scene/postfx/SAO.js~SAO#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#numsamples",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-numSamples",
+    "src/viewer/scene/postfx/SAO.js~SAO#numSamples",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#numsamples",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-numSamples",
+    "src/viewer/scene/postfx/SAO.js~SAO#numSamples",
     "member"
   ],
   [
@@ -10306,6 +10336,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-clearSectionPlanes",
     "src/viewer/scene/scene/Scene.js~Scene#clearSectionPlanes",
     "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#clippingcaps",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-clippingCaps",
+    "src/viewer/scene/scene/Scene.js~Scene#clippingCaps",
+    "member"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#colorizedobjectids",
@@ -11356,18 +11392,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-unbindRenderBuf",
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#unbindRenderBuf",
     "method"
-  ],
-  [
-    "src/viewer/scene/webgl/sao/saoblendrenderer.js",
-    "file/src/viewer/scene/webgl/sao/SAOBlendRenderer.js.html",
-    "src/viewer/scene/webgl/sao/SAOBlendRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/webgl/sao/saoblurrenderer.js",
-    "file/src/viewer/scene/webgl/sao/SAOBlurRenderer.js.html",
-    "src/viewer/scene/webgl/sao/SAOBlurRenderer.js",
-    "file"
   ],
   [
     "src/viewer/scene/webgl/sao/saodepthlimitedblurrenderer.js",

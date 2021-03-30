@@ -40,10 +40,11 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifchelpersplugin">plugins/IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-groundshadowplugin">plugins/GroundShadowPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html">GroundShadowPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html">ModelGroundShadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -162,7 +163,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Program} from &quot;../../../../../webgl/Program.js&quot;;
-import {RENDER_PASSES} from &quot;../../../RENDER_PASSES.js&quot;;
 import {createRTCViewMat, getPlaneRTCPos} from &quot;../../../../../math/rtcCoords.js&quot;;
 import {math} from &quot;../../../../../math/math.js&quot;;
 import {WEBGL_INFO} from &quot;../../../../../webglInfo.js&quot;;
@@ -236,30 +236,10 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
 
-        let material;
-
-        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-            material = scene.xrayMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-            material = scene.highlightMaterial._state;
-        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-            material = scene.selectedMaterial._state;
-        } else {
-            material = scene.edgeMaterial._state;
-        }
-
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        if (frameCtx.lineWidth !== material.edgeWidth) {
-            gl.lineWidth(material.edgeWidth);
-            frameCtx.lineWidth = material.edgeWidth;
-        }
-
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aColor.bindArrayBuffer(state.colorsBuf);
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
@@ -289,7 +269,6 @@ class TrianglesBatchingEdgesRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation(&quot;renderPass&quot;);
-        this._uColor = program.getLocation(&quot;color&quot;);
         this._uPositionsDecodeMatrix = program.getLocation(&quot;positionsDecodeMatrix&quot;);
         this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
         this._uWorldMatrix = program.getLocation(&quot;worldMatrix&quot;);
@@ -305,6 +284,7 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         this._aPosition = program.getAttribute(&quot;position&quot;);
+        this._aColor = program.getAttribute(&quot;color&quot;);
         this._aOffset = program.getAttribute(&quot;offset&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
         this._aFlags2 = program.getAttribute(&quot;flags2&quot;);
@@ -353,6 +333,7 @@ class TrianglesBatchingEdgesRenderer {
         src.push(&quot;uniform int renderPass;&quot;);
 
         src.push(&quot;attribute vec3 position;&quot;);
+        src.push(&quot;attribute vec4 color;&quot;);
         if (scene.entityOffsetsEnabled) {
             src.push(&quot;attribute vec3 offset;&quot;);
         }
@@ -376,8 +357,7 @@ class TrianglesBatchingEdgesRenderer {
             src.push(&quot;varying vec4 vFlags2;&quot;);
         }
 
-        src.push(&quot;uniform vec4 color;&quot;);
-
+        src.push(&quot;varying vec4 vColor;&quot;);
         src.push(&quot;void main(void) {&quot;);
 
         // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
@@ -409,6 +389,7 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
         src.push(&quot;gl_Position = clipPos;&quot;);
+        src.push(&quot;vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);&quot;);
         src.push(&quot;}&quot;);
         src.push(&quot;}&quot;);
         return src;
@@ -443,7 +424,7 @@ class TrianglesBatchingEdgesRenderer {
                 src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
             }
         }
-        src.push(&quot;uniform vec4 color;&quot;);
+        src.push(&quot;varying vec4 vColor;&quot;);
         src.push(&quot;void main(void) {&quot;);
         if (clipping) {
             src.push(&quot;  bool clippable = (float(vFlags2.x) &gt; 0.0);&quot;);
@@ -460,7 +441,7 @@ class TrianglesBatchingEdgesRenderer {
         if (scene.logarithmicDepthBufferEnabled &amp;&amp; WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
             src.push(&quot;gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
         }
-        src.push(&quot;gl_FragColor = color;&quot;);
+        src.push(&quot;gl_FragColor = vColor;&quot;);
         src.push(&quot;}&quot;);
         return src;
     }
