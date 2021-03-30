@@ -5,9 +5,14 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
 * # Usage
  *
- * In the example below, we'll create a {@link Viewer}, add a {@link FastNavPlugin}, then use a {@link  XKTLoaderPlugin} to load a model.
+ * In the example below, we'll create a {@link Viewer}, add a {@link FastNavPlugin}, then use an {@link XKTLoaderPlugin} to load a model.
  *
-* This viewer will only render the model with physically-based rendering (PBR) and scalable ambient obscurance (SAO) when the camera is not moving.
+* This viewer will only render the model with enhanced edges, physically-based rendering (PBR) and scalable
+ * ambient obscurance (SAO) when the camera is not moving.
+ *
+ * Note how we enable SAO and PBR on the ````Scene```` and the model.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -21,9 +26,9 @@ import {Plugin} from "../../viewer/Plugin.js";
  *      saoEnabled: true
  *  });
  *
- * viewer.camera.eye = [7.31, 2.79, 6.12];
- * viewer.camera.look = [2.80, 0.15, 1.83];
- * viewer.camera.up = [-0.28, 0.92, -0.26];
+ * viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
+ * viewer.scene.camera.look = [42.45, 49.62, -43.59];
+ * viewer.scene.camera.up = [0.05, 0.95, 0.15];
  *
  * new FastNavPlugin(viewer, {});
  *
@@ -31,7 +36,8 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/gearboxPropellorTurbine/gearboxPropellorTurbine.xkt",
+ *      src: "./models/xkt/HolterTower/HolterTower.xkt",
+ *      metaModelSrc: "./metaModels/HolterTower/HolterTower.json",
  *      edges: true,
  *      saoEnabled: true,
  *      pbrEnabled: true
