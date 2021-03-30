@@ -31,7 +31,7 @@ class Viewer {
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
      * @param {Boolean} [cfg.premultipliedAlpha=false]  Whether or not you want alpha composition with premultiplied alpha. Highlighting and selection works best when this is ````false````.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
-     * @param {Boolean} [cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
+     * @param {Boolean} [cfg.gammaOutput=false]  Whether or not to render with pre-multiplied gama.
      * @param {Number} [cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      * @param {Boolean} [cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
      * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
@@ -73,7 +73,7 @@ class Viewer {
             spinnerElementId: cfg.spinnerElementId,
             transparent: (cfg.transparent !== false),
             gammaInput: true,
-            gammaOutput: true,
+            gammaOutput: false,
             clearColorAmbient: cfg.clearColorAmbient,
             ticksPerRender: 1,
             ticksPerOcclusionTest: 20,
