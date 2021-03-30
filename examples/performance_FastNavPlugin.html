@@ -54,7 +54,6 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {Skybox} from "../src/viewer/scene/skybox/Skybox.js";
     import {FastNavPlugin} from "../src/plugins/FastNavPlugin/FastNavPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -88,15 +87,6 @@
     viewer.scene.camera.up = [0.05, 0.95, 0.15];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a SkyBox
-    //------------------------------------------------------------------------------------------------------------------
-
-    new Skybox(viewer.scene, {
-        src: "textures/skybox/cloudySkyBox.jpg",
-        size: 1000
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
     // Add a FastNavPlugin
     //------------------------------------------------------------------------------------------------------------------
 
@@ -118,7 +108,8 @@
         metaModelSrc: "./metaModels/HolterTower/HolterTower.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true,
         saoEnabled: true,
-        pbrEnabled: false
+        pbrEnabled: false,
+        backfaces: false
     });
 
     model.on("loaded", () => {
