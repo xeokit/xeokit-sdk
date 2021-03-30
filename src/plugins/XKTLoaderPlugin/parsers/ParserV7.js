@@ -234,6 +234,12 @@ function load(viewer, options, inflatedData, performanceModel) {
                     if (props.opacity !== undefined && props.opacity !== null) {
                         meshDefaults.opacity = props.opacity;
                     }
+                    if (props.metallic !== undefined && props.metallic !== null) {
+                        meshDefaults.metallic = props.metallic;
+                    }
+                    if (props.roughness !== undefined && props.roughness !== null) {
+                        meshDefaults.roughness = props.roughness;
+                    }
                 }
 
             } else {
