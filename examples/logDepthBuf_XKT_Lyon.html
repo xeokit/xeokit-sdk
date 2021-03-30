@@ -76,6 +76,7 @@
     import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
     import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
     import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
+    import {FastNavPlugin} from "../src/plugins/FastNavPlugin/FastNavPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -86,6 +87,20 @@
         transparent: true,
         logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
     });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality SAO configuration
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.sao.bias = -.3;
+    viewer.scene.sao.numSamples = 50;
+    viewer.scene.sao.kernelRadius = 200;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality rendering when camera still, lower-quality when moving
+    //------------------------------------------------------------------------------------------------------------------
+
+    new FastNavPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure Camera
@@ -181,37 +196,6 @@
         collidable: false
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Only enable ambient shadows and emphasized edges when camera is stationary
-    //------------------------------------------------------------------------------------------------------------------
-
-    let timeoutDuration = 1000; // Milliseconds
-    let timer = timeoutDuration;
-    let saoAndEdgesDisabled = false;
-
-    viewer.scene.camera.on("matrix", () => {
-        timer = timeoutDuration;
-        if (!saoAndEdgesDisabled) {
-            viewer.scene.sao.enabled = false;
-            viewer.scene.edgeMaterial.edges = false;
-            saoAndEdgesDisabled = true;
-        }
-    });
-
-    viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
-        if (!saoAndEdgesDisabled) {
-            return;
-        }
-        timer -= tickEvent.deltaTime;
-        if (timer <= 0) {
-            if (saoAndEdgesDisabled) {
-                //    viewer.scene.sao.enabled = true;
-                viewer.scene.edgeMaterial.edges = true;
-                saoAndEdgesDisabled = false;
-            }
-        }
-    });
-
     //----------------------------------------------------------------------------------------------------------------------
     // Load nine CityGML models
     //----------------------------------------------------------------------------------------------------------------------
@@ -225,7 +209,8 @@
     xktLoader.load({
         id: "lyon1",
         src: "./models/xkt/Lyon/Lyon1.xkt",
-        edges: true, saoEnabled: true
+        edges: true,
+        saoEnabled: true
     }).on("loaded", () => {
 
         document.getElementById("time").innerHTML = "Loading model 2 of 9";
@@ -233,7 +218,8 @@
         xktLoader.load({
             id: "lyon2",
             src: "./models/xkt/Lyon/Lyon2.xkt",
-            edges: true, saoEnabled: true
+            edges: true,
+            saoEnabled: true
         }).on("loaded", () => {
 
             document.getElementById("time").innerHTML = "Loading model 3 of 9";
@@ -241,7 +227,8 @@
             xktLoader.load({
                 id: "lyon3",
                 src: "./models/xkt/Lyon/Lyon3.xkt",
-                edges: true, saoEnabled: true
+                edges: true,
+                saoEnabled: true
             }).on("loaded", () => {
 
                 document.getElementById("time").innerHTML = "Loading model 4 of 9";
@@ -249,7 +236,8 @@
                 xktLoader.load({
                     id: "lyon4",
                     src: "./models/xkt/Lyon/Lyon4.xkt",
-                    edges: true, saoEnabled: true
+                    edges: true,
+                    saoEnabled: true
                 }).on("loaded", () => {
 
                     document.getElementById("time").innerHTML = "Loading model 5 of 9";
@@ -257,7 +245,8 @@
                     xktLoader.load({
                         id: "Lyon5",
                         src: "./models/xkt/Lyon/Lyon5.xkt",
-                        edges: true, saoEnabled: true
+                        edges: true,
+                        saoEnabled: true
                     }).on("loaded", () => {
 
                         document.getElementById("time").innerHTML = "Loading model 6 of 9";
@@ -265,7 +254,8 @@
                         xktLoader.load({
                             id: "Lyon6",
                             src: "./models/xkt/Lyon/Lyon6.xkt",
-                            edges: true, saoEnabled: true
+                            edges: true,
+                            saoEnabled: true
                         }).on("loaded", () => {
 
                             document.getElementById("time").innerHTML = "Loading model 7 of 9";
@@ -273,7 +263,8 @@
                             xktLoader.load({
                                 id: "Lyon7",
                                 src: "./models/xkt/Lyon/Lyon7.xkt",
-                                edges: true, saoEnabled: true
+                                edges: true,
+                                saoEnabled: true
                             }).on("loaded", () => {
 
                                 document.getElementById("time").innerHTML = "Loading model 8 of 9";
@@ -281,7 +272,8 @@
                                 xktLoader.load({
                                     id: "Lyon8",
                                     src: "./models/xkt/Lyon/Lyon8.xkt",
-                                    edges: true, saoEnabled: true
+                                    edges: true,
+                                    saoEnabled: true
                                 }).on("loaded", () => {
 
                                     document.getElementById("time").innerHTML = "Loading model 9 of 9";
@@ -289,7 +281,8 @@
                                     const lyon9 = xktLoader.load({
                                         id: "Lyon9",
                                         src: "./models/xkt/Lyon/Lyon9.xkt",
-                                        edges: true, saoEnabled: true
+                                        edges: true,
+                                        saoEnabled: true
                                     });
 
                                     lyon9.on("loaded", () => {
