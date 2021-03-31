@@ -20,9 +20,13 @@ Rendering and performance improvements.
   * Fix PerformanceModel SAO shader breakage with logarithmic depth buffer. [#592](https://github.com/xeokit/xeokit-sdk/issues/592) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, SectionPlanesPlugin
   * Show backfaces on solid meshes when sliced by SectionPlanes. [#600](https://github.com/xeokit/xeokit-sdk/issues/600) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+  * Improve default lighting. [#605](https://github.com/xeokit/xeokit-sdk/issues/605) ([**@xeolabs**](https://github.com/xeolabs))
+  * Option to include gizmos in canvas snapshots. [#606](https://github.com/xeokit/xeokit-sdk/issues/606) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, PerformanceModel
   * Fix missing backfaces. [#596](https://github.com/xeokit/xeokit-sdk/issues/596) ([**@xeolabs**](https://github.com/xeolabs))
   * Improved edge coloring. [#595](https://github.com/xeokit/xeokit-sdk/issues/595) ([**@xeolabs**](https://github.com/xeolabs))
+  * Make XKTLoaderPlugin load most colors from model by default. [#604](https://github.com/xeokit/xeokit-sdk/issues/604) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.7.1
 
