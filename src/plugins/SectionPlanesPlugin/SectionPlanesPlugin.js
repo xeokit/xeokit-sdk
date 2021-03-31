@@ -112,12 +112,12 @@ class SectionPlanesPlugin extends Plugin {
         this._controls = {};
         this._shownControlId = null;
 
-        if (cfg.overviewCanvasId) {
+        if (cfg.overviewCanvasId !== null && cfg.overviewCanvasId !== undefined) {
 
             const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
 
             if (!overviewCanvas) {
-                this.error("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
+                this.warn("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
 
             } else {
 

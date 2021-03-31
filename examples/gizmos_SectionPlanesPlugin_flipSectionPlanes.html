@@ -92,10 +92,7 @@
         edges: true
     });
 
-    const sectionPlanes = new SectionPlanesPlugin(viewer, {
-        overviewCanvasId: "mySectionPlanesOverviewCanvas",
-        overviewVisible: true
-    });
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
 
     model.on("loaded", () => {
         var t1 = performance.now();
