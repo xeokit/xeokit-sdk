@@ -285,6 +285,7 @@ class Viewer {
      * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
      * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
      * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
@@ -295,7 +296,9 @@ class Viewer {
             this.beginSnapshot();
         }
 
-        this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
 
         const resize = (params.width !== undefined && params.height !== undefined);
         const canvas = this.scene.canvas.canvas;
@@ -325,7 +328,9 @@ class Viewer {
             this.scene.glRedraw();
         }
 
-        this.sendToPlugins("snapshotFinished");
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
 
         if (needFinishSnapshot) {
             this.endSnapshot();
