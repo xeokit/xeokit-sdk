@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.8
 
-March 30, 2021
+Unreleased
 
 Rendering and performance improvements.
 
@@ -28,6 +28,7 @@ Rendering and performance improvements.
   * Improved edge coloring. [#595](https://github.com/xeokit/xeokit-sdk/issues/595) ([**@xeolabs**](https://github.com/xeolabs))
   * Make XKTLoaderPlugin load most colors from model by default. [#604](https://github.com/xeokit/xeokit-sdk/issues/604) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix disappearing loading spinner for XKTLoaderPlugin. [#603](https://github.com/xeokit/xeokit-sdk/issues/603) ([**@xeolabs**](https://github.com/xeolabs))
+  
 # 1.7.1
 
 March 18, 2021
