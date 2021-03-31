@@ -670,8 +670,6 @@ class XKTLoaderPlugin extends Plugin {
                     globalizeObjectIds: this.globalizeObjectIds
                 });
 
-                this.viewer.scene.canvas.spinner.processes--;
-
                 if (!metaModel) {
                     return false;
                 }
