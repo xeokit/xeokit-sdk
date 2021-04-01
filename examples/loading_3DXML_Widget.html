@@ -46,9 +46,6 @@
         canvasId: "myCanvas"
     });
 
-    viewer.scene.gammaInput = true;
-    viewer.scene.gammaOutput = true;
-
     viewer.camera.orbitPitch(20);
     viewer.camera.zoom(-35);
 
@@ -79,10 +76,8 @@
     const model = xml3dLoader.load({
         id: "myModel",
         src: "./models/xml3d/3dpreview.3dxml",
-
-        // Enhance edges and make slightly transparent
-        edges: true,
-        opacity: 0.8
+        materialType: "SpecularMaterial", // <<----------- Create SpecularMaterials
+        edges: true
     });
 
     model.on("loaded", () => {

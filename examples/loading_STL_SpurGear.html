@@ -32,6 +32,8 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {STLLoaderPlugin} from "../src/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
+    import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
+    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -39,6 +41,30 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "textures/reflect/desertRoad/px.png",
+            "textures/reflect/desertRoad/nx.png",
+            "textures/reflect/desertRoad/py.png",
+            "textures/reflect/desertRoad/ny.png",
+            "textures/reflect/desertRoad/pz.png",
+            "textures/reflect/desertRoad/nz.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    new LightMap(viewer.scene, {
+        src: [
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+        ],
+        encoding: "sRGB"
     });
 
     //------------------------------------------------------------------------------------------------------------------
