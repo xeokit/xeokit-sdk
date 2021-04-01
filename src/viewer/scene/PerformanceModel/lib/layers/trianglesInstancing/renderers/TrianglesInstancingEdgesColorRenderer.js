@@ -263,7 +263,8 @@ class TrianglesInstancingEdgesColorRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
+     //   src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r*0.5) / 255.0, float(color.g*0.5) / 255.0, float(color.b*0.5) / 255.0, float(color.a) / 255.0);");
         src.push("}");
         src.push("}");
         return src;
