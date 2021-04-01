@@ -276,7 +276,7 @@ class MousePickHandler {
                 }
 
                 pickController.pickCursorPos = states.pointerCanvasPos;
-                pickController.schedulePickEntity = configs.doublePickFlyTo;
+                pickController.schedulePickEntity = configs.doublePickFlyTo || doublePickedSubs || doublePickedSurfaceSubs;
                 pickController.schedulePickSurface = pickController.schedulePickEntity && doublePickedSurfaceSubs;
                 pickController.update();
 

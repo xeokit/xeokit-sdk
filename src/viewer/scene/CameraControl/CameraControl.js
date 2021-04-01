@@ -13,6 +13,7 @@ import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
 import {utils} from "../utils.js";
 import {math} from "../math/math.js";
+import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -713,6 +714,7 @@ class CameraControl extends Component {
             new MousePanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardAxisViewHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new MousePickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
+            new TouchPickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];
 
