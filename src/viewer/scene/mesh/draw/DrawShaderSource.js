@@ -1534,7 +1534,7 @@ function buildFragmentDraw(mesh) {
             src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor) + ((occlusion * (( reflectedLight.diffuse + reflectedLight.specular)))) + emissiveColor;");
 
         } else {
-            src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor) + (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");
+            src.push("vec3 outgoingLight = (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");
         }
 
     } else {
