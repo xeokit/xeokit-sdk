@@ -257,7 +257,6 @@ class TrianglesBatchingColorRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        const clippingCaps = sectionPlanesState.clippingCaps;
         let light;
         const src = [];
 
@@ -325,9 +324,6 @@ class TrianglesBatchingColorRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
-            if (clippingCaps) {
-                src.push("varying vec4 vClipPosition;");
-            }
         }
         src.push("varying vec4 vColor;");
 
@@ -400,9 +396,6 @@ class TrianglesBatchingColorRenderer {
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2;");
-            if (clippingCaps) {
-                src.push("vClipPosition = clipPos;");
-            }
         }
         src.push("gl_Position = clipPos;");
         src.push("}");
@@ -415,7 +408,6 @@ class TrianglesBatchingColorRenderer {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
         src.push("// Triangles batching draw fragment shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -450,9 +442,6 @@ class TrianglesBatchingColorRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
-            if (clippingCaps) {
-                src.push("varying vec4 vClipPosition;");
-            }
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -471,22 +460,9 @@ class TrianglesBatchingColorRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            if (clippingCaps) {
-                src.push("  if (dist > (0.002 * vClipPosition.w)) {");
-                src.push("      discard;");
-                src.push("  }");
-                src.push("  if (dist > 0.0) { ");
-                src.push("      gl_FragColor=vec4(1.0, 0.0, 0.0, 1.0);");
-                if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                    src.push("  gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
-                }
-                src.push("  return;");
-                src.push("}");
-            } else {
                 src.push("  if (dist > 0.0) { ");
                 src.push("      discard;")
                 src.push("  }");
-            }
             src.push("}");
         }
 
