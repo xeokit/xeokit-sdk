@@ -3,11 +3,11 @@ import {Plugin} from "../../viewer/Plugin.js";
 /**
  * {@link Viewer} plugin that improves interactivity by disabling expensive rendering effects while the {@link Camera} is moving.
  *
-* # Usage
+ * # Usage
  *
  * In the example below, we'll create a {@link Viewer}, add a {@link FastNavPlugin}, then use an {@link XKTLoaderPlugin} to load a model.
  *
-* This viewer will only render the model with enhanced edges, physically-based rendering (PBR) and scalable
+ * This viewer will only render the model with enhanced edges, physically-based rendering (PBR) and scalable
  * ambient obscurance (SAO) when the camera is not moving.
  *
  * Note how we enable SAO and PBR on the ````Scene```` and the model.
@@ -85,6 +85,49 @@ class FastNavPlugin extends Plugin {
                 }
             }
         });
+
+        this._onSceneObjectVisibility = viewer.scene.on("objectVisibility", () => {
+            timer = timeoutDuration;
+            if (!fastMode) {
+                this._cancelFade();
+                viewer.scene.pbrEnabled = false;
+                viewer.scene.sao.enabled = false;
+                viewer.scene.edgeMaterial.edges = false;
+                fastMode = true;
+            }
+        });
+
+        let down = false;
+
+        this._onSceneMouseDown = viewer.scene.input.on("mousedown", () => {
+            timer = timeoutDuration;
+            if (!fastMode) {
+                this._cancelFade();
+                viewer.scene.pbrEnabled = false;
+                viewer.scene.sao.enabled = false;
+                viewer.scene.edgeMaterial.edges = false;
+                fastMode = true;
+            }
+            down = true;
+        });
+
+        this._onSceneMouseUp = viewer.scene.input.on("mouseup", () => {
+            down = false;
+        });
+
+        this._onSceneMouseMove = viewer.scene.input.on("mousemove", () => {
+            if (!down) {
+                return;
+            }
+            timer = timeoutDuration;
+            if (!fastMode) {
+                this._cancelFade();
+                viewer.scene.pbrEnabled = false;
+                viewer.scene.sao.enabled = false;
+                viewer.scene.edgeMaterial.edges = false;
+                fastMode = true;
+            }
+        });
     }
 
     _startFade() {
@@ -102,18 +145,23 @@ class FastNavPlugin extends Plugin {
         }
 
         const canvas = this.viewer.scene.canvas.canvas;
-        const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
+        const canvasOffset = cumulativeOffset(canvas);
+        //const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
 
         this._img.style.position = "absolute";
-        this._img.style["z-index"] = zIndex;
-        this._img.style.left = canvas.style.left;
-        this._img.style.top = canvas.style.top;
-        this._img.style.width = canvas.style.width;
-        this._img.style.height = canvas.style.height;
+        this._img.style["z-index"] = 5;
+        this._img.style["background"] = canvas.style.background;
+        this._img.style.left = canvasOffset.left + "px";
+        this._img.style.top = canvasOffset.top + "px";
+        this._img.style.width = canvas.width + "px";
+        this._img.style.height = canvas.height + "px";
         this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
-        this._img.src = this.viewer.getSnapshot({format: "png"});
+        this._img.src = this.viewer.getSnapshot({
+            format: "png",
+            includeGizmos: true
+        });
         this._img.style.visibility = "visible";
 
         let opacity = 1;
@@ -131,22 +179,24 @@ class FastNavPlugin extends Plugin {
     }
 
     _initFade() {
-        const body = document.getElementsByTagName("body")[0];
         this._img = document.createElement('img');
         const canvas = this.viewer.scene.canvas.canvas;
+        const canvasOffset = cumulativeOffset(canvas);
         const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
         this._img.style.position = "absolute";
         this._img.style.visibility = "hidden";
         this._img.style["pointer-events"] = "none";
-        this._img.style["z-index"] = zIndex;
-        this._img.style.left = canvas.style.left;
-        this._img.style.top = canvas.style.top;
-        this._img.style.width = canvas.style.width;
-        this._img.style.height = canvas.style.height;
-        this._img.style.opacity = 0;
+        this._img.style["z-index"] = 5;
+        this._img.style.left = canvasOffset.left + "px";
+        this._img.style.top = canvasOffset.top + "px";
+        this._img.style.width = canvas.width + "px";
+        this._img.style.height = canvas.height + "px";
+        this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
-        body.appendChild(this._img);
+        this._img.left = canvasOffset.left;
+        this._img.top = canvasOffset.top;
+        canvas.parentNode.insertBefore(this._img, canvas.nextSibling);
     }
 
     _cancelFade() {
@@ -179,10 +229,28 @@ class FastNavPlugin extends Plugin {
         this._cancelFade();
         this.viewer.scene.camera.off(this._onCameraMatrix);
         this.viewer.scene.off(this._onSceneTick);
+        this.viewer.scene.off(this._onSceneObjectVisibility);
+        this.viewer.scene.input.off(this._onSceneMouseDown);
+        this.viewer.scene.input.off(this._onSceneMouseUp);
+        this.viewer.scene.input.off(this._onSceneMouseMove);
         super.destroy();
         this._img.parentNode.removeChild(this._img);
         this._img = null;
     }
+}
+
+function cumulativeOffset(element) {
+    let top = 0, left = 0;
+    do {
+        top += element.offsetTop || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while (element);
+
+    return {
+        top: top,
+        left: left
+    };
 }
 
 export {FastNavPlugin}
