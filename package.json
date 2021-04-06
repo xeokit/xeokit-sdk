@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "snapshots": "percy exec -- node snapshots.js",
     "docs": "./node_modules/.bin/esdoc",
     "publish": "npm publish --access public"
   },
@@ -36,8 +37,9 @@
     "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
   "homepage": "https://xeokit.io",
-  "dependencies": {},
   "devDependencies": {
+    "@percy/script": "^1.1.0",
+    "http-server": "^0.12.3",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.16.0"
