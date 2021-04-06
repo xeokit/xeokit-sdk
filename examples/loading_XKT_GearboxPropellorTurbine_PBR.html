@@ -55,9 +55,6 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
-    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -73,35 +70,6 @@
     viewer.camera.look = [2.80, 0.15, 1.83];
     viewer.camera.up = [-0.28, 0.92, -0.26];
 
-    viewer.cameraControl.followPointer = true;
-
-    const sao = viewer.scene.sao;
-    sao.enabled = true;
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Replace the Scene's default lights with three custom world-space DirLights
-    //------------------------------------------------------------------------------------------------------------------
-
-    viewer.scene.gammaInput = true;
-     viewer.scene.gammaOutput = true;
-     viewer.scene.gammaFactor = 2.2;
-
-    viewer.scene.clearLights();
-
-    // new AmbientLight(viewer.scene, {
-    //     id: "myAmbientLight",
-    //     color: [0.3, 0.3, 0.3],
-    //     intensity: 0.2
-    // });
-
-    new DirLight(viewer.scene, {
-        id: "keyLight",
-        dir: [0.8, -0.6, -0.8],
-        color: [1.0, 1.0, 0.8],
-        intensity: 1.0,
-        space: "world"
-    });
-
     new ReflectionMap(viewer.scene, {
         src: [
             "textures/reflect/desertRoad/px.png",
@@ -110,18 +78,6 @@
             "textures/reflect/desertRoad/ny.png",
             "textures/reflect/desertRoad/pz.png",
             "textures/reflect/desertRoad/nz.png"
-        ],
-        encoding: "sRGB"
-    });
-
-    new LightMap(viewer.scene, {
-        src: [
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
         encoding: "sRGB"
     });
@@ -140,79 +96,15 @@
         id: "myModel",
         src: "./models/xkt/gearboxPropellorTurbine/gearboxPropellorTurbine.xkt",
         edges: true,
-        saoEnabled: true
+        saoEnabled: false,
+        pbrEnabled: true,
+        scale: [10, 10, 10]
     });
 
     model.on("loaded", () => {
         var t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // GUI to play with SAO parameters
-    //------------------------------------------------------------------------------------------------------------------
-
-    const camera = viewer.scene.camera;
-
-    const saoParams = new function () {
-        this.enabled = sao.enabled;
-        this.kernelRadius = sao.kernelRadius;
-        this.intensity = sao.intensity;
-        this.bias = sao.bias;
-        this.scale = sao.scale;
-        this.minResolution = sao.minResolution;
-        this.numSamples = sao.numSamples;
-        this.blendFactor = sao.blendFactor;
-        this.blendCutoff = sao.blendCutoff;
-        this.blur = sao.blur;
-        this.perspective = (camera.projection === "perspective");
-        this.far = camera.perspective.far;
-        this.fov = camera.perspective.fov;
-    }();
-
-    const update = function () {
-        sao.enabled = saoParams.enabled;
-        sao.kernelRadius = saoParams.kernelRadius;
-        sao.intensity = saoParams.intensity;
-        sao.bias = saoParams.bias;
-        sao.scale = saoParams.scale;
-        sao.minResolution = saoParams.minResolution;
-        sao.numSamples = saoParams.numSamples;
-        sao.blendFactor = saoParams.blendFactor;
-        sao.blendCutoff = saoParams.blendCutoff;
-        sao.blur = saoParams.blur;
-        camera.projection = saoParams.perspective ? "perspective" : "ortho";
-        camera.perspective.far = saoParams.far;
-        camera.ortho.far = saoParams.far;
-        camera.perspective.fov = saoParams.fov;
-        requestAnimationFrame(update);
-    };
-
-    update();
-
-    const gui = new dat.GUI({autoPlace: false});
-
-    const saoFolder = gui.addFolder('SAO');
-    saoFolder.add(saoParams, 'enabled');
-    saoFolder.add(saoParams, 'bias', -2, 2);
-    saoFolder.add(saoParams, 'intensity', 0, 1.0);
-    saoFolder.add(saoParams, 'scale', .05, 5);
-    saoFolder.add(saoParams, 'kernelRadius', 1, 200);
-    saoFolder.add(saoParams, 'minResolution', 0, 0.001);
-    saoFolder.add(saoParams, 'numSamples', 4, 100);
-    saoFolder.add(saoParams, 'blendFactor', 0, 2);
-    saoFolder.add(saoParams, 'blendCutoff', 0, 2);
-    saoFolder.add(saoParams, 'blur');
-    saoFolder.open();
-
-    const cameraFolder = gui.addFolder('Camera');
-    cameraFolder.add(saoParams, 'perspective');
-    cameraFolder.add(saoParams, 'far', 100, 20000);
-    cameraFolder.add(saoParams, 'fov', 10, 120);
-    cameraFolder.open();
-
-    const customContainer = document.getElementById('my-gui-container');
-    customContainer.appendChild(gui.domElement);
 
 </script>
 </html>

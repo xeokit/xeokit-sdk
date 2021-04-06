@@ -60,9 +60,9 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-33.39, 19.86, 16.48];
-    viewer.scene.camera.look = [8.29, 8.28, 0.31];
-    viewer.scene.camera.up = [0.23, 0.96, -0.09];
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
     viewer.cameraControl.navMode = "orbit";
     viewer.cameraControl.followPointer = true;
@@ -80,7 +80,9 @@
     const model = xktLoader.load({
         id: "myModel",
         src: "./models/xkt/MAP/MAP.v7.xkt",
-        edges: true
+        edges: true,
+        excludeTypes: ["IfcSpace"],
+        objectDefaults: {}
     });
 
     model.on("loaded", () => {

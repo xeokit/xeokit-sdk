@@ -50,9 +50,6 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    viewer.camera.orbitPitch(20);
-    viewer.camera.orbitYaw(100);
-
     viewer.cameraControl.followPointer = true;
 
     const scene = viewer.scene;
@@ -71,16 +68,18 @@
         id: "myModel1",
         src: "./models/xkt/MAP/MAP.v3.xkt",
         metaModelSrc: "./metaModels/MAP/metaModel.json",
-        edges: true
+        edges: true,
+        excludeTypes: ["IfcSpace"],
+        objectDefaults: {}
     });
 
     model1.on("loaded", () => {
         viewer.cameraFlight.jumpTo(model1);
     });
 
-    viewer.scene.on("tick", () => {
-        viewer.scene.camera.orbitYaw(1.0);
-    });
+    // viewer.scene.on("tick", () => {
+    //     viewer.scene.camera.orbitYaw(1.0);
+    // });
 
 </script>
 </html>

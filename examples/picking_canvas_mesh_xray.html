@@ -56,7 +56,9 @@
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
     viewer.scene.xrayMaterial.edges = true;
-    viewer.scene.xrayMaterial.edgeAlpha = 1.0;
+    viewer.scene.xrayMaterial.fill = false;
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
     
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
