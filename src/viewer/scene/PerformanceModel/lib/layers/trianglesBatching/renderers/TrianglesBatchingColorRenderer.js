@@ -364,9 +364,9 @@ class TrianglesBatchingColorRenderer {
                 }
             } else if (light.type === "point") {
                 if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightPos" + i + " - viewPosition.xyz);");
+                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
                 } else {
-                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
+                    src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
                 }
             } else if (light.type === "spot") {
                 if (light.space === "view") {
