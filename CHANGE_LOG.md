@@ -21,6 +21,8 @@ Rendering, performance and QA improvements.
   * Fix ambient lighting for PBR, Phong and Lambert shaders. [#609](https://github.com/xeokit/xeokit-sdk/issues/608) ([**@xeolabs**](https://github.com/xeolabs))
 * PointLight
   * Fix PointLight shading direction. [#612](https://github.com/xeokit/xeokit-sdk/issues/612) ([**@xeolabs**](https://github.com/xeolabs))
+* PointsMaterial
+  * Set PointsMaterial#roundPoints true by default. [#613](https://github.com/xeokit/xeokit-sdk/issues/613) ([**@xeolabs**](https://github.com/xeolabs))
 * SAO  
   * Make SAO automatically work for all far clipping plane distances #598. [#598](https://github.com/xeokit/xeokit-sdk/issues/598) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix halo artifacts in SAO blur. [#594](https://github.com/xeokit/xeokit-sdk/issues/594) ([**@xeolabs**](https://github.com/xeolabs))
