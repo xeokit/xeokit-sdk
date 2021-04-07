@@ -1,7 +1,13 @@
-function signalTestComplete() {
+function signalTestComplete(viewer) {
     const div = document.createElement("div");
     div.id = "percyLoaded";
-    document.body.appendChild(div);
+    if (!viewer) {
+        document.body.appendChild(div);
+    } else {
+        viewer.scene.canvas.spinner.on("zeroProcesses", () => { // All outstanding tasks complete
+            document.body.appendChild(div);
+        });
+    }
 }
 
 export {signalTestComplete};

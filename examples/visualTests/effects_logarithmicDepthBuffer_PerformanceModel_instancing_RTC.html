@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PerformanceModel with instanced, double-precision geometries, rendered with logarithmic depth buffer
+        enabled</title>
+    <link href="../css/styles.css" type="text/css" rel="stylesheet"/>
+    <style>
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+
+<script type="module">
+
+    import {Viewer} from "../../src/viewer/Viewer.js";
+    import {math} from "../../src/viewer/scene/math/math.js";
+    import {PerformanceModel} from "../../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
+    });
+
+    viewer.scene.camera.eye = [-605702.2526865711, 370947.8054924678, -1175420.310009351];
+    viewer.scene.camera.look = [-125000.00000000081, -57499.99999999936, -125000.00000000186];
+    viewer.scene.camera.up = [0.14470456984788824, 0.9375898733411252, 0.31620533972928233];
+
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 100000000; // 1000000km
+
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 100000000; // 1000000km
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "table",
+        isModel: true,
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    const OFFSET = 500000.0;
+    const SIZE = 10000;
+
+    for (let x = -OFFSET; x < OFFSET; x += 250000.0) {
+        for (let z = -OFFSET; z < OFFSET; z += 250000.0) {
+            const rtcCenter = [x, 0, z];
+            buildTable(performanceModel, rtcCenter, SIZE);
+        }
+    }
+
+    performanceModel.finalize();
+
+    signalTestComplete();
+
+    function buildTable(performanceModel, rtcCenter, size = 1) {
+
+        const geometryId = math.createUUID();
+
+        performanceModel.createGeometry({
+            id: geometryId,
+            rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+            primitive: "triangles",
+            positions: [
+                1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+                1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+                -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+            ],
+            normals: [
+                0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+                0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+                0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+            ],
+            indices: [
+                0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+                16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+            ]
+        });
+
+        let meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [-4 * size, -6 * size, -4 * size],
+            scale: [1 * size, 3 * size, 1 * size],
+            rotation: [0, 0, 0],
+            color: [1, 0.3, 0.3]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [4 * size, -6 * size, -4 * size],
+            scale: [1 * size, 3 * size, 1 * size],
+            rotation: [0, 0, 0],
+            color: [0.3, 1.0, 0.3]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [4 * size, -6 * size, 4 * size],
+            scale: [1 * size, 3 * size, 1 * size],
+            rotation: [0, 0, 0],
+            color: [0.3, 0.3, 1.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [-4 * size, -6 * size, 4 * size],
+            scale: [1 * size, 3 * size, 1 * size],
+            rotation: [0, 0, 0],
+            color: [1.0, 1.0, 0.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+
+        meshId = math.createUUID();
+
+        performanceModel.createMesh({
+            id: meshId,
+            geometryId: geometryId,
+            position: [0, -3 * size, 0],
+            scale: [6 * size, 0.5 * size, 6 * size],
+            rotation: [0, 0, 0],
+            color: [1.0, 0.3, 1.0]
+        });
+
+        performanceModel.createEntity({
+            meshIds: [meshId],
+            isObject: true
+        });
+    }
+
+</script>
+</html>

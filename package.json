@@ -4,8 +4,7 @@
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "snapshots": "percy exec -- node snapshots.js",
+    "test": "percy exec -- node ./snapshots.js",
     "docs": "./node_modules/.bin/esdoc",
     "publish": "npm publish --access public"
   },

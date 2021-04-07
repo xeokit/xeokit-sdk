@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="../css/styles.css" type="text/css" rel="stylesheet"/>
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {Viewer} from "../../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {SectionPlanesPlugin} from "../../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-36.491402604993425, 22.101517892093614, 28.67478779933717];
+    viewer.scene.camera.look = [-10.118899011650011, 8.598208504990206, 15.281017949521566];
+    viewer.scene.camera.up = [0.3702753431210267, 0.9096883483277403, -0.18805126746011006];
+
+    viewer.scene.camera.projection = "ortho";
+    viewer.scene.camera.project.scale = 52.59413761471501;
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./../models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./../metaModels/duplex/metaModel.json",
+        edges: true
+    });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1.04, 1.95, 9.74],
+        dir: [1.0, 0.0, 0.0]
+    });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane2",
+        pos: [2.30, 4.46, 14.93],
+        dir: [0.0, -0.09, -0.79]
+    });
+
+    model.on("loaded", () => {
+        signalTestComplete();
+    });
+
+</script>
+
+</html>
