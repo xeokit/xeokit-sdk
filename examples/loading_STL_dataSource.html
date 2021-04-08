@@ -40,7 +40,7 @@
     // Load STL model
     //------------------------------------------------------------------------------------------------------------------
 
-    // Custom data access strategy - implementation happens to be the same as STLDefaultDataSource
+    // Custom assets access strategy - implementation happens to be the same as STLDefaultDataSource
     class MyDataSource {
         getSTL(src, ok, error) {
             const request = new XMLHttpRequest();
@@ -66,7 +66,7 @@
 
     const model = stlLoader.load({
         id: "myModel",
-        src: "./models/stl/binary/spurGear.stl",
+        src: "../assets/models/stl/binary/spurGear.stl",
         smoothNormals: true
     });
 

@@ -31,7 +31,7 @@
         </li>
         <li>
             <a
-                href="./images/schependomlaanSatMap.png">Satellite image</a> from Google Maps
+                href="../assets/images/schependomlaanSatMap.png">Satellite image</a> from Google Maps
         </li>
         <li>
             <a target="_other"
@@ -98,8 +98,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "./../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         edges: true,
         rotation: [0, 22, 0],
         position: [-8, 0, 15],
@@ -111,7 +111,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new ImagePlane(viewer.scene, {
-        src: "./images/schependomlaanSatMap.png",
+        src: "./../assets/images/schependomlaanSatMap.png",
         size: 190,
         position: [0, -1, 0],
         rotation: [0, 0, 0], // X, Y and Z

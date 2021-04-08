@@ -55,12 +55,12 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "textures/reflect/desertRoad/px.png",
-            "textures/reflect/desertRoad/nx.png",
-            "textures/reflect/desertRoad/py.png",
-            "textures/reflect/desertRoad/ny.png",
-            "textures/reflect/desertRoad/pz.png",
-            "textures/reflect/desertRoad/nz.png"
+            "./../assets/textures/reflect/desertRoad/px.png",
+            "./../assets/textures/reflect/desertRoad/nx.png",
+            "./../assets/textures/reflect/desertRoad/py.png",
+            "./../assets/textures/reflect/desertRoad/ny.png",
+            "./../assets/textures/reflect/desertRoad/pz.png",
+            "./../assets/textures/reflect/desertRoad/nz.png"
         ],
         encoding: "sRGB"
     });
@@ -75,7 +75,7 @@
 
     const model = xml3dLoader.load({
         id: "myModel",
-        src: "./models/xml3d/3dpreview.3dxml",
+        src: "../assets/models/xml3d/3dpreview.3dxml",
         materialType: "PhongMaterial", // <<----------- Create PhongMaterials
         edges: true
     });

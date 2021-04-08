@@ -50,7 +50,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
-    import {DimensionsFootprintModel} from "./js/DimensionsFootprintModel.js";
+    import {DimensionsFootprintModel} from "../assets/js/DimensionsFootprintModel.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -74,8 +74,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         excludeTypes: ["IfcSpace"],
         edges: true
     });

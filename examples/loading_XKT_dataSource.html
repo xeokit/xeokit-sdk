@@ -162,7 +162,7 @@
     // Load model and metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    // Custom data access strategy - implementation happens to be the same as XKTDefaultDataSource
+    // Custom assets access strategy - implementation happens to be the same as XKTDefaultDataSource
     class MyDataSource {
 
         constructor() {
@@ -200,8 +200,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "./../assets/models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 

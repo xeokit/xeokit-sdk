@@ -336,7 +336,7 @@ p.subSectionTip {
 
 a.subSubSection {
     padding-left: 22px;
-    background: url("../images/bullet-point.png") no-repeat 8px 2px !important;
+    background: url("../../assets/images/bullet-point.png") no-repeat 8px 2px !important;
 }
 
 #pageMenuContainer {

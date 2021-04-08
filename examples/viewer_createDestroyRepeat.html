@@ -65,8 +65,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "../assets/models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json",
         edges: true,
         saoEnabled: true // Allows SAO to be applied to the model (default is true)
     });
@@ -83,8 +83,8 @@
 
             const model2 = xktLoader.load({
                 id: "myModel2",
-                src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-                metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+                src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+                metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
                 edges: true
             });
         }, 3000);

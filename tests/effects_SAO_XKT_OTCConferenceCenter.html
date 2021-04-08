@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    if (!viewer.scene.sao.supported) {
+        viewer.scene.sao.warn("SAO is not supported by this browser or GPU - ignoring SAO configs")
+    }
+
+    viewer.scene.sao.enabled = true; // Only works if supported (see above)
+
+    viewer.scene.camera.eye =  [3.6930694580078125, 5.834853649139404, -23.98213005065918];
+    viewer.scene.camera.look = [84.31920623779297, -29.88751792907715, -116.21513366699219];
+    viewer.scene.camera.up = [0.18424127995967865, 0.9600174427032471, -0.21076446771621704];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./../assets/models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+        metaModelSrc: "./../assets/metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true,
+        saoEnabled: true
+    });
+
+    model.on("loaded", function () {
+        signalTestComplete();
+    });
+
+</script>
+</html>

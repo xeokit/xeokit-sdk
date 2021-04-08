@@ -207,8 +207,8 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
@@ -252,7 +252,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Click an object to log IFC data to console
+    // Click an object to log IFC assets to console
     //------------------------------------------------------------------------------------------------------------------
 
     scene.input.on("mouseclicked", function (coords) {

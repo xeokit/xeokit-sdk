@@ -103,7 +103,7 @@
 
     objLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel",
-        src: "./models/obj/sportsCar/sportsCar.obj",
+        src: "../assets/models/obj/sportsCar/sportsCar.obj",
         position: [-5, -1, 0],
         scale: [1.5, 1.5, 1.5],
         edges: true
@@ -113,8 +113,8 @@
 
     xktLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel2",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         rotation: [0, 50, 0],
         edges: true
     });
@@ -123,7 +123,7 @@
 
     stlLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel3",
-        src: "./models/stl/binary/spurGear.stl",
+        src: "../assets/models/stl/binary/spurGear.stl",
         position: [-8, -1, 0],
         scale: [0.07, 0.07, 0.07],
         rotation: [0, 180, 0],

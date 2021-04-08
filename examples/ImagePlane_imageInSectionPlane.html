@@ -54,7 +54,7 @@
         </li>
         <li>
             <a
-                    href="./images/schependomlaanPlanView.png">Plan view image</a>
+                    href="../assets/images/schependomlaanPlanView.png">Plan view image</a>
         </li>
         <li>
             <a target="_other"
@@ -119,8 +119,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "./../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         edges: true,
         saoEnabled: true
     });
@@ -140,7 +140,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const imagePlane = new ImagePlane(viewer.scene, {
-        src: "./images/schependomlaanPlanView.png",
+        src: "./../assets/images/schependomlaanPlanView.png",
         visible: true,
         gridVisible: true,
         size: 23.95,

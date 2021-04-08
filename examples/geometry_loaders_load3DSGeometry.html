@@ -76,7 +76,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     load3DSGeometry(viewer.scene, {
-        src: "models/3ds/lexus.3ds",
+        src: "../assets/models/3ds/lexus.3ds",
         compressGeometry: false
 
     })
@@ -91,7 +91,7 @@
                     material: new PhongMaterial(viewer.scene, {
                         emissive: [1, 1, 1],
                         emissiveMap: new Texture(viewer.scene, {  // .3DS has no normals so relies on emissive illumination
-                            src: "models/3ds/lexus.jpg"
+                            src: "../assets/models/3ds/lexus.jpg"
                         })
                     }),
 

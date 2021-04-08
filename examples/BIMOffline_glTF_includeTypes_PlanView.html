@@ -169,10 +169,10 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/OTCConferenceCenter/scene.gltf",
+        src: "../assets/models/gltf/OTCConferenceCenter/scene.gltf",
 
         // Classify entities as IFC elements
-        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        metaModelSrc: "./../assets/metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
 
         // Load the walls only
         includeTypes: ["IfcWallStandardCase"],

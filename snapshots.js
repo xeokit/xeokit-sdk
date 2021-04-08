@@ -4,7 +4,7 @@ const httpServer = require('http-server');
 PercyScript.run(async (page, percySnapshot) => {
 
     async function testPage(pageName) {
-        await page.goto('http://localhost:8080/examples/visualTests/' + pageName);
+        await page.goto('http://localhost:8080/tests/' + pageName);
         await page.waitFor(() => !!document.querySelector('#percyLoaded'));
         await percySnapshot(pageName);
     }
@@ -20,17 +20,15 @@ PercyScript.run(async (page, percySnapshot) => {
     Our test plan aims to make it easy to trace the failure of a test back to the cause, without needing to embark
     on major debugging missions.
 
-    While it's tempting to create a small set of complex and high-level tests, that randomly test a wide range
-    of xeokit features, the problem with that approach is that when a test fails, with nothing but a blank canvas
-    reported by the test report, we've basically got to debug an entire mini-application, with no clues to guide us.
+    Guidelines:
 
-    To help us trace test failures quickly, we therefore try to structure our tests so that they are ordered by
-    complexity: simplest first, complex last. This way, the complex tests can focus on what is effectively
-    higher-level integration testing of low-level features that have already been validated upstream by simpler tests.
+    - Use xeokit's defaults wherever possible. That way, we're also testing those defaults.
 
-    This means that the earliest tests in the sequence are easiest to debug, because they are the simplest. In our
-    test sequence, most of our tests need to be simple and low-level, with all features used by higher-level tests
-    validated upstream first.
+    - Each test should represent a single feature, so that when test fails, we know exactly which feature to debug.
+
+    - Don't make too many tests, since we're only allowed a finite number of tests per month at
+      Browserify. As a rule of thumb, keep the number of tests to less than one hundred, to allow
+      us to schedule daily test runs.
 
      */
 

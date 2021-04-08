@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+
+<script type="module">
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {utils} from "../src/viewer/scene/utils.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    class MyDataSource {
+
+        constructor() {
+        }
+
+        getMetaModel(metaModelSrc, ok, error) {
+            utils.loadJSON(metaModelSrc,
+                (json) => {
+                    ok(json);
+                },
+                function (errMsg) {
+                    error(errMsg);
+                });
+        }
+
+        getGLTF(glTFSrc, ok, error) {
+            utils.loadJSON(glTFSrc,
+                (gltf) => {
+                    ok(gltf);
+                },
+                function (errMsg) {
+                    error(errMsg);
+                });
+        }
+
+        getArrayBuffer(glTFSrc, binarySrc, ok, error) {
+            utils.loadArraybuffer(binarySrc,
+                (arrayBuffer) => {
+                    ok(arrayBuffer);
+                },
+                function (errMsg) {
+                    error(errMsg);
+                });
+        }
+    }
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer, {
+        dataSource: new MyDataSource()
+    });
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./../assets/models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", function () {
+        signalTestComplete();
+    });
+
+</script>
+</html>

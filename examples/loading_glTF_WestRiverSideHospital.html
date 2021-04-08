@@ -52,8 +52,8 @@
 
     const structure = gltfLoader.load({
         id: "structure",
-        src: "./models/gltf/WestRiverSideHospital/structure.gltf",
-        metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+        src: "./../assets/models/gltf/WestRiverSideHospital/structure.gltf",
+        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/structure.json",
         edges: true
     });
 
@@ -61,24 +61,24 @@
 
         const electrical = gltfLoader.load({
             id: "electrical",
-            src: "./models/gltf/WestRiverSideHospital/electrical.gltf",
-            metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
+            src: "./../assets/models/gltf/WestRiverSideHospital/electrical.gltf",
+            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/electrical.json",
             edges: true
         });
 
         electrical.on("loaded", function () {
             const fireAlarms = gltfLoader.load({
                 id: "fireAlarms",
-                src: "./models/gltf/WestRiverSideHospital/fireAlarms.gltf",
-                metaModelSrc: "./metaModels/WestRiverSideHospital/fireAlarms.json",
+                src: "./../assets/models/gltf/WestRiverSideHospital/fireAlarms.gltf",
+                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/fireAlarms.json",
                 edges: true
             });
 
             fireAlarms.on("loaded", function () {
                 const sprinklers = gltfLoader.load({
                     id: "sprinklers",
-                    src: "./models/gltf/WestRiverSideHospital/sprinklers.gltf",
-                    metaModelSrc: "./metaModels/WestRiverSideHospital/sprinklers.json",
+                    src: "./../assets/models/gltf/WestRiverSideHospital/sprinklers.gltf",
+                    metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/sprinklers.json",
                     edges: true
                 });
 
