@@ -210,6 +210,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
+    "variable/index.html#static-variable-IFCObjectDefaultColors",
+    "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaults.js~ifcobjectdefaults",
     "variable/index.html#static-variable-IFCObjectDefaults",
     "<span>IFCObjectDefaults</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaults.js</span>",
@@ -2970,6 +2976,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/ifcobjectdefaultcolors.js",
+    "file/src/viewer/metadata/IFCObjectDefaultColors.js.html",
+    "src/viewer/metadata/IFCObjectDefaultColors.js",
+    "file"
+  ],
+  [
     "src/viewer/metadata/ifcobjectdefaults.js",
     "file/src/viewer/metadata/IFCObjectDefaults.js.html",
     "src/viewer/metadata/IFCObjectDefaults.js",
@@ -3717,6 +3729,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/lib/handlers/touchpanrotateanddollyhandler.js",
     "file/src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js.html",
     "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/lib/handlers/touchpickhandler.js",
+    "file/src/viewer/scene/CameraControl/lib/handlers/TouchPickHandler.js.html",
+    "src/viewer/scene/CameraControl/lib/handlers/TouchPickHandler.js",
     "file"
   ],
   [

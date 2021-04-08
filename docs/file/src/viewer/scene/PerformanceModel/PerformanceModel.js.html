@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -71,6 +71,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
@@ -997,6 +998,9 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel&apos;s edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel&apos;s initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel&apos;s initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Number} [cfg.backfaces=false] When we set this ````true````, then we force rendering of backfaces for this PerformanceModel. When
+     * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
+     * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene&apos;s {@link SAO} component.
      * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the PerformanceModel. Only works when {@link Scene#pbrEnabled} is also ````true````.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
@@ -1115,6 +1119,7 @@ class PerformanceModel extends Component {
         this.edges = cfg.edges;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
+        this.backfaces = cfg.backfaces;
 
         // Build static matrix
 
@@ -1893,8 +1898,16 @@ class PerformanceModel extends Component {
      *
      * Default is ````false````.
      *
+     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
+     *
+     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
+     * the Viewer will:
+     *
+     *  * hide backfaces on watertight meshes,
+     *  * show backfaces on open meshes, and
+     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
+     *
      * @type {Boolean}
-     * @deprecated
      */
     set backfaces(backfaces) {
         backfaces = !!backfaces;
@@ -1908,7 +1921,6 @@ class PerformanceModel extends Component {
      * Default is ````false````.
      *
      * @type {Boolean}
-     * @deprecated
      */
     get backfaces() {
         return this._backfaces;

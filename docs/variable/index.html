@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -71,6 +71,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
@@ -180,6 +181,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Initial properties for <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s loaded from IFC models accompanied by metadata.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
         </p>
       </div>
@@ -230,6 +260,54 @@
 <div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-variable-IFCObjectDefaultColors">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">IFCObjectDefaultColors</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/IFCObjectDefaultColors.js.html#lineNumber11">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {IFCObjectDefaultColors} from &apos;<span><a href="file/src/viewer/metadata/IFCObjectDefaultColors.js.html#lineNumber11">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Initial properties for <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s loaded from IFC models accompanied by metadata.</p>
+<p>When loading a model, plugins such as <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> create
+a tree of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represent the model. These loaders can optionally load metadata, to create
+a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding to the root <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, with a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> corresponding to each
+object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within the tree.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-variable-IFCObjectDefaults">
     <span class="access" data-ice="access">public</span>
     
@@ -249,7 +327,7 @@
   
   
   <div data-ice="description"><p>Default initial properties for <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s loaded from models accompanied by metadata.</p>
-<p>When loading a model, a loader plugins such as <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> and <span>BIMServerLoaderPlugin</span> create
+<p>When loading a model, plugins such as <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> create
 a tree of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represent the model. These loaders can optionally load metadata, to create
 a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding to the root <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, with a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> corresponding to each
 object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within the tree.</p>

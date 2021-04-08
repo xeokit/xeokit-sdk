@@ -47,7 +47,7 @@
     buttons[i].addEventListener('click', toggle);
   }
 
-  var topDescribes = document.querySelectorAll('.test-summary tr[assets-test-depth="0"]');
+  var topDescribes = document.querySelectorAll('.test-summary tr[data-test-depth="0"]');
   for (var i = 0; i < topDescribes.length; i++) {
     topDescribes[i].style.display = '';
   }

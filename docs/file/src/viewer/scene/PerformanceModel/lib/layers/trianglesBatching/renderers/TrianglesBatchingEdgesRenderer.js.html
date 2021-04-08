@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -71,6 +71,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
@@ -166,8 +167,10 @@
 import {createRTCViewMat, getPlaneRTCPos} from &quot;../../../../../math/rtcCoords.js&quot;;
 import {math} from &quot;../../../../../math/math.js&quot;;
 import {WEBGL_INFO} from &quot;../../../../../webglInfo.js&quot;;
+import {RENDER_PASSES} from &quot;../../../RENDER_PASSES.js&quot;;
 
 const tempVec3a = math.vec3();
+const defaultColor = new Float32Array([0,0,0,1]);
 
 /**
  * @private
@@ -211,6 +214,28 @@ class TrianglesBatchingEdgesRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+            const material = scene.xrayMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+            const material = scene.highlightMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+            const material = scene.selectedMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+        } else {
+            gl.uniform4fv(this._uColor, defaultColor);
+        }
+
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -239,7 +264,6 @@ class TrianglesBatchingEdgesRenderer {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aColor.bindArrayBuffer(state.colorsBuf);
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
@@ -269,6 +293,7 @@ class TrianglesBatchingEdgesRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation(&quot;renderPass&quot;);
+        this._uColor = program.getLocation(&quot;color&quot;);
         this._uPositionsDecodeMatrix = program.getLocation(&quot;positionsDecodeMatrix&quot;);
         this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
         this._uWorldMatrix = program.getLocation(&quot;worldMatrix&quot;);
@@ -284,7 +309,6 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         this._aPosition = program.getAttribute(&quot;position&quot;);
-        this._aColor = program.getAttribute(&quot;color&quot;);
         this._aOffset = program.getAttribute(&quot;offset&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
         this._aFlags2 = program.getAttribute(&quot;flags2&quot;);
@@ -331,9 +355,9 @@ class TrianglesBatchingEdgesRenderer {
         }
 
         src.push(&quot;uniform int renderPass;&quot;);
+        src.push(&quot;uniform vec4 color;&quot;);
 
         src.push(&quot;attribute vec3 position;&quot;);
-        src.push(&quot;attribute vec4 color;&quot;);
         if (scene.entityOffsetsEnabled) {
             src.push(&quot;attribute vec3 offset;&quot;);
         }
@@ -389,7 +413,7 @@ class TrianglesBatchingEdgesRenderer {
             }
         }
         src.push(&quot;gl_Position = clipPos;&quot;);
-        src.push(&quot;vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);&quot;);
+        src.push(&quot;vColor = vec4(color.r, color.g, color.b, color.a);&quot;);
         src.push(&quot;}&quot;);
         src.push(&quot;}&quot;);
         return src;
