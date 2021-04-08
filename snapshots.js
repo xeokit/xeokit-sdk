@@ -6,7 +6,9 @@ PercyScript.run(async (page, percySnapshot) => {
     async function testPage(pageName) {
         await page.goto('http://localhost:8080/tests/' + pageName);
         await page.waitFor(() => !!document.querySelector('#percyLoaded'));
-        await percySnapshot(pageName);
+        await percySnapshot(pageName, {
+            widths: [1280]
+        });
     }
 
     let server = httpServer.createServer();
