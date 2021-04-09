@@ -4,8 +4,8 @@ const httpServer = require('http-server');
 PercyScript.run(async (page, percySnapshot) => {
 
     async function testPage(pageName) {
-        await page.goto('http://localhost:8080/tests/' + pageName);
-        await page.waitFor(() => !!document.querySelector('#percyLoaded'));
+        await page.goto('http://localhost:3000/tests/' + pageName);
+        await page.waitForFunction(() => !!document.querySelector('#percyLoaded'));
         await percySnapshot(pageName, {
             widths: [1280]
         });
@@ -13,26 +13,9 @@ PercyScript.run(async (page, percySnapshot) => {
 
     let server = httpServer.createServer();
 
-    server.listen(8080);
+    server.listen(3000);
 
     console.log(`Server started`);
-
-    /*
-
-    Our test plan aims to make it easy to trace the failure of a test back to the cause, without needing to embark
-    on major debugging missions.
-
-    Guidelines:
-
-    - Use xeokit's defaults wherever possible. That way, we're also testing those defaults.
-
-    - Each test should represent a single feature, so that when test fails, we know exactly which feature to debug.
-
-    - Don't make too many tests, since we're only allowed a finite number of tests per month at
-      Browserify. As a rule of thumb, keep the number of tests to less than one hundred, to allow
-      us to schedule daily test runs.
-
-     */
 
     //------------------------------------------------------------------------------------------------------------------
     // Scene representation within the graphics engine
