@@ -9,7 +9,7 @@ April 6, 2021
 Rendering, performance and QA improvements.
 
 * General
-  * Automatic visual tests. [#501](https://github.com/xeokit/xeokit-sdk/issues/501) ([**@xeolabs**](https://github.com/xeolabs))
+  * Automatic visual tests. [#618](https://github.com/xeokit/xeokit-sdk/issues/618) ([**@xeolabs**](https://github.com/xeolabs))
 * AnnotationsPlugin
   * Add AnnotationsPlugin "annotationCreated" and "annotationDestroyed" events. [#597](https://github.com/xeokit/xeokit-sdk/issues/597) ([**@xeolabs**](https://github.com/xeolabs))
 * CameraControl
@@ -37,6 +37,7 @@ Rendering, performance and QA improvements.
   * Improved edge coloring. [#595](https://github.com/xeokit/xeokit-sdk/issues/595) ([**@xeolabs**](https://github.com/xeolabs))
   * Make XKTLoaderPlugin load most colors from model by default. [#604](https://github.com/xeokit/xeokit-sdk/issues/604) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix disappearing loading spinner for XKTLoaderPlugin. [#603](https://github.com/xeokit/xeokit-sdk/issues/603) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix picking for PerformanceModel with instanced "points" geometry. [#619](https://github.com/xeokit/xeokit-sdk/issues/619) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.7.1
 
