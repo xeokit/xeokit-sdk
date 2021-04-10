@@ -10,6 +10,7 @@ Rendering, performance and QA improvements.
 
 * General
   * Automatic visual tests. [#618](https://github.com/xeokit/xeokit-sdk/issues/618) ([**@xeolabs**](https://github.com/xeolabs))
+  * Tidy up examples. [#617](https://github.com/xeokit/xeokit-sdk/issues/617) ([**@xeolabs**](https://github.com/xeolabs))
 * AnnotationsPlugin
   * Add AnnotationsPlugin "annotationCreated" and "annotationDestroyed" events. [#597](https://github.com/xeokit/xeokit-sdk/issues/597) ([**@xeolabs**](https://github.com/xeolabs))
 * CameraControl
