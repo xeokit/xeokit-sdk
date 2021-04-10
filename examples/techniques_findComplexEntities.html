@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>A Function to Find Complex Entities</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #myCanvas {
@@ -22,7 +22,7 @@
     </style>
 
 
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
 
 </head>
 
@@ -36,8 +36,12 @@
             <div id="time">Loading JavaScript modules...</div>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -149,7 +153,7 @@
         }
         return minComplexity;
     }
-    
+
     /**
      *
      * @param viewer
@@ -209,11 +213,11 @@
         }
 
         update();
-        
+
         const minComplexity = getMinComplexity(viewer);
         const maxSize = getMaxSize(viewer);
-        
-        const gui = new dat.GUI({autoPlace: false, width: 300 });
+
+        const gui = new dat.GUI({autoPlace: false, width: 300});
         const complexityFolder = gui.addFolder('Complexity Filter');
         complexityFolder.add(params, 'enableComplexityTest', true);
         complexityFolder.add(params, 'minComplexity', 0, minComplexity);

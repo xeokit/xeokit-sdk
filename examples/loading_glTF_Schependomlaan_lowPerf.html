@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>GLTFLoaderPlugin - Loading a Model from GLTF</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #myCanvas {
@@ -17,15 +17,15 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Loading a glTF Model</h1>
+    <h1>Loading a glTF Model into a low-performance scene graph representation</h1>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads glTF model from file system in performance:false mode
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+            <a href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
         </li>
     </ul>
 </div>
@@ -72,7 +72,7 @@
         viewer.cameraFlight.flyTo(model);
     });
 
-    viewer.cameraControl.on("picked", function(e) {
+    viewer.cameraControl.on("picked", function (e) {
         console.log(e.entity.id);
     })
 </script>

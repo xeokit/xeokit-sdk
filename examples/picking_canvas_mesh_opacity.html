@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Changing Opacity with the Pointer</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -11,15 +11,15 @@
 <div id="info">
     <h1>Changing Opacity with the Pointer</h1>
     <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
 
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xKT model from file system
-        </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Picking">User Guide</a>
-        </li>
 
     </ul>
 </div>
@@ -71,7 +71,7 @@
 
         if (hit) {
 
-          //  console.log(hit.entity.id);
+            //  console.log(hit.entity.id);
 
             if (!lastEntity || hit.entity.id !== lastEntity.id) {
 

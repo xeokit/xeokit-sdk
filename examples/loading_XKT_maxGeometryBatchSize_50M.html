@@ -2,9 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>XKT model with XKTLoaderPlugin maxGeometryBatchSize == 50000000</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
 
@@ -51,11 +51,15 @@
             <div id="time">Loading JavaScript modules...</div>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
-        <li>Models provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+        <li>Models provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
 
@@ -222,7 +226,7 @@
     // roughly between ````50000```` and ````50000000```.
     //----------------------------------------------------------------------------------------------------------------------
 
-    const xktLoader = new XKTLoaderPlugin(viewer,{
+    const xktLoader = new XKTLoaderPlugin(viewer, {
         maxGeometryBatchSize: 50000000 // <<--- Default
     });
 

@@ -2,9 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>xeokit StoreyViewsPlugin createStoreyMap()</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
 
@@ -13,7 +13,7 @@
         }
 
         #info {
-           max-width: 410px;
+            max-width: 410px;
         }
 
         #storeyMap {
@@ -37,21 +37,22 @@
     <br>
     <p>Creating a 2D plan view image of a given IfcBuildingStorey.</p>
     <div id="storeyMap"></div>
-
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
-            - Provides tools for visualizing IfcBuildingStoreys
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html"
+               target="_other">StoreyViewsPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -108,7 +109,7 @@
     // When the model has loaded, create a StoreyMap, insert its 2D plan image into the document
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded",  () =>{
+    model.on("loaded", () => {
 
         const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
             format: "png",

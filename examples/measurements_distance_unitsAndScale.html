@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <title>DistanceMeasurementPlugin - Configuring units and scale</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #my-gui-container {
             position: absolute;
             top: 260px;
-            right:020px;
+            right: 020px;
             z-index: 10;
         }
     </style>
 
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
 
 </head>
 
@@ -25,14 +25,16 @@
     <h1>DistanceMeasurementPlugin - Configuring units and scale</h1><br>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a>
-            - Creates DistanceMeasurements
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+               target="_other">DistanceMeasurementsPlugin</a>
         </li>
     </ul>
 
@@ -134,7 +136,7 @@
 
     update();
 
-    var gui = new dat.GUI({ autoPlace: false });
+    var gui = new dat.GUI({autoPlace: false});
     gui.add(metrics, 'scale', 0.1, 10.0);
     gui.add(metrics, 'units', ["meters", "centimeters", "millimeters", "yards", "feet", "inches"])
 

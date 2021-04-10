@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Forcing All Backfaces Visible</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <title>Loading a BIM model from XKT and setting all backfaces visible</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #myCanvas {
@@ -18,19 +18,22 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>XKTLoaderPlugin - Forcing All Backfaces Visible</h1><br>
+    <h1>Loading a BIM model from XKT and setting all backfaces visible</h1><br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit XKT model from the file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -77,7 +80,7 @@
 
     model.on("loaded", () => {
         var t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) /1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
 
 </script>

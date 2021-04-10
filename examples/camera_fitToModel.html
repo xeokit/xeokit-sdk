@@ -2,9 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Minimal BIM Viewer for .xkt Models</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #myCanvas {
@@ -21,18 +21,20 @@
     <h1>Loading a Model and Fit Camera</h1>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a>
-            - Fits camera to model
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="./../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html"
+               target="_other">CameraFlightAnimation</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -61,8 +63,8 @@
         edges: true
     });
 
-    model.on("loaded", function() {
-       viewer.cameraFlight.flyTo(model);
+    model.on("loaded", function () {
+        viewer.cameraFlight.flyTo(model);
     });
 
 </script>

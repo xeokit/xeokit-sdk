@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Rounding Jitter with XKT V3 Model</title>
+    <title>Loading a BIM Model from the File System</title>
     <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
@@ -18,15 +18,21 @@
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>Rounding Jitter with XKT V3 Model</h1><br>
-
-    <p>Model is loaded from XKT V3, which does not emulate full-precision geometry, causing rounding jitter</p><br>
+    <h1>Loading a BIM Model from the File System</h1><br>
     <ul>
-        <li>Model center is [1842022, 10, -5173301]</li>
-        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
     </ul>
 </div>
-
 </body>
 <script type="module">
 
@@ -50,36 +56,27 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    viewer.cameraControl.followPointer = true;
-
-    const scene = viewer.scene;
-    const sao = scene.sao;
-    // sao.enabled = true;
-
-    const camera = scene.camera;
-
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
     //----------------------------------------------------------------------------------------------------------------------
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model1 = xktLoader.load({
-        id: "myModel1",
-        src: "../assets/models/xkt/MAP/MAP.v3.xkt",
-        metaModelSrc: "./../assets/metaModels/MAP/metaModel.json",
-        edges: true,
-        excludeTypes: ["IfcSpace"],
-        objectDefaults: {}
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./../assets/models/xkt/convenienceStore/convenienceStore.xkt",
+        metaModelSrc: "./../assets/metaModels/convenienceStore/metaModel.json",
+        edges: true
     });
 
-    model1.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model1);
+    model.on("loaded", () => {
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
-
-    // viewer.scene.on("tick", () => {
-    //     viewer.scene.camera.orbitYaw(1.0);
-    // });
 
 </script>
 </html>

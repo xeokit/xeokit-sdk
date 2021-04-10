@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>ImagePlane - Ground Plane using a Google Maps Satellite Imag</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     <style>
         #myCanvas {
             width: 100%;
@@ -21,27 +21,31 @@
     <br>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a> - Creates ground plane
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html"
+               target="_other">ImagePlane</a>
         </li>
         <li>
             <a
-                href="../assets/images/schependomlaanSatMap.png">Satellite image</a> from Google Maps
+                    href="../assets/images/schependomlaanSatMap.png">Satellite image</a> from Google Maps
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan">Model source</a>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model
+                source</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";

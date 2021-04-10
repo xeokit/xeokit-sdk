@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>Repeatedly creating and destroying a viewer, reusing same canvas</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
 
     <style>
         #myCanvas {
             background: #ffffff;
         }
- </style>
+    </style>
 
 </head>
 
@@ -25,8 +25,12 @@
             A stress test to check for bugs.
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -37,8 +41,8 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import { Viewer } from "../src/viewer/Viewer.js";
-    import { XKTLoaderPlugin } from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
