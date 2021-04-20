@@ -660,6 +660,7 @@ class ModelTreeView {
         checkbox.id = nodeId;
         checkbox.type = "checkbox";
         checkbox.checked = node.checked;
+        checkbox.style["pointer-events"] = "all";
         checkbox.addEventListener("change", this._checkboxChangeHandler);
         nodeElement.appendChild(checkbox);
         const span = document.createElement('span');
