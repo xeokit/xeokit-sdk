@@ -2,9 +2,9 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.8.0-alpha.3
+# 1.8.0
 
-April 6, 2021
+April 21, 2021
 
 Rendering, performance and QA improvements.
 
