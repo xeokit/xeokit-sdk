@@ -27,7 +27,7 @@ class MousePickHandler {
             if (pickResult && pickResult.worldPos) {
                 pos = pickResult.worldPos
             }
-            const aabb = pickResult ? pickResult.entity.aabb : scene.aabb;
+            const aabb = pickResult && pickResult.entity ? pickResult.entity.aabb : scene.aabb;
             if (pos) { // Fly to look at point, don't change eye->look dist
                 const camera = scene.camera;
                 const diff = math.subVec3(camera.eye, camera.look, []);
