@@ -1,31 +1,46 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Full-Precision Geometry</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Rounding Jitter Fixed with XKT V7</h1><br>
-    <p>Model is loaded from XKT, which supports full-precision geometry, which fixes rounding jitter</p><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Using double-precision emulation to eliminate rounding jitter</h2>
+    <p>In this example, we're loading a double-precision BIM model, which xeokit renders using double-precision
+        emulation. This eliminates "rounding jitter" while rendering.</p>
     <ul>
         <li>Model center is [1842022, 10, -5173301]</li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li><a href="https://www.notion.so/xeokit/Viewing-Double-Precision-Models-3f9e155fd1394d1f974474484decf31b"
+               target="_other">Tutorial</a></li>
         <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
 </body>
+
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
@@ -68,10 +83,6 @@
     model1.on("loaded", () => {
         viewer.cameraFlight.jumpTo(model1);
     });
-
-    // viewer.scene.on("tick", () => {
-    //     viewer.scene.camera.orbitYaw(1.0);
-    // });
 
 </script>
 </html>

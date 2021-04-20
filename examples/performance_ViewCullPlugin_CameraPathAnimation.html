@@ -1,30 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>ViewCullPlugin and CameraPathAnimation</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: #dadada;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>ViewCullPlugin and CameraPathAnimation</h1>
+<div class="slideout-sidebar">
+    <h1>ViewCullPlugin</h1>
+    <h2>Makes interaction smoother</h2>
+    <p>ViewCullPlugin makes interaction smoother by disabling rendering for objects that fall outside our field of
+        view.</p>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
             <a href="./../docs/class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html"
@@ -34,8 +40,11 @@
             <a href="./../docs/class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html"
                target="_other">CameraPathAnimation</a>
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/301"
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/316"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -117,7 +126,7 @@
         id: "myModel",
         src: "../assets/models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
         metaModelSrc: "./../assets/metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true
+        edges: false
     });
 
     //----------------------------------------------------------------------------------------------------------------------

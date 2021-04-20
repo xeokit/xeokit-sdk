@@ -1,49 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Capturing PNG Screenshots</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #screenshots {
+        #snapshots {
+            position: absolute;
+            left: 10px;
+            top: 60px;
             margin-top: 20px;
             overflow-y: scroll;
-            height: 600px;
+            height: calc(100% - 120px);
+            margin-bottom: 10px;
+            width: 230px;
             pointer-events: all;
+            opacity: 0.8;
         }
-
-        #info {
-            position: absolute;
-            top: 0;
-            z-index: 200000;
-            float: right;
-            right: 0;
-            padding: 10px;
-            height: auto;
-            text-align: left;
-            pointer-events: none;
-            background: RGBA(0, 0, 0, 0.4);
-            max-width: 500px;
-            color: white;
-        }
-
     </style>
-
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
+<div id="snapshots"></div>
+<div class="slideout-sidebar">
     <h1>Capturing PNG Screenshots</h1>
     <p>Using viewer.getSnapshot()</p>
+    <h3>Components used</h3>
     <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
@@ -54,14 +41,15 @@
                target="_other">XKTLoaderPlugin</a>
 
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
             <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
                target="_other">Model source</a>
         </li>
     </ul>
-    <div id="screenshots"></div>
 </div>
-
 </body>
 
 <script type="module">
@@ -106,10 +94,11 @@
     // When model loaded, start capturing PNG screenshots
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", function () {
+    model.on("loaded", () => {
 
-        const screenshotsDiv = document.getElementById("screenshots");
-        var numScreenshots = 0;
+        const screenshotsDiv = document.getElementById("snapshots");
+
+        let numScreenshots = 0;
 
         setInterval(() => {
 

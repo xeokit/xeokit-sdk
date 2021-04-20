@@ -1,17 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Customizing the xeokit Spinner</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
 
         /* Custom spinner CSS */
 
@@ -191,11 +187,10 @@
         }
     </style>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <div id="mySpinnerElement">
     <div class="sk-fading-circle">
         <div class="sk-circle1 sk-circle"></div>
@@ -212,16 +207,28 @@
         <div class="sk-circle12 sk-circle"></div>
     </div>
 </div>
-
-<div id="info">
-    <h1>Customizing the Spinner</h1>
-    <br>
-    <p>The <a href="./../docs/class/src/viewer/scene/canvas/Spinner.js~Spinner.html"
-              target="_other">Spinner</a> shows an HTML spinner
-        over the canvas while xeokit is busy. In this example, we're customizing the appearance of the Spinner with our
+<div class="slideout-sidebar">
+    <h1>Customizing the loading spinner</h1>
+    <p>The spinner shows an HTML spinner element over the canvas while xeokit is busy. In this example, we're customizing the appearance of the Spinner with our
         own HTML and CSS.</p>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/canvas/Spinner.js~Spinner.html"
+               target="_other">Spinner</a>
+        </li>
+    </ul>
 </div>
 </body>
+
+
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------

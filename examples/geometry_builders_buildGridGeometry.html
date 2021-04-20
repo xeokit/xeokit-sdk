@@ -1,16 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Grid geometry</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Grid geometry</h1>
+<div class="slideout-sidebar">
+    <h1>buildGridGeometry</h1>
+    <h2>Builds grid-shaped line segment meshes</h2>
+    <p>In this example, we're creating a simple 3D scene that contains a grid-shaped geometry, generated using the
+        buildGridGeometry helper function.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
@@ -19,27 +26,23 @@
         <li>
             <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
                target="_other">Mesh</a>
-
         </li>
         <li>
-            <a href="./../docs/class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html"
-               target="_other">VBOGeometry</a>
-
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
             <a href="./../docs/function/index.html#static-function-buildGridGeometry"
-               target="_other">buildGridGeometry()</a>
-
+               target="_other">buildGridGeometry</a>
         </li>
+
         <li>
             <a href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
                target="_other">PhongMaterial</a>
-
         </li>
         <li>
             <a href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
                target="_other">Texture</a>
-
         </li>
     </ul>
 </div>

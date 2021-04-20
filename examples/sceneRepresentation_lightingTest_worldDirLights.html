@@ -1,14 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Test directional World-space lighting for all scene representations</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-        #myCanvas {
-            background: lightblue;
-        }
 
         .annotation-marker {
             color: #ffffff;
@@ -78,17 +77,54 @@
         }
 
     </style>
-
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>Test directional World-space lighting for all scene representations</h1>
+<div class="slideout-sidebar">
+    <h1>DirLight</h1>
+    <h2>Directional World-space lighting test for various scene representations</h2>
+    <p>In this example, we're programmatically building a scene, using both the scene graph and PerformanceModel scene
+        representations, which we illuminate with directional World-space light sources.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/lights/DirLight.js~DirLight.html"
+               target="_other">DirLight</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="./../docs/function/index.html#static-function-buildBoxGeometry"
+               target="_other">buildBoxGeometry</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html"
+               target="_other">LambertMaterial</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+    </ul>
 </div>
 </body>
+
 
 <script type="module">
 

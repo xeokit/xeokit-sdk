@@ -1,60 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Scalable Ambient Obscurance</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #my-gui-container {
-            position: absolute;
-            top: 280px;
-            right: 20px;
-            z-index: 10;
-        }
-
-    </style>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <script src="libs/dat.gui.min.js" type="text/javascript"></script>
-
+    <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>Scalable Ambient Obscurance</h1><br>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>SAO</h1>
+    <h2>Scalable Ambient Obscurance</h2>
+    <p>SAO is a visual effect that darkens the crevices in models, to emphasis geometric details.</p>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Customize SAO</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
-        </li>
-        <li>
-            <a href="./../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html"
-               target="_other">SAO</a>
         </li>
         <li>
             <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
                target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
+            <a href="./../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html"
+               target="_other">SAO</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
             <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
                target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
-<div id="my-gui-container"></div>
-
 </body>
 
 <script type="module">
@@ -168,7 +162,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false});
+    const gui = new dat.GUI({autoPlace: false, width:"100%"});
 
     const saoFolder = gui.addFolder('SAO');
     saoFolder.add(saoParams, 'enabled');
@@ -189,7 +183,7 @@
     cameraFolder.add(saoParams, 'fov', 10, 120);
     cameraFolder.open();
 
-    const customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
 
 </script>

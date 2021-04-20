@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>Configuring GLTFLoaderPlugin with a custom data source</title>
-    <link href="./css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/pageStyle.css" rel="stylesheet" type="text/css"/>
 
     <style>
 
@@ -16,36 +16,40 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            padding-top: 25px;
-            pointer-events: all;
+            pointer-events: none;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
+            background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 0;
+            top: 60px;
             z-index: 200000;
             float: left;
             left: 0;
+            padding-left: 10px;
             font-family: 'Roboto', sans-serif;
             font-size: 15px;
             user-select: none;
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 550px;
+            width: 350px;
         }
 
         #treeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
+            pointer-events: none;
         }
 
         #treeViewContainer ul li {
             position: relative;
             width: 500px;
-
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
         }
 
         #treeViewContainer ul li a {
@@ -59,24 +63,38 @@
             text-align: center;
             text-decoration: none;
             width: 1.5em;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.plus {
             background-color: #ded;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.minus {
             background-color: #eee;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a:active {
             top: 1px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span {
             display: inline-block;
             width: calc(100% - 50px);
             padding-left: 2px;
+            pointer-events: all;
+            height:23px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -85,6 +103,7 @@
             color: black;
             padding-left: 1px;
             padding-right: 5px;
+            pointer-events: all;
         }
 
     </style>

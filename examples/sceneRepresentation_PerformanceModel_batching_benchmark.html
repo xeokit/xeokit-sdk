@@ -1,39 +1,29 @@
+
+
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel Geometry Instancing</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #pleaseWait {
-            position: absolute;
-            margin: auto;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 350px;
-            height: 100px;
-            border-radius: 3px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 24px;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>PerformanceModel Benchmark</h1>
-    <p>373494 objects using geometry batching</p>
+<div class="slideout-sidebar">
+    <h1>PerformanceModel</h1>
+    <h2>Geometry batching benchmark</h2>
+    <p>In this example, we're building a large model using xeokit's PerformanceModel component and no geometry reuse.</p>
+    <ul>
+        <li>
+            <div id="pleaseWait">Geometry batching benchmark<br>generating 373494 objects, please wait...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
     <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
@@ -45,8 +35,6 @@
         </li>
     </ul>
 </div>
-
-<div id="pleaseWait">Geometry batching benchmark<br>generating 373494 objects, please wait...</div>
 </body>
 
 <script type="module">
@@ -178,12 +166,11 @@
     performanceModel.finalize();
 
     const pleaseWait = document.getElementById("pleaseWait");
-    pleaseWait.parentElement.removeChild(pleaseWait);
+    pleaseWait.innerText = "Generated 373494 objects";
 
     viewer.scene.canvas.spinner.processes -= 1;
 
     console.log("numObjects = " + numObjects);
-
 
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over Entities to highlight them

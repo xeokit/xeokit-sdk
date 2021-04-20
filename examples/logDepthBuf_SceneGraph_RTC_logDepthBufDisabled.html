@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Scene graph with double-precision geometry, rendered without logarithmic depth buffer enabled</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 
     <style>
 
@@ -21,7 +24,7 @@
             z-index: 200000;
         }
 
-        .camera-pivot-marker {
+        .xeokit-camera-pivot-marker {
             color: #ffffff;
             position: absolute;
             width: 25px;
@@ -38,14 +41,16 @@
     </style>
 
 </head>
+
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info" style="visibility:visible">
-    <h1>Scene graph with double-precision geometry, rendered <b>without</b> logarithmic depth buffer enabled</h1><br>
+<div class="slideout-sidebar">
+    <h1>Info</h1>
+    <p>Scene graph with double-precision geometry, rendered <b>with</b> logarithmic depth buffer enabled</p>
+    <h3>Components used</h3>
     <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
@@ -65,8 +70,8 @@
         </li>
     </ul>
 </div>
-
 </body>
+
 
 <script type="module">
 
@@ -118,7 +123,7 @@
 
     viewer.cameraControl.followPointer = true;
 
-    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
     viewer.cameraControl.pivotElement = pivotElement;
 

@@ -1,9 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 
     <style>
 
@@ -79,31 +82,40 @@
         }
 
     </style>
-
 </head>
 
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Hover over Annotation to show labels</h1>
-    <p><br>Shows how to customize annotation interaction using callbacks.</p><br>
+<div class="slideout-sidebar">
+    <h1>AnnotationsPlugin</h1>
+    <h2>Hover over the annotation pins to show their labels</h2><br>
+    <h3>Components Used</h3>
     <ul>
         <li>
             <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html"
-               target="_other">AnnotationsPlugin</a>
-        </li>
-        <li>
             <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
                target="_other">XKTLoaderPlugin</a>
         </li>
-
+        <li>
+            <a href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html"
+               target="_other">AnnotationsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
     </ul>
 </div>
 </body>
+
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
