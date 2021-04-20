@@ -825,7 +825,7 @@
     var hash = window.location.hash;
 
     window.setInterval(function () {
-        if (window.location.hash !== hash) {
+        if (window.location.hash !== hash || viewer.src === "") {
             setTimeout(() => {
                 load(window.location.hash.substring(1));
                 hash = window.location.hash;
