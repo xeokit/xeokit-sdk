@@ -30,7 +30,11 @@ import {Plugin} from "../../viewer/Plugin.js";
  * viewer.scene.camera.look = [42.45, 49.62, -43.59];
  * viewer.scene.camera.up = [0.05, 0.95, 0.15];
  *
- * new FastNavPlugin(viewer, {});
+ * new FastNavPlugin(viewer, {
+ *     pbrEnabled: true,
+ *     saoEnabled: true,
+ *     edgesEnabled: true
+ * });
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
@@ -48,9 +52,22 @@ import {Plugin} from "../../viewer/Plugin.js";
  */
 class FastNavPlugin extends Plugin {
 
-    constructor(viewer) {
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg FastNavPlugin configuration.
+     * @param {String} [cfg.id="FastNav"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if it's currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
+     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it's currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
+     * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they're currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
+     */
+    constructor(viewer, cfg) {
 
         super("FastNav", viewer);
+
+        this._pbrEnabled = (cfg.pbrEnabled !== undefined && cfg.pbrEnabled !== null) ? cfg.pbrEnabled : viewer.scene.pbrEnabled;
+        this._saoEnabled = (cfg.saoEnabled !== undefined && cfg.saoEnabled !== null) ? cfg.saoEnabled : viewer.scene.sao.enabled;
+        this._edgesEnabled = (cfg.edgesEnabled !== undefined && cfg.edgesEnabled !== null) ? cfg.edgesEnabled : viewer.scene.edgeMaterial.edges;
 
         this._pInterval = null;
         this._fadeMillisecs = 500;
@@ -78,9 +95,9 @@ class FastNavPlugin extends Plugin {
             if (timer <= 0) {
                 if (fastMode) {
                     this._startFade();
-                    viewer.scene.pbrEnabled = true;
-                    viewer.scene.sao.enabled = true;
-                    viewer.scene.edgeMaterial.edges = true;
+                    viewer.scene.pbrEnabled = this._pbrEnabled;
+                    viewer.scene.sao.enabled = this._saoEnabled;
+                    viewer.scene.edgeMaterial.edges = this._edgesEnabled;
                     fastMode = false;
                 }
             }
