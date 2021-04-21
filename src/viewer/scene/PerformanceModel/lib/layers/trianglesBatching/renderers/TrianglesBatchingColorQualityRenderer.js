@@ -649,7 +649,7 @@ class TrianglesBatchingColorQualityRenderer {
             }
 
             if (lightsState.reflectionMaps.length > 0) {
-                src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
+                src.push("   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);");
                 src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
                 src.push("   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);");
                 src.push("   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);");
@@ -718,7 +718,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
 
         src.push("geometry.position      = vViewPosition.xyz;");
-        src.push("geometry.viewNormal    = -vViewNormal;");
+        src.push("geometry.viewNormal    = -normalize(vViewNormal);");
         src.push("geometry.viewEyeDir    = normalize(vViewPosition.xyz);");
 
         if (lightsState.lightMaps.length > 0) {

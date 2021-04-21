@@ -426,7 +426,7 @@ class TrianglesInstancingColorQualityRenderer {
 
         src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
         src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-        src.push("vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);");
+        src.push("vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -698,7 +698,7 @@ class TrianglesInstancingColorQualityRenderer {
             }
 
             if (lightsState.reflectionMaps.length > 0) {
-                src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
+                src.push("   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);");
                 src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
                 src.push("   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);");
                 src.push("   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);");
@@ -767,7 +767,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
 
         src.push("geometry.position      = vViewPosition.xyz;");
-        src.push("geometry.viewNormal    = -vViewNormal;");
+        src.push("geometry.viewNormal    = -normalize(vViewNormal);");
         src.push("geometry.viewEyeDir    = normalize(vViewPosition.xyz);");
         if (lightsState.lightMaps.length > 0) {
             src.push("geometry.worldNormal   = normalize(vWorldNormal);");
