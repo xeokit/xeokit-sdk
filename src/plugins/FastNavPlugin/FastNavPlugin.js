@@ -95,9 +95,12 @@ class FastNavPlugin extends Plugin {
             if (timer <= 0) {
                 if (fastMode) {
                     this._startFade();
-                    viewer.scene.pbrEnabled = this._pbrEnabled;
-                    viewer.scene.sao.enabled = this._saoEnabled;
-                    viewer.scene.edgeMaterial.edges = this._edgesEnabled;
+                    this._pInterval2 = setTimeout(() => { // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
+                        viewer.scene.pbrEnabled = this._pbrEnabled;
+                        viewer.scene.sao.enabled = this._saoEnabled;
+                        viewer.scene.edgeMaterial.edges = this._edgesEnabled;
+                    }, 100);
+
                     fastMode = false;
                 }
             }
@@ -175,6 +178,7 @@ class FastNavPlugin extends Plugin {
         this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
+        this._img.src = ""; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
         this._img.src = this.viewer.getSnapshot({
             format: "png",
             includeGizmos: true
@@ -224,6 +228,10 @@ class FastNavPlugin extends Plugin {
             clearInterval(this._pInterval);
             this._pInterval = null;
         }
+        if (this._pInterval2) {
+            clearInterval(this._pInterval2);
+            this._pInterval2 = null;
+        }
         this._img.style.opacity = 0;
         this._img.style.visibility = "hidden";
     }
@@ -251,8 +259,10 @@ class FastNavPlugin extends Plugin {
         this.viewer.scene.input.off(this._onSceneMouseUp);
         this.viewer.scene.input.off(this._onSceneMouseMove);
         super.destroy();
-        this._img.parentNode.removeChild(this._img);
-        this._img = null;
+        if (this._img) {
+            this._img.parentNode.removeChild(this._img);
+            this._img = null;
+        }
     }
 }
 
