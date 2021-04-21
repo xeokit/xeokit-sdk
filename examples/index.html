@@ -35,7 +35,7 @@
             height: 100%;
             background: #fdfdfd;
             overflow: auto;
-            border-right: 2px solid grey;
+            border-right: 2px solid #444444;
             padding: 20px;
             padding-bottom: 100px;
             user-select: none;
@@ -184,6 +184,7 @@
 
         .index-button:hover {
             cursor: pointer;
+            color: black;
         }
 
         .page-title {
@@ -201,7 +202,7 @@
         }
 
         .viewSourceButton {
-            color: grey;
+            color: #444444;
             position: absolute;
             left: 20px;
             bottom: 15px;
@@ -212,6 +213,7 @@
         .viewSourceButton:hover {
             cursor: pointer;
             opacity: 1;
+            color: black;
         }
 
         #index_toggle:checked ~ .slideout-sidebar {
@@ -240,80 +242,6 @@
         #index_toggle:checked ~ .content-overlay {
             pointer-events: all;
         }
-
-        /*#index_toggle:checked ~ body {*/
-        /*    background-color: red;*/
-        /*}*/
-
-        /*#index_toggle:checked ~ .content-container {*/
-        /*    padding-left: 378px; !* Creates clean edge *!*/
-        /*    width: calc(100% - 380px);*/
-        /*}*/
-
-        /*@media (max-width: 991px) {*/
-        /*    .content-container {*/
-        /*        max-width: 480px;*/
-        /*    }*/
-        /*}*/
-
-        /*@media (max-width: 767px) {*/
-
-        /*    .content-container {*/
-        /*        max-width: 100%;*/
-        /*        margin: 30px auto 0;*/
-        /*    }*/
-
-        /*    #index_toggle:checked ~ .content-container {*/
-        /*        padding-left: 0;*/
-        /*    }*/
-
-        /*    .slideout-sidebar ul {*/
-        /*        text-align: center;*/
-        /*        max-width: 200px;*/
-        /*        margin: 30px auto 0;*/
-        /*    }*/
-
-        /*    .index-button {*/
-        /*        left: 20px*/
-        /*    }*/
-
-        /*    #index_toggle:checked ~ .slideout-sidebar {*/
-        /*        width: 100%;*/
-        /*    }*/
-
-        /*    #index_toggle:checked + .index-button {*/
-        /*        left: 87%;*/
-        /*        color: #fafafa;*/
-        /*    }*/
-
-        /*    #index_toggle:checked ~ .viewSourceButton {*/
-        /*        left: 87%;*/
-        /*    }*/
-
-        /*    @media screen*/
-        /*    and (max-width: 736px)*/
-        /*    and (orientation: landscape) {*/
-
-        /*        .slideout-sidebar {*/
-        /*            padding: 0;*/
-        /*        }*/
-
-        /*        .slideout-sidebar ul {*/
-        /*            max-width: 100%;*/
-        /*            margin: 60px auto 0;*/
-        /*        }*/
-
-        /*        .slideout-sidebar ul li {*/
-        /*            display: inline-block;*/
-        /*            border-bottom: 0;*/
-        /*            width: 72px;*/
-        /*            padding: 18px 24px;*/
-        /*            margin: 0 6px 12px;*/
-        /*            color: #ffffff;*/
-        /*            background-color: #777;*/
-        /*        }*/
-        /*    }*/
-        /*}*/
 
     </style>
 </head>

@@ -103,6 +103,8 @@
 
     viewer.scene.gammaOutput = true;
 
+    viewer.scene.gammaInput = false;
+
     viewer.scene.clearLights();
 
     new DirLight(viewer.scene, {
@@ -128,12 +130,12 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "./../assets/textures/reflect/desertRoad/px.png",
-            "./../assets/textures/reflect/desertRoad/nx.png",
-            "./../assets/textures/reflect/desertRoad/py.png",
-            "./../assets/textures/reflect/desertRoad/ny.png",
-            "./../assets/textures/reflect/desertRoad/pz.png",
-            "./../assets/textures/reflect/desertRoad/nz.png"
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "./../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
         encoding: "sRGB"
     });
