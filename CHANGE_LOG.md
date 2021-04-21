@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.8.1
 
-April 21, 2021
+April 22, 2021
 
 Patches
 
@@ -12,6 +12,7 @@ Patches
   * Fix sticky CameraControl rotation after dragging with left & right mouse buttons. [#623](https://github.com/xeokit/xeokit-sdk/issues/623) ([**@xeolabs**](https://github.com/xeolabs))
 * FastNavPlugin
   * Ability to configure which quality rendering effects are enabled by FastNavPlugin. [#625](https://github.com/xeokit/xeokit-sdk/issues/625) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix FastNavPlugin fade for Firefox. [#624](https://github.com/xeokit/xeokit-sdk/issues/624) ([**@xeolabs**](https://github.com/xeolabs))
   
 # 1.8.0
 
