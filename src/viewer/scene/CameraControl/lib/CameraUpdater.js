@@ -299,8 +299,6 @@ class CameraUpdater {
 
             pickController.fireEvents();
 
-            updates.inputFromMouse = false;
-
             document.body.style.cursor = cursorType;
         });
     }

@@ -668,7 +668,6 @@ class CameraControl extends Component {
         this._states = {
             pointerCanvasPos: math.vec2(),
             mouseover: false,
-            inputFromMouse: false, // TODO: Is this needed?
             followPointerDirty: true,
             mouseDownClientX: 0,
             mouseDownClientY: 0,
