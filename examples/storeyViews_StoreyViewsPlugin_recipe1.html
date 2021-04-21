@@ -1,64 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit StoreyViewsPlugin createStoreyMap()</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-
-        #myCanvas {
-            /*background: lightblue;*/
-        }
-
-        #info {
-            max-width: 410px;
-        }
-
         #storeyMap {
+            position: absolute;
+            left:10px;
+            top: 60px;
             margin-top: 20px;
             overflow-y: hidden;
             height: auto;
             pointer-events: all;
             width: auto;
+            user-select: none;
         }
 
     </style>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-
-<div id="info">
-    <h1>StoreyViewsPlugin UX Recipe #1</h1>
-
-    <br>
+<div id="storeyMap"></div>
+<div class="slideout-sidebar">
+    <h1>StoreyViewsPlugin</h1>
+    <h2>UX Recipe #1: using createStoreyMap() and pickStoreyMap()</h2>
     <p>Click a room in the 2D plan to fit it within the 3D View.</p>
     <p>Click empty space in the 2D plan to fit the whole model.</p>
-
-    <div id="storeyMap"></div>
-
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
-            - Provides tools for visualizing IfcBuildingStoreys
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html"
+               target="_other">StoreyViewsPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html"
+               target="_other">CameraFlightAnimation</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -89,10 +89,6 @@
     viewer.cameraControl.followPointer = true;
     viewer.cameraControl.navMode = "planView";
 
-    viewer.scene.highlightMaterial.fill = false;
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
-
     //------------------------------------------------------------------------------------------------------------------
     // Add an XKTLoaderPlugin and load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -101,9 +97,10 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
-        edges: true
+        src: "./../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        excludeTypes: ["IfcSpace"]
     });
 
     //------------------------------------------------------------------------------------------------------------------

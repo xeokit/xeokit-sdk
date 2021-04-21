@@ -118,7 +118,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(renderFlags, frameCtx) {
     }
 
     /**
@@ -129,7 +129,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawColorTransparent(frameCtx) {
+    drawColorTransparent(renderFlags, frameCtx) {
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -140,7 +140,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawDepth(frameCtx) {
+    drawDepth(renderFlags, frameCtx) {
     }
 
     /**
@@ -149,7 +149,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormals(frameCtx) {
+    drawNormals(renderFlags, frameCtx) {
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
@@ -162,7 +162,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteXRayed(frameCtx) {
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
     }
 
     /**
@@ -173,7 +173,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteHighlighted(frameCtx) {
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
     }
 
     /**
@@ -184,7 +184,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteSelected(frameCtx) {
+    drawSilhouetteSelected(renderFlags, frameCtx) {
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
@@ -197,7 +197,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesColorOpaque(frameCtx) {
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
     }
 
     /**
@@ -208,7 +208,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesColorTransparent(frameCtx) {
+    drawEdgesColorTransparent(renderFlags, frameCtx) {
     }
 
     /**
@@ -219,7 +219,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesXRayed(frameCtx) {
+    drawEdgesXRayed(renderFlags, frameCtx) {
     }
 
     /**
@@ -230,7 +230,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesHighlighted(frameCtx) {
+    drawEdgesHighlighted(renderFlags, frameCtx) {
     }
 
     /**
@@ -241,7 +241,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesSelected(frameCtx) {
+    drawEdgesSelected(renderFlags, frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
@@ -252,7 +252,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawOcclusion(frameCtx) {
+    drawOcclusion(renderFlags, frameCtx) {
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
@@ -263,7 +263,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawShadow(frameCtx) {
+    drawShadow(renderFlags, frameCtx) {
     }
 }
 

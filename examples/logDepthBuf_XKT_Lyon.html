@@ -1,16 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>XKT model with double-precision geometry, rendered with logarithmic buffer enabled</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 
     <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
 
         #myNavCubeCanvas {
             position: absolute;
@@ -21,7 +19,7 @@
             z-index: 200000;
         }
 
-        .camera-pivot-marker {
+        .xeokit-camera-pivot-marker {
             color: #ffffff;
             position: absolute;
             width: 25px;
@@ -38,27 +36,37 @@
     </style>
 
 </head>
+
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info" style="visibility:visible">
-    <h1>XKT model with double-precision geometry, rendered <b>with</b> logarithmic buffer enabled</h1><br>
+<div class="slideout-sidebar">
+    <h1>Logarithmic depth buffer enabled</h1>
+    <p>XKT model with double-precision geometry, rendered <b>with</b> logarithmic buffer enabled</p><br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
-        </li>
-        <li>Models provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
     </ul>
-</div>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
+    </ul>
 
+</div>
 </body>
 
 <script type="module">
@@ -76,6 +84,7 @@
     import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
     import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
     import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
+    import {FastNavPlugin} from "../src/plugins/FastNavPlugin/FastNavPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -86,6 +95,20 @@
         transparent: true,
         logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
     });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality SAO configuration
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.sao.bias = -.3;
+    viewer.scene.sao.numSamples = 50;
+    viewer.scene.sao.kernelRadius = 200;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality rendering when camera still, lower-quality when moving
+    //------------------------------------------------------------------------------------------------------------------
+
+    new FastNavPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure Camera
@@ -113,7 +136,7 @@
     viewer.cameraControl.followPointer = true;
     viewer.cameraControl.smartPivot = true;
 
-    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
     viewer.cameraControl.pivotElement = pivotElement;
 
@@ -181,37 +204,6 @@
         collidable: false
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Only enable ambient shadows and emphasized edges when camera is stationary
-    //------------------------------------------------------------------------------------------------------------------
-
-    let timeoutDuration = 1000; // Milliseconds
-    let timer = timeoutDuration;
-    let saoAndEdgesDisabled = false;
-
-    viewer.scene.camera.on("matrix", () => {
-        timer = timeoutDuration;
-        if (!saoAndEdgesDisabled) {
-            viewer.scene.sao.enabled = false;
-            viewer.scene.edgeMaterial.edges = false;
-            saoAndEdgesDisabled = true;
-        }
-    });
-
-    viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
-        if (!saoAndEdgesDisabled) {
-            return;
-        }
-        timer -= tickEvent.deltaTime;
-        if (timer <= 0) {
-            if (saoAndEdgesDisabled) {
-                //    viewer.scene.sao.enabled = true;
-                viewer.scene.edgeMaterial.edges = true;
-                saoAndEdgesDisabled = false;
-            }
-        }
-    });
-
     //----------------------------------------------------------------------------------------------------------------------
     // Load nine CityGML models
     //----------------------------------------------------------------------------------------------------------------------
@@ -224,80 +216,89 @@
 
     xktLoader.load({
         id: "lyon1",
-        src: "./models/xkt/Lyon/Lyon1.xkt",
-        edges: true, saoEnabled: true
+        src: "./../assets/models/xkt/Lyon/Lyon1.xkt",
+        edges: true,
+        saoEnabled: true
     }).on("loaded", () => {
 
         document.getElementById("time").innerHTML = "Loading model 2 of 9";
 
         xktLoader.load({
             id: "lyon2",
-            src: "./models/xkt/Lyon/Lyon2.xkt",
-            edges: true, saoEnabled: true
+            src: "./../assets/models/xkt/Lyon/Lyon2.xkt",
+            edges: true,
+            saoEnabled: true
         }).on("loaded", () => {
 
             document.getElementById("time").innerHTML = "Loading model 3 of 9";
 
             xktLoader.load({
                 id: "lyon3",
-                src: "./models/xkt/Lyon/Lyon3.xkt",
-                edges: true, saoEnabled: true
+                src: "./../assets/models/xkt/Lyon/Lyon3.xkt",
+                edges: true,
+                saoEnabled: true
             }).on("loaded", () => {
 
                 document.getElementById("time").innerHTML = "Loading model 4 of 9";
 
                 xktLoader.load({
                     id: "lyon4",
-                    src: "./models/xkt/Lyon/Lyon4.xkt",
-                    edges: true, saoEnabled: true
+                    src: "./../assets/models/xkt/Lyon/Lyon4.xkt",
+                    edges: true,
+                    saoEnabled: true
                 }).on("loaded", () => {
 
                     document.getElementById("time").innerHTML = "Loading model 5 of 9";
 
                     xktLoader.load({
                         id: "Lyon5",
-                        src: "./models/xkt/Lyon/Lyon5.xkt",
-                        edges: true, saoEnabled: true
+                        src: "./../assets/models/xkt/Lyon/Lyon5.xkt",
+                        edges: true,
+                        saoEnabled: true
                     }).on("loaded", () => {
 
                         document.getElementById("time").innerHTML = "Loading model 6 of 9";
 
                         xktLoader.load({
                             id: "Lyon6",
-                            src: "./models/xkt/Lyon/Lyon6.xkt",
-                            edges: true, saoEnabled: true
+                            src: "./../assets/models/xkt/Lyon/Lyon6.xkt",
+                            edges: true,
+                            saoEnabled: true
                         }).on("loaded", () => {
 
                             document.getElementById("time").innerHTML = "Loading model 7 of 9";
 
                             xktLoader.load({
                                 id: "Lyon7",
-                                src: "./models/xkt/Lyon/Lyon7.xkt",
-                                edges: true, saoEnabled: true
+                                src: "./../assets/models/xkt/Lyon/Lyon7.xkt",
+                                edges: true,
+                                saoEnabled: true
                             }).on("loaded", () => {
 
                                 document.getElementById("time").innerHTML = "Loading model 8 of 9";
 
                                 xktLoader.load({
                                     id: "Lyon8",
-                                    src: "./models/xkt/Lyon/Lyon8.xkt",
-                                    edges: true, saoEnabled: true
+                                    src: "./../assets/models/xkt/Lyon/Lyon8.xkt",
+                                    edges: true,
+                                    saoEnabled: true
                                 }).on("loaded", () => {
 
                                     document.getElementById("time").innerHTML = "Loading model 9 of 9";
 
                                     const lyon9 = xktLoader.load({
                                         id: "Lyon9",
-                                        src: "./models/xkt/Lyon/Lyon9.xkt",
-                                        edges: true, saoEnabled: true
+                                        src: "./../assets/models/xkt/Lyon/Lyon9.xkt",
+                                        edges: true,
+                                        saoEnabled: true
                                     });
 
                                     lyon9.on("loaded", () => {
 
                                         // const duplex = xktLoader.load({
                                         //     id: "myModel",
-                                        //     src: "./models/xkt/duplex/duplex.xkt",
-                                        //     metaModelSrc: "./metaModels/duplex/metaModel.json",
+                                        //     src: "./../assets/models/xkt/duplex/duplex.xkt",
+                                        //     metaModelSrc: "./../assets/metaModels/duplex/metaModel.json",
                                         //     edges: true,
                                         //     scale: [1000, 1000, 1000]
                                         // });

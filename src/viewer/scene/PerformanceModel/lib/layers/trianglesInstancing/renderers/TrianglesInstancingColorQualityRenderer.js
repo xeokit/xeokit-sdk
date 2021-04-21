@@ -338,6 +338,7 @@ class TrianglesInstancingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
         src.push("// Instancing geometry quality drawing vertex shader");
@@ -400,6 +401,9 @@ class TrianglesInstancingColorQualityRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
+            if (clippingCaps) {
+                src.push("varying vec4 vClipPosition;");
+            }
         }
 
         src.push("void main(void) {");
@@ -424,10 +428,6 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
         src.push("vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);");
 
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
-        }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -435,6 +435,14 @@ class TrianglesInstancingColorQualityRenderer {
             } else {
                 src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
                 src.push("clipPos.z *= clipPos.w;");
+            }
+        }
+
+        if (clipping) {
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags2 = flags2;");
+            if (clippingCaps) {
+                src.push("vClipPosition = clipPos;");
             }
         }
 
@@ -460,6 +468,7 @@ class TrianglesInstancingColorQualityRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
         src.push("// Instancing geometry quality drawing fragment shader");
@@ -544,6 +553,9 @@ class TrianglesInstancingColorQualityRenderer {
         if (clipping) {
             src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
+            if (clippingCaps) {
+                src.push("varying vec4 vClipPosition;");
+            }
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -717,7 +729,22 @@ class TrianglesInstancingColorQualityRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("if (dist > 0.0) { discard; }");
+            if (clippingCaps) {
+                src.push("  if (dist > (0.002 * vClipPosition.w)) {");
+                src.push("      discard;");
+                src.push("  }");
+                src.push("  if (dist > 0.0) { ");
+                src.push("      gl_FragColor=vec4(1.0, 0.0, 0.0, 1.0);");
+                if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                    src.push("  gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+                }
+                src.push("  return;");
+                src.push("}");
+            } else {
+                src.push("  if (dist > 0.0) { ");
+                src.push("      discard;")
+                src.push("  }");
+            }
             src.push("}");
         }
 
@@ -784,7 +811,7 @@ class TrianglesInstancingColorQualityRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 outgoingLight = (reflectedLight.diffuse) + (reflectedLight.specular);");
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
 
         src.push("vec4 fragColor;");
 

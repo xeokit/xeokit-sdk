@@ -5,6 +5,7 @@ import {math} from "../../../../../math/math.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
+const defaultColor = new Float32Array([0,0,0,1]);
 
 /**
  * @private
@@ -49,15 +50,26 @@ class TrianglesInstancingEdgesRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        let material;
         if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-            material = scene.xrayMaterial._state;
+            const material = scene.xrayMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
         } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-            material = scene.highlightMaterial._state;
+            const material = scene.highlightMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
         } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-            material = scene.selectedMaterial._state;
+            const material = scene.selectedMaterial._state;
+            const edgeColor = material.edgeColor;
+            const edgeAlpha = material.edgeAlpha;
+            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
         } else {
-            material = scene.edgeMaterial._state;
+            gl.uniform4fv(this._uColor, defaultColor);
         }
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
@@ -83,16 +95,6 @@ class TrianglesInstancingEdgesRenderer {
                     gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
-        }
-
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        if (frameCtx.lineWidth !== material.edgeWidth) {
-            gl.lineWidth(material.edgeWidth);
-            frameCtx.lineWidth = material.edgeWidth;
         }
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
@@ -222,6 +224,7 @@ class TrianglesInstancingEdgesRenderer {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
         src.push("uniform int renderPass;");
+        src.push("uniform vec4 color;");
         src.push("attribute vec3 position;");
         if (scene.entityOffsetsEnabled) {
             src.push("attribute vec3 offset;");
@@ -248,7 +251,7 @@ class TrianglesInstancingEdgesRenderer {
             src.push("varying vec4 vFlags2;");
         }
 
-        src.push("uniform vec4 color;");
+        src.push("varying vec4 vColor;");
 
         src.push("void main(void) {");
 
@@ -279,6 +282,7 @@ class TrianglesInstancingEdgesRenderer {
             }
         }
         src.push("gl_Position = clipPos;");
+        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
         src.push("}");
         src.push("}");
         return src;
@@ -313,7 +317,7 @@ class TrianglesInstancingEdgesRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("varying vec4 vColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
@@ -330,7 +334,7 @@ class TrianglesInstancingEdgesRenderer {
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("gl_FragColor = color;");
+        src.push("gl_FragColor = vColor;");
         src.push("}");
         return src;
     }

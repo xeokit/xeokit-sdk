@@ -399,11 +399,11 @@ class Canvas extends Component {
     }
 
     /**
-     The busy {@link Spinner} for this Canvas.
-
-     @property spinner
-     @type Spinner
-     @final
+     * The busy {@link Spinner} for this Canvas.
+     *
+     * @property spinner
+     * @type Spinner
+     * @final
      */
     get spinner() {
         return this._spinner;

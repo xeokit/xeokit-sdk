@@ -1,62 +1,51 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Creating a basic scene graph</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>EmphasisMaterial</h1>
-    <br>
     <p>A scene graph containing five objects, each with their own custom EmphasisMaterial for highlighted appearance.
-        Mouse over the objects to highlight them.</p><br>
+        Mouse over the objects to highlight them.</p>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/nodes/Node.js~Node.html">Node</a>
-            - Scene graph node
+            <a href="./../docs/class/src/viewer/scene/nodes/Node.js~Node.html"
+               target="_other">Node</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
-            - ReadableGeometry
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/function/index.html#static-function-buildBoxGeometry">buildBoxGeometry()</a>
-            - creates the boxes
+            <a href="./../docs/function/index.html#static-function-buildBoxGeometry"
+               target="_other">buildBoxGeometry()</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a>
-            - Phong material
+            <a href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a>
-            - Emphasis material
+            <a href="./../docs/class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html"
+               target="_other">EmphasisMaterial</a>
         </li>
-
     </ul>
 </div>
 </body>

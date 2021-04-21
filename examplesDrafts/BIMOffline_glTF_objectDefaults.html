@@ -1,0 +1,356 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../examples/css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+    <style>
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        /*!* ----------------------------------------------------------------------------------------------------------*!*/
+        /*!* TreeViewPlugin *!*/
+        /*!* ----------------------------------------------------------------------------------------------------------*!*/
+
+        /*#treeViewContainer {*/
+        /*    padding-top: 10px;*/
+        /*    padding-left: 80px;*/
+        /*    pointer-events: all;*/
+        /*    height: 100%;*/
+        /*    overflow-y: scroll;*/
+        /*    overflow-x: hidden;*/
+        /*    position: absolute;*/
+        /*    background-color: rgba(255, 255, 255, 0);*/
+        /*    color: black;*/
+        /*    top: 0;*/
+        /*    z-index: 200000;*/
+        /*    float: left;*/
+        /*    left: 0;*/
+        /*    font-family: 'Roboto', sans-serif;*/
+        /*    font-size: 15px;*/
+        /*    user-select: none;*/
+        /*    -ms-user-select: none;*/
+        /*    -moz-user-select: none;*/
+        /*    -webkit-user-select: none;*/
+        /*    width: 350px;*/
+        /*}*/
+
+        /*#treeViewContainer ul {*/
+        /*    list-style: none;*/
+        /*    padding-left: 1.75em;*/
+        /*}*/
+
+        /*#treeViewContainer ul li {*/
+        /*    position: relative;*/
+        /*    width: 500px;*/
+        /*}*/
+
+        /*#treeViewContainer ul li a {*/
+        /*    background-color: #eee;*/
+        /*    border-radius: 50%;*/
+        /*    color: #000;*/
+        /*    display: inline-block;*/
+        /*    height: 1.5em;*/
+        /*    left: -1.5em;*/
+        /*    position: absolute;*/
+        /*    text-align: center;*/
+        /*    text-decoration: none;*/
+        /*    width: 1.5em;*/
+        /*}*/
+
+        /*#treeViewContainer ul li a.plus {*/
+        /*    background-color: #ded;*/
+        /*}*/
+
+        /*#treeViewContainer ul li a.minus {*/
+        /*    background-color: #eee;*/
+        /*}*/
+
+        /*#treeViewContainer ul li a:active {*/
+        /*    top: 1px;*/
+        /*}*/
+
+        /*#treeViewContainer ul li span {*/
+        /*    display: inline-block;*/
+        /*    width: calc(100% - 50px);*/
+        /*}*/
+
+        /*#treeViewContainer .highlighted-node { !* Appearance of node highlighted with TreeViewPlugin#showNode() *!*/
+        /*    border: black solid 1px;*/
+        /*    background: yellow;*/
+        /*    color: black;*/
+        /*    padding-left: 1px;*/
+        /*    padding-right: 5px;*/
+        /*}*/
+
+    </style>
+
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<div id="viewer">
+    <canvas id="myCanvas"></canvas>
+</div>
+<div class="slideout-sidebar">
+    <h1>GLTFLoaderPlugin</h1>
+    <h2>Overriding object appearances by IFC type</h2>
+    <p>Configuring GLTFLoaderPlugin with our own map of initial default visual states for IFC objects</p>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    viewer.cameraFlight.fitFOV = 15;
+
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        autoExpandDepth: 1 // Initially expand root tree node
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata using a GLTFLoaderPlugin
+    //
+    // Use our own map of initial default states for each Entity that represents an object in glTF
+    // models loaded by our GLTFLoaderPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    const myObjectDefaults = {
+        IfcRoof: {
+            colorize: [0.337255, 0.803922, 0.270588]
+        },
+        IfcSlab: {
+            colorize: [0.837255, 0.603922, 0.670588]
+        },
+        IfcWall: {
+            colorize: [0.537255, 0.537255, 0.837255]
+        },
+        IfcWallStandardCase: {
+            colorize: [0.537255, 0.337255, 0.237255]
+        },
+        IfcCovering: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDoor: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcStair: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcStairFlight: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcProxy: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcRamp: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcColumn: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcBeam: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcCurtainWall: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcPlate: {
+            colorize: [0.8470588235, 0.427450980392, 0, 0.5],
+            opacity: 0.5
+        },
+        IfcTransportElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFooting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcRailing: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFurnishingElement: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFurniture: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcSystemFurnitureElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFlowSegment: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFlowitting: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFlowTerminal: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFlowController: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFlowFitting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDuctSegment: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDistributionFlowElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDuctFitting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcLightFixture: {
+            colorize: [0.8470588235, 0.8470588235, 0.870588]
+        },
+        IfcAirTerminal: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcOpeningElement: {
+            colorize: [0.137255, 0.403922, 0.870588],
+            pickable: false,
+            visible: false
+        },
+        IfcSpace: {
+            colorize: [0.137255, 0.403922, 0.870588],
+            pickable: false,
+            visible: false,
+            opacity: 0.5
+        },
+        IfcWindow: {
+            colorize: [0.137255, 0.403922, 0.870588],
+            pickable: false,
+            opacity: 0.4
+        },
+        IfcBuildingElementProxy: {
+            colorize: [0.5, 0.5, 0.5]
+        },
+
+        IfcSite: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+
+        IfcMember: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+
+        DEFAULT: {
+            colorize: [0.5, 0.5, 0.5]
+        }
+    };
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./../assets/models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        objectDefaults: myObjectDefaults, // Use our custom initial default states for object Entities
+        edges: true
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) + " milliseconds<br>Objects: " + model.numEntities;
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+
+</script>
+</html>

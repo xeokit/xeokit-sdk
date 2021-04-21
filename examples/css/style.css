@@ -17,15 +17,15 @@ body {
 
 
 
-#viewer {
-    position: absolute;
-    left: 340px;
-    width: -webkit-calc(100% - 340px); /* Safari */
-    width: calc(100% - 340px);
-    height: 100%;
-    border: 0px;
-    background-color: black;
-}
+/*#viewer {*/
+/*    position: absolute;*/
+/*    left: 340px;*/
+/*    width: -webkit-calc(100% - 340px); !* Safari *!*/
+/*    width: calc(100% - 340px);*/
+/*    height: 100%;*/
+/*    border: 0px;*/
+/*    background-color: black;*/
+/*}*/
 
 #sourceButton {
     position: fixed;
@@ -336,7 +336,7 @@ p.subSectionTip {
 
 a.subSubSection {
     padding-left: 22px;
-    background: url("../images/bullet-point.png") no-repeat 8px 2px !important;
+    background: url("../../assets/images/bullet-point.png") no-repeat 8px 2px !important;
 }
 
 #pageMenuContainer {
@@ -399,7 +399,7 @@ ul ul {
 }
 
 
-#contents {
+#content {
     position: absolute;
     width: 340px;
     height: calc(100% - 50px);
@@ -409,11 +409,11 @@ ul ul {
     overflow:auto;
 }
 
-#contents a {
+#content a {
     text-decoration: none;
 }
 
-#contents h1 {
+#content h1 {
     color: #78ce73;
     margin-top: 30px;
     margin-bottom: 40px;
@@ -422,11 +422,11 @@ ul ul {
     text-decoration: none !important;
 }
 
-#contents h1 a {
+#content h1 a {
     color: #78ce73;
 }
 
-#contents h2 {
+#content h2 {
     color: #78ce73;
     font-size: 20px;
     font-weight: normal;
@@ -435,13 +435,14 @@ ul ul {
     text-decoration: none;
 }
 
-#contents #list {
+#content  {
+    margin:0;
     padding: 0px 20px;
     line-height: 18px;
     overflow-x: hidden;
 }
 
-#contents #list .link {
+#content  .link {
     margin-left: 0 !important;
     padding-left: 0 !important;
     padding-top: 1px;
@@ -452,7 +453,7 @@ ul ul {
     line-height: 1.5em;
 }
 
-#contents #list .selected {
+#content  .selected {
     margin-left: -5px !important;
     padding-left: 5px !important;
     padding-top: 0;
@@ -462,11 +463,11 @@ ul ul {
     background: #FFFF44;
 }
 
-#contents #list .link:hover {
+#content  .link:hover {
     text-decoration: underline;
 }
 
-#contents #list .info {
+#content  .info {
     color: #78ce73;
     text-decoration: none;
     font-style: italic;
@@ -478,7 +479,7 @@ ul ul {
     margin-bottom: 4px;
 }
 
-#contents #list .infoFirst {
+#content  .infoFirst {
     color: #78ce73;
     text-decoration: none;
     font-style: italic;

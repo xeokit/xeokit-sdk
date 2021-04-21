@@ -1,32 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Scene graph containing OBJ and XKT models</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>Loading Multiple Models</h1>
+<div class="slideout-sidebar">
+    <h1>Loading Models from XKT, OBJ and STL into the same scene</h1>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads the house from XKT
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a>
-            - Loads the car from OBJ
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Node</a>
-            - Creates the ground plane
+            <a href="./../docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html"
+               target="_other">OBJLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html"
+               target="_other">STLLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
     </ul>
 </div>
@@ -103,7 +110,7 @@
 
     objLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel",
-        src: "./models/obj/sportsCar/sportsCar.obj",
+        src: "../assets/models/obj/sportsCar/sportsCar.obj",
         position: [-5, -1, 0],
         scale: [1.5, 1.5, 1.5],
         edges: true
@@ -113,8 +120,8 @@
 
     xktLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel2",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         rotation: [0, 50, 0],
         edges: true
     });
@@ -123,7 +130,7 @@
 
     stlLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel3",
-        src: "./models/stl/binary/spurGear.stl",
+        src: "../assets/models/stl/binary/spurGear.stl",
         position: [-8, -1, 0],
         scale: [0.07, 0.07, 0.07],
         rotation: [0, 180, 0],

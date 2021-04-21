@@ -1,16 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ContextMenu - Tree and Canvas Context Menus</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
     <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
 
         /* ----------------------------------------------------------------------------------------------------------*/
         /* NavCubePlugin */
@@ -30,36 +26,40 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            padding-top: 25px;
-            pointer-events: all;
+            pointer-events: none;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
+            background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 0;
+            top: 60px;
             z-index: 200000;
             float: left;
             left: 0;
+            padding-left: 10px;
             font-family: 'Roboto', sans-serif;
             font-size: 15px;
             user-select: none;
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 550px;
+            width: 350px;
         }
 
         #treeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
+            pointer-events: none;
         }
 
         #treeViewContainer ul li {
             position: relative;
             width: 500px;
-
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
         }
 
         #treeViewContainer ul li a {
@@ -73,18 +73,22 @@
             text-align: center;
             text-decoration: none;
             width: 1.5em;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.plus {
             background-color: #ded;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.minus {
             background-color: #eee;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a:active {
             top: 1px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span:hover {
@@ -92,12 +96,15 @@
             cursor: pointer;
             background: black;
             padding-left: 2px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span {
             display: inline-block;
             width: calc(100% - 50px);
             padding-left: 2px;
+            pointer-events: all;
+            height: 23px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -106,6 +113,7 @@
             color: black;
             padding-left: 1px;
             padding-right: 5px;
+            pointer-events: all;
         }
 
         /* ----------------------------------------------------------------------------------------------------------*/
@@ -171,7 +179,7 @@
         /* CameraControl pivot element */
         /* ----------------------------------------------------------------------------------------------------------*/
 
-        .camera-pivot-marker {
+        .xeokit-camera-pivot-marker {
             color: #ffffff;
             line-height: 1.8;
             text-align: center;
@@ -189,46 +197,55 @@
             pointer-events: none;
         }
     </style>
+</head>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
 <div id="treeViewContainer"></div>
-
-<div id="info">
-    <h1>ContextMenu - Viewing a Double-Precision IFC Model, with TreeView and ContextMenus</h1><br>
-
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading a double-precision BIM Model from the file system</h2>
     <p>Geometry in this IFC model is placed at [1842022, 10, -5173301], which causes its coordinates to have
-        large values that rely on xeokit's double-precision precision support.</p><br>
-
+        large values that rely on xeokit's double-precision precision support.</p>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a>
-            - HTML context menu
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view of IFC containment hierarchy
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
         </li>
-        <li>Double-precision IFC model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a>
+        <li>
+            <a href="./../docs/class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html"
+               target="_other">ContextMenu</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Double-precision IFC model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a>
         </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -252,9 +269,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
     viewer.scene.xrayMaterial.fill = true;
     viewer.scene.xrayMaterial.fillAlpha = 0.1;
@@ -270,7 +287,7 @@
 
     viewer.cameraControl.followPointer = true;
 
-    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
     viewer.cameraControl.pivotElement = pivotElement;
 
@@ -821,8 +838,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/MAP/MAP.v6.xkt",
-        metaModelSrc: "./metaModels/MAP/metaModel.json",
+        src: "./../assets/models/xkt/MAP/MAP.v7.xkt",
+        metaModelSrc: "./../assets/metaModels/MAP/metaModel.json",
         edges: true,
         excludeUnclassifiedObjects: false
     });

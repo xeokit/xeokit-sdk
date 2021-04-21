@@ -1,59 +1,52 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>MetallicMaterial</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>MetallicMaterial</h1>
-    <br>
     <p>A physically-correct metallic/roughness material that renders with Cook-Torrance, GGX & Shlick's Fresnel
         approximation.</p>
-    <br>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
-            - ReadableGeometry we'll load into
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/function/index.html#static-function-loadOBJGeometry">loadOBJGeometry()</a>
-            - loads the fire hydrant geometry from OBJ
+            <a href="./../docs/function/index.html#static-function-loadOBJGeometry"
+               target="_other">loadOBJGeometry()</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a>
-            - Physically-correct metallic/roughness material
+            <a href="./../docs/class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html"
+               target="_other">MetallicMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a>
-            - Texture
-        </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Material-Workflows">User Guide</a>
+            <a href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
@@ -65,6 +58,7 @@
     import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
     import {MetallicMaterial} from "../src/viewer/scene/materials/MetallicMaterial.js";
     import {Texture} from "../src/viewer/scene/materials/Texture.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -78,12 +72,38 @@
     viewer.scene.camera.look = [0.04, 0.58, 0.00];
     viewer.scene.camera.up = [-0.22, 0.84, -0.48];
 
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.0;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
     //------------------------------------------------------------------------------------------------------------------
     // Create a mesh with torus shape
     //------------------------------------------------------------------------------------------------------------------
 
     loadOBJGeometry(viewer.scene, {
-        src: "models/obj/fireHydrant/FireHydrantMesh.obj"
+        src: "./../assets/models/obj/fireHydrant/FireHydrantMesh.obj"
     })
         .then(function (geometry) {
 
@@ -100,20 +120,20 @@
                         roughness: 1.0,
 
                         baseColorMap: new Texture(viewer.scene, {
-                            src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
+                            src: "./../assets/models/obj/fireHydrant/fire_hydrant_Base_Color.png",
                             encoding: "sRGB"
                         }),
                         normalMap: new Texture(viewer.scene, {
-                            src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
+                            src: "./../assets/models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
                         }),
                         roughnessMap: new Texture(viewer.scene, {
-                            src: "models/obj/fireHydrant/fire_hydrant_Roughness.png"
+                            src: "./../assets/models/obj/fireHydrant/fire_hydrant_Roughness.png"
                         }),
                         metallicMap: new Texture(viewer.scene, {
-                            src: "models/obj/fireHydrant/fire_hydrant_Metallic.png"
+                            src: "./../assets/models/obj/fireHydrant/fire_hydrant_Metallic.png"
                         }),
                         occlusionMap: new Texture(viewer.scene, {
-                            src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
+                            src: "./../assets/models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
                         }),
 
                         specularF0: 0.7

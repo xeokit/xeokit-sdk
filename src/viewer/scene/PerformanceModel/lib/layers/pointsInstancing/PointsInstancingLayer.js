@@ -580,7 +580,7 @@ class PointsInstancingLayer {
 
     // ---------------------- NORMAL RENDERING -----------------------------------
 
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -589,7 +589,7 @@ class PointsInstancingLayer {
         }
     }
 
-    drawColorTransparent(frameCtx) {
+    drawColorTransparent(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -600,15 +600,15 @@ class PointsInstancingLayer {
 
     // -- RENDERING SAO POST EFFECT TARGETS ----------------------------------------------------------------------------
 
-    drawDepth(frameCtx) {
+    drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(frameCtx) {
+    drawNormals(renderFlags, frameCtx) {
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
-    drawSilhouetteXRayed(frameCtx) {
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -617,7 +617,7 @@ class PointsInstancingLayer {
         }
     }
 
-    drawSilhouetteHighlighted(frameCtx) {
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -626,7 +626,7 @@ class PointsInstancingLayer {
         }
     }
 
-    drawSilhouetteSelected(frameCtx) {
+    drawSilhouetteSelected(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -637,24 +637,24 @@ class PointsInstancingLayer {
 
     //-- EDGES RENDERING -----------------------------------------------------------------------------------------------
 
-    drawEdgesColorOpaque(frameCtx) {
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
     }
 
-    drawEdgesColorTransparent(frameCtx) {
+    drawEdgesColorTransparent(renderFlags, frameCtx) {
     }
 
-    drawEdgesHighlighted(frameCtx) {
+    drawEdgesHighlighted(renderFlags, frameCtx) {
     }
 
-    drawEdgesSelected(frameCtx) {
+    drawEdgesSelected(renderFlags, frameCtx) {
     }
 
-    drawEdgesXRayed(frameCtx) {
+    drawEdgesXRayed(renderFlags, frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
-    drawOcclusion(frameCtx) {
+    drawOcclusion(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -666,12 +666,12 @@ class PointsInstancingLayer {
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
-    drawShadow(frameCtx) {
+    drawShadow(renderFlags, frameCtx) {
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
-    drawPickMesh(frameCtx) {
+    drawPickMesh(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -680,13 +680,16 @@ class PointsInstancingLayer {
         }
     }
 
-    drawPickDepths(frameCtx) {
+    drawPickDepths(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._pointsInstancingRenderers.pickDepthRenderer) {
             this._pointsInstancingRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
+    }
+
+    drawPickNormals(renderFlags, frameCtx) {
     }
 
     destroy() {

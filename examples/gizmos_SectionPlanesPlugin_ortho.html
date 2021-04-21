@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>SectionPlanesPlugin</title>
-    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="./css/pageStyle.css" rel="stylesheet" type="text/css"/>
 
     <style>
 
@@ -41,17 +41,16 @@
     <br>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Creates section planes
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Section-Planes">User Guide</a>
+            <a href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
         </li>
     </ul>
 </div>
@@ -107,13 +106,13 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/xkt/duplex/duplex.xkt",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true,
         backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
     });
 
-    model.on("loaded", ()=> {
+    model.on("loaded", () => {
         viewer.cameraFlight.flyTo(model);
     });
 

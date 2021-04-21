@@ -17,9 +17,9 @@
         "typeInference": {"enable": true},
 
         "brand": {
-          "logo": "./images/logo.jpg",
+          "logo": "./assets/images/logo.jpg",
           "title": "xeokit-sdk",
-          "description": "SDK for developing custom 3D viewers",
+          "description": "3D engineering graphics in the browser",
           "repository": "https://github.com/xeokit/xeokit-sdk",
           "site": "http://xeokit.io",
           "author": "http://xeolabs.com",

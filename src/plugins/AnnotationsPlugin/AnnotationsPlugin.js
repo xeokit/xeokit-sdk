@@ -533,7 +533,9 @@ class AnnotationsPlugin extends Plugin {
         this.annotations[annotation.id] = annotation;
         annotation.on("destroyed", () => {
             delete this.annotations[annotation.id];
+            this.fire("annotationDestroyed", annotation.id);
         });
+        this.fire("annotationCreated", annotation.id);
         return annotation;
     }
 

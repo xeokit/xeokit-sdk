@@ -1,36 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Physically-Based Rendering</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: black;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>XKTLoaderPlugin - Physically-Based Rendering</h1><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading a CAD model with physically-based materials</h2>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit XKT model from the file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://sketchfab.com/tflexcad">Model source</a>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html"
+               target="_other">ReflectionMap</a>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="https://sketchfab.com/tflexcad"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -44,9 +53,6 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
-    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -62,56 +68,14 @@
     viewer.camera.look = [2.80, 0.15, 1.83];
     viewer.camera.up = [-0.28, 0.92, -0.26];
 
-    viewer.cameraControl.followPointer = true;
-
-    const sao = viewer.scene.sao.enabled = true;
-
-    viewer.scene.edgeMaterial.edgeColor = [.6, .6, .6];
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Replace the Scene's default lights with three custom world-space DirLights
-    //------------------------------------------------------------------------------------------------------------------
-
-    viewer.scene.gammaInput = true;
-     viewer.scene.gammaOutput = true;
-     viewer.scene.gammaFactor = 2.2;
-
-    viewer.scene.clearLights();
-
-    // new AmbientLight(viewer.scene, {
-    //     id: "myAmbientLight",
-    //     color: [0.3, 0.3, 0.3],
-    //     intensity: 0.2
-    // });
-
-    new DirLight(viewer.scene, {
-        id: "keyLight",
-        dir: [0.8, -0.6, -0.8],
-        color: [1.0, 1.0, 0.8],
-        intensity: 1.0,
-        space: "world"
-    });
-
     new ReflectionMap(viewer.scene, {
         src: [
-            "textures/reflect/desertRoad/px.png",
-            "textures/reflect/desertRoad/nx.png",
-            "textures/reflect/desertRoad/py.png",
-            "textures/reflect/desertRoad/ny.png",
-            "textures/reflect/desertRoad/pz.png",
-            "textures/reflect/desertRoad/nz.png"
-        ],
-        encoding: "sRGB"
-    });
-
-    new LightMap(viewer.scene, {
-        src: [
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+            "./../assets/textures/reflect/desertRoad/px.png",
+            "./../assets/textures/reflect/desertRoad/nx.png",
+            "./../assets/textures/reflect/desertRoad/py.png",
+            "./../assets/textures/reflect/desertRoad/ny.png",
+            "./../assets/textures/reflect/desertRoad/pz.png",
+            "./../assets/textures/reflect/desertRoad/nz.png"
         ],
         encoding: "sRGB"
     });
@@ -128,18 +92,17 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/gearboxPropellorTurbine/gearboxPropellorTurbine.xkt",
-        scale: [8, 8, 8],
-        edges: false,
-        saoEnabled: true
+        src: "../assets/models/xkt/gearboxPropellorTurbine/gearboxPropellorTurbine.xkt",
+        edges: true,
+        saoEnabled: false,
+        pbrEnabled: true,
+        scale: [10, 10, 10]
     });
 
     model.on("loaded", () => {
         var t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
-
-    window.viewer = viewer;
 
 </script>
 </html>

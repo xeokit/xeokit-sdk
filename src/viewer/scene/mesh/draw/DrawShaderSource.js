@@ -75,7 +75,7 @@ function buildVertexLambert(mesh) {
 
     const src = [];
     src.push("// Lambertian drawing vertex shader");
-    if (scene.logarithmicDepthBufferEnabled ) {
+    if (scene.logarithmicDepthBufferEnabled) {
         src.push("#extension GL_EXT_frag_depth : enable");
     }
     src.push("attribute vec3 position;");
@@ -87,7 +87,7 @@ function buildVertexLambert(mesh) {
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
-    if (scene.logarithmicDepthBufferEnabled ) {
+    if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -206,9 +206,9 @@ function buildVertexLambert(mesh) {
                 }
             } else if (light.type === "point") {
                 if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightPos" + i + " - viewPosition.xyz);");
+                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
                 } else {
-                    src.push("viewLightDir = normalize((viewMatrix2 * vec4(lightPos" + i + ", 0.0)).xyz);");
+                    src.push("viewLightDir = -normalize((viewMatrix2 * vec4(lightPos" + i + ", 0.0)).xyz);");
                 }
             } else if (light.type === "spot") {
                 if (light.space === "view") {
@@ -224,7 +224,7 @@ function buildVertexLambert(mesh) {
         }
     }
     //src.push("vColor = vec4((reflectedColor * materialColor) + (lightAmbient.rgb * lightAmbient.a), 1.0) * colorize;");
-    src.push("vColor = vec4(materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
+    src.push("vColor = vec4((lightAmbient.rgb * lightAmbient.a * materialColor.rgb) + materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
@@ -1531,10 +1531,7 @@ function buildFragmentDraw(mesh) {
         // COMBINE TERMS
 
         if (phongMaterial) {
-
-            src.push("ambientColor *= (lightAmbient.rgb * lightAmbient.a);");
-
-            src.push("vec3 outgoingLight =  ((occlusion * (( reflectedLight.diffuse + reflectedLight.specular)))) + emissiveColor;");
+            src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor) + ((occlusion * (( reflectedLight.diffuse + reflectedLight.specular)))) + emissiveColor;");
 
         } else {
             src.push("vec3 outgoingLight = (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");

@@ -1,40 +1,46 @@
+
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel with Batched Geometries and SAO</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #my-gui-container {
-            position: absolute;
-            top: 280px;
-            right: 20px;
-            z-index: 10;
-        }
-
-    </style>
-
-
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>PerformanceModel with Batched Geometries and SAO</h1>
+<div class="slideout-sidebar">
+    <h1>PerformanceModel</h1>
+    <h2>Geometry batching and SAO</h2>
+    <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
+        at the same providing a separate geometry for each object, and rendering with scalable ambient obscurance (SAO).</p>
+    <p>SAO emphasises detail by darkening crevices.</p>
+    <h3>Customize SAO</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html"
+               target="_other">SAO</a>
+        </li>
+    </ul>
 </div>
-
-<div id="my-gui-container"></div>
-
 </body>
+
 
 <script type="module">
 
@@ -65,12 +71,6 @@
     const sao = viewer.scene.sao;
 
     sao.enabled = true; // Only works if supported
-    sao.intensity = 0.20;
-    sao.bias = 0.5;
-    sao.scale = 230.0; // <<------- Scale the SAO effect for this model
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel representing a table with four legs, using geometry batching
@@ -158,12 +158,12 @@
             -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
         ],
         normals: [
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,  0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,  0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
         ],
         indices: [
             0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
-            16, 17, 18, 16, 18, 19,  20, 21, 22, 20, 22, 23
+            16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
         ],
         position: [4, -6, -4],
         scale: [1, 3, 1],
@@ -189,8 +189,8 @@
             -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
         ],
         normals: [
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,  0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,  0, 0, -1, 0, 0, -1, 0, 0,
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0,
             -1, 0, 0, -1
         ],
         indices: [
@@ -221,8 +221,8 @@
             -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
         ],
         normals: [
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,  0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,  0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
         ],
         indices: [
             0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
@@ -252,8 +252,8 @@
             -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
         ],
         normals: [
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,  0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,  0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
         ],
         indices: [
             0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
@@ -325,57 +325,67 @@
     // GUI to play with SAO parameters
     //------------------------------------------------------------------------------------------------------------------
 
-    const camera = viewer.camera;
+    const camera = viewer.scene.camera;
 
-    var saoParams = new function () {
+    const saoParams = new function () {
         this.enabled = sao.enabled;
         this.kernelRadius = sao.kernelRadius;
         this.intensity = sao.intensity;
         this.bias = sao.bias;
         this.scale = sao.scale;
         this.minResolution = sao.minResolution;
+        this.numSamples = sao.numSamples;
+        this.blendFactor = sao.blendFactor;
+        this.blendCutoff = sao.blendCutoff;
         this.blur = sao.blur;
         this.perspective = (camera.projection === "perspective");
         this.far = camera.perspective.far;
+        this.fov = camera.perspective.fov;
     }();
 
-    var update = function () {
+    const update = function () {
         sao.enabled = saoParams.enabled;
         sao.kernelRadius = saoParams.kernelRadius;
         sao.intensity = saoParams.intensity;
         sao.bias = saoParams.bias;
         sao.scale = saoParams.scale;
         sao.minResolution = saoParams.minResolution;
+        sao.numSamples = saoParams.numSamples;
+        sao.blendFactor = saoParams.blendFactor;
+        sao.blendCutoff = saoParams.blendCutoff;
         sao.blur = saoParams.blur;
         camera.projection = saoParams.perspective ? "perspective" : "ortho";
         camera.perspective.far = saoParams.far;
         camera.ortho.far = saoParams.far;
+        camera.perspective.fov = saoParams.fov;
         requestAnimationFrame(update);
     };
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false});
+    const gui = new dat.GUI({autoPlace: false, width:"100%"});
 
     const saoFolder = gui.addFolder('SAO');
     saoFolder.add(saoParams, 'enabled');
     saoFolder.add(saoParams, 'bias', -2, 2);
     saoFolder.add(saoParams, 'intensity', 0, 1.0);
-    saoFolder.add(saoParams, 'scale', 0, 2000);
+    saoFolder.add(saoParams, 'scale', .05, 5);
     saoFolder.add(saoParams, 'kernelRadius', 1, 200);
-    saoFolder.add(saoParams, 'minResolution', 0, 1);
+    saoFolder.add(saoParams, 'minResolution', 0, 0.001);
+    saoFolder.add(saoParams, 'numSamples', 4, 100);
+    saoFolder.add(saoParams, 'blendFactor', 0, 2);
+    saoFolder.add(saoParams, 'blendCutoff', 0, 2);
     saoFolder.add(saoParams, 'blur');
     saoFolder.open();
 
     const cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(saoParams, 'perspective');
-    cameraFolder.add(saoParams, 'far', 100, 5000);
+    cameraFolder.add(saoParams, 'far', 100, 20000);
+    cameraFolder.add(saoParams, 'fov', 10, 120);
     cameraFolder.open();
 
-    var customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
-
-
 
 </script>
 </html>

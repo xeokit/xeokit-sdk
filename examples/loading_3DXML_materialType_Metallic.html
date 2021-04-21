@@ -1,29 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XML3DLoaderPlugin - Metallic Materials</title>
-    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>XML3DLoaderPlugin - Metallic Material Workflow</h1>
+<div class="slideout-sidebar">
+    <h1>XML3DLoaderPlugin</h1>
+    <h2>Metallic/rough PBR material workflow</h2>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a>
-            - Loads a 3DXML model from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a>
-            - Creates reflections
+            <a href="./../docs/class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html"
+               target="_other">XML3DLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+            <a href="./../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html"
+               target="_other">ReflectionMap</a>
         </li>
     </ul>
 </div>
@@ -58,18 +62,18 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "textures/reflect/desertRoad/px.png",
-            "textures/reflect/desertRoad/nx.png",
-            "textures/reflect/desertRoad/py.png",
-            "textures/reflect/desertRoad/ny.png",
-            "textures/reflect/desertRoad/pz.png",
-            "textures/reflect/desertRoad/nz.png"
+            "./../assets/textures/reflect/desertRoad/px.png",
+            "./../assets/textures/reflect/desertRoad/nx.png",
+            "./../assets/textures/reflect/desertRoad/py.png",
+            "./../assets/textures/reflect/desertRoad/ny.png",
+            "./../assets/textures/reflect/desertRoad/pz.png",
+            "./../assets/textures/reflect/desertRoad/nz.png"
         ],
         encoding: "sRGB"
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Load 3DXML model and fit it to view, then start orbiting the camera
+    // Load 3DXML model and fit it to view
     //------------------------------------------------------------------------------------------------------------------
 
     const xml3dLoader = new XML3DLoaderPlugin(viewer, {
@@ -78,16 +82,13 @@
 
     const model = xml3dLoader.load({
         id: "myModel",
-        src: "./models/xml3d/3dpreview.3dxml",
+        src: "../assets/models/xml3d/3dpreview.3dxml",
         materialType: "MetallicMaterial", // <<----------- Create MetallicMaterials
         edges: true
     });
 
     model.on("loaded", () => {
         viewer.cameraFlight.jumpTo(model);
-        viewer.scene.on("tick", () => {
-            viewer.camera.orbitYaw(0.4);
-        })
     });
 
 </script>

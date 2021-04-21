@@ -234,6 +234,12 @@ function load(viewer, options, inflatedData, performanceModel) {
                     if (props.opacity !== undefined && props.opacity !== null) {
                         meshDefaults.opacity = props.opacity;
                     }
+                    if (props.metallic !== undefined && props.metallic !== null) {
+                        meshDefaults.metallic = props.metallic;
+                    }
+                    if (props.roughness !== undefined && props.roughness !== null) {
+                        meshDefaults.roughness = props.roughness;
+                    }
                 }
 
             } else {
@@ -280,15 +286,15 @@ function load(viewer, options, inflatedData, performanceModel) {
                         let geometryEdgeIndices;
 
                         switch (primitiveType) {
-                            case 0: // Solid
-                                primitiveName = "triangles";
+                            case 0:
+                                primitiveName = "solid";
                                 geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                                 geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                                 geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                                 geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
                                 break;
-                            case 1: // Surface
-                                primitiveName = "triangles";
+                            case 1:
+                                primitiveName = "surface";
                                 geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                                 geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                                 geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
@@ -347,15 +353,15 @@ function load(viewer, options, inflatedData, performanceModel) {
                     let geometryEdgeIndices;
 
                     switch (primitiveType) {
-                        case 0: // Solid
-                            primitiveName = "triangles";
+                        case 0:
+                            primitiveName = "solid";
                             geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                             geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                             geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
                             break;
-                        case 1: // Surface
-                            primitiveName = "triangles";
+                        case 1:
+                            primitiveName = "surface";
                             geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                             geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);

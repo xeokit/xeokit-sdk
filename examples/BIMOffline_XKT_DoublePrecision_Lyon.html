@@ -1,27 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>XKTLoaderPlugin - Loading Nine CityGML Models from the File System</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
 
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #myNavCubeCanvas {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            bottom: 50px;
-            right: 10px;
-            z-index: 200000;
-        }
-
-        .camera-pivot-marker {
+        .xeokit-camera-pivot-marker {
             color: #ffffff;
             position: absolute;
             width: 25px;
@@ -35,30 +23,52 @@
             pointer-events: none;
         }
 
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
     </style>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info">
-    <h1>XKTLoaderPlugin - Loading Nine CityGML Models from the File System</h1><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading nine double-precision BIM models from the file system</h2>
+    <p>These models represent nine districts within the city of Lyon. They were converted from CityGML to xeokit's
+        native XKT model format.</p>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
-        <li>Models provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Double-precision IFC models provided by <a href="https://bimdata.io" target="_other">BIMData.io</a>
+        </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -72,12 +82,6 @@
     import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
     import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {buildPlaneGeometry} from "../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -114,7 +118,7 @@
 
     viewer.cameraControl.followPointer = true;
 
-    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
     viewer.cameraControl.pivotElement = pivotElement;
 
@@ -123,31 +127,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.edgeMaterial.edgeColor = [.3, .3, .3];
-
-    //----------------------------------------------------------------------------------------------------------------------
-    // Configure ambient shadows
-    //----------------------------------------------------------------------------------------------------------------------
-
-    const sao = viewer.scene.sao;
-    sao.enabled = false;
-    sao.bias = 0.5;
-    sao.intensity = 0.5;
-    sao.scale = ((viewer.camera.perspective.far - viewer.camera.perspective.near) * 0.3);
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
-
-    /*
-    // For logarithmic depth buffer:
-    const sao = viewer.scene.sao;
-    sao.enabled = false;
-    sao.bias = 0.5;
-    sao.intensity = 0.1;
-    sao.scale = 500;
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
-     */
 
     //------------------------------------------------------------------------------------------------------------------
     // Replace the Scene's default lights
@@ -173,24 +152,6 @@
         intensity: 0.4,
         space: "world"
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a ground plane
-    //------------------------------------------------------------------------------------------------------------------
-
-    // new Mesh(viewer.scene, {
-    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-    //         xSize: 700000,
-    //         zSize: 700000
-    //     })),
-    //     material: new PhongMaterial(viewer.scene, {
-    //         diffuse: [0.3, 0.5, 0.1],
-    //         // alpha: 0.0,
-    //         alphaMode: "opaque"
-    //     }),
-    //     position: [1842215.561857325, -5.53293939639616, -5177009.767748618],
-    //     collidable: false
-    // });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a NavCube
@@ -231,7 +192,7 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-            //    viewer.scene.sao.enabled = true;
+                //    viewer.scene.sao.enabled = true;
                 viewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }
@@ -250,7 +211,7 @@
 
     xktLoader.load({
         id: "lyon1",
-        src: "./models/xkt/Lyon/Lyon1.xkt",
+        src: "../assets/models/xkt/Lyon/Lyon1.xkt",
         edges: true, saoEnabled: true
     }).on("loaded", () => {
 
@@ -258,7 +219,7 @@
 
         xktLoader.load({
             id: "lyon2",
-            src: "./models/xkt/Lyon/Lyon2.xkt",
+            src: "../assets/models/xkt/Lyon/Lyon2.xkt",
             edges: true, saoEnabled: true
         }).on("loaded", () => {
 
@@ -266,7 +227,7 @@
 
             xktLoader.load({
                 id: "lyon3",
-                src: "./models/xkt/Lyon/Lyon3.xkt",
+                src: "../assets/models/xkt/Lyon/Lyon3.xkt",
                 edges: true, saoEnabled: true
             }).on("loaded", () => {
 
@@ -274,7 +235,7 @@
 
                 xktLoader.load({
                     id: "lyon4",
-                    src: "./models/xkt/Lyon/Lyon4.xkt",
+                    src: "../assets/models/xkt/Lyon/Lyon4.xkt",
                     edges: true, saoEnabled: true
                 }).on("loaded", () => {
 
@@ -282,7 +243,7 @@
 
                     xktLoader.load({
                         id: "Lyon5",
-                        src: "./models/xkt/Lyon/Lyon5.xkt",
+                        src: "../assets/models/xkt/Lyon/Lyon5.xkt",
                         edges: true, saoEnabled: true
                     }).on("loaded", () => {
 
@@ -290,7 +251,7 @@
 
                         xktLoader.load({
                             id: "Lyon6",
-                            src: "./models/xkt/Lyon/Lyon6.xkt",
+                            src: "../assets/models/xkt/Lyon/Lyon6.xkt",
                             edges: true, saoEnabled: true
                         }).on("loaded", () => {
 
@@ -298,7 +259,7 @@
 
                             xktLoader.load({
                                 id: "Lyon7",
-                                src: "./models/xkt/Lyon/Lyon7.xkt",
+                                src: "../assets/models/xkt/Lyon/Lyon7.xkt",
                                 edges: true, saoEnabled: true
                             }).on("loaded", () => {
 
@@ -306,7 +267,7 @@
 
                                 xktLoader.load({
                                     id: "Lyon8",
-                                    src: "./models/xkt/Lyon/Lyon8.xkt",
+                                    src: "../assets/models/xkt/Lyon/Lyon8.xkt",
                                     edges: true, saoEnabled: true
                                 }).on("loaded", () => {
 
@@ -314,7 +275,7 @@
 
                                     const lyon9 = xktLoader.load({
                                         id: "Lyon9",
-                                        src: "./models/xkt/Lyon/Lyon9.xkt",
+                                        src: "../assets/models/xkt/Lyon/Lyon9.xkt",
                                         edges: true, saoEnabled: true
                                     });
 

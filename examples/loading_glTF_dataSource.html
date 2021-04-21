@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>Configuring GLTFLoaderPlugin with a custom data source</title>
-    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="./css/pageStyle.css" rel="stylesheet" type="text/css"/>
 
     <style>
 
@@ -16,36 +16,40 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            padding-top: 25px;
-            pointer-events: all;
+            pointer-events: none;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
+            background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 0;
+            top: 60px;
             z-index: 200000;
             float: left;
             left: 0;
+            padding-left: 10px;
             font-family: 'Roboto', sans-serif;
             font-size: 15px;
             user-select: none;
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 550px;
+            width: 350px;
         }
 
         #treeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
+            pointer-events: none;
         }
 
         #treeViewContainer ul li {
             position: relative;
             width: 500px;
-
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
         }
 
         #treeViewContainer ul li a {
@@ -59,24 +63,38 @@
             text-align: center;
             text-decoration: none;
             width: 1.5em;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.plus {
             background-color: #ded;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.minus {
             background-color: #eee;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a:active {
             top: 1px;
+            pointer-events: all;
+        }
+
+        #treeViewContainer ul li span:hover {
+            color: white;
+            cursor: pointer;
+            background: black;
+            padding-left: 2px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span {
             display: inline-block;
             width: calc(100% - 50px);
             padding-left: 2px;
+            pointer-events: all;
+            height:23px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -85,6 +103,7 @@
             color: black;
             padding-left: 1px;
             padding-right: 5px;
+            pointer-events: all;
         }
 
     </style>
@@ -100,22 +119,21 @@
     <h1>Configuring GLTFLoaderPlugin with a custom data source</h1>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view of IFC containment hierarchy
+            <a href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
-                Guide</a>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -158,7 +176,7 @@
     // Load model and metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    // Custom data access strategy - implementation happens to be the same as GLTFDefaultDataSource
+    // Custom assets access strategy - implementation happens to be the same as GLTFDefaultDataSource
     class MyDataSource {
 
         constructor() {
@@ -208,8 +226,8 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/duplex/scene.gltf",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 

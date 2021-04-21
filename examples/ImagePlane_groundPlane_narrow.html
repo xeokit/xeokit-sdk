@@ -1,49 +1,49 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>ImagePlane - Satellite Image Ground Plane - Narrow Version</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: #c3d4f7;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>ImagePlane - Ground Plane using a Google Maps Satellite Image - Narrow Version</h1>
     <br>
     <p>Using a narrow image to demonstrate the ImagePlane's automatic sizing for image aspect.</p>
     <br>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a> - Creates ground plane
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html"
+               target="_other">ImagePlane</a>
         </li>
         <li>
             <a
-                href="./images/schependomlaanSatMap_narrow.png">Satellite image</a> from Google Maps
+                    href="../assets/images/schependomlaanSatMap_narrow.png">Satellite image</a> from Google Maps
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan">Model source</a>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model
+                source</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
@@ -57,7 +57,7 @@
     });
 
     viewer.camera.eye = [-93.90, 90.78, 136.73];
-    viewer.camera.look =  [1.89, -19.18, -17.71];
+    viewer.camera.look = [1.89, -19.18, -17.71];
     viewer.camera.up = [0.27, 0.85, -0.43];
 
     viewer.cameraControl.followPointer = true;
@@ -100,8 +100,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         edges: true,
         rotation: [0, 22, 0],
         position: [-8, 0, 15],
@@ -113,7 +113,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new ImagePlane(viewer.scene, {
-        src: "./images/schependomlaanSatMap_narrow.png",
+        src: "./../assets/images/schependomlaanSatMap_narrow.png",
         size: 190,
         position: [0, -1, 0],
         rotation: [0, 0, 0], // X, Y and Z

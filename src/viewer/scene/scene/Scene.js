@@ -608,6 +608,8 @@ class Scene extends Component {
 
             this.sectionPlanes = [];
 
+            this.clippingCaps = false;
+
             let hash = null;
 
             this.getHash = function () {
@@ -827,15 +829,22 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [1.0, 1.0, 1.0],
+            color: [0.9, 0.9, 0.9],
             intensity: 0.9
         });
 
         new DirLight(this, {
-            dir: [0.8, -1.0, -0.8],
-            color: [1.0, 1.0, 1.0],
-            intensity: 1.0,
-            space: "view"
+            dir: [0.8, -.5, -0.5],
+            color: [0.67, 0.67, 1.0],
+            intensity: 0.7,
+            space: "world"
+        });
+
+        new DirLight(this, {
+            dir: [-0.8, -1.0, 0.5],
+            color: [1, 1, .9],
+            intensity: 0.9,
+            space: "world"
         });
 
         this._camera.on("dirty", () => {

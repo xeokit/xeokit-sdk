@@ -4,7 +4,7 @@ import {RenderState} from '../webgl/RenderState.js';
 const PRESETS = {
     "default": {
         pointSize: 4,
-        roundPoints: false,
+        roundPoints: true,
         perspectivePoints: true
     },
     "square": {
@@ -86,7 +86,7 @@ class PointsMaterial extends Material {
      * @param {*} [cfg] The PointsMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {Number} [cfg.pointSize=2] Point size in pixels.
-     * @param {Boolean} [cfg.roundPoints=false] Whether points are round (````true````) or square (````false````).
+     * @param {Boolean} [cfg.roundPoints=true] Whether points are round (````true````) or square (````false````).
      * @param {Boolean} [cfg.perspectivePoints=true] Whether apparent point size reduces with distance when {@link Camera#projection} is set to "perspective".
      * @param {Number} [cfg.minPerspectivePointSize=1] When ````perspectivePoints```` is ````true````, this is the minimum rendered size of each point in pixels.
      * @param {Number} [cfg.maxPerspectivePointSize=6] When ````perspectivePoints```` is ````true````, this is the maximum rendered size of each point in pixels.
@@ -159,12 +159,12 @@ class PointsMaterial extends Material {
     /**
      * Sets if points are round or square.
      *
-     * Default is ````false```` to set points square.
+     * Default is ````true```` to set points round.
      *
      * @type {Boolean}
      */
     set roundPoints(value) {
-        value = !!value;
+        value = (value !== false);
         if (this._state.roundPoints === value) {
             return;
         }
@@ -176,7 +176,7 @@ class PointsMaterial extends Material {
     /**
      * Gets if points are round or square.
      *
-     * Default is ````false```` to set points square.
+     * Default is ````true```` to set points round.
      *
      * @type {Boolean}
      */

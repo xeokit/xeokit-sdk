@@ -1,17 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Loading Seven BIM Models from the File System</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-
         #myNavCubeCanvas {
             position: absolute;
             width: 250px;
@@ -23,36 +19,39 @@
     </style>
 
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info">
-    <h1>XKTLoaderPlugin - Loading Seven BIM Models from the File System</h1><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading seven BIM models from the file system</h2>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
         <li>
-            Architectural, Structure, Electrical, Fire Alarms, Sprinklers, Plumbing and Mechanical models are from the Autodesk <a target="_other"
-                                                                                                      href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/305">West
-            RiverSide
-            Hospital</a> example
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            docs
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/305" target="_other">Model source</a>
         </li>
     </ul>
 </div>
-</body>
+</body>v
+
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
@@ -101,8 +100,8 @@
 
     const mechanical = xktLoader.load({
         id: "mechanical",
-        src: "./models/xkt/WestRiverSideHospital/mechanical.xkt",
-        metaModelSrc: "./metaModels/WestRiverSideHospital/mechanical.json",
+        src: "../assets/models/xkt/WestRiverSideHospital/mechanical.xkt",
+        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/mechanical.json",
         edges: true
     });
 
@@ -112,8 +111,8 @@
 
         const plumbing = xktLoader.load({
             id: "plumbing",
-            src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
-            metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
+            src: "../assets/models/xkt/WestRiverSideHospital/plumbing.xkt",
+            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/plumbing.json",
             edges: true
         });
 
@@ -123,8 +122,8 @@
 
             const electrical = xktLoader.load({
                 id: "electrical",
-                src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
-                metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
+                src: "../assets/models/xkt/WestRiverSideHospital/electrical.xkt",
+                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/electrical.json",
                 edges: true
             });
 
@@ -134,8 +133,8 @@
 
                 const fireAlarms = xktLoader.load({
                     id: "fireAlarms",
-                    src: "./models/xkt/WestRiverSideHospital/fireAlarms.xkt",
-                    metaModelSrc: "./metaModels/WestRiverSideHospital/fireAlarms.json",
+                    src: "../assets/models/xkt/WestRiverSideHospital/fireAlarms.xkt",
+                    metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/fireAlarms.json",
                     edges: true
                 });
 
@@ -145,8 +144,8 @@
 
                     const sprinklers = xktLoader.load({
                         id: "sprinklers",
-                        src: "./models/xkt/WestRiverSideHospital/sprinklers.xkt",
-                        metaModelSrc: "./metaModels/WestRiverSideHospital/sprinklers.json",
+                        src: "../assets/models/xkt/WestRiverSideHospital/sprinklers.xkt",
+                        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/sprinklers.json",
                         edges: true
                     });
 
@@ -156,8 +155,8 @@
 
                         const structure = xktLoader.load({
                             id: "structure",
-                            src: "./models/xkt/WestRiverSideHospital/structure.xkt",
-                            metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+                            src: "../assets/models/xkt/WestRiverSideHospital/structure.xkt",
+                            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/structure.json",
                             edges: true,
                             Zxrayed: true
                         });
@@ -168,8 +167,8 @@
 
                             const architectural = xktLoader.load({
                                 id: "architectural",
-                                src: "./models/xkt/WestRiverSideHospital/architectural.xkt",
-                                metaModelSrc: "./metaModels/WestRiverSideHospital/architectural.json",
+                                src: "../assets/models/xkt/WestRiverSideHospital/architectural.xkt",
+                                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/architectural.json",
                                 edges: true
                             });
 

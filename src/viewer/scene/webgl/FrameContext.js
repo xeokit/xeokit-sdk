@@ -34,6 +34,12 @@ class FrameContext {
         this._rtcPickViewMats = {};
 
         /**
+         * The WebGL rendering context.
+         * @type {WebGLRenderingContext}
+         */
+        this.gl = this._scene.canvas.gl;
+
+        /**
          * ID of the last {@link WebGLProgram} that was bound during the current frame.
          * @property lastProgramId
          * @type {Number}
@@ -81,7 +87,7 @@ class FrameContext {
         this.frontface = true;
 
         /**
-         * The next available texture unit to bind a {@link webgl.Texture} to.
+         * The next available texture unit to bind a {@link Texture} to.
          * @defauilt 0
          * @property textureUnit
          * @type {number}

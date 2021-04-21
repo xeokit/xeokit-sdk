@@ -1,27 +1,71 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel with Batched Geometries and PBR</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: black;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>PerformanceModel with Batched Geometries and PBR</h1>
+<div class="slideout-sidebar">
+    <h1>PerformanceModel</h1>
+    <h2>Geometry batching and physically-based rendering</h2>
+    <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
+        at the same time providing a separate geometry for each object, and using PerformanceModel's additional metallic
+        and roughness
+        properties for physically-based rendering (PBR).</p>
+    <p>PBR shades objects using a physically-correct shading model, for more realism.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/lights/DirLight.js~DirLight.html"
+               target="_other">DirLight</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/lights/LightMap.js~LightMap.html"
+               target="_other">LightMap</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html"
+               target="_other">ReflectionMap</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="./../docs/function/index.html#static-function-buildSphereGeometry"
+               target="_other">buildSphereGeometry</a>
+        </li>
+        <li>
+            <a href="./../docs/function/index.html#static-function-buildVectorTextGeometry"
+               target="_other">buildVectorTextGeometry</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+    </ul>
 </div>
-
 </body>
+
 
 <script type="module">
 
@@ -85,24 +129,24 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "textures/reflect/desertRoad/px.png",
-            "textures/reflect/desertRoad/nx.png",
-            "textures/reflect/desertRoad/py.png",
-            "textures/reflect/desertRoad/ny.png",
-            "textures/reflect/desertRoad/pz.png",
-            "textures/reflect/desertRoad/nz.png"
+            "./../assets/textures/reflect/desertRoad/px.png",
+            "./../assets/textures/reflect/desertRoad/nx.png",
+            "./../assets/textures/reflect/desertRoad/py.png",
+            "./../assets/textures/reflect/desertRoad/ny.png",
+            "./../assets/textures/reflect/desertRoad/pz.png",
+            "./../assets/textures/reflect/desertRoad/nz.png"
         ],
         encoding: "sRGB"
     });
 
     new LightMap(viewer.scene, {
         src: [
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "./../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
         encoding: "sRGB"
     });
@@ -112,7 +156,8 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
-        id: "pbrMetalRoughness"
+        id: "pbrMetalRoughness",
+        pbrEnabled: true
     });
 
     let numObjects = 0;
@@ -176,8 +221,8 @@
             size: .7
         })),
         material: new PhongMaterial(viewer.scene, {
-            emissive: [1.0, 1.0, 1.0],
-            lineWidth: 2
+            diffuse: [0, 0, 0],
+            lineWidth: 1
         }),
         position: [min, max + inc, 0]
     });
@@ -188,8 +233,8 @@
             size: .5
         })),
         material: new PhongMaterial(viewer.scene, {
-            emissive: [1.0, 1.0, 1.0],
-            lineWidth: 2
+            diffuse: [0, 0, 0],
+            lineWidth: 1
         }),
         rotation: [0, 0, 270],
         position: [min - inc, max, 0]
@@ -201,8 +246,8 @@
             size: .5
         })),
         material: new PhongMaterial(viewer.scene, {
-            emissive: [1.0, 1.0, 1.0],
-            lineWidth: 2
+            diffuse: [0, 0, 0],
+            lineWidth: 1
         }),
         position: [min, min - inc, 0]
     });

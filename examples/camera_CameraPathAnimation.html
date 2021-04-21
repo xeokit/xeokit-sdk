@@ -1,46 +1,52 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>CameraPathAnimation</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightblue;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>CameraPathAnimation</h1>
+    <h2>Animating the camera along a path</h2>
+    <p>In this example, we load a BIM model from the file system, then fly the camera along a pre-defined path that passes
+        through the model.</p>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit .XKT model from the file system
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/301">Model source</a>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a>
-            - defines camera path
+            <a href="./../docs/class/src/viewer/scene/camera/CameraPath.js~CameraPath.html"
+               target="_other">CameraPath</a>
         </li>
 
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a>
-            - animates camera along path
+            <a href="./../docs/class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html"
+               target="_other">CameraPathAnimation</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/301"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -101,13 +107,13 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
-        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true
+        src: "../assets/models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+        metaModelSrc: "./../assets/metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: false
     });
 
     new Skybox(viewer.scene, {
-        src: "textures/skybox/cloudySkyBox.jpg",
+        src: "./../assets/textures/skybox/cloudySkyBox.jpg",
         size: 1000
     });
 

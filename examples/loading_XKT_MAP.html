@@ -1,44 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - MAP model from XKT</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-
-        #my-gui-container {
-            position: absolute;
-            top: 350px;
-            right: 20px;
-            z-index: 10;
-        }
-    </style>
-
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="my-gui-container"></div>
-<div id="info">
-    <h1>XKTLoaderPlugin - Double-precision MAP model loaded from XKT 7</h1><br>
+<div class="slideout-sidebar">
+    <h1>Rounding Jitter Fixed with XKT V7</h1><br>
+    <p>Model is loaded from XKT, which supports full-precision geometry, which fixes rounding jitter</p><br>
     <ul>
-        <li>
-            <div id="time">Loading JavaScript modules...</div>
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit XKT model from the file system
-        </li>
-        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+        <li>Model center is [1842022, 10, -5173301]</li>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
 </body>
@@ -60,9 +39,9 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-33.39, 19.86, 16.48];
-    viewer.scene.camera.look = [8.29, 8.28, 0.31];
-    viewer.scene.camera.up = [0.23, 0.96, -0.09];
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
     viewer.cameraControl.navMode = "orbit";
     viewer.cameraControl.followPointer = true;
@@ -79,8 +58,10 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/MAP/MAP.v7.xkt",
-        edges: true
+        src: "../assets/models/xkt/MAP/MAP.v7.xkt",
+        edges: true,
+        excludeTypes: ["IfcSpace"],
+        objectDefaults: {}
     });
 
     model.on("loaded", () => {

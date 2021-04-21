@@ -2,9 +2,47 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.7.0
+# 1.8.0
 
-Unreleased
+April 21, 2021
+
+Rendering, performance and QA improvements.
+
+* General
+  * Automatic visual tests. [#501](https://github.com/xeokit/xeokit-sdk/issues/501) ([**@xeolabs**](https://github.com/xeolabs))
+  * Improve examples UX. [#617](https://github.com/xeokit/xeokit-sdk/issues/617) ([**@xeolabs**](https://github.com/xeolabs))
+* AnnotationsPlugin
+  * Add AnnotationsPlugin "annotationCreated" and "annotationDestroyed" events. [#597](https://github.com/xeokit/xeokit-sdk/issues/597) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControl
+  * Fix CameraControl double-click. [#602](https://github.com/xeokit/xeokit-sdk/issues/602) ([**@xeolabs**](https://github.com/xeolabs))
+  * Touch picking support. [#608](https://github.com/xeokit/xeokit-sdk/issues/608) ([**@xeolabs**](https://github.com/xeolabs))
+* FastNavPlugin
+  * FastNavPlugin - disables SAO and PBR while camera moving. [#601](https://github.com/xeokit/xeokit-sdk/issues/601) ([**@xeolabs**](https://github.com/xeolabs))
+* Mesh
+  * Fix ambient lighting for PBR, Phong and Lambert shaders. [#609](https://github.com/xeokit/xeokit-sdk/issues/608) ([**@xeolabs**](https://github.com/xeolabs))
+* PointLight
+  * Fix PointLight shading direction. [#612](https://github.com/xeokit/xeokit-sdk/issues/612) ([**@xeolabs**](https://github.com/xeolabs))
+* PointsMaterial
+  * Set PointsMaterial#roundPoints true by default. [#613](https://github.com/xeokit/xeokit-sdk/issues/613) ([**@xeolabs**](https://github.com/xeolabs))
+* SAO  
+  * Make SAO automatically work for all far clipping plane distances #598. [#598](https://github.com/xeokit/xeokit-sdk/issues/598) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix halo artifacts in SAO blur. [#594](https://github.com/xeokit/xeokit-sdk/issues/594) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix PerformanceModel SAO shader breakage with logarithmic depth buffer. [#592](https://github.com/xeokit/xeokit-sdk/issues/592) ([**@xeolabs**](https://github.com/xeolabs))
+* SectionPlane, SectionPlanesPlugin
+  * Show backfaces on solid meshes when sliced by SectionPlanes. [#600](https://github.com/xeokit/xeokit-sdk/issues/600) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+  * Improve default lighting. [#605](https://github.com/xeokit/xeokit-sdk/issues/605) ([**@xeolabs**](https://github.com/xeolabs))
+  * Option to include gizmos in canvas snapshots. [#606](https://github.com/xeokit/xeokit-sdk/issues/606) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin, PerformanceModel
+  * Fix missing backfaces. [#596](https://github.com/xeokit/xeokit-sdk/issues/596) ([**@xeolabs**](https://github.com/xeolabs))
+  * Improved edge coloring. [#595](https://github.com/xeokit/xeokit-sdk/issues/595) ([**@xeolabs**](https://github.com/xeolabs))
+  * Make XKTLoaderPlugin load most colors from model by default. [#604](https://github.com/xeokit/xeokit-sdk/issues/604) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix disappearing loading spinner for XKTLoaderPlugin. [#603](https://github.com/xeokit/xeokit-sdk/issues/603) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix picking for PerformanceModel with instanced "points" geometry. [#619](https://github.com/xeokit/xeokit-sdk/issues/619) ([**@xeolabs**](https://github.com/xeolabs))
+  
+# 1.7.1
+
+March 18, 2021
 
 Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera control fixes.    
 
@@ -13,6 +51,7 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
 * CameraControl
   * Fix dollying exception for ortho and frustum projections. [#547](https://github.com/xeokit/xeokit-sdk/issues/547) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix canvas position for touch events on canvas with margins. [#588](https://github.com/xeokit/xeokit-sdk/issues/588) ([**@xeolabs**](https://github.com/xeolabs))
+  * Enable CameraControl follow pointer mode by default. [#585](https://github.com/xeokit/xeokit-sdk/issues/585) ([**@xeolabs**](https://github.com/xeolabs))
 * DirLight, PointLight
   * Fix lighting for PerformanceModel with instanced geometry. [#545](https://github.com/xeokit/xeokit-sdk/pull/545) ([**@xeolabs**](https://github.com/xeolabs))
   * Minimal default lights for better performance. [#543](https://github.com/xeokit/xeokit-sdk/pull/543) ([**@xeolabs**](https://github.com/xeolabs))
@@ -26,6 +65,8 @@ Faster rendering, XKT, STL and OBJ loading enhancements, lighting and camera con
   * Extend STLLoaderPlugin to support double-precision geometry. [#579](https://github.com/xeokit/xeokit-sdk/issues/579) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to load via optional, custom data source object. [#578](https://github.com/xeokit/xeokit-sdk/issues/578) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend STLLoaderPlugin to handle data directly, not only loaded from file. [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
+* TreeViewPlugin 
+  * Make TreeViewPlugin robust for invalid metadata.  [#572](https://github.com/xeokit/xeokit-sdk/issues/572) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin, PerformanceModel
   * Ability to cancel XKT model loading. [#565](https://github.com/xeokit/xeokit-sdk/issues/565) ([**@xeolabs**](https://github.com/xeolabs))
   * Configurable max geometry batching size for PerformanceModel and XKTLoaderPlugin. [#559](https://github.com/xeokit/xeokit-sdk/issues/559) ([**@xeolabs**](https://github.com/xeolabs))

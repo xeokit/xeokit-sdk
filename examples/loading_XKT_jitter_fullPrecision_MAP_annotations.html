@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Full-Precision Model with Annotations</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
         #myCanvas {
             width: 100%;
@@ -86,15 +88,40 @@
     </style>
 
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Full-Precision Model with Annotations</h1><br>
-    <p>Model is loaded from XKT V6, which supports full-precision geometry, which fixes rounding jitter</p><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Full-precision BIM model with annotations</h2>
+    <p>In this example, we're loading a double-precision BIM model, which xeokit renders using double-precision
+        emulation. This eliminates "rounding jitter" while rendering.</p>
+    <p>After the model has loaded, we then programmatically attach some annotations to it.</p>
     <ul>
         <li>Model center is [1842022, 10, -5173301]</li>
-        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+        <li>
+            <a href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html"
+               target="_other">AnnotationsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li><a href="https://www.notion.so/xeokit/Viewing-Double-Precision-Models-3f9e155fd1394d1f974474484decf31b"
+               target="_other">Tutorial</a></li>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
 </body>
@@ -117,12 +144,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-3.933, 2.855, 27.018];
-    viewer.camera.look = [4.400, 3.724, 8.899];
-    viewer.camera.up = [-0.018, 0.999, 0.039];
-
-    viewer.camera.orbitPitch(20);
-    viewer.camera.orbitYaw(100);
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
     viewer.cameraControl.followPointer = true;
 
@@ -138,21 +162,15 @@
 
     const model1 = xktLoader.load({
         id: "myModel1",
-        src: "./models/xkt/MAP/MAP.v6.xkt",
-        metaModelSrc: "./metaModels/MAP/metaModel.json",
-        edges: true
-    });
-
-    model1.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model1);
-    });
-
-    viewer.scene.on("tick", () => {
-          viewer.scene.camera.orbitYaw(1.0);
+        src: "../assets/models/xkt/MAP/MAP.v7.xkt",
+        metaModelSrc: "./../assets/metaModels/MAP/metaModel.json",
+        edges: true,
+        excludeTypes: ["IfcSpace"],
+        objectDefaults: {}
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an AnnotationsPlugin, then create some annotations
+    // When the model has loaded, create some annotations
     //------------------------------------------------------------------------------------------------------------------
 
     const annotations = new AnnotationsPlugin(viewer, {
@@ -171,56 +189,65 @@
         annotation.labelShown = !annotation.labelShown;
     });
 
-    annotations.createAnnotation({
-        id: "a1",
-        worldPos: [1842036.164901515, 2.2709207218137575, -5173304.935329479],
-        occludable: true,
-        markerShown: true,
-        labelShown: true,
-        values: {
-            glyph: "A1",
-            title: "My annotation 1",
-            description: "My description 1"
-        },
-    });
+    model1.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model1);
 
-    annotations.createAnnotation({
-        id: "a2",
-        worldPos: [1842016.7502089352, 16.116118310916697, -5173304.496801555],
-        occludable: true,
-        markerShown: true,
-        labelShown: true,
-        values: {
-            glyph: "A2",
-            title: "My annotation 2",
-            description: "My description 2"
-        },
-    });
+        viewer.scene.on("tick", () => {
+            viewer.scene.camera.orbitYaw(1.0);
+        });
 
-    annotations.createAnnotation({
-        id: "a3",
-        worldPos: [1842009.1252660889, 0.22266775344006823, -5173293.303721189],
-        occludable: true,
-        markerShown: true,
-        labelShown: true,
-        values: {
-            glyph: "A3",
-            title: "My annotation 3",
-            description: "My description 3"
-        },
-    });
+        annotations.createAnnotation({
+            id: "a1",
+            worldPos: [1842036.164901515, 2.2709207218137575, -5173304.935329479],
+            occludable: true,
+            markerShown: true,
+            labelShown: true,
+            values: {
+                glyph: "A1",
+                title: "My annotation 1",
+                description: "My description 1"
+            },
+        });
 
-    annotations.createAnnotation({
-        id: "a4",
-        worldPos: [1842021.0555786698, 22.064205794296942, -5173293.94533045],
-        occludable: true,
-        markerShown: true,
-        labelShown: true,
-        values: {
-            glyph: "A4",
-            title: "My annotation 4",
-            description: "My description 4"
-        },
+        annotations.createAnnotation({
+            id: "a2",
+            worldPos: [1842016.7502089352, 16.116118310916697, -5173304.496801555],
+            occludable: true,
+            markerShown: true,
+            labelShown: true,
+            values: {
+                glyph: "A2",
+                title: "My annotation 2",
+                description: "My description 2"
+            },
+        });
+
+        annotations.createAnnotation({
+            id: "a3",
+            worldPos: [1842009.1252660889, 0.22266775344006823, -5173293.303721189],
+            occludable: true,
+            markerShown: true,
+            labelShown: true,
+            values: {
+                glyph: "A3",
+                title: "My annotation 3",
+                description: "My description 3"
+            },
+        });
+
+        annotations.createAnnotation({
+            id: "a4",
+            worldPos: [1842021.0555786698, 22.064205794296942, -5173293.94533045],
+            occludable: true,
+            markerShown: true,
+            labelShown: true,
+            values: {
+                glyph: "A4",
+                title: "My annotation 4",
+                description: "My description 4"
+            },
+        });
+
     });
 
 </script>

@@ -1,8 +1,16 @@
 import {Map} from "./../../viewer/scene/utils/Map.js";
+import {
+    validateMetaModelForTreeViewContainmentHierarchy,
+    validateMetaModelForTreeViewStoreysHierarchy, validateMetaModelForTreeViewTypesHierarchy
+} from "./modelValidation.js";
 
 const idMap = new Map();
 
-/** @private
+/**
+ * @desc Represents a model tree view within a {@link TreeViewPlugin}.
+ *
+ * * Stored in {@link treeViewPlugin#modelTreeViews}, mapped to the model ID.
+ * * Created by each call to {@link TreeViewPlugin#addModel}.
  */
 class ModelTreeView {
 
@@ -20,10 +28,27 @@ class ModelTreeView {
             return;
         }
 
+        /**
+         * Contains messages for any errors found in the MetaModel for this ModelTreeView.
+         * @type {String[]}
+         */
+        this.errors = [];
+
+        /**
+         * True if errors were found in the MetaModel for this ModelTreeView.
+         * @type {boolean}
+         */
+        this.valid = true;
+
+        /**
+         * The MetaModel corresponding to this ModelTreeView.
+         * @type {MetaModel}
+         */
+        this.metaModel = metaModel;
+
         this._id = idMap.addItem();
         this._baseId = "" + this._id;
         this._viewer = viewer;
-        this._metaModel = metaModel;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
         this._containerElement = cfg.containerElement;
@@ -163,10 +188,18 @@ class ModelTreeView {
         return this._baseId + objectId;
     }
 
+    /**
+     * @private
+     * @param depth
+     */
     setAutoExpandDepth(depth = 0) {
         this._autoExpandDepth = depth;
     }
 
+    /**
+     * @private
+     * @param hierarchy
+     */
     setHierarchy(hierarchy) {
         if (this._hierarchy === hierarchy) {
             return;
@@ -182,6 +215,32 @@ class ModelTreeView {
         }
         this._rootNodes = [];
         this._objectNodes = {};
+        this._validate();
+        if (this.valid) {
+            this._createEnabledNodes();
+        } else {
+            this._createDisabledNodes();
+        }
+    }
+
+    _validate() {
+        this.errors = [];
+        switch (this._hierarchy) {
+            case "storeys":
+                this.valid = validateMetaModelForTreeViewStoreysHierarchy(this.metaModel, this.errors);
+                break;
+            case "types":
+                this.valid = validateMetaModelForTreeViewTypesHierarchy(this.metaModel, this.errors);
+                break;
+            case "containment":
+            default:
+                this.valid = validateMetaModelForTreeViewContainmentHierarchy(this.metaModel, this.errors);
+                break;
+        }
+        return this.valid;
+    }
+
+    _createEnabledNodes() {
         if (this._pruneEmptyNodes) {
             this._findEmptyNodes();
         }
@@ -189,7 +248,7 @@ class ModelTreeView {
             case "storeys":
                 this._createStoreysNodes();
                 if (this._rootNodes.length === 0) {
-                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - perhaps this model is not an IFC model?");
+                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this.metaModel.id + "' - perhaps this model is not an IFC model?");
                 }
                 break;
             case "types":
@@ -205,6 +264,32 @@ class ModelTreeView {
         this._synchNodesToEntities();
         this._createTrees();
         this.expandToDepth(this._autoExpandDepth);
+    }
+
+    _createDisabledNodes() {
+
+        const metaObject = this._rootMetaObject;
+        const metaObjectType = metaObject.type;
+        const metaObjectName = metaObject.name;
+
+        const rootName = ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType);
+
+        const ul = document.createElement('ul');
+        const li = document.createElement('li');
+        ul.appendChild(li);
+        this._containerElement.appendChild(ul);
+        this._rootElement = ul;
+
+        const switchElement = document.createElement('a');
+        switchElement.href = '#';
+        switchElement.textContent = '!';
+        switchElement.classList.add('warn');
+        switchElement.classList.add('warning');
+        li.appendChild(switchElement);
+
+        const span = document.createElement('span');
+        span.textContent = rootName;
+        li.appendChild(span);
     }
 
     _findEmptyNodes(metaObject = this._rootMetaObject, countEntities = 0) {
@@ -255,7 +340,7 @@ class ModelTreeView {
             this._objectNodes[buildingNode.objectId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
             if (!buildingNode) {
-                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this.metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
                 return;
             }
             storeyNode = {
@@ -575,6 +660,7 @@ class ModelTreeView {
         checkbox.id = nodeId;
         checkbox.type = "checkbox";
         checkbox.checked = node.checked;
+        checkbox.style["pointer-events"] = "all";
         checkbox.addEventListener("change", this._checkboxChangeHandler);
         nodeElement.appendChild(checkbox);
         const span = document.createElement('span');
@@ -601,6 +687,10 @@ class ModelTreeView {
         return nodeElement;
     }
 
+    /**
+     * @private
+     * @param depth
+     */
     expandToDepth(depth) {
         const expand = (node, countDepth) => {
             if (countDepth === depth) {
@@ -624,6 +714,9 @@ class ModelTreeView {
         }
     }
 
+    /**
+     * @private
+     */
     collapse() {
         for (let i = 0, len = this._rootNodes.length; i < len; i++) {
             const rootNode = this._rootNodes[i];
@@ -632,6 +725,10 @@ class ModelTreeView {
         }
     }
 
+    /**
+     * @private
+     * @param objectId
+     */
     showNode(objectId) {
         if (this._showListItemElementId) {
             this.unShowNode();
@@ -671,6 +768,9 @@ class ModelTreeView {
         this._showListItemElementId = listItemElementId;
     }
 
+    /**
+     * @private
+     */
     unShowNode() {
         if (!this._showListItemElementId) {
             return;
@@ -738,6 +838,7 @@ class ModelTreeView {
 
     /**
      * Destroys this ModelTreeView.
+     * @private
      */
     destroy() {
         if (this._rootElement && !this._destroyed) {

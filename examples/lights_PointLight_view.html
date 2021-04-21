@@ -1,60 +1,55 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PointLight</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>PointLight</h1>
-    <br>
-    <p>Three View-space PointLights.</p>
-    <br>
+    <h2>Three View-space PointLights.</h2>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
-            - ReadableGeometry
+            <a href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/function/index.html#static-function-buildTorusGeometry">buildTorusGeometry()</a>
-            - creates the torus
+            <a href="./../docs/function/index.html#static-function-buildTorusGeometry"
+               target="_other">buildTorusGeometry()</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a>
-            - Phong material
+            <a href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a>
-            - Texture map
+            <a href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a>
-            - Light source type
+            <a href="./../docs/class/src/viewer/scene/lights/PointLight.js~PointLight.html"
+               target="_other">PointLight</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
@@ -87,7 +82,7 @@
 
     viewer.scene.clearLights();
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "keyLight",
         pos: [-80, 60, 80],
         color: [1.0, 0.3, 0.3],
@@ -95,7 +90,7 @@
         space: "view"
     });
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "fillLight",
         pos: [80, 40, 40],
         color: [0.3, 1.0, 0.3],
@@ -103,7 +98,7 @@
         space: "view"
     });
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "rimLight",
         pos: [-20, 80, -80],
         color: [0.6, 0.6, 0.6],
@@ -126,7 +121,7 @@
             alpha: 1.0,
             ambient: [1, 1, 0],
             diffuseMap: new Texture(viewer.scene, {
-                src: "textures/diffuse/uvGrid2.jpg"
+                src: "./../assets/textures/diffuse/uvGrid2.jpg"
             })
         })
     });
@@ -138,7 +133,7 @@
         })),
         material: new PhongMaterial(viewer.scene, {
             diffuseMap: new Texture(viewer.scene, {
-                src: "textures/diffuse/uvGrid2.jpg"
+                src: "./../assets/textures/diffuse/uvGrid2.jpg"
             }),
             backfaces: true
         }),

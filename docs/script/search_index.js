@@ -168,6 +168,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html",
+    "<span>FastNavPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/fresnel.js~fresnel",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html",
     "<span>Fresnel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/Fresnel.js</span>",
@@ -196,6 +202,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/geometry/Geometry.js~Geometry.html",
     "<span>Geometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/Geometry.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html",
+    "<span>GroundShadowPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
+    "variable/index.html#static-variable-IFCObjectDefaultColors",
+    "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaults.js~ifcobjectdefaults",
@@ -237,6 +255,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/lightmap.js~lightmap",
     "class/src/viewer/scene/lights/LightMap.js~LightMap.html",
     "<span>LightMap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/LightMap.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/materials/linesmaterial.js~linesmaterial",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html",
+    "<span>LinesMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LinesMaterial.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html",
+    "<span>LogDepthBuf</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/logDepthBuf/LogDepthBuf.js</span>",
     "class"
   ],
   [
@@ -288,9 +318,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html",
+    "<span>ModelGroundShadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/ModelGroundShadow.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/mementos/modelmemento.js~modelmemento",
     "class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html",
     "<span>ModelMemento</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modeltreeview.js~modeltreeview",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html",
+    "<span>ModelTreeView</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/ModelTreeView.js</span>",
     "class"
   ],
   [
@@ -381,6 +423,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/pointlight.js~pointlight",
     "class/src/viewer/scene/lights/PointLight.js~PointLight.html",
     "<span>PointLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/PointLight.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/materials/pointsmaterial.js~pointsmaterial",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html",
+    "<span>PointsMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/PointsMaterial.js</span>",
     "class"
   ],
   [
@@ -558,6 +606,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxlinesgeometry.js~buildboxlinesgeometry",
+    "function/index.html#static-function-buildBoxLinesGeometry",
+    "<span>buildBoxLinesGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildcylindergeometry.js~buildcylindergeometry",
     "function/index.html#static-function-buildCylinderGeometry",
     "<span>buildCylinderGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildCylinderGeometry.js</span>",
@@ -594,15 +648,27 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/batching/batchingrenderers.js~getbatchingrenderers",
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/linesbatching/linesbatchingrenderers.js~getbatchingrenderers",
     "function/index.html#static-function-getBatchingRenderers",
-    "<span>getBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/batching/BatchingRenderers.js</span>",
+    "<span>getBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js</span>",
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/instancing/instancingrenderers.js~getinstancingrenderers",
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/trianglesbatching/trianglesbatchingrenderers.js~getbatchingrenderers",
+    "function/index.html#static-function-getBatchingRenderers",
+    "<span>getBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/linesinstancing/linesinstancingrenderers.js~getinstancingrenderers",
     "function/index.html#static-function-getInstancingRenderers",
-    "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/instancing/InstancingRenderers.js</span>",
+    "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/trianglesinstancingrenderers.js~getinstancingrenderers",
+    "function/index.html#static-function-getInstancingRenderers",
+    "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js</span>",
     "function"
   ],
   [
@@ -618,6 +684,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/pointsbatching/pointsbatchingrenderers.js~getpointsbatchingrenderers",
+    "function/index.html#static-function-getPointsBatchingRenderers",
+    "<span>getPointsBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/pointsinstancing/pointsinstancingrenderers.js~getpointsinstancingrenderers",
+    "function/index.html#static-function-getPointsInstancingRenderers",
+    "<span>getPointsInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
     "function/index.html#static-function-load3DSGeometry",
     "<span>load3DSGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</span>",
@@ -630,9 +708,39 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octdecodevec2",
+    "function/index.html#static-function-octDecodeVec2",
+    "<span>octDecodeVec2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octencodenormals",
+    "function/index.html#static-function-octEncodeNormals",
+    "<span>octEncodeNormals</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octencodevec3",
+    "function/index.html#static-function-octEncodeVec3",
+    "<span>octEncodeVec3</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~quantizepositions",
+    "function/index.html#static-function-quantizePositions",
+    "<span>quantizePositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~rtctoworldpos",
     "function/index.html#static-function-rtcToWorldPos",
     "<span>rtcToWorldPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~transformandoctencodenormals",
+    "function/index.html#static-function-transformAndOctEncodeNormals",
+    "<span>transformAndOctEncodeNormals</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
     "function"
   ],
   [
@@ -1632,6 +1740,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/fastnavplugin/fastnavplugin.js",
+    "file/src/plugins/FastNavPlugin/FastNavPlugin.js.html",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#constructor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-constructor-constructor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#destroy",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-method-destroy",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#destroy",
+    "method"
+  ],
+  [
     "src/plugins/gltfloaderplugin/gltfdefaultdatasource.js",
     "file/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js",
@@ -1720,6 +1846,54 @@ window.esdocSearchIndex = [
     "file/src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js",
     "file"
+  ],
+  [
+    "src/plugins/groundshadowplugin/groundshadowplugin.js",
+    "file/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js.html",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#constructor",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-constructor-constructor",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#destroy",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-method-destroy",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#groundshadows",
+    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-member-groundShadows",
+    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#groundShadows",
+    "member"
+  ],
+  [
+    "src/plugins/groundshadowplugin/modelgroundshadow.js",
+    "file/src/plugins/GroundShadowPlugin/ModelGroundShadow.js.html",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js",
+    "file"
+  ],
+  [
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#constructor",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-constructor-constructor",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#destroy",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-method-destroy",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#image",
+    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-set-image",
+    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#image",
+    "member"
   ],
   [
     "src/plugins/navcubeplugin/cubetexturecanvas.js",
@@ -2214,6 +2388,36 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#errors",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-errors",
+    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#errors",
+    "member"
+  ],
+  [
+    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#metamodel",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-metaModel",
+    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#metaModel",
+    "member"
+  ],
+  [
+    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#switchcollapsehandler",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-switchCollapseHandler",
+    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#switchCollapseHandler",
+    "member"
+  ],
+  [
+    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#switchexpandhandler",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-switchExpandHandler",
+    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#switchExpandHandler",
+    "member"
+  ],
+  [
+    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#valid",
+    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-valid",
+    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#valid",
+    "member"
+  ],
+  [
     "src/plugins/treeviewplugin/treeviewnode.js",
     "file/src/plugins/TreeViewPlugin/TreeViewNode.js.html",
     "src/plugins/TreeViewPlugin/TreeViewNode.js",
@@ -2313,6 +2517,12 @@ window.esdocSearchIndex = [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-hierarchy",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
+    "member"
+  ],
+  [
+    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#modeltreeviews",
+    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-modelTreeViews",
+    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#modelTreeViews",
     "member"
   ],
   [
@@ -2529,6 +2739,12 @@ window.esdocSearchIndex = [
     "src/plugins/xktloaderplugin/parsers/parserv6.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/ParserV6.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/ParserV6.js",
+    "file"
+  ],
+  [
+    "src/plugins/xktloaderplugin/parsers/parserv7.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV7.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV7.js",
     "file"
   ],
   [
@@ -2758,6 +2974,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/Viewer.js~Viewer.html#instance-member-scene",
     "src/viewer/Viewer.js~Viewer#scene",
     "member"
+  ],
+  [
+    "src/viewer/metadata/ifcobjectdefaultcolors.js",
+    "file/src/viewer/metadata/IFCObjectDefaultColors.js.html",
+    "src/viewer/metadata/IFCObjectDefaultColors.js",
+    "file"
   ],
   [
     "src/viewer/metadata/ifcobjectdefaults.js",
@@ -3510,6 +3732,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/cameracontrol/lib/handlers/touchpickhandler.js",
+    "file/src/viewer/scene/CameraControl/lib/handlers/TouchPickHandler.js.html",
+    "src/viewer/scene/CameraControl/lib/handlers/TouchPickHandler.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/component.js",
     "file/src/viewer/scene/Component.js.html",
     "src/viewer/scene/Component.js",
@@ -4218,6 +4446,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#numlines",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-numLines",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#numLines",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#numpoints",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-numPoints",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#numPoints",
+    "member"
+  ],
+  [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#numtriangles",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-numTriangles",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#numTriangles",
@@ -4233,6 +4473,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#opacity",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#pbrenabled",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-pbrEnabled",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#pbrEnabled",
     "member"
   ],
   [
@@ -4350,6 +4596,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/entity_flags.js",
+    "file/src/viewer/scene/PerformanceModel/lib/ENTITY_FLAGS.js.html",
+    "src/viewer/scene/PerformanceModel/lib/ENTITY_FLAGS.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/performancemesh.js",
     "file/src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js.html",
     "src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js",
@@ -4362,291 +4614,357 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/batchingbuffer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/BatchingBuffer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/BatchingBuffer.js",
+    "src/viewer/scene/performancemodel/lib/render_passes.js",
+    "file/src/viewer/scene/PerformanceModel/lib/RENDER_PASSES.js.html",
+    "src/viewer/scene/PerformanceModel/lib/RENDER_PASSES.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/batchinglayer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/BatchingLayer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/BatchingLayer.js",
+    "src/viewer/scene/performancemodel/lib/scratchmemory.js",
+    "file/src/viewer/scene/PerformanceModel/lib/ScratchMemory.js.html",
+    "src/viewer/scene/PerformanceModel/lib/ScratchMemory.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/batchinglayerscratchmemory.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/BatchingLayerScratchMemory.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/BatchingLayerScratchMemory.js",
+    "src/viewer/scene/performancemodel/lib/compression.js",
+    "file/src/viewer/scene/PerformanceModel/lib/compression.js.html",
+    "src/viewer/scene/PerformanceModel/lib/compression.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/batchingrenderers.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/BatchingRenderers.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/BatchingRenderers.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesbatching/linesbatchingbuffer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingBuffer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/depth/batchingdepthrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/depth/BatchingDepthRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/depth/BatchingDepthRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesbatching/linesbatchinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/depth/batchingdepthshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/depth/BatchingDepthShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/depth/BatchingDepthShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesbatching/linesbatchingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/draw/batchingdrawrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/draw/BatchingDrawRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/draw/BatchingDrawRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesbatching/renderers/linesbatchingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/draw/batchingdrawshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/draw/batchingDrawShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/draw/batchingDrawShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesbatching/renderers/linesbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/emphasis/batchingedgesrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingEdgesRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingEdgesRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesinstancing/linesinstancinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/emphasis/batchingedgesshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingEdgesShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingEdgesShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesinstancing/linesinstancingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/emphasis/batchingfillrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingFillRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingFillRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesinstancing/renderers/linesinstancingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/emphasis/batchingfillshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingFillShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/emphasis/BatchingFillShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/linesinstancing/renderers/linesinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/normals/batchingnormalsrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/normals/BatchingNormalsRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/normals/BatchingNormalsRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/pointsbatchingbuffer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingBuffer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/normals/batchingnormalsshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/normals/BatchingNormalsShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/normals/BatchingNormalsShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/pointsbatchinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/occlusion/batchingocclusionrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/occlusion/BatchingOcclusionRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/occlusion/BatchingOcclusionRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/pointsbatchingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/occlusion/batchingocclusionshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/occlusion/BatchingOcclusionShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/occlusion/BatchingOcclusionShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpickdepthrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickDepthRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickDepthRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingocclusionrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpickdepthshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickDepthShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickDepthShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingpickdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpickmeshrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickMeshRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickMeshRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingpickmeshrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpickmeshshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickMeshShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickMeshShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpicknormalsrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickNormalsRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickNormalsRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsbatching/renderers/pointsbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/pick/batchingpicknormalsshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickNormalsShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/pick/BatchingPickNormalsShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/pointsinstancinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/shadow/batchingshadowrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/pointsinstancingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/batching/shadow/batchingshadowshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/batching/shadow/BatchingShadowShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/entityflags.js",
-    "file/src/viewer/scene/PerformanceModel/lib/entityFlags.js.html",
-    "src/viewer/scene/PerformanceModel/lib/entityFlags.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/instancinglayer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/InstancingLayer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingocclusionrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/instancingrenderers.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/InstancingRenderers.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/InstancingRenderers.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingpickdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/depth/instancingdepthrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/depth/InstancingDepthRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/depth/InstancingDepthRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingpickmeshrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/depth/instancingdepthshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/depth/InstancingDepthShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/depth/InstancingDepthShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/draw/instancingdrawrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/draw/InstancingDrawRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/draw/InstancingDrawRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/pointsinstancing/renderers/pointsinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/draw/instancingdrawshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/draw/InstancingDrawShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/draw/InstancingDrawShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/trianglesbatchingbuffer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/emphasis/instancingedgesrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingEdgesRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingEdgesRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/trianglesbatchinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/emphasis/instancingedgesshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingEdgesShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingEdgesShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/trianglesbatchingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/emphasis/instancingfillrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingFillRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingFillRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingcolorqualityrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorQualityRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorQualityRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/emphasis/instancingfillshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingFillShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/emphasis/InstancingFillShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/normals/instancingnormalsrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/normals/InstancingNormalsRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/normals/InstancingNormalsRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/normals/instancingnormalsshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/normals/InstancingNormalsShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/normals/InstancingNormalsShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgescolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/occlusion/instancingocclusionrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/occlusion/InstancingOcclusionRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/occlusion/InstancingOcclusionRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgesrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/occlusion/instancingocclusionshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/occlusion/InstancingOcclusionShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/occlusion/InstancingOcclusionShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingnormalsrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpickdepthrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickDepthRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickDepthRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingocclusionrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpickdepthshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickDepthShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickDepthShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpickdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpickmeshrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickMeshRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickMeshRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpickmeshrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpickmeshshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickMeshShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickMeshShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpicknormalsrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpicknormalsrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/pick/instancingpicknormalsshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/pick/InstancingPickNormalsShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/shadow/instancingshadowrenderer.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowRenderer.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowRenderer.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/trianglesinstancinglayer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/instancing/shadow/instancingshadowshadersource.js",
-    "file/src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowShaderSource.js.html",
-    "src/viewer/scene/PerformanceModel/lib/instancing/shadow/InstancingShadowShaderSource.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/trianglesinstancingrenderers.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/performancemodel/lib/renderpasses.js",
-    "file/src/viewer/scene/PerformanceModel/lib/renderPasses.js.html",
-    "src/viewer/scene/PerformanceModel/lib/renderPasses.js",
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingcolorqualityrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorQualityRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorQualityRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingedgescolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingedgesrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingnormalsrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingocclusionrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpickdepthrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpickmeshrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpicknormalsrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingshadowrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
@@ -5724,6 +6042,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/geometry/builders/buildboxlinesgeometry.js",
+    "file/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js.html",
+    "src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/geometry/builders/buildcylindergeometry.js",
     "file/src/viewer/scene/geometry/builders/buildCylinderGeometry.js.html",
     "src/viewer/scene/geometry/builders/buildCylinderGeometry.js",
@@ -6798,6 +7122,108 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js",
+    "file/src/viewer/scene/logDepthBuf/LogDepthBuf.js.html",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-bias",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-bias",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-blur",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-blur",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#destroy",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-method-destroy",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-enabled",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-enabled",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-intensity",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-intensity",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-kernelRadius",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-kernelRadius",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-minResolution",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-minResolution",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-scale",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-scale",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#supported",
+    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-supported",
+    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#supported",
+    "member"
+  ],
+  [
     "src/viewer/scene/marker/marker.js",
     "file/src/viewer/scene/marker/Marker.js.html",
     "src/viewer/scene/marker/Marker.js",
@@ -7296,6 +7722,54 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/materials/linesmaterial.js",
+    "file/src/viewer/scene/materials/LinesMaterial.js.html",
+    "src/viewer/scene/materials/LinesMaterial.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#constructor",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-constructor-constructor",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#destroy",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-method-destroy",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#linewidth",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-set-lineWidth",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#lineWidth",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#linewidth",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-get-lineWidth",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#lineWidth",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#preset",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-set-preset",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#preset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#preset",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-get-preset",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#preset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/linesmaterial.js~linesmaterial#presets",
+    "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html#instance-get-presets",
+    "src/viewer/scene/materials/LinesMaterial.js~LinesMaterial#presets",
+    "member"
+  ],
+  [
     "src/viewer/scene/materials/material.js",
     "file/src/viewer/scene/materials/Material.js.html",
     "src/viewer/scene/materials/Material.js",
@@ -7773,6 +8247,102 @@ window.esdocSearchIndex = [
     "src/viewer/scene/materials/phongmaterial.js~phongmaterial#specularmap",
     "class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap",
     "src/viewer/scene/materials/PhongMaterial.js~PhongMaterial#specularMap",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js",
+    "file/src/viewer/scene/materials/PointsMaterial.js.html",
+    "src/viewer/scene/materials/PointsMaterial.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#constructor",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-constructor-constructor",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#destroy",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-method-destroy",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxperspectivepointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-maxPerspectivePointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxPerspectivePointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxperspectivepointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-maxPerspectivePointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxPerspectivePointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#minperspectivepointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-minPerspectivePointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#minPerspectivePointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#minperspectivepointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-minPerspectivePointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#minPerspectivePointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#perspectivepoints",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-perspectivePoints",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#perspectivePoints",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#perspectivepoints",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-perspectivePoints",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#perspectivePoints",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#pointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-pointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#pointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#pointsize",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-pointSize",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#pointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#preset",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-preset",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#preset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#preset",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-preset",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#preset",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#presets",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-presets",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#presets",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#roundpoints",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-roundPoints",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#roundPoints",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#roundpoints",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-roundPoints",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#roundPoints",
     "member"
   ],
   [
@@ -9606,6 +10176,30 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/postfx/sao.js~sao#blendcutoff",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendCutoff",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendCutoff",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendcutoff",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendCutoff",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendCutoff",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendfactor",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blendFactor",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendFactor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#blendfactor",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-blendFactor",
+    "src/viewer/scene/postfx/SAO.js~SAO#blendFactor",
+    "member"
+  ],
+  [
     "src/viewer/scene/postfx/sao.js~sao#blur",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-blur",
     "src/viewer/scene/postfx/SAO.js~SAO#blur",
@@ -9669,6 +10263,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/postfx/sao.js~sao#minresolution",
     "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-minResolution",
     "src/viewer/scene/postfx/SAO.js~SAO#minResolution",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#numsamples",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-numSamples",
+    "src/viewer/scene/postfx/SAO.js~SAO#numSamples",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/sao.js~sao#numsamples",
+    "class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-get-numSamples",
+    "src/viewer/scene/postfx/SAO.js~SAO#numSamples",
     "member"
   ],
   [
@@ -9748,6 +10354,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-clearSectionPlanes",
     "src/viewer/scene/scene/Scene.js~Scene#clearSectionPlanes",
     "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#clippingcaps",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-clippingCaps",
+    "src/viewer/scene/scene/Scene.js~Scene#clippingCaps",
+    "member"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#colorizedobjectids",
@@ -9876,6 +10488,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#linesmaterial",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-linesMaterial",
+    "src/viewer/scene/scene/Scene.js~Scene#linesMaterial",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#loading",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-loading",
     "src/viewer/scene/scene/Scene.js~Scene#loading",
@@ -9996,10 +10614,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#pbrenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-pbrEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#pbrEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#pbrenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-pbrEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#pbrEnabled",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#pick",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick",
     "src/viewer/scene/scene/Scene.js~Scene#pick",
     "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#pointsmaterial",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-pointsMaterial",
+    "src/viewer/scene/scene/Scene.js~Scene#pointsMaterial",
+    "member"
   ],
   [
     "src/viewer/scene/scene/scene.js~scene#realworldoffset",
@@ -10774,18 +11410,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-unbindRenderBuf",
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#unbindRenderBuf",
     "method"
-  ],
-  [
-    "src/viewer/scene/webgl/sao/saoblendrenderer.js",
-    "file/src/viewer/scene/webgl/sao/SAOBlendRenderer.js.html",
-    "src/viewer/scene/webgl/sao/SAOBlendRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/webgl/sao/saoblurrenderer.js",
-    "file/src/viewer/scene/webgl/sao/SAOBlurRenderer.js.html",
-    "src/viewer/scene/webgl/sao/SAOBlurRenderer.js",
-    "file"
   ],
   [
     "src/viewer/scene/webgl/sao/saodepthlimitedblurrenderer.js",

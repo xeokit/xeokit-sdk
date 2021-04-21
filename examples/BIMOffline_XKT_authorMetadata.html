@@ -1,58 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>XKTLoaderPlugin - Loading an IFC Model from the File System</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-
-        #myCanvas {
-            background: #ffffff;
+        #metadata {
+            font-size:16px;
+            position: absolute;
+            left: 10px;
+            top: 60px;
+            margin-top: 20px;
+            height: auto;
+            width: auto;
+            pointer-events: all;
+            opacity: 0.8;
         }
-
     </style>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
+<ul id="metadata">
+    <li>
+        <div id="time">Loading JavaScript modules...</div>
+    </li>
+    <li>
+        Model author: <span id="modelAuthor"></span>
+    </li>
+    <li>
+        Model creation date: <span id="modelCreatedAt"></span>
+    </li>
+    <li>
+        Model creation app: <span id="modelCreatingApplication"></span>
+    </li>
+    <li>
+        Model schema: <span id="modelSchema"></span>
+    </li>
+</ul>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading a BIM model with author metadata</h2>
 
-<canvas id="myNavCubeCanvas"></canvas>
-
-<div id="treeViewContainer"></div>
-
-<div id="info" style="width: 350px">
-    <h1>XKTLoaderPlugin - Creation/Version/Authoring Metadata</h1><br>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <div id="time">Loading JavaScript modules...</div>
+            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
-            Model author: <span id="modelAuthor"></span>
-        </li>
-        <li>
-            Model creation date: <span id="modelCreatedAt"></span>
-        </li>
-        <li>
-            Model creation app: <span id="modelCreatingApplication"></span>
-        </li>
-        <li>
-            Model schema: <span id="modelSchema"></span>
-        </li>
-        <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -87,8 +99,8 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
-        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "./../assets/models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
+        metaModelSrc: "./../assets/metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
@@ -107,7 +119,6 @@
             document.getElementById("modelSchema").innerHTML = metaModel.schema || "Unknown";
         }
     });
-
 
 </script>
 </html>

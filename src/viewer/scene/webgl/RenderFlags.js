@@ -63,6 +63,14 @@ class RenderFlags {
         this.culled = false;
 
         /**
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate whether the {@link Drawable} is sliced by any {@link SectionPlane}s.
+         *
+         * @property sectioned
+         * @type {Boolean}
+         */
+        this.sectioned  = false;
+
+        /**
          * Set by {@link Drawable#rebuildRenderFlags} to indicate the number of layers within the {@link Drawable}.
          *
          * @property numLayers

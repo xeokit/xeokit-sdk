@@ -374,7 +374,6 @@ class TreeViewPlugin extends Plugin {
 
         this._containerElement = cfg.containerElement;
         this._modelTreeViews = {};
-        this._modelTreeViews = {};
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
         this._sortNodes = (cfg.sortNodes !== false);
@@ -386,7 +385,7 @@ class TreeViewPlugin extends Plugin {
                 const modelId = modelIds[i];
                 this.addModel(modelId);
             }
-            this.viewer.scene.on("modelLoaded", (modelId) =>{
+            this.viewer.scene.on("modelLoaded", (modelId) => {
                 if (this.viewer.metaScene.metaModels[modelId]) {
                     this.addModel(modelId);
                 }
@@ -394,6 +393,17 @@ class TreeViewPlugin extends Plugin {
         }
 
         this.hierarchy = cfg.hierarchy;
+    }
+
+    /**
+     * Returns the map of {@link ModelTreeView}s.
+     *
+     * Each ModelTreeView is mapped to the ID of its model.
+     *
+     * @return {*|{}}
+     */
+    get modelTreeViews() {
+        return this._modelTreeViews;
     }
 
     /**
@@ -445,9 +455,14 @@ class TreeViewPlugin extends Plugin {
      *
      * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
      * @param {Object} [options] Options for model in the tree view.
-     * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for "containment" and "storeys" hierarchy types, the tree would derive the root node name from the model's "IfcProject" element name. This option allows to override that name when it is not suitable as a display name.
+     * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for "containment"
+     * and "storeys" hierarchy types, the tree would derive the root node name from the model's "IfcProject" element
+     * name. This option allows to override that name when it is not suitable as a display name.
+     * @returns {ModelTreeView} ModelTreeView for the newly-added model. If this method succeeded in adding the model,
+     * then {@link ModelTreeView#valid} will equal ````true````. Otherwise, that property will be ````false````
+     * and {@link ModelTreeView#errors} will contain error messages.
      */
-    addModel(modelId, options={}) {
+    addModel(modelId, options = {}) {
         if (!this._containerElement) {
             return;
         }
@@ -464,7 +479,7 @@ class TreeViewPlugin extends Plugin {
             this.warn("Model already added: " + modelId);
             return;
         }
-        this._modelTreeViews[modelId] = new ModelTreeView(this.viewer, this, model, metaModel, {
+        const modelTreeView = new ModelTreeView(this.viewer, this, model, metaModel, {
             containerElement: this._containerElement,
             autoExpandDepth: this._autoExpandDepth,
             hierarchy: this._hierarchy,
@@ -472,9 +487,11 @@ class TreeViewPlugin extends Plugin {
             pruneEmptyNodes: this._pruneEmptyNodes,
             rootName: options.rootName
         });
+        this._modelTreeViews[modelId] = modelTreeView;
         model.on("destroyed", () => {
             this.removeModel(model.id);
         });
+        return modelTreeView;
     }
 
     /**

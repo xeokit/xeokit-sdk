@@ -187,7 +187,6 @@ class PickController {
     }
 
     destroy() {
-        this._scene.off(this._onTick);
     }
 }
 
