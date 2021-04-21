@@ -2,6 +2,15 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 1.8.1
+
+April 21, 2021
+
+Patches
+
+* CameraControl
+  * Fix sticky CameraControl rotation after dragging with left & right mouse buttons. [#623](https://github.com/xeokit/xeokit-sdk/issues/623) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 1.8.0
 
 April 21, 2021
