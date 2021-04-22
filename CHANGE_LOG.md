@@ -10,6 +10,7 @@ Patches
 
 * CameraControl
   * Fix sticky CameraControl rotation after dragging with left & right mouse buttons. [#623](https://github.com/xeokit/xeokit-sdk/issues/623) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix jumping around behavior with CameraControl middle mouse button. [#571](https://github.com/xeokit/xeokit-sdk/issues/571) ([**@xeolabs**](https://github.com/xeolabs))
 * FastNavPlugin
   * Ability to configure which quality rendering effects are enabled by FastNavPlugin. [#625](https://github.com/xeokit/xeokit-sdk/issues/625) ([**@xeolabs**](https://github.com/xeolabs))
   * Fix FastNavPlugin fade for Firefox. [#624](https://github.com/xeokit/xeokit-sdk/issues/624) ([**@xeolabs**](https://github.com/xeolabs))
