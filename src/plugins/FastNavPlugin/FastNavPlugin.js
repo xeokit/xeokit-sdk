@@ -61,7 +61,7 @@ class FastNavPlugin extends Plugin {
      * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it's currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
      * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they're currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
      */
-    constructor(viewer, cfg) {
+    constructor(viewer, cfg={}) {
 
         super("FastNav", viewer);
 
