@@ -130,10 +130,7 @@ class MousePanRotateDollyHandler {
 
                     mouseDownMiddle = true;
 
-                   if (!configs.panRightClick) {
-
-                        setMousedownState();
-                    }
+                    setMousedownState();
 
                     break;
 
