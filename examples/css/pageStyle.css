@@ -40,6 +40,12 @@ body {
     padding: 0px 10px 10px 20px;
 }
 
+.info-icon {
+    width: 100px;
+    height: auto;
+    padding-top: 20px;
+}
+
 #info-button {
     display: none;
 }
@@ -70,6 +76,11 @@ body {
     right: 400px;
 }
 
+#myDatGuiContainer {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
 h1, h2, h3 {
     font-weight: normal;
     -webkit-transform-origin: 0% 100%;
@@ -94,7 +105,7 @@ h2 {
     padding-left: 0px;
     font-weight: bold;
     margin-top: 0px;
-    padding-bottom: 0px;
+    padding-bottom: 10px;
     margin-bottom: 0;
     letter-spacing: 0px;
     /*border-bottom: 2px solid #d4d4d4;*/
@@ -111,7 +122,7 @@ h3 {
     padding-left: 0px;
     padding-right: 40px;
     padding-top: 14px;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
 }
 
 .xeokit-camera-pivot-marker {

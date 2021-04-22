@@ -27,14 +27,14 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            pointer-events: none;
+            pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 60px;
+            top: 80px;
             z-index: 200000;
             float: left;
             left: 0;
@@ -126,8 +126,10 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/tree_view_icon.png"/>
     <h1>TreeViewPlugin</h1>
-    <h2>Group objects by building storey</h2>
+    <h2>IFC Storeys Hierarchy</h2>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
