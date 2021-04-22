@@ -1,7 +1,7 @@
 {
-  "coverage": "37.53%",
-  "expectCount": 5822,
-  "actualCount": 2185,
+  "coverage": "37.62%",
+  "expectCount": 5815,
+  "actualCount": 2188,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -251,23 +251,26 @@
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
-      "expectCount": 17,
-      "actualCount": 3,
+      "expectCount": 27,
+      "actualCount": 10,
       "undocumentLines": [
-        242,
-        51,
-        55,
-        56,
-        62,
+        325,
+        68,
+        69,
+        70,
+        72,
         73,
-        89,
-        102,
-        114,
-        118,
-        133,
-        181,
-        182,
-        202
+        79,
+        90,
+        98,
+        109,
+        122,
+        134,
+        138,
+        153,
+        204,
+        205,
+        225
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -308,30 +311,6 @@
         18,
         22,
         46
-      ]
-    },
-    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js": {
-      "expectCount": 9,
-      "actualCount": 4,
-      "undocumentLines": [
-        33,
-        35,
-        46,
-        52,
-        81
-      ]
-    },
-    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js": {
-      "expectCount": 7,
-      "actualCount": 0,
-      "undocumentLines": [
-        8,
-        10,
-        14,
-        16,
-        20,
-        34,
-        38
       ]
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {
@@ -581,10 +560,10 @@
         618,
         629,
         644,
-        786,
-        811,
-        818,
-        846
+        787,
+        812,
+        819,
+        847
       ]
     },
     "src/plugins/TreeViewPlugin/TreeViewNode.js": {
@@ -911,13 +890,13 @@
         613,
         621,
         668,
-        686,
-        699,
-        711,
-        723,
-        946,
-        1617,
-        1626
+        685,
+        698,
+        710,
+        722,
+        945,
+        1616,
+        1625
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
@@ -930,7 +909,7 @@
         14,
         16,
         26,
-        309
+        307
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1038,16 +1017,15 @@
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePanRotateDollyHandler.js": {
-      "expectCount": 8,
+      "expectCount": 7,
       "actualCount": 1,
       "undocumentLines": [
         6,
         8,
         33,
         35,
-        45,
         321,
-        325
+        324
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePickHandler.js": {

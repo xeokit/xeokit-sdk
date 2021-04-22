@@ -204,12 +204,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin",
-    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html",
-    "<span>GroundShadowPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
     "variable/index.html#static-variable-IFCObjectDefaultColors",
     "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
@@ -315,12 +309,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/metriqs/metriqs.js~metrics",
     "class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html",
     "<span>Metrics</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/metriqs/Metriqs.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow",
-    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html",
-    "<span>ModelGroundShadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GroundShadowPlugin/ModelGroundShadow.js</span>",
     "class"
   ],
   [
@@ -1758,6 +1746,42 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#edgesenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-edgesEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#edgesEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#edgesenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-edgesEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#edgesEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#pbrenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-pbrEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#pbrEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#pbrenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-pbrEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#pbrEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#saoenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-saoEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#saoEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#saoenabled",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-saoEnabled",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#saoEnabled",
+    "member"
+  ],
+  [
     "src/plugins/gltfloaderplugin/gltfdefaultdatasource.js",
     "file/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js",
@@ -1846,54 +1870,6 @@ window.esdocSearchIndex = [
     "file/src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js",
     "file"
-  ],
-  [
-    "src/plugins/groundshadowplugin/groundshadowplugin.js",
-    "file/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js.html",
-    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#constructor",
-    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-constructor-constructor",
-    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#destroy",
-    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-method-destroy",
-    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/groundshadowplugin/groundshadowplugin.js~groundshadowplugin#groundshadows",
-    "class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html#instance-member-groundShadows",
-    "src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin#groundShadows",
-    "member"
-  ],
-  [
-    "src/plugins/groundshadowplugin/modelgroundshadow.js",
-    "file/src/plugins/GroundShadowPlugin/ModelGroundShadow.js.html",
-    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js",
-    "file"
-  ],
-  [
-    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#constructor",
-    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-constructor-constructor",
-    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#destroy",
-    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-method-destroy",
-    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/groundshadowplugin/modelgroundshadow.js~modelgroundshadow#image",
-    "class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html#instance-set-image",
-    "src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow#image",
-    "member"
   ],
   [
     "src/plugins/navcubeplugin/cubetexturecanvas.js",
