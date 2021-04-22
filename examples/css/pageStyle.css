@@ -1,9 +1,10 @@
 
 body {
-    font-family: 'Roboto', sans-serif;
-    font-size: 15px;
-    line-height: 1.50;
-    color: #444444;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
     background-color: white;
     text-decoration: none;
     word-spacing: normal;
@@ -35,7 +36,7 @@ body {
     height: 100%;
     overflow-y: scroll;
     transition: all 300ms ease-in-out;
-    border-left: 2px solid #444444;
+    border-left: 2px solid #212529;
     margin-top: 0;
     padding: 0px 10px 10px 20px;
 }
@@ -56,7 +57,6 @@ body {
 
 .info-button {
     position: absolute;
-    color: #444444;
     right: 15px;
     top: 12px;
     z-index: 1;
@@ -82,16 +82,18 @@ body {
 }
 
 h1, h2, h3 {
-    font-weight: normal;
+    font-family: inherit;
+    line-height: 1.2;
+    color: inherit;
     -webkit-transform-origin: 0% 100%;
 }
 
 h1 {
+    font-weight:500;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 15px;
-    font-size: 22px;
-    font-weight: normal;
+    font-size: 1.4rem;
 }
 
 h1 a {
@@ -99,24 +101,20 @@ h1 a {
 }
 
 h2 {
-    font-size: 18px;
-    line-height: 1.2;
+    font-size: 1.0rem;
+    font-weight: 550;
     padding-top: 30px;
     padding-left: 0px;
-    font-weight: bold;
     margin-top: 0px;
     padding-bottom: 10px;
     margin-bottom: 0;
     letter-spacing: 0px;
     /*border-bottom: 2px solid #d4d4d4;*/
-    color: #4E7A4A;
 }
 
 h3 {
-    font-size: 14px;
-    line-height: 1.2;
-    font-weight: bold;
-    color: #8F3434;
+    font-size: 1.0rem;
+    font-weight: 550;
     padding: 0;
     margin: 0;
     padding-left: 0px;
@@ -134,8 +132,16 @@ h3 {
     border: 2px solid #ebebeb;
     background: #4444;
     visibility: hidden;
-    box-shadow: 5px 5px 15px 1px #444444;
+    box-shadow: 5px 5px 15px 1px #212529;
     z-index: 10000;
     pointer-events: none;
 }
 
+a {
+    /*text-decoration: none;*/
+    /*color: #212529;*/
+}
+
+a:hover {
+    text-decoration: underline;
+}
