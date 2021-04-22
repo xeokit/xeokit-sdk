@@ -115,6 +115,8 @@ class MousePanRotateDollyHandler {
 
                     if (keyDown[scene.input.KEY_SHIFT] || configs.planView) {
 
+                        mouseDownLeft = true;
+
                         setMousedownState();
 
                     } else {
