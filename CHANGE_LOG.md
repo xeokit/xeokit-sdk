@@ -2,7 +2,7 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 1.8.1
+# 1.8.2
 
 April 22, 2021
 
