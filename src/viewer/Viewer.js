@@ -340,7 +340,7 @@ class Viewer {
     }
 
     /**
-     * Exists snapshot mode.
+     * Exits snapshot mode.
      *
      * Switches rendering back to the main canvas.
      *
