@@ -92,7 +92,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  *
  * ## Example 2: Creating AngleMeasurements Interactively
  *
- * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the AngleMeasurementPlugin's {@link AngleMeasurementsControl} to interactively create {@link AngleMeasurement}s with mouse or touch input.
+ * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the AngleMeasurementsPlugin's {@link AngleMeasurementsControl} to interactively create {@link AngleMeasurement}s with mouse or touch input.
  *
  * After we've activated the AngleMeasurementsControl, the first click on any {@link Entity} begins constructing a AngleMeasurement, fixing its
  * origin to that Entity. The next click on any Entity will fix the AngleMeasurement's corner, and the next click after

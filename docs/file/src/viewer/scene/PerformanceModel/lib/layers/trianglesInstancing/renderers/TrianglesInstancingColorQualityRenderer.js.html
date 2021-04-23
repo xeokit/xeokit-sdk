@@ -43,8 +43,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-groundshadowplugin">plugins/GroundShadowPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html">GroundShadowPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html">ModelGroundShadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -591,7 +589,7 @@ class TrianglesInstancingColorQualityRenderer {
 
         src.push(&quot;vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); &quot;);
         src.push(&quot;vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);&quot;);
-        src.push(&quot;vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);&quot;);
+        src.push(&quot;vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;&quot;);
 
         src.push(&quot;vec4 clipPos = projMatrix * viewPosition;&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
@@ -863,7 +861,7 @@ class TrianglesInstancingColorQualityRenderer {
             }
 
             if (lightsState.reflectionMaps.length &gt; 0) {
-                src.push(&quot;   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);&quot;);
+                src.push(&quot;   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);&quot;);
                 src.push(&quot;   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);&quot;);
                 src.push(&quot;   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);&quot;);
                 src.push(&quot;   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);&quot;);
@@ -932,7 +930,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push(&quot;material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);&quot;);
 
         src.push(&quot;geometry.position      = vViewPosition.xyz;&quot;);
-        src.push(&quot;geometry.viewNormal    = -vViewNormal;&quot;);
+        src.push(&quot;geometry.viewNormal    = -normalize(vViewNormal);&quot;);
         src.push(&quot;geometry.viewEyeDir    = normalize(vViewPosition.xyz);&quot;);
         if (lightsState.lightMaps.length &gt; 0) {
             src.push(&quot;geometry.worldNormal   = normalize(vWorldNormal);&quot;);

@@ -13,8 +13,9 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/lighting_icon.png"/>
     <h1>DirLight</h1>
-    <h2>Three View-space DirLights.</h2>
+    <h2>Three directional light sources in View-space</h2>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -85,7 +86,7 @@
     new DirLight(viewer.scene, {
         id: "keyLight",
         dir: [0.8, -0.6, -0.8],
-        color: [1.0, 0.3, 0.3],
+        color: [1.0, 0.8, 0.8],
         intensity: 1.0,
         space: "view"
     });
@@ -93,7 +94,7 @@
     new DirLight(viewer.scene, {
         id: "fillLight",
         dir: [-0.8, -0.4, -0.4],
-        color: [0.3, 1.0, 0.3],
+        color: [0.8, 1.0, 0.8],
         intensity: 1.0,
         space: "view"
     });
@@ -101,7 +102,7 @@
     new DirLight(viewer.scene, {
         id: "rimLight",
         dir: [0.2, -0.8, 0.8],
-        color: [0.6, 0.6, 0.6],
+        color: [0.8, 0.8, 1.0],
         intensity: 1.0,
         space: "view"
     });
@@ -115,11 +116,12 @@
             radius: 1.3
         })),
         material: new PhongMaterial(viewer.scene, {
-            diffuse: [0.7, 0.7, 0.7],
+            diffuse: [1.0, 1.0, 1.0],
             specular: [1.0, 1.0, 1.0],
             emissive: [0, 0, 0],
             alpha: 1.0,
-            ambient: [1, 1, 0],
+            ambient: [1, 1, 1],
+            shininess:70,
             diffuseMap: new Texture(viewer.scene, {
                 src: "./../assets/textures/diffuse/uvGrid2.jpg"
             })
@@ -132,9 +134,12 @@
             zSize: 30
         })),
         material: new PhongMaterial(viewer.scene, {
+            diffuse: [1.0, 1.0, 1.0],
             diffuseMap: new Texture(viewer.scene, {
                 src: "./../assets/textures/diffuse/uvGrid2.jpg"
             }),
+            ambient: [1, 1, 1],
+            shininess:70,
             backfaces: true
         }),
         position: [0, -2.1, 0]

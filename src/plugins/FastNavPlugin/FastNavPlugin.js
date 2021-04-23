@@ -61,7 +61,7 @@ class FastNavPlugin extends Plugin {
      * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it's currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
      * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they're currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
      */
-    constructor(viewer, cfg) {
+    constructor(viewer, cfg = {}) {
 
         super("FastNav", viewer);
 
@@ -164,7 +164,9 @@ class FastNavPlugin extends Plugin {
             this._pInterval = null;
         }
 
-        const canvas = this.viewer.scene.canvas.canvas;
+        const viewer = this.viewer;
+
+        const canvas = viewer.scene.canvas.canvas;
         const canvasOffset = cumulativeOffset(canvas);
         //const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
 
@@ -179,7 +181,7 @@ class FastNavPlugin extends Plugin {
         this._img.width = canvas.width;
         this._img.height = canvas.height;
         this._img.src = ""; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
-        this._img.src = this.viewer.getSnapshot({
+        this._img.src = viewer.getSnapshot({
             format: "png",
             includeGizmos: true
         });
@@ -234,6 +236,60 @@ class FastNavPlugin extends Plugin {
         }
         this._img.style.opacity = 0;
         this._img.style.visibility = "hidden";
+    }
+
+    /**
+     * Sets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     *
+     * @return {Boolean} Whether PBR will be enabled.
+     */
+    set pbrEnabled(pbrEnabled) {
+        this._pbrEnabled = pbrEnabled;
+    }
+
+    /**
+     * Gets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     *
+     * @return {Boolean} Whether PBR will be enabled.
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled
+    }
+
+    /**
+     * Sets whether to enable scalable ambient occlusion (SAO) when the camera stops moving.
+     *
+     * @return {Boolean} Whether SAO will be enabled.
+     */
+    set saoEnabled(saoEnabled) {
+        this._saoEnabled = saoEnabled;
+    }
+
+    /**
+     * Gets whether the FastNavPlugin enables SAO when switching to quality rendering.
+     *
+     * @return {Boolean} Whether SAO will be enabled.
+     */
+    get saoEnabled() {
+        return this._saoEnabled
+    }
+
+    /**
+     * Sets whether to show enhanced edges when the camera stops moving.
+     *
+     * @return {Boolean} Whether edge enhancement will be enabled.
+     */
+    set edgesEnabled(edgesEnabled) {
+        this._edgesEnabled = edgesEnabled;
+    }
+
+    /**
+     * Gets whether to show enhanced edges when the camera stops moving.
+     *
+     * @return {Boolean} Whether edge enhancement will be enabled.
+     */
+    get edgesEnabled() {
+        return this._edgesEnabled
     }
 
     /**

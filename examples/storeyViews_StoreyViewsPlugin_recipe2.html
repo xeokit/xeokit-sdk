@@ -40,10 +40,11 @@
 <canvas id="myCanvas"></canvas>
 <div id="storeyMap"></div>
 <div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/storey_views_icon.png"/>
     <h1>StoreyViewsPlugin</h1>
     <h2>UX Recipe #2</h2>
-    <p>Click anywhere in the 2D plan to go there in <b>first-person mode</b> in the 3D view.</p>
-    <p>Click empty space in the 2D plan to return to ortho view.</p>
+    <p>Click anywhere in the 2D plan image (see top left) to go there within the 3D view, in first-person mode.</p>
+    <p>Click empty space in the 2D plan image to return to ortho view.</p>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -96,11 +97,10 @@
     viewer.camera.eye = [-2.56, 8.38, 8.27];
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
-    viewer.camera.perspective.fov = 65;
+    viewer.camera.perspective.fov = 75;
     viewer.camera.orbitPitch(20);
 
     viewer.cameraControl.followPointer = true;
-    viewer.cameraControl.constrainVertical = true;
 
     viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;

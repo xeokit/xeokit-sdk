@@ -26,14 +26,14 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            pointer-events: none;
+            pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 60px;
+            top: 80px;
             z-index: 200000;
             float: left;
             left: 0;
@@ -208,10 +208,12 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
     <h2>Loading a double-precision BIM Model from the file system</h2>
     <p>Geometry in this IFC model is placed at [1842022, 10, -5173301], which causes its coordinates to have
         large values that rely on xeokit's double-precision precision support.</p>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>

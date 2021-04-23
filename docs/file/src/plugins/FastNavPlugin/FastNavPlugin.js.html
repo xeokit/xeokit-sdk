@@ -43,8 +43,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-groundshadowplugin">plugins/GroundShadowPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/GroundShadowPlugin.js~GroundShadowPlugin.html">GroundShadowPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GroundShadowPlugin/ModelGroundShadow.js~ModelGroundShadow.html">ModelGroundShadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -195,7 +193,11 @@
  * viewer.scene.camera.look = [42.45, 49.62, -43.59];
  * viewer.scene.camera.up = [0.05, 0.95, 0.15];
  *
- * new FastNavPlugin(viewer, {});
+ * new FastNavPlugin(viewer, {
+ *     pbrEnabled: true,
+ *     saoEnabled: true,
+ *     edgesEnabled: true
+ * });
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
@@ -213,9 +215,22 @@
  */
 class FastNavPlugin extends Plugin {
 
-    constructor(viewer) {
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg FastNavPlugin configuration.
+     * @param {String} [cfg.id=&quot;FastNav&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if it&apos;s currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
+     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it&apos;s currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
+     * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they&apos;re currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
+     */
+    constructor(viewer, cfg = {}) {
 
         super(&quot;FastNav&quot;, viewer);
+
+        this._pbrEnabled = (cfg.pbrEnabled !== undefined &amp;&amp; cfg.pbrEnabled !== null) ? cfg.pbrEnabled : viewer.scene.pbrEnabled;
+        this._saoEnabled = (cfg.saoEnabled !== undefined &amp;&amp; cfg.saoEnabled !== null) ? cfg.saoEnabled : viewer.scene.sao.enabled;
+        this._edgesEnabled = (cfg.edgesEnabled !== undefined &amp;&amp; cfg.edgesEnabled !== null) ? cfg.edgesEnabled : viewer.scene.edgeMaterial.edges;
 
         this._pInterval = null;
         this._fadeMillisecs = 500;
@@ -243,9 +258,12 @@ class FastNavPlugin extends Plugin {
             if (timer &lt;= 0) {
                 if (fastMode) {
                     this._startFade();
-                    viewer.scene.pbrEnabled = true;
-                    viewer.scene.sao.enabled = true;
-                    viewer.scene.edgeMaterial.edges = true;
+                    this._pInterval2 = setTimeout(() =&gt; { // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
+                        viewer.scene.pbrEnabled = this._pbrEnabled;
+                        viewer.scene.sao.enabled = this._saoEnabled;
+                        viewer.scene.edgeMaterial.edges = this._edgesEnabled;
+                    }, 100);
+
                     fastMode = false;
                 }
             }
@@ -309,7 +327,9 @@ class FastNavPlugin extends Plugin {
             this._pInterval = null;
         }
 
-        const canvas = this.viewer.scene.canvas.canvas;
+        const viewer = this.viewer;
+
+        const canvas = viewer.scene.canvas.canvas;
         const canvasOffset = cumulativeOffset(canvas);
         //const zIndex = (parseInt(canvas.style[&quot;z-index&quot;]) || 0) + 1;
 
@@ -323,7 +343,8 @@ class FastNavPlugin extends Plugin {
         this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
-        this._img.src = this.viewer.getSnapshot({
+        this._img.src = &quot;&quot;; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
+        this._img.src = viewer.getSnapshot({
             format: &quot;png&quot;,
             includeGizmos: true
         });
@@ -372,8 +393,66 @@ class FastNavPlugin extends Plugin {
             clearInterval(this._pInterval);
             this._pInterval = null;
         }
+        if (this._pInterval2) {
+            clearInterval(this._pInterval2);
+            this._pInterval2 = null;
+        }
         this._img.style.opacity = 0;
         this._img.style.visibility = &quot;hidden&quot;;
+    }
+
+    /**
+     * Sets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     *
+     * @return {Boolean} Whether PBR will be enabled.
+     */
+    set pbrEnabled(pbrEnabled) {
+        this._pbrEnabled = pbrEnabled;
+    }
+
+    /**
+     * Gets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     *
+     * @return {Boolean} Whether PBR will be enabled.
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled
+    }
+
+    /**
+     * Sets whether to enable scalable ambient occlusion (SAO) when the camera stops moving.
+     *
+     * @return {Boolean} Whether SAO will be enabled.
+     */
+    set saoEnabled(saoEnabled) {
+        this._saoEnabled = saoEnabled;
+    }
+
+    /**
+     * Gets whether the FastNavPlugin enables SAO when switching to quality rendering.
+     *
+     * @return {Boolean} Whether SAO will be enabled.
+     */
+    get saoEnabled() {
+        return this._saoEnabled
+    }
+
+    /**
+     * Sets whether to show enhanced edges when the camera stops moving.
+     *
+     * @return {Boolean} Whether edge enhancement will be enabled.
+     */
+    set edgesEnabled(edgesEnabled) {
+        this._edgesEnabled = edgesEnabled;
+    }
+
+    /**
+     * Gets whether to show enhanced edges when the camera stops moving.
+     *
+     * @return {Boolean} Whether edge enhancement will be enabled.
+     */
+    get edgesEnabled() {
+        return this._edgesEnabled
     }
 
     /**
@@ -399,8 +478,10 @@ class FastNavPlugin extends Plugin {
         this.viewer.scene.input.off(this._onSceneMouseUp);
         this.viewer.scene.input.off(this._onSceneMouseMove);
         super.destroy();
-        this._img.parentNode.removeChild(this._img);
-        this._img = null;
+        if (this._img) {
+            this._img.parentNode.removeChild(this._img);
+            this._img = null;
+        }
     }
 }
 

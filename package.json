@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.8.0",
+  "version": "1.8.2",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "index.js",
   "scripts": {
@@ -38,10 +38,12 @@
   "homepage": "https://xeokit.io",
   "devDependencies": {
     "@percy/script": "^1.1.0",
-    "http-server": "^0.12.3",
     "esdoc": "^1.1.0",
+    "esdoc-custom-theme": "^1.4.2",
+    "esdoc-publish-html-plugin": "^1.1.2",
     "esdoc-standard-plugin": "^1.0.0",
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "http-server": "^0.12.3"
   },
   "files": [
     "/src"

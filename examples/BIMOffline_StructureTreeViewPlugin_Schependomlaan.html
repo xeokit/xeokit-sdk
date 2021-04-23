@@ -13,14 +13,14 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            pointer-events: none;
+            pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 60px;
+            top: 80px;
             z-index: 200000;
             float: left;
             left: 0;
@@ -112,8 +112,10 @@
 <canvas id="myCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div id="info">
+    <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>TreeViewPlugin</h1>
     <h2>HTML tree view of IFC structure</h2>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>

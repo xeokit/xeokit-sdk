@@ -13,10 +13,10 @@
     <style>
 
         body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 1rem;
             line-height: 1.50;
-            color: #000000;
+            color: #212529;
             background-color: #000000;
             text-decoration: none;
             word-spacing: normal;
@@ -35,32 +35,30 @@
             height: 100%;
             background: #fdfdfd;
             overflow: auto;
-            border-right: 2px solid #444444;
+            border-right: 2px solid #212529;
             padding: 20px;
             padding-bottom: 100px;
             user-select: none;
         }
 
         #index a {
-            text-decoration: none;
+            /*text-decoration: none;*/
         }
 
         #index h1 {
-            color: #000000;
             margin-top: 0;
             margin-bottom: 0;
-            font-size: 25px;
+            font-size: 1.8rem;
             font-weight: normal;
             text-decoration: none !important;
         }
 
         #index h1 a {
-            color: #000000;
+            color: #212529;
         }
 
         #index h2 {
-            color: #000000;
-            font-size: 20px;
+            font-size: 1.4rem;
             font-weight: normal;
             padding-top: 20px;
             padding-bottom: 10px;
@@ -83,7 +81,6 @@
             padding-left: 5px !important;
             padding-top: 0;
             padding-bottom: 0;
-            color: #000000;
             border: 1px solid #676767;
             background: #FFFF44;
         }
@@ -170,7 +167,6 @@
         .index-button {
             position: absolute;
             font-size: 18px;
-            color: #444444;
             top: 15px;
             left: 20px;
             text-align: center;
@@ -189,20 +185,20 @@
 
         .page-title {
             position: absolute;
-            font-size: 22px;
-            color: #444444;
+            font-size: 1.6rem;
             top: 17px;
             left: 75px;
-            text-align: center;
+            text-align: left;
             -webkit-user-select: none;
             -ms-user-select: none;
             user-select: none;
             z-index: 5;
             transition: all 300ms ease-in-out;
+            max-width: calc(100% - 400px);
+            pointer-events: none;
         }
 
         .viewSourceButton {
-            color: #444444;
             position: absolute;
             left: 20px;
             bottom: 15px;
@@ -262,13 +258,13 @@
 
         "Annotations": [
             "#Pinning 3D labels on models",
-            ["annotations_clickShowLabels", "Click annotation markers to show their labels"],
-            ["annotations_hoverShowLabels", "Hover over annotation markers to show their labels"],
-            ["annotations_clickFlyToPosition", "Click each annotation marker to move to its vantage point"],
+            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
+            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
+            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
             ["annotations_createWithMouse", "Click on the model to create annotations"],
             ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
             ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
-            ["annotations_occlusionDisabled", "Annotations without occlusion culling (always visible)"],
+            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
         ],
 
         "AxisGizmo": [
@@ -340,15 +336,15 @@
         "Lighting": [
             "#Light sources",
             ["lights_AmbientLight", "Ambient light"],
-            ["lights_DirLight_view", "View-space directional light"],
-            ["lights_DirLight_world", "World-space directional light"],
-            ["lights_PointLight_view", "View-space point light"],
-            ["lights_PointLight_world", "World-space point light"],
+            ["lights_DirLight_view", "View-space directional lights"],
+            ["lights_DirLight_world", "World-space directional lights"],
+            ["lights_PointLight_view", "View-space point lights"],
+            ["lights_PointLight_world", "World-space point lights"],
             "#Testing lights with different scene representations",
-            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional light with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional light with various scene representations"],
-            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point light with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point light with various scene representations"],
+            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point lights with various scene representations"],
         ],
 
         "Loading Models": [
@@ -366,7 +362,7 @@
             ["BIMOffline_XKT_metadata_Schependomlaan", "Using IFC metadata to X-ray an IfcBuildingStorey"],
             ["BIMOffline_XKT_metadata_moveStoreys", "Using IFC metadata to separate IfcBuildingStoreys"],
             ["BIMOffline_XKT_authorMetadata", "Viewing an IFC4 BIM model with authoring data"],
-            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing a IFC4 BIM model placed at [1842022, 10, -5173301]"],
+            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing an IFC4 BIM model placed at [1842022, 10, -5173301]"],
             ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing a double-precision CityJSON model"],
             ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
 
