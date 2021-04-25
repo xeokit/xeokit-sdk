@@ -57,8 +57,8 @@ class FastNavPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg FastNavPlugin configuration.
      * @param {String} [cfg.id="FastNav"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if it's currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
-     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it's currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
+     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if its currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
+     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if its currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
      * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they're currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
      */
     constructor(viewer, cfg = {}) {
