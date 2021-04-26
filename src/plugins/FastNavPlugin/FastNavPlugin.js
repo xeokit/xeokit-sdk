@@ -76,6 +76,17 @@ class FastNavPlugin extends Plugin {
         let timer = timeoutDuration;
         let fastMode = false;
 
+        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", () => {
+            timer = timeoutDuration;
+            if (!fastMode) {
+                this._cancelFade();
+                viewer.scene.pbrEnabled = false;
+                viewer.scene.sao.enabled = false;
+                viewer.scene.edgeMaterial.edges = false;
+                fastMode = true;
+            }
+        });
+
         this._onCameraMatrix = viewer.scene.camera.on("matrix", () => {
             timer = timeoutDuration;
             if (!fastMode) {
@@ -103,17 +114,6 @@ class FastNavPlugin extends Plugin {
 
                     fastMode = false;
                 }
-            }
-        });
-
-        this._onSceneObjectVisibility = viewer.scene.on("objectVisibility", () => {
-            timer = timeoutDuration;
-            if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
-                fastMode = true;
             }
         });
 
@@ -168,16 +168,15 @@ class FastNavPlugin extends Plugin {
 
         const canvas = viewer.scene.canvas.canvas;
         const canvasOffset = cumulativeOffset(canvas);
-        //const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
-
-        this._img.style.position = "absolute";
-        this._img.style["z-index"] = 5;
+        const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
+        this._img.style.position = "fixed";
+        this._img.style["margin"] = 0 + "px";
+        this._img.style["z-index"] = zIndex;
         this._img.style["background"] = canvas.style.background;
         this._img.style.left = canvasOffset.left + "px";
         this._img.style.top = canvasOffset.top + "px";
         this._img.style.width = canvas.width + "px";
         this._img.style.height = canvas.height + "px";
-        this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
         this._img.src = ""; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
@@ -186,12 +185,22 @@ class FastNavPlugin extends Plugin {
             includeGizmos: true
         });
         this._img.style.visibility = "visible";
+        this._img.style.opacity = 1;
 
         let opacity = 1;
         this._pInterval = setInterval(() => {
             opacity -= inc;
             if (opacity > 0) {
                 this._img.style.opacity = opacity;
+                const canvasOffset = cumulativeOffset(canvas);
+                this._img.style.left = canvasOffset.left + "px";
+                this._img.style.top = canvasOffset.top + "px";
+                this._img.style.width = canvas.width + "px";
+                this._img.style.height = canvas.height + "px";
+                this._img.style.opacity = opacity;
+                this._img.width = canvas.width;
+                this._img.height = canvas.height;
+
             } else {
                 this._img.style.opacity = 0;
                 this._img.style.visibility = "hidden";
@@ -309,11 +318,11 @@ class FastNavPlugin extends Plugin {
     destroy() {
         this._cancelFade();
         this.viewer.scene.camera.off(this._onCameraMatrix);
-        this.viewer.scene.off(this._onSceneTick);
-        this.viewer.scene.off(this._onSceneObjectVisibility);
+        this.viewer.scene.canvas.off(this._onCanvasBoundary);
         this.viewer.scene.input.off(this._onSceneMouseDown);
         this.viewer.scene.input.off(this._onSceneMouseUp);
         this.viewer.scene.input.off(this._onSceneMouseMove);
+        this.viewer.scene.off(this._onSceneTick);
         super.destroy();
         if (this._img) {
             this._img.parentNode.removeChild(this._img);
