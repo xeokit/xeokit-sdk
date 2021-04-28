@@ -241,20 +241,17 @@ class TrianglesBatchingDepthRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        if (!WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
+        src.push("const float   packUpScale = 256. / 255.;");
+        src.push("const float   unpackDownscale = 255. / 256.;");
+        src.push("const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+        src.push("const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );");
+        src.push("const float   shiftRight8 = 1.0 / 256.;");
 
-            src.push("const float   packUpScale = 256. / 255.;");
-            src.push("const float   unpackDownscale = 255. / 256.;");
-            src.push("const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );");
-            src.push("const float   shiftRight8 = 1.0 / 256.;");
-
-            src.push("vec4 packDepthToRGBA( const in float v ) {");
-            src.push("    vec4 r = vec4( fract( v * packFactors ), v );");
-            src.push("    r.yzw -= r.xyz * shiftRight8;");
-            src.push("    return r * packUpScale;");
-            src.push("}");
-        }
+        src.push("vec4 packDepthToRGBA( const in float v ) {");
+        src.push("    vec4 r = vec4( fract( v * packFactors ), v );");
+        src.push("    r.yzw -= r.xyz * shiftRight8;");
+        src.push("    return r * packUpScale;");
+        src.push("}");
         src.push("varying vec2 vHighPrecisionZW;");
         src.push("void main(void) {");
         if (clipping) {
