@@ -19,34 +19,28 @@ import {math} from "../../viewer/scene/math/math.js";
  *
  * ````JavaScript````
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
  * import {AxisGizmoPlugin} from "../src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
  * });
  *
- * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
  *
- * new AxisGizmoPlugin(viewer, {size: [250, 250]});
+ * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * const model = gltfLoader.load({
- *     id: "myModel",
- *     src: "./models/gltf/schependomlaan/scene.gltf",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
- *     edges: true
+ * new AxisGizmoPlugin(viewer, {
+ *     canvasId: "myAxisGizmoCanvas"
  * });
  *
- * const scene = viewer.scene;
- * const camera = scene.camera;
- *
- * camera.orbitPitch(20);
- *
- * model.on("loaded", () => {
- *     viewer.cameraFlight.jumpTo(modelNode);
- *     scene.on("tick", () => {
- *        camera.orbitYaw(0.4);
- *     })
+ * const model = xktLoader.load({
+ *     id: "myModel",
+ *     src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
+ *     metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
+ *     edges: true
  * });
  * ````
  */
@@ -57,7 +51,8 @@ class AxisGizmoPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="AxisGizmo"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Number[]} [cfg.size=[250,250]] Initial size in pixels.
+     * @param {String} [cfg.canvasId] ID of an existing HTML canvas to display the AxisGizmo - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas to display the AxisGizmo - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      */
     constructor(viewer, cfg) {
 
@@ -65,76 +60,42 @@ class AxisGizmoPlugin extends Plugin {
 
         super("AxisGizmo", viewer, cfg);
 
-        var camera = viewer.scene.camera;
+        const camera = viewer.scene.camera;
 
-        var size = cfg.size || [250, 250];
+        if (!cfg.canvasId && !cfg.canvasElement) {
+            this.error("Config expected: either 'canvasId' or 'canvasElement'");
+        }
 
-        var canvas = camera.scene.canvas;
-
-        // Create canvas for this gizmo
-
-        var canvasId = "xeokit-axisHelper-canvas-" + math.createUUID();
-        var body = document.getElementsByTagName("body")[0];
-        var div = document.createElement('div');
-        var style = div.style;
-        style.height = size[0] + "px";
-        style.width = size[1] + "px";
-        style.padding = "0";
-        style.margin = "0";
-        style.float = "left";
-        style.left = "410px";
-        style.bottom = "350px";
-        style.position = "absolute";
-        style["z-index"] = "1000000";
-        // style["background-color"] = "rgba(0,0,0,0.3)";
-        div.innerHTML += '<canvas id="' + canvasId + '" style="width: ' + size[0] + 'px; height: ' + size[1] + 'px; float: left; margin: 0; padding: 0;"></canvas>';
-        body.appendChild(div);
-
-        canvas.on("boundary",
-            function (boundary) {
-                style.left = boundary[0] + 10 + "px";
-                style.bottom = (boundary[0] + 20) + "px";
+        try {
+            this._axisGizmoScene = new Scene(viewer, {
+                canvasId: cfg.canvasId,
+                canvasElement: cfg.canvasElement,
+                transparent: true
             });
+        } catch (error) {
+            this.error(error);
+            return;
+        }
 
-        // The scene containing this helper
-        var scene = new Scene(viewer, {
-            canvasId: canvasId,
-            transparent: true
-        });
+        const axisGizmoScene = this._axisGizmoScene;
 
-        // Custom lights
-        scene.clearLights();
+        axisGizmoScene.clearLights();
 
-        new AmbientLight(scene, {
-            color: [0.45, 0.45, 0.5],
-            intensity: 0.9
-        });
-
-        new DirLight(scene, {
-            dir: [-0.5, 0.5, -0.6],
-            color: [0.8, 0.8, 0.7],
-            intensity: 1.0,
-            space: "view"
-        });
-
-        new DirLight(scene, {
-            dir: [0.5, -0.5, -0.6],
-            color: [0.8, 0.8, 0.8],
-            intensity: 1.0,
-            space: "view"
-        });
+        new AmbientLight(axisGizmoScene, {color: [0.45, 0.45, 0.5], intensity: 0.9});
+        new DirLight(axisGizmoScene, {dir: [-0.5, 0.5, -0.6], color: [0.8, 0.8, 0.7], intensity: 1.0, space: "view"});
+        new DirLight(axisGizmoScene, {dir: [0.5, -0.5, -0.6], color: [0.8, 0.8, 0.8], intensity: 1.0, space: "view"});
 
         // Rotate helper in synch with target camera
 
-        var helperCamera = scene.camera;
+        const helperCamera = axisGizmoScene.camera;
 
         camera.on("matrix", function () {
 
-            var eye = camera.eye;
-            var look = camera.look;
-            var up = camera.up;
+            const eye = camera.eye;
+            const look = camera.look;
+            const up = camera.up;
 
-            var eyeLook = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, [])), 22);
+            const eyeLook = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, [])), 22);
 
             helperCamera.look = [0, 0, 0];
             helperCamera.eye = eyeLook;
@@ -143,7 +104,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // ----------------- Components that are shared among more than one mesh ---------------
 
-        var arrowHead = new ReadableGeometry(scene, buildCylinderGeometry({
+        const arrowHead = new ReadableGeometry(axisGizmoScene, buildCylinderGeometry({
             radiusTop: 0.01,
             radiusBottom: 0.6,
             height: 1.7,
@@ -152,7 +113,7 @@ class AxisGizmoPlugin extends Plugin {
             openEnded: false
         }));
 
-        var arrowShaft = new ReadableGeometry(scene, buildCylinderGeometry({
+        const arrowShaft = new ReadableGeometry(axisGizmoScene, buildCylinderGeometry({
             radiusTop: 0.2,
             radiusBottom: 0.2,
             height: 4.5,
@@ -161,7 +122,7 @@ class AxisGizmoPlugin extends Plugin {
             openEnded: false
         }));
 
-        var xAxisMaterial = new PhongMaterial(scene, { // Red by convention
+        const xAxisMaterial = new PhongMaterial(axisGizmoScene, { // Red by convention
             diffuse: [1, 0.3, 0.3],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -169,7 +130,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-        var xAxisLabelMaterial = new PhongMaterial(scene, { // Red by convention
+        const xAxisLabelMaterial = new PhongMaterial(axisGizmoScene, { // Red by convention
             emissive: [1, 0.3, 0.3],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -177,7 +138,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-        var yAxisMaterial = new PhongMaterial(scene, { // Green by convention
+        const yAxisMaterial = new PhongMaterial(axisGizmoScene, { // Green by convention
             diffuse: [0.3, 1, 0.3],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -185,7 +146,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-        var yAxisLabelMaterial = new PhongMaterial(scene, { // Green by convention
+        const yAxisLabelMaterial = new PhongMaterial(axisGizmoScene, { // Green by convention
             emissive: [0.3, 1, 0.3],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -193,8 +154,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-
-        var zAxisMaterial = new PhongMaterial(scene, { // Blue by convention
+        const zAxisMaterial = new PhongMaterial(axisGizmoScene, { // Blue by convention
             diffuse: [0.3, 0.3, 1],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -202,7 +162,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-        var zAxisLabelMaterial = new PhongMaterial(scene, {
+        const zAxisLabelMaterial = new PhongMaterial(axisGizmoScene, {
             emissive: [0.3, 0.3, 1],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -210,7 +170,7 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-        var ballMaterial = new PhongMaterial(scene, {
+        const ballMaterial = new PhongMaterial(axisGizmoScene, {
             diffuse: [0.5, 0.5, 0.5],
             ambient: [0.0, 0.0, 0.0],
             specular: [.6, .6, .3],
@@ -218,20 +178,19 @@ class AxisGizmoPlugin extends Plugin {
             lineWidth: 2
         });
 
-
         // ----------------- Meshes ------------------------------
 
         this._meshes = [
 
             // Sphere behind gnomon
 
-            new Mesh(scene, {
-                geometry: new ReadableGeometry(scene, buildSphereGeometry({
+            new Mesh(axisGizmoScene, {
+                geometry: new ReadableGeometry(axisGizmoScene, buildSphereGeometry({
                     radius: 9.0,
                     heightSegments: 60,
                     widthSegments: 60
                 })),
-                material: new PhongMaterial(scene, {
+                material: new PhongMaterial(axisGizmoScene, {
                     diffuse: [0.0, 0.0, 0.0],
                     emissive: [0.1, 0.1, 0.1],
                     ambient: [0.1, 0.1, 0.2],
@@ -247,8 +206,8 @@ class AxisGizmoPlugin extends Plugin {
 
             // Ball at center of axis
 
-            new Mesh(scene, {  // Arrow
-                geometry: new ReadableGeometry(scene, buildSphereGeometry({
+            new Mesh(axisGizmoScene, {  // Arrow
+                geometry: new ReadableGeometry(axisGizmoScene, buildSphereGeometry({
                     radius: 1.0
                 })),
                 material: ballMaterial,
@@ -259,7 +218,7 @@ class AxisGizmoPlugin extends Plugin {
 
             // X-axis arrow, shaft and label
 
-            new Mesh(scene, {  // Arrow
+            new Mesh(axisGizmoScene, {  // Arrow
                 geometry: arrowHead,
                 material: xAxisMaterial,
                 pickable: false,
@@ -269,7 +228,7 @@ class AxisGizmoPlugin extends Plugin {
                 rotation: [0, 0, 90]
             }),
 
-            new Mesh(scene, {  // Shaft
+            new Mesh(axisGizmoScene, {  // Shaft
                 geometry: arrowShaft,
                 material: xAxisMaterial,
                 pickable: false,
@@ -279,8 +238,8 @@ class AxisGizmoPlugin extends Plugin {
                 rotation: [0, 0, 90]
             }),
 
-            new Mesh(scene, {  // Label
-                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "X", size: 1.5})),
+            new Mesh(axisGizmoScene, {  // Label
+                geometry: new ReadableGeometry(axisGizmoScene, buildVectorTextGeometry({text: "X", size: 1.5})),
                 material: xAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -291,7 +250,7 @@ class AxisGizmoPlugin extends Plugin {
 
             // Y-axis arrow, shaft and label
 
-            new Mesh(scene, {  // Arrow
+            new Mesh(axisGizmoScene, {  // Arrow
                 geometry: arrowHead,
                 material: yAxisMaterial,
                 pickable: false,
@@ -300,7 +259,7 @@ class AxisGizmoPlugin extends Plugin {
                 position: [0, 5, 0]
             }),
 
-            new Mesh(scene, {  // Shaft
+            new Mesh(axisGizmoScene, {  // Shaft
                 geometry: arrowShaft,
                 material: yAxisMaterial,
                 pickable: false,
@@ -309,8 +268,8 @@ class AxisGizmoPlugin extends Plugin {
                 position: [0, 2, 0]
             }),
 
-            new Mesh(scene, {  // Label
-                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "Y", size: 1.5})),
+            new Mesh(axisGizmoScene, {  // Label
+                geometry: new ReadableGeometry(axisGizmoScene, buildVectorTextGeometry({text: "Y", size: 1.5})),
                 material: yAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -321,7 +280,7 @@ class AxisGizmoPlugin extends Plugin {
 
             // Z-axis arrow, shaft and label
 
-            new Mesh(scene, {  // Arrow
+            new Mesh(axisGizmoScene, {  // Arrow
                 geometry: arrowHead,
                 material: zAxisMaterial,
                 pickable: false,
@@ -331,7 +290,7 @@ class AxisGizmoPlugin extends Plugin {
                 rotation: [90, 0, 0]
             }),
 
-            new Mesh(scene, {  // Shaft
+            new Mesh(axisGizmoScene, {  // Shaft
                 geometry: arrowShaft,
                 material: zAxisMaterial,
                 pickable: false,
@@ -341,8 +300,8 @@ class AxisGizmoPlugin extends Plugin {
                 rotation: [90, 0, 0]
             }),
 
-            new Mesh(scene, {  // Label
-                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "Z", size: 1.5})),
+            new Mesh(axisGizmoScene, {  // Label
+                geometry: new ReadableGeometry(axisGizmoScene, buildVectorTextGeometry({text: "Z", size: 1.5})),
                 material: zAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -353,12 +312,12 @@ class AxisGizmoPlugin extends Plugin {
         ];
     }
 
-    /** Shows or hides this helper
+    /** Shows or hides this AxisGizmoPlugin.
      *
      * @param visible
      */
     setVisible(visible) {
-        for (var i = 0; i < this._meshes.length; i++) {
+        for (let i = 0; i < this._meshes.length; i++) {
             this._meshes[i].visible = visible;
         }
     }
@@ -367,6 +326,9 @@ class AxisGizmoPlugin extends Plugin {
      * Destroys this AxisGizmoPlugin.
      */
     destroy() {
+        this._axisGizmoCanvas = null;
+        this._navCubeScene.destroy();
+        this._navCubeScene = null;
         super.destroy();
     }
 }
