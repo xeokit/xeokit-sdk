@@ -283,7 +283,7 @@ class TrianglesInstancingDepthRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
+        if (!WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
 
             src.push("const float   packUpScale = 256. / 255.;");
             src.push("const float   unpackDownscale = 255. / 256.;");
