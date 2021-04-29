@@ -1,5 +1,5 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
-import minify from 'rollup-plugin-minify-es';
+import { terser } from "rollup-plugin-terser";
 
 export default {
     input: './src/index.js',
@@ -12,6 +12,6 @@ export default {
     ],
     plugins: [
         nodeResolve(),
-        minify()
+        terser()
     ]
 }

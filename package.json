@@ -44,14 +44,14 @@
     "esdoc-publish-html-plugin": "^1.1.2",
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.16.0",
-    "http-server": "^0.12.3"
+    "http-server": "^0.12.3",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "files": [
     "/src"
   ],
   "dependencies": {
     "rollup": "^2.46.0",
-    "rollup-plugin-minify-es": "^1.1.1",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
