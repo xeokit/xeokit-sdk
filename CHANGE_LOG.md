@@ -4,8 +4,10 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.8.3
 
-April 26, 2021
+Unreleased
 
+* General
+  * Build into library using Rollup. [#638](https://github.com/xeokit/xeokit-sdk/issues/638) ([**@incureforce**](https://github.com/incureforce), [**@xeolabs**](https://github.com/xeolabs))
 * FastNavPlugin
   * Fix FastNavPlugin snapshot overlay alignment. [#628](https://github.com/xeokit/xeokit-sdk/issues/628) ([**@xeolabs**](https://github.com/xeolabs))
 
