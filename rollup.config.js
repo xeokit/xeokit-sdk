@@ -8,11 +8,6 @@ export default {
             file: './dist/xeokit-sdk.es.js',
             format: 'es',
             name: 'bundle'
-        },
-        {
-            file: './dist/xeokit-sdk.cjs.js',
-            format: 'cjs',
-            name: 'bundle2'
         }
     ],
     plugins: [
