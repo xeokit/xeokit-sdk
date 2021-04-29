@@ -320,7 +320,10 @@ class Canvas extends Component {
                     this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
                 }
                 if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                    const ext = this.gl.getExtension('EXT_frag_depth');
+                    this.gl.getExtension('EXT_frag_depth');
+                }
+                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
+                    this.gl.getExtension('WEBGL_depth_texture');
                 }
             }
         }

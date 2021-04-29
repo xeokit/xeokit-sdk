@@ -15,18 +15,6 @@ body {
     touch-action: none;
 }
 
-
-
-/*#viewer {*/
-/*    position: absolute;*/
-/*    left: 340px;*/
-/*    width: -webkit-calc(100% - 340px); !* Safari *!*/
-/*    width: calc(100% - 340px);*/
-/*    height: 100%;*/
-/*    border: 0px;*/
-/*    background-color: black;*/
-/*}*/
-
 #sourceButton {
     position: fixed;
     bottom: 20px;

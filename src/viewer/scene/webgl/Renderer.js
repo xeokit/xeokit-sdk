@@ -23,6 +23,8 @@ const Renderer = function (scene, options) {
     const canvasTransparent = (!!options.transparent);
     const alphaDepthMask = options.alphaDepthMask;
 
+    const extensionHandles = {};
+
     const pickIDs = new Map({});
 
     let drawableTypeInfo = {};
@@ -33,9 +35,11 @@ const Renderer = function (scene, options) {
     let imageDirty = true;
     let shadowsDirty = true;
 
-    const saoDepthBuffer = new RenderBuffer(canvas, gl);
-    const occlusionBuffer1 = new RenderBuffer(canvas, gl);
-    const occlusionBuffer2 = new RenderBuffer(canvas, gl);
+    const saoDepthRenderBuffer = new RenderBuffer(canvas, gl, {
+        depthTexture: WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
+    });
+    const occlusionRenderBuffer1 = new RenderBuffer(canvas, gl);
+    const occlusionRenderBuffer2 = new RenderBuffer(canvas, gl);
 
     const pickBuffer = new RenderBuffer(canvas, gl);
     const snapshotBuffer = new RenderBuffer(canvas, gl);
@@ -69,9 +73,9 @@ const Renderer = function (scene, options) {
 
         pickBuffer.webglContextRestored(gl);
         snapshotBuffer.webglContextRestored(gl);
-        saoDepthBuffer.webglContextRestored(gl);
-        occlusionBuffer1.webglContextRestored(gl);
-        occlusionBuffer2.webglContextRestored(gl);
+        saoDepthRenderBuffer.webglContextRestored(gl);
+        occlusionRenderBuffer1.webglContextRestored(gl);
+        occlusionRenderBuffer2.webglContextRestored(gl);
 
         saoOcclusionRenderer.init();
         saoDepthLimitedBlurRenderer.init();
@@ -249,12 +253,16 @@ const Renderer = function (scene, options) {
 
     function draw(params) {
 
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
-            gl.getExtension("OES_element_index_uint");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
+            extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
         }
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            gl.getExtension('EXT_frag_depth');
+            extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
+        }
+
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
+            extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
         }
 
         const sao = scene.sao;
@@ -274,33 +282,33 @@ const Renderer = function (scene, options) {
 
         // Render depth buffer
 
-        saoDepthBuffer.bind();
-        saoDepthBuffer.clear();
+        saoDepthRenderBuffer.bind();
+        saoDepthRenderBuffer.clear();
         drawDepth(params);
-        saoDepthBuffer.unbind();
+        saoDepthRenderBuffer.unbind();
 
         // Render occlusion buffer
 
-        occlusionBuffer1.bind();
-        occlusionBuffer1.clear();
-        saoOcclusionRenderer.render(saoDepthBuffer.getTexture(), null);
-        occlusionBuffer1.unbind();
+        occlusionRenderBuffer1.bind();
+        occlusionRenderBuffer1.clear();
+        saoOcclusionRenderer.render(saoDepthRenderBuffer);
+        occlusionRenderBuffer1.unbind();
 
         if (sao.blur) {
 
             // Horizontally blur occlusion buffer 1 into occlusion buffer 2
 
-            occlusionBuffer2.bind();
-            occlusionBuffer2.clear();
-            saoDepthLimitedBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
-            occlusionBuffer2.unbind();
+            occlusionRenderBuffer2.bind();
+            occlusionRenderBuffer2.clear();
+            saoDepthLimitedBlurRenderer.render(saoDepthRenderBuffer, occlusionRenderBuffer1, 0);
+            occlusionRenderBuffer2.unbind();
 
             // Vertically blur occlusion buffer 2 back into occlusion buffer 1
 
-            occlusionBuffer1.bind();
-            occlusionBuffer1.clear();
-            saoDepthLimitedBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
-            occlusionBuffer1.unbind();
+            occlusionRenderBuffer1.bind();
+            occlusionRenderBuffer1.clear();
+            saoDepthLimitedBlurRenderer.render(saoDepthRenderBuffer, occlusionRenderBuffer2, 1);
+            occlusionRenderBuffer1.unbind();
         }
     }
 
@@ -474,7 +482,7 @@ const Renderer = function (scene, options) {
             frameCtx.lineWidth = 1;
 
             const saoPossible = scene.sao.possible;
-            frameCtx.occlusionTexture = saoPossible ? occlusionBuffer1.getTexture() : null;
+            frameCtx.occlusionTexture = saoPossible ? occlusionRenderBuffer1.getTexture() : null;
 
             let i;
             let len;
@@ -808,11 +816,15 @@ const Renderer = function (scene, options) {
             updateDrawlist();
 
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
-                gl.getExtension("OES_element_index_uint");
+                extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
             }
 
             if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                gl.getExtension('EXT_frag_depth');
+                extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
+            }
+
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
+                extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
             }
 
             let canvasX;
@@ -1272,9 +1284,9 @@ const Renderer = function (scene, options) {
 
         pickBuffer.destroy();
         snapshotBuffer.destroy();
-        saoDepthBuffer.destroy();
-        occlusionBuffer1.destroy();
-        occlusionBuffer2.destroy();
+        saoDepthRenderBuffer.destroy();
+        occlusionRenderBuffer1.destroy();
+        occlusionRenderBuffer2.destroy();
 
         saoOcclusionRenderer.destroy();
         saoDepthLimitedBlurRenderer.destroy();

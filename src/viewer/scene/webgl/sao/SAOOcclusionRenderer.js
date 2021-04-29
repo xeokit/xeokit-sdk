@@ -1,6 +1,7 @@
 import {Program} from "./../Program.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
+import {WEBGL_INFO} from "../../webglInfo.js";
 
 const tempVec2 = math.vec2();
 
@@ -47,7 +48,7 @@ class SAOOcclusionRenderer {
         this._indicesBuf = null;
     }
 
-    render(depthTexture) {
+    render(depthRenderBuffer) {
 
         this._build();
 
@@ -115,6 +116,10 @@ class SAOOcclusionRenderer {
         gl.uniform2fv(this._uViewport, tempVec2);
         gl.uniform1f(this._uRandomSeed, randomSeed);
 
+        const depthTexture = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
+            ? depthRenderBuffer.getDepthTexture()
+            : depthRenderBuffer.getTexture();
+
         program.bindTexture(this._uDepthTexture, depthTexture, 0);
 
         this._aUV.bindArrayBuffer(this._uvBuf);
@@ -148,13 +153,8 @@ class SAOOcclusionRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
-                    precision highp float;
+            vertex: [`precision highp float;
                     precision highp int;
-                    #else
-                    precision mediump float;
-                    precision mediump int;
-                    #endif
                     
                     attribute vec3 aPosition;
                     attribute vec2 aUV;            
@@ -167,14 +167,9 @@ class SAOOcclusionRenderer {
                     }`],
 
             fragment: [
-                `#extension GL_OES_standard_derivatives : require
-                #ifdef GL_FRAGMENT_PRECISION_HIGH
+                `#extension GL_OES_standard_derivatives : require              
                 precision highp float;
-                precision highp int;
-                #else
-                precision mediump float;
-                precision mediump int;
-                #endif                   
+                precision highp int;           
                 
                 #define NORMAL_TEXTURE 0
                 #define PI 3.14159265359
@@ -232,8 +227,8 @@ class SAOOcclusionRenderer {
                     return r * packUpscale;
                 }
 
-                float unpackRGBAToFloat( const in vec4 v ) {
-                    return dot( v, unPackFactors );
+                float unpackRGBAToFloat( const in vec4 v ) {                   
+                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unPackFactors );
                 }
                 
                 float perspectiveDepthToViewZ( const in float invClipZ, const in float near, const in float far ) {
@@ -244,9 +239,9 @@ class SAOOcclusionRenderer {
                     return linearClipZ * ( near - far ) - near;
                 }
                 
-                float getDepth( const in vec2 screenPos ) {
-                	return unpackRGBAToFloat( texture2D( uDepthTexture, screenPos ) );
-                }
+                float getDepth( const in vec2 screenPosition ) {`
+                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
+                `}
 
                 float getViewZ( const in float depth ) {
                      if (uPerspective) {

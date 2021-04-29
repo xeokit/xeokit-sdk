@@ -7,11 +7,22 @@
     <title>xeokit Example</title>
     <link href="css/pageStyle.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #myAxisGizmoCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 100px;
+            left: 50px;
+            z-index: 200000;
+        }
+    </style>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
+<canvas id="myAxisGizmoCanvas"></canvas>
 <div class="slideout-sidebar">
     <h1>AxisGizmoPlugin</h1>
     <h2>Shows the coordinate axis</h2>
@@ -54,7 +65,9 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    new AxisGizmoPlugin(viewer, {size: [250, 250]});
+    new AxisGizmoPlugin(viewer, {
+        canvasId: "myAxisGizmoCanvas"
+    });
 
     const model = xktLoader.load({
         id: "myModel",
@@ -62,11 +75,6 @@
         metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
         edges: true
     });
-
-    const scene = viewer.scene;
-    const camera = scene.camera;
-
-    camera.orbitPitch(20);
 
 </script>
 </html>

@@ -1,6 +1,7 @@
 import {Program} from "./../Program.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
+import {WEBGL_INFO} from "../../webglInfo.js";
 
 const blurStdDev = 4;
 const blurDepthCutoff = 0.01;
@@ -65,13 +66,8 @@ class SAODepthLimitedBlurRenderer {
         this._program = new Program(gl, {
 
             vertex: [
-                `#ifdef GL_FRAGMENT_PRECISION_HIGH
-                precision highp float;
+                `precision highp float;
                 precision highp int;
-                #else
-                precision mediump float;
-                precision mediump int;
-                #endif
                     
                 attribute vec3 aPosition;
                 attribute vec2 aUV;
@@ -85,13 +81,8 @@ class SAODepthLimitedBlurRenderer {
                 }`],
 
             fragment: [
-                `#ifdef GL_FRAGMENT_PRECISION_HIGH
-                precision highp float;
+                `precision highp float;
                 precision highp int;
-                #else
-                precision mediump float;
-                precision mediump int;
-                #endif
                     
                 #define PI 3.14159265359
                 #define PI2 6.28318530718
@@ -122,7 +113,7 @@ class SAODepthLimitedBlurRenderer {
                 const float shiftRights = 1. / 256.;
                 
                 float unpackRGBAToFloat( const in vec4 v ) {
-                    return dot( v, unpackFactors );
+                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unpackFactors );
                 }               
 
                 vec4 packFloatToRGBA( const in float v ) {
@@ -147,9 +138,9 @@ class SAODepthLimitedBlurRenderer {
                     return ( uCameraNear * uCameraFar ) / ( ( uCameraFar - uCameraNear ) * invClipZ - uCameraFar );
                 }
 
-                float getDepth( const in vec2 screenPosition ) {
-                	return unpackRGBAToFloat( texture2D( uDepthTexture, screenPosition ) );
-                }
+                float getDepth( const in vec2 screenPosition ) {`
+                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
+                `}
 
                 float getViewZ( const in float depth ) {
                      return perspectiveDepthToViewZ( depth );
@@ -233,7 +224,7 @@ class SAODepthLimitedBlurRenderer {
         this._aUV = this._program.getAttribute("aUV");
     }
 
-    render(depthTexture, occlusionTexture, direction) {
+    render(depthRenderBuffer, occlusionRenderBuffer, direction) {
 
         if (this._programError) {
             return;
@@ -289,6 +280,12 @@ class SAODepthLimitedBlurRenderer {
         }
 
         gl.uniform1fv(this._uSampleWeights, sampleWeights);
+
+        const depthTexture = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
+            ? depthRenderBuffer.getDepthTexture()
+            : depthRenderBuffer.getTexture();
+
+        const occlusionTexture = occlusionRenderBuffer.getTexture();
 
         program.bindTexture(this._uDepthTexture, depthTexture, 0);
         program.bindTexture(this._uOcclusionTexture, occlusionTexture, 1);
