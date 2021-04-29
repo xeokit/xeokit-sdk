@@ -1,4 +1,2 @@
-export * from "./GLTFDefaultDataSource";
-export * from "./GLTFLoaderPlugin";
-export * from "./GLTFPerformanceModelLoader";
-export * from "./GLTFSceneGraphLoader";
+export * from "./GLTFDefaultDataSource.js";
+export * from "./GLTFLoaderPlugin.js";

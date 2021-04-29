@@ -1,3 +1,2 @@
-export * from "./STLDefaultDataSource";
-export * from "./STLLoaderPlugin";
-export * from "./STLSceneGraphLoader";
+export * from "./STLDefaultDataSource.js";
+export * from "./STLLoaderPlugin.js";

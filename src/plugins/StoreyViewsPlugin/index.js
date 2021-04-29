@@ -1,3 +1,1 @@
-export * from "./Storey";
-export * from "./StoreyMap";
-export * from "./StoreyViewsPlugin";
+export * from "./StoreyViewsPlugin.js";

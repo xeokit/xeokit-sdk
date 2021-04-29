@@ -123,9 +123,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, AnnotationsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -194,7 +192,7 @@
 
     viewer.scene.input.on("mouseclicked", (coords) => {
 
-        var pickResult = viewer.scene.pick({
+        const pickResult = viewer.scene.pick({
             canvasPos: coords,
             pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
         });

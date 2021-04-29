@@ -17,7 +17,8 @@
     <h1>PerformanceModel</h1>
     <h2>Geometry reuse and SAO</h2>
     <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
-        at the same time reusing the same geometry for each object, and rendering with scalable ambient obscurance (SAO).</p>
+        at the same time reusing the same geometry for each object, and rendering with scalable ambient obscurance
+        (SAO).</p>
     <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
     <p>SAO emphasises detail by darkening crevices.</p>
     <h3>Components Used</h3>
@@ -44,8 +45,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera

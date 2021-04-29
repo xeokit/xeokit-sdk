@@ -25,7 +25,7 @@
         }
 
         #myDatGuiContainer {
-            padding-bottom:30px;
+            padding-bottom: 30px;
         }
     </style>
 </head>
@@ -61,8 +61,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -186,7 +185,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false, width:"100%"});
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const pointsMaterialFolder = gui.addFolder('PointsMaterial');
     pointsMaterialFolder.add(guiParams, 'roundPoints');

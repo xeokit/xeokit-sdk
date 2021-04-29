@@ -10,10 +10,8 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel, math} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
-    import {math} from "../src/viewer/scene/math/math.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",

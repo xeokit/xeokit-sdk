@@ -11,14 +11,16 @@
 
 <script type="module" id="source">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {
+        Viewer,
+        Mesh,
+        ReadableGeometry,
+        PhongMaterial,
+        Texture,
+        DirLight,
+        buildTorusGeometry
+    } from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
-    import {buildTorusGeometry} from "../src/viewer/scene/geometry/builders/buildTorusGeometry.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"

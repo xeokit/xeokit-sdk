@@ -1,3 +1,3 @@
-export * from "./extras";
-export * from "./plugins";
-export * from "./viewer";
+export * from "./extras/index.js";
+export * from "./plugins/index.js";
+export * from "./viewer/index.js";

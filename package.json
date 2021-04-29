@@ -1,9 +1,10 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.8.2",
+  "version": "1.8.3-alpha.1",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "index.js",
   "scripts": {
+    "build": "rollup -c",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "./node_modules/.bin/esdoc",
     "publish": "npm publish --access public"
@@ -47,5 +48,10 @@
   },
   "files": [
     "/src"
-  ]
+  ],
+  "dependencies": {
+    "rollup": "^2.46.0",
+    "rollup-plugin-minify-es": "^1.1.1",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
 }

@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html>
 <head>
@@ -18,7 +16,8 @@
     <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
     <h1>PerformanceModel</h1>
     <h2>Geometry batching benchmark</h2>
-    <p>In this example, we're building a large model using xeokit's PerformanceModel component and no geometry reuse.</p>
+    <p>In this example, we're building a large model using xeokit's PerformanceModel component and no geometry
+        reuse.</p>
     <ul>
         <li>
             <div id="pleaseWait">Geometry batching benchmark<br>generating 373494 objects, please wait...</div>
@@ -44,9 +43,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+    import {Viewer, PerformanceModel, buildBoxGeometry} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera

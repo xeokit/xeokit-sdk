@@ -10,11 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
-    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
-    import {buildSphereGeometry} from "../src/viewer/scene/geometry/builders/buildSphereGeometry.js";
+    import {Viewer, PerformanceModel, buildSphereGeometry} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({

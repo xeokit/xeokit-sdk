@@ -11,7 +11,7 @@
     <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
     <style>
         #myDatGuiContainer {
-            padding-bottom:30px;
+            padding-bottom: 30px;
         }
     </style>
 </head>
@@ -51,9 +51,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {buildVectorTextGeometry} from "../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
+    import {Viewer, PerformanceModel, buildVectorTextGeometry} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -139,7 +137,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false, width:"100%"});
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const linesMaterialFolder = gui.addFolder('LinesMaterial');
     linesMaterialFolder.add(guiParams, 'lineWidth', 1, 15);

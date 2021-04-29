@@ -1,3 +1,1 @@
-export * from "./AngleMeasurement";
-export * from "./AngleMeasurementsControl";
-export * from "./AngleMeasurementsPlugin";
+export * from "./AngleMeasurementsPlugin.js";

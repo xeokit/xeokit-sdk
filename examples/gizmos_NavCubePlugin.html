@@ -53,9 +53,8 @@
 </div>
 </body>
 <script type="module">
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -69,7 +68,7 @@
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
-        color:"lightblue",
+        color: "lightblue",
         visible: true,           // Initially visible (default)
         size: 250,               // NavCube size in pixels (default is 200)
         alignment: "topRight",   // Align NavCube to top-left of Viewer canvas

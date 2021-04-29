@@ -10,15 +10,10 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {buildVectorTextGeometry} from "../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {buildCylinderGeometry} from "../src/viewer/scene/geometry/builders/buildCylinderGeometry.js";
-    import {buildTorusGeometry} from "../src/viewer/scene/geometry/builders/buildTorusGeometry.js";
-    import {buildSphereGeometry} from "../src/viewer/scene/geometry/builders/buildSphereGeometry.js";
-    import {buildBoxLinesGeometry} from "../src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js";
-    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+    import {
+        Viewer, PerformanceModel, buildVectorTextGeometry, buildGridGeometry, buildCylinderGeometry, buildTorusGeometry,
+        buildSphereGeometry, buildBoxLinesGeometry, buildBoxGeometry
+    } from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({

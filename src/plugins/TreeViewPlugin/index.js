@@ -1,3 +1,1 @@
-export * from "./ModelTreeView";
-export * from "./TreeViewNode";
-export * from "./TreeViewPlugin";
+export * from "./TreeViewPlugin.js";
