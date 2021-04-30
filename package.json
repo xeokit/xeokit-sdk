@@ -1,8 +1,8 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.8.3-alpha.3",
+  "version": "1.8.3-alpha.4",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "dist/xeokit-sdk.es.js",
+  "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
     "build": "rollup -c",
     "test": "percy exec -- node ./snapshots.js",
@@ -45,14 +45,14 @@
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.16.0",
     "http-server": "^0.12.3",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup": "^2.46.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "files": [
     "/src",
     "/dist"
   ],
   "dependencies": {
-    "rollup": "^2.46.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
