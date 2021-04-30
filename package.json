@@ -1,8 +1,8 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.8.3-alpha.2",
+  "version": "1.8.3-alpha.3",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "index.js",
+  "main": "dist/xeokit-sdk.es.js",
   "scripts": {
     "build": "rollup -c",
     "test": "percy exec -- node ./snapshots.js",
