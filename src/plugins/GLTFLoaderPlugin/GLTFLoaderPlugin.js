@@ -58,8 +58,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {Viewer, GLTFLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,

@@ -33,10 +33,7 @@ const identityMat = math.identityMat4();
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {Node} from "../src/scene/nodes/Node.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Viewer, Mesh, Node, PhongMaterial} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

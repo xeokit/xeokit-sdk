@@ -31,9 +31,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {AngleMeasurementsPlugin} from "../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js";
+ * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -104,9 +102,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {AngleMeasurementsPlugin} from "../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js";
+ * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",

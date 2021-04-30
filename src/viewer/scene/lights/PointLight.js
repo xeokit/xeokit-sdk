@@ -21,14 +21,8 @@ import {math} from '../math/math.js';
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#lights_PointLight_world)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
- * import {buildPlaneGeometry} from "../src/scene/geometry/builders/buildPlaneGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
- * import {PointLight} from "../src/scene/lights/PointLight.js";
+ * import {Viewer, Mesh, buildSphereGeometry, buildPlaneGeometry,
+ *      ReadableGeometry, PhongMaterial, Texture, PointLight} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange the camera
  *

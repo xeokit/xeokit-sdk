@@ -10,11 +10,7 @@ import {utils} from '../../utils.js';
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildBoxLinesGeometry)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildBoxLinesGeometry} from "../src/scene/geometry/builders/buildBoxLinesGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Viewer, Mesh, buildBoxLinesGeometry, ReadableGeometry, PhongMaterial} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *         canvasId: "myCanvas"

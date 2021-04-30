@@ -1585,11 +1585,7 @@ const letters = {
  *
  * ````javascript
  *
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildVectorTextGeometry} from "../src/scene/geometry/builders/buildVectorTextGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Viewer, Mesh, buildVectorTextGeometry, ReadableGeometry, PhongMaterial} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"

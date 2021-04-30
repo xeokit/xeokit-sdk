@@ -48,12 +48,8 @@ function nextHighestPowerOfTwo(x) {
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_Texture)]
  *
  * ```` javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {Viewer, Mesh, buildTorusGeometry,
+ *      ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"

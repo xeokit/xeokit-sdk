@@ -83,8 +83,7 @@ parsers[ParserV7.version] = ParserV7;
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,
@@ -285,7 +284,7 @@ parsers[ParserV7.version] = ParserV7;
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
  * ````javascript
- * import {utils} from "./../src/viewer/scene/utils.js";
+ * import {utils} from "xeokit-sdk.es.js";
  *
  * class MyDataSource {
  *

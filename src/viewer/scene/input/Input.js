@@ -15,7 +15,7 @@ import {math} from '../math/math.js';
  * Subscribing to mouse events on the canvas:
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Viewer} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"

@@ -40,8 +40,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * clipping planes. Finally, we'll use {@link XKTLoaderPlugin} to load the OTC Conference Center model.
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",

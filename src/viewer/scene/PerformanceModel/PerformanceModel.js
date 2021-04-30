@@ -112,8 +112,7 @@ const defaultQuaternion = math.identityQuaternion();
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {PerformanceModel} from "../src/viewer/scene/PerformanceModels/PerformanceModel.js";
+ * import {Viewer, PerformanceModel} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -315,8 +314,7 @@ const defaultQuaternion = math.identityQuaternion();
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+ * import {Viewer, PerformanceModel} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
