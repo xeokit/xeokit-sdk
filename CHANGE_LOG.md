@@ -6,10 +6,18 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+Improved developer experience, Safari/iOS robustness, SAO tweaks.
+
 * General
   * Build into library using Rollup. [#638](https://github.com/xeokit/xeokit-sdk/issues/638) ([**@incureforce**](https://github.com/incureforce), [**@xeolabs**](https://github.com/xeolabs))
+  * Serve library via JSDelivr CDN. [#639](https://github.com/xeokit/xeokit-sdk/issues/639) ([**@xeolabs**](https://github.com/xeolabs))
+* AxisGizmoPlugin
+  * AxisGizmoPlugin breaking change: require external canvas. [#630](https://github.com/xeokit/xeokit-sdk/issues/630) ([**@xeolabs**](https://github.com/xeolabs))  
 * FastNavPlugin
   * Fix FastNavPlugin snapshot overlay alignment. [#628](https://github.com/xeokit/xeokit-sdk/issues/628) ([**@xeolabs**](https://github.com/xeolabs))
+* SAO
+  * Disable SAO for Safari #598. [#632](https://github.com/xeokit/xeokit-sdk/issues/632) ([**@xeolabs**](https://github.com/xeolabs))
+  * Improve depth/SAO shader accuracy #633. [#633](https://github.com/xeokit/xeokit-sdk/issues/633) ([**@xeolabs**](https://github.com/xeolabs))
 
 # 1.8.2
 
