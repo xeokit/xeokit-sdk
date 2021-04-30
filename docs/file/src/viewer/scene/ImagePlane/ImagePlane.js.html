@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -199,9 +198,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)]
  *
  * ````javascript
- * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
- * import {ImagePlane} from &quot;../src/viewer/scene/ImagePlane/ImagePlane.js&quot;;
- * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+ * import {Viewer, ImagePlane, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
  *
  * const viewer = new Viewer({
  *      canvasId: &quot;myCanvas&quot;,
@@ -252,10 +249,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
- * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
- * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
- * import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
- * import {ImagePlane} from &quot;../src/viewer/scene/ImagePlane/ImagePlane.js&quot;;
+ * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from &quot;xeokit-sdk.es.js&quot;;
  *
  * const viewer = new Viewer({
  *     canvasId: &quot;myCanvas&quot;,

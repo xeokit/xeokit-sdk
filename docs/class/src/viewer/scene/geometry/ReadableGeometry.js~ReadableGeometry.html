@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ReadableGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber62">@xeokit/xeokit-sdk/src/viewer/scene/geometry/ReadableGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ReadableGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber58">@xeokit/xeokit-sdk/src/viewer/scene/geometry/ReadableGeometry.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber62">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber58">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -191,11 +190,7 @@
 <p>ReadableGeometry uses more memory than <span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span>, which only stores its geometry data in GPU memory.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a ReadableGeometry that defines a single triangle, plus a <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span> with diffuse <span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span>:</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_ReadableGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
         canvasId: &quot;myCanvas&quot;
@@ -1275,7 +1270,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber106">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1442,7 +1437,7 @@ this indicates the threshold angle (in degrees) between the face normals of adja
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber590">source</a></span></span>
     </span>
   </h3>
 
@@ -1504,7 +1499,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber543">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber539">source</a></span></span>
     </span>
   </h3>
 
@@ -1564,7 +1559,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber547">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber543">source</a></span></span>
     </span>
   </h3>
 
@@ -1607,7 +1602,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber393">source</a></span></span>
     </span>
   </h3>
 
@@ -1670,7 +1665,7 @@ in quantized and oct-encoded formats for reduced memory footprint and GPU bus us
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber580">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber576">source</a></span></span>
     </span>
   </h3>
 
@@ -1732,7 +1727,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber450">source</a></span></span>
     </span>
   </h3>
 
@@ -1792,7 +1787,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber470">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -1835,7 +1830,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber634">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber630">source</a></span></span>
     </span>
   </h3>
 
@@ -1880,7 +1875,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber615">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber611">source</a></span></span>
     </span>
   </h3>
 
@@ -1942,7 +1937,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber408">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -2002,7 +1997,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber422">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber418">source</a></span></span>
     </span>
   </h3>
 
@@ -2045,7 +2040,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber376">source</a></span></span>
     </span>
   </h3>
 
@@ -2106,7 +2101,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -2166,7 +2161,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber514">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber510">source</a></span></span>
     </span>
   </h3>
 
@@ -2212,7 +2207,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber654">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/ReadableGeometry.js.html#lineNumber650">source</a></span></span>
     </span>
   </h3>
 

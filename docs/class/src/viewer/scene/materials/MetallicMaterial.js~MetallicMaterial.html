@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetallicMaterial} from &apos;<span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber220">@xeokit/xeokit-sdk/src/viewer/scene/materials/MetallicMaterial.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetallicMaterial} from &apos;<span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber215">@xeokit/xeokit-sdk/src/viewer/scene/materials/MetallicMaterial.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber220">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber215">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -199,12 +198,7 @@
 channels, which allows us a little creative flexibility. Then, in the next example further down, we&apos;ll combine those channels
 within the same <span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span> for efficiency.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#materials_MetallicMaterial">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {loadOBJGeometry} from &quot;../src/scene/geometry/loaders/loadOBJGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {MetallicMaterial} from &quot;../src/scene/materials/MetallicMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, loadOBJGeometry, ReadableGeometry, MetallicMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -2083,7 +2077,7 @@ with <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~Metalli
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber250">source</a></span></span>
     </span>
   </h3>
 
@@ -2320,7 +2314,7 @@ with <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~Metalli
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber615">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber610">source</a></span></span>
     </span>
   </h3>
 
@@ -2367,7 +2361,7 @@ with <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~Metalli
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber629">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber624">source</a></span></span>
     </span>
   </h3>
 
@@ -2411,7 +2405,7 @@ with <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~Metalli
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber701">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber696">source</a></span></span>
     </span>
   </h3>
 
@@ -2459,7 +2453,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber716">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber711">source</a></span></span>
     </span>
   </h3>
 
@@ -2503,7 +2497,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber640">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber635">source</a></span></span>
     </span>
   </h3>
 
@@ -2548,7 +2542,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber666">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber661">source</a></span></span>
     </span>
   </h3>
 
@@ -2599,7 +2593,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber685">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber680">source</a></span></span>
     </span>
   </h3>
 
@@ -2643,7 +2637,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber729">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber724">source</a></span></span>
     </span>
   </h3>
 
@@ -2689,7 +2683,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber743">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber738">source</a></span></span>
     </span>
   </h3>
 
@@ -2733,7 +2727,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber384">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber379">source</a></span></span>
     </span>
   </h3>
 
@@ -2779,7 +2773,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber406">source</a></span></span>
     </span>
   </h3>
 
@@ -2825,7 +2819,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber423">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber418">source</a></span></span>
     </span>
   </h3>
 
@@ -2870,7 +2864,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber554">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber549">source</a></span></span>
     </span>
   </h3>
 
@@ -2916,7 +2910,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber578">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber573">source</a></span></span>
     </span>
   </h3>
 
@@ -2960,7 +2954,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber589">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber584">source</a></span></span>
     </span>
   </h3>
 
@@ -3005,7 +2999,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber754">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber749">source</a></span></span>
     </span>
   </h3>
 
@@ -3050,7 +3044,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber768">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber763">source</a></span></span>
     </span>
   </h3>
 
@@ -3094,7 +3088,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber781">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber776">source</a></span></span>
     </span>
   </h3>
 
@@ -3140,7 +3134,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber791">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber786">source</a></span></span>
     </span>
   </h3>
 
@@ -3184,7 +3178,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber435">source</a></span></span>
     </span>
   </h3>
 
@@ -3232,7 +3226,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber449">source</a></span></span>
     </span>
   </h3>
 
@@ -3276,7 +3270,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber465">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -3321,7 +3315,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber516">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber511">source</a></span></span>
     </span>
   </h3>
 
@@ -3366,7 +3360,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber649">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber644">source</a></span></span>
     </span>
   </h3>
 
@@ -3410,7 +3404,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber600">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber595">source</a></span></span>
     </span>
   </h3>
 
@@ -3455,7 +3449,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber802">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber797">source</a></span></span>
     </span>
   </h3>
 
@@ -3500,7 +3494,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber812">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber807">source</a></span></span>
     </span>
   </h3>
 
@@ -3544,7 +3538,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber475">source</a></span></span>
     </span>
   </h3>
 
@@ -3591,7 +3585,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber494">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber489">source</a></span></span>
     </span>
   </h3>
 
@@ -3635,7 +3629,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber505">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 
@@ -3680,7 +3674,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber527">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber522">source</a></span></span>
     </span>
   </h3>
 
@@ -3725,7 +3719,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber541">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber536">source</a></span></span>
     </span>
   </h3>
 
@@ -3772,7 +3766,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/MetallicMaterial.js.html#lineNumber814">source</a></span></span>
     </span>
   </h3>
 

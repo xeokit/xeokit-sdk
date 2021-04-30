@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -381,6 +380,7 @@ class TrianglesInstancingDepthRenderer {
             src.push(&quot;varying vec4 vWorldPosition;&quot;);
             src.push(&quot;varying vec4 vFlags2;&quot;);
         }
+        src.push(&quot;varying vec2 vHighPrecisionZW;&quot;);
         src.push(&quot;void main(void) {&quot;);
 
         // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -411,6 +411,7 @@ class TrianglesInstancingDepthRenderer {
             }
         }
         src.push(&quot;gl_Position = clipPos;&quot;);
+        src.push(&quot;vHighPrecisionZW = gl_Position.zw;&quot;);
         src.push(&quot;}&quot;);
         src.push(&quot;}&quot;);
         return src;
@@ -427,13 +428,8 @@ class TrianglesInstancingDepthRenderer {
         if (scene.logarithmicDepthBufferEnabled &amp;&amp; WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
             src.push(&quot;#extension GL_EXT_frag_depth : enable&quot;);
         }
-        src.push(&quot;#ifdef GL_FRAGMENT_PRECISION_HIGH&quot;);
         src.push(&quot;precision highp float;&quot;);
         src.push(&quot;precision highp int;&quot;);
-        src.push(&quot;#else&quot;);
-        src.push(&quot;precision mediump float;&quot;);
-        src.push(&quot;precision mediump int;&quot;);
-        src.push(&quot;#endif&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
                 src.push(&quot;uniform float logDepthBufFC;&quot;);
@@ -449,19 +445,21 @@ class TrianglesInstancingDepthRenderer {
                 src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
             }
         }
+        if (!WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;WEBGL_depth_texture&quot;]) {
 
-        src.push(&quot;const float   packUpScale = 256. / 255.;&quot;);
-        src.push(&quot;const float   unpackDownscale = 255. / 256.;&quot;);
-        src.push(&quot;const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );&quot;);
-        src.push(&quot;const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );&quot;);
-        src.push(&quot;const float   shiftRight8 = 1.0 / 256.;&quot;);
+            src.push(&quot;const float   packUpScale = 256. / 255.;&quot;);
+            src.push(&quot;const float   unpackDownscale = 255. / 256.;&quot;);
+            src.push(&quot;const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );&quot;);
+            src.push(&quot;const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );&quot;);
+            src.push(&quot;const float   shiftRight8 = 1.0 / 256.;&quot;);
 
-        src.push(&quot;vec4 packDepthToRGBA( const in float v ) {&quot;);
-        src.push(&quot;    vec4 r = vec4( fract( v * packFactors ), v );&quot;);
-        src.push(&quot;    r.yzw -= r.xyz * shiftRight8;&quot;);
-        src.push(&quot;    return r * packUpScale;&quot;);
-        src.push(&quot;}&quot;);
-
+            src.push(&quot;vec4 packDepthToRGBA( const in float v ) {&quot;);
+            src.push(&quot;    vec4 r = vec4( fract( v * packFactors ), v );&quot;);
+            src.push(&quot;    r.yzw -= r.xyz * shiftRight8;&quot;);
+            src.push(&quot;    return r * packUpScale;&quot;);
+            src.push(&quot;}&quot;);
+        }
+        src.push(&quot;varying vec2 vHighPrecisionZW;&quot;);
         src.push(&quot;void main(void) {&quot;);
         if (clipping) {
             src.push(&quot;  bool clippable = (float(vFlags2.x) &gt; 0.0);&quot;);
@@ -475,9 +473,14 @@ class TrianglesInstancingDepthRenderer {
             src.push(&quot;if (dist &gt; 0.0) { discard; }&quot;);
             src.push(&quot;}&quot;);
         }
-        src.push(&quot;    gl_FragColor = packDepthToRGBA( gl_FragCoord.z); &quot;); // Must be linear depth
         if (scene.logarithmicDepthBufferEnabled &amp;&amp; WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
             src.push(&quot;gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+        }
+        src.push(&quot;float fragCoordZ = 0.5 * vHighPrecisionZW[0] / vHighPrecisionZW[1] + 0.5;&quot;);
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;WEBGL_depth_texture&quot;]) {
+            src.push(&quot;    gl_FragColor = vec4(vec3(1.0 - fragCoordZ), 1.0); &quot;);
+        } else {
+            src.push(&quot;    gl_FragColor = packDepthToRGBA(fragCoordZ); &quot;); // Must be linear depth
         }
         src.push(&quot;}&quot;);
         return src;

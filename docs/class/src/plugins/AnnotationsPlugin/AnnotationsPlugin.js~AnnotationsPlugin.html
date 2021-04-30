@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber375">@xeokit/xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber373">@xeokit/xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber375">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber373">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -205,7 +204,7 @@ individual Annotations using HTML template; configure default appearance by sett
 <li>Optionally configure Annotations to hide themselves whenever occluded by <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
 <li>Optionally configure each Annotation with a position we can jump or fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to.</li>
 </ul>
-<h2 id="example-1--loading-a-model-and-creating-an-annotation">Example 1: Loading a model and creating an annotation</h2><p>In the example below, we&apos;ll use a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model, and an AnnotationsPlugin
+<h2 id="example-1--loading-a-model-and-creating-an-annotation">Example 1: Loading a model and creating an annotation</h2><p>In the example below, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, and an AnnotationsPlugin
 to create an <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> on it.</p>
 <p>We&apos;ll configure the AnnotationsPlugin with default HTML templates for each Annotation&apos;s position (its &quot;marker&quot;) and
 label, along with some default data values to insert into them.</p>
@@ -217,9 +216,7 @@ and the keys in the values map.</p>
 can adjust that frequency via property <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerOcclusionTest">Scene#ticksPerOcclusionTest</a></span>.</p>
 <p>Finally, we&apos;ll query the Annotation&apos;s position occlusion/visibility status, and subscribe to change events on those properties.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels">Run example</a>]</p>
-<pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
-import {AnnotationsPlugin} from &quot;../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js&quot;;
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin,AnnotationsPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
@@ -230,7 +227,7 @@ viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
 viewer.scene.camera.look = [10.97, 5.82, -11.22];
 viewer.scene.camera.up = [0.36, 0.83, 0.40];
 
-const gltfLoader = new GLTFLoaderPlugin(viewer);
+const xktLoader = new XKTLoaderPlugin(viewer);
 
 const annotations = new AnnotationsPlugin(viewer, {
 
@@ -251,8 +248,8 @@ const annotations = new AnnotationsPlugin(viewer, {
      }
 });
 
-const model = gltfLoader.load({
-     src: &quot;./models/gltf/duplex/scene.gltf&quot;
+const model = xktLoader.load({
+     src: &quot;./models/xkt/duplex/geometry.xkt&quot;
 });
 
 model.on(&quot;loaded&quot;, () =&gt; {
@@ -1015,7 +1012,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber389">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -1132,7 +1129,7 @@ its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></spa
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber402">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -1176,7 +1173,7 @@ its <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></spa
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber428">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -1223,7 +1220,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber444">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber442">source</a></span></span>
     </span>
   </h3>
 
@@ -1286,7 +1283,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber559">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber557">source</a></span></span>
     </span>
   </h3>
 
@@ -1330,7 +1327,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber473">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber471">source</a></span></span>
     </span>
   </h3>
 
@@ -1523,7 +1520,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber571">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber569">source</a></span></span>
     </span>
   </h3>
 
@@ -1568,7 +1565,7 @@ create the Annotation by supplying a <span><a href="class/src/viewer/scene/webgl
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber547">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber545">source</a></span></span>
     </span>
   </h3>
 

@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -1012,22 +1011,17 @@ return a plane position that is relative to the RTC center.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildBoxGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber52">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildBoxGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber47">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates box-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a box-shaped <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span>.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildBoxGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildBoxGeometry} from &quot;../src/scene/geometry/builders/buildBoxGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildBoxGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
         canvasId: &quot;myCanvas&quot;
@@ -1155,21 +1149,17 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildBoxLinesGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js.html#lineNumber49">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildBoxLinesGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js.html#lineNumber45">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a box-shaped lines <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a box-shaped <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> that has lines primitives.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildBoxLinesGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildBoxLinesGeometry} from &quot;../src/scene/geometry/builders/buildBoxLinesGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildBoxLinesGeometry, ReadableGeometry, PhongMaterial} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
         canvasId: &quot;myCanvas&quot;
@@ -1295,23 +1285,18 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber59">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildCylinderGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber59">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildCylinderGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildCylinderGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber54">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildCylinderGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a cylinder-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a cylinder-shaped <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
-import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildCylinderGeometry} from &quot;../src/scene/geometry/builders/buildCylinderGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+import {Viewer, Mesh, buildCylinderGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -1466,22 +1451,17 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildGridGeometry.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildGridGeometry.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildGridGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildGridGeometry.js.html#lineNumber48">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildGridGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildGridGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildGridGeometry.js.html#lineNumber43">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildGridGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a grid-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a GridGeometry and a <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>:</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildGridGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildGridGeometry} from &quot;../src/scene/geometry/builders/buildGridGeometry.js&quot;;
-import {VBOGeometry} from &quot;../src/scene/geometry/VBOGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildGridGeometry, VBOGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -1592,22 +1572,17 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildPlaneGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber54">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildPlaneGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildPlaneGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber49">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildPlaneGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a plane-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a PlaneGeometry and a <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span> with diffuse <span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span>:</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildPlaneGeometry} from &quot;../src/scene/geometry/builders/buildPlaneGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildPlaneGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -1744,22 +1719,17 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildSphereGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber52">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildSphereGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildSphereGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber47">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildSphereGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a sphere-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a sphere-shaped <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildSphereGeometry} from &quot;../src/scene/geometry/builders/buildSphereGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildSphereGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;
@@ -1887,22 +1857,17 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildTorusGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber56">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildTorusGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildTorusGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber51">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildTorusGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates a torus-shaped <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a torus-shaped <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildTorusGeometry} from &quot;../src/scene/geometry/builders/buildTorusGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildTorusGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -2048,22 +2013,18 @@ new Mesh(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1624">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1620">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildVectorTextGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1624">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildVectorTextGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1620">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildVectorTextGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Creates wireframe vector text <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
 <h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with vector text <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
-import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildVectorTextGeometry} from &quot;../src/scene/geometry/builders/buildVectorTextGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Viewer, Mesh, buildVectorTextGeometry, ReadableGeometry, PhongMaterial} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -2776,22 +2737,17 @@ return a plane position that is relative to the RTC center.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {load3DSGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber62">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {load3DSGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber57">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Loads <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from 3DS.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>, <span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span> and a <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> loaded from 3DS.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_loaders_3DS">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {load3DSGeometry} from &quot;../src/scene/geometry/loaders/load3DSGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, load3DSGeometry, ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -2907,22 +2863,18 @@ load3DSGeometry(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {loadOBJGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber79">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {loadOBJGeometry} from &apos;<span><a href="file/src/viewer/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber75">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Loads <span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from OBJ.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span> and <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> loaded from OBJ.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#geometry_loaders_OBJ">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {loadOBJGeometry} from &quot;../src/scene/geometry/loaders/loadOBJGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {MetallicMaterial} from &quot;../src/scene/materials/MetallicMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, loadOBJGeometry, ReadableGeometry,
+     MetallicMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;

@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -178,9 +177,7 @@
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
  *
  * ````javascript
- * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
- * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
- * import {FastNavPlugin} from &quot;../src/plugins/FastNavPlugin/FastNavPlugin.js&quot;;
+ * import {Viewer, XKTLoaderPlugin, FastNavPlugin} from &quot;xeokit-sdk.es.js&quot;;
  *
  * const viewer = new Viewer({
  *      canvasId: &quot;myCanvas&quot;,
@@ -220,8 +217,8 @@ class FastNavPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg FastNavPlugin configuration.
      * @param {String} [cfg.id=&quot;FastNav&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if it&apos;s currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
-     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if it&apos;s currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
+     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if its currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
+     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if its currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
      * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they&apos;re currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
      */
     constructor(viewer, cfg = {}) {
@@ -238,6 +235,17 @@ class FastNavPlugin extends Plugin {
         let timeoutDuration = 600; // Milliseconds
         let timer = timeoutDuration;
         let fastMode = false;
+
+        this._onCanvasBoundary = viewer.scene.canvas.on(&quot;boundary&quot;, () =&gt; {
+            timer = timeoutDuration;
+            if (!fastMode) {
+                this._cancelFade();
+                viewer.scene.pbrEnabled = false;
+                viewer.scene.sao.enabled = false;
+                viewer.scene.edgeMaterial.edges = false;
+                fastMode = true;
+            }
+        });
 
         this._onCameraMatrix = viewer.scene.camera.on(&quot;matrix&quot;, () =&gt; {
             timer = timeoutDuration;
@@ -266,17 +274,6 @@ class FastNavPlugin extends Plugin {
 
                     fastMode = false;
                 }
-            }
-        });
-
-        this._onSceneObjectVisibility = viewer.scene.on(&quot;objectVisibility&quot;, () =&gt; {
-            timer = timeoutDuration;
-            if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
-                fastMode = true;
             }
         });
 
@@ -331,16 +328,15 @@ class FastNavPlugin extends Plugin {
 
         const canvas = viewer.scene.canvas.canvas;
         const canvasOffset = cumulativeOffset(canvas);
-        //const zIndex = (parseInt(canvas.style[&quot;z-index&quot;]) || 0) + 1;
-
-        this._img.style.position = &quot;absolute&quot;;
-        this._img.style[&quot;z-index&quot;] = 5;
+        const zIndex = (parseInt(canvas.style[&quot;z-index&quot;]) || 0) + 1;
+        this._img.style.position = &quot;fixed&quot;;
+        this._img.style[&quot;margin&quot;] = 0 + &quot;px&quot;;
+        this._img.style[&quot;z-index&quot;] = zIndex;
         this._img.style[&quot;background&quot;] = canvas.style.background;
         this._img.style.left = canvasOffset.left + &quot;px&quot;;
         this._img.style.top = canvasOffset.top + &quot;px&quot;;
         this._img.style.width = canvas.width + &quot;px&quot;;
         this._img.style.height = canvas.height + &quot;px&quot;;
-        this._img.style.opacity = 1;
         this._img.width = canvas.width;
         this._img.height = canvas.height;
         this._img.src = &quot;&quot;; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
@@ -349,12 +345,22 @@ class FastNavPlugin extends Plugin {
             includeGizmos: true
         });
         this._img.style.visibility = &quot;visible&quot;;
+        this._img.style.opacity = 1;
 
         let opacity = 1;
         this._pInterval = setInterval(() =&gt; {
             opacity -= inc;
             if (opacity &gt; 0) {
                 this._img.style.opacity = opacity;
+                const canvasOffset = cumulativeOffset(canvas);
+                this._img.style.left = canvasOffset.left + &quot;px&quot;;
+                this._img.style.top = canvasOffset.top + &quot;px&quot;;
+                this._img.style.width = canvas.width + &quot;px&quot;;
+                this._img.style.height = canvas.height + &quot;px&quot;;
+                this._img.style.opacity = opacity;
+                this._img.width = canvas.width;
+                this._img.height = canvas.height;
+
             } else {
                 this._img.style.opacity = 0;
                 this._img.style.visibility = &quot;hidden&quot;;
@@ -472,11 +478,11 @@ class FastNavPlugin extends Plugin {
     destroy() {
         this._cancelFade();
         this.viewer.scene.camera.off(this._onCameraMatrix);
-        this.viewer.scene.off(this._onSceneTick);
-        this.viewer.scene.off(this._onSceneObjectVisibility);
+        this.viewer.scene.canvas.off(this._onCanvasBoundary);
         this.viewer.scene.input.off(this._onSceneMouseDown);
         this.viewer.scene.input.off(this._onSceneMouseUp);
         this.viewer.scene.input.off(this._onSceneMouseMove);
+        this.viewer.scene.off(this._onSceneTick);
         super.destroy();
         if (this._img) {
             this._img.parentNode.removeChild(this._img);

@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AxisGizmoPlugin} from &apos;<span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber53">@xeokit/xeokit-sdk/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AxisGizmoPlugin} from &apos;<span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber45">@xeokit/xeokit-sdk/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber53">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber45">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -189,35 +188,27 @@
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that shows the axii of the World-space coordinate system.</p>
 <h2 id="usage">Usage</h2><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin">Run this example</a>]</p>
-<pre><code class="lang-JavaScript````"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
-import {AxisGizmoPlugin} from &quot;../src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js&quot;;
+<pre><code class="lang-JavaScript````"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, AxisGizmoPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;
 });
 
-const gltfLoader = new GLTFLoaderPlugin(viewer);
+viewer.camera.eye = [-2.56, 8.38, 8.27];
+viewer.camera.look = [13.44, 3.31, -14.83];
+viewer.camera.up = [0.10, 0.98, -0.14];
 
-new AxisGizmoPlugin(viewer, {size: [250, 250]});
+const xktLoader = new XKTLoaderPlugin(viewer);
 
-const model = gltfLoader.load({
-    id: &quot;myModel&quot;,
-    src: &quot;./models/gltf/schependomlaan/scene.gltf&quot;,
-    metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;,
-    edges: true
+new AxisGizmoPlugin(viewer, {
+    canvasId: &quot;myAxisGizmoCanvas&quot;
 });
 
-const scene = viewer.scene;
-const camera = scene.camera;
-
-camera.orbitPitch(20);
-
-model.on(&quot;loaded&quot;, () =&gt; {
-    viewer.cameraFlight.jumpTo(modelNode);
-    scene.on(&quot;tick&quot;, () =&gt; {
-       camera.orbitYaw(0.4);
-    })
+const model = xktLoader.load({
+    id: &quot;myModel&quot;,
+    src: &quot;../assets/models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+    metaModelSrc: &quot;./../assets/metaModels/schependomlaan/metaModel.json&quot;,
+    edges: true
 });</code>
 </code></pre>
 </div>
@@ -323,7 +314,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
       <div>
         
         
-        <div data-ice="description"><p>Shows or hides this helper</p>
+        <div data-ice="description"><p>Shows or hides this AxisGizmoPlugin.</p>
 </div>
       </div>
     </td>
@@ -592,7 +583,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
@@ -635,11 +626,17 @@ model.on(&quot;loaded&quot;, () =&gt; {
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.size</td>
-      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [250,250]</li></ul></td>
-      <td data-ice="description"><p>Initial size in pixels.</p>
+      <td data-ice="name" class="code" data-depth="1">cfg.canvasId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID of an existing HTML canvas to display the AxisGizmo - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.canvasElement</td>
+      <td data-ice="type" class="code"><span>HTMLCanvasElement</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Reference of an existing HTML canvas to display the AxisGizmo - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.</p>
 </td>
     </tr>
 </tbody>
@@ -680,7 +677,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber326">source</a></span></span>
     </span>
   </h3>
 
@@ -724,14 +721,14 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber360">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html#lineNumber317">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Shows or hides this helper</p>
+  <div data-ice="description"><p>Shows or hides this AxisGizmoPlugin.</p>
 </div>
 
   
