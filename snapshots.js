@@ -92,6 +92,7 @@ PercyScript.run(async (page, percySnapshot) => {
 
     // XKT
 
+    await testPage('loading_XKT_SimpleWall.html');
     await testPage('loading_XKT.html'); // Loading a single-precision BIM model from XKT format
     await testPage('loading_XKT_pointCloud.html');
     await testPage('loading_XKT_doublePrecision.html'); // Loading a double-precision BIM model from XKT format

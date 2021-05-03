@@ -1293,10 +1293,6 @@ class PerformanceModel extends Component {
         const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
         const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-        if (opacity < 255) {
-            this.numTransparentLayerPortions++;
-        }
-
         const mesh = new PerformanceMesh(this, id, color, opacity);
 
         const pickId = mesh.pickId;

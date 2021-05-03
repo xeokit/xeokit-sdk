@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-1.435705073143666, 1.8650236556813373, 4.214759764260711];
+    viewer.camera.look = [2.4221999766041202, 1.2633229612519277, 0.32444810601025287];
+    viewer.camera.up = [0.07686835793474099, 0.9940235543650155, -0.07751405624761087];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./../assets/models/xkt/simple_wall/simple_wall.xkt",
+        metaModelSrc: "./../assets/metaModels/simple_wall/simple_wall.json",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        signalTestComplete();
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>
