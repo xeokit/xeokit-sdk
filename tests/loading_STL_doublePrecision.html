@@ -10,8 +10,9 @@
 </body>
 <script type="module">
 
-    import {Viewer, STLLoaderPlugin, generateTestSTL} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, STLLoaderPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
+    const {generateTestSTL} = require("../assets/js/generateTestSTL.js");
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
