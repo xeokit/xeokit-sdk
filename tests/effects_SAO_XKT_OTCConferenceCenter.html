@@ -10,8 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -25,7 +24,7 @@
 
     viewer.scene.sao.enabled = true; // Only works if supported (see above)
 
-    viewer.scene.camera.eye =  [3.6930694580078125, 5.834853649139404, -23.98213005065918];
+    viewer.scene.camera.eye = [3.6930694580078125, 5.834853649139404, -23.98213005065918];
     viewer.scene.camera.look = [84.31920623779297, -29.88751792907715, -116.21513366699219];
     viewer.scene.camera.up = [0.18424127995967865, 0.9600174427032471, -0.21076446771621704];
 
@@ -40,7 +39,7 @@
     });
 
     model.on("loaded", function () {
-        signalTestComplete();
+        signalTestComplete(viewer);
     });
 
 </script>

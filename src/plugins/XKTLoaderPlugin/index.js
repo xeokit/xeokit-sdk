@@ -1,2 +1,2 @@
-export * from "./XKTDefaultDataSource";
-export * from "./XKTLoaderPlugin";
+export * from "./XKTDefaultDataSource.js";
+export * from "./XKTLoaderPlugin.js";

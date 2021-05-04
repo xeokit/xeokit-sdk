@@ -10,8 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -36,7 +35,7 @@
 
     model.on("loaded", () => {
 
-        signalTestComplete();
+        signalTestComplete(viewer);
     });
 
 </script>

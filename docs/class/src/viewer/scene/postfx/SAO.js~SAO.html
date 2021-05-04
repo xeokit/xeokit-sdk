@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber178">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber178">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -208,8 +207,7 @@ feel for that.</p>
 system.</p>
 <p>Then we&apos;ll enable and configure SAO, position the camera, and configure the near and far perspective and orthographic
 clipping planes. Finally, we&apos;ll use <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load the OTC Conference Center model.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
@@ -1510,7 +1508,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber337">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber341">source</a></span></span>
     </span>
   </h3>
 
@@ -1555,7 +1553,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber355">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
@@ -1600,7 +1598,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber484">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -1646,7 +1644,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber504">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber508">source</a></span></span>
     </span>
   </h3>
 
@@ -1692,7 +1690,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -1738,7 +1736,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber537">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber541">source</a></span></span>
     </span>
   </h3>
 
@@ -1784,7 +1782,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber455">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1829,7 +1827,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber475">source</a></span></span>
     </span>
   </h3>
 
@@ -1874,7 +1872,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber223">source</a></span></span>
     </span>
   </h3>
 
@@ -1920,7 +1918,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber241">source</a></span></span>
     </span>
   </h3>
 
@@ -1966,7 +1964,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
@@ -2011,7 +2009,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber330">source</a></span></span>
     </span>
   </h3>
 
@@ -2056,7 +2054,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -2101,7 +2099,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 
@@ -2146,7 +2144,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber395">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber399">source</a></span></span>
     </span>
   </h3>
 
@@ -2191,7 +2189,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -2236,7 +2234,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -2282,7 +2280,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber444">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber448">source</a></span></span>
     </span>
   </h3>
 
@@ -2327,7 +2325,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber366">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -2372,7 +2370,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber384">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber388">source</a></span></span>
     </span>
   </h3>
 
@@ -2417,7 +2415,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber210">source</a></span></span>
     </span>
   </h3>
 
@@ -2465,7 +2463,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber544">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber548">source</a></span></span>
     </span>
   </h3>
 

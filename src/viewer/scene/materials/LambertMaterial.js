@@ -18,11 +18,7 @@ import {math} from '../math/math.js';
  * In the example below we'll create a {@link Mesh} with a shape defined by a {@link buildTorusGeometry} and normal rendering appearance configured with a LambertMaterial.
  *
  * ```` javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {LambertMaterial} from "../src/scene/materials/LambertMaterial.js";
+ * import {Viewer, Mesh, buildTorusGeometry, ReadableGeometry, LambertMaterial} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

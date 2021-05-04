@@ -1,5 +1,5 @@
 import {utils} from "../utils.js";
-import {Curve} from "./curve.js"
+import {Curve} from "./Curve.js"
 
 /**
  * @desc A complex curved path constructed from various {@link Curve} subtypes.

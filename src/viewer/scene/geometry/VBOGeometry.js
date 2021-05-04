@@ -24,11 +24,7 @@ const tempAABB = math.AABB3();
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_VBOGeometry)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {VBOGeometry} from "../src/scene/geometry/VBOGeometry.js"
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {Viewer, Mesh, VBOGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *         canvasId: "myCanvas"

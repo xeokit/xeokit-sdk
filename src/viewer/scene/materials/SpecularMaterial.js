@@ -22,11 +22,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * within the same {@link Texture} for efficiency.
  *
  * ````javascript
- * import {Viewer} from "src/viewer/Viewer.js";
- * import {Mesh} from "src/scene/mesh/Mesh.js";
- * import {buildTorusGeometry} from "src/scene/geometry/builders/buildTorusGeometry.js";
- * import {SpecularMaterial} from "src/scene/materials/SpecularMaterial.js";
- * import {Texture} from "src/scene/materials/Texture.js";
+ * import {Viewer, Mesh, buildTorusGeometry, SpecularMaterial, Texture} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({ canvasId: "myCanvas" });
  *

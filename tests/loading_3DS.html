@@ -11,12 +11,7 @@
 
 <script type="module" id="source">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {load3DSGeometry} from "../src/viewer/scene/geometry/loaders/load3DSGeometry.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
+    import {Viewer, Mesh, load3DSGeometry, ReadableGeometry, PhongMaterial, Texture} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({

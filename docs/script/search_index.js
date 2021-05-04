@@ -258,12 +258,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html",
-    "<span>LogDepthBuf</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/logDepthBuf/LogDepthBuf.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/marker/marker.js~marker",
     "class/src/viewer/scene/marker/Marker.js~Marker.html",
     "<span>Marker</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/marker/Marker.js</span>",
@@ -1128,6 +1122,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/extras/contextmenu/index.js",
+    "file/src/extras/ContextMenu/index.js.html",
+    "src/extras/ContextMenu/index.js",
+    "file"
+  ],
+  [
+    "src/extras/index.js",
+    "file/src/extras/index.js.html",
+    "src/extras/index.js",
+    "file"
+  ],
+  [
+    "src/index.js",
+    "file/src/index.js.html",
+    "src/index.js",
+    "file"
+  ],
+  [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js",
     "file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js",
@@ -1332,6 +1344,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/anglemeasurementsplugin/index.js",
+    "file/src/plugins/AngleMeasurementsPlugin/index.js.html",
+    "src/plugins/AngleMeasurementsPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/annotationsplugin/annotation.js",
     "file/src/plugins/AnnotationsPlugin/Annotation.js.html",
     "src/plugins/AnnotationsPlugin/Annotation.js",
@@ -1476,6 +1494,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/annotationsplugin/index.js",
+    "file/src/plugins/AnnotationsPlugin/index.js.html",
+    "src/plugins/AnnotationsPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/axisgizmoplugin/axisgizmoplugin.js",
     "file/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html",
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
@@ -1498,6 +1522,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html#instance-method-setVisible",
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin#setVisible",
     "method"
+  ],
+  [
+    "src/plugins/axisgizmoplugin/index.js",
+    "file/src/plugins/AxisGizmoPlugin/index.js.html",
+    "src/plugins/AxisGizmoPlugin/index.js",
+    "file"
   ],
   [
     "src/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js",
@@ -1540,6 +1570,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint",
     "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
     "method"
+  ],
+  [
+    "src/plugins/bcfviewpointsplugin/index.js",
+    "file/src/plugins/BCFViewpointsPlugin/index.js.html",
+    "src/plugins/BCFViewpointsPlugin/index.js",
+    "file"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js",
@@ -1728,6 +1764,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/index.js",
+    "file/src/plugins/DistanceMeasurementsPlugin/index.js.html",
+    "src/plugins/DistanceMeasurementsPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/fastnavplugin/fastnavplugin.js",
     "file/src/plugins/FastNavPlugin/FastNavPlugin.js.html",
     "src/plugins/FastNavPlugin/FastNavPlugin.js",
@@ -1780,6 +1822,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-saoEnabled",
     "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#saoEnabled",
     "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/index.js",
+    "file/src/plugins/FastNavPlugin/index.js.html",
+    "src/plugins/FastNavPlugin/index.js",
+    "file"
   ],
   [
     "src/plugins/gltfloaderplugin/gltfdefaultdatasource.js",
@@ -1869,6 +1917,12 @@ window.esdocSearchIndex = [
     "src/plugins/gltfloaderplugin/gltfscenegraphloader.js",
     "file/src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js.html",
     "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/gltfloaderplugin/index.js",
+    "file/src/plugins/GLTFLoaderPlugin/index.js.html",
+    "src/plugins/GLTFLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -1974,6 +2028,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/navcubeplugin/index.js",
+    "file/src/plugins/NavCubePlugin/index.js.html",
+    "src/plugins/NavCubePlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/objloaderplugin/objloaderplugin.js",
     "file/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js.html",
     "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js",
@@ -2001,6 +2061,12 @@ window.esdocSearchIndex = [
     "src/plugins/objloaderplugin/objscenegraphloader.js",
     "file/src/plugins/OBJLoaderPlugin/OBJSceneGraphLoader.js.html",
     "src/plugins/OBJLoaderPlugin/OBJSceneGraphLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/objloaderplugin/index.js",
+    "file/src/plugins/OBJLoaderPlugin/index.js.html",
+    "src/plugins/OBJLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -2049,6 +2115,12 @@ window.esdocSearchIndex = [
     "src/plugins/stlloaderplugin/stlscenegraphloader.js",
     "file/src/plugins/STLLoaderPlugin/STLSceneGraphLoader.js.html",
     "src/plugins/STLLoaderPlugin/STLSceneGraphLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/stlloaderplugin/index.js",
+    "file/src/plugins/STLLoaderPlugin/index.js.html",
+    "src/plugins/STLLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -2148,6 +2220,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/sectionplanesplugin/index.js",
+    "file/src/plugins/SectionPlanesPlugin/index.js.html",
+    "src/plugins/SectionPlanesPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/skyboxesplugin/skyboxesplugin.js",
     "file/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js.html",
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js",
@@ -2188,6 +2266,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-member-skyboxes",
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#skyboxes",
     "member"
+  ],
+  [
+    "src/plugins/skyboxesplugin/index.js",
+    "file/src/plugins/SkyboxesPlugin/index.js.html",
+    "src/plugins/SkyboxesPlugin/index.js",
+    "file"
   ],
   [
     "src/plugins/storeyviewsplugin/ifcstoreyplanobjectstates.js",
@@ -2358,6 +2442,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/storeyviewsplugin/index.js",
+    "file/src/plugins/StoreyViewsPlugin/index.js.html",
+    "src/plugins/StoreyViewsPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/treeviewplugin/modeltreeview.js",
     "file/src/plugins/TreeViewPlugin/ModelTreeView.js.html",
     "src/plugins/TreeViewPlugin/ModelTreeView.js",
@@ -2526,6 +2616,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/treeviewplugin/index.js",
+    "file/src/plugins/TreeViewPlugin/index.js.html",
+    "src/plugins/TreeViewPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/treeviewplugin/modelvalidation.js",
     "file/src/plugins/TreeViewPlugin/modelValidation.js.html",
     "src/plugins/TreeViewPlugin/modelValidation.js",
@@ -2560,6 +2656,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html#instance-get-enabled",
     "src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin#enabled",
     "member"
+  ],
+  [
+    "src/plugins/viewcullplugin/index.js",
+    "file/src/plugins/ViewCullPlugin/index.js.html",
+    "src/plugins/ViewCullPlugin/index.js",
+    "file"
   ],
   [
     "src/plugins/xktloaderplugin/xktdefaultdatasource.js",
@@ -2682,6 +2784,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/xktloaderplugin/index.js",
+    "file/src/plugins/XKTLoaderPlugin/index.js.html",
+    "src/plugins/XKTLoaderPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/xktloaderplugin/parsers/parserv1.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/ParserV1.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js",
@@ -2757,6 +2865,18 @@ window.esdocSearchIndex = [
     "src/plugins/xml3dloaderplugin/xml3dscenegraphloader.js",
     "file/src/plugins/XML3DLoaderPlugin/XML3DSceneGraphLoader.js.html",
     "src/plugins/XML3DLoaderPlugin/XML3DSceneGraphLoader.js",
+    "file"
+  ],
+  [
+    "src/plugins/xml3dloaderplugin/index.js",
+    "file/src/plugins/XML3DLoaderPlugin/index.js.html",
+    "src/plugins/XML3DLoaderPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/index.js",
+    "file/src/plugins/index.js.html",
+    "src/plugins/index.js",
     "file"
   ],
   [
@@ -2950,6 +3070,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/Viewer.js~Viewer.html#instance-member-scene",
     "src/viewer/Viewer.js~Viewer#scene",
     "member"
+  ],
+  [
+    "src/viewer/index.js",
+    "file/src/viewer/index.js.html",
+    "src/viewer/index.js",
+    "file"
   ],
   [
     "src/viewer/metadata/ifcobjectdefaultcolors.js",
@@ -4224,6 +4350,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/imageplane/index.js",
+    "file/src/viewer/scene/ImagePlane/index.js.html",
+    "src/viewer/scene/ImagePlane/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/performancemodel.js",
     "file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js",
@@ -4570,6 +4702,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-xrayed",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#xrayed",
     "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/index.js",
+    "file/src/viewer/scene/PerformanceModel/index.js.html",
+    "src/viewer/scene/PerformanceModel/index.js",
+    "file"
   ],
   [
     "src/viewer/scene/performancemodel/lib/entity_flags.js",
@@ -5748,6 +5886,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/camera/index.js",
+    "file/src/viewer/scene/camera/index.js.html",
+    "src/viewer/scene/camera/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/canvas/canvas.js",
     "file/src/viewer/scene/canvas/Canvas.js.html",
     "src/viewer/scene/canvas/Canvas.js",
@@ -6060,6 +6204,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/geometry/builders/index.js",
+    "file/src/viewer/scene/geometry/builders/index.js.html",
+    "src/viewer/scene/geometry/builders/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/geometry/index.js",
+    "file/src/viewer/scene/geometry/index.js.html",
+    "src/viewer/scene/geometry/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/geometry/loaders/index.js",
+    "file/src/viewer/scene/geometry/loaders/index.js.html",
+    "src/viewer/scene/geometry/loaders/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/geometry/loaders/load3dsgeometry.js",
     "file/src/viewer/scene/geometry/loaders/load3DSGeometry.js.html",
     "src/viewer/scene/geometry/loaders/load3DSGeometry.js",
@@ -6069,6 +6231,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/geometry/loaders/loadobjgeometry.js",
     "file/src/viewer/scene/geometry/loaders/loadOBJGeometry.js.html",
     "src/viewer/scene/geometry/loaders/loadOBJGeometry.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/index.js",
+    "file/src/viewer/scene/index.js.html",
+    "src/viewer/scene/index.js",
     "file"
   ],
   [
@@ -7098,106 +7266,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js",
-    "file/src/viewer/scene/logDepthBuf/LogDepthBuf.js.html",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js",
+    "src/viewer/scene/lights/index.js",
+    "file/src/viewer/scene/lights/index.js.html",
+    "src/viewer/scene/lights/index.js",
     "file"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-bias",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#bias",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-bias",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#bias",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-blur",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#blur",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-blur",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#blur",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#destroy",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-method-destroy",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-enabled",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#enabled",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-enabled",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-intensity",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#intensity",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-intensity",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#intensity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-kernelRadius",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#kernelradius",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-kernelRadius",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#kernelRadius",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-minResolution",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#minresolution",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-minResolution",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#minResolution",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-set-scale",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#scale",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-scale",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/logdepthbuf/logdepthbuf.js~logdepthbuf#supported",
-    "class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html#instance-get-supported",
-    "src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf#supported",
-    "member"
   ],
   [
     "src/viewer/scene/marker/marker.js",
@@ -7282,6 +7354,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-worldPos",
     "src/viewer/scene/marker/Marker.js~Marker#worldPos",
     "member"
+  ],
+  [
+    "src/viewer/scene/marker/index.js",
+    "file/src/viewer/scene/marker/index.js.html",
+    "src/viewer/scene/marker/index.js",
+    "file"
   ],
   [
     "src/viewer/scene/materials/edgematerial.js",
@@ -8646,6 +8724,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/materials/index.js",
+    "file/src/viewer/scene/materials/index.js.html",
+    "src/viewer/scene/materials/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/math/frustum.js",
     "file/src/viewer/scene/math/Frustum.js.html",
     "src/viewer/scene/math/Frustum.js",
@@ -8661,6 +8745,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/math/geometrycompressionutils.js",
     "file/src/viewer/scene/math/geometryCompressionUtils.js.html",
     "src/viewer/scene/math/geometryCompressionUtils.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/index.js",
+    "file/src/viewer/scene/math/index.js.html",
+    "src/viewer/scene/math/index.js",
     "file"
   ],
   [
@@ -8746,6 +8836,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html#instance-method-saveObjects",
     "src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento#saveObjects",
     "method"
+  ],
+  [
+    "src/viewer/scene/mementos/index.js",
+    "file/src/viewer/scene/mementos/index.js.html",
+    "src/viewer/scene/mementos/index.js",
+    "file"
   ],
   [
     "src/viewer/scene/mesh/mesh.js",
@@ -9243,6 +9339,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/mesh/emphasis/emphasisfillshadersource.js",
     "file/src/viewer/scene/mesh/emphasis/EmphasisFillShaderSource.js.html",
     "src/viewer/scene/mesh/emphasis/EmphasisFillShaderSource.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/mesh/index.js",
+    "file/src/viewer/scene/mesh/index.js.html",
+    "src/viewer/scene/mesh/index.js",
     "file"
   ],
   [
@@ -9774,6 +9876,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/nodes/index.js",
+    "file/src/viewer/scene/nodes/index.js.html",
+    "src/viewer/scene/nodes/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/paths/cubicbeziercurve.js",
     "file/src/viewer/scene/paths/CubicBezierCurve.js.html",
     "src/viewer/scene/paths/CubicBezierCurve.js",
@@ -10132,6 +10240,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-t",
     "src/viewer/scene/paths/SplineCurve.js~SplineCurve#t",
     "member"
+  ],
+  [
+    "src/viewer/scene/paths/index.js",
+    "file/src/viewer/scene/paths/index.js.html",
+    "src/viewer/scene/paths/index.js",
+    "file"
   ],
   [
     "src/viewer/scene/postfx/sao.js",
@@ -10878,6 +10992,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/sectionplane/index.js",
+    "file/src/viewer/scene/sectionPlane/index.js.html",
+    "src/viewer/scene/sectionPlane/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/skybox/skybox.js",
     "file/src/viewer/scene/skybox/Skybox.js.html",
     "src/viewer/scene/skybox/Skybox.js",
@@ -10914,6 +11034,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/skybox/index.js",
+    "file/src/viewer/scene/skybox/index.js.html",
+    "src/viewer/scene/skybox/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/stats.js",
     "file/src/viewer/scene/stats.js.html",
     "src/viewer/scene/stats.js",
@@ -10935,6 +11061,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/utils/queue.js",
     "file/src/viewer/scene/utils/Queue.js.html",
     "src/viewer/scene/utils/Queue.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/index.js",
+    "file/src/viewer/scene/utils/index.js.html",
+    "src/viewer/scene/utils/index.js",
     "file"
   ],
   [

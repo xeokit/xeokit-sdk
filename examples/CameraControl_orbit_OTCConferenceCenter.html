@@ -88,13 +88,15 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        Mesh,
+        VBOGeometry,
+        buildGridGeometry,
+        PhongMaterial,
+        NavCubePlugin
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera

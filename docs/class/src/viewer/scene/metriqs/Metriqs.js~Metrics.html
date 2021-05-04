@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Metrics} from &apos;<span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber79">@xeokit/xeokit-sdk/src/viewer/scene/metriqs/Metriqs.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Metrics} from &apos;<span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber78">@xeokit/xeokit-sdk/src/viewer/scene/metriqs/Metriqs.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber79">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber78">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -196,8 +195,7 @@
 </ul>
 <h2 id="usage">Usage</h2><p>Let&apos;s load a model using an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>, then configure the Real-space unit type and the coordinate
 mapping between the Real-space and World-space 3D coordinate systems.</p>
-<pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;
@@ -1030,7 +1028,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
@@ -1086,7 +1084,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber224">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber223">source</a></span></span>
     </span>
   </h3>
 
@@ -1130,7 +1128,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber180">source</a></span></span>
     </span>
   </h3>
 
@@ -1187,7 +1185,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber195">source</a></span></span>
     </span>
   </h3>
 
@@ -1231,7 +1229,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
@@ -1288,7 +1286,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber168">source</a></span></span>
     </span>
   </h3>
 
@@ -1332,7 +1330,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber138">source</a></span></span>
     </span>
   </h3>
 
@@ -1412,7 +1410,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber252">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber251">source</a></span></span>
     </span>
   </h3>
 
@@ -1494,7 +1492,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metriqs/Metriqs.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 

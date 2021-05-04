@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Texture} from &apos;<span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber85">@xeokit/xeokit-sdk/src/viewer/scene/materials/Texture.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Texture} from &apos;<span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber81">@xeokit/xeokit-sdk/src/viewer/scene/materials/Texture.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber85">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber81">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -198,12 +197,8 @@
 with <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuseMap">PhongMaterial#diffuseMap</a></span> and <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>. The <span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span> pixel colors directly
 provide the diffuse and specular components for each fragment across the <span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> surface.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#materials_Texture">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildTorusGeometry} from &quot;../src/scene/geometry/builders/buildTorusGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, Mesh, buildTorusGeometry,
+     ReadableGeometry, PhongMaterial, Texture} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -1333,7 +1328,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -1498,7 +1493,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber509">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 
@@ -1542,7 +1537,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -1586,7 +1581,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber262">source</a></span></span>
     </span>
   </h3>
 
@@ -1631,7 +1626,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber282">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -1676,7 +1671,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber451">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber447">source</a></span></span>
     </span>
   </h3>
 
@@ -1727,7 +1722,7 @@ closest to the center of the pixel being textured.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber431">source</a></span></span>
     </span>
   </h3>
 
@@ -1802,7 +1797,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
@@ -1847,7 +1842,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber395">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 
@@ -1892,7 +1887,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber354">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber350">source</a></span></span>
     </span>
   </h3>
 
@@ -1937,7 +1932,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber363">source</a></span></span>
     </span>
   </h3>
 
@@ -1982,7 +1977,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber293">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber289">source</a></span></span>
     </span>
   </h3>
 
@@ -2027,7 +2022,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -2072,7 +2067,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber326">source</a></span></span>
     </span>
   </h3>
 
@@ -2117,7 +2112,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber343">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -2162,7 +2157,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber467">source</a></span></span>
     </span>
   </h3>
 
@@ -2216,7 +2211,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber487">source</a></span></span>
     </span>
   </h3>
 
@@ -2275,7 +2270,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber516">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/materials/Texture.js.html#lineNumber512">source</a></span></span>
     </span>
   </h3>
 

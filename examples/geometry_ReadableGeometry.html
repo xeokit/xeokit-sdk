@@ -15,8 +15,10 @@
 <div class="slideout-sidebar">
     <h1>ReadableGeometry</h1>
     <h2>JavaScript-resident geometry</h2>
-    <p>In this example, we're creating a simple 3D scene that contains geometry that is stored both on the GPU and in browser
-        memory.</p><p>Storing the geometry data in browser memory increases the memory footprint, but allows us to access
+    <p>In this example, we're creating a simple 3D scene that contains geometry that is stored both on the GPU and in
+        browser
+        memory.</p>
+    <p>Storing the geometry data in browser memory increases the memory footprint, but allows us to access
         it with JavaScript.</p>
     <h3>Components Used</h3>
     <ul>
@@ -46,11 +48,7 @@
 
 <script id="source" type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js"
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
+    import {Viewer, Mesh, ReadableGeometry, PhongMaterial, Texture} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"

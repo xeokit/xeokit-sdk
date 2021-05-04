@@ -46,11 +46,7 @@
 
 <script id="source" type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+    import {Viewer, ImagePlane, XKTLoaderPlugin, DirLight, AmbientLight} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",

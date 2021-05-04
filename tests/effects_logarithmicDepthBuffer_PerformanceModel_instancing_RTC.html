@@ -11,9 +11,7 @@
 
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, math, PerformanceModel} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -53,7 +51,7 @@
 
     performanceModel.finalize();
 
-    signalTestComplete();
+    signalTestComplete(viewer);
 
     function buildTable(performanceModel, rtcCenter, size = 1) {
 

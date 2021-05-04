@@ -105,7 +105,7 @@
             width: calc(100% - 50px);
             padding-left: 2px;
             pointer-events: all;
-            height:23px;
+            height: 23px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -170,9 +170,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+    import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials

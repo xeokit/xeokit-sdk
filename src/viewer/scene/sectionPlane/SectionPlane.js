@@ -17,9 +17,7 @@ import {math} from "../math/math.js";
  * using a {@link SectionPlanesPlugin}.
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {SectionPlane} from "../src/sectionPlane/SectionPlane.js";
+ * import {Viewer, GLTFLoaderPlugin, SectionPlane} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"

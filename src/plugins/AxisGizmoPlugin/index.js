@@ -1,1 +1,1 @@
-export * from "./AxisGizmoPlugin";
+export * from "./AxisGizmoPlugin.js";

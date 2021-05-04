@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ModelMemento} from &apos;<span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber75">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ModelMemento} from &apos;<span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber74">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber75">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber74">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -194,8 +193,7 @@ again, and then we&apos;ll restore the visual states of all the Entitys again fr
 <li><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span> - Saves and restores the state of a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span>.</li>
 <li><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span> - Saves and restores a snapshot of the visual state of the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>&apos;s that represent objects within a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</li>
 </ul>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {ModelMemento} from &quot;../src/scene/mementos/ModelMemento.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin,  ModelMemento} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;
@@ -378,7 +376,7 @@ ModelMemento.restoreObjects(viewer.scene);</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
@@ -443,7 +441,7 @@ ModelMemento.restoreObjects(viewer.scene);</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber210">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -512,7 +510,7 @@ ModelMemento.restoreObjects(viewer.scene);</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ModelMemento.js.html#lineNumber137">source</a></span></span>
     </span>
   </h3>
 

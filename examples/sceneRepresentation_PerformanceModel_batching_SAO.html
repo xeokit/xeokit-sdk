@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 <head>
@@ -20,7 +19,8 @@
     <h1>PerformanceModel</h1>
     <h2>Geometry batching and SAO</h2>
     <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
-        at the same providing a separate geometry for each object, and rendering with scalable ambient obscurance (SAO).</p>
+        at the same providing a separate geometry for each object, and rendering with scalable ambient obscurance
+        (SAO).</p>
     <p>SAO emphasises detail by darkening crevices.</p>
     <h3>Customize SAO</h3>
     <div id="myDatGuiContainer"></div>
@@ -49,8 +49,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -364,7 +363,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false, width:"100%"});
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const saoFolder = gui.addFolder('SAO');
     saoFolder.add(saoParams, 'enabled');

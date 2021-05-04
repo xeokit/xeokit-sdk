@@ -10,11 +10,8 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
-
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -42,7 +39,7 @@
         const bcfViewpoint = getBCFViewpoint();
         bcfViewpoints.setViewpoint(bcfViewpoint);
 
-        signalTestComplete();
+        signalTestComplete(viewer);
     });
 
     function getBCFViewpoint() {

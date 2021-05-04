@@ -1,2 +1,1 @@
-export * from "./OBJLoaderPlugin";
-export * from "./OBJSceneGraphLoader";
+export * from "./OBJLoaderPlugin.js";

@@ -11,9 +11,7 @@
 
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {utils} from "../src/viewer/scene/utils.js";
+    import {Viewer, GLTFLoaderPlugin, utils} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -73,7 +71,7 @@
     });
 
     model.on("loaded", function () {
-        signalTestComplete();
+        signalTestComplete(viewer);
     });
 
 </script>

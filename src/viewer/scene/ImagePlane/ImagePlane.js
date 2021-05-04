@@ -36,9 +36,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, ImagePlane, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",
@@ -89,10 +87,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
- * import {ImagePlane} from "../src/viewer/scene/ImagePlane/ImagePlane.js";
+ * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",

@@ -19,13 +19,12 @@ const IFCObjectDefaults = {
         colorize: [0.137255, 0.403922, 0.870588],
         pickable: false,
         visible: false,
-        opacity: 0.5
+        opacity: 0.4
     },
 
     IfcWindow: {
         colorize: [0.137255, 0.403922, 0.870588],
-        pickable: true,
-        opacity: 0.1
+        opacity: 0.3
     },
 
     IfcPlate: {

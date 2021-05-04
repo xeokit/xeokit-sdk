@@ -20,8 +20,7 @@ const color = math.vec3();
  * again, and then we'll restore the visual states of all the Entitys again from the ObjectsMemento, which will hide those two Entitys again.
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {ObjectsMemento} from "../src/scene/mementos/ObjectsMemento.js";
+ * import {Viewer, XKTLoaderPlugin, ObjectsMemento} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

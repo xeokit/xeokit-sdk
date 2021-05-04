@@ -10,8 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -77,7 +76,7 @@
                                     })
                                         .on("loaded", () => {
 
-                                            signalTestComplete();
+                                            signalTestComplete(viewer);
                                         });
                                 });
                         });

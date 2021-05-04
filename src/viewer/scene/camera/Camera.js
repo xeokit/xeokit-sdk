@@ -37,7 +37,7 @@ const offsetEye = math.vec3();
  * There is exactly one Camera per {@link Scene}:
  *
  * ````javascript
- * import {Viewer} from "viewer/Viewer.js";
+ * import {Viewer} from "xeokit-sdk.es.js";
  *
  * var camera = viewer.scene.camera;
  *

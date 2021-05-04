@@ -13,10 +13,7 @@
 
 <script type="module">
 
-    import {Viewer} from "../../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {SectionPlanesPlugin} from "../../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
-    import {BCFViewpointsPlugin} from "../../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+    import {Viewer,XKTLoaderPlugin,SectionPlanesPlugin,BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -61,7 +58,7 @@
 
             bcfViewpoints.setViewpoint(bcfViewpoint);
 
-            signalTestComplete();
+            signalTestComplete(viewer);
         });
     });
 

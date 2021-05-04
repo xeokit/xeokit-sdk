@@ -112,8 +112,7 @@ const defaultQuaternion = math.identityQuaternion();
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {PerformanceModel} from "../src/viewer/scene/PerformanceModels/PerformanceModel.js";
+ * import {Viewer, PerformanceModel} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -315,8 +314,7 @@ const defaultQuaternion = math.identityQuaternion();
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+ * import {Viewer, PerformanceModel} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -1294,10 +1292,6 @@ class PerformanceModel extends Component {
         const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
         const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
         const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
-
-        if (opacity < 255) {
-            this.numTransparentLayerPortions++;
-        }
 
         const mesh = new PerformanceMesh(this, id, color, opacity);
 

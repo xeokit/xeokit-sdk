@@ -194,10 +194,10 @@
             }
           },
           "extra": {
-            "rawValue": "./curve.js",
-            "raw": "\"./curve.js\""
+            "rawValue": "./Curve.js",
+            "raw": "\"./Curve.js\""
           },
-          "value": "./curve.js",
+          "value": "./Curve.js",
           "leadingComments": null,
           "trailingComments": null
         },
@@ -26907,7 +26907,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./curve.js",
+      "value": "./Curve.js",
       "start": 55,
       "end": 67,
       "loc": {

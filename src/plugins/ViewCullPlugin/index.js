@@ -1,1 +1,1 @@
-export * from "./ViewCullPlugin";
+export * from "./ViewCullPlugin.js";

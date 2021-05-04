@@ -24,7 +24,6 @@ const kdTreeDimLength = new Float32Array(3);
  *
  * Use ````ViewCullPlugin```` by simply adding it to your ````Viewer````:
  *
- *
  * ````javascript
  * const viewer = new Viewer({
  *    canvasId: "myCanvas",

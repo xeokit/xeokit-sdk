@@ -10,8 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {STLLoaderPlugin} from "../src/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
+    import {Viewer, STLLoaderPlugin} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -52,7 +51,7 @@
     });
 
     model.on("loaded", () => {
-        signalTestComplete();
+        signalTestComplete(viewer);
     });
 
 </script>

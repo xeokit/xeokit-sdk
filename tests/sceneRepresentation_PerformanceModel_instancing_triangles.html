@@ -10,8 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -128,7 +127,7 @@
 
     performanceModel.finalize();
 
-    signalTestComplete();
+    signalTestComplete(viewer);
 
 </script>
 

@@ -6,12 +6,8 @@ import {CubeTexture} from './CubeTexture.js';
  * ## Usage
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
- * import {LightMap} from "../src/scene/lights/LightMap.js";
+ * import {Viewer, Mesh, buildSphereGeometry,
+ *      ReadableGeometry, MetallicMaterial, LightMap} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange the camera
  *

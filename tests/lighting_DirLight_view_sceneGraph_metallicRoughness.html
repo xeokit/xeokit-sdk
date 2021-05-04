@@ -11,14 +11,16 @@
 
 <script type="module" id="source">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {
+        Viewer,
+        Mesh,
+        ReadableGeometry,
+        Texture,
+        DirLight,
+        loadOBJGeometry,
+        MetallicMaterial
+    } from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
-    import {loadOBJGeometry} from "../src/viewer/scene/geometry/loaders/loadOBJGeometry.js";
-    import {MetallicMaterial} from "../src/viewer/scene/materials/MetallicMaterial.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -86,12 +88,12 @@
                         specularF0: 0.7
                     })
                 });
+
+                signalTestComplete(viewer);
             },
             function () {
                 // Error
             });
-
-    signalTestComplete(viewer);
 
 </script>
 </html>

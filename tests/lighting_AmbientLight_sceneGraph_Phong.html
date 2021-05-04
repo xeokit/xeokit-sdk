@@ -11,14 +11,16 @@
 
 <script type="module" id="source">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {buildTorusGeometry} from "../src/viewer/scene/geometry/builders/buildTorusGeometry.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {
+        Viewer,
+        Mesh,
+        buildTorusGeometry,
+        ReadableGeometry,
+        PhongMaterial,
+        Texture,
+        AmbientLight,
+        DirLight
+    } from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -75,7 +77,7 @@
             ambient: [1.0, 1.0, 1.0],
             shininess: 30,
             diffuseMap: new Texture(viewer.scene, {
-                src: "../textures/diffuse/uvGrid2.jpg"
+                src: "../assets/textures/diffuse/uvGrid2.jpg"
             })
         })
     });

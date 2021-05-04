@@ -119,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-logdepthbuf">viewer/scene/logDepthBuf</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/logDepthBuf/LogDepthBuf.js~LogDepthBuf.html">LogDepthBuf</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
@@ -161,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber52">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber50">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber52">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber50">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -197,9 +196,7 @@
 </ul>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create two SectionPlanes to slice a model loaded from glTF. Note that we could also create them
 using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
-import {SectionPlane} from &quot;../src/sectionPlane/SectionPlane.js&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, GLTFLoaderPlugin, SectionPlane} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
@@ -1075,7 +1072,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -1176,7 +1173,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -1221,7 +1218,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -1279,7 +1276,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber143">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
@@ -1324,7 +1321,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber155">source</a></span></span>
     </span>
   </h3>
 
@@ -1382,7 +1379,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
@@ -1440,7 +1437,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1485,7 +1482,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber130">source</a></span></span>
     </span>
   </h3>
 
@@ -1546,7 +1543,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -1590,7 +1587,7 @@ each time either of two properties are updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 

@@ -17,7 +17,8 @@
     <h1>PerformanceModel</h1>
     <h2>Geometry reuse and physically-based rendering</h2>
     <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
-        at the same time reusing the same geometry for each object, and using PerformanceModel's additional metallic and roughness
+        at the same time reusing the same geometry for each object, and using PerformanceModel's additional metallic and
+        roughness
         properties for physically-based rendering (PBR).</p>
     <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
     <p>PBR shades objects using a physically-correct shading model, for more realism.</p>
@@ -62,12 +63,14 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
-    import {LightMap} from "../src/viewer/scene/lights/LightMap.js";
-    import {buildSphereGeometry} from "../src/viewer/scene/geometry/builders/buildSphereGeometry.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {
+        Viewer,
+        PerformanceModel,
+        ReflectionMap,
+        LightMap,
+        buildSphereGeometry,
+        DirLight
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera

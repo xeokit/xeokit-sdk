@@ -5,7 +5,9 @@ function signalTestComplete(viewer) {
         document.body.appendChild(div);
     } else {
         viewer.scene.canvas.spinner.on("zeroProcesses", () => { // All outstanding tasks complete
-            document.body.appendChild(div);
+            setTimeout(() => {
+                document.body.appendChild(div);
+            }, 500);
         });
     }
 }

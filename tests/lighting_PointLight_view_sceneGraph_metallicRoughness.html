@@ -10,14 +10,17 @@
 </body>
 <script type="module" id="source">
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
+    import {
+        Viewer,
+        Mesh,
+        ReadableGeometry,
+        Texture,
+        loadOBJGeometry,
+        MetallicMaterial,
+        PointLight
+    } from "../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
-    import {loadOBJGeometry} from "../src/viewer/scene/geometry/loaders/loadOBJGeometry.js";
-    import {MetallicMaterial} from "../src/viewer/scene/materials/MetallicMaterial.js";
-    import {PointLight} from "../src/viewer/scene/lights/PointLight.js";
+
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -29,7 +32,7 @@
 
     viewer.scene.clearLights();
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "keyLight",
         pos: [-80, 60, 80],
         color: [1.0, 0.8, 0.8],
@@ -37,7 +40,7 @@
         space: "view"
     });
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "fillLight",
         pos: [80, 40, 40],
         color: [0.8, 1.0, 0.8],
@@ -45,7 +48,7 @@
         space: "view"
     });
 
-    new PointLight(viewer.scene,{
+    new PointLight(viewer.scene, {
         id: "rimLight",
         pos: [-20, 80, -80],
         color: [1.0, 1.0, 1.0],
@@ -85,12 +88,12 @@
                         specularF0: 0.7
                     })
                 });
+
+                signalTestComplete(viewer);
             },
             function () {
                 // Error
             });
-
-    signalTestComplete(viewer);
 
 </script>
 </html>

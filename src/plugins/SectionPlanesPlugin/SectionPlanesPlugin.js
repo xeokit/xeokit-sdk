@@ -31,9 +31,7 @@ const tempVec3 = math.vec3();
  * reposition our second SectionPlane.
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+ * import {Viewer, GLTFLoaderPlugin, SectionPlanesPlugin} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange its Camera
  *

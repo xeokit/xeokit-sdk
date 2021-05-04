@@ -16,8 +16,9 @@
     <h1>ObjectsMemento</h1>
     <h2>Saving and Restoring Object States</h2>
     <p>In this example, we're loading a BIM model from the file system, randomly hiding some objects, saving object
-        visibility states to a memento,  hiding all objects, then restoring the memento, which restores the object visibilities to their original random states.</p>
-<p>Object state mementos are useful when we want to build "rese</p>
+        visibility states to a memento, hiding all objects, then restoring the memento, which restores the object
+        visibilities to their original random states.</p>
+    <p>Object state mementos are useful when we want to build "rese</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -54,9 +55,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {ObjectsMemento} from "../src/viewer/scene/mementos/ObjectsMemento.js";
+    import {Viewer, XKTLoaderPlugin, ObjectsMemento} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
