@@ -54,8 +54,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  * ````
@@ -77,8 +76,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  *
@@ -378,7 +376,7 @@ class TreeViewPlugin extends Plugin {
         this._pruneEmptyNodes = (cfg.pruneEmptyNodes !== false);
 
         if (this._autoAddModels) {
-            const modelIds = Object.keys(this.viewer.scene.models);
+            const modelIds = Object.keys(this.viewer.metaScene.metaModels);
             for (let i = 0, len = modelIds.length; i < len; i++) {
                 const modelId = modelIds[i];
                 this.addModel(modelId);

@@ -38,8 +38,7 @@ const kdTreeDimLength = new Float32Array(3);
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json"
+ *      src: "./models/xkt/OTCConferenceCenter.xkt"
  * });
  * ````
  */

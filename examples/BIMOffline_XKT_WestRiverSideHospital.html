@@ -139,19 +139,19 @@
     <h3>Components used</h3>
     <ul>
         <li>
-            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
                target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+            <a href="../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
                target="_other">TreeViewPlugin</a>
         </li>
         <li>
-            <a href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+            <a href="../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
                target="_other">NavCubePlugin</a>
         </li>
     </ul>
@@ -179,7 +179,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        saoEnabled: true
     });
 
     viewer.camera.eye = [110.27, 172.88, -6.49];
@@ -195,7 +196,6 @@
 
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
-
 
     new FastNavPlugin(viewer);
 
@@ -220,8 +220,8 @@
 
     const mechanical = xktLoader.load({
         id: "mechanical",
-        src: "../assets/models/xkt/WestRiverSideHospital/mechanical.xkt",
-        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/mechanical.json",
+        src: "../assets/models/xkt/v2/WestRiverSideHospital/mechanical.xkt",
+        metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/mechanical.json",
         edges: true
     });
 
@@ -231,8 +231,8 @@
 
         const plumbing = xktLoader.load({
             id: "plumbing",
-            src: "../assets/models/xkt/WestRiverSideHospital/plumbing.xkt",
-            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/plumbing.json",
+            src: "../assets/models/xkt/v2/WestRiverSideHospital/plumbing.xkt",
+            metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/plumbing.json",
             edges: true
         });
 
@@ -242,8 +242,8 @@
 
             const electrical = xktLoader.load({
                 id: "electrical",
-                src: "../assets/models/xkt/WestRiverSideHospital/electrical.xkt",
-                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/electrical.json",
+                src: "../assets/models/xkt/v2/WestRiverSideHospital/electrical.xkt",
+                metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/electrical.json",
                 edges: true
             });
 
@@ -253,8 +253,8 @@
 
                 const fireAlarms = xktLoader.load({
                     id: "fireAlarms",
-                    src: "../assets/models/xkt/WestRiverSideHospital/fireAlarms.xkt",
-                    metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/fireAlarms.json",
+                    src: "../assets/models/xkt/v2/WestRiverSideHospital/fireAlarms.xkt",
+                    metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/fireAlarms.json",
                     edges: true
                 });
 
@@ -264,8 +264,8 @@
 
                     const sprinklers = xktLoader.load({
                         id: "sprinklers",
-                        src: "../assets/models/xkt/WestRiverSideHospital/sprinklers.xkt",
-                        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/sprinklers.json",
+                        src: "../assets/models/xkt/v2/WestRiverSideHospital/sprinklers.xkt",
+                        metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/sprinklers.json",
                         edges: true
                     });
 
@@ -275,8 +275,8 @@
 
                         const structure = xktLoader.load({
                             id: "structure",
-                            src: "../assets/models/xkt/WestRiverSideHospital/structure.xkt",
-                            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/structure.json",
+                            src: "../assets/models/xkt/v2/WestRiverSideHospital/structure.xkt",
+                            metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/structure.json",
                             excludeUnclassifiedObjects: true,
                             edges: true
                         });
@@ -287,8 +287,8 @@
 
                             const architectural = xktLoader.load({
                                 id: "architectural",
-                                src: "../assets/models/xkt/WestRiverSideHospital/architectural.xkt",
-                                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/architectural.json",
+                                src: "../assets/models/xkt/v2/WestRiverSideHospital/architectural.xkt",
+                                metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/architectural.json",
                                 excludeUnclassifiedObjects: true,
                                 edges: true
                             });
@@ -315,56 +315,6 @@
         });
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Mouse over entities to highlight them
-    //------------------------------------------------------------------------------------------------------------------
-
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
-
-    viewer.scene.input.on("mousedown", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            const entity = hit.entity;
-
-            const metaObject = viewer.metaScene.metaObjects[entity.id];
-
-            if (metaObject) {
-                console.log(metaObject.type);
-            }
-
-        }
-    });
 
 </script>
 </html>

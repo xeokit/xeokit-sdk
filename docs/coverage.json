@@ -1,7 +1,7 @@
 {
-  "coverage": "37.38%",
-  "expectCount": 5788,
-  "actualCount": 2164,
+  "coverage": "37.36%",
+  "expectCount": 5794,
+  "actualCount": 2165,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -157,10 +157,10 @@
       "expectCount": 8,
       "actualCount": 4,
       "undocumentLines": [
-        68,
-        181,
-        327,
-        329
+        67,
+        180,
+        326,
+        328
       ]
     },
     "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js": {
@@ -168,13 +168,13 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        750,
-        754,
-        762,
-        766,
-        770,
-        473,
-        679
+        749,
+        753,
+        761,
+        765,
+        769,
+        472,
+        678
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
@@ -257,23 +257,23 @@
       "expectCount": 27,
       "actualCount": 10,
       "undocumentLines": [
-        332,
+        331,
+        65,
         66,
         67,
-        68,
+        69,
         70,
-        71,
-        77,
-        88,
-        99,
-        107,
-        120,
-        132,
-        136,
-        151,
+        76,
+        87,
+        98,
+        106,
+        119,
+        131,
+        135,
+        150,
+        210,
         211,
-        212,
-        232
+        231
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -325,31 +325,31 @@
       "expectCount": 40,
       "actualCount": 15,
       "undocumentLines": [
-        107,
-        113,
-        130,
-        135,
-        139,
-        163,
-        165,
-        172,
-        206,
+        106,
+        112,
+        129,
+        134,
+        138,
+        162,
+        164,
+        171,
+        205,
+        224,
         225,
-        226,
-        239,
-        244,
-        492,
-        501,
-        543,
-        566,
-        589,
-        612,
-        633,
+        238,
+        243,
+        491,
+        500,
+        542,
+        565,
+        588,
+        611,
+        632,
+        670,
         671,
         672,
         673,
-        674,
-        675
+        674
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js": {
@@ -510,13 +510,13 @@
         10,
         11,
         13,
+        284,
         285,
-        286,
-        310,
-        316,
-        345,
-        371,
-        635
+        309,
+        315,
+        344,
+        370,
+        634
       ]
     },
     "src/plugins/TreeViewPlugin/ModelTreeView.js": {
@@ -578,13 +578,13 @@
       "expectCount": 20,
       "actualCount": 13,
       "undocumentLines": [
+        371,
+        372,
         373,
         374,
         375,
         376,
-        377,
-        378,
-        429
+        427
       ]
     },
     "src/plugins/TreeViewPlugin/modelValidation.js": {
@@ -598,26 +598,26 @@
       "undocumentLines": [
         6,
         8,
-        59,
+        58,
+        60,
         61,
         62,
         63,
-        64,
+        65,
         66,
-        67,
-        69,
-        73,
-        77,
-        84,
-        95,
-        107,
-        118,
-        127,
-        143,
-        149,
-        168,
-        241,
-        285
+        68,
+        72,
+        76,
+        83,
+        94,
+        106,
+        117,
+        126,
+        142,
+        148,
+        167,
+        240,
+        284
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
@@ -631,16 +631,16 @@
       "expectCount": 26,
       "actualCount": 16,
       "undocumentLines": [
-        15,
-        411,
-        436,
-        458,
-        483,
-        511,
-        540,
-        575,
-        740,
-        757
+        16,
+        410,
+        435,
+        457,
+        482,
+        510,
+        539,
+        574,
+        744,
+        761
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -718,6 +718,17 @@
         63,
         100,
         110
+      ]
+    },
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV8.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        12,
+        17,
+        65,
+        107,
+        117
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js": {
@@ -1107,6 +1118,7 @@
         14,
         15,
         16,
+        159,
         160,
         161,
         162,
@@ -1114,13 +1126,12 @@
         164,
         165,
         166,
-        167,
-        169,
-        171,
-        192,
-        206,
-        217,
-        558
+        168,
+        170,
+        191,
+        205,
+        216,
+        557
       ]
     },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {
@@ -1162,19 +1173,19 @@
         984,
         986,
         991,
-        1747,
-        1819,
-        1864,
-        1889,
-        1912,
-        1935,
-        1958,
-        1983,
-        2010,
-        2035,
-        2059,
-        2136,
-        2158
+        1743,
+        1815,
+        1860,
+        1885,
+        1908,
+        1931,
+        1954,
+        1979,
+        2006,
+        2031,
+        2055,
+        2132,
+        2154
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/ENTITY_FLAGS.js": {
@@ -3984,8 +3995,8 @@
       "actualCount": 10,
       "undocumentLines": [
         4,
-        82,
-        93
+        81,
+        92
       ]
     },
     "src/viewer/scene/materials/Material.js": {
@@ -4043,8 +4054,8 @@
       "actualCount": 18,
       "undocumentLines": [
         4,
-        98,
-        125
+        97,
+        124
       ]
     },
     "src/viewer/scene/materials/SpecularMaterial.js": {
@@ -4526,17 +4537,17 @@
       "expectCount": 37,
       "actualCount": 26,
       "undocumentLines": [
-        188,
-        228,
-        290,
-        319,
-        348,
-        377,
-        406,
-        437,
-        464,
-        495,
-        528
+        183,
+        223,
+        285,
+        314,
+        343,
+        372,
+        401,
+        432,
+        459,
+        490,
+        523
       ]
     },
     "src/viewer/scene/scene/Scene.js": {

@@ -2832,6 +2832,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/xktloaderplugin/parsers/parserv8.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV8.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV8.js",
+    "file"
+  ],
+  [
     "src/plugins/xktloaderplugin/parsers/lib/pako.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/lib/pako.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/lib/pako.js",

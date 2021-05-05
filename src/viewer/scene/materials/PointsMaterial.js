@@ -56,8 +56,7 @@ const PRESETS = {
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json"
+ *      src: "../assets/models/xkt/MAP-PointCloud.xkt"
  * });
  * ````
  */
