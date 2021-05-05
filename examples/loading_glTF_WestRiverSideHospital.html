@@ -19,11 +19,11 @@
     <h3>Components used</h3>
     <ul>
         <li>
-            <a href="./../docs/class/src/viewer/Viewer.js~Viewer.html"
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
                target="_other">GLTFLoaderPlugin</a>
         </li>
     </ul>
@@ -62,8 +62,8 @@
 
     const structure = gltfLoader.load({
         id: "structure",
-        src: "./../assets/models/gltf/WestRiverSideHospital/structure.gltf",
-        metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/structure.json",
+        src: "../assets/models/gltf/WestRiverSideHospital/structure.gltf",
+        metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/structure.json",
         edges: true
     });
 
@@ -71,24 +71,24 @@
 
         const electrical = gltfLoader.load({
             id: "electrical",
-            src: "./../assets/models/gltf/WestRiverSideHospital/electrical.gltf",
-            metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/electrical.json",
+            src: "../assets/models/gltf/WestRiverSideHospital/electrical.gltf",
+            metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/electrical.json",
             edges: true
         });
 
         electrical.on("loaded", function () {
             const fireAlarms = gltfLoader.load({
                 id: "fireAlarms",
-                src: "./../assets/models/gltf/WestRiverSideHospital/fireAlarms.gltf",
-                metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/fireAlarms.json",
+                src: "../assets/models/gltf/WestRiverSideHospital/fireAlarms.gltf",
+                metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/fireAlarms.json",
                 edges: true
             });
 
             fireAlarms.on("loaded", function () {
                 const sprinklers = gltfLoader.load({
                     id: "sprinklers",
-                    src: "./../assets/models/gltf/WestRiverSideHospital/sprinklers.gltf",
-                    metaModelSrc: "./../assets/metaModels/WestRiverSideHospital/sprinklers.json",
+                    src: "../assets/models/gltf/WestRiverSideHospital/sprinklers.gltf",
+                    metaModelSrc: "../assets/models/xkt/v2/WestRiverSideHospital/sprinklers.json",
                     edges: true
                 });
 

@@ -256,117 +256,32 @@
 
     const files = {
 
-        "Annotations": [
-            "#Pinning 3D labels on models",
-            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
-            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
-            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
-            ["annotations_createWithMouse", "Click on the model to create annotations"],
-            ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
-            ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
-            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
-        ],
-
-        "AxisGizmo": [
-            "#Showing the coordinate axis",
-            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom right)"]
-        ],
-
-        "BCF": [
-            "#Saving and loading BCF viewpoints for BIM software interoperability",
-            ["BCF_SaveViewpoint", "Saving viewer state as a BCF viewpoint"],
-            ["BCF_LoadViewpoint", "Loading viewer state from a BCF viewpoint"],
-            ["BCF_LoadViewpoint_withSectionPlanesPlugin", "Loading a BCF viewpoint with section planes"],
-            ["BCF_LoadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
-            ["BCF_SaveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
-            ["BCF_LoadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
-            ["BCF_SaveViewpoint_ortho", "Saving a BCF viewpoint for an orthographic camera"],
-            ["BCF_LoadViewpoint_ortho", "Loading a BCF viewpoint for an orthographic camera"],
-        ],
-
-        "Camera": [
-            "#Navigating scenes using the camera",
-            ["camera_CameraPathAnimation", "Animating the camera along a path"],
-            ["camera_fitToModel", "Arranging the camera to fit the model in view"],
-            ["camera_CameraFlightAnimation_projection", "Smooth transition between projections"],
-            ["CameraControl_orbit_Duplex", "Orbiting camera navigation"],
-            ["CameraControl_orbit_Duplex_smallCanvas", "Orbiting camera navigation, with small canvas"],
-            ["CameraControl_orbit_HolterTower", "Orbiting camera navigation"],
-            ["CameraControl_orbit_OTCConferenceCenter", "Orbiting camera navigation"],
-            ["CameraControl_orbit_MAP", "Orbiting camera with a model placed at [1842022, 10, -5173301]"],
-            ["CameraControl_orbit_Lyon", "Orbiting camera navigation with a CityJSON model"],
-            ["CameraControl_orbit_WaterLock", "Orbiting camera navigation"],
-            ["CameraControl_firstPerson_Duplex", "First-person navigation"],
-            ["CameraControl_firstPerson_HolterTower", "First-person navigation"],
-            ["CameraControl_firstPerson_MAP", "First-person navigation with model placed at [1842022, 10, -5173301]"],
-            ["CameraControl_planView_Schependomlaan", "Plan view navigation"],
-            ["CameraControl_keyMap", "Custom key bindings for camera navigation"],
-            ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"]
-        ],
-
-        "Context Menus": [
-            "#Creating pop-up context menus",
-            ["ContextMenu_Canvas_TreeViewPlugin_Custom", "Right-click to open a context menu"],
-            ["ContextMenu_dynamicItemTitles", "Right-click to open a context menu with dynamic titles"],
-            ["ContextMenu_subMenus", "Right-click on the model to open a multi-level context menu"],
-        ],
-
-        "Geometry": [
-            "#Creating geometry meshes",
-            ["geometry_VBOGeometry", "GPU-resident geometry"],
-            ["geometry_ReadableGeometry", "Browser-resident geometry"],
-            ["geometry_builders_buildBoxGeometry", "Building a box-shaped triangle mesh geometry"],
-            ["geometry_builders_buildBoxLinesGeometry", "Building a box-shaped lines mesh geometry"],
-            ["geometry_builders_buildGridGeometry", "Building a grid lines geometry"],
-            ["geometry_builders_buildCylinderGeometry", "Building a cylinder-shaped triangle mesh geometry"],
-            ["geometry_builders_buildSphereGeometry", "Building a sphere-shaped triangle mesh geometry"],
-            ["geometry_builders_buildTorusGeometry", "Building a torus-shaped triangle mesh geometry"],
-            ["geometry_builders_buildVectorTextGeometry", "Building vector text geometry"],
-            ["geometry_loaders_loadOBJGeometry", "Loading geometry from OBJ"],
-            ["geometry_loaders_load3DSGeometry", "Loading geometry from 3DS"]
-        ],
-
-        "ImagePlane": [
-            "#Showing bitmap images within 3D scenes",
-            ["ImagePlane_groundPlane", "Google satellite image embedded in ground plane"],
-            ["ImagePlane_groundPlane_narrow", "Google satellite image embedded in ground plane"],
-            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
-        ],
-
-        "Lighting": [
-            "#Light sources",
-            ["lights_AmbientLight", "Ambient light"],
-            ["lights_DirLight_view", "View-space directional lights"],
-            ["lights_DirLight_world", "World-space directional lights"],
-            ["lights_PointLight_view", "View-space point lights"],
-            ["lights_PointLight_world", "World-space point lights"],
-            "#Testing lights with different scene representations",
-            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point lights with various scene representations"],
-        ],
-
         "Loading Models": [
 
             "#Loading BIM models from the file system",
 
+            ["BIMOffline_XKT_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
+            ["BIMOffline_XKT_RevitSamples_RME", "Viewing an IFC4 BIM model exported from Revit"],
+            ["loading_XKT_MAP_pointCloud", "Viewing a point cloud model with 2.6M points"],
             ["BIMOffline_XKT_HolterTower", "Viewing an IFC4 BIM model"],
             ["BIMOffline_XKT_Duplex", "Viewing an IFC2x3 BIM model"],
-            ["BIMOffline_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, with colors loaded from file"],
             ["BIMOffline_XKT_Schependomlaan", "Viewing an IFC2x3 BIM model"],
             ["BIMOffline_XKT_OTCConferenceCenter", "Viewing an IFC4 BIM model"],
             ["BIMOffline_XKT_WestRiverSideHospital", "Viewing seven IFC4 BIM models"],
+            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing an IFC4 BIM model placed at [1842022, 10, -5173301]"],
+            ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing a double-precision CityJSON model"],
+            ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
+
+            "#",
+
             ["BIMOffline_XKT_includeTypes", "Loading only IfcWalls from an IFC4 BIM model"],
             ["BIMOffline_XKT_objectDefaults", "Viewing an IFC2x3 BIM model, providing custom colors for IFC types"],
             ["BIMOffline_XKT_metadata_Schependomlaan", "Using IFC metadata to X-ray an IfcBuildingStorey"],
             ["BIMOffline_XKT_metadata_moveStoreys", "Using IFC metadata to separate IfcBuildingStoreys"],
             ["BIMOffline_XKT_authorMetadata", "Viewing an IFC4 BIM model with authoring data"],
-            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing an IFC4 BIM model placed at [1842022, 10, -5173301]"],
-            ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing a double-precision CityJSON model"],
-            ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
+            ["BIMOffline_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, with colors loaded from file"],
 
-            "#Loading xeokit's native model format",
+            "#",
 
             ["loading_XKT_Duplex", "Viewing an IFC2x3 model"],
             ["loading_XKT_ConvenienceStore", "Viewing an IFC4 model"],
@@ -379,7 +294,7 @@
             ["loading_XKT_GearboxPropellorTurbine", "Viewing a CAD model"],
             ["loading_XKT_GearboxPropellorTurbine_PBR", "Viewing a CAD model"],
             ["loading_XKT_APHS", "Viewing a large IFC4 model"],
-            ["loading_XKT_MAP_pointCloud", "Viewing a point cloud model with 2.6M points"],
+
             ["loading_XKT_dataSource", "Loading a model from XKT using a custom data source"],
             ["loading_XKT_concurrently", "Loading multiple models from XKT concurrently"],
             ["loading_XKT_maxGeometryBatchSize_50M", "Setting PerformanceModel#maxGeometryBatchSize to 50000"],
@@ -418,6 +333,169 @@
             ["loading_MultipleModels", "Loading models from multiple formats"]
         ],
 
+        "Camera Navigation": [
+            "#Navigating scenes using the camera",
+            ["CameraControl_orbit_Duplex", "Orbiting camera navigation"],
+            ["CameraControl_orbit_Duplex_smallCanvas", "Orbiting camera navigation, with small canvas"],
+            ["CameraControl_orbit_HolterTower", "Orbiting camera navigation"],
+            ["CameraControl_orbit_OTCConferenceCenter", "Orbiting camera navigation"],
+            ["CameraControl_orbit_MAP", "Orbiting camera with a model placed at [1842022, 10, -5173301]"],
+            ["CameraControl_orbit_Lyon", "Orbiting camera navigation with a CityJSON model"],
+            ["CameraControl_orbit_WaterLock", "Orbiting camera navigation"],
+            ["CameraControl_firstPerson_Duplex", "First-person navigation"],
+            ["CameraControl_firstPerson_HolterTower", "First-person navigation"],
+            ["CameraControl_firstPerson_MAP", "First-person navigation with model placed at [1842022, 10, -5173301]"],
+            ["CameraControl_planView_Schependomlaan", "Plan view navigation"],
+            ["CameraControl_keyMap", "Custom key bindings for camera navigation"],
+            ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"],
+            ["camera_CameraPathAnimation", "Animating the camera along a path"],
+            ["camera_fitToModel", "Arranging the camera to fit the model in view"],
+            ["camera_CameraFlightAnimation_projection", "Smooth transition between projections"],
+        ],
+
+        "Pinning Notes": [
+            "#Pinning 3D labels on models",
+            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
+            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
+            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
+            ["annotations_createWithMouse", "Click on the model to create annotations"],
+            ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
+            ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
+            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
+        ],
+
+        "Measuring": [
+            "#Measuring angles",
+            ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
+            ["measurements_angle_createWithMouse", "Click on the model to create angle measurements"],
+            "#Measuring distances",
+            ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
+            ["measurements_distance_createWithMouse", "Click on the model to create distance measurements"],
+            ["measurements_distance_unitsAndScale", "Click on the model to create distance measurements"],
+        ],
+
+        "Picking": [
+            "#Interacting with objects using mouse and touch",
+            ["picking_canvas_mesh_colorize", "Hover over objects to colorize them"],
+            ["picking_canvas_mesh_colorize_click", "Click objects to colorize them"],
+            ["picking_canvas_mesh_opacity", "Click objects to make them transparent"],
+            ["picking_canvas_mesh_highlight", "Hover over objects to highlight them"],
+            ["picking_canvas_mesh_highlight_transparent", "Hover over objects to highlight them"],
+            ["picking_canvas_mesh_select", "Hover over objects to select them"],
+            ["picking_canvas_mesh_select_transparent", "Hover over objects to select them"],
+            ["picking_canvas_mesh_xray", "Hover over objects to X-ray them"],
+            ["picking_canvas_mesh_xray_transparent", "Hover over objects to X-ray them"],
+            ["picking_canvas_surface", "Hover over objects to ray-pick their surfaces"],
+            // "picking_canvas_click",
+            ["picking_canvas_doubleClick", "Double-click objects to highlight them"],
+            ["picking_ray_mesh", "Ray-picking objects with an arbitrary World-space ray"],
+            ["picking_ray_surface", "Ray-picking surfaces with an arbitrary World-space ray"],
+            ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
+            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"]
+        ],
+
+        "BCF": [
+            "#Saving and loading BCF viewpoints for BIM software interoperability",
+            ["BCF_SaveViewpoint", "Saving viewer state as a BCF viewpoint"],
+            ["BCF_LoadViewpoint", "Loading viewer state from a BCF viewpoint"],
+            ["BCF_LoadViewpoint_withSectionPlanesPlugin", "Loading a BCF viewpoint with section planes"],
+            ["BCF_LoadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
+            ["BCF_SaveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
+            ["BCF_LoadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
+            ["BCF_SaveViewpoint_ortho", "Saving a BCF viewpoint for an orthographic camera"],
+            ["BCF_LoadViewpoint_ortho", "Loading a BCF viewpoint for an orthographic camera"],
+        ],
+
+        "Section Planes": [
+            "#Slicing objects with arbitrary cutting planes",
+            ["gizmos_SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
+            ["gizmos_SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
+            ["gizmos_SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
+            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
+        ],
+
+        "Storey Views": [
+            "#Visualizing and navigating building stories",
+            ["storeyViews_StoreyViewsPlugin_showStoreyObjects", "Creating an isolated view of objects in building storey"],
+            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera", "Creating an orthographic plan view of building storey"],
+            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera2", "Creating a perspective plan view of building storey"],
+            ["storeyViews_StoreyViewsPlugin_createStoreyMap", "Creating a building storey map image"],
+            ["storeyViews_StoreyViewsPlugin_createStoreyMap_height", "Creating a building storey map image"],
+            ["storeyViews_StoreyViewsPlugin_pickStoreyMap", "Click anywhere in the 2D storey plan to go there in 3D"],
+            ["storeyViews_StoreyViewsPlugin_recipe1", "Click anywhere in the storey map image to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe2", "Click anywhere in the storey map image to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe3", "Click anywhere in the storey map images to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe4", "Click anywhere in the 2D storey plan to go there in 3D"],
+        ],
+
+        "Tree Views": [
+            "#Creating tree views of model metadata",
+            ["TreeViewPlugin_Containment", "TreeViewPlugin 'containment' hierarchy"],
+            ["TreeViewPlugin_Containment_MultipleModels", "TreeViewPlugin 'containment' hierarchy with two models"],
+            ["TreeViewPlugin_Types", "TreeViewPlugin 'types' hierarchy"],
+            ["TreeViewPlugin_Storeys", "TreeViewPlugin 'storeys' hierarchy"],
+            ["TreeViewPlugin_Storeys_validate", "Tree view validation for invalid IFC metadata"],
+            ["TreeViewPlugin_options_rootName", "Configuring a custom label for tree view root"],
+            ["loading_3DXML_TreeView", "Tree view with 3DXML model exported from SolidWorks"]
+        ],
+
+        "Context Menus": [
+            "#Creating pop-up context menus",
+            ["ContextMenu_Canvas_TreeViewPlugin_Custom", "Right-click to open a context menu"],
+            ["ContextMenu_dynamicItemTitles", "Right-click to open a context menu with dynamic titles"],
+            ["ContextMenu_subMenus", "Right-click on the model to open a multi-level context menu"],
+        ],
+
+        "SAO": [
+            "#Scalable ambient obscurance is a rendering effect that emphasizes detail in models by darkening crevices",
+            ["postEffects_SAO_Schependomlaan", "Scalable ambient obscurance (SAO)"],
+            ["postEffects_SAO_OTCConferenceCenter", "Scalable ambient obscurance (SAO)"],
+            ["postEffects_SAO_Duplex", "Scalable ambient obscurance (SAO)"]
+        ],
+
+        "AxisGizmo": [
+            "#Showing the coordinate axis",
+            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom right)"]
+        ],
+
+        "Geometry": [
+            "#Creating geometry meshes",
+            ["geometry_VBOGeometry", "GPU-resident geometry"],
+            ["geometry_ReadableGeometry", "Browser-resident geometry"],
+            ["geometry_builders_buildBoxGeometry", "Building a box-shaped triangle mesh geometry"],
+            ["geometry_builders_buildBoxLinesGeometry", "Building a box-shaped lines mesh geometry"],
+            ["geometry_builders_buildGridGeometry", "Building a grid lines geometry"],
+            ["geometry_builders_buildCylinderGeometry", "Building a cylinder-shaped triangle mesh geometry"],
+            ["geometry_builders_buildSphereGeometry", "Building a sphere-shaped triangle mesh geometry"],
+            ["geometry_builders_buildTorusGeometry", "Building a torus-shaped triangle mesh geometry"],
+            ["geometry_builders_buildVectorTextGeometry", "Building vector text geometry"],
+            ["geometry_loaders_loadOBJGeometry", "Loading geometry from OBJ"],
+            ["geometry_loaders_load3DSGeometry", "Loading geometry from 3DS"]
+        ],
+
+        "ImagePlane": [
+            "#Showing bitmap images within 3D scenes",
+            ["ImagePlane_groundPlane", "Google satellite image embedded in ground plane"],
+            ["ImagePlane_groundPlane_narrow", "Google satellite image embedded in ground plane"],
+            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
+        ],
+
+        "Lighting": [
+            "#Light sources",
+            ["lights_AmbientLight", "Ambient light"],
+            ["lights_DirLight_view", "View-space directional lights"],
+            ["lights_DirLight_world", "World-space directional lights"],
+            ["lights_PointLight_view", "View-space point lights"],
+            ["lights_PointLight_world", "World-space point lights"],
+            "#Testing lights with different scene representations",
+            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point lights with various scene representations"],
+        ],
+
         "Logarithmic Depth Buffer": [
             "#Improving rendering accuracy for mixed object scales",
             ["logDepthBuf_XKT_Lyon", "Enabling the logarithmic depth buffer"],
@@ -444,16 +522,6 @@
             ["materials_LinesMaterial", "LinesMaterial"]
         ],
 
-        "Measurements": [
-            "#Measuring angles",
-            ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
-            ["measurements_angle_createWithMouse", "Click on the model to create angle measurements"],
-            "#Measuring distances",
-            ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
-            ["measurements_distance_createWithMouse", "Click on the model to create distance measurements"],
-            ["measurements_distance_unitsAndScale", "Click on the model to create distance measurements"],
-        ],
-
         "Mementos": [
             "#Saving and restoring viewer state",
             ["mementos_ObjectsMemento", "Saving and restoring object states - demo with random states"]
@@ -471,33 +539,6 @@
             "#Frustum culling",
             ["performance_ViewCullPlugin", "ViewCullPlugin - culls objects outside the view frustum"],
             ["performance_ViewCullPlugin_CameraPathAnimation", "ViewCullPlugin - culls objects outside the view frustum"],
-        ],
-
-        "Picking": [
-            "#Interacting with objects using mouse and touch",
-            ["picking_canvas_mesh_colorize", "Hover over objects to colorize them"],
-            ["picking_canvas_mesh_colorize_click", "Click objects to colorize them"],
-            ["picking_canvas_mesh_opacity", "Click objects to make them transparent"],
-            ["picking_canvas_mesh_highlight", "Hover over objects to highlight them"],
-            ["picking_canvas_mesh_highlight_transparent", "Hover over objects to highlight them"],
-            ["picking_canvas_mesh_select", "Hover over objects to select them"],
-            ["picking_canvas_mesh_select_transparent", "Hover over objects to select them"],
-            ["picking_canvas_mesh_xray", "Hover over objects to X-ray them"],
-            ["picking_canvas_mesh_xray_transparent", "Hover over objects to X-ray them"],
-            ["picking_canvas_surface", "Hover over objects to ray-pick their surfaces"],
-            // "picking_canvas_click",
-            ["picking_canvas_doubleClick", "Double-click objects to highlight them"],
-            ["picking_ray_mesh", "Ray-picking objects with an arbitrary World-space ray"],
-            ["picking_ray_surface", "Ray-picking surfaces with an arbitrary World-space ray"],
-            ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
-            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"]
-        ],
-
-        "SAO": [
-            "#Scalable ambient obscurance is a rendering effect that emphasizes detail in models by darkening crevices",
-            ["postEffects_SAO_Schependomlaan", "Scalable ambient obscurance (SAO)"],
-            ["postEffects_SAO_OTCConferenceCenter", "Scalable ambient obscurance (SAO)"],
-            ["postEffects_SAO_Duplex", "Scalable ambient obscurance (SAO)"]
         ],
 
         "PerformanceModel": [
@@ -549,33 +590,9 @@
             ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane excluded"]
         ],
 
-        "Section Planes": [
-            "#Slicing objects with arbitrary cutting planes",
-            ["gizmos_SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
-            ["gizmos_SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
-            ["gizmos_SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
-            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
-        ],
-
         "Spinner": [
             "#CSS animation while models are loading",
             ["spinner_custom", "Customizing the appearance of the loading spinner"]
-        ],
-
-        "Storey Views": [
-            "#Visualizing and navigating building stories",
-            ["storeyViews_StoreyViewsPlugin_showStoreyObjects", "Creating an isolated view of objects in building storey"],
-            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera", "Creating an orthographic plan view of building storey"],
-            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera2", "Creating a perspective plan view of building storey"],
-            ["storeyViews_StoreyViewsPlugin_createStoreyMap", "Creating a building storey map image"],
-            ["storeyViews_StoreyViewsPlugin_createStoreyMap_height", "Creating a building storey map image"],
-            ["storeyViews_StoreyViewsPlugin_pickStoreyMap", "Click anywhere in the 2D storey plan to go there in 3D"],
-            ["storeyViews_StoreyViewsPlugin_recipe1", "Click anywhere in the storey map image to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe2", "Click anywhere in the storey map image to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe3", "Click anywhere in the storey map images to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe4", "Click anywhere in the 2D storey plan to go there in 3D"],
         ],
 
         "Experiments": [
@@ -584,17 +601,6 @@
             ["techniques_findComplexEntities", "Automatically detect and colorize small and complex entities"],
             // ["DimensionsFootprintModel_example1", "Dimensions footprint experiment #1"],
             // ["DimensionsFootprintModel_example2", "Dimensions footprint experiment #2"]
-        ],
-
-        "Tree Views": [
-            "#Creating tree views of model metadata",
-            ["TreeViewPlugin_Containment", "TreeViewPlugin 'containment' hierarchy"],
-            ["TreeViewPlugin_Containment_MultipleModels", "TreeViewPlugin 'containment' hierarchy with two models"],
-            ["TreeViewPlugin_Types", "TreeViewPlugin 'types' hierarchy"],
-            ["TreeViewPlugin_Storeys", "TreeViewPlugin 'storeys' hierarchy"],
-            ["TreeViewPlugin_Storeys_validate", "Tree view validation for invalid IFC metadata"],
-            ["TreeViewPlugin_options_rootName", "Configuring a custom label for tree view root"],
-            ["loading_3DXML_TreeView", "Tree view with 3DXML model exported from SolidWorks"]
         ],
 
         "Viewer": [
@@ -644,15 +650,15 @@
     container.appendChild(document.createElement('hr'));
 
     const sectionNames = Object.keys(files);
-    sectionNames.sort((a, b) => {
-        if (a < b) {
-            return -1;
-        }
-        if (a > b) {
-            return 1;
-        }
-        return 0;
-    });
+    // sectionNames.sort((a, b) => {
+    //     if (a < b) {
+    //         return -1;
+    //     }
+    //     if (a > b) {
+    //         return 1;
+    //     }
+    //     return 0;
+    // });
 
     for (let i = 0, len = sectionNames.length; i < len; i++) {
         const sectionName = sectionNames[i];
