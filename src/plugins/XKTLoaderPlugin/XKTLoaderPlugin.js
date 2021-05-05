@@ -11,6 +11,7 @@ import {ParserV4} from "./parsers/ParserV4.js";
 import {ParserV5} from "./parsers/ParserV5.js";
 import {ParserV6} from "./parsers/ParserV6.js";
 import {ParserV7} from "./parsers/ParserV7.js";
+import {ParserV8} from "./parsers/ParserV8.js";
 
 const parsers = {};
 
@@ -21,6 +22,7 @@ parsers[ParserV4.version] = ParserV4;
 parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
 parsers[ParserV7.version] = ParserV7;
+parsers[ParserV8.version] = ParserV8;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -589,6 +591,12 @@ class XKTLoaderPlugin extends Plugin {
     /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
+     * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
+     * data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+     * load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
+     * However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+     * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
+     *
      * @param {*} params Loading parameters.
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a *````.xkt````* file, as an alternative to the ````xkt```` parameter.
@@ -633,33 +641,32 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         const options = {};
+        const includeTypes = params.includeTypes || this._includeTypes;
+        const excludeTypes = params.excludeTypes || this._excludeTypes;
+        const objectDefaults = params.objectDefaults || this._objectDefaults;
+
+        if (includeTypes) {
+            options.includeTypesMap = {};
+            for (let i = 0, len = includeTypes.length; i < len; i++) {
+                options.includeTypesMap[includeTypes[i]] = true;
+            }
+        }
+
+        if (excludeTypes) {
+            options.excludeTypesMap = {};
+            for (let i = 0, len = excludeTypes.length; i < len; i++) {
+                options.excludeTypesMap[excludeTypes[i]] = true;
+            }
+        }
+
+        if (objectDefaults) {
+            options.objectDefaults = objectDefaults;
+        }
+
+        options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
+        options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
         if (params.metaModelSrc || params.metaModelData) {
-
-            const includeTypes = params.includeTypes || this._includeTypes;
-            const excludeTypes = params.excludeTypes || this._excludeTypes;
-            const objectDefaults = params.objectDefaults || this._objectDefaults;
-
-            if (includeTypes) {
-                options.includeTypesMap = {};
-                for (let i = 0, len = includeTypes.length; i < len; i++) {
-                    options.includeTypesMap[includeTypes[i]] = true;
-                }
-            }
-
-            if (excludeTypes) {
-                options.excludeTypesMap = {};
-                for (let i = 0, len = excludeTypes.length; i < len; i++) {
-                    options.excludeTypesMap[excludeTypes[i]] = true;
-                }
-            }
-
-            if (objectDefaults) {
-                options.objectDefaults = objectDefaults;
-            }
-
-            options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
-            options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
             const processMetaModelData = (metaModelData) => {
 
