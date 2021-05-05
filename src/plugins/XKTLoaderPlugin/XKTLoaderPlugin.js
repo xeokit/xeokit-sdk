@@ -63,24 +63,29 @@ parsers[ParserV8.version] = ParserV8;
  *
  * ## Metadata
  *
- * XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a {@link MetaModel} corresponding
- * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
+ * Since XKT V8, model metadata is included in the XKT file. If the XKT file has metadata, then loading it creates
+ * model metadata components within the Viewer, namely a {@link MetaModel} corresponding to the model {@link Entity},
+ * and a {@link MetaObject} for each object {@link Entity}.
  *
- * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
- * metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, XKTLoaderPlugin
- * uses its own map of default colors and visibilities for IFC element types.
+ * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding
+ * {@link Entity}. When loading metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial
+ * values to set on the properties of each type of {@link Entity}. By default, XKTLoaderPlugin uses its own map of
+ * default colors and visibilities for IFC element types.
+ *
+ * For XKT versions prior to V8, we provided the metadata to XKTLoaderPlugin as an accompanying JSON file to load. We can
+ * still do that for all XKT versions, and for XKT V8+ it will override any metadata provided within the XKT file.
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
- * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
+ * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
  *
- * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
+ * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
+ * {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
  *
@@ -112,10 +117,9 @@ parsers[ParserV8.version] = ParserV8;
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * // 2
- * const model = xktLoader.load({                                       // Returns an Entity that represents the model
+ * const model = xktLoader.load({          // Returns an Entity that represents the model
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",     // Creates a MetaModel (see below)
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  *
@@ -167,8 +171,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * ````javascript
  * xktLoader.load({
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json",
+ *      src: "./models/xkt/Duplex.xkt",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -186,8 +189,7 @@ parsers[ParserV8.version] = ParserV8;
  * ````javascript
  * const model2 = xktLoader.load({
  *     id: "myModel2",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt",
  *     includeTypes: ["IfcWallStandardCase"]
  * });
  * ````
@@ -201,8 +203,7 @@ parsers[ParserV8.version] = ParserV8;
  * ````javascript
  * const model3 = xktLoader.load({
  *     id: "myModel3",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt",
  *     excludeTypes: ["IfcSpace"]
  * });
  * ````
@@ -242,8 +243,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model4 = xktLoader.load({
  *      id: "myModel4",
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      src: "./models/xkt/Duplex.xkt",
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
@@ -324,8 +324,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model5 = xktLoader2.load({
  *      id: "myModel5",
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json" // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      src: "./models/xkt/Duplex.xkt"
  * });
  * ````
  *
@@ -343,14 +342,12 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model = xktLoader.load({
  *      id: "model1",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ *      src: "./models/xkt/Schependomlaan.xkt"
  * });
  *
  * const model2 = xktLoader.load({
  *    id: "model2",
- *    src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *    metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ *    src: "./models/xkt/Schependomlaan.xkt"
  * });
  * ````
  *

@@ -51,7 +51,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * Since this model contains IFC types, the GLTFLoaderPlugin will set the initial colors of object {@link Entity}s according
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
  * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
@@ -92,7 +92,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * var model = gltfLoader.load({                                    // Returns an Entity that represents the model
  *      id: "myModel",
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
- *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
+ *      metaModelSrc: "./models/gltf/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
  *      edges: true,
  *      performance: true  // Load high-performance scene representation (default is false)
  * });
@@ -145,8 +145,8 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *
  * ````javascript
  * const model = gltfLoader.load({
- *      src: "./models/gltf/duplex/scene.gltf",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json",
+ *      src: "./models/gltf/Duplex/scene.gltf",
+ *      metaModelSrc: "./models/gltf/Duplex/Duplex.json",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -164,7 +164,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * const model = gltfLoader.load({
  *     id: "myModel",
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
- *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *      metaModelSrc: "./models/gltf/OTCConferenceCenter/metaModel.json",
  *      includeTypes: ["IfcWallStandardCase"]
  * });
  * ````
@@ -176,7 +176,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * const model = gltfLoader.load({
  *     id: "myModel",
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
- *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *      metaModelSrc: "./models/gltf/OTCConferenceCenter/metaModel.json",
  *      excludeTypes: ["IfcSpace"]
  * });
  * ````

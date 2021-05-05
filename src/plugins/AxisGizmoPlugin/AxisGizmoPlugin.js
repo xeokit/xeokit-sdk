@@ -36,8 +36,7 @@ import {math} from "../../viewer/scene/math/math.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "../assets/models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./../assets/metaModels/schependomlaan/metaModel.json",
+ *     src: "../assets/models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  * ````

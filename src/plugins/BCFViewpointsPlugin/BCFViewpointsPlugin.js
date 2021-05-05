@@ -39,8 +39,7 @@ const tempVec3 = math.vec3();
  * // Load an .XKT model
  * const modelNode = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      src: "./models/xkt/Schependomlaan.xkt",
  *      edges: true // Emphasise edges
  * });
  *

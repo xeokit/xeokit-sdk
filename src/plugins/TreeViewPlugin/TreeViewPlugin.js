@@ -54,8 +54,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  * ````
@@ -77,8 +76,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  *
