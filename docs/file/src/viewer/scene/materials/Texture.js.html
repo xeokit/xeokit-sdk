@@ -459,8 +459,8 @@ class Texture extends Component {
             self._state.texture.setImage(image, self._state);
             self._state.texture.setProps(self._state); // Generate mipmaps
             self.scene.loading--;
-            self.scene.canvas.spinner.processes--;
             self.glRedraw();
+            self.scene.canvas.spinner.processes--;
         };
         image.src = src;
         this._src = src;

@@ -107,7 +107,7 @@ class MetaScene {
      * Creates a {@link MetaModel} in this MetaScene.
      *
      * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
-     * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {Object} metaModelData Data for the {@link MetaModel}.
      * @param {Object} [options] Options for creating the {@link MetaModel}.
      * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
      * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.

@@ -1301,13 +1301,16 @@ will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-g
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The XKTLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
 model. Those Entities will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered
 by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</p>
-<h2 id="metadata">Metadata</h2><p>XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding
-to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> and a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> corresponding to each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
-<p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading
-metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin
-uses its own map of default colors and visibilities for IFC element types.</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>, along
-with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
+<h2 id="metadata">Metadata</h2><p>Since XKT V8, model metadata is included in the XKT file. If the XKT file has metadata, then loading it creates
+model metadata components within the Viewer, namely a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>,
+and a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
+<p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial
+values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin uses its own map of
+default colors and visibilities for IFC element types.</p>
+<p>For XKT versions prior to V8, we provided the metadata to XKTLoaderPlugin as an accompanying JSON file to load. We can
+still do that for all XKT versions, and for XKT V8+ it will override any metadata provided within the XKT file.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>.</p>
 </div>
       </div>
     </td>

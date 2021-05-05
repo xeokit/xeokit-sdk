@@ -160,13 +160,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber388">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber387">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber388">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber387">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -209,17 +209,21 @@ will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-g
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The XKTLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
 model. Those Entities will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered
 by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</p>
-<h2 id="metadata">Metadata</h2><p>XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding
-to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> and a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> corresponding to each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
-<p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading
-metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin
-uses its own map of default colors and visibilities for IFC element types.</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>, along
-with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
+<h2 id="metadata">Metadata</h2><p>Since XKT V8, model metadata is included in the XKT file. If the XKT file has metadata, then loading it creates
+model metadata components within the Viewer, namely a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>,
+and a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
+<p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial
+values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin uses its own map of
+default colors and visibilities for IFC element types.</p>
+<p>For XKT versions prior to V8, we provided the metadata to XKTLoaderPlugin as an accompanying JSON file to load. We can
+still do that for all XKT versions, and for XKT V8+ it will override any metadata provided within the XKT file.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>.</p>
 <p>This will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s
 that hold their metadata.</p>
-<p>Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
-<p>Read more about this example in the user guide on <a href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">Viewing BIM Models Offline</a>.</p>
+<p>Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
+<p>Read more about this example in the user guide on <a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee">Viewing BIM Models Offline</a>.</p>
 <ul>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan">Run example</a>]</li>
 </ul>
@@ -250,10 +254,9 @@ viewer.camera.up = [0.10, 0.98, -0.14];
 const xktLoader = new XKTLoaderPlugin(viewer);
 
 // 2
-const model = xktLoader.load({                                       // Returns an Entity that represents the model
+const model = xktLoader.load({          // Returns an Entity that represents the model
     id: &quot;myModel&quot;,
-    src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
-    metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;,     // Creates a MetaModel (see below)
+    src: &quot;./models/xkt/Schependomlaan.xkt&quot;,
     edges: true
 });
 
@@ -299,8 +302,7 @@ translate it 100 units along its X axis.</p>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.load({
-     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
-     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;,
+     src: &quot;./models/xkt/Duplex.xkt&quot;,
      rotation: [90,0,0],
      scale: [0.5, 0.5, 0.5],
      position: [100, 0, 0]
@@ -313,8 +315,7 @@ translate it 100 units along its X axis.</p>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model2 = xktLoader.load({
     id: &quot;myModel2&quot;,
-    src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
-    metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+    src: &quot;./models/xkt/OTCConferenceCenter.xkt&quot;,
     includeTypes: [&quot;IfcWallStandardCase&quot;]
 });</code>
 </code></pre>
@@ -325,8 +326,7 @@ translate it 100 units along its X axis.</p>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model3 = xktLoader.load({
     id: &quot;myModel3&quot;,
-    src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
-    metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+    src: &quot;./models/xkt/OTCConferenceCenter.xkt&quot;,
     excludeTypes: [&quot;IfcSpace&quot;]
 });</code>
 </code></pre>
@@ -362,8 +362,7 @@ and <code>IfcWindow</code> types to be always translucent blue.</p>
 
 const model4 = xktLoader.load({
      id: &quot;myModel4&quot;,
-     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
-     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;, // Creates a MetaObject instances in scene.metaScene.metaObjects
+     src: &quot;./models/xkt/Duplex.xkt&quot;,
      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
 });</code>
 </code></pre>
@@ -432,8 +431,7 @@ const xktLoader2 = new XKTLoaderPlugin(viewer, {
 
 const model5 = xktLoader2.load({
      id: &quot;myModel5&quot;,
-     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
-     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot; // Creates a MetaObject instances in scene.metaScene.metaObjects
+     src: &quot;./models/xkt/Duplex.xkt&quot;
 });</code>
 </code></pre>
 <h2 id="loading-multiple-copies-of-a-model--without-object-id-clashes">Loading multiple copies of a model, without object ID clashes</h2><p>Sometimes we need to load two or more instances of the same model, without having clashes
@@ -446,14 +444,12 @@ between the IDs of the equivalent objects in the model instances.</p>
 
 const model = xktLoader.load({
      id: &quot;model1&quot;,
-     src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
-     metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+     src: &quot;./models/xkt/Schependomlaan.xkt&quot;
 });
 
 const model2 = xktLoader.load({
    id: &quot;model2&quot;,
-   src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
-   metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+   src: &quot;./models/xkt/Schependomlaan.xkt&quot;
 });</code>
 </code></pre>
 <p>For each <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> loaded by these two calls, <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> will get prefixed by
@@ -933,6 +929,11 @@ that don&apos;t have IFC types.</p>
         
         
         <div data-ice="description"><p>Loads an <code>.xkt</code> model into this XKTLoaderPlugin&apos;s <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
+data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
+However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.</p>
 </div>
       </div>
     </td>
@@ -1201,7 +1202,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber407">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber406">source</a></span></span>
     </span>
   </h3>
 
@@ -1328,7 +1329,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber434">source</a></span></span>
     </span>
   </h3>
 
@@ -1373,7 +1374,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber446">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber445">source</a></span></span>
     </span>
   </h3>
 
@@ -1418,7 +1419,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber509">source</a></span></span>
     </span>
   </h3>
 
@@ -1465,7 +1466,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber524">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber523">source</a></span></span>
     </span>
   </h3>
 
@@ -1512,7 +1513,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber539">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber538">source</a></span></span>
     </span>
   </h3>
 
@@ -1559,7 +1560,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber553">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber552">source</a></span></span>
     </span>
   </h3>
 
@@ -1606,7 +1607,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber574">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber573">source</a></span></span>
     </span>
   </h3>
 
@@ -1657,7 +1658,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber585">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber584">source</a></span></span>
     </span>
   </h3>
 
@@ -1702,7 +1703,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -1749,7 +1750,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber495">source</a></span></span>
     </span>
   </h3>
 
@@ -1796,7 +1797,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber456">source</a></span></span>
     </span>
   </h3>
 
@@ -1841,7 +1842,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber467">source</a></span></span>
     </span>
   </h3>
 
@@ -1886,7 +1887,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -1945,7 +1946,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber616">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber621">source</a></span></span>
     </span>
   </h3>
 
@@ -1953,6 +1954,11 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
   
   
   <div data-ice="description"><p>Loads an <code>.xkt</code> model into this XKTLoaderPlugin&apos;s <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
+data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
+However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.</p>
 </div>
 
   
@@ -1997,14 +2003,14 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
       <td data-ice="name" class="code" data-depth="1">params.metaModelSrc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.metaModelData</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

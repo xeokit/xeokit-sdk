@@ -214,7 +214,7 @@ with an accompanying JSON <a href="http://xeokit.github.io/xeokit-sdk/examples/m
 that hold their metadata.</p>
 <p>Since this model contains IFC types, the GLTFLoaderPlugin will set the initial colors of object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s according
 to the standard IFC element colors in the GLTFModel&apos;s current map. Override that with your own map via property <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-objectDefaults">GLTFLoaderPlugin#objectDefaults</a></span>.</p>
-<p>Read more about this example in the user guide on <a href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">Viewing BIM Models Offline</a>.</p>
+<p>Read more about this example in the user guide on <a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee">Viewing BIM Models Offline</a>.</p>
 <p>We&apos;re leaving <code>performance: true</code> since our model has many objects and we&apos;re not interested in realistic rendering.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, GLTFLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
@@ -251,7 +251,7 @@ const gltfLoader = new GLTFLoaderPlugin(viewer);
 var model = gltfLoader.load({                                    // Returns an Entity that represents the model
      id: &quot;myModel&quot;,
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
-     metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,     // Creates a MetaModel (see below)
+     metaModelSrc: &quot;./models/gltf/OTCConferenceCenter/metaModel.json&quot;,     // Creates a MetaModel (see below)
      edges: true,
      performance: true  // Load high-performance scene representation (default is false)
 });
@@ -296,8 +296,8 @@ model.destroy();</code>
 translate it 100 units along its X axis.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_glTF_Duplex_transform">Run example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model = gltfLoader.load({
-     src: &quot;./models/gltf/duplex/scene.gltf&quot;,
-     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;,
+     src: &quot;./models/gltf/Duplex/scene.gltf&quot;,
+     metaModelSrc: &quot;./models/gltf/Duplex/Duplex.json&quot;,
      rotation: [90,0,0],
      scale: [0.5, 0.5, 0.5],
      position: [100, 0, 0]
@@ -309,7 +309,7 @@ objects that represent walls.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model = gltfLoader.load({
     id: &quot;myModel&quot;,
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
-     metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+     metaModelSrc: &quot;./models/gltf/OTCConferenceCenter/metaModel.json&quot;,
      includeTypes: [&quot;IfcWallStandardCase&quot;]
 });</code>
 </code></pre>
@@ -318,7 +318,7 @@ objects that do not represent empty space.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model = gltfLoader.load({
     id: &quot;myModel&quot;,
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
-     metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+     metaModelSrc: &quot;./models/gltf/OTCConferenceCenter/metaModel.json&quot;,
      excludeTypes: [&quot;IfcSpace&quot;]
 });</code>
 </code></pre>
@@ -1188,14 +1188,14 @@ objects that do not represent empty space.</p>
       <td data-ice="name" class="code" data-depth="1">params.metaModelSrc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.metaModelData</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
