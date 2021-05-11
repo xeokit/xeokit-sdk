@@ -750,9 +750,9 @@ class Scene extends Component {
                 if (ambientLight) {
                     const color = ambientLight.color;
                     const intensity = ambientLight.intensity;
-                    ambientColor[0] = color[0] * intensity;
-                    ambientColor[1] = color[1] * intensity;
-                    ambientColor[2] = color[2] * intensity;
+                    ambientColor[0] = color[0];
+                    ambientColor[1] = color[1];
+                    ambientColor[2] = color[2];
                     return ambientColor;
                 } else {
                     return DEFAULT_AMBIENT;
@@ -829,8 +829,8 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [0.9, 0.9, 0.9],
-            intensity: 0.9
+            color: [1.0, 1.0, 1.0],
+            intensity: 0.5
         });
 
         new DirLight(this, {
@@ -1173,7 +1173,7 @@ class Scene extends Component {
         this._pbrEnabled = !!pbrEnabled;
         this.glRedraw();
     }
-    
+
     /**
      * Sets whether quality rendering is enabled.
      *
@@ -1184,7 +1184,7 @@ class Scene extends Component {
     get pbrEnabled() {
         return this._pbrEnabled;
     }
-    
+
     /**
      * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
      *

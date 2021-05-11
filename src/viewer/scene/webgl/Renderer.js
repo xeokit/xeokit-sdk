@@ -159,8 +159,8 @@ const Renderer = function (scene, options) {
         if (canvasTransparent) {
             gl.clearColor(1, 1, 1, 1);
         } else {
-            const color = params.ambientColor || scene.canvas.backgroundColor || this.lights.getAmbientColor();
-            gl.clearColor(color[0], color[1], color[2], 1.0);
+            const clearColor = scene.canvas.clearColorAmbient ? this.lights.getAmbientColor() : scene.canvas.backgroundColor;
+            gl.clearColor(clearColor[0], clearColor[1], clearColor[2], 1.0);
         }
         if (bindOutputFrameBuffer) {
             bindOutputFrameBuffer(params.pass);
