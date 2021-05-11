@@ -292,21 +292,21 @@ class DistanceMeasurement extends Component {
             this._zAxisLabelCulled = (zAxisCanvasLength < labelMinAxisLength);
 
             if (!this._xAxisLabelCulled) {
-                this._xAxisLabel.setText(Math.abs(this._targetWorld[0] - this._originWorld[0] * scale).toFixed(2) + unitAbbrev);
+                this._xAxisLabel.setText(Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
                 this._xAxisLabel.setVisible(true);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
-                this._yAxisLabel.setText(Math.abs(this._targetWorld[1] - this._originWorld[1] * scale).toFixed(2) + unitAbbrev);
+                this._yAxisLabel.setText(Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
                 this._yAxisLabel.setVisible(true);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
-                this._zAxisLabel.setText(Math.abs(this._targetWorld[2] - this._originWorld[2] * scale).toFixed(2) + unitAbbrev);
+                this._zAxisLabel.setText(Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
                 this._zAxisLabel.setVisible(true);
             } else {
                 this._zAxisLabel.setVisible(false);
