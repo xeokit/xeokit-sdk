@@ -11,6 +11,10 @@ Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixe
 * General
   * Build into library using Rollup. [#638](https://github.com/xeokit/xeokit-sdk/issues/638) ([**@incureforce**](https://github.com/incureforce), [**@xeolabs**](https://github.com/xeolabs))
   * Serve library via JSDelivr CDN. [#639](https://github.com/xeokit/xeokit-sdk/issues/639) ([**@xeolabs**](https://github.com/xeolabs))
+* AmbientLight
+  * Don't use intensity when using AmbientLight for WebGL clear color. [#650](https://github.com/xeokit/xeokit-sdk/issues/650) ([**@xeolabs**](https://github.com/xeolabs))
+* DistanceMeasurementPlugin
+  * Distance measurement axes scale bugfix. [#648](https://github.com/xeokit/xeokit-sdk/issues/648) ([**@robin-pham**](https://github.com/robin-pham))
 * FastNavPlugin
   * Fix FastNavPlugin snapshot overlay alignment. [#628](https://github.com/xeokit/xeokit-sdk/issues/628) ([**@xeolabs**](https://github.com/xeolabs))
 * SAO
