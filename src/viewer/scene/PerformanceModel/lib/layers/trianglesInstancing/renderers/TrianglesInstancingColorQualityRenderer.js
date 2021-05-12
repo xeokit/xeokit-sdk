@@ -266,8 +266,7 @@ class TrianglesInstancingColorQualityRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
         if (this._uLightAmbient) {
-            const ambientColor = scene._lightsState.getAmbientColor();
-            gl.uniform4f(this._uLightAmbient, ambientColor[0], ambientColor[1], ambientColor[2], 1.0);
+            gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
         }
 
         for (let i = 0, len = lights.length; i < len; i++) {
