@@ -5904,6 +5904,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolor",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolor",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolorfromambientlight",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColorFromAmbientLight",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColorFromAmbientLight",
+    "member"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolorfromambientlight",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColorFromAmbientLight",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColorFromAmbientLight",
+    "member"
+  ],
+  [
     "src/viewer/scene/canvas/canvas.js~canvas#boundary",
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary",
     "src/viewer/scene/canvas/Canvas.js~Canvas#boundary",
@@ -5913,18 +5937,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/canvas/canvas.js~canvas#canvas",
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-canvas",
     "src/viewer/scene/canvas/Canvas.js~Canvas#canvas",
-    "member"
-  ],
-  [
-    "src/viewer/scene/canvas/canvas.js~canvas#clearcolorambient",
-    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-clearColorAmbient",
-    "src/viewer/scene/canvas/Canvas.js~Canvas#clearColorAmbient",
-    "member"
-  ],
-  [
-    "src/viewer/scene/canvas/canvas.js~canvas#clearcolorambient",
-    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-clearColorAmbient",
-    "src/viewer/scene/canvas/Canvas.js~Canvas#clearColorAmbient",
     "member"
   ],
   [

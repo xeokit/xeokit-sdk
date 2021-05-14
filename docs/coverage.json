@@ -1,7 +1,7 @@
 {
-  "coverage": "37.36%",
-  "expectCount": 5794,
-  "actualCount": 2165,
+  "coverage": "37.38%",
+  "expectCount": 5797,
+  "actualCount": 2167,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -861,8 +861,8 @@
       "expectCount": 26,
       "actualCount": 24,
       "undocumentLines": [
-        134,
-        269
+        137,
+        272
       ]
     },
     "src/viewer/metadata/IFCObjectDefaultColors.js": {
@@ -1098,10 +1098,10 @@
         206,
         207,
         213,
-        445,
-        720,
-        745,
-        772
+        451,
+        726,
+        751,
+        778
       ]
     },
     "src/viewer/scene/Entity.js": {
@@ -2442,11 +2442,11 @@
         205,
         209,
         213,
-        289,
-        296,
-        417,
-        796,
-        800
+        288,
+        295,
+        416,
+        795,
+        799
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js": {
@@ -2488,11 +2488,11 @@
         184,
         188,
         192,
-        248,
-        255,
-        407,
-        491,
-        495
+        247,
+        254,
+        406,
+        490,
+        494
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js": {
@@ -3006,11 +3006,11 @@
         248,
         251,
         255,
-        328,
-        335,
-        464,
-        846,
-        850
+        327,
+        334,
+        463,
+        845,
+        849
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js": {
@@ -3059,11 +3059,11 @@
         227,
         230,
         234,
-        288,
-        295,
-        457,
-        544,
-        548
+        287,
+        294,
+        456,
+        543,
+        547
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js": {
@@ -3611,15 +3611,16 @@
       ]
     },
     "src/viewer/scene/canvas/Canvas.js": {
-      "expectCount": 23,
-      "actualCount": 17,
+      "expectCount": 26,
+      "actualCount": 19,
       "undocumentLines": [
         8,
-        167,
-        236,
-        274,
-        343,
-        415
+        39,
+        43,
+        173,
+        242,
+        278,
+        453
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
@@ -4580,45 +4581,45 @@
         607,
         611,
         651,
-        805,
         806,
-        808,
-        818,
-        824,
-        855,
-        869,
-        905,
-        930,
-        937,
-        943,
-        949,
-        955,
-        962,
-        968,
-        974,
-        980,
-        985,
-        990,
-        996,
-        1002,
-        1024,
-        1043,
-        1062,
-        1081,
-        1092,
-        1103,
-        1114,
-        1128,
-        1265,
-        1275,
-        1286,
-        1475,
-        1507,
-        1539,
-        1566,
-        1828,
-        1850,
-        1909
+        807,
+        809,
+        819,
+        825,
+        856,
+        870,
+        906,
+        931,
+        938,
+        944,
+        950,
+        956,
+        963,
+        969,
+        975,
+        981,
+        986,
+        991,
+        997,
+        1003,
+        1025,
+        1044,
+        1063,
+        1082,
+        1093,
+        1104,
+        1115,
+        1129,
+        1266,
+        1276,
+        1287,
+        1476,
+        1508,
+        1540,
+        1567,
+        1829,
+        1851,
+        1910
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
