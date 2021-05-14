@@ -6,7 +6,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 May 14, 2021
 
-Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixes.
+Simpler and faster model loading, better code bundling, Safari/iOS robustness, SAO tweaks, rendering fixes.
 
 * General
   * Build into library using Rollup. [#638](https://github.com/xeokit/xeokit-sdk/issues/638) ([**@incureforce**](https://github.com/incureforce), [**@xeolabs**](https://github.com/xeolabs))
