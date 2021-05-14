@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.9.0
 
-Unreleased
+May 14, 2021
 
 Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixes.
 
@@ -22,7 +22,9 @@ Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixe
   * Improve depth/SAO shader accuracy [#633](https://github.com/xeokit/xeokit-sdk/issues/633) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Fix transparency bug revealed by IfcOpenShell simple_wall.ifc model. [#641](https://github.com/xeokit/xeokit-sdk/issues/641) ([**@xeolabs**](https://github.com/xeolabs))
-
+* XKTLoaderPlugin
+  * Support XKT V8. [#655](https://github.com/xeokit/xeokit-sdk/issues/655) ([**@xeolabs**](https://github.com/xeolabs))
+  
 ### Breaking changes
 
 * AxisGizmoPlugin
