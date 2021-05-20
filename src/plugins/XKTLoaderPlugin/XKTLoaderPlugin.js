@@ -789,6 +789,8 @@ class XKTLoaderPlugin extends Plugin {
 
         performanceModel.finalize();
 
+        this._createDefaultMetaModelIfNeeded(performanceModel, options);
+
         performanceModel.scene.once("tick", () => {
             if (performanceModel.destroyed) {
                 return;
@@ -796,6 +798,49 @@ class XKTLoaderPlugin extends Plugin {
             performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
             performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });
+    }
+
+    _createDefaultMetaModelIfNeeded(performanceModel, options) {
+
+        const metaModelId = performanceModel.id;
+
+        if (!this.viewer.metaScene.metaModels[metaModelId]) {
+
+            const metaModelData = {
+                metaObjects: []
+            };
+
+            metaModelData.metaObjects.push({
+                id: metaModelId,
+                type: "default",
+                name: metaModelId,
+                parent: null
+            });
+
+            const entityList = performanceModel.entityList;
+
+            for (let i = 0, len = entityList.length; i < len; i++) {
+                const entity = entityList[i];
+                if (entity.isObject) {
+                    metaModelData.metaObjects.push({
+                        id: entity.id,
+                        type: "default",
+                        name: entity.id,
+                        parent: metaModelId
+                    });
+                }
+            }
+
+            this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
+                includeTypes: options.includeTypes,
+                excludeTypes: options.excludeTypes,
+                globalizeObjectIds: options.globalizeObjectIds
+            });
+
+            performanceModel.once("destroyed", () => {
+                this.viewer.metaScene.destroyMetaModel(metaModelId);
+            });
+        }
     }
 }
 
