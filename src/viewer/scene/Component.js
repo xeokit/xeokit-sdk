@@ -245,6 +245,9 @@ class Component {
      @protected
      */
     glRedraw() {
+        if (!this._renderer) { // Called from a constructor
+            return;
+        }
         this._renderer.imageDirty();
         if (this.castsShadow) { // Light source or object
             this._renderer.shadowsDirty();
@@ -263,6 +266,9 @@ class Component {
      @protected
      */
     glResort() {
+        if (!this._renderer) { // Called from a constructor
+            return;
+        }
         this._renderer.needStateSort();
     }
 

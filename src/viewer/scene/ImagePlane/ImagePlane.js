@@ -51,8 +51,7 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * xktLoader.load({             // Load IFC model
  *      id: "myModel",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *      src: "./models/xkt/Schependomlaan.xkt",
  *      edges: true,
  *
  *      rotation: [0, 22, 0],   // Rotate, position and scale the model to align it correctly with the ImagePlane

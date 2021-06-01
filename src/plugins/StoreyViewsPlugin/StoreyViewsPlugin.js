@@ -67,8 +67,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *      src: "./models/xkt/Schependomlaan.xkt",
  *      edges: true
  * });
  * ````

@@ -38,8 +38,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/HolterTower/HolterTower.xkt",
- *      metaModelSrc: "./metaModels/HolterTower/HolterTower.json",
+ *      src: "./models/xkt/HolterTower.xkt",
  *      edges: true,
  *      saoEnabled: true,
  *      pbrEnabled: true

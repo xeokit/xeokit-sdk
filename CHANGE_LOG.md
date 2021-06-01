@@ -4,13 +4,17 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 1.9.0
 
-Unreleased
+May 14, 2021
 
-Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixes.
+Simpler and faster model loading, better code bundling, Safari/iOS robustness, SAO tweaks, rendering fixes.
 
 * General
   * Build into library using Rollup. [#638](https://github.com/xeokit/xeokit-sdk/issues/638) ([**@incureforce**](https://github.com/incureforce), [**@xeolabs**](https://github.com/xeolabs))
   * Serve library via JSDelivr CDN. [#639](https://github.com/xeokit/xeokit-sdk/issues/639) ([**@xeolabs**](https://github.com/xeolabs))
+* AmbientLight
+  * Don't use intensity when using AmbientLight for WebGL clear color. [#650](https://github.com/xeokit/xeokit-sdk/issues/650) ([**@xeolabs**](https://github.com/xeolabs))
+* DistanceMeasurementPlugin
+  * Distance measurement axes scale bugfix. [#648](https://github.com/xeokit/xeokit-sdk/issues/648) ([**@robin-pham**](https://github.com/robin-pham))
 * FastNavPlugin
   * Fix FastNavPlugin snapshot overlay alignment. [#628](https://github.com/xeokit/xeokit-sdk/issues/628) ([**@xeolabs**](https://github.com/xeolabs))
 * SAO
@@ -18,7 +22,9 @@ Improved developer experience, Safari/iOS robustness, SAO tweaks, rendering fixe
   * Improve depth/SAO shader accuracy [#633](https://github.com/xeokit/xeokit-sdk/issues/633) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Fix transparency bug revealed by IfcOpenShell simple_wall.ifc model. [#641](https://github.com/xeokit/xeokit-sdk/issues/641) ([**@xeolabs**](https://github.com/xeolabs))
-
+* XKTLoaderPlugin
+  * Support XKT V8. [#655](https://github.com/xeokit/xeokit-sdk/issues/655) ([**@xeolabs**](https://github.com/xeolabs))
+  
 ### Breaking changes
 
 * AxisGizmoPlugin

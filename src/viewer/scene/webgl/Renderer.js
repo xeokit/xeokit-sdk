@@ -157,10 +157,10 @@ const Renderer = function (scene, options) {
         params = params || {};
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         if (canvasTransparent) {
-            gl.clearColor(0, 0, 0, 0);
+            gl.clearColor(1, 1, 1, 1);
         } else {
-            const color = params.ambientColor || scene.canvas.backgroundColor || this.lights.getAmbientColor();
-            gl.clearColor(color[0], color[1], color[2], 1.0);
+            const backgroundColor = scene.canvas.backgroundColorFromAmbientLight ? this.lights.getAmbientColorAndIntensity() : scene.canvas.backgroundColor;
+            gl.clearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0);
         }
         if (bindOutputFrameBuffer) {
             bindOutputFrameBuffer(params.pass);
@@ -457,7 +457,7 @@ const Renderer = function (scene, options) {
 
         return function (params) {
 
-            const ambientColor = scene._lightsState.getAmbientColor();
+            const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
 
             frameCtx.reset();
             frameCtx.pass = params.pass;
@@ -469,8 +469,8 @@ const Renderer = function (scene, options) {
             if (canvasTransparent) {
                 gl.clearColor(0, 0, 0, 0);
             } else {
-                const clearColor = scene.canvas.backgroundColor || ambientColor;
-                gl.clearColor(clearColor[0], clearColor[1], clearColor[2], 1.0);
+                const backgroundColor = scene.canvas.backgroundColorFromAmbientLight ? ambientColorAndIntensity : scene.canvas.backgroundColor;
+                gl.clearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0);
             }
 
             gl.enable(gl.DEPTH_TEST);

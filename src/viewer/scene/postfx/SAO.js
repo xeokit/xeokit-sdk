@@ -79,8 +79,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt"
  *     edges: true
  * });
  * ````
@@ -113,8 +112,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * ````javascript
  * const structure = xktLoader.load({
  *      id: "structure",
- *      src: "./models/xkt/WestRiverSideHospital/structure.xkt",
- *      metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+ *      src: "./models/xkt/WestRiverSideHospital/structure.xkt"
  *      edges: true,
  *      saoEnabled: true
  *  });
@@ -124,7 +122,6 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *      const electrical = xktLoader.load({
  *          id: "electrical",
  *          src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
- *          metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
  *          edges: true
  *      });
  *
@@ -133,9 +130,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *          const plumbing = xktLoader.load({
  *              id: "plumbing",
  *              src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
- *              metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
- *                  edges: true
- *              });
+ *              edges: true
  *          });
  *      });
  * });
@@ -182,7 +177,7 @@ class SAO extends Component {
         super(owner, cfg);
 
         const ua = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
-        const browser =  (navigator.userAgent.match(/Edge/i) || navigator.userAgent.match(/Trident.*rv[ :]*11\./i)) ? "msie": ua[1].toLowerCase();
+        const browser = (navigator.userAgent.match(/Edge/i) || navigator.userAgent.match(/Trident.*rv[ :]*11\./i)) ? "msie" : ua[1].toLowerCase();
         const isSafari = (browser === "safari");
 
         this._supported = (!isSafari) &&
@@ -235,7 +230,7 @@ class SAO extends Component {
      * Even when enabled, SAO will only apply if supported.
      *
      * Default value is ````false````.
-     * 
+     *
      * @type {Boolean}
      */
     get enabled() {
@@ -295,7 +290,7 @@ class SAO extends Component {
      * Gets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.
      *
      * Default value is ````100.0````.
-     * 
+     *
      * @type {Number}
      */
     get kernelRadius() {
@@ -324,7 +319,7 @@ class SAO extends Component {
      * Gets the degree of darkening (ambient obscurance) produced by the SAO effect.
      *
      * Default value is ````0.15````.
-     * 
+     *
      * @type {Number}
      */
     get intensity() {

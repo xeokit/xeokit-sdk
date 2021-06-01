@@ -584,10 +584,10 @@ class Scene extends Component {
             canvas: canvas,
             spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
-            backgroundColor: cfg.backgroundColor,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
-            clearColorAmbient: cfg.clearColorAmbient,
+            backgroundColor: cfg.backgroundColor,
+            backgroundColorFromAmbientLight: cfg.backgroundColorFromAmbientLight,
             premultipliedAlpha: cfg.premultipliedAlpha
         });
 
@@ -650,8 +650,8 @@ class Scene extends Component {
 
         this._lightsState = new (function () {
 
-            const DEFAULT_AMBIENT = math.vec3([0, 0, 0]);
-            const ambientColor = math.vec3();
+            const DEFAULT_AMBIENT = math.vec4([0, 0, 0, 0]);
+            const ambientColorIntensity = math.vec4();
 
             this.lights = [];
             this.reflectionMaps = [];
@@ -737,7 +737,7 @@ class Scene extends Component {
                 }
             };
 
-            this.getAmbientColor = function () {
+            this.getAmbientColorAndIntensity = function () {
                 if (!ambientLight) {
                     for (let i = 0, len = this.lights.length; i < len; i++) {
                         const light = this.lights[i];
@@ -750,10 +750,11 @@ class Scene extends Component {
                 if (ambientLight) {
                     const color = ambientLight.color;
                     const intensity = ambientLight.intensity;
-                    ambientColor[0] = color[0] * intensity;
-                    ambientColor[1] = color[1] * intensity;
-                    ambientColor[2] = color[2] * intensity;
-                    return ambientColor;
+                    ambientColorIntensity[0] = color[0];
+                    ambientColorIntensity[1] = color[1];
+                    ambientColorIntensity[2] = color[2];
+                    ambientColorIntensity[3] = intensity
+                    return ambientColorIntensity;
                 } else {
                     return DEFAULT_AMBIENT;
                 }
@@ -829,8 +830,8 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [0.9, 0.9, 0.9],
-            intensity: 0.9
+            color: [1.0, 1.0, 1.0],
+            intensity: 0.7
         });
 
         new DirLight(this, {
@@ -1173,7 +1174,7 @@ class Scene extends Component {
         this._pbrEnabled = !!pbrEnabled;
         this.glRedraw();
     }
-    
+
     /**
      * Sets whether quality rendering is enabled.
      *
@@ -1184,7 +1185,7 @@ class Scene extends Component {
     get pbrEnabled() {
         return this._pbrEnabled;
     }
-    
+
     /**
      * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
      *
@@ -1275,17 +1276,17 @@ class Scene extends Component {
     _saveAmbientColor() {
         const canvas = this.canvas;
         if (!canvas.transparent && !canvas.backgroundImage && !canvas.backgroundColor) {
-            const ambientColor = this._lightsState.getAmbientColor();
+            const ambientColorIntensity = this._lightsState.getAmbientColorAndIntensity();
             if (!this._lastAmbientColor ||
-                this._lastAmbientColor[0] !== ambientColor[0] ||
-                this._lastAmbientColor[1] !== ambientColor[1] ||
-                this._lastAmbientColor[2] !== ambientColor[2] ||
-                this._lastAmbientColor[3] !== ambientColor[3]) {
-                canvas.backgroundColor = ambientColor;
+                this._lastAmbientColor[0] !== ambientColorIntensity[0] ||
+                this._lastAmbientColor[1] !== ambientColorIntensity[1] ||
+                this._lastAmbientColor[2] !== ambientColorIntensity[2] ||
+                this._lastAmbientColor[3] !== ambientColorIntensity[3]) {
+                canvas.backgroundColor = ambientColorIntensity;
                 if (!this._lastAmbientColor) {
                     this._lastAmbientColor = math.vec4([0, 0, 0, 1]);
                 }
-                this._lastAmbientColor.set(ambientColor);
+                this._lastAmbientColor.set(ambientColorIntensity);
             }
         } else {
             this._lastAmbientColor = null;
