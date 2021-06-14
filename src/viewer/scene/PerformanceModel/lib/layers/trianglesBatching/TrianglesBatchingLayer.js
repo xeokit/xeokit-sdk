@@ -25,6 +25,7 @@ class TrianglesBatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.autoNormals
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
@@ -38,7 +39,7 @@ class TrianglesBatchingLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesBatchingLayer" + cfg.solid ? "-solid" : "-surface";
+        this.sortId = "TrianglesBatchingLayer" + (cfg.solid ? "-solid" : "-surface") + (cfg.autoNormals ? "-autonormals" : "-normals");
 
         /**
          * Index of this TrianglesBatchingLayer in {@link PerformanceModel#_layerList}.
@@ -249,7 +250,7 @@ class TrianglesBatchingLayer {
 
         math.expandAABB3(this.aabb, worldAABB);
 
-        if (normals) {
+        if (normals && normals.length > 0) {
 
             if (this._preCompressed) {
 
@@ -390,8 +391,8 @@ class TrianglesBatchingLayer {
             state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
         }
 
-        if (buffer.colors.length > 0) { // Because we build flags arrays here, get their length from the colors array
-            const flagsLength = buffer.colors.length;
+        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
+            const flagsLength = (buffer.positions.length / 3) * 4;
             const flags = new Uint8Array(flagsLength);
             const flags2 = new Uint8Array(flagsLength);
             let notNormalized = false;
@@ -426,6 +427,10 @@ class TrianglesBatchingLayer {
 
         this._buffer = null;
         this._finalized = true;
+    }
+
+    isEmpty() {
+        return (!this._state.indicesBuf);
     }
 
     initFlags(portionId, flags, meshTransparent) {
@@ -607,7 +612,9 @@ class TrianglesBatchingLayer {
             tempArray[i + 2] = b;
             tempArray[i + 3] = a;
         }
-        this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        if (this._state.colorsBuf) {
+            this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -702,7 +709,9 @@ class TrianglesBatchingLayer {
             tempArray[i + 3] = f3; // w - pick
         }
 
-        this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
+        if (this._state.flagsBuf) {
+            this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
+        }
     }
 
     _setFlags2(portionId, flags) {
@@ -724,7 +733,9 @@ class TrianglesBatchingLayer {
             tempArray[i + 0] = clippable;
         }
 
-        this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+        if (this._state.flags2Buf) {
+            this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+        }
     }
 
     setOffset(portionId, offset) {
@@ -749,7 +760,9 @@ class TrianglesBatchingLayer {
             tempArray[i + 1] = y;
             tempArray[i + 2] = z;
         }
-        this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        if (this._state.offsetsBuf) {
+            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        }
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
@@ -760,23 +773,35 @@ class TrianglesBatchingLayer {
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._batchingRenderers.colorQualityRendererWithSAO) {
                     this._batchingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._batchingRenderers.colorRendererWithSAO) {
-                    this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._batchingRenderers.colorRendererWithSAO) {
+                        this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._batchingRenderers.flatColorRendererWithSAO) {
+                        this._batchingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         } else {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._batchingRenderers.colorQualityRenderer) {
                     this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._batchingRenderers.colorRenderer) {
-                    this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._batchingRenderers.colorRenderer) {
+                        this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._batchingRenderers.flatColorRenderer) {
+                        this._batchingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         }
@@ -800,13 +825,19 @@ class TrianglesBatchingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+        if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
             if (this._batchingRenderers.colorQualityRenderer) {
                 this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else {
-            if (this._batchingRenderers.colorRenderer) {
-                this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            if (this._state.normalsBuf) {
+                if (this._batchingRenderers.colorRenderer) {
+                    this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
+            } else {
+                if (this._batchingRenderers.flatColorRenderer) {
+                    this._batchingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
             }
         }
     }
@@ -820,16 +851,6 @@ class TrianglesBatchingLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._batchingRenderers.depthRenderer) {
             this._batchingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        }
-    }
-
-    drawNormals(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._batchingRenderers.normalsRenderer) {
-            this._batchingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);  // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
     }
 
@@ -963,8 +984,14 @@ class TrianglesBatchingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._batchingRenderers.pickNormalsRenderer) {
-            this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._state.normalsBuf) {
+            if (this._batchingRenderers.pickNormalsRenderer) {
+                this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
+        } else {
+            if (this._batchingRenderers.pickNormalsFlatRenderer) {
+                this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
         }
     }
 

@@ -43,7 +43,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * For huge models, we have the ````PerformanceModel```` representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.
  *
- * ````PerformanceModel```` is the default model representation loaded by {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and {@link BIMServerLoaderPlugin}.
+ * ````PerformanceModel```` is the default model representation loaded by {@link GLTFLoaderPlugin} and {@link XKTLoaderPlugin}.
  *
  * In this tutorial you'll learn how to use ````PerformanceModel```` to create high-detail content programmatically. Ordinarily you'd be learning about ````PerformanceModel```` if you were writing your own model loader plugins.
  *
@@ -856,6 +856,7 @@ class PerformanceModel extends Component {
 
         this._lastRTCCenter = null;
         this._lastDecodeMatrix = null;
+        this._lastNormals = null;
 
         this._instancingLayers = {};
         this._currentBatchingLayers = {};
@@ -1145,7 +1146,11 @@ class PerformanceModel extends Component {
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} cfg.positions Flat array of positions.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Required for 'triangles' primitives.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
+     * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
+     * @param {Number[]} [cfg.intensities] Flat array of vertex color intensities as float values in range ````[0..1]````. Only used with 'triangles' primitives.
+     * @param {Number[]} [cfg.intensitiesCompressed] Flat array of vertex color intensities as unsigned short integers in range ````[0..255]````. Only used with 'triangles' primitives.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
@@ -1244,8 +1249,11 @@ class PerformanceModel extends Component {
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
      * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.colors] Flat array of vertex colors. Ignored when ````geometryId```` is given, overriden by ````color````.
-     * @param {Number[]} [cfg.normals] Flat array of vertex normals. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
+     * @param {Number[]} [cfg.intensities] Flat array of vertex color intensities as float values in range ````[0..1]````. Only used with 'triangles' primitives.
+     * @param {Number[]} [cfg.intensitiesCompressed] Flat array of vertex color intensities as unsigned short integers in range ````[0..255]````. Only used with 'points' primitives.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
@@ -1256,7 +1264,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
-     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors````.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors```` and ````colorsCompressed````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
@@ -1377,7 +1385,7 @@ class PerformanceModel extends Component {
                 } else {
                     if (!math.compareVec3(this._lastRTCCenter, cfg.rtcCenter)) {
                         needNewBatchingLayers = true;
-                        this._lastRTCCenter.set(cfg.rtcCenter)
+                        this._lastRTCCenter.set(cfg.rtcCenter);
                     }
                 }
             }
@@ -1402,6 +1410,20 @@ class PerformanceModel extends Component {
                     }
                 }
                 this._currentBatchingLayers = {};
+            }
+
+            const normalsProvided = (!!cfg.normals && cfg.normals.length > 0);
+
+            if (primitive === "triangles" || primitive === "solid" || primitive === "surface") {
+                if (this._lastNormals !== null && normalsProvided !== this._lastNormals) {
+                    ["triangles", "solid", "surface"].map(primitiveId => {
+                        if (this._currentBatchingLayers[primitiveId]) {
+                            this._currentBatchingLayers[primitiveId].finalize();
+                            delete this._currentBatchingLayers[primitiveId];
+                        }
+                    });
+                }
+                this._lastNormals = normalsProvided;
             }
 
             const worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
@@ -1442,7 +1464,8 @@ class PerformanceModel extends Component {
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                             rtcCenter: cfg.rtcCenter, // Can be undefined
                             maxGeometryBatchSize: this._maxGeometryBatchSize,
-                            solid: (primitive === "solid")
+                            solid: (primitive === "solid"),
+                            autoNormals: (!normalsProvided)
                         });
                         this._layerList.push(layer);
                         this._currentBatchingLayers[primitive] = layer;
@@ -1461,6 +1484,7 @@ class PerformanceModel extends Component {
                         metallic: metallic,
                         roughness: roughness,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -1501,6 +1525,7 @@ class PerformanceModel extends Component {
                         indices: indices,
                         color: color,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -1538,6 +1563,9 @@ class PerformanceModel extends Component {
                         positions: positions,
                         color: color,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
+                        intensities: cfg.intensities,
+                        intensitiesCompressed: cfg.intensitiesCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
