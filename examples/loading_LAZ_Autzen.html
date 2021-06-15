@@ -103,6 +103,9 @@
     viewer.scene.pointsMaterial.perspectivePoints = true;
     viewer.scene.pointsMaterial.minPerspectivePointSize = 2;
     viewer.scene.pointsMaterial.maxPerspectivePointSize = 4;
+    viewer.scene.pointsMaterial.filterIntensity = true;
+    viewer.scene.pointsMaterial.minIntensity = 0;
+    viewer.scene.pointsMaterial.maxIntensity = 1;
 
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
@@ -110,7 +113,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    var t0 = performance.now();
+    const t0 = performance.now();
 
     document.getElementById("time").innerHTML = "Loading model...";
 
@@ -122,7 +125,7 @@
     });
 
     model.on("loaded", () => {
-        var t1 = performance.now();
+        const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
 
@@ -133,21 +136,27 @@
     const pointsMaterial = viewer.scene.pointsMaterial;
     const camera = viewer.camera;
 
-    var guiParams = new function () {
+    const guiParams = new function () {
         this.roundPoints = pointsMaterial.roundPoints;
-        this.perspectivePoints = pointsMaterial.perspectivePoints;
         this.pointSize = pointsMaterial.pointSize;
+        this.perspectivePoints = pointsMaterial.perspectivePoints;
         this.minPerspectivePointSize = pointsMaterial.minPerspectivePointSize;
         this.maxPerspectivePointSize = pointsMaterial.maxPerspectivePointSize;
+        this.filterIntensity = pointsMaterial.filterIntensity;
+        this.minIntensity = pointsMaterial.minIntensity;
+        this.maxIntensity = pointsMaterial.maxIntensity;
         this.perspective = (camera.projection === "perspective");
     }();
 
-    var update = function () {
+    const update = function () {
         pointsMaterial.roundPoints = guiParams.roundPoints;
-        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
         pointsMaterial.pointSize = guiParams.pointSize;
+        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
         pointsMaterial.minPerspectivePointSize = guiParams.minPerspectivePointSize;
         pointsMaterial.maxPerspectivePointSize = guiParams.maxPerspectivePointSize;
+        pointsMaterial.filterIntensity = guiParams.filterIntensity;
+        pointsMaterial.minIntensity = guiParams.minIntensity;
+        pointsMaterial.maxIntensity = guiParams.maxIntensity;
         camera.projection = guiParams.perspective ? "perspective" : "ortho";
         requestAnimationFrame(update);
     };
@@ -158,20 +167,22 @@
 
     const pointsMaterialFolder = gui.addFolder('PointsMaterial');
     pointsMaterialFolder.add(guiParams, 'roundPoints');
-    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
     pointsMaterialFolder.add(guiParams, 'pointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
     pointsMaterialFolder.add(guiParams, 'minPerspectivePointSize', 1, 50);
     pointsMaterialFolder.add(guiParams, 'maxPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'filterIntensity');
+    pointsMaterialFolder.add(guiParams, 'minIntensity', 0.0, 1.0);
+    pointsMaterialFolder.add(guiParams, 'maxIntensity', 0.0, 1.0);
     pointsMaterialFolder.open();
 
     const cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(guiParams, 'perspective');
     cameraFolder.open();
 
-    var customContainer = document.getElementById('myDatGuiContainer');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
 
-    window.viewer = viewer;
 
 </script>
 </html>
