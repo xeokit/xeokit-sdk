@@ -107,6 +107,17 @@ const decompressColor = (function () {
     };
 })();
 
+function convertColorsRGBToRGBA(colorsRGB) {
+    const colorsRGBA = [];
+    for (let i = 0, len = colorsRGB.length; i < len; i+=3) {
+        colorsRGBA.push(colorsRGB[i]);
+        colorsRGBA.push(colorsRGB[i+1]);
+        colorsRGBA.push(colorsRGB[i+2]);
+        colorsRGBA.push(1.0);
+    }
+    return colorsRGBA;
+}
+
 function load(viewer, options, inflatedData, performanceModel) {
 
     const positions = inflatedData.positions;
@@ -303,7 +314,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                             case 2:
                                 primitiveName = "points";
                                 geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryColors = colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]);
+                                geometryColors = convertColorsRGBToRGBA(colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]));
                                 break;
                             case 3:
                                 primitiveName = "lines";
@@ -370,7 +381,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                         case 2:
                             primitiveName = "points";
                             geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                            geometryColors = colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]);
+                            geometryColors = convertColorsRGBToRGBA(colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]));
                             break;
                         case 3:
                             primitiveName = "lines";
