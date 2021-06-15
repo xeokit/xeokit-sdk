@@ -12,6 +12,7 @@ import {ParserV5} from "./parsers/ParserV5.js";
 import {ParserV6} from "./parsers/ParserV6.js";
 import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
+import {ParserV9} from "./parsers/ParserV9.js";
 
 const parsers = {};
 
@@ -23,6 +24,7 @@ parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
 parsers[ParserV7.version] = ParserV7;
 parsers[ParserV8.version] = ParserV8;
+parsers[ParserV9.version] = ParserV9;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -171,7 +173,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * ````javascript
  * xktLoader.load({
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -243,7 +245,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model4 = xktLoader.load({
  *      id: "myModel4",
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
@@ -324,7 +326,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model5 = xktLoader2.load({
  *      id: "myModel5",
- *      src: "./models/xkt/Duplex.xkt"
+ *      src: "./models/xkt/Duplex.ifc.xkt"
  * });
  * ````
  *
