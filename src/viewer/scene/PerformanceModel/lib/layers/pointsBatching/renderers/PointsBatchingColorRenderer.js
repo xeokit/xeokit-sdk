@@ -81,8 +81,8 @@ class PointsBatchingColorRenderer {
             this._aColor.bindArrayBuffer(state.colorsBuf);
         }
 
-        if (this._aIntensity) {
-            this._aIntensity.bindArrayBuffer(state.intensitiesBuf);
+        if (pointsMaterial.filterIntensity) {
+            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
         }
 
         if (this._aFlags) {
@@ -107,6 +107,7 @@ class PointsBatchingColorRenderer {
     _allocate() {
 
         const scene = this._scene;
+        const pointsMaterial = scene.pointsMaterial._state;
         const gl = scene.canvas.gl;
 
         this._program = new Program(gl, this._buildShader(scene));
@@ -137,12 +138,15 @@ class PointsBatchingColorRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aColor = program.getAttribute("color");
-        this._aIntensity = program.getAttribute("intensity");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
 
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
+
+        if (pointsMaterial.filterIntensity) {
+            this._uIntensityRange = program.getLocation("intensityRange");
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -190,8 +194,7 @@ class PointsBatchingColorRenderer {
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec3 color;");
-        src.push("attribute float intensity;");
+        src.push("attribute vec4 color;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
 
@@ -208,6 +211,10 @@ class PointsBatchingColorRenderer {
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
+        }
+
+        if (pointsMaterial.filterIntensity) {
+            src.push("uniform vec2 intensityRange;");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -233,6 +240,13 @@ class PointsBatchingColorRenderer {
 
         src.push("} else {");
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("float intensity = float(color.a) / 255.0;")
+            src.push("if (intensity < intensityRange[0] || intensity > intensityRange[1]) {");
+            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+            src.push("} else {");
+        }
+
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
@@ -240,7 +254,6 @@ class PointsBatchingColorRenderer {
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);");
-        // src.push("vColor.rgb *= (intensity/255.0)")
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
@@ -264,6 +277,9 @@ class PointsBatchingColorRenderer {
             src.push("gl_PointSize = pointSize;");
         }
         src.push("}");
+        if (pointsMaterial.filterIntensity) {
+            src.push("}");
+        }
         src.push("}");
         return src;
     }

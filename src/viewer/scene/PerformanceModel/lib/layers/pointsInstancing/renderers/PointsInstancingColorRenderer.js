@@ -18,7 +18,7 @@ class PointsInstancingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
@@ -55,8 +55,8 @@ class PointsInstancingColorRenderer {
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aColor.bindArrayBuffer(state.colorsBuf);
 
-        if (this._aIntensity) {
-            this._aIntensity.bindArrayBuffer(state.intensitiesBuf);
+        if (pointsMaterial.filterIntensity) {
+            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
         }
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -128,6 +128,7 @@ class PointsInstancingColorRenderer {
     _allocate() {
 
         const scene = this._scene;
+        const pointsMaterial = scene.pointsMaterial._state;
         const gl = scene.canvas.gl;
 
         this._program = new Program(gl, this._buildShader());
@@ -161,7 +162,6 @@ class PointsInstancingColorRenderer {
 
         this._aPosition = program.getAttribute("position");
         this._aColor = program.getAttribute("color");
-        this._aIntensity = program.getAttribute("intensity");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
         this._aOffset = program.getAttribute("offset");
@@ -174,6 +174,10 @@ class PointsInstancingColorRenderer {
 
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
+
+        if (pointsMaterial.filterIntensity) {
+            this._uIntensityRange = program.getLocation("intensityRange");
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -217,8 +221,7 @@ class PointsInstancingColorRenderer {
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec3 color;");
-        src.push("attribute float intensity;");
+        src.push("attribute vec4 color;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
 
@@ -238,6 +241,10 @@ class PointsInstancingColorRenderer {
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
+        }
+
+        if (pointsMaterial.filterIntensity) {
+            src.push("uniform vec2 intensityRange;");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -263,6 +270,13 @@ class PointsInstancingColorRenderer {
 
         src.push("} else {");
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("float intensity = float(color.a) / 255.0;")
+            src.push("if (intensity < intensityRange[0] || intensity > intensityRange[1]) {");
+            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+            src.push("} else {");
+        }
+
         src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
@@ -271,7 +285,7 @@ class PointsInstancingColorRenderer {
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-        src.push("vColor = (intensity / 255.0) * vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);");
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
@@ -298,6 +312,9 @@ class PointsInstancingColorRenderer {
             src.push("gl_PointSize = pointSize;");
         }
         src.push("}");
+        if (pointsMaterial.filterIntensity) {
+            src.push("}");
+        }
         src.push("}");
         return src;
     }

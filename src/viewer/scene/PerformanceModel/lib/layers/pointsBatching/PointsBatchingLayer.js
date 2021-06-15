@@ -53,7 +53,6 @@ class PointsBatchingLayer {
             positionsBuf: null,
             offsetsBuf: null,
             colorsBuf: null,
-            intensitiesBuf: null,
             flagsBuf: null,
             flags2Buf: null,
             positionsDecodeMatrix: math.mat4(),
@@ -108,10 +107,8 @@ class PointsBatchingLayer {
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param cfg.positions Flat float Local-space positions array.
-     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255]
+     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]
      * @param [cfg.colors] Flat float colors array.
-     * @param [cfg.intensitiesCompressed] Quantized intensities in range [0..255].
-     * @param [cfg.intensities] Flat float intensities array.
      * @param cfg.color Float RGB color [0..1,0..1,0..1]
 
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
@@ -130,8 +127,6 @@ class PointsBatchingLayer {
         const color = cfg.color;
         const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
-        const intensities = cfg.intensities;
-        const intensitiesCompressed = cfg.intensitiesCompressed;
         const meshMatrix = cfg.meshMatrix;
         const worldMatrix = cfg.worldMatrix;
         const worldAABB = cfg.worldAABB;
@@ -246,28 +241,13 @@ class PointsBatchingLayer {
             const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
             const b = color[2];
+            const a = 1.0;
 
             for (let i = 0; i < numVerts; i++) {
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
-            }
-        }
-
-        if (intensitiesCompressed) {
-            for (let i = 0, len = intensitiesCompressed.length; i < len; i++) {
-                buffer.intensities.push(intensitiesCompressed[i]);
-            }
-
-        } else if (intensities) {
-            for (let i = 0, len = intensities.length; i < len; i++) {
-                buffer.intensities.push(intensities[i] * 255);
-            }
-
-        } else {
-            const intensityVal = 255;
-            for (let i = 0; i < numVerts; i++) {
-                buffer.intensities.push(intensityVal);
+                buffer.colors.push(a);
             }
         }
 
@@ -331,13 +311,7 @@ class PointsBatchingLayer {
         if (buffer.colors.length > 0) {
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 3, gl.STATIC_DRAW, normalized);
-        }
-
-        if (buffer.intensities.length > 0) {
-            const intensities = new Uint8Array(buffer.intensities);
-            let normalized = false;
-            state.intensitiesBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, intensities, buffer.intensities.length, 1, gl.STATIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.STATIC_DRAW, normalized);
         }
 
         if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
@@ -522,13 +496,13 @@ class PointsBatchingLayer {
         const portionsIdx = portionId * 2;
         const vertexBase = this._portions[portionsIdx];
         const numVerts = this._portions[portionsIdx + 1];
-        const firstColor = vertexBase * 3;
-        const lenColor = numVerts * 3;
+        const firstColor = vertexBase * 4;
+        const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
         const g = color[1];
         const b = color[2];
-        for (let i = 0; i < lenColor; i += 3) {
+        for (let i = 0; i < lenColor; i += 4) {
             tempArray[i + 0] = r;
             tempArray[i + 1] = g;
             tempArray[i + 2] = b;
@@ -782,10 +756,6 @@ class PointsBatchingLayer {
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
-        }
-        if (state.intensitiesBuf) {
-            state.intensitiesBuf.destroy();
-            state.intensitiesBuf = null;
         }
         if (state.flagsBuf) {
             state.flagsBuf.destroy();

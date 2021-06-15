@@ -1147,10 +1147,8 @@ class PerformanceModel extends Component {
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
-     * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
-     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
-     * @param {Number[]} [cfg.intensities] Flat array of vertex color intensities as float values in range ````[0..1]````. Only used with 'triangles' primitives.
-     * @param {Number[]} [cfg.intensitiesCompressed] Flat array of vertex color intensities as unsigned short integers in range ````[0..255]````. Only used with 'triangles' primitives.
+     * @param {Number[]} [cfg.colors] Flat array of RGBA vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overidden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
@@ -1251,8 +1249,6 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
      * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
-     * @param {Number[]} [cfg.intensities] Flat array of vertex color intensities as float values in range ````[0..1]````. Only used with 'triangles' primitives.
-     * @param {Number[]} [cfg.intensitiesCompressed] Flat array of vertex color intensities as unsigned short integers in range ````[0..255]````. Only used with 'points' primitives.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
@@ -1564,8 +1560,6 @@ class PerformanceModel extends Component {
                         color: color,
                         colors: cfg.colors,
                         colorsCompressed: cfg.colorsCompressed,
-                        intensities: cfg.intensities,
-                        intensitiesCompressed: cfg.intensitiesCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,

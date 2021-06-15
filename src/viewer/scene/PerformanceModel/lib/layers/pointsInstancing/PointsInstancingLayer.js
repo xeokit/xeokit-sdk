@@ -86,50 +86,24 @@ class PointsInstancingLayer {
         if (cfg.colorsCompressed) {
             const colorsCompressed = new Uint8Array(cfg.colorsCompressed);
             let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 3, gl.STATIC_DRAW, notNormalized);
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
 
         } else if (cfg.colors) {
             const colors = cfg.colors;
             const colorsCompressed = new Uint8Array(colors.length);
-            for (let i = 0, j = 0, len = colors.length; i < len; i += 3, j += 3) {
-                colorsCompressed[i + 0] = colors[j + 0] * 255;
-                colorsCompressed[j + 1] = colors[i + 1] * 255;
-                colorsCompressed[j + 2] = colors[i + 2] * 255;
+            for (let i = 0, len = colors.length; i < len; i++) {
+                colorsCompressed[i] = colors[i] * 255;
             }
             let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 3, gl.STATIC_DRAW, notNormalized);
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
 
         } else {
-            const colorsCompressed = new Uint8Array(numVerts * 3);
-            for (let i = 0, len = numVerts * 3; i < len; i++) {
+            const colorsCompressed = new Uint8Array(numVerts * 4);
+            for (let i = 0, len = numVerts * 4; i < len; i++) {
                 colorsCompressed[i] = 255;
             }
             let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 3, gl.STATIC_DRAW, notNormalized);
-        }
-
-        if (cfg.intensitiesCompressed) {
-            const intensitiesCompressed = new Uint8Array(cfg.intensitiesCompressed);
-            let notNormalized = false;
-            stateCfg.intensitiesBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, intensitiesCompressed, intensitiesCompressed.length, 1, gl.STATIC_DRAW, notNormalized);
-
-        } else if (cfg.intensities) {
-            const intensities = cfg.intensities;
-            const intensitiesCompressed = new Uint8Array(intensities.length);
-            for (let i = 0, len = intensities.length; i < len; i++) {
-                intensitiesCompressed[i] = (intensities[i] * 255);
-            }
-            let notNormalized = false;
-            stateCfg.intensitiesBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, intensitiesCompressed, intensitiesCompressed.length, 1, gl.STATIC_DRAW, notNormalized);
-
-        } else {
-            const intensitiesCompressed = new Uint8Array(numVerts);
-            const intensityVal = 255;
-            for (let i = 0, len = numVerts; i < len; i++) {
-                intensitiesCompressed[i] = intensityVal;
-            }
-            let notNormalized = false;
-            stateCfg.intensitiesBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, intensitiesCompressed, intensitiesCompressed.length, 1, gl.STATIC_DRAW, notNormalized);
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
         }
 
         this._state = new RenderState(stateCfg);
@@ -739,10 +713,6 @@ class PointsInstancingLayer {
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
-        }
-        if (state.intensitiesBuf) {
-            state.intensitiesBuf.destroy();
-            state.intensitiesBuf = null;
         }
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
