@@ -349,12 +349,14 @@ class OcclusionTester {
                 const sectionPlanes = sectionPlanesState.sectionPlanes;
                 for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                     const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                    const active = occlusionLayer.sectionPlanesActive[sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a));
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    if (sectionPlaneUniforms) {
+                        const active = occlusionLayer.sectionPlanesActive[sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a));
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                        }
                     }
                 }
             }
