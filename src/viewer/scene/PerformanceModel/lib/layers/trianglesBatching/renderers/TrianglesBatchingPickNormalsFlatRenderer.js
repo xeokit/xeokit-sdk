@@ -182,8 +182,8 @@ class TrianglesBatchingPickNormalsFlatRenderer {
                 src.push("varying float vFragDepth;");
             }
         }
+        src.push("varying vec4 vWorldPosition;");
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
             src.push("varying vec4 vFlags2;");
         }
         src.push("void main(void) {");
