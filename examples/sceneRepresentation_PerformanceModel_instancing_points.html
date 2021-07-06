@@ -121,6 +121,7 @@
         colors.push(Math.random());
         colors.push(Math.random());
         colors.push(Math.random());
+        colors.push(Math.random());
     }
 
     performanceModel.createGeometry({
@@ -158,21 +159,27 @@
     const pointsMaterial = viewer.scene.pointsMaterial;
     const camera = viewer.camera;
 
-    var guiParams = new function () {
+    const guiParams = new function () {
         this.roundPoints = pointsMaterial.roundPoints;
-        this.perspectivePoints = pointsMaterial.perspectivePoints;
         this.pointSize = pointsMaterial.pointSize;
+        this.perspectivePoints = pointsMaterial.perspectivePoints;
         this.minPerspectivePointSize = pointsMaterial.minPerspectivePointSize;
         this.maxPerspectivePointSize = pointsMaterial.maxPerspectivePointSize;
+        this.filterIntensity = pointsMaterial.filterIntensity;
+        this.minIntensity = pointsMaterial.minIntensity;
+        this.maxIntensity = pointsMaterial.maxIntensity;
         this.perspective = (camera.projection === "perspective");
     }();
 
-    var update = function () {
+    const update = function () {
         pointsMaterial.roundPoints = guiParams.roundPoints;
-        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
         pointsMaterial.pointSize = guiParams.pointSize;
+        pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
         pointsMaterial.minPerspectivePointSize = guiParams.minPerspectivePointSize;
         pointsMaterial.maxPerspectivePointSize = guiParams.maxPerspectivePointSize;
+        pointsMaterial.filterIntensity = guiParams.filterIntensity;
+        pointsMaterial.minIntensity = guiParams.minIntensity;
+        pointsMaterial.maxIntensity = guiParams.maxIntensity;
         camera.projection = guiParams.perspective ? "perspective" : "ortho";
         requestAnimationFrame(update);
     };
@@ -183,20 +190,21 @@
 
     const pointsMaterialFolder = gui.addFolder('PointsMaterial');
     pointsMaterialFolder.add(guiParams, 'roundPoints');
-    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
     pointsMaterialFolder.add(guiParams, 'pointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'perspectivePoints');
     pointsMaterialFolder.add(guiParams, 'minPerspectivePointSize', 1, 50);
     pointsMaterialFolder.add(guiParams, 'maxPerspectivePointSize', 1, 50);
+    pointsMaterialFolder.add(guiParams, 'filterIntensity');
+    pointsMaterialFolder.add(guiParams, 'minIntensity', 0.0, 1.0);
+    pointsMaterialFolder.add(guiParams, 'maxIntensity', 0.0, 1.0);
     pointsMaterialFolder.open();
 
     const cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(guiParams, 'perspective');
     cameraFolder.open();
 
-    var customContainer = document.getElementById('myDatGuiContainer');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
-
-    window.viewer = viewer;
 
 </script>
 </html>

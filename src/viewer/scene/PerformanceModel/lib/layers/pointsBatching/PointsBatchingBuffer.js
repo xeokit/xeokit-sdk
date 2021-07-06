@@ -23,6 +23,7 @@ class PointsBatchingBuffer {
         this.maxIndices = maxGeometryBatchSize * 3; // Rough rule-of-thumb
         this.positions = [];
         this.colors = [];
+        this.intensities = [];
         this.pickColors = [];
         this.flags = [];
         this.flags2 = [];

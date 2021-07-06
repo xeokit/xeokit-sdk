@@ -53,44 +53,57 @@ class PointsInstancingLayer {
             rtcCenter: null
         };
 
-        const preCompressed = (!!cfg.positionsDecodeMatrix);
+        const preCompressedPositions = (!!cfg.positionsDecodeMatrix);
 
-        if (cfg.positions) {
-
-            if (preCompressed) {
-
-                let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
-                stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-
-                let localAABB = math.collapseAABB3();
-                math.expandAABB3Points3(localAABB, cfg.positions);
-                geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
-                math.AABB3ToOBB3(localAABB, stateCfg.obb);
-
-            } else {
-
-                let lenPositions = cfg.positions.length;
-                let localAABB = math.collapseAABB3();
-                math.expandAABB3Points3(localAABB, cfg.positions);
-                math.AABB3ToOBB3(localAABB, stateCfg.obb);
-                const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
-                let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
-            }
+        if (!cfg.positions) {
+            throw "positions expected";
         }
 
-        if (cfg.colors) {
+        const numVerts = cfg.positions.length / 3;
+
+        if (preCompressedPositions) {
+
+            let normalized = false;
+            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
+            stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
+
+            let localAABB = math.collapseAABB3();
+            math.expandAABB3Points3(localAABB, cfg.positions);
+            geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
+            math.AABB3ToOBB3(localAABB, stateCfg.obb);
+
+        } else {
+
+            let lenPositions = cfg.positions.length;
+            let localAABB = math.collapseAABB3();
+            math.expandAABB3Points3(localAABB, cfg.positions);
+            math.AABB3ToOBB3(localAABB, stateCfg.obb);
+            const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
+            let normalized = false;
+            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+        }
+
+        if (cfg.colorsCompressed) {
+            const colorsCompressed = new Uint8Array(cfg.colorsCompressed);
+            let notNormalized = false;
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+
+        } else if (cfg.colors) {
             const colors = cfg.colors;
-            const compressedColors = new Uint8Array((colors.length / 3) * 4);
-            for (let i = 0, j = 0, len = colors.length; i < len; i += 3, j += 4) {
-                compressedColors[i + 0] = colors[j + 0] * 255;
-                compressedColors[j + 1] = colors[i + 1] * 255;
-                compressedColors[j + 2] = colors[i + 2] * 255;
-                compressedColors[j + 3] = 255;
+            const colorsCompressed = new Uint8Array(colors.length);
+            for (let i = 0, len = colors.length; i < len; i++) {
+                colorsCompressed[i] = colors[i] * 255;
             }
             let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedColors, compressedColors.length, 4, gl.STATIC_DRAW, notNormalized);
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+
+        } else {
+            const colorsCompressed = new Uint8Array(numVerts * 4);
+            for (let i = 0, len = numVerts * 4; i < len; i++) {
+                colorsCompressed[i] = 255;
+            }
+            let notNormalized = false;
+            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
         }
 
         this._state = new RenderState(stateCfg);
@@ -432,8 +445,7 @@ class PointsInstancingLayer {
         tempUint8Vec4[0] = color[0];
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
-        tempUint8Vec4[3] = color[3];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 3, 3);
     }
 
     setTransparent(portionId, flags, transparent) {

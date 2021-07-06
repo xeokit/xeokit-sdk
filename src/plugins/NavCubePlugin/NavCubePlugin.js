@@ -64,7 +64,7 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/Duplex.xkt",
+ *     src: "./models/xkt/Duplex.ifc.xkt",
  *     edges: true
  * });
  * ````

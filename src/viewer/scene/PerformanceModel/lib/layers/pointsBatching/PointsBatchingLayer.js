@@ -107,9 +107,10 @@ class PointsBatchingLayer {
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param cfg.positions Flat float Local-space positions array.
+     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]
      * @param [cfg.colors] Flat float colors array.
-     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
-     * @param cfg.opacity Opacity [0..255]
+     * @param cfg.color Float RGB color [0..1,0..1,0..1]
+
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
      * @param [cfg.worldMatrix] Flat float 4x4 matrix
      * @param cfg.worldAABB Flat float AABB World-space AABB
@@ -124,8 +125,8 @@ class PointsBatchingLayer {
 
         const positions = cfg.positions;
         const color = cfg.color;
+        const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
-        const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
         const worldMatrix = cfg.worldMatrix;
         const worldAABB = cfg.worldAABB;
@@ -225,13 +226,14 @@ class PointsBatchingLayer {
 
         math.expandAABB3(this.aabb, worldAABB);
 
-        if (colors) {
+        if (colorsCompressed) {
+            for (let i = 0, len = colorsCompressed.length; i < len; i++) {
+                buffer.colors.push(colorsCompressed[i]);
+            }
 
-            for (let i = 0, len = colors.length; i < len; i += 3) {
+        } else if (colors) {
+            for (let i = 0, len = colors.length; i < len; i++) {
                 buffer.colors.push(colors[i] * 255);
-                buffer.colors.push(colors[i + 1] * 255);
-                buffer.colors.push(colors[i + 2] * 255);
-                buffer.colors.push(255);
             }
 
         } else if (color) {
@@ -239,7 +241,7 @@ class PointsBatchingLayer {
             const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
             const b = color[2];
-            const a = opacity;
+            const a = 1.0;
 
             for (let i = 0; i < numVerts; i++) {
                 buffer.colors.push(r);
@@ -301,7 +303,7 @@ class PointsBatchingLayer {
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
             } else {
                 const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB,  state.positionsDecodeMatrix);
+                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix);
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }
@@ -309,11 +311,11 @@ class PointsBatchingLayer {
         if (buffer.colors.length > 0) {
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.STATIC_DRAW, normalized);
         }
 
-        if (buffer.colors.length > 0) { // Because we build flags arrays here, get their length from the colors array
-            const flagsLength = buffer.colors.length;
+        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
+            const flagsLength = (buffer.positions.length / 3) * 4;
             const flags = new Uint8Array(flagsLength);
             const flags2 = new Uint8Array(flagsLength);
             let notNormalized = false;
@@ -500,12 +502,10 @@ class PointsBatchingLayer {
         const r = color[0];
         const g = color[1];
         const b = color[2];
-        const a = color[3];
         for (let i = 0; i < lenColor; i += 4) {
             tempArray[i + 0] = r;
             tempArray[i + 1] = g;
             tempArray[i + 2] = b;
-            tempArray[i + 3] = a;
         }
         this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
     }

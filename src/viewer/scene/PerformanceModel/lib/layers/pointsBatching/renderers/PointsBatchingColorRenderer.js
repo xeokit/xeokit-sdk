@@ -18,7 +18,7 @@ class PointsBatchingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
@@ -83,6 +83,10 @@ class PointsBatchingColorRenderer {
             this._aColor.bindArrayBuffer(state.colorsBuf);
         }
 
+        if (pointsMaterial.filterIntensity) {
+            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+        }
+
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
@@ -105,6 +109,7 @@ class PointsBatchingColorRenderer {
     _allocate() {
 
         const scene = this._scene;
+        const pointsMaterial = scene.pointsMaterial._state;
         const gl = scene.canvas.gl;
 
         this._program = new Program(gl, this._buildShader(scene));
@@ -140,6 +145,10 @@ class PointsBatchingColorRenderer {
 
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
+
+        if (pointsMaterial.filterIntensity) {
+            this._uIntensityRange = program.getLocation("intensityRange");
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -206,6 +215,10 @@ class PointsBatchingColorRenderer {
             src.push("uniform float nearPlaneHeight;");
         }
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("uniform vec2 intensityRange;");
+        }
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -229,13 +242,20 @@ class PointsBatchingColorRenderer {
 
         src.push("} else {");
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("float intensity = float(color.a) / 255.0;")
+            src.push("if (intensity < intensityRange[0] || intensity > intensityRange[1]) {");
+            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+            src.push("} else {");
+        }
+
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);");
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
@@ -259,6 +279,9 @@ class PointsBatchingColorRenderer {
             src.push("gl_PointSize = pointSize;");
         }
         src.push("}");
+        if (pointsMaterial.filterIntensity) {
+            src.push("}");
+        }
         src.push("}");
         return src;
     }

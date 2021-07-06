@@ -41,7 +41,7 @@ class TrianglesInstancingLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesInstancingLayer" + cfg.solid ? "-solid" : "-surface";
+        this.sortId = "TrianglesInstancingLayer" + (cfg.solid ? "-solid" : "-surface") + (cfg.normals ? "-normals" : "-autoNormals");
 
         /**
          * Index of this InstancingLayer in PerformanceModel#_layerList
@@ -88,7 +88,7 @@ class TrianglesInstancingLayer {
             }
         }
 
-        if (cfg.normals) {
+        if (cfg.normals && cfg.normals.length > 0) {
 
             if (preCompressed) {
 
@@ -237,25 +237,28 @@ class TrianglesInstancingLayer {
         this._modelMatrixCol2.push(meshMatrix[10]);
         this._modelMatrixCol2.push(meshMatrix[14]);
 
-        // Note: order of inverse and transpose doesn't matter
+        if (this._state.normalsBuf) {
 
-        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-        let normalMatrix = math.inverseMat4(transposedMat);
+            // Note: order of inverse and transpose doesn't matter
 
-        this._modelNormalMatrixCol0.push(normalMatrix[0]);
-        this._modelNormalMatrixCol0.push(normalMatrix[4]);
-        this._modelNormalMatrixCol0.push(normalMatrix[8]);
-        this._modelNormalMatrixCol0.push(normalMatrix[12]);
+            let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
+            let normalMatrix = math.inverseMat4(transposedMat);
 
-        this._modelNormalMatrixCol1.push(normalMatrix[1]);
-        this._modelNormalMatrixCol1.push(normalMatrix[5]);
-        this._modelNormalMatrixCol1.push(normalMatrix[9]);
-        this._modelNormalMatrixCol1.push(normalMatrix[13]);
+            this._modelNormalMatrixCol0.push(normalMatrix[0]);
+            this._modelNormalMatrixCol0.push(normalMatrix[4]);
+            this._modelNormalMatrixCol0.push(normalMatrix[8]);
+            this._modelNormalMatrixCol0.push(normalMatrix[12]);
 
-        this._modelNormalMatrixCol2.push(normalMatrix[2]);
-        this._modelNormalMatrixCol2.push(normalMatrix[6]);
-        this._modelNormalMatrixCol2.push(normalMatrix[10]);
-        this._modelNormalMatrixCol2.push(normalMatrix[14]);
+            this._modelNormalMatrixCol1.push(normalMatrix[1]);
+            this._modelNormalMatrixCol1.push(normalMatrix[5]);
+            this._modelNormalMatrixCol1.push(normalMatrix[9]);
+            this._modelNormalMatrixCol1.push(normalMatrix[13]);
+
+            this._modelNormalMatrixCol2.push(normalMatrix[2]);
+            this._modelNormalMatrixCol2.push(normalMatrix[6]);
+            this._modelNormalMatrixCol2.push(normalMatrix[10]);
+            this._modelNormalMatrixCol2.push(normalMatrix[14]);
+        }
 
         // Per-vertex pick colors
 
@@ -348,12 +351,14 @@ class TrianglesInstancingLayer {
             this._modelMatrixCol1 = [];
             this._modelMatrixCol2 = [];
 
-            this._state.modelNormalMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol0), this._modelNormalMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelNormalMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol1), this._modelNormalMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelNormalMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol2), this._modelNormalMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
-            this._modelNormalMatrixCol0 = [];
-            this._modelNormalMatrixCol1 = [];
-            this._modelNormalMatrixCol2 = [];
+            if (this._state.normalsBuf) {
+                this._state.modelNormalMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol0), this._modelNormalMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
+                this._state.modelNormalMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol1), this._modelNormalMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
+                this._state.modelNormalMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol2), this._modelNormalMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
+                this._modelNormalMatrixCol0 = [];
+                this._modelNormalMatrixCol1 = [];
+                this._modelNormalMatrixCol2 = [];
+            }
         }
         if (this._pickColors.length > 0) {
             const normalized = false;
@@ -361,6 +366,10 @@ class TrianglesInstancingLayer {
             this._pickColors = []; // Release memory
         }
         this._finalized = true;
+    }
+
+    isEmpty() {
+        return (!this._state.indicesBuf);
     }
 
     // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
@@ -533,7 +542,9 @@ class TrianglesInstancingLayer {
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
         tempUint8Vec4[3] = color[3];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        if (this._state.colorsBuf) {
+            this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -649,7 +660,9 @@ class TrianglesInstancingLayer {
         tempUint8Vec4[2] = f2; // z - edges
         tempUint8Vec4[3] = f3; // w - pick
 
-        this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        if (this._state.flagsBuf) {
+            this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        }
     }
 
     _setFlags2(portionId, flags) {
@@ -661,7 +674,9 @@ class TrianglesInstancingLayer {
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
         tempUint8Vec4[0] = clippable;
 
-        this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
+        if (this._state.flags2Buf) {
+            this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
+        }
     }
 
     setOffset(portionId, offset) {
@@ -675,7 +690,9 @@ class TrianglesInstancingLayer {
         tempVec3fa[0] = offset[0];
         tempVec3fa[1] = offset[1];
         tempVec3fa[2] = offset[2];
-        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+        if (this._state.offsetsBuf) {
+            this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+        }
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
@@ -686,23 +703,35 @@ class TrianglesInstancingLayer {
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
                     this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._instancingRenderers.colorRendererWithSAO) {
-                    this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._instancingRenderers.colorRendererWithSAO) {
+                        this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._instancingRenderers.flatColorRendererWithSAO) {
+                        this._instancingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         } else {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._instancingRenderers.colorQualityRenderer) {
                     this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._instancingRenderers.colorRenderer) {
-                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._instancingRenderers.colorRenderer) {
+                        this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._instancingRenderers.flatColorRenderer) {
+                        this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         }
@@ -726,13 +755,19 @@ class TrianglesInstancingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+        if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
             if (this._instancingRenderers.colorQualityRenderer) {
                 this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else {
-            if (this._instancingRenderers.colorRenderer) {
-                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            if (this._state.normalsBuf) {
+                if (this._instancingRenderers.colorRenderer) {
+                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
+            } else {
+                if (this._instancingRenderers.flatColorRenderer) {
+                    this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
             }
         }
     }
@@ -746,16 +781,6 @@ class TrianglesInstancingLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.depthRenderer) {
             this._instancingRenderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        }
-    }
-
-    drawNormals(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._instancingRenderers.normalsRenderer) {
-            this._instancingRenderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
         }
     }
 
@@ -890,11 +915,16 @@ class TrianglesInstancingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._instancingRenderers.pickNormalsRenderer) {
-            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._state.normalsBuf) {
+            if (this._instancingRenderers.pickNormalsRenderer) {
+                this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
+        } else {
+            if (this._instancingRenderers.pickNormalsFlatRenderer) {
+                this._instancingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
         }
     }
-
 
     destroy() {
         const state = this._state;

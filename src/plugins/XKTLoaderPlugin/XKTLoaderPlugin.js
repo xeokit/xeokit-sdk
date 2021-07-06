@@ -12,6 +12,7 @@ import {ParserV5} from "./parsers/ParserV5.js";
 import {ParserV6} from "./parsers/ParserV6.js";
 import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
+import {ParserV9} from "./parsers/ParserV9.js";
 
 const parsers = {};
 
@@ -23,6 +24,7 @@ parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
 parsers[ParserV7.version] = ParserV7;
 parsers[ParserV8.version] = ParserV8;
+parsers[ParserV9.version] = ParserV9;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -42,12 +44,6 @@ parsers[ParserV8.version] = ParserV8;
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.XKT````* and IFC metadata files.
  * * Option to load multiple copies of the same model, without object ID clashes.
- * * Does not (yet) support textures or physically-based materials.
- *
- * ## Credits
- *
- * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
- * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
  *
  * ## Creating *````.XKT````* Files and Metadata
  *
@@ -171,7 +167,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * ````javascript
  * xktLoader.load({
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -243,7 +239,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model4 = xktLoader.load({
  *      id: "myModel4",
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
@@ -324,7 +320,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model5 = xktLoader2.load({
  *      id: "myModel5",
- *      src: "./models/xkt/Duplex.xkt"
+ *      src: "./models/xkt/Duplex.ifc.xkt"
  * });
  * ````
  *
@@ -724,7 +720,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 if (!processMetaModelData(params.metaModelData)) {
 
-                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
 
                     performanceModel.fire("error", "Metadata not valid");
                 }
@@ -789,7 +785,7 @@ class XKTLoaderPlugin extends Plugin {
 
         performanceModel.finalize();
 
-        this._createDefaultMetaModelIfNeeded(performanceModel, options);
+        this._createDefaultMetaModelIfNeeded(performanceModel, params, options);
 
         performanceModel.scene.once("tick", () => {
             if (performanceModel.destroyed) {
@@ -800,7 +796,7 @@ class XKTLoaderPlugin extends Plugin {
         });
     }
 
-    _createDefaultMetaModelIfNeeded(performanceModel, options) {
+    _createDefaultMetaModelIfNeeded(performanceModel, params, options) {
 
         const metaModelId = performanceModel.id;
 
@@ -831,10 +827,17 @@ class XKTLoaderPlugin extends Plugin {
                 }
             }
 
+            const src = params.src;
+
             this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
+
                 includeTypes: options.includeTypes,
                 excludeTypes: options.excludeTypes,
-                globalizeObjectIds: options.globalizeObjectIds
+                globalizeObjectIds: options.globalizeObjectIds,
+
+                getProperties: async (propertiesId) => {
+                    return await this._dataSource.getProperties(src, propertiesId);
+                }
             });
 
             performanceModel.once("destroyed", () => {

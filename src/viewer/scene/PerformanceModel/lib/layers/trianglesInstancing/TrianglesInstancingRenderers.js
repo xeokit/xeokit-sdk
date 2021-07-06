@@ -1,4 +1,5 @@
 import {TrianglesInstancingColorRenderer} from "./renderers/TrianglesInstancingColorRenderer.js";
+import {TrianglesInstancingFlatColorRenderer} from "./renderers/TrianglesInstancingFlatColorRenderer.js";
 import {TrianglesInstancingSilhouetteRenderer} from "./renderers/TrianglesInstancingSilhouetteRenderer.js";
 import {TrianglesInstancingEdgesRenderer} from "./renderers/TrianglesInstancingEdgesRenderer.js";
 import {TrianglesInstancingEdgesColorRenderer} from "./renderers/TrianglesInstancingEdgesColorRenderer.js";
@@ -10,6 +11,7 @@ import {TrianglesInstancingDepthRenderer} from "./renderers/TrianglesInstancingD
 import {TrianglesInstancingNormalsRenderer} from "./renderers/TrianglesInstancingNormalsRenderer.js";
 import {TrianglesInstancingShadowRenderer} from "./renderers/TrianglesInstancingShadowRenderer.js";
 import {TrianglesInstancingColorQualityRenderer} from "./renderers/TrianglesInstancingColorQualityRenderer.js";
+import {TrianglesInstancingPickNormalsFlatRenderer} from "./renderers/TrianglesInstancingPickNormalsFlatRenderer.js";
 
 /**
  * @private
@@ -28,6 +30,14 @@ class TrianglesInstancingRenderers {
         if (this._colorRendererWithSAO && (!this._colorRendererWithSAO.getValid())) {
             this._colorRendererWithSAO.destroy();
             this._colorRendererWithSAO = null;
+        }
+        if (this._flatColorRenderer && (!this._flatColorRenderer.getValid())) {
+            this._flatColorRenderer.destroy();
+            this._flatColorRenderer = null;
+        }
+        if (this._flatColorRendererWithSAO && (!this._flatColorRendererWithSAO.getValid())) {
+            this._flatColorRendererWithSAO.destroy();
+            this._flatColorRendererWithSAO = null;
         }
         if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
             this._colorQualityRenderer.destroy();
@@ -69,6 +79,10 @@ class TrianglesInstancingRenderers {
             this._pickNormalsRenderer.destroy();
             this._pickNormalsRenderer = null;
         }
+        if (this._pickNormalsFlatRenderer && (!this._pickNormalsFlatRenderer.getValid())) {
+            this._pickNormalsFlatRenderer.destroy();
+            this._pickNormalsFlatRenderer = null;
+        }
         if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
             this._occlusionRenderer.destroy();
             this._occlusionRenderer = null;
@@ -91,6 +105,20 @@ class TrianglesInstancingRenderers {
             this._colorRendererWithSAO = new TrianglesInstancingColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
+    }
+
+    get flatColorRenderer() {
+        if (!this._flatColorRenderer) {
+            this._flatColorRenderer = new TrianglesInstancingFlatColorRenderer(this._scene, false);
+        }
+        return this._flatColorRenderer;
+    }
+
+    get flatColorRendererWithSAO() {
+        if (!this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO = new TrianglesInstancingFlatColorRenderer(this._scene, true);
+        }
+        return this._flatColorRendererWithSAO;
     }
 
     get colorQualityRenderer() {
@@ -156,6 +184,13 @@ class TrianglesInstancingRenderers {
         return this._pickNormalsRenderer;
     }
 
+    get pickNormalsFlatRenderer() {
+        if (!this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer = new TrianglesInstancingPickNormalsFlatRenderer(this._scene);
+        }
+        return this._pickNormalsFlatRenderer;
+    }
+
     get pickDepthRenderer() {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new TrianglesInstancingPickDepthRenderer(this._scene);
@@ -183,6 +218,12 @@ class TrianglesInstancingRenderers {
         }
         if (this._colorRendererWithSAO) {
             this._colorRendererWithSAO.destroy();
+        }
+        if (this._flatColorRenderer) {
+            this._flatColorRenderer.destroy();
+        }
+        if (this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO.destroy();
         }
         if (this._colorQualityRenderer) {
             this._colorQualityRenderer.destroy();
@@ -213,6 +254,9 @@ class TrianglesInstancingRenderers {
         }
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();
+        }
+        if (this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer.destroy();
         }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.destroy();
