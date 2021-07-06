@@ -44,12 +44,6 @@ parsers[ParserV9.version] = ParserV9;
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.XKT````* and IFC metadata files.
  * * Option to load multiple copies of the same model, without object ID clashes.
- * * Does not (yet) support textures or physically-based materials.
- *
- * ## Credits
- *
- * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
- * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
  *
  * ## Creating *````.XKT````* Files and Metadata
  *
@@ -726,7 +720,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 if (!processMetaModelData(params.metaModelData)) {
 
-                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
 
                     performanceModel.fire("error", "Metadata not valid");
                 }
@@ -791,7 +785,7 @@ class XKTLoaderPlugin extends Plugin {
 
         performanceModel.finalize();
 
-        this._createDefaultMetaModelIfNeeded(performanceModel, options);
+        this._createDefaultMetaModelIfNeeded(performanceModel, params, options);
 
         performanceModel.scene.once("tick", () => {
             if (performanceModel.destroyed) {
@@ -802,7 +796,7 @@ class XKTLoaderPlugin extends Plugin {
         });
     }
 
-    _createDefaultMetaModelIfNeeded(performanceModel, options) {
+    _createDefaultMetaModelIfNeeded(performanceModel, params, options) {
 
         const metaModelId = performanceModel.id;
 
@@ -833,10 +827,17 @@ class XKTLoaderPlugin extends Plugin {
                 }
             }
 
+            const src = params.src;
+
             this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
+
                 includeTypes: options.includeTypes,
                 excludeTypes: options.excludeTypes,
-                globalizeObjectIds: options.globalizeObjectIds
+                globalizeObjectIds: options.globalizeObjectIds,
+
+                getProperties: async (propertiesId) => {
+                    return await this._dataSource.getProperties(src, propertiesId);
+                }
             });
 
             performanceModel.once("destroyed", () => {
