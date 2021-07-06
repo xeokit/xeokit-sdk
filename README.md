@@ -24,7 +24,7 @@ npm i @xeokit/xeokit-sdk
  * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
  * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
  * [User Guides](https://github.com/xeokit/xeokit-sdk/wiki)
- * [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
+ * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
  * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
  * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
 
