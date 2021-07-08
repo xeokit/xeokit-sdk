@@ -6,6 +6,8 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+* General
+  * Remove src directory from npm distribution. [#688](https://github.com/xeokit/xeokit-sdk/issues/688) ([**@xeolabs**](https://github.com/xeolabs))
 * NavCubePlugin
   * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
