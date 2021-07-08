@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.6",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
@@ -55,7 +55,6 @@
     "rollup-plugin-node-resolve": "^5.2.0"
   },
   "files": [
-    "/src",
     "/dist"
   ],
   "dependencies": {}
