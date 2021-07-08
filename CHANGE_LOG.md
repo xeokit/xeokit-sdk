@@ -6,6 +6,8 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+* NavCubePlugin
+  * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
