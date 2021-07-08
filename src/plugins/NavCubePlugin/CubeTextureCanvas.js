@@ -90,11 +90,6 @@ function CubeTextureCanvas(viewer, cfg = {}) {
         {boundaries: [[11, 5, 2, 2]], dir: [-1, -1, -1], up: [-1, 1, -1]}
     ];
 
-    for (let i = 0, len = areasZUp.length; i < len; i++) {
-        math.normalizeVec3(areasZUp[i].dir, areasZUp[i].dir);
-        math.normalizeVec3(areasYUp[i].dir, areasYUp[i].dir);
-    }
-
     var faces = facesYUp;
     var areas = areasYUp;
 
