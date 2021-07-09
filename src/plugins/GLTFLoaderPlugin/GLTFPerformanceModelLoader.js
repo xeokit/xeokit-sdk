@@ -374,11 +374,14 @@ const parseGLTF = (function () {
                     const meshIds = [];
 
                     for (let i = 0; i < numPrimitives; i++) {
+                        const primitiveInfo = meshInfo.primitives[i];
+                        if (primitiveInfo.mode < 4 ) {
+                            continue;
+                        }
                         const meshCfg = {
                             id: performanceModel.id + "." + ctx.numObjects++,
                             matrix: worldMatrix
                         };
-                        const primitiveInfo = meshInfo.primitives[i];
 
                         const materialIndex = primitiveInfo.material;
                         let materialInfo;
