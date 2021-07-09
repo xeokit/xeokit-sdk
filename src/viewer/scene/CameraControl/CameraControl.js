@@ -636,6 +636,7 @@ class CameraControl extends Component {
             followPointer: true,
             doublePickFlyTo: true,
             panRightClick: true,
+            rotateRightClick: true,
             showPivot: false,
             pointerEnabled: true,
             constrainVertical: false,
@@ -735,6 +736,7 @@ class CameraControl extends Component {
         }
         this.doublePickFlyTo = cfg.doublePickFlyTo;
         this.panRightClick = cfg.panRightClick;
+        this.rotateRightClick = cfg.rotateRightClick;
         this.active = cfg.active;
         this.followPointer = cfg.followPointer;
         this.rotationInertia = cfg.rotationInertia;
@@ -1216,6 +1218,28 @@ class CameraControl extends Component {
      */
     get panRightClick() {
         return this._configs.panRightClick;
+    }
+
+    /**
+     * Sets whether mouse-moving after right-click rotates the {@link Camera}.
+     *
+     * Default is ````true````.
+     *
+     * @param {Boolean} value Set ````false```` to disable rotate on mouse-move after right-click.
+     */
+    set rotateRightClick(value) {
+        this._configs.rotateRightClick = value !== false;
+    }
+
+    /**
+     * Gets whether mouse-moving after right-click rotates the {@link Camera}.
+     *
+     * Default is ````true````.
+     *
+     * @returns {Boolean} Returns ````false```` when rotate on mouse-move after right-click is disabled.
+     */
+    get rotateRightClick() {
+        return this._configs.rotateRightClick;
     }
 
     /**
