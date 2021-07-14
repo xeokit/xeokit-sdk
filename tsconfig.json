@@ -1,0 +1,17 @@
+{
+    "include": ["src/**/*"],
+    "exclude": [
+        "**/src/plugins/XML3DLoaderPlugin/zipjs",
+        "**/src/plugins/XKTLoaderPlugin/parsers"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "dist",
+        "strict": false,
+        "target": "es6",
+        "module": "es6",
+        "sourceMap": true
+    }
+}
