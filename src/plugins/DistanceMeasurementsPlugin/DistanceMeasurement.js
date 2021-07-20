@@ -58,11 +58,9 @@ class DistanceMeasurement extends Component {
         this._yAxisLabelCulled = false;
         this._zAxisLabelCulled = false;
 
-        this._originDot = new Dot(this._container, {
-        });
+        this._originDot = new Dot(this._container, {});
 
-        this._targetDot = new Dot(this._container, {
-        });
+        this._targetDot = new Dot(this._container, {});
 
         this._lengthWire = new Wire(this._container, {
             color: "#00BBFF",
@@ -160,6 +158,7 @@ class DistanceMeasurement extends Component {
             this._needUpdate();
         });
 
+        this.approximate = cfg.approximate;
         this.visible = cfg.visible;
         this.originVisible = cfg.originVisible;
         this.targetVisible = cfg.targetVisible;
@@ -259,7 +258,7 @@ class DistanceMeasurement extends Component {
             const unitAbbrev = unitInfo.abbrev;
 
             for (var i = 0, len = pp.length; i < len; i += 4) {
-                cp[j] = left +  Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
+                cp[j] = left + Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
                 cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
                 j += 2;
             }
@@ -278,8 +277,10 @@ class DistanceMeasurement extends Component {
             this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
             this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
 
+            const tilde = this._approximate ? " ~ " : " = ";
+
             this._length = Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)))
-            this._lengthLabel.setText((this._length * scale).toFixed(2) + unitAbbrev);
+            this._lengthLabel.setText(tilde + (this._length * scale).toFixed(2) + unitAbbrev);
 
             const xAxisCanvasLength = Math.abs(lengthWire(cp[0], cp[1], cp[2], cp[3]));
             const yAxisCanvasLength = Math.abs(lengthWire(cp[2], cp[3], cp[4], cp[5]));
@@ -292,21 +293,21 @@ class DistanceMeasurement extends Component {
             this._zAxisLabelCulled = (zAxisCanvasLength < labelMinAxisLength);
 
             if (!this._xAxisLabelCulled) {
-                this._xAxisLabel.setText(Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
+                this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
                 this._xAxisLabel.setVisible(true);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
-                this._yAxisLabel.setText(Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
+                this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
                 this._yAxisLabel.setVisible(true);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
-                this._zAxisLabel.setText(Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
+                this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
                 this._zAxisLabel.setVisible(true);
             } else {
                 this._zAxisLabel.setVisible(false);
@@ -322,6 +323,34 @@ class DistanceMeasurement extends Component {
 
             this._cpDirty = false;
         }
+    }
+
+    /**
+     * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    set approximate(approximate) {
+        approximate = approximate !== false;
+        if (this._approximate === approximate) {
+            return;
+        }
+        this._approximate = approximate;
+        this._cpDirty = true;
+        this._needUpdate(0);
+    }
+
+    /**
+     * Gets whether this DistanceMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    get approximate() {
+        return this._approximate;
     }
 
     /**

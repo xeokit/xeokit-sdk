@@ -229,6 +229,11 @@ class PerformanceMesh {
     }
 
     /** @private */
+    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos) {
+        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos) : false;
+    }
+
+    /** @private */
     canPickWorldPos() {
         return true;
     }

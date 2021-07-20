@@ -2,14 +2,13 @@ import {Scene} from "./scene/scene/Scene.js";
 import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
-import {WEBGL_INFO} from "./scene/webglInfo.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
  *
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
- * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
+ * * {@link Viewer#metaScene} holds metadata about models in the
  * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
  * {@link Camera} to target positions, boundaries or {@link Entity}s.
@@ -44,6 +43,7 @@ class Viewer {
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      * @param {Boolean} [cfg.alphaDepthMask=true] Whether writing into the depth buffer is enabled or disabled when rendering transparent objects.
      * @param {Boolean} [cfg.entityOffsetsEnabled=false] Whether to enable {@link Entity#offset}. For best performance, only set this ````true```` when you need to use {@link Entity#offset}.
+     * @param {Boolean} [cfg.pickSurfacePrecisionEnabled=false] Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer. The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
      * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
@@ -86,6 +86,7 @@ class Viewer {
             saoEnabled: cfg.saoEnabled,
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
+            pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
             pbrEnabled: (!!cfg.pbrEnabled)
         });
