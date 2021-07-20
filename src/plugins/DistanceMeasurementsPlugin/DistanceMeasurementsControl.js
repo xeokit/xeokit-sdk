@@ -33,10 +33,8 @@ class DistanceMeasurementsControl extends Component {
         this._state = HOVERING;
         this._currentDistMeasurement = null;
         this._prevDistMeasurement = null;
-        this._onhoverSurface = null;
-        this._onPickedSurface = null;
-        this._onHoverNothing = null;
-        this._onPickedNothing = null;
+        this._onHoverSurface = null;
+        this._onHoverOff = null;
     }
 
     /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
@@ -61,12 +59,16 @@ class DistanceMeasurementsControl extends Component {
         let over = false;
         let entity = null;
         let worldPos = math.vec3();
+        const hoverCanvasPos = math.vec2();
 
-        this._onhoverSurface = cameraControl.on("hoverSurface", e => {
+        const pickSurfacePrecisionEnabled = this.plugin.viewer.scene.pickSurfacePrecisionEnabled;
+
+        this._onHoverSurface = cameraControl.on("hoverSurface", e => {
 
             over = true;
             entity = e.entity;
             worldPos.set(e.worldPos);
+            hoverCanvasPos.set(e.canvasPos);
 
             if (this._state === HOVERING) {
                 document.body.style.cursor = "pointer";
@@ -86,9 +88,9 @@ class DistanceMeasurementsControl extends Component {
             }
         });
 
-        var lastX;
-        var lastY;
-        const tolerance = 2;
+        let lastX;
+        let lastY;
+        const tolerance = 5;
 
         this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", (coords) => {
             lastX = coords[0];
@@ -104,12 +106,23 @@ class DistanceMeasurementsControl extends Component {
             switch (this._state) {
 
                 case HOVERING:
+
                     if (this._prevDistMeasurement) {
                         this._prevDistMeasurement.originVisible = true;
                         this._prevDistMeasurement.targetVisible = true;
                         this._prevDistMeasurement.axisVisible = true;
                     }
                     if (over) {
+                        if (pickSurfacePrecisionEnabled) {
+                            const pickResult = this.plugin.viewer.scene.pick({
+                                canvasPos: hoverCanvasPos,
+                                pickSurface: true,
+                                pickSurfacePrecision: true
+                            });
+                            if (pickResult && pickResult.worldPos) {
+                                worldPos.set(pickResult.worldPos);
+                            }
+                        }
                         this._currentDistMeasurement = this.plugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
@@ -119,7 +132,8 @@ class DistanceMeasurementsControl extends Component {
                             target: {
                                 entity: entity,
                                 worldPos: worldPos
-                            }
+                            },
+                            approximate: true
                         });
                         this._currentDistMeasurement.axisVisible = false;
                         this._currentDistMeasurement.targetVisible = true;
@@ -129,13 +143,30 @@ class DistanceMeasurementsControl extends Component {
                     break;
 
                 case FINDING_TARGET:
+
                     if (over) {
+
+                        if (pickSurfacePrecisionEnabled) {
+                            const pickResult = this.plugin.viewer.scene.pick({
+                                canvasPos: hoverCanvasPos,
+                                pickSurface: true,
+                                pickSurfacePrecision: true
+                            });
+                            if (pickResult && pickResult.worldPos) {
+                                this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
+                            }
+                            this._currentDistMeasurement.approximate = false;
+                        }
+
                         this._currentDistMeasurement.axisVisible = true;
                         this._currentDistMeasurement.targetVisible = true;
                         this._currentDistMeasurement = null;
                         this._prevDistMeasurement = null;
+
                         this._state = HOVERING;
+
                     } else {
+
                         if (this._currentDistMeasurement) {
                             this._currentDistMeasurement.destroy();
                             this._currentDistMeasurement = null;
@@ -144,10 +175,13 @@ class DistanceMeasurementsControl extends Component {
                         }
                     }
                     break;
+
+                default:
+                    break;
             }
         });
 
-        this._onHoverNothing = cameraControl.on("hoverOff", e => {
+        this._onHoverOff = cameraControl.on("hoverOff", e => {
             over = false;
             if (this._currentDistMeasurement) {
                 switch (this._state) {
@@ -166,15 +200,6 @@ class DistanceMeasurementsControl extends Component {
                 }
             }
             document.body.style.cursor = "default";
-        });
-
-        this._onPickedNothing = cameraControl.on("pickedNothing", e => {
-            if (this._currentDistMeasurement) {
-                this._currentDistMeasurement.destroy();
-                this._currentDistMeasurement = null;
-                this._prevDistMeasurement = null;
-                this._state = HOVERING
-            }
         });
 
         this._active = true;
@@ -198,10 +223,8 @@ class DistanceMeasurementsControl extends Component {
 
         input.off(this._onInputMouseDown);
 
-        cameraControl.off(this._onhoverSurface);
-        cameraControl.off(this._onPickedSurface);
-        cameraControl.off(this._onHoverNothing);
-        cameraControl.off(this._onPickedNothing);
+        cameraControl.off(this._onHoverSurface);
+        cameraControl.off(this._onHoverOff);
 
         this._currentDistMeasurement = null;
 

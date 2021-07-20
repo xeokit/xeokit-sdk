@@ -13,11 +13,13 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/measure_distance_icon.png"/>
-    <h1>DistanceMeasurementPlugin</h1>
-    <h2>Click on the model to create distance measurements</h2>
-    <p>In this example, we're loading a BIM model from the file system, then creating distance measurements wherever the
+    <img class="info-icon" src="../assets/images/measure_angle_icon.png"/>
+    <h1>AngleMeasurementsPlugin Precision Mode</h1>
+    <h2>Click on the model to create full-precision angle measurements</h2>
+    <p>In this example, we're loading a BIM model from the file system, then creating angle measurements wherever the
         user clicks on the model.</p>
+    <p>The model is placed at [1842022, 10, -5173301], which gives it very large geometry coordinates that rely on
+        xeokit's double-precision support for accurate rendering and measurement.</p>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -25,8 +27,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
-               target="_other">DistanceMeasurementsPlugin</a>
+            <a href="../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html"
+               target="_other">AngleMeasurementsPlugin</a>
         </li>
         <li>
             <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
@@ -35,10 +37,7 @@
     </ul>
     <h3>Resources</h3>
     <ul>
-        <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
-               target="_other">Model source</a>
-        </li>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
 </body>
@@ -48,21 +47,20 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
-        canvasId: "myCanvas"
+        canvasId: "myCanvas",
+        pickSurfacePrecisionEnabled: true
     });
 
-    viewer.camera.eye = [-3.93, 2.85, 27.01];
-    viewer.camera.look = [4.40, 3.72, 8.89];
-    viewer.camera.up = [-0.01, 0.99, 0.039];
-
-    viewer.cameraControl.followPointer = true;
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -72,17 +70,20 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/Duplex.xkt",
-        edges: true
+        src: "../assets/models/xkt/v7/MAP/MAP.xkt",
+        metaModelSrc: "../assets/models/xkt/v7/MAP/MAP.json",
+        edges: true,
+        excludeTypes: ["IfcSpace"],
+        objectDefaults: {}
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
+    // Create an AngleMeasurementsPlugin, activate its AngleMeasuremntsControl
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+    const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
-    distanceMeasurements.control.activate();
+    angleMeasurements.control.activate();
 
 </script>
 </html>

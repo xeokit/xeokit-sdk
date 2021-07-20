@@ -809,6 +809,12 @@ const Renderer = function (scene, options) {
 
         const nearAndFar = math.vec2();
 
+        const canvasPos = math.vec3();
+
+        const worldRayOrigin = math.vec3();
+        const worldRayDir = math.vec3();
+        const worldSurfacePos = math.vec3();
+
         return function (params, pickResult = _pickResult) {
 
             pickResult.reset();
@@ -827,10 +833,6 @@ const Renderer = function (scene, options) {
                 extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
             }
 
-            let canvasX;
-            let canvasY;
-            let origin;
-            let direction;
             let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
@@ -839,8 +841,8 @@ const Renderer = function (scene, options) {
 
             if (params.canvasPos) {
 
-                canvasX = params.canvasPos[0];
-                canvasY = params.canvasPos[1];
+                canvasPos[0] = params.canvasPos[0];
+                canvasPos[1] = params.canvasPos[1];
 
                 pickViewMatrix = scene.camera.viewMatrix;
                 pickProjMatrix = scene.camera.projMatrix;
@@ -861,24 +863,25 @@ const Renderer = function (scene, options) {
 
                 } else {
 
-                    origin = params.origin || math.vec3([0, 0, 0]);
-                    direction = params.direction || math.vec3([0, 0, 1]);
-                    look = math.addVec3(origin, direction, tempVec3a);
+                    worldRayOrigin.set(params.origin || [0, 0, 0]);
+                    worldRayDir.set(params.direction || [0, 0, 1]);
 
-                    pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4b);
+                    look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
+
+                    pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
-                    pickResult.origin = origin;
-                    pickResult.direction = direction;
+                    pickResult.origin = worldRayOrigin;
+                    pickResult.direction = worldRayDir;
                 }
 
-                canvasX = canvas.clientWidth * 0.5;
-                canvasY = canvas.clientHeight * 0.5;
+                canvasPos[0] = canvas.clientWidth * 0.5;
+                canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
             pickBuffer.bind();
 
-            const pickable = pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params);
+            const pickable = gpuPickPickable(canvasPos, pickViewMatrix, pickProjMatrix, params);
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -888,25 +891,57 @@ const Renderer = function (scene, options) {
             const pickedEntity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
             if (!pickedEntity) {
+                pickBuffer.unbind();
                 return null;
             }
 
             if (params.pickSurface) {
 
-                if (pickable.canPickTriangle && pickable.canPickTriangle()) {
-                    pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
-                    pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+                if (params.pickSurfacePrecision && scene.pickSurfacePrecisionEnabled) {
+
+                    // JavaScript-based ray-picking - slow and precise
+
+                    if (params.canvasPos) {
+                        math.canvasPosToWorldRay(scene.canvas.canvas, pickViewMatrix, pickProjMatrix, canvasPos, worldRayOrigin, worldRayDir);
+                    }
+
+                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos)) {
+
+                        pickResult.worldPos = worldSurfacePos;
+
+                        if (params.pickSurfaceNormal !== false) {
+                            gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                        }
+
+                        pickResult.pickSurfacePrecision = true;
+                    }
 
                 } else {
 
-                    if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
+                    // GPU-based ray-picking - fast and imprecise
 
-                        nearAndFar[0] = scene.camera.project.near;
-                        nearAndFar[1] = scene.camera.project.far;
+                    if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
-                        pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
-                        if (params.pickSurfaceNormal !== false) {
-                            pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        gpuPickTriangle(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+
+                        pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+
+                        pickResult.pickSurfacePrecision = false;
+
+                    } else {
+
+                        if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
+
+                            nearAndFar[0] = scene.camera.project.near;
+                            nearAndFar[1] = scene.camera.project.far;
+
+                            gpuPickWorldPos(pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+
+                            if (params.pickSurfaceNormal !== false) {
+                                gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                            }
+
+                            pickResult.pickSurfacePrecision = false;
                         }
                     }
                 }
@@ -920,7 +955,7 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    function pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
+    function gpuPickPickable(canvasPos, pickViewMatrix, pickProjMatrix, params) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -967,7 +1002,7 @@ const Renderer = function (scene, options) {
             }
         }
 
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(canvasPos[0]), Math.round(canvasPos[1]));
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -979,7 +1014,7 @@ const Renderer = function (scene, options) {
         return pickable;
     }
 
-    function pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function gpuPickTriangle(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
         if (!pickable.drawPickTriangles) {
             return;
@@ -1002,7 +1037,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const pix = pickBuffer.read(canvasX, canvasY);
+        const pix = pickBuffer.read(canvasPos[0], canvasPos[1]);
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -1011,7 +1046,7 @@ const Renderer = function (scene, options) {
         pickResult.primIndex = primIndex;
     }
 
-    const pickWorldPos = (function () {
+    const gpuPickWorldPos = (function () {
 
         const tempVec4a = math.vec4();
         const tempVec4b = math.vec4();
@@ -1022,7 +1057,7 @@ const Renderer = function (scene, options) {
         const tempMat4b = math.mat4();
         const tempMat4c = math.mat4();
 
-        return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
+        return function (pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
             frameCtx.reset();
             frameCtx.backfaces = true;
@@ -1042,13 +1077,13 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+            const pix = pickBuffer.read(Math.round(canvasPos[0]), Math.round(canvasPos[1]));
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
             // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            const x = (canvasX - canvas.width / 2) / (canvas.width / 2);
-            const y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+            const x = (canvasPos[0] - canvas.width / 2) / (canvas.width / 2);
+            const y = -(canvasPos[1] - canvas.height / 2) / (canvas.height / 2);
 
             const rtcCenter = pickable.rtcCenter;
             let pvMat;
@@ -1096,15 +1131,13 @@ const Renderer = function (scene, options) {
         return math.dotVec4(vec, bitShift);
     }
 
-    function pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
+    function gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
-        frameCtx.pickZNear = nearAndFar[0];
-        frameCtx.pickZFar = nearAndFar[1];
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1116,7 +1149,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(canvasPos[0]), Math.round(canvasPos[1]));
 
         const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
 
