@@ -5,14 +5,12 @@ import {math} from "../../viewer/scene/math/math.js";
  */
 function CubeTextureCanvas(viewer, cfg = {}) {
 
-    var axisLabels = false;
-
     const cubeColor = "lightgrey";
     const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
 
-    var height = 500;
-    var width = height + (height / 3);
-    var scale = width / 24;
+    const height = 500;
+    const width = height + (height / 3);
+    const scale = width / 24;
 
     const facesZUp = [
         {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
@@ -24,12 +22,12 @@ function CubeTextureCanvas(viewer, cfg = {}) {
     ];
 
     const areasZUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
-        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
-        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
-        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
-        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
-        {label: "bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 0, 1], up: [0, -1, 0]},
+        {label: "NavCube.front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
+        {label: "NavCube.back", boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
+        {label: "NavCube.right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
+        {label: "NavCube.left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
+        {label: "NavCube.top", boundaries: [[7, 1, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: "NavCube.bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 0, 1], up: [0, -1, 0]},
         {boundaries: [[7, 5, 4, 2]], dir: [0, 1, -1], up: [0, 1, 1]},
         {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, 0, -1], up: [1, 0, 1]},
         {boundaries: [[7, 0, 4, 1], [19, 6, 4, 1]], dir: [0, -1, -1], up: [0, -1, 1]},
@@ -62,12 +60,12 @@ function CubeTextureCanvas(viewer, cfg = {}) {
     ];
 
     const areasYUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
-        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
-        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
-        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
-        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
-        {label: "bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
+        {label: "NavCube.front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: "NavCube.back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
+        {label: "NavCube.right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
+        {label: "NavCube.left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
+        {label: "NavCube.top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
+        {label: "NavCube.bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
         {boundaries: [[7, 5, 4, 2]], dir: [0, -1, -1], up: [0, 1, -1]},
         {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, -1, 0], up: [1, 1, 0]},
         {boundaries: [[7, 0, 4, 1], [19, 6, 4, 1]], dir: [0, -1, 1], up: [0, 1, 1]},
@@ -119,7 +117,7 @@ function CubeTextureCanvas(viewer, cfg = {}) {
 
     const context = this._textureCanvas.getContext("2d");
 
-    var zUp = false;
+    let zUp = false;
 
     function paint() {
 
@@ -162,25 +160,46 @@ function CubeTextureCanvas(viewer, cfg = {}) {
                 context.fillText(translateLabel(area.label), xcenter, ycenter, 80);
             }
         }
+
+        viewer.scene.glRedraw();
     }
 
-    var translateLabel = (function () {
-        const dictionaries = {
-            "yUp": {"front": "+Z", "back": "-Z", "right": "+X", "left": "-X", "top": "+Y", "bottom": "-Y"},
-            "en": {"front": "FRONT", "back": "BACK", "right": "RIGHT", "left": "LEFT", "top": "TOP", "bottom": "BOTTOM"}
+    const translateLabel = (function () {
+
+        const swizzleYUp = {
+            "NavCube.front": "NavCube.front",
+            "NavCube.back": "NavCube.back",
+            "NavCube.right": "NavCube.right",
+            "NavCube.left": "NavCube.left",
+            "NavCube.top": "NavCube.top",
+            "NavCube.bottom": "NavCube.bottom"
         };
+
+        const swizzleZUp = {
+            "NavCube.front": "NavCube.front",
+            "NavCube.back": "NavCube.back",
+            "NavCube.right": "NavCube.right",
+            "NavCube.left": "NavCube.left",
+            "NavCube.top": "NavCube.top",
+            "NavCube.bottom": "NavCube.bottom"
+        };
+
+        const defaultLabels = {
+            "NavCube.front": "FRONT",
+            "NavCube.back": "BACK",
+            "NavCube.right": "RIGHT",
+            "NavCube.left": "LEFT",
+            "NavCube.top": "TOP",
+            "NavCube.bottom": "BOTTOM"
+        };
+
         return function (key) {
-            var dictionary;
-            if (axisLabels) {
-                if (zUp) {
-                    dictionary = dictionaries["zUp"];
-                } else {
-                    dictionary = dictionaries["yUp"];
-                }
-            } else {
-                dictionary = dictionaries[viewer.language || "en"];
+            const swizzle = zUp ? swizzleZUp : swizzleYUp;
+            const swizzledKey = swizzle ? swizzle[key] : null;
+            if (swizzledKey) {
+                return viewer.localeService.translate(swizzledKey) || defaultLabels[swizzledKey] || swizzledKey;
             }
-            return dictionary ? (dictionary[key] || key) : key;
+            return key;
         };
     })();
 
@@ -259,8 +278,6 @@ function CubeTextureCanvas(viewer, cfg = {}) {
             this._textureCanvas = null;
         }
     };
-
-    this.clear();
 }
 
 export {CubeTextureCanvas};

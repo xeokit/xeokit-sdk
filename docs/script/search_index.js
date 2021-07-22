@@ -204,6 +204,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html",
+    "<span>I18nLocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/I18nLocaleService.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
     "variable/index.html#static-variable-IFCObjectDefaultColors",
     "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
@@ -255,6 +261,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/linesmaterial.js~linesmaterial",
     "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html",
     "<span>LinesMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LinesMaterial.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/localization/localeservice.js~localeservice",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html",
+    "<span>LocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</span>",
     "class"
   ],
   [
@@ -1164,6 +1176,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#approximate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-approximate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#approximate",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#approximate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-approximate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#approximate",
+    "member"
+  ],
+  [
     "src/plugins/anglemeasurementsplugin/anglemeasurement.js~anglemeasurement#corner",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-corner",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement#corner",
@@ -1582,6 +1606,18 @@ window.esdocSearchIndex = [
     "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js",
     "file"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#approximate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-approximate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#approximate",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#approximate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-approximate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#approximate",
+    "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#axisvisible",
@@ -2838,6 +2874,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/xktloaderplugin/parsers/parserv9.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV9.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV9.js",
+    "file"
+  ],
+  [
     "src/plugins/xktloaderplugin/parsers/lib/pako.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/lib/pako.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/lib/pako.js",
@@ -3048,6 +3090,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/viewer.js~viewer#localeservice",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService",
+    "src/viewer/Viewer.js~Viewer#localeService",
+    "member"
+  ],
+  [
     "src/viewer/viewer.js~viewer#log",
     "class/src/viewer/Viewer.js~Viewer.html#instance-method-log",
     "src/viewer/Viewer.js~Viewer#log",
@@ -3081,6 +3129,132 @@ window.esdocSearchIndex = [
     "src/viewer/index.js",
     "file/src/viewer/index.js.html",
     "src/viewer/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js",
+    "file/src/viewer/localization/I18nLocaleService.js.html",
+    "src/viewer/localization/I18nLocaleService.js",
+    "file"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#clearmessages",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-clearMessages",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#clearMessages",
+    "method"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#constructor",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-constructor-constructor",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#loadmessages",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-loadMessages",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#loadMessages",
+    "method"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locale",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-set-locale",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locale",
+    "member"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locale",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-get-locale",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locale",
+    "member"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locales",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-get-locales",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locales",
+    "member"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#messages",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-set-messages",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#messages",
+    "member"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#translate",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-translate",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#translate",
+    "method"
+  ],
+  [
+    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#translateplurals",
+    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-translatePlurals",
+    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#translatePlurals",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js",
+    "file/src/viewer/localization/LocaleService.js.html",
+    "src/viewer/localization/LocaleService.js",
+    "file"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#constructor",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-constructor-constructor",
+    "src/viewer/localization/LocaleService.js~LocaleService#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#fire",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-fire",
+    "src/viewer/localization/LocaleService.js~LocaleService#fire",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#locale",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-set-locale",
+    "src/viewer/localization/LocaleService.js~LocaleService#locale",
+    "member"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#locale",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locale",
+    "src/viewer/localization/LocaleService.js~LocaleService#locale",
+    "member"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#locales",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales",
+    "src/viewer/localization/LocaleService.js~LocaleService#locales",
+    "member"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#off",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-off",
+    "src/viewer/localization/LocaleService.js~LocaleService#off",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#on",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-on",
+    "src/viewer/localization/LocaleService.js~LocaleService#on",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#translate",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate",
+    "src/viewer/localization/LocaleService.js~LocaleService#translate",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#translateplurals",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals",
+    "src/viewer/localization/LocaleService.js~LocaleService#translatePlurals",
+    "method"
+  ],
+  [
+    "src/viewer/localization/index.js",
+    "file/src/viewer/localization/index.js.html",
+    "src/viewer/localization/index.js",
     "file"
   ],
   [
@@ -4962,6 +5136,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingflatcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingnormalsrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js",
@@ -4983,6 +5163,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpickmeshrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpicknormalsflatrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js",
     "file"
   ],
   [
@@ -5046,6 +5232,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingflatcolorrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingflatnormalsrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingnormalsrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js",
@@ -5067,6 +5265,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpickmeshrenderer.js",
     "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js.html",
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpicknormalsflatrenderer.js",
+    "file/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js",
     "file"
   ],
   [
@@ -8340,6 +8544,30 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#filterintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-filterIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#filterIntensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#filterintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-filterIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#filterIntensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-maxIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxIntensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-maxIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxIntensity",
+    "member"
+  ],
+  [
     "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxperspectivepointsize",
     "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-maxPerspectivePointSize",
     "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxPerspectivePointSize",
@@ -8349,6 +8577,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#maxperspectivepointsize",
     "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-maxPerspectivePointSize",
     "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#maxPerspectivePointSize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#minintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-set-minIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#minIntensity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/materials/pointsmaterial.js~pointsmaterial#minintensity",
+    "class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html#instance-get-minIntensity",
+    "src/viewer/scene/materials/PointsMaterial.js~PointsMaterial#minIntensity",
     "member"
   ],
   [
@@ -10740,6 +10980,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#picksurfaceprecisionenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-pickSurfacePrecisionEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#pickSurfacePrecisionEnabled",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#pointsmaterial",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-pointsMaterial",
     "src/viewer/scene/scene/Scene.js~Scene#pointsMaterial",
@@ -11187,6 +11433,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/pickresult.js~pickresult#origin",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-get-origin",
     "src/viewer/scene/webgl/PickResult.js~PickResult#origin",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/pickresult.js~pickresult#picksurfaceprecision",
+    "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-pickSurfacePrecision",
+    "src/viewer/scene/webgl/PickResult.js~PickResult#pickSurfacePrecision",
     "member"
   ],
   [

@@ -2,7 +2,7 @@ import {Scene} from "./scene/scene/Scene.js";
 import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
-import {I18nLocaleService} from "./localization/I1n8LocaleService.js";
+import {I18nLocaleService} from "./localization/I18nLocaleService.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -56,14 +56,22 @@ class Viewer {
         /**
          * The Viewer's current language setting.
          * @property language
+         * @deprecated
          * @type {String}
          */
         this.language = "en";
 
         /**
          * The viewer's locale service.
+         *
+         * This is configured via the Viewer's constructor.
+         *
+         * By default, this service will be an instance of {@link I18nLocaleService}, which will just return
+         * null translations for all given strings and phrases.
+         *
          * @property localeService
          * @type {LocaleService}
+         * @since 2.0
          */
         this.localeService = cfg.localeService || new I18nLocaleService();
 

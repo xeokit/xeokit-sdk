@@ -480,6 +480,11 @@ class NavCubePlugin extends Plugin {
             })();
         }
 
+        this._onUpdated = viewer.localeService.on("updated", () => {
+            this._cubeTextureCanvas.clear();
+            this._repaint();
+        });
+
         this.setVisible(cfg.visible);
         this.setCameraFitFOV(cfg.cameraFitFOV);
         this.setCameraFly(cfg.cameraFly);
@@ -651,6 +656,7 @@ class NavCubePlugin extends Plugin {
 
         if (this._navCubeCanvas) {
 
+            this.viewer.localeService.off(this._onUpdated);
             this.viewer.camera.off(this._onCameraMatrix);
             this.viewer.camera.off(this._onCameraWorldAxis);
             this.viewer.camera.perspective.off(this._onCameraFOV);
