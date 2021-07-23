@@ -66,6 +66,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -232,7 +234,7 @@ const xktLoader = new XKTLoaderPlugin(viewer);
 
 const model = xktLoader.load({
     id: &quot;myModel&quot;,
-    src: &quot;./models/xkt/Duplex.xkt&quot;,
+    src: &quot;./models/xkt/Duplex.ifc.xkt&quot;,
     edges: true
 });</code>
 </code></pre>
@@ -1168,7 +1170,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber650">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber655">source</a></span></span>
     </span>
   </h3>
 
@@ -1213,7 +1215,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber599">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber604">source</a></span></span>
     </span>
   </h3>
 
@@ -1272,7 +1274,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber575">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber580">source</a></span></span>
     </span>
   </h3>
 
@@ -1330,7 +1332,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber621">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber626">source</a></span></span>
     </span>
   </h3>
 
@@ -1388,7 +1390,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber553">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber558">source</a></span></span>
     </span>
   </h3>
 
@@ -1447,7 +1449,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber641">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber646">source</a></span></span>
     </span>
   </h3>
 
@@ -1505,7 +1507,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber525">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber530">source</a></span></span>
     </span>
   </h3>
 
@@ -1562,7 +1564,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -1627,7 +1629,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber587">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber592">source</a></span></span>
     </span>
   </h3>
 
@@ -1690,7 +1692,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber564">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber569">source</a></span></span>
     </span>
   </h3>
 
@@ -1752,7 +1754,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber610">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber615">source</a></span></span>
     </span>
   </h3>
 
@@ -1814,7 +1816,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber541">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber546">source</a></span></span>
     </span>
   </h3>
 
@@ -1877,7 +1879,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber631">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber636">source</a></span></span>
     </span>
   </h3>
 
@@ -1939,7 +1941,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber511">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber516">source</a></span></span>
     </span>
   </h3>
 

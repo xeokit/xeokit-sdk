@@ -2,6 +2,7 @@ import {Scene} from "./scene/scene/Scene.js";
 import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
+import {I18nLocaleService} from "./localization/I18nLocaleService.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -48,15 +49,31 @@ class Viewer {
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
+     * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {
 
         /**
          * The Viewer's current language setting.
          * @property language
+         * @deprecated
          * @type {String}
          */
         this.language = "en";
+
+        /**
+         * The viewer's locale service.
+         *
+         * This is configured via the Viewer's constructor.
+         *
+         * By default, this service will be an instance of {@link I18nLocaleService}, which will just return
+         * null translations for all given strings and phrases.
+         *
+         * @property localeService
+         * @type {LocaleService}
+         * @since 2.0
+         */
+        this.localeService = cfg.localeService || new I18nLocaleService();
 
         /**
          * The Viewer's {@link Scene}.

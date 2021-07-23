@@ -66,6 +66,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -266,6 +268,7 @@ class AngleMeasurement extends Component {
             this._needUpdate(0); // No lag
         });
 
+        this.approximate = cfg.approximate;
         this.visible = cfg.visible;
 
         this.originVisible = cfg.originVisible;
@@ -354,12 +357,6 @@ class AngleMeasurement extends Component {
             var canvasHeight = aabb[3];
             var j = 0;
 
-            const metrics = this.plugin.viewer.scene.metrics;
-            const scale = metrics.scale;
-            const units = metrics.units;
-            const unitInfo = metrics.unitsInfo[units];
-            const unitAbbrev = unitInfo.abbrev;
-
             for (var i = 0, len = pp.length; i &lt; len; i += 4) {
                 cp[j] = left + Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
                 cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
@@ -375,7 +372,6 @@ class AngleMeasurement extends Component {
 
             this._angleLabel.setPosBetweenWires(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5]);
 
-
             math.subVec3(this._originWorld, this._cornerWorld, originVec);
             math.subVec3(this._targetWorld, this._cornerWorld, targetVec);
 
@@ -384,11 +380,14 @@ class AngleMeasurement extends Component {
                 (targetVec[0] !== 0 || targetVec[1] !== 0 || targetVec[2] !== 0);
 
             if (validVecs) {
+
+                const tilde = this._approximate ? &quot; ~ &quot; : &quot; = &quot;;
+
                 math.normalizeVec3(originVec);
                 math.normalizeVec3(targetVec);
-                var angle = Math.abs(math.angleVec3(originVec, targetVec));
+                const angle = Math.abs(math.angleVec3(originVec, targetVec));
                 this._angle = angle / math.DEGTORAD;
-                this._angleLabel.setText(&quot;&quot; + this._angle.toFixed(2) + &quot;&#xB0;&quot;);
+                this._angleLabel.setText(tilde + this._angle.toFixed(2) + &quot;&#xB0;&quot;);
             } else {
                 this._angleLabel.setText(&quot;&quot;);
             }
@@ -406,6 +405,34 @@ class AngleMeasurement extends Component {
 
             this._cpDirty = false;
         }
+    }
+
+    /**
+     * Sets whether this AngleMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    set approximate(approximate) {
+        approximate = approximate !== false;
+        if (this._approximate === approximate) {
+            return;
+        }
+        this._approximate = approximate;
+        this._cpDirty = true;
+        this._needUpdate(0);
+    }
+
+    /**
+     * Gets whether this AngleMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    get approximate() {
+        return this._approximate;
     }
 
     /**

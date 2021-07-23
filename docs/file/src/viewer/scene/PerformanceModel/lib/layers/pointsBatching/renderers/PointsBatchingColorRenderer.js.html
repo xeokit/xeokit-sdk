@@ -66,6 +66,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -180,7 +182,7 @@ class PointsBatchingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
@@ -220,17 +222,19 @@ class PointsBatchingColorRenderer {
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex &lt; numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                if (active) {
-                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                    } else {
-                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                if (sectionPlaneUniforms) {
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (rtcCenter) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }
@@ -241,6 +245,10 @@ class PointsBatchingColorRenderer {
 
         if (this._aColor) {
             this._aColor.bindArrayBuffer(state.colorsBuf);
+        }
+
+        if (pointsMaterial.filterIntensity) {
+            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
         }
 
         if (this._aFlags) {
@@ -265,6 +273,7 @@ class PointsBatchingColorRenderer {
     _allocate() {
 
         const scene = this._scene;
+        const pointsMaterial = scene.pointsMaterial._state;
         const gl = scene.canvas.gl;
 
         this._program = new Program(gl, this._buildShader(scene));
@@ -300,6 +309,10 @@ class PointsBatchingColorRenderer {
 
         this._uPointSize = program.getLocation(&quot;pointSize&quot;);
         this._uNearPlaneHeight = program.getLocation(&quot;nearPlaneHeight&quot;);
+
+        if (pointsMaterial.filterIntensity) {
+            this._uIntensityRange = program.getLocation(&quot;intensityRange&quot;);
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation(&quot;logDepthBufFC&quot;);
@@ -366,6 +379,10 @@ class PointsBatchingColorRenderer {
             src.push(&quot;uniform float nearPlaneHeight;&quot;);
         }
 
+        if (pointsMaterial.filterIntensity) {
+            src.push(&quot;uniform vec2 intensityRange;&quot;);
+        }
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push(&quot;uniform float logDepthBufFC;&quot;);
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
@@ -389,13 +406,20 @@ class PointsBatchingColorRenderer {
 
         src.push(&quot;} else {&quot;);
 
+        if (pointsMaterial.filterIntensity) {
+            src.push(&quot;float intensity = float(color.a) / 255.0;&quot;)
+            src.push(&quot;if (intensity &lt; intensityRange[0] || intensity &gt; intensityRange[1]) {&quot;);
+            src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex
+            src.push(&quot;} else {&quot;);
+        }
+
         src.push(&quot;vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); &quot;);
         if (scene.entityOffsetsEnabled) {
             src.push(&quot;worldPosition.xyz = worldPosition.xyz + offset;&quot;);
         }
         src.push(&quot;vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
 
-        src.push(&quot;vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);&quot;);
+        src.push(&quot;vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);&quot;);
 
         if (clipping) {
             src.push(&quot;vWorldPosition = worldPosition;&quot;);
@@ -419,6 +443,9 @@ class PointsBatchingColorRenderer {
             src.push(&quot;gl_PointSize = pointSize;&quot;);
         }
         src.push(&quot;}&quot;);
+        if (pointsMaterial.filterIntensity) {
+            src.push(&quot;}&quot;);
+        }
         src.push(&quot;}&quot;);
         return src;
     }

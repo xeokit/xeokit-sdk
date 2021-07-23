@@ -66,6 +66,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -161,6 +163,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {TrianglesBatchingColorRenderer} from &quot;./renderers/TrianglesBatchingColorRenderer.js&quot;;
+import {TrianglesBatchingFlatColorRenderer} from &quot;./renderers/TrianglesBatchingFlatColorRenderer.js&quot;;
 import {TrianglesBatchingSilhouetteRenderer} from &quot;./renderers/TrianglesBatchingSilhouetteRenderer.js&quot;;
 import {TrianglesBatchingEdgesRenderer} from &quot;./renderers/TrianglesBatchingEdgesRenderer.js&quot;;
 import {TrianglesBatchingEdgesColorRenderer} from &quot;./renderers/TrianglesBatchingEdgesColorRenderer.js&quot;;
@@ -172,6 +175,7 @@ import {TrianglesBatchingDepthRenderer} from &quot;./renderers/TrianglesBatching
 import {TrianglesBatchingNormalsRenderer} from &quot;./renderers/TrianglesBatchingNormalsRenderer.js&quot;;
 import {TrianglesBatchingShadowRenderer} from &quot;./renderers/TrianglesBatchingShadowRenderer.js&quot;;
 import {TrianglesBatchingColorQualityRenderer} from &quot;./renderers/TrianglesBatchingColorQualityRenderer.js&quot;;
+import {TrianglesBatchingPickNormalsFlatRenderer} from &quot;./renderers/TrianglesBatchingPickNormalsFlatRenderer.js&quot;;
 
 /**
  * @private
@@ -190,6 +194,14 @@ class TrianglesBatchingRenderers {
         if (this._colorRendererWithSAO &amp;&amp; (!this._colorRendererWithSAO.getValid())) {
             this._colorRendererWithSAO.destroy();
             this._colorRendererWithSAO = null;
+        }
+        if (this._flatColorRenderer &amp;&amp; (!this._flatColorRenderer.getValid())) {
+            this._flatColorRenderer.destroy();
+            this._flatColorRenderer = null;
+        }
+        if (this._flatColorRendererWithSAO &amp;&amp; (!this._flatColorRendererWithSAO.getValid())) {
+            this._flatColorRendererWithSAO.destroy();
+            this._flatColorRendererWithSAO = null;
         }
         if (this._colorQualityRenderer &amp;&amp; (!this._colorQualityRenderer.getValid())) {
             this._colorQualityRenderer.destroy();
@@ -231,6 +243,10 @@ class TrianglesBatchingRenderers {
             this._pickNormalsRenderer.destroy();
             this._pickNormalsRenderer = null;
         }
+        if (this._pickNormalsFlatRenderer &amp;&amp; this._pickNormalsFlatRenderer.getValid() === false) {
+            this._pickNormalsFlatRenderer.destroy();
+            this._pickNormalsFlatRenderer = null;
+        }
         if (this._occlusionRenderer &amp;&amp; this._occlusionRenderer.getValid() === false) {
             this._occlusionRenderer.destroy();
             this._occlusionRenderer = null;
@@ -253,6 +269,20 @@ class TrianglesBatchingRenderers {
             this._colorRendererWithSAO = new TrianglesBatchingColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
+    }
+
+    get flatColorRenderer() {
+        if (!this._flatColorRenderer) {
+            this._flatColorRenderer = new TrianglesBatchingFlatColorRenderer(this._scene, false);
+        }
+        return this._flatColorRenderer;
+    }
+
+    get flatColorRendererWithSAO() {
+        if (!this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO = new TrianglesBatchingFlatColorRenderer(this._scene, true);
+        }
+        return this._flatColorRendererWithSAO;
     }
 
     get colorQualityRenderer() {
@@ -318,6 +348,13 @@ class TrianglesBatchingRenderers {
         return this._pickNormalsRenderer;
     }
 
+    get pickNormalsFlatRenderer() {
+        if (!this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer = new TrianglesBatchingPickNormalsFlatRenderer(this._scene);
+        }
+        return this._pickNormalsFlatRenderer;
+    }
+
     get pickDepthRenderer() {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new TrianglesBatchingPickDepthRenderer(this._scene);
@@ -345,6 +382,12 @@ class TrianglesBatchingRenderers {
         }
         if (this._colorRendererWithSAO) {
             this._colorRendererWithSAO.destroy();
+        }
+        if (this._flatColorRenderer) {
+            this._flatColorRenderer.destroy();
+        }
+        if (this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO.destroy();
         }
         if (this._colorQualityRenderer) {
             this._colorQualityRenderer.destroy();
@@ -375,6 +418,9 @@ class TrianglesBatchingRenderers {
         }
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();
+        }
+        if (this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer.destroy();
         }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.destroy();

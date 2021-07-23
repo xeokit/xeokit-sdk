@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.0.0-alpha.7",
+  "version": "2.0.0-alpha.8",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
@@ -50,9 +50,9 @@
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.16.0",
     "http-server": "^0.12.3",
-    "rollup-plugin-terser": "^7.0.2",
     "rollup": "^2.46.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "files": [
     "/dist"
