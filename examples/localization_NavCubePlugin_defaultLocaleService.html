@@ -31,7 +31,7 @@
     <h2>Navigation helper with localized labels</h2>
     <p>NavCubePlugin creates a navigational helper that allows us easily jump the camera to axis-aligned views of our
         scene. </p>
-    <p>In this example, we're using our Viewer's default I18nLocaleService to configure locale translations for our
+    <p>In this example, we're using our Viewer's default LocaleService to configure locale translations for our
         NavCube's labels, which enables us to dynamically switch the NavCube between different languages.</p>
     <h3>Select a Locale</h3>
     <p>Select a locale and watch the NavCube labels change:</p>
@@ -43,8 +43,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html"
-               target="_other">I18nLocaleService</a>
+            <a href="../docs/class/src/viewer/localization/LocaleService.js~LocaleService.html"
+               target="_other">LocaleService</a>
         </li>
         <li>
             <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
@@ -68,7 +68,7 @@
 
     import {
         Viewer,
-        I18nLocaleService,
+        LocaleService,
         XKTLoaderPlugin,
         NavCubePlugin
     } from "../dist/xeokit-sdk.es.js";
@@ -79,7 +79,7 @@
         canvasId: "myCanvas"
     });
 
-    // Load some translations into the Viewer's default I18nLocaleService
+    // Load some translations into the Viewer's default LocaleService
 
     viewer.localeService.loadMessages({
         "en": { // English
@@ -124,7 +124,7 @@
         }
     });
 
-    // We can now dynamically switch the I18nLocaleService between locales at any time, eg:
+    // We can now dynamically switch the LocaleService between locales at any time, eg:
 
     viewer.localeService.locale = "jp";
 
