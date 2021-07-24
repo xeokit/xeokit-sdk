@@ -1,23 +1,24 @@
 import {Map} from "./../scene/utils/Map.js";
 
 /**
- * @desc An in8n-based localization service for a {@link Viewer}.
+ * @desc Localization service for a {@link Viewer}.
  *
- * * A ````LocaleService```` is a container of string translations for various locales.
- * * A {@link Viewer} has its own default ````LocaleService```` at {@link Viewer#localeService}.
- * * We can replace that with our own ````LocaleService```` (or any custom {@link LocaleService} subclass), via the Viewer's constructor.
- * * Viewer plugins that show text will attempt to fetch translations for the currently active locale from the ````LocaleService````.
- * * Whenever we switch the ````LocaleService```` to a different locale, plugins will automatically re-fetch their translations for that locale.
+ * * A LocaleService is a container of string translations for various locales.
+ * * A {@link Viewer} has its own default LocaleService at {@link Viewer#localeService}.
+ * * We can replace that with our own LocaleService, or a custom subclass, via the Viewer's constructor.
+ * * Viewer plugins that need localized translations will attempt to them for the currently active locale from the LocaleService.
+ * * Whenever we switch the LocaleService to a different locale, plugins will automatically refresh their translations for that locale.
  *
  * ## Usage
  *
  * In the example below, we'll create a {@link Viewer} that uses an {@link XKTLoaderPlugin} to load a BIM model, and a
  * {@link NavCubePlugin}, which shows a camera navigation cube in the corner of the canvas.
  *
- * We'll also configure our Viewer with our own ````LocaleService```` instance, configured with English, Māori and French
- * translations for our NavCubePlugin. Remember that we could also just use the Viewer's default ````LocaleService````,
- * but this example also shows how we might configure the Viewer our own custom {@link LocaleService} subclass, if we needed to
- * do that.
+ * We'll also configure our Viewer with our own LocaleService instance, configured with English, Māori and French
+ * translations for our NavCubePlugin. 
+ * 
+ * We could instead have just used the Viewer's default LocaleService, but this example demonstrates how we might 
+ * configure the Viewer our own custom LocaleService subclass.
  *
  * The translations fetched by our NavCubePlugin will be:
  *
@@ -32,10 +33,10 @@ import {Map} from "./../scene/utils/Map.js";
  * These are paths that resolve to our translations for the currently active locale, and are hard-coded within
  * the NavCubePlugin.
  *
- * For example, if  the ````LocaleService````'s locale is set to "fr", then the path "NavCube.back" will drill down
+ * For example, if  the LocaleService's locale is set to "fr", then the path "NavCube.back" will drill down
  * into ````messages->fr->NavCube->front```` and fetch "Arrière".
  *
- * If we didn't provide that particular translation in our ````LocaleService````, or any translations for that locale,
+ * If we didn't provide that particular translation in our LocaleService, or any translations for that locale,
  * then the NavCubePlugin will just fall back on its own default hard-coded translation, which in this case is "BACK".
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#localization_NavCubePlugin)]
@@ -131,7 +132,7 @@ import {Map} from "./../scene/utils/Map.js";
  * viewer.localeService.clearMessages();
  * ````
  *
- * We can get an "updated" event from the ````LocaleService```` whenever we switch locales or load messages, which is useful
+ * We can get an "updated" event from the LocaleService whenever we switch locales or load messages, which is useful
  * for triggering UI elements to refresh themselves with updated translations. Internally, our {@link NavCubePlugin}
  * subscribes to this event, fetching new strings for itself via {@link LocaleService#translate} each time the
  * event is fired.
@@ -146,7 +147,7 @@ import {Map} from "./../scene/utils/Map.js";
 class LocaleService {
 
     /**
-     * Constructs an I18LocaleService.
+     * Constructs a LocaleService.
      *
      * @param {*} [params={}]
      * @param {JSON} [params.messages]
@@ -388,7 +389,7 @@ class LocaleService {
     }
 
     /**
-     * Subscribes to an event on this LocalService.
+     * Subscribes to an event on this LocaleService.
      *
      * @param {String} event The event
      * @param {Function} callback Callback fired on the event
@@ -425,7 +426,7 @@ class LocaleService {
     }
 
     /**
-     * Cancels an event subscription that was previously made with {@link LocalService#on}.
+     * Cancels an event subscription that was previously made with {@link LocaleService#on}.
      *
      * @param {String} subId Subscription ID
      */
