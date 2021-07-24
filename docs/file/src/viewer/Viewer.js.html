@@ -66,8 +66,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -166,7 +165,7 @@
 import {CameraFlightAnimation} from &quot;./scene/camera/CameraFlightAnimation.js&quot;;
 import {CameraControl} from &quot;./scene/CameraControl/CameraControl.js&quot;;
 import {MetaScene} from &quot;./metadata/MetaScene.js&quot;;
-import {I18nLocaleService} from &quot;./localization/I18nLocaleService.js&quot;;
+import {LocaleService} from &quot;./localization/LocaleService.js&quot;;
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -230,14 +229,14 @@ class Viewer {
          *
          * This is configured via the Viewer&apos;s constructor.
          *
-         * By default, this service will be an instance of {@link I18nLocaleService}, which will just return
+         * By default, this service will be an instance of {@link LocaleService}, which will just return
          * null translations for all given strings and phrases.
          *
          * @property localeService
          * @type {LocaleService}
          * @since 2.0
          */
-        this.localeService = cfg.localeService || new I18nLocaleService();
+        this.localeService = cfg.localeService || new LocaleService();
 
         /**
          * The Viewer&apos;s {@link Scene}.

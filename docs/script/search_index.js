@@ -204,12 +204,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html",
-    "<span>I18nLocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/I18nLocaleService.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
     "variable/index.html#static-variable-IFCObjectDefaultColors",
     "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
@@ -3132,70 +3126,16 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/localization/i18nlocaleservice.js",
-    "file/src/viewer/localization/I18nLocaleService.js.html",
-    "src/viewer/localization/I18nLocaleService.js",
-    "file"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#clearmessages",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-clearMessages",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#clearMessages",
-    "method"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#constructor",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-constructor-constructor",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#loadmessages",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-loadMessages",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#loadMessages",
-    "method"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locale",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-set-locale",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locale",
-    "member"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locale",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-get-locale",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locale",
-    "member"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#locales",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-get-locales",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#locales",
-    "member"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#messages",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-set-messages",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#messages",
-    "member"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#translate",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-translate",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#translate",
-    "method"
-  ],
-  [
-    "src/viewer/localization/i18nlocaleservice.js~i18nlocaleservice#translateplurals",
-    "class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html#instance-method-translatePlurals",
-    "src/viewer/localization/I18nLocaleService.js~I18nLocaleService#translatePlurals",
-    "method"
-  ],
-  [
     "src/viewer/localization/localeservice.js",
     "file/src/viewer/localization/LocaleService.js.html",
     "src/viewer/localization/LocaleService.js",
     "file"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#clearmessages",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-clearMessages",
+    "src/viewer/localization/LocaleService.js~LocaleService#clearMessages",
+    "method"
   ],
   [
     "src/viewer/localization/localeservice.js~localeservice#constructor",
@@ -3207,6 +3147,12 @@ window.esdocSearchIndex = [
     "src/viewer/localization/localeservice.js~localeservice#fire",
     "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-fire",
     "src/viewer/localization/LocaleService.js~LocaleService#fire",
+    "method"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#loadmessages",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-loadMessages",
+    "src/viewer/localization/LocaleService.js~LocaleService#loadMessages",
     "method"
   ],
   [
@@ -3225,6 +3171,12 @@ window.esdocSearchIndex = [
     "src/viewer/localization/localeservice.js~localeservice#locales",
     "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales",
     "src/viewer/localization/LocaleService.js~LocaleService#locales",
+    "member"
+  ],
+  [
+    "src/viewer/localization/localeservice.js~localeservice#messages",
+    "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-set-messages",
+    "src/viewer/localization/LocaleService.js~LocaleService#messages",
     "member"
   ],
   [
@@ -3250,12 +3202,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals",
     "src/viewer/localization/LocaleService.js~LocaleService#translatePlurals",
     "method"
-  ],
-  [
-    "src/viewer/localization/index.js",
-    "file/src/viewer/localization/index.js.html",
-    "src/viewer/localization/index.js",
-    "file"
   ],
   [
     "src/viewer/metadata/ifcobjectdefaultcolors.js",

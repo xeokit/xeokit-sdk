@@ -66,8 +66,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lib-culling">plugins/lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
@@ -162,13 +161,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LocaleService} from &apos;<span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber14">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LocaleService} from &apos;<span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber144">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0</span>
-  <span data-ice="source">| <span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber14">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber144">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -179,7 +178,7 @@
   
   
   
-  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/viewer/localization/I18nLocaleService.js~I18nLocaleService.html">I18nLocaleService</a></span></div></div>
+  
   
   
   
@@ -188,10 +187,125 @@
 
   
   
-  <div class="description" data-ice="description"><p>Defines the abstract base class for a localization service that we can configure on a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
-<p>A concrete sub-class of LocaleService can optionally be supplied to the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> constructor, to configure a central
-service through which the Viewer and its <span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>s can obtain locale string translations.</p>
-<p>The LocalService will then be available at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService">Viewer#localeService</a></span>.</p>
+  <div class="description" data-ice="description"><p>An in8n-based localization service for a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<ul>
+<li>A <code>LocaleService</code> is a container of string translations for various locales.</li>
+<li>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has its own default <code>LocaleService</code> at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService">Viewer#localeService</a></span>.</li>
+<li>We can replace that with our own <code>LocaleService</code> (or any custom <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span> subclass), via the Viewer&apos;s constructor.</li>
+<li>Viewer plugins that show text will attempt to fetch translations for the currently active locale from the <code>LocaleService</code>.</li>
+<li>Whenever we switch the <code>LocaleService</code> to a different locale, plugins will automatically re-fetch their translations for that locale.</li>
+</ul>
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> that uses an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a BIM model, and a
+<span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span>, which shows a camera navigation cube in the corner of the canvas.</p>
+<p>We&apos;ll also configure our Viewer with our own <code>LocaleService</code> instance, configured with English, M&#x101;ori and French
+translations for our NavCubePlugin. Remember that we could also just use the Viewer&apos;s default <code>LocaleService</code>,
+but this example also shows how we might configure the Viewer our own custom <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span> subclass, if we needed to
+do that.</p>
+<p>The translations fetched by our NavCubePlugin will be:</p>
+<ul>
+<li>&quot;NavCube.front&quot;</li>
+<li>&quot;NavCube.back&quot;</li>
+<li>&quot;NavCube.top&quot;</li>
+<li>&quot;NavCube.bottom&quot;</li>
+<li>&quot;NavCube.left&quot;</li>
+<li>&quot;NavCube.right&quot;</li>
+</ul>
+<p><br>
+These are paths that resolve to our translations for the currently active locale, and are hard-coded within
+the NavCubePlugin.</p>
+<p>For example, if  the <code>LocaleService</code>&apos;s locale is set to &quot;fr&quot;, then the path &quot;NavCube.back&quot; will drill down
+into <code>messages-&gt;fr-&gt;NavCube-&gt;front</code> and fetch &quot;Arri&#xE8;re&quot;.</p>
+<p>If we didn&apos;t provide that particular translation in our <code>LocaleService</code>, or any translations for that locale,
+then the NavCubePlugin will just fall back on its own default hard-coded translation, which in this case is &quot;BACK&quot;.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#localization_NavCubePlugin">Run example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, LocaleService, NavCubePlugin, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
+
+const viewer = new Viewer({
+
+     canvasId: &quot;myCanvas&quot;,
+
+     localeService: new LocaleService({
+         messages: {
+             &quot;en&quot;: { // English
+                 &quot;NavCube&quot;: {
+                     &quot;front&quot;: &quot;Front&quot;,
+                     &quot;back&quot;: &quot;Back&quot;,
+                     &quot;top&quot;: &quot;Top&quot;,
+                     &quot;bottom&quot;: &quot;Bottom&quot;,
+                     &quot;left&quot;: &quot;Left&quot;,
+                     &quot;right&quot;: &quot;Right&quot;
+                 }
+             },
+             &quot;mi&quot;: { // M&#x101;ori
+                 &quot;NavCube&quot;: {
+                     &quot;front&quot;: &quot;Mua&quot;,
+                     &quot;back&quot;: &quot;Tuar&#x101;&quot;,
+                     &quot;top&quot;: &quot;Runga&quot;,
+                     &quot;bottom&quot;: &quot;Raro&quot;,
+                     &quot;left&quot;: &quot;Mau&#x12B;&quot;,
+                     &quot;right&quot;: &quot;Tika&quot;
+                 }
+             },
+             &quot;fr&quot;: { // Francais
+                 &quot;NavCube&quot;: {
+                     &quot;front&quot;: &quot;Avant&quot;,
+                     &quot;back&quot;: &quot;Arri&#xE8;re&quot;,
+                     &quot;top&quot;: &quot;Sup&#xE9;rieur&quot;,
+                     &quot;bottom&quot;: &quot;Inf&#xE9;rieur&quot;,
+                     &quot;left&quot;: &quot;Gauche&quot;,
+                     &quot;right&quot;: &quot;Droit&quot;
+                 }
+             }
+         },
+         locale: &quot;en&quot;
+     })
+ });
+
+viewer.camera.eye = [-3.93, 2.85, 27.01];
+viewer.camera.look = [4.40, 3.72, 8.89];
+viewer.camera.up = [-0.01, 0.99, 0.03];
+
+const navCubePlugin = new NavCubePlugin(viewer, {
+     canvasID: &quot;myNavCubeCanvas&quot;
+ });
+
+const xktLoader = new XKTLoaderPlugin(viewer);
+
+const model = xktLoader.load({
+    id: &quot;myModel&quot;,
+    src: &quot;./models/xkt/Duplex.ifc.xkt&quot;,
+    edges: true
+});</code>
+</code></pre>
+<p>We can dynamically switch our Viewer to a different locale at any time, which will update the text on the
+faces of our NavCube:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.locale = &quot;mi&quot;; // Switch to M&#x101;ori</code>
+</code></pre>
+<p>We can load new translations at any time:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.loadMessages({
+    &quot;jp&quot;: { // Japanese
+        &quot;NavCube&quot;: {
+            &quot;front&quot;: &quot;&#x524D;&#x90E8;&quot;,
+            &quot;back&quot;: &quot;&#x88CF;&quot;,
+            &quot;top&quot;: &quot;&#x4E0A;&quot;,
+            &quot;bottom&quot;: &quot;&#x5E95;&quot;,
+            &quot;left&quot;: &quot;&#x5DE6;&quot;,
+            &quot;right&quot;: &quot;&#x53F3;&quot;
+        }
+    }
+});</code>
+</code></pre>
+<p>And we can clear the translations if needed:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.clearMessages();</code>
+</code></pre>
+<p>We can get an &quot;updated&quot; event from the <code>LocaleService</code> whenever we switch locales or load messages, which is useful
+for triggering UI elements to refresh themselves with updated translations. Internally, our <span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span>
+subscribes to this event, fetching new strings for itself via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span> each time the
+event is fired.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.on(&quot;updated&quot;, () =&gt; {
+    console.log( viewer.localeService.translate(&quot;NavCube.left&quot;) );
+});</code>
+</code></pre>
 </div>
   
 
@@ -224,13 +338,13 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Constructs a new LocalService.</p>
+        <div data-ice="description"><p>Constructs an I18LocaleService.</p>
 </div>
       </div>
     </td>
@@ -289,7 +403,7 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locale">locale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locale">locale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -318,13 +432,42 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">locales</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>: <span><span>*</span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">locales</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
         <div data-ice="description"><p>Gets the list of available locales.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-set-messages">messages</a></span></span><span class="code" data-ice="signature">(messages: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Replaces the current set of locale translations.</p>
 </div>
       </div>
     </td>
@@ -354,6 +497,35 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-clearMessages">clearMessages</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Clears all locale translations.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-fire">fire</a></span></span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, forget: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
@@ -361,6 +533,35 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
         
         
         <div data-ice="description"><p>Fires an event on this LocaleService.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-loadMessages">loadMessages</a></span></span><span class="code" data-ice="signature">(messages: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Loads a new set of locale translations, adding them to the existing translations.</p>
 </div>
       </div>
     </td>
@@ -470,7 +671,7 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">translatePlurals</a></span></span><span class="code" data-ice="signature">(phrase: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, count: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, args: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">translatePlurals</a></span></span><span class="code" data-ice="signature">(msg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, count: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, args: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span></span>
         </p>
       </div>
       <div>
@@ -503,23 +704,52 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(params: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Constructs a new LocalService.</p>
+  <div data-ice="description"><p>Constructs an I18LocaleService.</p>
 </div>
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">params</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: {}</li></ul></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.messages</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON">JSON</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.locale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -554,7 +784,7 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber50">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber280">source</a></span></span>
     </span>
   </h3>
 
@@ -562,10 +792,12 @@ service through which the Viewer and its <span><a href="class/src/viewer/Plugin.
   
   
   <div data-ice="description"><p>Sets the current locale.</p>
-<p>The given locale must be in the list of available locales returned by <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">LocaleService#locales</a></span>.</p>
-<p>When the local has been set and translations are loaded, the LocaleService will fire a &quot;updated&quot; event.</p>
-<p>At that point, it&apos;s possible to get the translations for the locale via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span>
-and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">LocaleService#translatePlurals</a></span>.</p>
+<ul>
+<li>Fires an &quot;updated&quot; event when done.</li>
+<li>The given locale must be in the list of available locales returned by <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">LocaleService#locales</a></span>.</li>
+<li>Automatically refreshes any plugins that depend on the translations.</li>
+<li>We can then get translations for the locale via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span> and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">LocaleService#translatePlurals</a></span>.</li>
+</ul>
 </div>
 
   
@@ -598,11 +830,11 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
     
     
     
-    <span class="code" data-ice="name">locale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">locale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 
@@ -622,8 +854,8 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The current locale code.</p>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current locale.</p>
 </td>
         </tr>
       </tbody>
@@ -655,11 +887,11 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
     
     
     
-    <span class="code" data-ice="name">locales</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>: <span><span>*</span><span>[]</span></span></span>
+    <span class="code" data-ice="name">locales</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -667,6 +899,7 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
   
   
   <div data-ice="description"><p>Gets the list of available locales.</p>
+<p>These are derived from the currently configured set of translations.</p>
 </div>
 
   
@@ -680,7 +913,7 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The list of available locale codes.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The list of available locales.</p>
 </td>
         </tr>
       </tbody>
@@ -704,9 +937,134 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-messages">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">messages</span><span class="code" data-ice="signature">(messages: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber207">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Replaces the current set of locale translations.</p>
+<ul>
+<li>Fires an &quot;updated&quot; event when done.</li>
+<li>Automatically refreshes any plugins that depend on the translations.</li>
+<li>Does not change the current locale.</li>
+</ul>
+<h2 id="usage">Usage</h2><pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.setMessages({
+    messages: {
+        &quot;en&quot;: { // English
+            &quot;NavCube&quot;: {
+                &quot;front&quot;: &quot;Front&quot;,
+                &quot;back&quot;: &quot;Back&quot;,
+                &quot;top&quot;: &quot;Top&quot;,
+                &quot;bottom&quot;: &quot;Bottom&quot;,
+                &quot;left&quot;: &quot;Left&quot;,
+                &quot;right&quot;: &quot;Right&quot;
+            }
+        },
+        &quot;mi&quot;: { // M&#x101;ori
+            &quot;NavCube&quot;: {
+                &quot;front&quot;: &quot;Mua&quot;,
+                &quot;back&quot;: &quot;Tuar&#x101;&quot;,
+                &quot;top&quot;: &quot;Runga&quot;,
+                &quot;bottom&quot;: &quot;Raro&quot;,
+                &quot;left&quot;: &quot;Mau&#x12B;&quot;,
+                &quot;right&quot;: &quot;Tika&quot;
+            }
+        }
+   }
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-clearMessages">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">clearMessages</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber255">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Clears all locale translations.</p>
+<ul>
+<li>Fires an &quot;updated&quot; event when done.</li>
+<li>Does not change the current locale.</li>
+<li>Automatically refreshes any plugins that depend on the translations, which will cause those
+plugins to fall back on their internal hard-coded text values, since this method removes all
+our translations.</li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-fire">
     <span class="access" data-ice="access">public</span>
@@ -719,7 +1077,7 @@ and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -786,6 +1144,85 @@ any subsequent notifications on the event as they are made.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-loadMessages">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">loadMessages</span><span class="code" data-ice="signature">(messages: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber239">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Loads a new set of locale translations, adding them to the existing translations.</p>
+<ul>
+<li>Fires an &quot;updated&quot; event when done.</li>
+<li>Automatically refreshes any plugins that depend on the translations.</li>
+<li>Does not change the current locale.</li>
+</ul>
+<h2 id="usage">Usage</h2><pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.loadMessages({
+    &quot;jp&quot;: { // Japanese
+        &quot;NavCube&quot;: {
+            &quot;front&quot;: &quot;&#x524D;&#x90E8;&quot;,
+            &quot;back&quot;: &quot;&#x88CF;&quot;,
+            &quot;top&quot;: &quot;&#x4E0A;&quot;,
+            &quot;bottom&quot;: &quot;&#x5E95;&quot;,
+            &quot;left&quot;: &quot;&#x5DE6;&quot;,
+            &quot;right&quot;: &quot;&#x53F3;&quot;
+        }
+    }
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">messages</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The new translations.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-off">
     <span class="access" data-ice="access">public</span>
     
@@ -797,7 +1234,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber164">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -858,7 +1295,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber395">source</a></span></span>
     </span>
   </h3>
 
@@ -939,7 +1376,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 
@@ -1017,11 +1454,11 @@ any subsequent notifications on the event as they are made.</p>
     
     
     
-    <span class="code" data-ice="name">translatePlurals</span><span class="code" data-ice="signature">(phrase: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, count: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, args: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span></span>
+    <span class="code" data-ice="name">translatePlurals</span><span class="code" data-ice="signature">(msg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, count: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, args: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber87">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber335">source</a></span></span>
     </span>
   </h3>
 
@@ -1043,7 +1480,7 @@ any subsequent notifications on the event as they are made.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">phrase</td>
+      <td data-ice="name" class="code" data-depth="0">msg</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Phrase to translate.</p>
