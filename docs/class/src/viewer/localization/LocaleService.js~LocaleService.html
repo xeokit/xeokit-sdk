@@ -161,13 +161,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LocaleService} from &apos;<span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber144">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LocaleService} from &apos;<span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber147">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0</span>
-  <span data-ice="source">| <span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber144">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber147">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -187,20 +187,20 @@
 
   
   
-  <div class="description" data-ice="description"><p>An in8n-based localization service for a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+  <div class="description" data-ice="description"><p>Localization service for a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 <ul>
-<li>A <code>LocaleService</code> is a container of string translations for various locales.</li>
-<li>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has its own default <code>LocaleService</code> at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService">Viewer#localeService</a></span>.</li>
-<li>We can replace that with our own <code>LocaleService</code> (or any custom <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span> subclass), via the Viewer&apos;s constructor.</li>
-<li>Viewer plugins that show text will attempt to fetch translations for the currently active locale from the <code>LocaleService</code>.</li>
-<li>Whenever we switch the <code>LocaleService</code> to a different locale, plugins will automatically re-fetch their translations for that locale.</li>
+<li>A LocaleService is a container of string translations for various locales.</li>
+<li>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has its own default LocaleService at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService">Viewer#localeService</a></span>.</li>
+<li>We can replace that with our own LocaleService, or a custom subclass, via the Viewer&apos;s constructor.</li>
+<li>Viewer plugins that need localized translations will attempt to them for the currently active locale from the LocaleService.</li>
+<li>Whenever we switch the LocaleService to a different locale, plugins will automatically refresh their translations for that locale.</li>
 </ul>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> that uses an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a BIM model, and a
 <span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span>, which shows a camera navigation cube in the corner of the canvas.</p>
-<p>We&apos;ll also configure our Viewer with our own <code>LocaleService</code> instance, configured with English, M&#x101;ori and French
-translations for our NavCubePlugin. Remember that we could also just use the Viewer&apos;s default <code>LocaleService</code>,
-but this example also shows how we might configure the Viewer our own custom <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span> subclass, if we needed to
-do that.</p>
+<p>We&apos;ll also configure our Viewer with our own LocaleService instance, configured with English, M&#x101;ori and French
+translations for our NavCubePlugin.</p>
+<p>We could instead have just used the Viewer&apos;s default LocaleService, but this example demonstrates how we might
+configure the Viewer our own custom LocaleService subclass.</p>
 <p>The translations fetched by our NavCubePlugin will be:</p>
 <ul>
 <li>&quot;NavCube.front&quot;</li>
@@ -213,9 +213,9 @@ do that.</p>
 <p><br>
 These are paths that resolve to our translations for the currently active locale, and are hard-coded within
 the NavCubePlugin.</p>
-<p>For example, if  the <code>LocaleService</code>&apos;s locale is set to &quot;fr&quot;, then the path &quot;NavCube.back&quot; will drill down
+<p>For example, if  the LocaleService&apos;s locale is set to &quot;fr&quot;, then the path &quot;NavCube.back&quot; will drill down
 into <code>messages-&gt;fr-&gt;NavCube-&gt;front</code> and fetch &quot;Arri&#xE8;re&quot;.</p>
-<p>If we didn&apos;t provide that particular translation in our <code>LocaleService</code>, or any translations for that locale,
+<p>If we didn&apos;t provide that particular translation in our LocaleService, or any translations for that locale,
 then the NavCubePlugin will just fall back on its own default hard-coded translation, which in this case is &quot;BACK&quot;.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#localization_NavCubePlugin">Run example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, LocaleService, NavCubePlugin, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
@@ -298,7 +298,7 @@ faces of our NavCube:</p>
 <p>And we can clear the translations if needed:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.localeService.clearMessages();</code>
 </code></pre>
-<p>We can get an &quot;updated&quot; event from the <code>LocaleService</code> whenever we switch locales or load messages, which is useful
+<p>We can get an &quot;updated&quot; event from the LocaleService whenever we switch locales or load messages, which is useful
 for triggering UI elements to refresh themselves with updated translations. Internally, our <span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span>
 subscribes to this event, fetching new strings for itself via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span> each time the
 event is fired.</p>
@@ -344,7 +344,7 @@ event is fired.</p>
       <div>
         
         
-        <div data-ice="description"><p>Constructs an I18LocaleService.</p>
+        <div data-ice="description"><p>Constructs a LocaleService.</p>
 </div>
       </div>
     </td>
@@ -590,7 +590,7 @@ event is fired.</p>
       <div>
         
         
-        <div data-ice="description"><p>Cancels an event subscription that was previously made with <span>LocalService#on</span>.</p>
+        <div data-ice="description"><p>Cancels an event subscription that was previously made with <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-on">LocaleService#on</a></span>.</p>
 </div>
       </div>
     </td>
@@ -619,7 +619,7 @@ event is fired.</p>
       <div>
         
         
-        <div data-ice="description"><p>Subscribes to an event on this LocalService.</p>
+        <div data-ice="description"><p>Subscribes to an event on this LocaleService.</p>
 </div>
       </div>
     </td>
@@ -708,14 +708,14 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Constructs an I18LocaleService.</p>
+  <div data-ice="description"><p>Constructs a LocaleService.</p>
 </div>
 
   
@@ -784,7 +784,7 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber280">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -794,9 +794,10 @@ event is fired.</p>
   <div data-ice="description"><p>Sets the current locale.</p>
 <ul>
 <li>Fires an &quot;updated&quot; event when done.</li>
-<li>The given locale must be in the list of available locales returned by <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">LocaleService#locales</a></span>.</li>
+<li>The given locale does not need to be in the list of available locales returned by <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-get-locales">LocaleService#locales</a></span>, since
+this method assumes that you may want to load the locales at a later point.</li>
 <li>Automatically refreshes any plugins that depend on the translations.</li>
-<li>We can then get translations for the locale via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span> and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">LocaleService#translatePlurals</a></span>.</li>
+<li>We can then get translations for the locale, if translations have been loaded for it, via <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translate">LocaleService#translate</a></span> and <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-translatePlurals">LocaleService#translatePlurals</a></span>.</li>
 </ul>
 </div>
 
@@ -834,7 +835,7 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber298">source</a></span></span>
     </span>
   </h3>
 
@@ -891,7 +892,7 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
@@ -949,7 +950,7 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber210">source</a></span></span>
     </span>
   </h3>
 
@@ -1026,7 +1027,7 @@ event is fired.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
@@ -1077,7 +1078,7 @@ our translations.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber368">source</a></span></span>
     </span>
   </h3>
 
@@ -1155,7 +1156,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -1234,14 +1235,14 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber430">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber431">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Cancels an event subscription that was previously made with <span>LocalService#on</span>.</p>
+  <div data-ice="description"><p>Cancels an event subscription that was previously made with <span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html#instance-method-on">LocaleService#on</a></span>.</p>
 </div>
 
   
@@ -1295,14 +1296,14 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber395">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber396">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Subscribes to an event on this LocalService.</p>
+  <div data-ice="description"><p>Subscribes to an event on this LocaleService.</p>
 </div>
 
   
@@ -1376,7 +1377,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber310">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber311">source</a></span></span>
     </span>
   </h3>
 
@@ -1458,7 +1459,7 @@ any subsequent notifications on the event as they are made.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/localization/LocaleService.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 

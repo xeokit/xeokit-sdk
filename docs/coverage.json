@@ -326,29 +326,29 @@
         106,
         112,
         129,
-        134,
-        138,
-        162,
-        164,
-        171,
-        205,
-        224,
-        225,
-        238,
-        243,
-        483,
-        496,
-        505,
-        547,
-        570,
-        593,
-        616,
-        637,
-        676,
-        677,
-        678,
+        137,
+        141,
+        165,
+        167,
+        174,
+        208,
+        227,
+        228,
+        241,
+        246,
+        486,
+        499,
+        508,
+        550,
+        573,
+        596,
+        619,
+        640,
         679,
-        680
+        680,
+        681,
+        682,
+        683
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js": {
@@ -882,15 +882,15 @@
       "expectCount": 22,
       "actualCount": 13,
       "undocumentLines": [
-        449,
-        462,
-        155,
-        156,
-        157,
+        450,
+        463,
         158,
+        159,
         160,
         161,
-        162
+        163,
+        164,
+        165
       ]
     },
     "src/viewer/metadata/IFCObjectDefaultColors.js": {
@@ -921,8 +921,8 @@
       "expectCount": 19,
       "actualCount": 17,
       "undocumentLines": [
-        303,
-        213
+        349,
+        259
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
