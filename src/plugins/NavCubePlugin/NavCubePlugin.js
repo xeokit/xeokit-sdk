@@ -131,6 +131,9 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera.ortho.near = 0.1;
         this._navCubeCamera.ortho.far = 2000;
 
+        navCubeScene.edgeMaterial.edgeColor = [0.2, 0.2, 0.2];
+        navCubeScene.edgeMaterial.edgeAlpha = 0.6;
+
         this._zUp = Boolean(viewer.camera.zUp);
 
         var self = this;
