@@ -15,9 +15,9 @@ import {Map} from "./../scene/utils/Map.js";
  * {@link NavCubePlugin}, which shows a camera navigation cube in the corner of the canvas.
  *
  * We'll also configure our Viewer with our own LocaleService instance, configured with English, Māori and French
- * translations for our NavCubePlugin. 
- * 
- * We could instead have just used the Viewer's default LocaleService, but this example demonstrates how we might 
+ * translations for our NavCubePlugin.
+ *
+ * We could instead have just used the Viewer's default LocaleService, but this example demonstrates how we might
  * configure the Viewer our own custom LocaleService subclass.
  *
  * The translations fetched by our NavCubePlugin will be:
@@ -274,18 +274,16 @@ class LocaleService {
      * Sets the current locale.
      *
      * * Fires an "updated" event when done.
-     * * The given locale must be in the list of available locales returned by {@link LocaleService#locales}.
+     * * The given locale does not need to be in the list of available locales returned by {@link LocaleService#locales}, since
+     * this method assumes that you may want to load the locales at a later point.
      * * Automatically refreshes any plugins that depend on the translations.
-     * * We can then get translations for the locale via {@link LocaleService#translate} and {@link LocaleService#translatePlurals}.
+     * * We can then get translations for the locale, if translations have been loaded for it, via {@link LocaleService#translate} and {@link LocaleService#translatePlurals}.
      *
      * @param {String} locale The new current locale.
      */
     set locale(locale) {
+        locale = locale || "de";
         if (this._locale === locale) {
-            return;
-        }
-        if (this._locales.indexOf(locale) === -1) {
-            console.error(`Locale not found: '${locale}'`);
             return;
         }
         this._locale = locale;
