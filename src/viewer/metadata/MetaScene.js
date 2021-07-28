@@ -106,6 +106,15 @@ class MetaScene {
     /**
      * Creates a {@link MetaModel} in this MetaScene.
      *
+     * The MetaModel will contain a hierarchy of {@link MetaObject}s, created from the
+     * meta objects in ````metaModelData````.
+     *
+     * The meta object hierarchy in ````metaModelData```` is expected to be non-cyclic, with a single root. If the meta
+     * objects are cyclic, then this method will log an error and attempt to recover by creating a dummy root MetaObject
+     * of type "Model" and connecting all other MetaObjects as its direct children. If the meta objects contain multiple
+     * roots, then this method similarly attempts to recover by creating a dummy root MetaObject of type "Model" and
+     * connecting all the root MetaObjects as its children.
+     *
      * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel}.
      * @param {Object} [options] Options for creating the {@link MetaModel}.
@@ -143,6 +152,43 @@ class MetaScene {
         const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
 
         this.metaModels[modelId] = metaModel;
+
+        const rootMetaObjects = [];
+
+        for (let i = 0, len = newObjects.length; i < len; i++) {
+            const newObject = newObjects[i];
+            if (newObject.parent === undefined || newObject.parent === null) {
+                rootMetaObjects.push(newObject);
+            }
+        }
+
+        if (rootMetaObjects.length === 0) {
+            this.scene.error("Cyclic containment hierarchy found in metamodel - will flatten the hierarchy and insert fake 'Model' root");
+            const fakeRoot = {
+                "id": modelId + ".fakeRoot",
+                "name": modelId,
+                "type": "Model",
+                "parent": null
+            };
+            newObjects.push(fakeRoot);
+            for (let i = 0, len = newObjects.length; i < len; i++) {
+                rootMetaObjects[i].parent = fakeRoot.id;
+            }
+        }
+
+        if (rootMetaObjects.length > 1) {
+            this.scene.error("Multiple containment hierarchy root found in metamodel - will insert fake 'Model' root");
+            const fakeRoot = {
+                "id": modelId + ".fakeRoot",
+                "name": modelId,
+                "type": "Model",
+                "parent": null
+            };
+            newObjects.push(fakeRoot);
+            for (let i = 0, len = rootMetaObjects.length; i < len; i++) {
+                rootMetaObjects[i].parent = fakeRoot.id;
+            }
+        }
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
