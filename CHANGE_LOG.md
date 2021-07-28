@@ -6,6 +6,8 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 Unreleased
 
+Multi language support, full-precision measurement, renderer features for more model types, various fixes. 
+
 * General
   * Localization. [#671](https://github.com/xeokit/xeokit-sdk/issues/671) ([**@xeolabs**](https://github.com/xeolabs))
   * Remove src directory from npm distribution. [#688](https://github.com/xeokit/xeokit-sdk/issues/688) ([**@xeolabs**](https://github.com/xeolabs))
