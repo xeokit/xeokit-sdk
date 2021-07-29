@@ -11,6 +11,8 @@ Multi language support, full-precision measurement, renderer features for more m
 * General
   * Localization. [#671](https://github.com/xeokit/xeokit-sdk/issues/671) ([**@xeolabs**](https://github.com/xeolabs))
   * Remove src directory from npm distribution. [#688](https://github.com/xeokit/xeokit-sdk/issues/688) ([**@xeolabs**](https://github.com/xeolabs))
+* FastNavPlugin
+  * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
 * NavCubePlugin
   * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
