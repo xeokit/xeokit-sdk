@@ -15,6 +15,7 @@ Multi language support, full-precision measurement, renderer features for more m
   * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
 * NavCubePlugin
   * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix view-fit distance for NavCube.  [#703](https://github.com/xeokit/xeokit-sdk/issues/703) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Full-precision triangle picking for PerformanceModel. [#690](https://github.com/xeokit/xeokit-sdk/issues/690) ([**@xeolabs**](https://github.com/xeolabs))
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
