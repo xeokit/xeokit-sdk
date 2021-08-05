@@ -170,10 +170,10 @@ class MetaScene {
                 "type": "Model",
                 "parent": null
             };
-            newObjects.push(fakeRoot);
             for (let i = 0, len = newObjects.length; i < len; i++) {
-                rootMetaObjects[i].parent = fakeRoot.id;
+                newObjects[i].parent = fakeRoot.id;
             }
+            newObjects.push(fakeRoot);
         }
 
         if (rootMetaObjects.length > 1) {
