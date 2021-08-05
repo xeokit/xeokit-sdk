@@ -324,8 +324,8 @@ class AxisGizmoPlugin extends Plugin {
      */
     destroy() {
         this._axisGizmoCanvas = null;
-        this._navCubeScene.destroy();
-        this._navCubeScene = null;
+        this._axisGizmoScene.destroy();
+        this._axisGizmoScene = null;
         super.destroy();
     }
 }
