@@ -207,8 +207,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
-            const xktEntityIndex = eachEntityMeshesPortion[tileEntityIndex];
-            const xktEntityId = eachEntityId[xktEntityIndex];
+            const xktEntityId = eachEntityId[tileEntityIndex];
 
             const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
 
