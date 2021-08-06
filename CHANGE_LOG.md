@@ -8,30 +8,39 @@ Unreleased
 
 Multi language support, full-precision measurement, renderer features for more model types, various fixes. 
 
+### Features
+
 * General
   * Localization. [#671](https://github.com/xeokit/xeokit-sdk/issues/671) ([**@xeolabs**](https://github.com/xeolabs))
   * Remove src directory from npm distribution. [#688](https://github.com/xeokit/xeokit-sdk/issues/688) ([**@xeolabs**](https://github.com/xeolabs))
-* AxisGizmoPlugin
-  * Fix AxisGizmoPlugin#destroy(). [#704](https://github.com/xeokit/xeokit-sdk/issues/704) ([**@xeolabs**](https://github.com/xeolabs))
+* AngleMeasurementPlugin
+  * Full-precision angle measurement. [#691](https://github.com/xeokit/xeokit-sdk/issues/691) ([**@xeolabs**](https://github.com/xeolabs))
 * FastNavPlugin
   * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
-* NavCubePlugin
-  * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
-  * Fix view-fit distance for NavCube.  [#703](https://github.com/xeokit/xeokit-sdk/issues/703) ([**@xeolabs**](https://github.com/xeolabs))
+* DistanceMeasurementPlugin
+  * Full-precision distance measurement. [#692](https://github.com/xeokit/xeokit-sdk/issues/692) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Full-precision triangle picking for PerformanceModel. [#690](https://github.com/xeokit/xeokit-sdk/issues/690) ([**@xeolabs**](https://github.com/xeolabs))
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin
+  * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
+  * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))
+
+### Fixes
+
+* AxisGizmoPlugin
+  * Fix AxisGizmoPlugin#destroy(). [#704](https://github.com/xeokit/xeokit-sdk/issues/704) ([**@xeolabs**](https://github.com/xeolabs))
+* NavCubePlugin
+  * Fix perpendicularity of camera eye, look, up for NavCube.  [#687](https://github.com/xeokit/xeokit-sdk/issues/687) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix view-fit distance for NavCube.  [#703](https://github.com/xeokit/xeokit-sdk/issues/703) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, FastNavPlugin
   * Fix SectionPlanes crash with FastNavPlugin on Windows/FF/Chrome.  [#678](https://github.com/xeokit/xeokit-sdk/issues/678) ([**@xeolabs**](https://github.com/xeolabs))
 * Spinner
   * Clean spinner destroy. [#673](https://github.com/xeokit/xeokit-sdk/issues/673) ([**@xeolabs**](https://github.com/xeolabs))
 * Viewer
   * Fix Safari user agent detector in SAO.  [#681](https://github.com/xeokit/xeokit-sdk/issues/681) ([**@juho-ylikyla**](https://github.com/juho-ylikyla))
-* XKTLoaderPlugin
-  * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
-  * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))
-
+  
 # 1.9.0
 
 May 14, 2021
