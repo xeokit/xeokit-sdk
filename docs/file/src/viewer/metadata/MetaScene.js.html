@@ -333,10 +333,10 @@ class MetaScene {
                 &quot;type&quot;: &quot;Model&quot;,
                 &quot;parent&quot;: null
             };
-            newObjects.push(fakeRoot);
             for (let i = 0, len = newObjects.length; i &lt; len; i++) {
-                rootMetaObjects[i].parent = fakeRoot.id;
+                newObjects[i].parent = fakeRoot.id;
             }
+            newObjects.push(fakeRoot);
         }
 
         if (rootMetaObjects.length &gt; 1) {

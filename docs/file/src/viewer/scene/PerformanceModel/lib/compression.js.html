@@ -162,7 +162,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/PerformanceModel/lib/compression.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../math/math.js&quot;;
-import {WEBGL_INFO} from &quot;../../webglInfo.js&quot;;
 
 const translate = math.mat4();
 const scale = math.mat4();
@@ -176,7 +175,6 @@ function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://c
     const xwid = aabb[3] - xmin;
     const ywid = aabb[4] - ymin;
     const zwid = aabb[5] - zmin;
-    // const maxInt = 2000000;
     const maxInt = 65525;
     const xMultiplier = maxInt / xwid;
     const yMultiplier = maxInt / ywid;

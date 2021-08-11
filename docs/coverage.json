@@ -1,6 +1,6 @@
 {
   "coverage": "36.38%",
-  "expectCount": 6047,
+  "expectCount": 6046,
   "actualCount": 2200,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -153,13 +153,12 @@
       ]
     },
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
-      "expectCount": 8,
+      "expectCount": 7,
       "actualCount": 4,
       "undocumentLines": [
         67,
         180,
-        326,
-        328
+        326
       ]
     },
     "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js": {
@@ -255,7 +254,7 @@
       "expectCount": 27,
       "actualCount": 10,
       "undocumentLines": [
-        331,
+        323,
         65,
         66,
         67,
@@ -266,12 +265,12 @@
         98,
         106,
         119,
-        131,
-        135,
-        150,
-        210,
-        211,
-        231
+        123,
+        127,
+        142,
+        202,
+        203,
+        223
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -1276,14 +1275,14 @@
       "expectCount": 9,
       "actualCount": 1,
       "undocumentLines": [
+        3,
         4,
-        5,
-        172,
-        7,
-        82,
-        34,
-        119,
-        154
+        170,
+        6,
+        80,
+        32,
+        117,
+        152
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingBuffer.js": {
@@ -3778,9 +3777,9 @@
         179,
         314,
         315,
-        317,
-        362,
-        456,
+        316,
+        361,
+        455,
         504,
         509,
         514,
