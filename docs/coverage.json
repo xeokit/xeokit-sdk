@@ -1,7 +1,7 @@
 {
-  "coverage": "36.38%",
-  "expectCount": 6046,
-  "actualCount": 2200,
+  "coverage": "36.6%",
+  "expectCount": 6045,
+  "actualCount": 2213,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -782,7 +782,7 @@
     },
     "src/plugins/lib/culling/ObjectCullStates.js": {
       "expectCount": 26,
-      "actualCount": 7,
+      "actualCount": 8,
       "undocumentLines": [
         19,
         21,
@@ -801,8 +801,7 @@
         69,
         87,
         179,
-        189,
-        191
+        189
       ]
     },
     "src/plugins/lib/html/Dot.js": {
@@ -1273,16 +1272,10 @@
     },
     "src/viewer/scene/PerformanceModel/lib/compression.js": {
       "expectCount": 9,
-      "actualCount": 1,
+      "actualCount": 7,
       "undocumentLines": [
         3,
-        4,
-        170,
-        6,
-        80,
-        32,
-        117,
-        152
+        4
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingBuffer.js": {
@@ -1366,7 +1359,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js": {
       "expectCount": 11,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         9,
         10,
@@ -1376,8 +1369,7 @@
         24,
         31,
         38,
-        48,
-        50
+        48
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js": {
@@ -1518,7 +1510,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js": {
       "expectCount": 11,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         9,
         10,
@@ -1528,8 +1520,7 @@
         24,
         31,
         38,
-        48,
-        50
+        48
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js": {
@@ -1692,7 +1683,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js": {
       "expectCount": 17,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         12,
         13,
@@ -1708,8 +1699,7 @@
         60,
         67,
         74,
-        93,
-        95
+        93
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js": {
@@ -1998,7 +1988,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js": {
       "expectCount": 21,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         14,
         15,
@@ -2018,8 +2008,7 @@
         84,
         91,
         98,
-        123,
-        125
+        123
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js": {
@@ -2398,7 +2387,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js": {
       "expectCount": 41,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         21,
         22,
@@ -2438,8 +2427,7 @@
         201,
         208,
         215,
-        270,
-        272
+        270
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorQualityRenderer.js": {
@@ -3045,7 +3033,7 @@
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js": {
       "expectCount": 41,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
         21,
         22,
@@ -3085,8 +3073,7 @@
         201,
         208,
         215,
-        270,
-        272
+        270
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorQualityRenderer.js": {
@@ -4402,11 +4389,10 @@
       ]
     },
     "src/viewer/scene/math/rtcCoords.js": {
-      "expectCount": 7,
+      "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        3,
-        4
+        3
       ]
     },
     "src/viewer/scene/mementos/CameraMemento.js": {

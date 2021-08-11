@@ -636,54 +636,6 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/linesbatching/linesbatchingrenderers.js~getbatchingrenderers",
-    "function/index.html#static-function-getBatchingRenderers",
-    "<span>getBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/trianglesbatching/trianglesbatchingrenderers.js~getbatchingrenderers",
-    "function/index.html#static-function-getBatchingRenderers",
-    "<span>getBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/linesinstancing/linesinstancingrenderers.js~getinstancingrenderers",
-    "function/index.html#static-function-getInstancingRenderers",
-    "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/trianglesinstancing/trianglesinstancingrenderers.js~getinstancingrenderers",
-    "function/index.html#static-function-getInstancingRenderers",
-    "<span>getInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/lib/culling/objectcullstates.js~getobjectcullstates",
-    "function/index.html#static-function-getObjectCullStates",
-    "<span>getObjectCullStates</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/culling/ObjectCullStates.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~getplanertcpos",
-    "function/index.html#static-function-getPlaneRTCPos",
-    "<span>getPlaneRTCPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/pointsbatching/pointsbatchingrenderers.js~getpointsbatchingrenderers",
-    "function/index.html#static-function-getPointsBatchingRenderers",
-    "<span>getPointsBatchingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/layers/pointsinstancing/pointsinstancingrenderers.js~getpointsinstancingrenderers",
-    "function/index.html#static-function-getPointsInstancingRenderers",
-    "<span>getPointsInstancingRenderers</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js</span>",
-    "function"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
     "function/index.html#static-function-load3DSGeometry",
     "<span>load3DSGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</span>",
@@ -693,42 +645,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octdecodevec2",
-    "function/index.html#static-function-octDecodeVec2",
-    "<span>octDecodeVec2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octencodenormals",
-    "function/index.html#static-function-octEncodeNormals",
-    "<span>octEncodeNormals</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~octencodevec3",
-    "function/index.html#static-function-octEncodeVec3",
-    "<span>octEncodeVec3</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~quantizepositions",
-    "function/index.html#static-function-quantizePositions",
-    "<span>quantizePositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~rtctoworldpos",
-    "function/index.html#static-function-rtcToWorldPos",
-    "<span>rtcToWorldPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/performancemodel/lib/compression.js~transformandoctencodenormals",
-    "function/index.html#static-function-transformAndOctEncodeNormals",
-    "<span>transformAndOctEncodeNormals</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/lib/compression.js</span>",
     "function"
   ],
   [
@@ -747,18 +663,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewtypeshierarchy",
     "function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy",
     "<span>validateMetaModelForTreeViewTypesHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~worldtortcpos",
-    "function/index.html#static-function-worldToRTCPos",
-    "<span>worldToRTCPos</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/math/rtccoords.js~worldtortcpositions",
-    "function/index.html#static-function-worldToRTCPositions",
-    "<span>worldToRTCPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/rtcCoords.js</span>",
     "function"
   ],
   [
