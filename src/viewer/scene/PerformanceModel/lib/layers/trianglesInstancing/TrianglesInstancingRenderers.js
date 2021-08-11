@@ -269,6 +269,9 @@ class TrianglesInstancingRenderers {
 
 const cachedRenderers = {};
 
+/**
+ * @private
+ */
 function getInstancingRenderers(scene) {
     const sceneId = scene.id;
     let instancingRenderers = cachedRenderers[sceneId];

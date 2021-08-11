@@ -188,6 +188,9 @@ class ObjectCullStates {
 
 const sceneObjectCullStates = {};
 
+/**
+ * @private
+ */
 function getObjectCullStates(scene) {
     const sceneId = scene.id;
     let objectCullStates = sceneObjectCullStates[sceneId];
