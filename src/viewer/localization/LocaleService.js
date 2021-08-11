@@ -3,7 +3,7 @@ import {Map} from "./../scene/utils/Map.js";
 /**
  * @desc Localization service for a {@link Viewer}.
  *
- * * A LocaleService is a container of string translations for various locales.
+ * * A LocaleService is a container of string translations ("messages") for various locales.
  * * A {@link Viewer} has its own default LocaleService at {@link Viewer#localeService}.
  * * We can replace that with our own LocaleService, or a custom subclass, via the Viewer's constructor.
  * * Viewer plugins that need localized translations will attempt to them for the currently active locale from the LocaleService.
