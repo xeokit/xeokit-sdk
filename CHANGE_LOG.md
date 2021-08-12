@@ -23,6 +23,7 @@ Multi language support, full-precision measurement, renderer features for more m
   * Full-precision triangle picking for PerformanceModel. [#690](https://github.com/xeokit/xeokit-sdk/issues/690) ([**@xeolabs**](https://github.com/xeolabs))
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
+  * Fix coordinate quantization for zero-width boundaries. [#709](https://github.com/xeokit/xeokit-sdk/issues/709) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin
   * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))
