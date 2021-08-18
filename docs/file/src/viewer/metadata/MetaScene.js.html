@@ -69,6 +69,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
@@ -148,6 +150,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {MetaModel} from &quot;./MetaModel.js&quot;;
 import {MetaObject} from &quot;./MetaObject.js&quot;;
 import {math} from &quot;../scene/math/math.js&quot;;
+import {PropertySet} from &quot;./PropertySet.js&quot;;
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -184,6 +187,13 @@ class MetaScene {
          * @type {{String:MetaModel}}
          */
         this.metaModels = {};
+
+        /**
+         * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet#id}.
+         *
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = {};
 
         /**
          * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
@@ -274,7 +284,8 @@ class MetaScene {
 
         const projectId = metaModelData.projectId || &quot;none&quot;;
         const revisionId = metaModelData.revisionId || &quot;none&quot;;
-        const newObjects = metaModelData.metaObjects;
+        const newPropertySets = metaModelData.propertySets || [];
+        const newObjects = metaModelData.metaObjects || [];
         const author = metaModelData.author;
         const createdAt = metaModelData.createdAt;
         const creatingApplication = metaModelData.creatingApplication;
@@ -296,9 +307,17 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, [], null);
 
         this.metaModels[modelId] = metaModel;
+
+        for (let i = 0, len = newPropertySets.length; i &lt; len; i++) {
+            const propertySetCfg = newPropertySets[i];
+            const propertySetId = propertySetCfg.id;
+            const propertySet = new PropertySet(metaModel, propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            metaModel.propertySets[propertySetId] = propertySet;
+            this.propertySets[propertySetId] = propertySet;
+        }
 
         const rootMetaObjects = [];
 
@@ -349,11 +368,11 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const properties = newObject.properties;
+            const propertySetId = newObject.propertySetId;
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySetId, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -425,6 +444,11 @@ class MetaScene {
             }
         };
         visit(metaModel.rootMetaObject);
+        for (let propertySetId in metaModel.propertySets) {
+            if (metaModel.propertySets.hasOwnProperty(propertySetId)) {
+                delete this.propertySets[propertySetId];
+            }
+        }
         delete this.metaModels[metaModel.id];
     }
 

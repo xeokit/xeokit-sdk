@@ -420,6 +420,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/metadata/property.js~property",
+    "class/src/viewer/metadata/Property.js~Property.html",
+    "<span>Property</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/Property.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/metadata/propertyset.js~propertyset",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html",
+    "<span>PropertySet</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/PropertySet.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve",
     "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html",
     "<span>QuadraticBezierCurve</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/QuadraticBezierCurve.js</span>",
@@ -3168,6 +3180,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#propertysets",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-propertySets",
+    "src/viewer/metadata/MetaModel.js~MetaModel#propertySets",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#revisionid",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-revisionId",
     "src/viewer/metadata/MetaModel.js~MetaModel#revisionId",
@@ -3258,9 +3276,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/metadata/metaobject.js~metaobject#properties",
-    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-properties",
-    "src/viewer/metadata/MetaObject.js~MetaObject#properties",
+    "src/viewer/metadata/metaobject.js~metaobject#propertysetid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySetId",
+    "src/viewer/metadata/MetaObject.js~MetaObject#propertySetId",
     "member"
   ],
   [
@@ -3342,6 +3360,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/metadata/metascene.js~metascene#propertysets",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-propertySets",
+    "src/viewer/metadata/MetaScene.js~MetaScene#propertySets",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metascene.js~metascene#scene",
     "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-scene",
     "src/viewer/metadata/MetaScene.js~MetaScene#scene",
@@ -3358,6 +3382,78 @@ window.esdocSearchIndex = [
     "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-withMetaObjectsInSubtree",
     "src/viewer/metadata/MetaScene.js~MetaScene#withMetaObjectsInSubtree",
     "method"
+  ],
+  [
+    "src/viewer/metadata/property.js",
+    "file/src/viewer/metadata/Property.js.html",
+    "src/viewer/metadata/Property.js",
+    "file"
+  ],
+  [
+    "src/viewer/metadata/property.js~property#name",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-name",
+    "src/viewer/metadata/Property.js~Property#name",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/property.js~property#propertyset",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-propertySet",
+    "src/viewer/metadata/Property.js~Property#propertySet",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/property.js~property#type",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-type",
+    "src/viewer/metadata/Property.js~Property#type",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/property.js~property#value",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-value",
+    "src/viewer/metadata/Property.js~Property#value",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js",
+    "file/src/viewer/metadata/PropertySet.js.html",
+    "src/viewer/metadata/PropertySet.js",
+    "file"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#id",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-id",
+    "src/viewer/metadata/PropertySet.js~PropertySet#id",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#metamodel",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-metaModel",
+    "src/viewer/metadata/PropertySet.js~PropertySet#metaModel",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#name",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-name",
+    "src/viewer/metadata/PropertySet.js~PropertySet#name",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#originalsystemid",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-originalSystemId",
+    "src/viewer/metadata/PropertySet.js~PropertySet#originalSystemId",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#properties",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-properties",
+    "src/viewer/metadata/PropertySet.js~PropertySet#properties",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#type",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-type",
+    "src/viewer/metadata/PropertySet.js~PropertySet#type",
+    "member"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js",

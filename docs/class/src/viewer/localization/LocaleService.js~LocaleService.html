@@ -69,6 +69,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
@@ -173,7 +175,7 @@
   
   <div class="description" data-ice="description"><p>Localization service for a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 <ul>
-<li>A LocaleService is a container of string translations for various locales.</li>
+<li>A LocaleService is a container of string translations (&quot;messages&quot;) for various locales.</li>
 <li>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has its own default LocaleService at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-localeService">Viewer#localeService</a></span>.</li>
 <li>We can replace that with our own LocaleService, or a custom subclass, via the Viewer&apos;s constructor.</li>
 <li>Viewer plugins that need localized translations will attempt to them for the currently active locale from the LocaleService.</li>
