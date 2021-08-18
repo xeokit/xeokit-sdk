@@ -1,6 +1,7 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
 import {math} from "../scene/math/math.js";
+import {PropertySet} from "./PropertySet.js";
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -37,6 +38,13 @@ class MetaScene {
          * @type {{String:MetaModel}}
          */
         this.metaModels = {};
+
+        /**
+         * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet#id}.
+         *
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = {};
 
         /**
          * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
@@ -127,7 +135,8 @@ class MetaScene {
 
         const projectId = metaModelData.projectId || "none";
         const revisionId = metaModelData.revisionId || "none";
-        const newObjects = metaModelData.metaObjects;
+        const newPropertySets = metaModelData.propertySets || [];
+        const newObjects = metaModelData.metaObjects || [];
         const author = metaModelData.author;
         const createdAt = metaModelData.createdAt;
         const creatingApplication = metaModelData.creatingApplication;
@@ -149,9 +158,17 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, [], null);
 
         this.metaModels[modelId] = metaModel;
+
+        for (let i = 0, len = newPropertySets.length; i < len; i++) {
+            const propertySetCfg = newPropertySets[i];
+            const propertySetId = propertySetCfg.id;
+            const propertySet = new PropertySet(metaModel, propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            metaModel.propertySets[propertySetId] = propertySet;
+            this.propertySets[propertySetId] = propertySet;
+        }
 
         const rootMetaObjects = [];
 
@@ -202,11 +219,11 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const properties = newObject.properties;
+            const propertySetId = newObject.propertySetId;
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySetId, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -278,6 +295,11 @@ class MetaScene {
             }
         };
         visit(metaModel.rootMetaObject);
+        for (let propertySetId in metaModel.propertySets) {
+            if (metaModel.propertySets.hasOwnProperty(propertySetId)) {
+                delete this.propertySets[propertySetId];
+            }
+        }
         delete this.metaModels[metaModel.id];
     }
 
