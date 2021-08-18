@@ -103239,15 +103239,7 @@ class Property {
     /**
      * @private
      */
-    constructor(propertySet, name, value, type) {
-
-        /**
-         * The {@link PropertySet} this Property belongs to.
-         *
-         * @property propertySet
-         * @type {PropertySet}
-         */
-        this.propertySet = propertySet;
+    constructor(name, value, type) {
 
         /**
          * The name of this property.
@@ -103291,15 +103283,7 @@ class PropertySet {
     /**
      * @private
      */
-    constructor(metaModel, id, originalSystemId, name, type, properties) {
-
-        /**
-         * The {@link MetaModel} this PropertySet belongs to.
-         *
-         * @property metaModel
-         * @type {MetaModel}
-         */
-        this.metaModel = metaModel;
+    constructor(id, originalSystemId, name, type, properties) {
 
         /**
          * Globally-unique ID.
@@ -103348,7 +103332,7 @@ class PropertySet {
         if (properties) {
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(this, property.label, property.value, property.type));
+                this.properties.push(new Property(property.label, property.value, property.type));
             }
         }
     }
@@ -103506,7 +103490,7 @@ class MetaScene {
         for (let i = 0, len = newPropertySets.length; i < len; i++) {
             const propertySetCfg = newPropertySets[i];
             const propertySetId = propertySetCfg.id;
-            const propertySet = new PropertySet(metaModel, propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            const propertySet = new PropertySet(propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
             metaModel.propertySets[propertySetId] = propertySet;
             this.propertySets[propertySetId] = propertySet;
         }
