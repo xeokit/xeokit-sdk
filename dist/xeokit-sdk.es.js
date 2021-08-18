@@ -102889,7 +102889,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, propertySets, rootMetaObject) {
 
         /**
          * Globally-unique ID.
@@ -102969,6 +102969,14 @@ class MetaModel {
         this.metaScene = metaScene;
 
         /**
+         * The {@link PropertySet}s in this MetaModel.
+         *
+         * @property propertySets
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = propertySets;
+
+        /**
          * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
          *
          * @property rootMetaObject
@@ -103030,7 +103038,7 @@ class MetaModel {
  */
 class MetaObject {
 
-    constructor(metaModel, id, originalSystemId, name, type, properties, parent, children, external) {
+    constructor(metaModel, id, originalSystemId, name, type, propertySetId, parent, children, external) {
 
         /**
          * Model metadata.
@@ -103074,18 +103082,13 @@ class MetaObject {
          */
         this.type = type;
 
-        if (properties) {
-
-            /**
-             * Arbitrary metadata properties.
-             *
-             * Undefined when no metadata properties are represented.
-             *
-             * @property properties
-             * @type {*}
-             */
-            this.properties = properties;
-        }
+        /**
+         * Optional ID of a {@link PropertySet} in {@link MetaModel#propertySets} and {@link MetaScene#propertySets}.
+         *
+         * @property propertySetId
+         * @type {String}
+         */
+        this.propertySetId = propertySetId;
 
         if (parent !== undefined && parent !== null) {
 
@@ -103227,6 +103230,131 @@ class MetaObject {
 }
 
 /**
+ * @desc A property within a {@link PropertySet}.
+ *
+ * @class Property
+ */
+class Property {
+
+    /**
+     * @private
+     */
+    constructor(propertySet, name, value, type) {
+
+        /**
+         * The {@link PropertySet} this Property belongs to.
+         *
+         * @property propertySet
+         * @type {PropertySet}
+         */
+        this.propertySet = propertySet;
+
+        /**
+         * The name of this property.
+         *
+         * @property name
+         * @type {String}
+         */
+        this.name = name;
+
+        /**
+         * The value of this property.
+         *
+         * @property value
+         * @type {*}
+         */
+        this.value = value;
+
+        /**
+         * The type of this property.
+         *
+         * @property type
+         * @type {Number|String}
+         */
+        this.type = type;
+    }
+}
+
+/**
+ * @desc A set of properties associated with one or more {@link MetaObject}s.
+ *
+ * A PropertySet is associated with an {@link MetaObject} when {@link MetaObject#propertySetId} matches {@link PropertySet#id}. Multiple {@link MetaObject}'s can  share the same PropertySets.
+ *
+ * A PropertySet is created within {@link MetaScene#createMetaModel} and belongs to a {@link MetaModel}.
+ *
+ * Each PropertySet is registered by {@link PropertySet#id} in {@link MetaScene#propertySets} and {@link MetaModel#propertySets}.
+ *
+ * @class PropertySet
+ */
+class PropertySet {
+
+    /**
+     * @private
+     */
+    constructor(metaModel, id, originalSystemId, name, type, properties) {
+
+        /**
+         * The {@link MetaModel} this PropertySet belongs to.
+         *
+         * @property metaModel
+         * @type {MetaModel}
+         */
+        this.metaModel = metaModel;
+
+        /**
+         * Globally-unique ID.
+         *
+         * PropertySet instances are registered by this ID in {@link MetaScene#propertySets} and {@link MetaModel#propertySets}.
+         *
+         * When a {@link MetaObject} uses this PropertySet, then {@link MetaObject#propertySetId} will match {@link MetaObject#id}.
+         *
+         * @property id
+         * @type {String}
+         */
+        this.id = id;
+
+        /**
+         * ID of the corresponding object within the originating system, if any.
+         *
+         * @type {String}
+         * @abstract
+         */
+        this.originalSystemId = originalSystemId;
+
+        /**
+         * Human-readable name of this PropertySet.
+         *
+         * @property name
+         * @type {String}
+         */
+        this.name = name;
+
+        /**
+         * Type of this PropertySet.
+         *
+         * @property type
+         * @type {String}
+         */
+        this.type = type;
+
+        /**
+         * Properties within this PropertySet.
+         *
+         * @property properties
+         * @type {Property[]}
+         */
+        this.properties = [];
+
+        if (properties) {
+            for (let i = 0, len = properties.length; i < len; i++) {
+                const property = properties[i];
+                this.properties.push(new Property(this, property.label, property.value, property.type));
+            }
+        }
+    }
+}
+
+/**
  * @desc Metadata corresponding to a {@link Scene}.
  *
  * * Located in {@link Viewer#metaScene}.
@@ -103261,6 +103389,13 @@ class MetaScene {
          * @type {{String:MetaModel}}
          */
         this.metaModels = {};
+
+        /**
+         * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet#id}.
+         *
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = {};
 
         /**
          * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
@@ -103351,7 +103486,8 @@ class MetaScene {
 
         const projectId = metaModelData.projectId || "none";
         const revisionId = metaModelData.revisionId || "none";
-        const newObjects = metaModelData.metaObjects;
+        const newPropertySets = metaModelData.propertySets || [];
+        const newObjects = metaModelData.metaObjects || [];
         const author = metaModelData.author;
         const createdAt = metaModelData.createdAt;
         const creatingApplication = metaModelData.creatingApplication;
@@ -103363,9 +103499,17 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, [], null);
 
         this.metaModels[modelId] = metaModel;
+
+        for (let i = 0, len = newPropertySets.length; i < len; i++) {
+            const propertySetCfg = newPropertySets[i];
+            const propertySetId = propertySetCfg.id;
+            const propertySet = new PropertySet(metaModel, propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            metaModel.propertySets[propertySetId] = propertySet;
+            this.propertySets[propertySetId] = propertySet;
+        }
 
         const rootMetaObjects = [];
 
@@ -103410,11 +103554,11 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const properties = newObject.properties;
+            const propertySetId = newObject.propertySetId;
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySetId, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -103486,6 +103630,11 @@ class MetaScene {
             }
         };
         visit(metaModel.rootMetaObject);
+        for (let propertySetId in metaModel.propertySets) {
+            if (metaModel.propertySets.hasOwnProperty(propertySetId)) {
+                delete this.propertySets[propertySetId];
+            }
+        }
         delete this.metaModels[metaModel.id];
     }
 
