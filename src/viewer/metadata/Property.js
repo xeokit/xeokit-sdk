@@ -8,15 +8,7 @@ class Property {
     /**
      * @private
      */
-    constructor(propertySet, name, value, type) {
-
-        /**
-         * The {@link PropertySet} this Property belongs to.
-         *
-         * @property propertySet
-         * @type {PropertySet}
-         */
-        this.propertySet = propertySet;
+    constructor(name, value, type) {
 
         /**
          * The name of this property.

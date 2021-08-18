@@ -165,7 +165,7 @@ class MetaScene {
         for (let i = 0, len = newPropertySets.length; i < len; i++) {
             const propertySetCfg = newPropertySets[i];
             const propertySetId = propertySetCfg.id;
-            const propertySet = new PropertySet(metaModel, propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            const propertySet = new PropertySet(propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
             metaModel.propertySets[propertySetId] = propertySet;
             this.propertySets[propertySetId] = propertySet;
         }

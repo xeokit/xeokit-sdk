@@ -16,15 +16,7 @@ class PropertySet {
     /**
      * @private
      */
-    constructor(metaModel, id, originalSystemId, name, type, properties) {
-
-        /**
-         * The {@link MetaModel} this PropertySet belongs to.
-         *
-         * @property metaModel
-         * @type {MetaModel}
-         */
-        this.metaModel = metaModel;
+    constructor(id, originalSystemId, name, type, properties) {
 
         /**
          * Globally-unique ID.
@@ -73,7 +65,7 @@ class PropertySet {
         if (properties) {
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(this, property.label, property.value, property.type));
+                this.properties.push(new Property(property.label, property.value, property.type));
             }
         }
     }
