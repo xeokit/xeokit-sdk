@@ -219,11 +219,20 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const propertySetId = newObject.propertySetId;
+            const propertySets = [];
+            if (newObject.propertySetIds && newObject.propertySetIds.length > 0) {
+                for (let j = 0, lenj = newObject.propertySetIds.length; j < lenj; j++) {
+                    const propertySetId = newObject.propertySetIds[j];
+                    const propertySet = metaModel.propertySets[propertySetId];
+                    if (propertySet) {
+                        propertySets.push(propertySet)
+                    }
+                }
+            }
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySetId, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {

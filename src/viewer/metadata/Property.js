@@ -8,7 +8,7 @@ class Property {
     /**
      * @private
      */
-    constructor(name, value, type) {
+    constructor(name, value, type, valueType, description) {
 
         /**
          * The name of this property.
@@ -19,6 +19,14 @@ class Property {
         this.name = name;
 
         /**
+         * The type of this property.
+         *
+         * @property type
+         * @type {Number|String}
+         */
+        this.type = type
+
+        /**
          * The value of this property.
          *
          * @property value
@@ -27,12 +35,20 @@ class Property {
         this.value = value
 
         /**
-         * The type of this property.
+         * The type of this property's value.
          *
-         * @property type
+         * @property valueType
          * @type {Number|String}
          */
-        this.type = type
+        this.valueType = valueType;
+
+        /**
+         * Informative text to explain the property.
+         *
+         * @property name
+         * @type {String}
+         */
+        this.description = description;
     }
 }
 

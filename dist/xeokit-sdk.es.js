@@ -103038,7 +103038,10 @@ class MetaModel {
  */
 class MetaObject {
 
-    constructor(metaModel, id, originalSystemId, name, type, propertySetId, parent, children, external) {
+    /**
+     * @private
+     */
+    constructor(metaModel, id, originalSystemId, name, type, propertySets, parent, children, external) {
 
         /**
          * Model metadata.
@@ -103083,12 +103086,12 @@ class MetaObject {
         this.type = type;
 
         /**
-         * Optional ID of a {@link PropertySet} in {@link MetaModel#propertySets} and {@link MetaScene#propertySets}.
+         * Optional {@link PropertySet}s used by this MetaObject.
          *
-         * @property propertySetId
-         * @type {String}
+         * @property propertySets
+         * @type {PropertySet[]}
          */
-        this.propertySetId = propertySetId;
+        this.propertySets = propertySets;
 
         if (parent !== undefined && parent !== null) {
 
@@ -103239,7 +103242,7 @@ class Property {
     /**
      * @private
      */
-    constructor(name, value, type) {
+    constructor(name, value, type, valueType, description) {
 
         /**
          * The name of this property.
@@ -103250,6 +103253,14 @@ class Property {
         this.name = name;
 
         /**
+         * The type of this property.
+         *
+         * @property type
+         * @type {Number|String}
+         */
+        this.type = type;
+
+        /**
          * The value of this property.
          *
          * @property value
@@ -103258,19 +103269,25 @@ class Property {
         this.value = value;
 
         /**
-         * The type of this property.
+         * The type of this property's value.
          *
-         * @property type
+         * @property valueType
          * @type {Number|String}
          */
-        this.type = type;
+        this.valueType = valueType;
+
+        /**
+         * Informative text to explain the property.
+         *
+         * @property name
+         * @type {String}
+         */
+        this.description = description;
     }
 }
 
 /**
  * @desc A set of properties associated with one or more {@link MetaObject}s.
- *
- * A PropertySet is associated with an {@link MetaObject} when {@link MetaObject#propertySetId} matches {@link PropertySet#id}. Multiple {@link MetaObject}'s can  share the same PropertySets.
  *
  * A PropertySet is created within {@link MetaScene#createMetaModel} and belongs to a {@link MetaModel}.
  *
@@ -103289,8 +103306,6 @@ class PropertySet {
          * Globally-unique ID.
          *
          * PropertySet instances are registered by this ID in {@link MetaScene#propertySets} and {@link MetaModel#propertySets}.
-         *
-         * When a {@link MetaObject} uses this PropertySet, then {@link MetaObject#propertySetId} will match {@link MetaObject#id}.
          *
          * @property id
          * @type {String}
@@ -103332,7 +103347,7 @@ class PropertySet {
         if (properties) {
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(property.label, property.value, property.type));
+                this.properties.push(new Property(property.label, property.value, property.type, property.valueType, property.description));
             }
         }
     }
@@ -103538,11 +103553,20 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const propertySetId = newObject.propertySetId;
+            const propertySets = [];
+            if (newObject.propertySetIds && newObject.propertySetIds.length > 0) {
+                for (let j = 0, lenj = newObject.propertySetIds.length; j < lenj; j++) {
+                    const propertySetId = newObject.propertySetIds[j];
+                    const propertySet = metaModel.propertySets[propertySetId];
+                    if (propertySet) {
+                        propertySets.push(propertySet);
+                    }
+                }
+            }
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySetId, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
