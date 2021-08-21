@@ -13,7 +13,7 @@ import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js"
 /**
  * @private
  */
-const Renderer = function (scene, options) {
+function Renderer(scene, options) {
 
     options = options || {};
 
@@ -1127,6 +1127,7 @@ const Renderer = function (scene, options) {
 
     /**
      * Adds a {@link Marker} for occlusion testing.
+     * @private
      * @param marker
      */
     this.addMarker = function (marker) {

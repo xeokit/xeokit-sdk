@@ -23,7 +23,9 @@ import {LinesMaterial} from "../materials/LinesMaterial.js";
 const ASSERT_OBJECT_STATE_UPDATE = false;
 
 // Cached vars to avoid garbage collection
-
+/**
+ * @private
+ */
 function getEntityIDMap(scene, entityIds) {
     const map = {};
     let entityId;
@@ -323,6 +325,9 @@ function getEntityIDMap(scene, entityIds) {
  *
  * @class Scene
  */
+/**
+ * @private
+ */
 class Scene extends Component {
 
     /**
@@ -603,7 +608,9 @@ class Scene extends Component {
             transparent: transparent,
             alphaDepthMask: alphaDepthMask
         });
-
+        /**
+         * @private
+         */
         this._sectionPlanesState = new (function () {
 
             this.sectionPlanes = [];
@@ -647,7 +654,9 @@ class Scene extends Component {
                 }
             };
         })();
-
+        /**
+         * @private
+         */
         this._lightsState = new (function () {
 
             const DEFAULT_AMBIENT = math.vec4([0, 0, 0, 0]);

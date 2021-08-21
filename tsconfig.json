@@ -7,11 +7,11 @@
     "compilerOptions": {
         "allowJs": true,
         "declaration": true,
-        "emitDeclarationOnly": true,
+        "emitDeclarationOnly": false,
         "outDir": "dist",
         "strict": false,
         "target": "es6",
         "module": "es6",
-        "sourceMap": true
+        "sourceMap": false
     }
 }

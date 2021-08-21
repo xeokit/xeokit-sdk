@@ -1,6 +1,6 @@
 /**
  * @desc Pick result returned by {@link Scene#pick}.
- *
+ * @private
  */
 class PickResult {
 
