@@ -147,13 +147,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PropertySet} from &apos;<span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber14">@xeokit/xeokit-sdk/src/viewer/metadata/PropertySet.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PropertySet} from &apos;<span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber12">@xeokit/xeokit-sdk/src/viewer/metadata/PropertySet.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber14">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber12">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -174,7 +174,6 @@
   
   
   <div class="description" data-ice="description"><p>A set of properties associated with one or more <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s.</p>
-<p>A PropertySet is associated with an <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> when <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySetId">MetaObject#propertySetId</a></span> matches <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-id">PropertySet#id</a></span>. Multiple <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s can  share the same PropertySets.</p>
 <p>A PropertySet is created within <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-createMetaModel">MetaScene#createMetaModel</a></span> and belongs to a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>.</p>
 <p>Each PropertySet is registered by <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-id">PropertySet#id</a></span> in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-propertySets">MetaScene#propertySets</a></span> and <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-propertySets">MetaModel#propertySets</a></span>.</p>
 </div>
@@ -217,35 +216,6 @@
         
         
         <div data-ice="description"><p>Globally-unique ID.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-metaModel">metaModel</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> this PropertySet belongs to.</p>
 </div>
       </div>
     </td>
@@ -394,7 +364,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -403,7 +373,6 @@
   
   <div data-ice="description"><p>Globally-unique ID.</p>
 <p>PropertySet instances are registered by this ID in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-propertySets">MetaScene#propertySets</a></span> and <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-propertySets">MetaModel#propertySets</a></span>.</p>
-<p>When a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> uses this PropertySet, then <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySetId">MetaObject#propertySetId</a></span> will match <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span>.</p>
 </div>
 
   
@@ -445,66 +414,6 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-metaModel">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">metaModel</span><span class="code" data-ice="signature">: <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber27">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> this PropertySet belongs to.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">metaModel</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-name">
     <span class="access" data-ice="access">public</span>
     
@@ -516,7 +425,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -576,7 +485,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
@@ -620,7 +529,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
@@ -680,7 +589,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/metadata/PropertySet.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 

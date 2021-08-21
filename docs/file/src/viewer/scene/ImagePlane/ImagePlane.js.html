@@ -295,8 +295,8 @@ class ImagePlane extends Component {
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation of the ````ImagePlane````, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Modelling transform matrix for the ````ImagePlane````. Overrides the ````position````, ````size```, ````rotation```` and ````dir```` parameters.
      * @param {Boolean} [cfg.collidable=true] Indicates if the ````ImagePlane```` is initially included in boundary calculations.
-     * @param {Boolean} [cfg.clippable=true] Indicates if the ````ImagePlane```` is initially clippable.
-     * @param {Boolean} [cfg.pickable=true] Indicates if the ````ImagePlane```` is initially pickable.
+     * @param {String} [cfg.billboard=&quot;none&quot;] ImagePlane&apos;s billboarding behaviour. Options are &quot;none&quot; for no billboarding, &quot;spherical&quot; to always directly face {@link Camera.eye}, rotating both vertically and horizontally, or &quot;cylindrical&quot; to face the {@link Camera#eye} while rotating only about its vertically axis (use that mode for things like trees on a landscape).
+     * @param {String} [cfg.pickable] Indicates if the ````ImagePlane```` is initially pickable.
      * @param {Number} [cfg.opacity=1.0] ````ImagePlane````&apos;s initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {String} [cfg.src] URL of image. Accepted file types are PNG and JPEG.
      * @param {HTMLImageElement} [cfg.image] An ````HTMLImageElement```` to source the image from. Overrides ````src````.
@@ -334,7 +334,9 @@ class ImagePlane extends Component {
                 emissiveMap: this._texture,
                 backfaces: true
             }),
-            clippable: cfg.clippable
+            clippable: cfg.clippable,
+            billboard: cfg.billboard,
+            backfaces:true
         });
 
         this._grid = new Mesh(this, {
@@ -348,19 +350,23 @@ class ImagePlane extends Component {
                 emissive: [0.2, 0.8, 0.2]
             }),
             position: [0, 0.001, 0.0],
-            clippable: cfg.clippable
+            clippable: cfg.clippable,
+            billboard: cfg.billboard,
+            backfaces:true
         });
 
-        this._node = new Node(this, {
-            rotation: [0, 0, 0],
-            position: [0, 0, 0],
-            scale: [1, 1, 1],
-            clippable: false,
-            children: [
-                this._plane,
-                this._grid
-            ]
-        });
+        // this._node = new Node(this, {
+        //     rotation: [0, 0, 0],
+        //     position: [0, 0, 0],
+        //     scale: [1, 1, 1],
+        //     clippable: false,
+        //     children: [
+        //         this._plane,
+        //         this._grid
+        //     ]
+        // });
+
+        this._node = this._plane;
 
         this._gridVisible = false;
 

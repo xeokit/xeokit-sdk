@@ -165,7 +165,10 @@
  */
 class MetaObject {
 
-    constructor(metaModel, id, originalSystemId, name, type, propertySetId, parent, children, external) {
+    /**
+     * @private
+     */
+    constructor(metaModel, id, originalSystemId, name, type, propertySets, parent, children, external) {
 
         /**
          * Model metadata.
@@ -210,12 +213,12 @@ class MetaObject {
         this.type = type;
 
         /**
-         * Optional ID of a {@link PropertySet} in {@link MetaModel#propertySets} and {@link MetaScene#propertySets}.
+         * Optional {@link PropertySet}s used by this MetaObject.
          *
-         * @property propertySetId
-         * @type {String}
+         * @property propertySets
+         * @type {PropertySet[]}
          */
-        this.propertySetId = propertySetId;
+        this.propertySets = propertySets;
 
         if (parent !== undefined &amp;&amp; parent !== null) {
 

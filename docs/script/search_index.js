@@ -1050,6 +1050,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/extras/propertysetpanel/propertysetpanel.js",
+    "file/src/extras/PropertySetPanel/PropertySetPanel.js.html",
+    "src/extras/PropertySetPanel/PropertySetPanel.js",
+    "file"
+  ],
+  [
     "src/extras/index.js",
     "file/src/extras/index.js.html",
     "src/extras/index.js",
@@ -3216,12 +3222,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/metadata/metaobject.js~metaobject#constructor",
-    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-constructor-constructor",
-    "src/viewer/metadata/MetaObject.js~MetaObject#constructor",
-    "method"
-  ],
-  [
     "src/viewer/metadata/metaobject.js~metaobject#external",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-external",
     "src/viewer/metadata/MetaObject.js~MetaObject#external",
@@ -3276,9 +3276,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/metadata/metaobject.js~metaobject#propertysetid",
-    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySetId",
-    "src/viewer/metadata/MetaObject.js~MetaObject#propertySetId",
+    "src/viewer/metadata/metaobject.js~metaobject#propertysets",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySets",
+    "src/viewer/metadata/MetaObject.js~MetaObject#propertySets",
     "member"
   ],
   [
@@ -3390,15 +3390,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/metadata/property.js~property#name",
-    "class/src/viewer/metadata/Property.js~Property.html#instance-member-name",
-    "src/viewer/metadata/Property.js~Property#name",
+    "src/viewer/metadata/property.js~property#description",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-description",
+    "src/viewer/metadata/Property.js~Property#description",
     "member"
   ],
   [
-    "src/viewer/metadata/property.js~property#propertyset",
-    "class/src/viewer/metadata/Property.js~Property.html#instance-member-propertySet",
-    "src/viewer/metadata/Property.js~Property#propertySet",
+    "src/viewer/metadata/property.js~property#name",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-name",
+    "src/viewer/metadata/Property.js~Property#name",
     "member"
   ],
   [
@@ -3414,6 +3414,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/property.js~property#valuetype",
+    "class/src/viewer/metadata/Property.js~Property.html#instance-member-valueType",
+    "src/viewer/metadata/Property.js~Property#valueType",
+    "member"
+  ],
+  [
     "src/viewer/metadata/propertyset.js",
     "file/src/viewer/metadata/PropertySet.js.html",
     "src/viewer/metadata/PropertySet.js",
@@ -3423,12 +3429,6 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/propertyset.js~propertyset#id",
     "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-id",
     "src/viewer/metadata/PropertySet.js~PropertySet#id",
-    "member"
-  ],
-  [
-    "src/viewer/metadata/propertyset.js~propertyset#metamodel",
-    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-metaModel",
-    "src/viewer/metadata/PropertySet.js~PropertySet#metaModel",
     "member"
   ],
   [

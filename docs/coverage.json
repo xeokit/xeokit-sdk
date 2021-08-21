@@ -1,7 +1,7 @@
 {
   "coverage": "36.77%",
-  "expectCount": 6061,
-  "actualCount": 2229,
+  "expectCount": 6067,
+  "actualCount": 2231,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -48,6 +48,17 @@
         835,
         842,
         856
+      ]
+    },
+    "src/extras/PropertySetPanel/PropertySetPanel.js": {
+      "expectCount": 6,
+      "actualCount": 1,
+      "undocumentLines": [
+        6,
+        7,
+        11,
+        85,
+        119
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -910,27 +921,25 @@
     },
     "src/viewer/metadata/MetaObject.js": {
       "expectCount": 15,
-      "actualCount": 14,
-      "undocumentLines": [
-        19
-      ]
+      "actualCount": 15,
+      "undocumentLines": []
     },
     "src/viewer/metadata/MetaScene.js": {
       "expectCount": 20,
       "actualCount": 18,
       "undocumentLines": [
-        371,
-        276
+        380,
+        285
       ]
     },
     "src/viewer/metadata/Property.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 7,
+      "actualCount": 7,
       "undocumentLines": []
     },
     "src/viewer/metadata/PropertySet.js": {
-      "expectCount": 8,
-      "actualCount": 8,
+      "expectCount": 7,
+      "actualCount": 7,
       "undocumentLines": []
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
@@ -1164,10 +1173,10 @@
         166,
         168,
         170,
-        191,
-        205,
-        216,
-        557
+        193,
+        220,
+        222,
+        563
       ]
     },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {

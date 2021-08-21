@@ -1680,18 +1680,17 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.clippable</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">cfg.billboard</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
-      <td data-ice="description"><p>Indicates if the <code>ImagePlane</code> is initially clippable.</p>
+<li>default: &quot;none&quot;</li></ul></td>
+      <td data-ice="description"><p>ImagePlane&apos;s billboarding behaviour. Options are &quot;none&quot; for no billboarding, &quot;spherical&quot; to always directly face <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera.eye</a></span>, rotating both vertically and horizontally, or &quot;cylindrical&quot; to face the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> while rotating only about its vertically axis (use that mode for things like trees on a landscape).</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.pickable</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>Indicates if the <code>ImagePlane</code> is initially pickable.</p>
 </td>
     </tr>
@@ -1754,7 +1753,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber488">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber494">source</a></span></span>
     </span>
   </h3>
 
@@ -1800,7 +1799,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber501">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber507">source</a></span></span>
     </span>
   </h3>
 
@@ -1846,7 +1845,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber464">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -1891,7 +1890,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber475">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -1936,7 +1935,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber427">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber433">source</a></span></span>
     </span>
   </h3>
 
@@ -1981,7 +1980,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -2038,7 +2037,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber274">source</a></span></span>
     </span>
   </h3>
 
@@ -2084,7 +2083,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber281">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber287">source</a></span></span>
     </span>
   </h3>
 
@@ -2142,7 +2141,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber292">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber298">source</a></span></span>
     </span>
   </h3>
 
@@ -2187,7 +2186,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber310">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -2232,7 +2231,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber534">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -2277,7 +2276,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber545">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber551">source</a></span></span>
     </span>
   </h3>
 
@@ -2322,7 +2321,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber512">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber518">source</a></span></span>
     </span>
   </h3>
 
@@ -2367,7 +2366,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber523">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber529">source</a></span></span>
     </span>
   </h3>
 
@@ -2412,7 +2411,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber356">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber362">source</a></span></span>
     </span>
   </h3>
 
@@ -2457,7 +2456,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber370">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber376">source</a></span></span>
     </span>
   </h3>
 
@@ -2515,7 +2514,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber381">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -2560,7 +2559,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber390">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber396">source</a></span></span>
     </span>
   </h3>
 
@@ -2617,7 +2616,7 @@ has size <code>400x300</code>, then the <code>ImagePlane</code> will then have s
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
@@ -2664,7 +2663,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber422">source</a></span></span>
     </span>
   </h3>
 
@@ -2709,7 +2708,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -2755,7 +2754,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -2800,7 +2799,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -2845,7 +2844,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -2906,7 +2905,7 @@ the image has size <code>400x300</code>, then the <code>ImagePlane</code> will t
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/ImagePlane/ImagePlane.js.html#lineNumber558">source</a></span></span>
     </span>
   </h3>
 
