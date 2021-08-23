@@ -277,7 +277,9 @@ function CubeTextureCanvas(viewer, cfg = {}) {
     this.getImage = function () {
         return this._textureCanvas;
     };
-
+    /**
+     * @private
+     */
     this.destroy = function () {
         if (this._textureCanvas) {
             this._textureCanvas.parentNode.removeChild(this._textureCanvas);

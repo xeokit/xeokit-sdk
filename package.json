@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.4.0-beta.7",
+  "version": "2.0.0-alpha-typescript.6",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
@@ -52,11 +52,13 @@
     "http-server": "^0.12.3",
     "rollup": "^2.46.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.3.5"
   },
   "files": [
     "/dist"
   ],
+  "types": "dist/index.d.ts",
   "dependencies": {
     "auto-changelog": "^2.3.0"
   }

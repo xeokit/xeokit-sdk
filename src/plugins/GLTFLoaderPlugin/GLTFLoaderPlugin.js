@@ -196,15 +196,7 @@ class GLTFLoaderPlugin extends Plugin {
     constructor(viewer, cfg = {}) {
 
         super("GLTFLoader", viewer, cfg);
-
-        /**
-         * @private
-         */
         this._sceneGraphLoader = new GLTFSceneGraphLoader(this, cfg);
-
-        /**
-         * @private
-         */
         this._performanceModelLoader = new GLTFPerformanceModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
