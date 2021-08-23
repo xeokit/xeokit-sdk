@@ -13,7 +13,6 @@ const tempVec3a = math.vec3();
 
 /**
  * Manages occlusion testing. Private member of a Renderer.
- * @private
  */
 class OcclusionTester {
 

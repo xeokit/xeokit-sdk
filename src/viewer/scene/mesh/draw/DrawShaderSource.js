@@ -1,7 +1,7 @@
 /**
  * @private
  */
-function DrawShaderSource(mesh) {
+const DrawShaderSource = function (mesh) {
     if (mesh._material._state.type === "LambertMaterial") {
         this.vertex = buildVertexLambert(mesh);
         this.fragment = buildFragmentLambert(mesh);

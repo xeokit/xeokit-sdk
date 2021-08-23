@@ -1,6 +1,4 @@
-/**
- * @private
- */
+/** @private */
 class Map {
 
     constructor(items, baseId) {

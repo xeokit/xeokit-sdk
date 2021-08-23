@@ -117,8 +117,6 @@
          *
          * console.log(deflate.result);
          * ```
-         * @private
-         * @return {*}
          **/
         function Deflate(options) {
             if (!(this instanceof Deflate)) return new Deflate(options);
@@ -494,8 +492,6 @@
          *
          * console.log(inflate.result);
          * ```
-         * @private
-         * @return {*}
          **/
         function Inflate(options) {
             if (!(this instanceof Inflate)) return new Inflate(options);

@@ -5,7 +5,7 @@
  * @private
  */
 class ScratchMemory {
-    /** @private */
+
     constructor() {
         this._uint8Arrays = {};
         this._float32Arrays = {};

@@ -804,7 +804,7 @@ const defaultQuaternion = math.identityQuaternion();
  *     isObject: true
  * });
  ````
- * @private
+ *
  * @implements {Drawable}
  * @implements {Entity}
  */

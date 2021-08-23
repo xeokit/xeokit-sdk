@@ -1,9 +1,6 @@
 import {math} from "../../math/math.js";
 import {ArrayBuf} from "../ArrayBuf.js";
 
-/**
- * @private
- */
 class OcclusionLayer {
 
     constructor(scene, rtcCenter) {
