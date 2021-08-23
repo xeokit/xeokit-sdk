@@ -32,7 +32,6 @@ const createRTCViewMat = (function () {
  *
  * Given a double-precision World-space position, returns a double-precision relative-to-center (RTC) center pos
  * and a single-precision offset fom that center.
- *
  * @private
  * @param {Float64Array} worldPos The World-space position.
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
