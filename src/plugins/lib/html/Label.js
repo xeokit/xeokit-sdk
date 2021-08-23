@@ -63,7 +63,7 @@ class Label {
     }
 
     setText(text) {
-        this._label.innerText = this._prefix + "~" + (text || "");
+        this._label.innerHTML = this._prefix + (text || "");
     }
 
     setFillColor(color) {

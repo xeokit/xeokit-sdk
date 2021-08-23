@@ -122,6 +122,9 @@ class PointsInstancingRenderers {
 
 const cachedRenderers = {};
 
+/**
+ * @private
+ */
 function getPointsInstancingRenderers(scene) {
     const sceneId = scene.id;
     let instancingRenderers = cachedRenderers[sceneId];

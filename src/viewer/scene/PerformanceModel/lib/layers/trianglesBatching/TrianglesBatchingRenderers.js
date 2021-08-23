@@ -269,6 +269,9 @@ class TrianglesBatchingRenderers {
 
 const cachdRenderers = {};
 
+/**
+ * @private
+ */
 function getBatchingRenderers(scene) {
     const sceneId = scene.id;
     let batchingRenderers = cachdRenderers[sceneId];

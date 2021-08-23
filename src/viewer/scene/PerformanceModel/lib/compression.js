@@ -1,9 +1,11 @@
 import {math} from "../../math/math.js";
-import {WEBGL_INFO} from "../../webglInfo.js";
 
 const translate = math.mat4();
 const scale = math.mat4();
 
+/**
+ * @private
+ */
 function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://cg.postech.ac.kr/research/mesh_comp_mobile/mesh_comp_mobile_conference.pdf
     const lenPositions = positions.length;
     const quantizedPositions = new Uint16Array(lenPositions);
@@ -13,15 +15,15 @@ function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://c
     const xwid = aabb[3] - xmin;
     const ywid = aabb[4] - ymin;
     const zwid = aabb[5] - zmin;
-    // const maxInt = 2000000;
     const maxInt = 65525;
     const xMultiplier = maxInt / xwid;
     const yMultiplier = maxInt / ywid;
     const zMultiplier = maxInt / zwid;
+    const verify = (num) => num >= 0 ? num : 0;
     for (let i = 0; i < lenPositions; i += 3) {
-        quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
-        quantizedPositions[i + 1] = Math.floor((positions[i + 1] - ymin) * yMultiplier);
-        quantizedPositions[i + 2] = Math.floor((positions[i + 2] - zmin) * zMultiplier);
+        quantizedPositions[i + 0] = Math.floor(verify(positions[i + 0] - xmin) * xMultiplier);
+        quantizedPositions[i + 1] = Math.floor(verify(positions[i + 1] - ymin) * yMultiplier);
+        quantizedPositions[i + 2] = Math.floor(verify(positions[i + 2] - zmin) * zMultiplier);
     }
     math.identityMat4(translate);
     math.translationMat4v(aabb, translate);
@@ -31,6 +33,9 @@ function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://c
     return quantizedPositions;
 }
 
+/**
+ * @private
+ */
 function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
     // http://jcgt.org/published/0003/02/01/
     let oct, dec, best, currentCos, bestCos;
@@ -78,7 +83,9 @@ function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, co
     return lenCompressedNormals;
 }
 
-
+/**
+ * @private
+ */
 function octEncodeNormals(normals) { // http://jcgt.org/published/0003/02/01/
     const lenNormals = normals.length;
     const compressedNormals = new Int8Array(lenNormals)
@@ -116,6 +123,9 @@ function octEncodeNormals(normals) { // http://jcgt.org/published/0003/02/01/
     return new Int8Array(compressedNormals)
 }
 
+/**
+ * @private
+ */
 function octEncodeVec3(p, xfunc, yfunc) { // Oct-encode single normal vector in 2 bytes
     let x = p[0] / (Math.abs(p[0]) + Math.abs(p[1]) + Math.abs(p[2]));
     let y = p[1] / (Math.abs(p[0]) + Math.abs(p[1]) + Math.abs(p[2]));
@@ -151,6 +161,9 @@ function octEncodeNormal(array, i, xfunc, yfunc) { // Oct-encode single normal v
     ]);
 }
 
+/**
+ * @private
+ */
 function octDecodeVec2(oct) { // Decode an oct-encoded normal
     let x = oct[0];
     let y = oct[1];
@@ -169,6 +182,9 @@ function octDecodeVec2(oct) { // Decode an oct-encoded normal
     ];
 }
 
+/**
+ * @private
+ */
 function dot(p, vec3) { // Dot product of a normal in an array against a candidate decoding
     return p[0] * vec3[0] + p[1] * vec3[1] + p[2] * vec3[2];
 }

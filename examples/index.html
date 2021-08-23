@@ -377,6 +377,12 @@
             ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"]
         ],
 
+        "Localization": [
+            "#Localizing xeokit components for different languages",
+            ["localization_NavCubePlugin", "NavCubePlugin Localization"],
+            ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"],
+        ],
+
         "Annotating Models": [
             "#Pinning 3D labels on models",
             ["annotations_clickShowLabels", "Click annotation markers to show labels"],
@@ -392,9 +398,11 @@
             "#Measuring angles",
             ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
             ["measurements_angle_createWithMouse", "Click on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_precision", "Click on the model to create full-precision angle measurements"],
             "#Measuring distances",
             ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
             ["measurements_distance_createWithMouse", "Click on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_precision", "Click on the model to create full-precision distance measurements"],
             ["measurements_distance_unitsAndScale", "Click on the model to create distance measurements"],
         ],
 
@@ -427,7 +435,10 @@
             ["picking_ray_mesh", "Ray-picking objects with an arbitrary World-space ray"],
             ["picking_ray_surface", "Ray-picking surfaces with an arbitrary World-space ray"],
             ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
-            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"]
+            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"],
+
+            ["picking_pickSurfacePrecision_PerformanceModel_batching", "Full-precision surface picking with PerformanceModel and batched geometries"],
+            ["picking_pickSurfacePrecision_PerformanceModel_instancing", "Full-precision surface picking with PerformanceModel and instanced geometries"]
         ],
 
         "Slicing Models": [
@@ -572,6 +583,7 @@
             "#Geometry batching",
 
             ["sceneRepresentation_PerformanceModel_batching", "PerformanceModel with batched triangle geometries"],
+            ["sceneRepresentation_PerformanceModel_batching_geometryInMemory", "PerformanceModel with batched triangle geometries, stored in browser memory"],
             ["sceneRepresentation_PerformanceModel_batching_points", "PerformanceModel with batched point cloud geometries"],
             ["sceneRepresentation_PerformanceModel_batching_lines", "PerformanceModel with batched line geometries"],
             ["sceneRepresentation_PerformanceModel_batching_annotations", "PerformanceModel with batched triangle geometry and annotations"],

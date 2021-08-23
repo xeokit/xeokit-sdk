@@ -185,7 +185,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         const atLastTile = (tileIndex === lastTileIndex);
 
         const firstTileEntityIndex = eachTileEntitiesPortion [tileIndex];
-        const lastTileEntityIndex = atLastTile ? numEntities : eachTileEntitiesPortion[tileIndex + 1];
+        const lastTileEntityIndex = atLastTile ? (numEntities - 1) : (eachTileEntitiesPortion[tileIndex + 1] - 1);
 
         const tileAABBIndex = tileIndex * 6;
         const tileAABB = eachTileAABB.subarray(tileAABBIndex, tileAABBIndex + 6);
@@ -205,17 +205,16 @@ function load(viewer, options, inflatedData, performanceModel) {
 
         // Iterate over each tile's entities
 
-        for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
+        for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex <= lastTileEntityIndex; tileEntityIndex++) {
 
-            const xktEntityIndex = eachEntityMeshesPortion[tileEntityIndex];
-            const xktEntityId = eachEntityId[xktEntityIndex];
+            const xktEntityId = eachEntityId[tileEntityIndex];
 
             const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
 
-            const lastTileEntityIndex = (numEntities - 1);
-            const atLastTileEntity = (tileEntityIndex === lastTileEntityIndex);
+            const finalTileEntityIndex = (numEntities - 1);
+            const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
             const firstMeshIndex = eachEntityMeshesPortion [tileEntityIndex];
-            const lastMeshIndex = atLastTileEntity ? eachMeshGeometriesPortion.length : eachEntityMeshesPortion[tileEntityIndex + 1];
+            const lastMeshIndex = atLastTileEntity ? (eachMeshGeometriesPortion.length - 1) : (eachEntityMeshesPortion[tileEntityIndex + 1] - 1);
 
             const meshIds = [];
 
@@ -268,7 +267,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             // Iterate each entity's meshes
 
-            for (let meshIndex = firstMeshIndex; meshIndex < lastMeshIndex; meshIndex++) {
+            for (let meshIndex = firstMeshIndex; meshIndex <= lastMeshIndex; meshIndex++) {
 
                 const geometryIndex = eachMeshGeometriesPortion[meshIndex];
                 const geometryReuseCount = geometryReuseCounts[geometryIndex];

@@ -1,7 +1,6 @@
 import {math} from './math.js';
 
 const tempVec3a = math.vec3();
-const tempAABB3 = math.AABB3();
 
 /**
  * Given a view matrix and a relative-to-center (RTC) coordinate origin, returns a view matrix
@@ -33,6 +32,10 @@ const createRTCViewMat = (function () {
  *
  * Given a double-precision World-space position, returns a double-precision relative-to-center (RTC) center pos
  * and a single-precision offset fom that center.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> master
  * @private
  * @param {Float64Array} worldPos The World-space position.
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
@@ -66,6 +69,10 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
  *
  * When computing the RTC position, this function uses a modulus operation to ensure that, whenever possible,
  * identical RTC positions are reused for different positions arrays.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> master
  * @private
  * @param {Float64Array} worldPositions Flat array of World-space 3D positions.
  * @param {Float64Array} rtcPositions Outputs the computed flat array of 3D RTC positions.
@@ -100,6 +107,10 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
 
 /**
  * Converts an RTC 3D position to World-space.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> master
  * @private
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
  * @param {Float32Array} rtcPos Single-precision offset fom that center.
@@ -115,6 +126,10 @@ function rtcToWorldPos(rtcCenter, rtcPos, worldPos) {
 /**
  * Given a 3D plane defined by distance from origin and direction, and an RTC center position,
  * return a plane position that is relative to the RTC center.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> master
  * @private
  * @param dist
  * @param dir

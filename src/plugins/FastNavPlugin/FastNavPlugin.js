@@ -117,14 +117,6 @@ class FastNavPlugin extends Plugin {
         let down = false;
 
         this._onSceneMouseDown = viewer.scene.input.on("mousedown", () => {
-            timer = timeoutDuration;
-            if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
-                fastMode = true;
-            }
             down = true;
         });
 

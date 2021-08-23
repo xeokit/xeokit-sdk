@@ -92,6 +92,9 @@ class PointsBatchingRenderers {
 
 const cachedRenderers = {};
 
+/**
+ * @private
+ */
 function getPointsBatchingRenderers(scene) {
     const sceneId = scene.id;
     let renderers = cachedRenderers[sceneId];

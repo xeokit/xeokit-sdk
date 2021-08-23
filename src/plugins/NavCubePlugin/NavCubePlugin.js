@@ -131,6 +131,9 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera.ortho.near = 0.1;
         this._navCubeCamera.ortho.far = 2000;
 
+        navCubeScene.edgeMaterial.edgeColor = [0.2, 0.2, 0.2];
+        navCubeScene.edgeMaterial.edgeAlpha = 0.6;
+
         this._zUp = Boolean(viewer.camera.zUp);
 
         var self = this;
@@ -456,14 +459,14 @@ class NavCubePlugin extends Plugin {
                     var aabb = self._fitVisible ? viewer.scene.getAABB(viewer.scene.visibleObjectIds) : viewer.scene.aabb;
                     var diag = math.getAABB3Diag(aabb);
                     math.getAABB3Center(aabb, center);
-                    var dist = Math.abs(diag / Math.tan(55.0 / 2));
+                    var dist = Math.abs(diag / Math.tan(self._cameraFitFOV * math.DEGTORAD));
                     viewer.cameraControl.pivotPos = center;
                     if (self._cameraFly) {
                         viewer.cameraFlight.flyTo({
                             look: center,
                             eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
                             up: up || [0, 1, 0],
-                            orthoScale: diag * 1.3,
+                            orthoScale: diag * 1.1,
                             fitFOV: self._cameraFitFOV,
                             duration: self._cameraFlyDuration
                         }, ok);
@@ -472,13 +475,18 @@ class NavCubePlugin extends Plugin {
                             look: center,
                             eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
                             up: up || [0, 1, 0],
-                            orthoScale: diag * 1.3,
+                            orthoScale: diag * 1.1,
                             fitFOV: self._cameraFitFOV
                         }, ok);
                     }
                 };
             })();
         }
+
+        this._onUpdated = viewer.localeService.on("updated", () => {
+            this._cubeTextureCanvas.clear();
+            this._repaint();
+        });
 
         this.setVisible(cfg.visible);
         this.setCameraFitFOV(cfg.cameraFitFOV);
@@ -651,6 +659,7 @@ class NavCubePlugin extends Plugin {
 
         if (this._navCubeCanvas) {
 
+            this.viewer.localeService.off(this._onUpdated);
             this.viewer.camera.off(this._onCameraMatrix);
             this.viewer.camera.off(this._onCameraWorldAxis);
             this.viewer.camera.perspective.off(this._onCameraFOV);

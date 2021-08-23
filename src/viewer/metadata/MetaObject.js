@@ -16,7 +16,10 @@
  */
 class MetaObject {
 
-    constructor(metaModel, id, originalSystemId, name, type, properties, parent, children, external) {
+    /**
+     * @private
+     */
+    constructor(metaModel, id, originalSystemId, name, type, propertySets, parent, children, external) {
 
         /**
          * Model metadata.
@@ -60,18 +63,13 @@ class MetaObject {
          */
         this.type = type;
 
-        if (properties) {
-
-            /**
-             * Arbitrary metadata properties.
-             *
-             * Undefined when no metadata properties are represented.
-             *
-             * @property properties
-             * @type {*}
-             */
-            this.properties = properties;
-        }
+        /**
+         * Optional {@link PropertySet}s used by this MetaObject.
+         *
+         * @property propertySets
+         * @type {PropertySet[]}
+         */
+        this.propertySets = propertySets;
 
         if (parent !== undefined && parent !== null) {
 

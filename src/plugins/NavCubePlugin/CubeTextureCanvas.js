@@ -5,14 +5,12 @@ import {math} from "../../viewer/scene/math/math.js";
  */
 function CubeTextureCanvas(viewer, cfg = {}) {
 
-    var axisLabels = false;
-
     const cubeColor = "lightgrey";
     const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
 
-    var height = 500;
-    var width = height + (height / 3);
-    var scale = width / 24;
+    const height = 500;
+    const width = height + (height / 3);
+    const scale = width / 24;
 
     const facesZUp = [
         {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
@@ -24,12 +22,12 @@ function CubeTextureCanvas(viewer, cfg = {}) {
     ];
 
     const areasZUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
-        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
-        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
-        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
-        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
-        {label: "bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 0, 1], up: [0, -1, 0]},
+        {label: "NavCube.front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
+        {label: "NavCube.back", boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
+        {label: "NavCube.right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
+        {label: "NavCube.left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
+        {label: "NavCube.top", boundaries: [[7, 1, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: "NavCube.bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 0, 1], up: [0, -1, 0]},
         {boundaries: [[7, 5, 4, 2]], dir: [0, 1, -1], up: [0, 1, 1]},
         {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, 0, -1], up: [1, 0, 1]},
         {boundaries: [[7, 0, 4, 1], [19, 6, 4, 1]], dir: [0, -1, -1], up: [0, -1, 1]},
@@ -62,33 +60,46 @@ function CubeTextureCanvas(viewer, cfg = {}) {
     ];
 
     const areasYUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
-        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
-        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
-        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
-        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
-        {label: "bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
-        {boundaries: [[7, 5, 4, 2]], dir: [0, -1, -1], up: [0, 1, -1]},
-        {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, -1, 0], up: [1, 1, 0]},
-        {boundaries: [[7, 0, 4, 1], [19, 6, 4, 1]], dir: [0, -1, 1], up: [0, 1, 1]},
-        {boundaries: [[13, 6, 4, 1], [11, 1, 1, 4]], dir: [-1, -1, 0], up: [-1, 1, 0]},
-        {boundaries: [[7, 11, 4, 2]], dir: [0, 1, -1], up: [0, 1, 1]},
-        {boundaries: [[1, 11, 4, 1], [6, 13, 1, 4]], dir: [1, 1, 0], up: [-1, 1, 0]},
-        {boundaries: [[7, 17, 4, 1], [19, 11, 4, 1]], dir: [0, 1, 1], up: [0, 1, -1]},
-        {boundaries: [[13, 11, 4, 1], [11, 13, 1, 4]], dir: [-1, 1, 0], up: [1, 1, 0]},
-        {boundaries: [[5, 7, 2, 4]], dir: [1, 0, -1], up: [0, 1, 0]},
-        {boundaries: [[11, 7, 2, 4]], dir: [-1, 0, -1], up: [0, 1, 0]},
-        {boundaries: [[17, 7, 2, 4]], dir: [-1, 0, 1], up: [0, 1, 0]},
-        {boundaries: [[0, 7, 1, 4], [23, 7, 1, 4]], dir: [1, 0, 1], up: [0, 1, 0]},
-        {boundaries: [[5, 11, 2, 2]], dir: [1, 1, -1], up: [-1, 1, 1]},
-        {boundaries: [[23, 11, 1, 1], [6, 17, 1, 1], [0, 11, 1, 1]], dir: [1, 1, 1], up: [-1, 1, -1]},
-        {boundaries: [[5, 5, 2, 2]], dir: [1, -1, -1], up: [1, 1, -1]},
-        {boundaries: [[11, 17, 1, 1], [17, 11, 2, 1]], dir: [-1, 1, 1], up: [1, 1, -1]},
-        {boundaries: [[17, 6, 2, 1], [11, 0, 1, 1]], dir: [-1, -1, 1], up: [-1, 1, 1]},
-        {boundaries: [[11, 11, 2, 2]], dir: [-1, 1, -1], up: [1, 1, 1]},
-        {boundaries: [[0, 6, 1, 1], [6, 0, 1, 1], [23, 6, 1, 1]], dir: [1, -1, 1], up: [1, 1, 1]},
-        {boundaries: [[11, 5, 2, 2]], dir: [-1, -1, -1], up: [-1, 1, -1]}
+
+        // Faces
+
+        {yUp: "", label: "NavCube.front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: "NavCube.back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
+        {label: "NavCube.right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
+        {label: "NavCube.left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
+        {label: "NavCube.top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
+        {label: "NavCube.bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
+        {boundaries: [[7, 5, 4, 2]], dir: [0, -0.7071, -0.7071], up: [0, 0.7071, -0.7071]}, // Top-front edge
+        {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, -1, 0], up: [1, 1, 0]},  // Top-left edge
+        {boundaries: [[7, 0, 4, 1], [19, 6, 4, 1]], dir: [0, -0.7071, 0.7071], up: [0, 0.7071, 0.7071]}, // Top-back edge
+        {boundaries: [[13, 6, 4, 1], [11, 1, 1, 4]], dir: [-1, -1, 0], up: [-1, 1, 0]}, // Top-right edge
+        {boundaries: [[7, 11, 4, 2]], dir: [0, 1, -1], up: [0, 1, 1]},  // Bottom-front edge
+        {boundaries: [[1, 11, 4, 1], [6, 13, 1, 4]], dir: [1, 1, 0], up: [-1, 1, 0]}, // Bottom-left edge
+        {boundaries: [[7, 17, 4, 1], [19, 11, 4, 1]], dir: [0, 1, 1], up: [0, 1, -1]}, // Bottom-back edge
+        {boundaries: [[13, 11, 4, 1], [11, 13, 1, 4]], dir: [-1, 1, 0], up: [1, 1, 0]}, // Bottom-right edge
+        {boundaries: [[5, 7, 2, 4]], dir: [1, 0, -1], up: [0, 1, 0]},// Front-left edge
+        {boundaries: [[11, 7, 2, 4]], dir: [-1, 0, -1], up: [0, 1, 0]}, // Front-right edge
+        {boundaries: [[17, 7, 2, 4]], dir: [-1, 0, 1], up: [0, 1, 0]},// Back-right edge
+        {boundaries: [[0, 7, 1, 4], [23, 7, 1, 4]], dir: [1, 0, 1], up: [0, 1, 0]},// Back-left edge
+        {boundaries: [[5, 11, 2, 2]], "dir": [0.5, 0.7071, -0.5], "up": [-0.5, 0.7071, 0.5]}, // Bottom-left-front corner
+        {boundaries: [[23, 11, 1, 1], [6, 17, 1, 1], [0, 11, 1, 1]],"dir": [0.5, 0.7071, 0.5],"up": [-0.5, 0.7071, -0.5]},// Bottom-back-left corner
+        {boundaries: [[5, 5, 2, 2]], "dir": [0.5, -0.7071, -0.5], "up": [0.5, 0.7071, -0.5]}, // Left-front-top corner
+        {boundaries: [[11, 17, 1, 1], [17, 11, 2, 1]], "dir": [-0.5, 0.7071, 0.5], "up": [0.5, 0.7071, -0.5]}, // Bottom-back-right corner
+        {boundaries: [[17, 6, 2, 1], [11, 0, 1, 1]], "dir": [-0.5, -0.7071, 0.5], "up": [-0.5, 0.7071, 0.5]}, // Top-back-right corner
+        {boundaries: [[11, 11, 2, 2]], "dir": [-0.5, 0.7071, -0.5], "up": [0.5, 0.7071, 0.5]}, // Bottom-front-right corner
+        {boundaries: [[0, 6, 1, 1], [6, 0, 1, 1], [23, 6, 1, 1]], "dir": [0.5, -0.7071, 0.5], "up": [0.5, 0.7071, 0.5]},// Top-back-left corner
+        {boundaries: [[11, 5, 2, 2]], "dir": [-0.5, -0.7071, -0.5], "up": [-0.5, 0.7071, -0.5]}// Top-front-right corner
     ];
+
+    for (let i = 0, len = areasZUp.length; i < len; i++) {
+        math.normalizeVec3(areasZUp[i].dir, areasZUp[i].dir);
+        math.normalizeVec3(areasZUp[i].up, areasZUp[i].up);
+    }
+
+    for (let i = 0, len = areasYUp.length; i < len; i++) {
+        math.normalizeVec3(areasYUp[i].dir, areasYUp[i].dir);
+        math.normalizeVec3(areasYUp[i].up, areasYUp[i].up);
+    }
 
     var faces = facesYUp;
     var areas = areasYUp;
@@ -112,7 +123,7 @@ function CubeTextureCanvas(viewer, cfg = {}) {
 
     const context = this._textureCanvas.getContext("2d");
 
-    var zUp = false;
+    let zUp = false;
 
     function paint() {
 
@@ -155,25 +166,46 @@ function CubeTextureCanvas(viewer, cfg = {}) {
                 context.fillText(translateLabel(area.label), xcenter, ycenter, 80);
             }
         }
+
+        viewer.scene.glRedraw();
     }
 
-    var translateLabel = (function () {
-        const dictionaries = {
-            "yUp": {"front": "+Z", "back": "-Z", "right": "+X", "left": "-X", "top": "+Y", "bottom": "-Y"},
-            "en": {"front": "FRONT", "back": "BACK", "right": "RIGHT", "left": "LEFT", "top": "TOP", "bottom": "BOTTOM"}
+    const translateLabel = (function () {
+
+        const swizzleYUp = {
+            "NavCube.front": "NavCube.front",
+            "NavCube.back": "NavCube.back",
+            "NavCube.right": "NavCube.right",
+            "NavCube.left": "NavCube.left",
+            "NavCube.top": "NavCube.top",
+            "NavCube.bottom": "NavCube.bottom"
         };
+
+        const swizzleZUp = {
+            "NavCube.front": "NavCube.front",
+            "NavCube.back": "NavCube.back",
+            "NavCube.right": "NavCube.right",
+            "NavCube.left": "NavCube.left",
+            "NavCube.top": "NavCube.top",
+            "NavCube.bottom": "NavCube.bottom"
+        };
+
+        const defaultLabels = {
+            "NavCube.front": "FRONT",
+            "NavCube.back": "BACK",
+            "NavCube.right": "RIGHT",
+            "NavCube.left": "LEFT",
+            "NavCube.top": "TOP",
+            "NavCube.bottom": "BOTTOM"
+        };
+
         return function (key) {
-            var dictionary;
-            if (axisLabels) {
-                if (zUp) {
-                    dictionary = dictionaries["zUp"];
-                } else {
-                    dictionary = dictionaries["yUp"];
-                }
-            } else {
-                dictionary = dictionaries[viewer.language || "en"];
+            const swizzle = zUp ? swizzleZUp : swizzleYUp;
+            const swizzledKey = swizzle ? swizzle[key] : null;
+            if (swizzledKey) {
+                return viewer.localeService.translate(swizzledKey) || defaultLabels[swizzledKey] || swizzledKey;
             }
-            return dictionary ? (dictionary[key] || key) : key;
+            return key;
         };
     })();
 
@@ -254,8 +286,6 @@ function CubeTextureCanvas(viewer, cfg = {}) {
             this._textureCanvas = null;
         }
     };
-
-    this.clear();
 }
 
 export {CubeTextureCanvas};

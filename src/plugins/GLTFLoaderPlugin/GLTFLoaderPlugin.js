@@ -326,6 +326,9 @@ class GLTFLoaderPlugin extends Plugin {
                 var excludeTypes;
                 if (params.excludeTypes) {
                     excludeTypes = {};
+                    if (!includeTypes) {
+                        includeTypes = {};
+                    }
                     for (let i = 0, len = params.excludeTypes.length; i < len; i++) {
                         includeTypes[params.excludeTypes[i]] = true;
                     }
