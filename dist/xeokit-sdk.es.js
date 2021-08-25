@@ -8767,7 +8767,6 @@ const createRTCViewMat = (function () {
  *
  * Given a double-precision World-space position, returns a double-precision relative-to-center (RTC) center pos
  * and a single-precision offset fom that center.
- *
  * @private
  * @param {Float64Array} worldPos The World-space position.
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
@@ -36935,8 +36934,8 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-5, 0, 0],
-                rotation: [0, 0, 90]
+                position: [5, 0, 0],
+                rotation: [0, 0, -90]
             }),
 
             new Mesh(axisGizmoScene, {  // Shaft
@@ -36945,7 +36944,7 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-2, 0, 0],
+                position: [2, 0, 0],
                 rotation: [0, 0, 90]
             }),
 
@@ -36955,7 +36954,7 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-7, 0, 0],
+                position: [7, 0, 0],
                 billboard: "spherical"
             }),
 
