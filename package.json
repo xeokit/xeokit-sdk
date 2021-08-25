@@ -56,8 +56,5 @@
   },
   "files": [
     "/dist"
-  ],
-  "dependencies": {
-    "auto-changelog": "^2.3.0"
-  }
+  ]
 }
