@@ -22,7 +22,7 @@ npm i @xeokit/xeokit-sdk
  * [Website](https://xeokit.io/)
  * [Features](https://xeokit.io/index.html?foo=1#features)
  * [FAQ](https://xeokit.io/index.html?foo=1#faq)  
- * [Blog](https://xeokit.io/index.html#blog)  
+ * [Blog](https://xeokit.io/blog.html)  
  * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
  * [User Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
  * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
