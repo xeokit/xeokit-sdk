@@ -1,7 +1,7 @@
 {
-  "coverage": "36.77%",
-  "expectCount": 6067,
-  "actualCount": 2231,
+  "coverage": "36.79%",
+  "expectCount": 6061,
+  "actualCount": 2230,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 59,
@@ -48,17 +48,6 @@
         835,
         842,
         856
-      ]
-    },
-    "src/extras/PropertySetPanel/PropertySetPanel.js": {
-      "expectCount": 6,
-      "actualCount": 1,
-      "undocumentLines": [
-        6,
-        7,
-        11,
-        85,
-        119
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -1173,10 +1162,10 @@
         166,
         168,
         170,
-        193,
-        220,
-        222,
-        563
+        191,
+        205,
+        216,
+        557
       ]
     },
     "src/viewer/scene/PerformanceModel/PerformanceModel.js": {

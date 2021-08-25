@@ -1050,12 +1050,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/extras/propertysetpanel/propertysetpanel.js",
-    "file/src/extras/PropertySetPanel/PropertySetPanel.js.html",
-    "src/extras/PropertySetPanel/PropertySetPanel.js",
-    "file"
-  ],
-  [
     "src/extras/index.js",
     "file/src/extras/index.js.html",
     "src/extras/index.js",

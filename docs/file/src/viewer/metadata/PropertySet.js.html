@@ -210,7 +210,7 @@ class PropertySet {
         if (properties) {
             for (let i = 0, len = properties.length; i &lt; len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(property.name, property.value, property.type, property.valueType, property.description));
+                this.properties.push(new Property(property.label, property.value, property.type, property.valueType, property.description));
             }
         }
     }
