@@ -20,11 +20,12 @@ npm i @xeokit/xeokit-sdk
 ## Resources 
 
  * [Website](https://xeokit.io/)
- * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
+ * [Features](https://xeokit.io/index.html?foo=1#features)
+ * [FAQ](https://xeokit.io/index.html?foo=1#faq)  
+ * [Blog](https://xeokit.io/index.html#blog)  
  * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
- * [User Guides](https://github.com/xeokit/xeokit-sdk/wiki)
+ * [User Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
  * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
- * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
- * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
+ * [License](https://xeokit.io/index.html#pricing)
 
 
