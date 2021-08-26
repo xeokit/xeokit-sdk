@@ -16016,8 +16016,6 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        let i;
-        let len;
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
@@ -16027,7 +16025,7 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableList = drawableInfo.drawableList;
 
-                for (i = 0, len = drawableList.length; i < len; i++) {
+                for (let i = 0, len = drawableList.length; i < len; i++) {
 
                     const drawable = drawableList[i];
 
@@ -45424,6 +45422,7 @@ const tempVec3c$4 = math.vec3();
 const tempVec3d$2 = math.vec3();
 const tempVec3e$1 = math.vec3();
 const tempVec3f$1 = math.vec3();
+const tempVec3g$1 = math.vec3();
 
 /**
  * @private
@@ -46483,9 +46482,13 @@ class TrianglesBatchingLayer {
         const b = tempVec3e$1;
         const c = tempVec3f$1;
 
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g$1;
+
         for (let i = 0, len = indices.length; i < len; i += 3) {
 
-            const ia = indices[i + 0] * 3;
+            const ia = indices[i] * 3;
             const ib = indices[i + 1] * 3;
             const ic = indices[i + 2] * 3;
 
@@ -46505,23 +46508,29 @@ class TrianglesBatchingLayer {
             math.decompressPosition(b, state.positionsDecodeMatrix);
             math.decompressPosition(c, state.positionsDecodeMatrix);
 
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, worldSurfacePos)) {
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(this.model.worldMatrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
                 if (offset) {
-                    math.addVec3(worldSurfacePos, offset);
+                    math.addVec3(closestIntersectPos, offset);
                 }
 
                 if (rtcCenter) {
-                    math.addVec3(worldSurfacePos, rtcCenter);
+                    math.addVec3(closestIntersectPos, rtcCenter);
                 }
 
-                return true;
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    gotIntersect = true;
+                }
             }
         }
 
-        return false;
+        return gotIntersect;
     }
 
     // ---------
@@ -52467,6 +52476,7 @@ const tempVec3c$3 = math.vec3();
 const tempVec3d$1 = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
 
 /**
  * @private
@@ -52703,18 +52713,18 @@ class TrianglesInstancingLayer {
 
             // Note: order of inverse and transpose doesn't matter
 
-        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-        let normalMatrix = math.inverseMat4(transposedMat);
+            let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
+            let normalMatrix = math.inverseMat4(transposedMat);
 
-        this._modelNormalMatrixCol0.push(normalMatrix[0]);
-        this._modelNormalMatrixCol0.push(normalMatrix[4]);
-        this._modelNormalMatrixCol0.push(normalMatrix[8]);
-        this._modelNormalMatrixCol0.push(normalMatrix[12]);
+            this._modelNormalMatrixCol0.push(normalMatrix[0]);
+            this._modelNormalMatrixCol0.push(normalMatrix[4]);
+            this._modelNormalMatrixCol0.push(normalMatrix[8]);
+            this._modelNormalMatrixCol0.push(normalMatrix[12]);
 
-        this._modelNormalMatrixCol1.push(normalMatrix[1]);
-        this._modelNormalMatrixCol1.push(normalMatrix[5]);
-        this._modelNormalMatrixCol1.push(normalMatrix[9]);
-        this._modelNormalMatrixCol1.push(normalMatrix[13]);
+            this._modelNormalMatrixCol1.push(normalMatrix[1]);
+            this._modelNormalMatrixCol1.push(normalMatrix[5]);
+            this._modelNormalMatrixCol1.push(normalMatrix[9]);
+            this._modelNormalMatrixCol1.push(normalMatrix[13]);
 
             this._modelNormalMatrixCol2.push(normalMatrix[2]);
             this._modelNormalMatrixCol2.push(normalMatrix[6]);
@@ -53439,6 +53449,10 @@ class TrianglesInstancingLayer {
         const b = tempVec3e;
         const c = tempVec3f;
 
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
         for (let i = 0, len = indices.length; i < len; i += 3) {
 
             const ia = indices[i + 0] * 3;
@@ -53461,25 +53475,31 @@ class TrianglesInstancingLayer {
             math.decompressPosition(b, state.positionsDecodeMatrix);
             math.decompressPosition(c, state.positionsDecodeMatrix);
 
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, worldSurfacePos)) {
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(portion.matrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(portion.matrix, closestIntersectPos, closestIntersectPos);
 
-                math.transformPoint3(this.model.worldMatrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
                 if (offset) {
-                    math.addVec3(worldSurfacePos, offset);
+                    math.addVec3(closestIntersectPos, offset);
                 }
 
                 if (rtcCenter) {
-                    math.addVec3(worldSurfacePos, rtcCenter);
+                    math.addVec3(closestIntersectPos, rtcCenter);
                 }
 
-                return true;
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    gotIntersect = true;
+                }
             }
         }
 
-        return false;
+        return gotIntersect;
     }
 
     destroy() {
