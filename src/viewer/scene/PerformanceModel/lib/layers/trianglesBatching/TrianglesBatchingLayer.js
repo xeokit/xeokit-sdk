@@ -23,6 +23,7 @@ const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
 
 /**
  * @private
@@ -1082,9 +1083,13 @@ class TrianglesBatchingLayer {
         const b = tempVec3e;
         const c = tempVec3f;
 
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
         for (let i = 0, len = indices.length; i < len; i += 3) {
 
-            const ia = indices[i + 0] * 3;
+            const ia = indices[i] * 3;
             const ib = indices[i + 1] * 3;
             const ic = indices[i + 2] * 3;
 
@@ -1104,23 +1109,29 @@ class TrianglesBatchingLayer {
             math.decompressPosition(b, state.positionsDecodeMatrix);
             math.decompressPosition(c, state.positionsDecodeMatrix);
 
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, worldSurfacePos)) {
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(this.model.worldMatrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
                 if (offset) {
-                    math.addVec3(worldSurfacePos, offset);
+                    math.addVec3(closestIntersectPos, offset);
                 }
 
                 if (rtcCenter) {
-                    math.addVec3(worldSurfacePos, rtcCenter);
+                    math.addVec3(closestIntersectPos, rtcCenter);
                 }
 
-                return true;
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    gotIntersect = true;
+                }
             }
         }
 
-        return false;
+        return gotIntersect;
     }
 
     // ---------

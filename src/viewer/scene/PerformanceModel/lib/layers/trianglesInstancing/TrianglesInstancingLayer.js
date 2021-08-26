@@ -24,6 +24,7 @@ const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
 
 /**
  * @private
@@ -260,18 +261,18 @@ class TrianglesInstancingLayer {
 
             // Note: order of inverse and transpose doesn't matter
 
-        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-        let normalMatrix = math.inverseMat4(transposedMat);
+            let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
+            let normalMatrix = math.inverseMat4(transposedMat);
 
-        this._modelNormalMatrixCol0.push(normalMatrix[0]);
-        this._modelNormalMatrixCol0.push(normalMatrix[4]);
-        this._modelNormalMatrixCol0.push(normalMatrix[8]);
-        this._modelNormalMatrixCol0.push(normalMatrix[12]);
+            this._modelNormalMatrixCol0.push(normalMatrix[0]);
+            this._modelNormalMatrixCol0.push(normalMatrix[4]);
+            this._modelNormalMatrixCol0.push(normalMatrix[8]);
+            this._modelNormalMatrixCol0.push(normalMatrix[12]);
 
-        this._modelNormalMatrixCol1.push(normalMatrix[1]);
-        this._modelNormalMatrixCol1.push(normalMatrix[5]);
-        this._modelNormalMatrixCol1.push(normalMatrix[9]);
-        this._modelNormalMatrixCol1.push(normalMatrix[13]);
+            this._modelNormalMatrixCol1.push(normalMatrix[1]);
+            this._modelNormalMatrixCol1.push(normalMatrix[5]);
+            this._modelNormalMatrixCol1.push(normalMatrix[9]);
+            this._modelNormalMatrixCol1.push(normalMatrix[13]);
 
             this._modelNormalMatrixCol2.push(normalMatrix[2]);
             this._modelNormalMatrixCol2.push(normalMatrix[6]);
@@ -996,6 +997,10 @@ class TrianglesInstancingLayer {
         const b = tempVec3e;
         const c = tempVec3f;
 
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
         for (let i = 0, len = indices.length; i < len; i += 3) {
 
             const ia = indices[i + 0] * 3;
@@ -1018,25 +1023,31 @@ class TrianglesInstancingLayer {
             math.decompressPosition(b, state.positionsDecodeMatrix);
             math.decompressPosition(c, state.positionsDecodeMatrix);
 
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, worldSurfacePos)) {
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(portion.matrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(portion.matrix, closestIntersectPos, closestIntersectPos);
 
-                math.transformPoint3(this.model.worldMatrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
                 if (offset) {
-                    math.addVec3(worldSurfacePos, offset);
+                    math.addVec3(closestIntersectPos, offset);
                 }
 
                 if (rtcCenter) {
-                    math.addVec3(worldSurfacePos, rtcCenter);
+                    math.addVec3(closestIntersectPos, rtcCenter);
                 }
 
-                return true;
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    gotIntersect = true;
+                }
             }
         }
 
-        return false;
+        return gotIntersect;
     }
 
     destroy() {

@@ -972,8 +972,6 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        let i;
-        let len;
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
@@ -983,7 +981,7 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableList = drawableInfo.drawableList;
 
-                for (i = 0, len = drawableList.length; i < len; i++) {
+                for (let i = 0, len = drawableList.length; i < len; i++) {
 
                     const drawable = drawableList[i];
 
