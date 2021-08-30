@@ -15,19 +15,21 @@ Multi language support, full-precision measurement, renderer features for more m
   * Remove src directory from npm distribution. [#688](https://github.com/xeokit/xeokit-sdk/issues/688) ([**@xeolabs**](https://github.com/xeolabs))
 * AngleMeasurementPlugin
   * Full-precision angle measurement. [#691](https://github.com/xeokit/xeokit-sdk/issues/691) ([**@xeolabs**](https://github.com/xeolabs))
-* FastNavPlugin
-  * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
+* CameraControlPlugin
+  * Extend CameraControl to fire "rightClick" event on long-touch. [#716](https://github.com/xeokit/xeokit-sdk/issues/716) ([**@xeolabs**](https://github.com/xeolabs))
 * DistanceMeasurementPlugin
   * Full-precision distance measurement. [#692](https://github.com/xeokit/xeokit-sdk/issues/692) ([**@xeolabs**](https://github.com/xeolabs))
+* FastNavPlugin
+  * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Full-precision triangle picking for PerformanceModel. [#690](https://github.com/xeokit/xeokit-sdk/issues/690) ([**@xeolabs**](https://github.com/xeolabs))
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
-* XKTLoaderPlugin
-  * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
-  * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))
 * PropertySet, Property
   * Support property sets in XKT and metadata.  [#712](https://github.com/xeokit/xeokit-sdk/issues/712) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin
+  * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
+  * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))  
 
 ### Fixes
 
