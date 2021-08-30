@@ -622,9 +622,8 @@ class CameraControl extends Component {
 
             // Private
 
-            tapInterval: 150, // Millisecs
-            doubleTapInterval: 325, // Millisecs
-            tapDistanceThreshold: 4, // Pixels
+            longTapTimeout: 600, // Millisecs
+            longTapRadius: 5, // Pixels
 
             // General
 
@@ -677,7 +676,8 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: math.vec2(),
             tapStartTime: -1,
-            lastTapTime: -1
+            lastTapTime: -1,
+            longTouchTimeout: null
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event

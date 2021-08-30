@@ -14,7 +14,6 @@ class TouchPickHandler {
         this._scene = scene;
 
         const pickController = controllers.pickController;
-        const pivotController = controllers.pivotController;
         const cameraControl = controllers.cameraControl;
 
         let touchStartTime;
@@ -51,6 +50,11 @@ class TouchPickHandler {
                 return;
             }
 
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
+
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
@@ -60,6 +64,23 @@ class TouchPickHandler {
                 tapStartTime = touchStartTime;
                 tapStartPos[0] = touches[0].pageX;
                 tapStartPos[1] = touches[0].pageY;
+
+                const rightClickClientX = touches[0].clientX;
+                const rightClickClientY = touches[0].clientY;
+
+                const rightClickPageX = touches[0].pageX;
+                const rightClickPageY = touches[0].pageY;
+
+                states.longTouchTimeout = setTimeout(() => {
+                    controllers.cameraControl.fire("rightClick", { // For context menus
+                        pagePos: [Math.round(rightClickPageX), Math.round(rightClickPageY)],
+                        canvasPos: [Math.round(rightClickClientX), Math.round(rightClickClientY)],
+                        event: e
+                    }, true);
+
+                    states.longTouchTimeout = null;
+                }, configs.longTapTimeout);
+
             } else {
                 tapStartTime = -1;
             }
@@ -90,12 +111,12 @@ class TouchPickHandler {
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
-            const pickedSubs = cameraControl.hasSubs("picked");
-            const pickedNothingSubs = cameraControl.hasSubs("pickedNothing");
             const pickedSurfaceSubs = cameraControl.hasSubs("pickedSurface");
-            const doublePickedSubs = cameraControl.hasSubs("doublePicked");
-            const doublePickedSurfaceSubs = cameraControl.hasSubs("doublePickedSurface");
-            const doublePickedNothingSubs = cameraControl.hasSubs("doublePickedNothing");
+
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
 
             // process tap
 
@@ -179,8 +200,8 @@ class TouchPickHandler {
 
     reset() {
         // TODO
-         // tapStartTime = -1;
-         // lastTapTime = -1;
+        // tapStartTime = -1;
+        // lastTapTime = -1;
 
     }
 
