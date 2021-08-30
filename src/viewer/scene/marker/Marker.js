@@ -209,12 +209,12 @@ class Marker extends Component {
         this._entity = entity;
         if (this._entity) {
             if (this._entity instanceof PerformanceNode) {
-                this._onEntityModelDestroyed = this._entity.model.once("destroyed", () => { // PerformanceNode does not fire events, and cannot exist beyond its PerformanceModel
+                this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // PerformanceNode does not fire events, and cannot exist beyond its PerformanceModel
                     this._entity = null; // Marker now may become visible, if it was synched to invisible Entity
                     this._onEntityModelDestroyed = null;
                 });
             } else {
-                this._onEntityDestroyed = this._entity.once("destroyed", () => {
+                this._onEntityDestroyed = this._entity.on("destroyed", () => {
                     this._entity = null;
                     this._onEntityDestroyed = null;
                 });
