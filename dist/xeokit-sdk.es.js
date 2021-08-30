@@ -99727,6 +99727,7 @@ class MousePanRotateDollyHandler {
                     const y = canvasPos[1];
                     if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
                         controllers.cameraControl.fire("rightClick", { // For context menus
+                            pagePos: [Math.round(e.pageX), Math.round(e.pageY)],
                             canvasPos: canvasPos,
                             event: e
                         }, true);
@@ -100984,7 +100985,12 @@ class TouchPanRotateAndDollyHandler {
 
                 const xPanDelta = touch0Vec[0];
                 const yPanDelta = touch0Vec[1];
-                
+
+                if (states.longTouchTimeout !== null && (Math.abs(xPanDelta) > configs.longTapRadius || Math.abs(yPanDelta) > configs.longTapRadius)) {
+                    clearTimeout(states.longTouchTimeout);
+                    states.longTouchTimeout = null;
+                }
+
                 if (configs.planView) { // No rotating in plan-view mode
 
                     const camera = scene.camera;
@@ -101094,7 +101100,6 @@ class TouchPickHandler {
         this._scene = scene;
 
         const pickController = controllers.pickController;
-        controllers.pivotController;
         const cameraControl = controllers.cameraControl;
 
         let touchStartTime;
@@ -101131,6 +101136,11 @@ class TouchPickHandler {
                 return;
             }
 
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
+
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
@@ -101140,6 +101150,23 @@ class TouchPickHandler {
                 tapStartTime = touchStartTime;
                 tapStartPos[0] = touches[0].pageX;
                 tapStartPos[1] = touches[0].pageY;
+
+                const rightClickClientX = touches[0].clientX;
+                const rightClickClientY = touches[0].clientY;
+
+                const rightClickPageX = touches[0].pageX;
+                const rightClickPageY = touches[0].pageY;
+
+                states.longTouchTimeout = setTimeout(() => {
+                    controllers.cameraControl.fire("rightClick", { // For context menus
+                        pagePos: [Math.round(rightClickPageX), Math.round(rightClickPageY)],
+                        canvasPos: [Math.round(rightClickClientX), Math.round(rightClickClientY)],
+                        event: e
+                    }, true);
+
+                    states.longTouchTimeout = null;
+                }, configs.longTapTimeout);
+
             } else {
                 tapStartTime = -1;
             }
@@ -101170,12 +101197,12 @@ class TouchPickHandler {
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
-            cameraControl.hasSubs("picked");
-            cameraControl.hasSubs("pickedNothing");
             const pickedSurfaceSubs = cameraControl.hasSubs("pickedSurface");
-            cameraControl.hasSubs("doublePicked");
-            cameraControl.hasSubs("doublePickedSurface");
-            cameraControl.hasSubs("doublePickedNothing");
+
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
 
             // process tap
 
@@ -101259,8 +101286,8 @@ class TouchPickHandler {
 
     reset() {
         // TODO
-         // tapStartTime = -1;
-         // lastTapTime = -1;
+        // tapStartTime = -1;
+        // lastTapTime = -1;
 
     }
 
@@ -101878,9 +101905,8 @@ class CameraControl extends Component {
 
             // Private
 
-            tapInterval: 150, // Millisecs
-            doubleTapInterval: 325, // Millisecs
-            tapDistanceThreshold: 4, // Pixels
+            longTapTimeout: 600, // Millisecs
+            longTapRadius: 5, // Pixels
 
             // General
 
@@ -101933,7 +101959,8 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: math.vec2(),
             tapStartTime: -1,
-            lastTapTime: -1
+            lastTapTime: -1,
+            longTouchTimeout: null
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event
