@@ -54,22 +54,15 @@
 </body>
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [4.4000000432133675, -20.029526195238272, 8.900000043213367];
-    viewer.camera.look = [4.4000000432133675, 2.542399887111968, 8.900000043213367];
-    viewer.camera.up = [0, 0, 1];
-
-    viewer.camera.worldAxis = [
-        1, 0, 0, // Right
-        0, 0, 1, // Up
-        0, -1, 0  // Forward
-    ];
-
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
