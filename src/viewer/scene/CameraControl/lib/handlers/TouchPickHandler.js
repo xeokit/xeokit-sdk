@@ -96,8 +96,6 @@ class TouchPickHandler {
 
             activeTouches.length = touches.length;
 
-            e.stopPropagation();
-
         }, {passive: true});
 
 

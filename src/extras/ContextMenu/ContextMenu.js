@@ -299,6 +299,11 @@ class ContextMenu {
                     this.hide();
                 }
             });
+            document.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
+                if (!event.target.classList.contains("xeokit-context-menu-item")) {
+                    this.hide();
+                }
+            });
         }
 
         if (cfg.items) {

@@ -54,7 +54,6 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
-            event.stopPropagation();
             event.preventDefault();
 
             const touches = event.touches;
