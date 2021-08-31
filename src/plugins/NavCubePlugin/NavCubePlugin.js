@@ -373,27 +373,16 @@ class NavCubePlugin extends Plugin {
                                             self._repaint();
                                             lastAreaId = -1;
                                         }
-                                        var hit = navCubeScene.pick({
-                                            canvasPos: canvasPos,
-                                            pickSurface: true
-                                        });
-                                        if (hit) {
-                                            if (hit.uv) {
-                                                var areaId = self._cubeTextureCanvas.getArea(hit.uv);
-                                                if (areaId !== undefined) {
-                                                    document.body.style.cursor = "pointer";
-                                                    if (lastAreaId >= 0) {
-                                                        self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
-                                                        self._repaint();
-                                                        lastAreaId = -1;
-                                                    }
-                                                    if (areaId >= 0) {
-                                                        self._cubeTextureCanvas.setAreaHighlighted(areaId, true);
-                                                        lastAreaId = areaId;
-                                                        self._repaint();
-                                                    }
-                                                }
-                                            }
+                                        document.body.style.cursor = "pointer";
+                                        if (lastAreaId >= 0) {
+                                            self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
+                                            self._repaint();
+                                            lastAreaId = -1;
+                                        }
+                                        if (areaId >= 0) {
+                                            self._cubeTextureCanvas.setAreaHighlighted(areaId, false);
+                                            lastAreaId = -1;
+                                            self._repaint();
                                         }
                                     });
                                 }
