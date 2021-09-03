@@ -88,7 +88,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
-        if(background){
+        if (background) {
             gl.depthFunc(gl.LEQUAL);
         }
         this._bindProgram(frameCtx);
@@ -608,7 +608,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         frameCtx.drawArrays++;
     }
 
-    if(background){
+    if (background) {
         gl.depthFunc(gl.LESS);
     }
 };
