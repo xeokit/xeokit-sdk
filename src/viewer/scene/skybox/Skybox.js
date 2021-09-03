@@ -56,8 +56,8 @@ class Skybox extends Component {
                 emissiveMap: new Texture(this, {
                     src: cfg.src,
                     flipY: true,
-                    wrapS:"clampToEdge",
-                    wrapT:"clampToEdge",
+                    wrapS: "clampToEdge",
+                    wrapT: "clampToEdge",
                     encoding: cfg.encoding || "sRGB"
                 }),
                 backfaces: true // Show interior faces of our skybox geometry

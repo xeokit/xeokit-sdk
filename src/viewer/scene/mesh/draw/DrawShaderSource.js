@@ -329,7 +329,7 @@ function buildVertexDraw(mesh) {
     let len;
     let light;
     const billboard = meshState.billboard;
-    const background=meshState.background;
+    const background = meshState.background;
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
