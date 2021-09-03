@@ -493,6 +493,8 @@ class TreeViewPlugin extends Plugin {
     /**
      * Removes a model from this tree view.
      *
+     * Does nothing if model not currently in tree view.
+     *
      * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
      */
     removeModel(modelId) {
@@ -501,7 +503,6 @@ class TreeViewPlugin extends Plugin {
         }
         const modelTreeView = this._modelTreeViews[modelId];
         if (!modelTreeView) {
-            this.warn("Model not added: " + modelId);
             return;
         }
         modelTreeView.destroy();
