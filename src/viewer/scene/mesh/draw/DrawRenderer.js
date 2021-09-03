@@ -84,9 +84,13 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const geometryState = mesh._geometry._state;
     const camera = scene.camera;
     const rtcCenter = mesh.rtcCenter;
+    const background=meshState.background;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
+        if(background){
+            gl.depthFunc(gl.LEQUAL);
+        }
         this._bindProgram(frameCtx);
     }
 
@@ -602,6 +606,10 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     } else if (geometryState.positions) {
         gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
         frameCtx.drawArrays++;
+    }
+
+    if(background){
+        gl.depthFunc(gl.LESS);
     }
 };
 

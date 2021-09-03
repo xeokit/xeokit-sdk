@@ -212,6 +212,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the Mesh's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] Mesh's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] Mesh's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Boolean} [cfg.background=false] Indicates if the Mesh is the background, such as skybox.
      * @param {String} [cfg.billboard="none"] Mesh's billboarding behaviour. Options are "none" for no billboarding, "spherical" to always directly face {@link Camera.eye}, rotating both vertically and horizontally, or "cylindrical" to face the {@link Camera#eye} while rotating only about its vertically axis (use that mode for things like trees on a landscape).
      * @param {Geometry} [cfg.geometry] {@link Geometry} to define the shape of this Mesh. Inherits {@link Scene#geometry} by default.
      * @param {Material} [cfg.material] {@link Material} to define the normal rendered appearance for this Mesh. Inherits {@link Scene#material} by default.
@@ -248,6 +249,7 @@ class Mesh extends Component {
             selected: false,
             edges: false,
             stationary: !!cfg.stationary,
+            background: !!cfg.background,
             billboard: this._checkBillboard(cfg.billboard),
             layer: null,
             colorize: null,
