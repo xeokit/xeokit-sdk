@@ -223,7 +223,6 @@ function buildVertexLambert(mesh) {
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
     }
-    //src.push("vColor = vec4((reflectedColor * materialColor) + (lightAmbient.rgb * lightAmbient.a), 1.0) * colorize;");
     src.push("vColor = vec4((lightAmbient.rgb * lightAmbient.a * materialColor.rgb) + materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");

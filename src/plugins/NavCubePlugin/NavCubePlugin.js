@@ -303,7 +303,7 @@ class NavCubePlugin extends Plugin {
 
             var lastX;
             var lastY;
-            var dragging = false;
+
 
             self._navCubeCanvas.addEventListener("mouseenter", self._onMouseEnter = function (e) {
                 over = true;
