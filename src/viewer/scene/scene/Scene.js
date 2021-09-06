@@ -985,8 +985,10 @@ class Scene extends Component {
     }
 
     _deregisterModel(entity) {
-        delete this.models[entity.id];
+        const modelId = entity.id;
+        delete this.models[modelId];
         this._modelIds = null; // Lazy regenerate
+        this.fire("modelUnloaded", modelId);
     }
 
     _registerObject(entity) {
