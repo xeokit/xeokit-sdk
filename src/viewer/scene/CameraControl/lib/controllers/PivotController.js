@@ -327,17 +327,7 @@ class PivotController {
      */
     showPivot() {
         if (this._shown) {
-            if (this._hideTimeout) {
-                window.clearTimeout(this._hideTimeout);
-                this._hideTimeout = window.setTimeout(() => {
-                    this.hidePivot();
-                }, 1000);
-            }
             return;
-        }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
         }
         if (this._pivotElement) {
             this.updatePivotElement();
@@ -348,9 +338,6 @@ class PivotController {
             this.createPivotSphere();
         }
         this._shown = true;
-        this._hideTimeout = window.setTimeout(() => {
-            this.hidePivot();
-        }, 1000);
     }
 
     /**
@@ -361,10 +348,6 @@ class PivotController {
     hidePivot() {
         if (!this._shown) {
             return;
-        }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
         }
         if (this._pivotElement) {
             this._pivotElement.style.visibility = "hidden";
