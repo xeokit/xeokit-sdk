@@ -1,10 +1,11 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "1.6.0-alpha",
+  "version": "1.9.0",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "index.js",
+  "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "test": "percy exec -- node ./snapshots.js",
     "docs": "./node_modules/.bin/esdoc",
     "publish": "npm publish --access public"
   },
@@ -20,9 +21,9 @@
     "ifc",
     "bim",
     "cad",
-    "bimserver",
     "buildingsmart",
     "openbim",
+    "opensource",
     "solidworks",
     "gltf",
     "3dxml",
@@ -36,13 +37,21 @@
     "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
   "homepage": "https://xeokit.io",
-  "dependencies": {},
   "devDependencies": {
+    "@percy/script": "^1.1.0",
     "esdoc": "^1.1.0",
+    "esdoc-custom-theme": "^1.4.2",
+    "esdoc-publish-html-plugin": "^1.1.2",
     "esdoc-standard-plugin": "^1.0.0",
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "http-server": "^0.12.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup": "^2.46.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "files": [
-    "/src"
-  ]
+    "/src",
+    "/dist"
+  ],
+  "dependencies": {}
 }

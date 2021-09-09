@@ -1,36 +1,47 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>DistanceMeasurementPlugin - Create distance measurements by clicking on objects</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>DistanceMeasurementPlugin - Create distance measurements by clicking on objects</h1><br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/measure_distance_icon.png"/>
+    <h1>DistanceMeasurementPlugin</h1>
+    <h2>Create distance measurements by clicking on objects</h2>
+    <p>In this example, we load a BIM model from the file system, then allow distance measurements to be made on the
+        model using the mouse.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a>
-            - Manages DistanceMeasurements
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a>
-            - Creates DistanceMeasurements from mouse and touch input
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
+            <a href="../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+               target="_other">DistanceMeasurementsPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html"
+               target="_other">DistanceMeasurementsControl</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -41,9 +52,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {DistanceMeasurementsPlugin} from "../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -67,8 +76,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
-        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+        src: "../assets/models/xkt/v8/OTCConferenceCenter.xkt",
         edges: true
     });
 

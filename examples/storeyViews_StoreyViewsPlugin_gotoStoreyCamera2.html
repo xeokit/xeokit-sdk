@@ -1,52 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit StoreyViewsPlugin gotoStoreyCamera()</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #info {
-           width: 350px;
-        }
-        
-    </style>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>StoreyViewsPlugin gotoStoreyCamera() and showStoreyObjects()</h1>
-
-    <br>
-    <p>Positioning the camera for an orthographic plan view, while showing only the objects within a given IfcBuildingStorey.</p>
-<br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/storey_views_icon.png"/>
+    <h1>StoreyViewsPlugin</h1>
+    <p>Using gotoStoreyCamera() and showStoreyObjects()</p>
+    <p>Positioning the camera for an orthographic plan view, while showing only the objects within a given
+        IfcBuildingStorey.</p>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
-            - Provides tools for visualizing IfcBuildingStoreys
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html"
+               target="_other">StoreyViewsPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -55,9 +49,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, StoreyViewsPlugin, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the Camera
@@ -85,8 +77,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
         edges: true
     });
 
@@ -101,7 +92,7 @@
     // arrange the camera for a 3D perspective plan view of the objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded",  () =>{
+    model.on("loaded", () => {
 
         setTimeout(() => {
 

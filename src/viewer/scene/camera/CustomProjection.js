@@ -27,7 +27,9 @@ class CustomProjection extends Component {
         /**
          * The Camera this CustomProjection belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 

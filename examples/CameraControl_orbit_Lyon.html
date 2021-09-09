@@ -1,18 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-    <title>CameraControl Orbit Mode with Lyon Model</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
     <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
-
-        .camera-pivot-marker {
+        .xeokit-camera-pivot-marker {
             color: #ffffff;
             position: absolute;
             width: 25px;
@@ -34,40 +32,52 @@
             right: 10px;
             z-index: 200000;
         }
-
-        #my-gui-container {
-            position: absolute;
-            top: 180px;
-            right: 20px;
-            z-index: 10;
-        }
-
     </style>
-
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info">
-    <h1><a target="_other"
-           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> -
-        Orbit Mode with Lyon Model</h1>
-    <br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/camera_icon.png"/>
+    <h1>CameraControl</h1>
+    <h2>Orbit mode</h2>
+    <p>In this example, we're loading seven double-precision BIM models from the file system, then navigating using an
+        orbiting
+        camera.</p>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
-        <li>Models provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+    </ul>
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html"
+               target="_other">CameraControl</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Models provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
-
-<div id="my-gui-container"></div>
-
 </body>
 
 <script type="module">
@@ -76,15 +86,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, DirLight, AmbientLight} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -112,10 +114,10 @@
     viewer.camera.up = [0.07693555158566205, 0.8946686100264034, 0.4400556773132614];
 
     viewer.camera.perspective.near = 1.0;
-    viewer.camera.perspective.far = 1e27;
+    viewer.camera.perspective.far = 10000000; // 10000km
 
     viewer.camera.ortho.near = 1.0;
-    viewer.camera.ortho.far = 1e27;
+    viewer.camera.ortho.far = 10000000; // 10000km
 
     //------------------------------------------------------------------------------------------------------------------
     // Customize CameraControl
@@ -126,7 +128,7 @@
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
 
-    const pivotElement = document.createRange().createContextualFragment("<div class='camera-pivot-marker'></div>").firstChild;
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
     cameraControl.pivotElement = pivotElement;
 
@@ -190,7 +192,7 @@
 
     xktLoader.load({
         id: "lyon1",
-        src: "./models/xkt/Lyon/Lyon1.xkt",
+        src: "../assets/models/xkt/v7/Lyon/Lyon1.xkt",
         edges: true, saoEnabled: true
     }).on("loaded", () => {
 
@@ -198,7 +200,7 @@
 
         xktLoader.load({
             id: "lyon2",
-            src: "./models/xkt/Lyon/Lyon2.xkt",
+            src: "../assets/models/xkt/v7/Lyon/Lyon2.xkt",
             edges: true, saoEnabled: true
         }).on("loaded", () => {
 
@@ -206,7 +208,7 @@
 
             xktLoader.load({
                 id: "lyon3",
-                src: "./models/xkt/Lyon/Lyon3.xkt",
+                src: "../assets/models/xkt/v7/Lyon/Lyon3.xkt",
                 edges: true, saoEnabled: true
             }).on("loaded", () => {
 
@@ -214,7 +216,7 @@
 
                 xktLoader.load({
                     id: "lyon4",
-                    src: "./models/xkt/Lyon/Lyon4.xkt",
+                    src: "../assets/models/xkt/v7/Lyon/Lyon4.xkt",
                     edges: true, saoEnabled: true
                 }).on("loaded", () => {
 
@@ -222,7 +224,7 @@
 
                     xktLoader.load({
                         id: "Lyon5",
-                        src: "./models/xkt/Lyon/Lyon5.xkt",
+                        src: "../assets/models/xkt/v7/Lyon/Lyon5.xkt",
                         edges: true, saoEnabled: true
                     }).on("loaded", () => {
 
@@ -230,7 +232,7 @@
 
                         xktLoader.load({
                             id: "Lyon6",
-                            src: "./models/xkt/Lyon/Lyon6.xkt",
+                            src: "../assets/models/xkt/v7/Lyon/Lyon6.xkt",
                             edges: true, saoEnabled: true
                         }).on("loaded", () => {
 
@@ -238,7 +240,7 @@
 
                             xktLoader.load({
                                 id: "Lyon7",
-                                src: "./models/xkt/Lyon/Lyon7.xkt",
+                                src: "../assets/models/xkt/v7/Lyon/Lyon7.xkt",
                                 edges: true, saoEnabled: true
                             }).on("loaded", () => {
 
@@ -246,7 +248,7 @@
 
                                 xktLoader.load({
                                     id: "Lyon8",
-                                    src: "./models/xkt/Lyon/Lyon8.xkt",
+                                    src: "../assets/models/xkt/v7/Lyon/Lyon8.xkt",
                                     edges: true, saoEnabled: true
                                 }).on("loaded", () => {
 
@@ -254,7 +256,7 @@
 
                                     const lyon9 = xktLoader.load({
                                         id: "Lyon9",
-                                        src: "./models/xkt/Lyon/Lyon9.xkt",
+                                        src: "../assets/models/xkt/v7/Lyon/Lyon9.xkt",
                                         edges: true, saoEnabled: true
                                     });
 
@@ -280,7 +282,6 @@
             });
         });
     });
-
 
 
     //------------------------------------------------------------------------------------------------------------------
@@ -339,7 +340,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false, width: 300});
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const cameraControlFolder = gui.addFolder('cameraControl');
     cameraControlFolder.add(cameraControlParams, 'active');
@@ -370,7 +371,7 @@
     dollyFolder.add(cameraControlParams, 'dollyMinSpeed', 0.01, 1.0);
     dollyFolder.open();
 
-    const customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
 
 </script>

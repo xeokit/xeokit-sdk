@@ -34,11 +34,32 @@ class FrameContext {
         this._rtcPickViewMats = {};
 
         /**
-         * ID of the last {@link webgl.Program} that was bound during the current frame.
+         * The WebGL rendering context.
+         * @type {WebGLRenderingContext}
+         */
+        this.gl = this._scene.canvas.gl;
+
+        /**
+         * ID of the last {@link WebGLProgram} that was bound during the current frame.
          * @property lastProgramId
          * @type {Number}
          */
         this.lastProgramId = null;
+
+        /**
+         * Whether to render a quality representation for triangle surfaces.
+         *
+         * When ````false````, we'll render them with a fast vertex-shaded Gouraud-shaded representation, which
+         * is great for zillions of objects.
+         *
+         * When ````true````, we'll render them at a better visual quality, using smooth, per-fragment shading
+         * and a more realistic lighting model.
+         *
+         * @property quality
+         * @default false
+         * @type {Boolean}
+         */
+        this.pbrEnabled = false;
 
         /**
          * Whether SAO is currently enabled during the current frame.
@@ -66,7 +87,7 @@ class FrameContext {
         this.frontface = true;
 
         /**
-         * The next available texture unit to bind a {@link webgl.Texture} to.
+         * The next available texture unit to bind a {@link Texture} to.
          * @defauilt 0
          * @property textureUnit
          * @type {number}

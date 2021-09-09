@@ -63,6 +63,14 @@ class RenderFlags {
         this.culled = false;
 
         /**
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate whether the {@link Drawable} is sliced by any {@link SectionPlane}s.
+         *
+         * @property sectioned
+         * @type {Boolean}
+         */
+        this.sectioned  = false;
+
+        /**
          * Set by {@link Drawable#rebuildRenderFlags} to indicate the number of layers within the {@link Drawable}.
          *
          * @property numLayers
@@ -79,112 +87,112 @@ class RenderFlags {
         this.numVisibleLayers = 0;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawNormalFillOpaque}.
-         * @property normalFillOpaque
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable#drawColorOpaque}.
+         * @property colorOpaque
          * @type {boolean}
          */
-        this.normalFillOpaque = false;
+        this.colorOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawNormalEdgesOpaque}.
-         * @property normalEdgesOpaque
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable#drawColorTransparent}.
+         * @property colorTransparent
          * @type {boolean}
          */
-        this.normalEdgesOpaque = false;
+        this.colorTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawNormalFillTransparent}.
-         * @property normalFillTransparent
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable#drawEdgesColorOpaque}.
+         * @property edgesOpaque
          * @type {boolean}
          */
-        this.normalFillTransparent = false;
+        this.edgesOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawNormalEdgesTransparent}.
-         * @property normalEdgesTransparent
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable#drawEdgesColorTransparent}.
+         * @property edgesTransparent
          * @type {boolean}
          */
-        this.normalEdgesTransparent = false;
+        this.edgesTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.
-         * @property xrayedFillOpaque
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawSilhouetteXRayed}.
+         * @property xrayedSilhouetteOpaque
          * @type {boolean}
          */
-        this.xrayedFillOpaque = false;
+        this.xrayedSilhouetteOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawEdgesXRayed}.
          * @property xrayedEdgesOpaque
          * @type {boolean}
          */
         this.xrayedEdgesOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.
-         * @property xrayedFillTransparent
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawSilhouetteXRayed}.
+         * @property xrayedSilhouetteTransparent
          * @type {boolean}
          */
-        this.xrayedFillTransparent = false;
+        this.xrayedSilhouetteTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawEdgesXRayed}.
          * @property xrayedEdgesTransparent
          * @type {boolean}
          */
         this.xrayedEdgesTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.
-         * @property highlightedFillOpaque
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawSilhouetteHighlighted}.
+         * @property highlightedSilhouetteOpaque
          * @type {boolean}
          */
-        this.highlightedFillOpaque = false;
+        this.highlightedSilhouetteOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawEdgesHighlighted}.
          * @property highlightedEdgesOpaque
          * @type {boolean}
          */
         this.highlightedEdgesOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.
-         * @property highlightedFillTransparent
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawSilhouetteHighlighted}.
+         * @property highlightedSilhouetteTransparent
          * @type {boolean}
          */
-        this.highlightedFillTransparent = false;
+        this.highlightedSilhouetteTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawEdgesHighlighted}.
          * @property highlightedEdgesTransparent
          * @type {boolean}
          */
         this.highlightedEdgesTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.
-         * @property selectedFillOpaque
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawSilhouetteSelected}.
+         * @property selectedSilhouetteOpaque
          * @type {boolean}
          */
-        this.selectedFillOpaque = false;
+        this.selectedSilhouetteOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs an opaque {@link Drawable#drawEdgesSelected}.
          * @property selectedEdgesOpaque
          * @type {boolean}
          */
         this.selectedEdgesOpaque = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.
-         * @property selectedFillTransparent
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawSilhouetteSelected}.
+         * @property selectedSilhouetteTransparent
          * @type {boolean}
          */
-        this.selectedFillTransparent = false;
+        this.selectedSilhouetteTransparent = false;
 
         /**
-         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.
+         * Set by {@link Drawable#rebuildRenderFlags} to indicate the {@link Drawable} needs a transparent {@link Drawable#drawEdgesSelected}.
          * @property selectedEdgesTransparent
          * @type {boolean}
          */

@@ -24,12 +24,7 @@ const modeNames = ["opaque", "mask", "blend"];
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_MetallicMaterial)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {loadOBJGeometry} from "../src/scene/geometry/loaders/loadOBJGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {Viewer, Mesh, loadOBJGeometry, ReadableGeometry, MetallicMaterial, Texture} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"

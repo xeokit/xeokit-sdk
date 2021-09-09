@@ -1,38 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Minimal BIM Viewer for .xkt Models</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-    </style>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>Loading a Model and Fit Camera</h1>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/camera_icon.png"/>
+    <h1>CameraFlightAnimation</h1>
+    <p>Fitting a model in view</p>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a>
-            - Fits camera to model
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html"
+               target="_other">CameraFlightAnimation</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -41,8 +44,7 @@
 </body>
 
 <script type="module">
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -56,13 +58,12 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true
     });
 
-    model.on("loaded", function() {
-       viewer.cameraFlight.flyTo(model);
+    model.on("loaded", function () {
+        viewer.cameraFlight.flyTo(model);
     });
 
 </script>

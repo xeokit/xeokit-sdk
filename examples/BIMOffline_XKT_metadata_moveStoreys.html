@@ -1,47 +1,52 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Using IFC Metadata to Isolate Objects using Offsets</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>XKTLoaderPlugin - Using IFC Metadata to Isolate Objects using Offsets</h1>
-    <br>
-    <p>Loads an .xkt IFC model and JSON IFC metadata from the file system, then uses the metadata to reveal each building storey.</p><br>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <img class="info-icon" src="../assets/images/bim_icon.png"/>
+    <h2>Using IFC metadata to separate building storeys.</h2>
+    <p>Loads an .xkt IFC model from the file system, then uses the model's metadata to reveal each
+        building storey.</p>
+    <p>Note that translation of objects requires the Viewer to be configured with <code>entityOffsetsEnabled</code> set
+        <code>true</code>.
+    </p>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/viewer/metadata/MetaScene.js~MetaScene.html"
+               target="_other">MetaScene</a>
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -52,13 +57,15 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        math,
+        VBOGeometry,
+        buildGridGeometry,
+        PhongMaterial,
+        Mesh
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak the x-ray material and  SAO
@@ -81,20 +88,6 @@
 
     camera.perspective.near = 0.1;
     camera.perspective.far = 5000.0;
-
-    scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
-    scene.xrayMaterial.edgeColor = [0.0, 0.0, 0.0];
-    scene.xrayMaterial.fillAlpha = 0.1;
-    scene.xrayMaterial.edgeAlpha = 0.4;
-
-    sao.enabled = true; // Only works if supported (see above)
-    sao.intensity = 0.15;
-    sao.bias = 0.5;
-    sao.scale = 1000.0;
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-
-    cameraControl.followPointer = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a ground plane
@@ -121,8 +114,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
         saoEnabled: true,
         edges: true
     });

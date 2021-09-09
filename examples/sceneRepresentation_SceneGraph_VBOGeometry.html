@@ -1,52 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Creating a basic scene graph</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>Basic Scene Graph, using VBOGeometry Components</h1>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/scene_graph_icon.png"/>
+    <h1>Scene Graph</h1>
+    <h2>Scene graph with GPU-resident geometry</h2>
+    <p>In this example, we're programmatically building a simple model from xeokit's scene graph components, with
+        geometry stored solely in GPU memory.</p>
+    <p>We have the option to not retain geometry in browser memory, in case we need a lower footprint.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/nodes/Node.js~Node.html">Node</a>
-            - Scene graph node
+            <a href="../docs/class/src/viewer/scene/nodes/Node.js~Node.html"
+               target="_other">Node</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a>
-            - Phong material
+            <a href="../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a>
-            - VBOGeometry
+            <a href="../docs/class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html"
+               target="_other">VBOGeometry</a>
         </li>
-
-
+        <li>
+            <a href="../docs/function/index.html#static-function-buildBoxGeometry"
+               target="_other">buildBoxGeometry</a>
+        </li>
     </ul>
 </div>
 </body>
@@ -57,15 +55,16 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {Node} from "../src/viewer/scene/nodes/Node.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildSphereGeometry} from "../src/viewer/scene/geometry/builders/buildSphereGeometry.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-
+    import {
+        Viewer,
+        Mesh,
+        Node,
+        PhongMaterial,
+        buildBoxGeometry,
+        VBOGeometry,
+        buildSphereGeometry,
+        math
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera

@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="utf-8"/>
-    <title>Controlling which objects are pickable</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
     <h1>Controlling which objects are pickable</h1>
     <br/>
-    <p>In this example, the grey objects are set un-pickable, while the blue object remains pickable.<br><br>Try clicking objects to pick them.
-    <br><br>
+    <p>In this example, the grey objects are set un-pickable, while the blue object remains pickable.<br><br>Try
+        clicking objects to pick them.
+        <br><br>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads .xkt model from file system
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
     </ul>
 </div>
@@ -35,8 +35,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -59,8 +58,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true,
         pickable: false
     });

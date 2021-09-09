@@ -120,8 +120,8 @@ class PivotController {
                 const canvasElem = canvas.canvas;
                 const canvasBoundingRect = canvasElem.getBoundingClientRect();
 
-                this._pivotElement.style.left = (Math.floor(canvasBoundingRect.left + this._pivotCanvasPos[0]) - (this._pivotElement.clientWidth / 2)) + "px";
-                this._pivotElement.style.top = (Math.floor(canvasBoundingRect.top + this._pivotCanvasPos[1]) - (this._pivotElement.clientHeight / 2)) + "px";
+                this._pivotElement.style.left = (Math.floor(canvasBoundingRect.left + this._pivotCanvasPos[0]) - (this._pivotElement.clientWidth / 2) + window.scrollX) + "px";
+                this._pivotElement.style.top = (Math.floor(canvasBoundingRect.top + this._pivotCanvasPos[1]) - (this._pivotElement.clientHeight / 2) + window.scrollY) + "px";
             }
             this._cameraDirty = false;
         }

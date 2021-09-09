@@ -82,7 +82,7 @@ class SplineCurve extends Curve {
     /**
      * Gets the point on this SplineCurve at position {@link SplineCurve#t}.
      *
-     * @returns {{Number[]}} The point at {@link SplineCurve#t}.
+     * @returns {Number[]} The point at {@link SplineCurve#t}.
      */
     get point() {
         return this.getPoint(this._t);
@@ -92,7 +92,7 @@ class SplineCurve extends Curve {
      * Returns point on this SplineCurve at the given position.
      *
      * @param {Number} t Position to get point at.
-     * @returns {{Number[]}} Point at the given position.
+     * @returns {Number[]} Point at the given position.
      */
     getPoint(t) {
 

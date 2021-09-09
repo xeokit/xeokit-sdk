@@ -1,28 +1,17 @@
 import {Program} from "./../Program.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
+import {WEBGL_INFO} from "../../webglInfo.js";
 
-function createSampleWeights(kernelRadius, stdDev) {
-    const weights = [];
-    for (let i = 0; i <= kernelRadius; i++) {
-        weights.push(gaussian(i, stdDev));
-    }
-    return weights; // TODO: Optimize
-}
+const blurStdDev = 4;
+const blurDepthCutoff = 0.01;
+const KERNEL_RADIUS = 16;
 
-function gaussian(x, stdDev) {
-    return Math.exp(-(x * x) / (2.0 * (stdDev * stdDev))) / (Math.sqrt(2.0 * Math.PI) * stdDev);
-}
+const sampleOffsetsVert = new Float32Array(createSampleOffsets(KERNEL_RADIUS + 1, [0, 1]));
+const sampleOffsetsHor = new Float32Array(createSampleOffsets(KERNEL_RADIUS + 1, [1, 0]));
+const sampleWeights = new Float32Array(createSampleWeights(KERNEL_RADIUS + 1, blurStdDev));
 
-function createSampleOffsets(kernelRadius, uvIncrement) {
-    var offsets = [];
-    for (var i = 0; i <= kernelRadius; i++) {
-        const vec = math.mulVec2Scalar(uvIncrement, i, math.vec2());
-        offsets.push(vec[0]);  // TODO: optimize!
-        offsets.push(vec[1]);
-    }
-    return offsets;
-}
+const tempVec2a = new Float32Array(2);
 
 /**
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
@@ -34,8 +23,6 @@ class SAODepthLimitedBlurRenderer {
 
         this._scene = scene;
 
-        this._uvIncrement = new Float32Array([0, 0]);
-
         // The program
 
         this._program = null;
@@ -46,9 +33,10 @@ class SAODepthLimitedBlurRenderer {
         this._aPosition = null;
         this._aUV = null;
 
-        this._uColorTexture = "uColorTexture";
         this._uDepthTexture = "uDepthTexture";
+        this._uOcclusionTexture = "uOcclusionTexture";
 
+        this._uViewport = null;
         this._uCameraNear = null;
         this._uCameraFar = null;
         this._uCameraProjectionMatrix = null;
@@ -59,7 +47,6 @@ class SAODepthLimitedBlurRenderer {
         this._uBias = null;
         this._uKernelRadius = null;
         this._uMinResolution = null;
-
 
         // VBOs
 
@@ -78,50 +65,39 @@ class SAODepthLimitedBlurRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
-                    precision highp float;
-                    precision highp int;
-                    #else
-                    precision mediump float;
-                    precision mediump int;
-                    #endif
+            vertex: [
+                `precision highp float;
+                precision highp int;
                     
-                    attribute vec3 aPosition;
-                    attribute vec2 aUV;
-                    uniform vec2 uViewport;
-                    varying vec2 vUV;
-                    varying vec2 vInvSize;
-                    void main () {
-                        vUV = aUV;
-                        vInvSize = 1.0 / uViewport;
-                        gl_Position = vec4(aPosition, 1.0);
-                    }`],
+                attribute vec3 aPosition;
+                attribute vec2 aUV;
+                uniform vec2 uViewport;
+                varying vec2 vUV;
+                varying vec2 vInvSize;
+                void main () {
+                    vUV = aUV;
+                    vInvSize = 1.0 / uViewport;
+                    gl_Position = vec4(aPosition, 1.0);
+                }`],
 
-            fragment: [`#ifdef GL_FRAGMENT_PRECISION_HIGH
-                    precision highp float;
-                    precision highp int;
-                    #else
-                    precision mediump float;
-                    precision mediump int;
-                    #endif
+            fragment: [
+                `precision highp float;
+                precision highp int;
                     
-                    #define PI 3.14159265359
+                #define PI 3.14159265359
                 #define PI2 6.28318530718
                 #define EPSILON 1e-6
 
-                #define KERNEL_RADIUS 4
+                #define KERNEL_RADIUS ${KERNEL_RADIUS}
 
-                precision highp float;
-            
                 varying vec2        vUV;
                 varying vec2        vInvSize;
             
-                uniform sampler2D   uColorTexture;
                 uniform sampler2D   uDepthTexture;
+                uniform sampler2D   uOcclusionTexture;              
                
                 uniform float       uCameraNear;
-                uniform float       uCameraFar;
-                
+                uniform float       uCameraFar;               
                 uniform float       uDepthCutoff;
 
                 uniform vec2        uSampleOffsets[ KERNEL_RADIUS + 1 ];
@@ -132,32 +108,42 @@ class SAODepthLimitedBlurRenderer {
                 const vec3          packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
                 const vec4          unpackFactors = unpackDownscale / vec4( packFactors, 1. );   
 
-                float unpackRGBAToDepth( const in vec4 v ) {
-                    return dot( v, unpackFactors );
+                const float packUpscale = 256. / 255.;
+       
+                const float shiftRights = 1. / 256.;
+                
+                float unpackRGBAToFloat( const in vec4 v ) {
+                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unpackFactors );
+                }               
+
+                vec4 packFloatToRGBA( const in float v ) {
+                    vec4 r = vec4( fract( v * packFactors ), v );
+                    r.yzw -= r.xyz * shiftRights; 
+                    return r * packUpscale;
                 }
 
-                float viewZToOrthographicDepth( const in float viewZ, const in float near, const in float far ) {
-                    return ( viewZ + near ) / ( near - far );
+                float viewZToOrthographicDepth( const in float viewZ) {
+                    return ( viewZ + uCameraNear ) / ( uCameraNear - uCameraFar );
                 }
               
-                float orthographicDepthToViewZ( const in float linearClipZ, const in float near, const in float far ) {
-                    return linearClipZ * ( near - far ) - near;
+                float orthographicDepthToViewZ( const in float linearClipZ) {
+                    return linearClipZ * ( uCameraNear - uCameraFar ) - uCameraNear;
                 }
 
-                float viewZToPerspectiveDepth( const in float viewZ, const in float near, const in float far ) {
-                    return (( near + viewZ ) * far ) / (( far - near ) * viewZ );
+                float viewZToPerspectiveDepth( const in float viewZ) {
+                    return (( uCameraNear + viewZ ) * uCameraFar ) / (( uCameraFar - uCameraNear ) * viewZ );
                 }
                 
-                float perspectiveDepthToViewZ( const in float invClipZ, const in float near, const in float far ) {
-                    return ( near * far ) / ( ( far - near ) * invClipZ - far );
+                float perspectiveDepthToViewZ( const in float invClipZ) {
+                    return ( uCameraNear * uCameraFar ) / ( ( uCameraFar - uCameraNear ) * invClipZ - uCameraFar );
                 }
 
-                float getDepth( const in vec2 screenPosition ) {
-                	return unpackRGBAToDepth( texture2D( uDepthTexture, screenPosition ) );
-                }
+                float getDepth( const in vec2 screenPosition ) {`
+                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
+                `}
 
                 float getViewZ( const in float depth ) {
-                     return perspectiveDepthToViewZ( depth, uCameraNear, uCameraFar );
+                     return perspectiveDepthToViewZ( depth );
                 }
 
                 void main() {
@@ -172,22 +158,22 @@ class SAODepthLimitedBlurRenderer {
                     bool lBreak = false;
 
                     float weightSum = uSampleWeights[0];
-                    vec4 diffuseSum = texture2D( uColorTexture, vUV ) * weightSum;
+                    float occlusionSum = unpackRGBAToFloat(texture2D( uOcclusionTexture, vUV )) * weightSum;
 
                     for( int i = 1; i <= KERNEL_RADIUS; i ++ ) {
 
-                        float   sampleWeight = uSampleWeights[i];
-                        vec2    sampleUVOffset = uSampleOffsets[i] * vInvSize;
+                        float sampleWeight = uSampleWeights[i];
+                        vec2 sampleUVOffset = uSampleOffsets[i] * vInvSize;
 
-                        vec2    sampleUV = vUV + sampleUVOffset;
-                        float   viewZ = -getViewZ( getDepth( sampleUV ) );
+                        vec2 sampleUV = vUV + sampleUVOffset;
+                        float viewZ = -getViewZ( getDepth( sampleUV ) );
 
                         if( abs( viewZ - centerViewZ ) > uDepthCutoff ) {
                             rBreak = true;
                         }
 
                         if( ! rBreak ) {
-                            diffuseSum += texture2D( uColorTexture, sampleUV ) * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture2D( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
 
@@ -199,12 +185,12 @@ class SAODepthLimitedBlurRenderer {
                         }
 
                         if( ! lBreak ) {
-                            diffuseSum += texture2D( uColorTexture, sampleUV ) * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture2D( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
                     }
 
-                    gl_FragColor = diffuseSum / weightSum;
+                    gl_FragColor = packFloatToRGBA(occlusionSum / weightSum);
                 }`]
         });
 
@@ -224,6 +210,8 @@ class SAODepthLimitedBlurRenderer {
 
         this._program.bind();
 
+        this._uViewport = this._program.getLocation("uViewport");
+
         this._uCameraNear = this._program.getLocation("uCameraNear");
         this._uCameraFar = this._program.getLocation("uCameraFar");
 
@@ -236,7 +224,7 @@ class SAODepthLimitedBlurRenderer {
         this._aUV = this._program.getAttribute("aUV");
     }
 
-    render(depthTexture, colorTexture, direction) {
+    render(depthRenderBuffer, occlusionRenderBuffer, direction) {
 
         if (this._programError) {
             return;
@@ -266,42 +254,41 @@ class SAODepthLimitedBlurRenderer {
         const projectState = scene.camera.project._state;
         const near = projectState.near;
         const far = projectState.far;
-        const blurStdDev = 1.0;
-        const blurDepthCutoff = 2.0;
-        const KERNEL_RADIUS = 4;
-
-        if (direction === 0) {
-            // Horizontal
-            this._uvIncrement[0] = 1.0 / viewportWidth;
-            this._uvIncrement[1] = 0.0;
-        } else {
-            // Vertical
-            this._uvIncrement[0] = 0.0;
-            this._uvIncrement[1] = 1.0 / viewportHeight;
-        }
 
         gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.BLEND);
         gl.frontFace(gl.CCW);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         program.bind();
 
+        tempVec2a[0] = viewportWidth;
+        tempVec2a[1] = viewportHeight;
+
+        gl.uniform2fv(this._uViewport, tempVec2a);
         gl.uniform1f(this._uCameraNear, near);
         gl.uniform1f(this._uCameraFar, far);
 
         gl.uniform1f(this._uDepthCutoff, blurDepthCutoff);
 
-        const sampleOffsets = createSampleOffsets(KERNEL_RADIUS + 1, this._uvIncrement);
-        const sampleWeights = createSampleWeights(KERNEL_RADIUS + 1, blurStdDev);
+        if (direction === 0) {// Horizontal
+            gl.uniform2fv(this._uSampleOffsets, sampleOffsetsHor);
+        } else { // Vertical
+            gl.uniform2fv(this._uSampleOffsets, sampleOffsetsVert);
+        }
 
-        gl.uniform2fv(this._uSampleOffsets, sampleOffsets);
         gl.uniform1fv(this._uSampleWeights, sampleWeights);
 
+        const depthTexture = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
+            ? depthRenderBuffer.getDepthTexture()
+            : depthRenderBuffer.getTexture();
+
+        const occlusionTexture = occlusionRenderBuffer.getTexture();
+
         program.bindTexture(this._uDepthTexture, depthTexture, 0);
-        program.bindTexture(this._uColorTexture, colorTexture, 1);
+        program.bindTexture(this._uOcclusionTexture, occlusionTexture, 1);
 
         this._aUV.bindArrayBuffer(this._uvBuf);
         this._aPosition.bindArrayBuffer(this._positionsBuf);
@@ -313,6 +300,27 @@ class SAODepthLimitedBlurRenderer {
     destroy() {
         this._program.destroy();
     }
+}
+
+function createSampleWeights(kernelRadius, stdDev) {
+    const weights = [];
+    for (let i = 0; i <= kernelRadius; i++) {
+        weights.push(gaussian(i, stdDev));
+    }
+    return weights; // TODO: Optimize
+}
+
+function gaussian(x, stdDev) {
+    return Math.exp(-(x * x) / (2.0 * (stdDev * stdDev))) / (Math.sqrt(2.0 * Math.PI) * stdDev);
+}
+
+function createSampleOffsets(kernelRadius, uvIncrement) {
+    const offsets = [];
+    for (let i = 0; i <= kernelRadius; i++) {
+        offsets.push(uvIncrement[0] * i);
+        offsets.push(uvIncrement[1] * i);
+    }
+    return offsets;
 }
 
 export {SAODepthLimitedBlurRenderer};

@@ -17,8 +17,7 @@ const color = math.vec3();
  * * {@link ObjectsMemento} - Saves and restores a snapshot of the visual state of the {@link Entity}'s that represent objects within a {@link Scene}.
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {ModelMemento} from "../src/scene/mementos/ModelMemento.js";
+ * import {Viewer, XKTLoaderPlugin,  ModelMemento} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

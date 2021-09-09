@@ -31,7 +31,9 @@ class Ortho extends Component {
         /**
          * The Camera this Ortho belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 
@@ -39,7 +41,7 @@ class Ortho extends Component {
             matrix: math.mat4(),
             inverseMatrix: math.mat4(),
             transposedMatrix: math.mat4(),
-            near : 0.1,
+            near: 0.1,
             far: 2000.0
         });
 
@@ -141,7 +143,7 @@ class Ortho extends Component {
      * @param {Number} value New Ortho near plane position.
      */
     set near(value) {
-       const near = (value !== undefined && value !== null) ? value : 0.1;
+        const near = (value !== undefined && value !== null) ? value : 0.1;
         if (this._state.near === near) {
             return;
         }
@@ -212,7 +214,7 @@ class Ortho extends Component {
      *
      * @returns {Number[]} The inverse of {@link Ortho#matrix}.
      */
-    inverseMatrix() {
+    get inverseMatrix() {
         if (this._updateScheduled) {
             this._doUpdate();
         }
@@ -228,7 +230,7 @@ class Ortho extends Component {
      *
      * @returns {Number[]} The transpose of {@link Ortho#matrix}.
      */
-    transposedMatrix() {
+    get transposedMatrix() {
         if (this._updateScheduled) {
             this._doUpdate();
         }

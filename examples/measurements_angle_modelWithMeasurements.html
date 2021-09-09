@@ -1,31 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>AngleMeasurementPlugin - Programmatically create angle measurements</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>AngleMeasurementPlugin - Programmatically create angle measurements</h1><br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/measure_angle_icon.png"/>
+    <h1>AngleMeasurementsPlugin</h1>
+    <h2>Creating angle measurements programmatically</h2>
+    <p>In this example, we're loading a BIM model from the file system, then programmatically creating a couple of
+        angle measurements on the model's surface.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a>
-            - Creates AngleMeasurements
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
+            <a href="../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html"
+               target="_other">AngleMeasurementsPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -36,9 +48,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {AngleMeasurementsPlugin} from "../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -62,8 +72,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/xkt/v8/Duplex.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
@@ -83,7 +92,7 @@
             id: "angleMeasurement1",
             origin: {
                 entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [0.41385602951049805,-0.030549049377441406,17.801637649536133]
+                worldPos: [0.41385602951049805, -0.030549049377441406, 17.801637649536133]
             },
             corner: {
                 entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
@@ -91,7 +100,7 @@
             },
             target: {
                 entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [6.181171894073486, -0.0305633544921875,22.141223907470703]
+                worldPos: [6.181171894073486, -0.0305633544921875, 22.141223907470703]
             },
             visible: true
         });
@@ -100,11 +109,11 @@
             id: "angleMeasurement2",
             origin: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
-                worldPos: [6.226694107055664,2.4763600826263428,17.717445373535156]
+                worldPos: [6.226694107055664, 2.4763600826263428, 17.717445373535156]
             },
             corner: {
-                entity: viewer.scene.objects[ "2O2Fr$t4X7Zf8NOew3FNqI"],
-                worldPos: [ 8.781314849853516 ,-0.01338815689086914,17.71697235107422]
+                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNqI"],
+                worldPos: [8.781314849853516, -0.01338815689086914, 17.71697235107422]
 
             },
             target: {

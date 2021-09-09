@@ -1,57 +1,61 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Grid geometry</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Grid geometry</h1>
+<div class="slideout-sidebar">
+    <!--    <img class="info-icon" src="../assets/images/geometry_icon.png"/>-->
+    <h1>buildGridGeometry()</h1>
+    <h2>Builds grid-shaped line segment meshes</h2>
+    <p>In this example, we're creating a simple 3D scene that contains a grid-shaped geometry, generated using the
+        buildGridGeometry helper function.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/geometry/VBOGeometry.js~VBOGeometry.html">ReadableGeometry</a>
-            - ReadableGeometry
+            <a href="../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/function/index.html#static-function-buildGridGeometry">buildGridGeometry()</a>
-            - creates the grid
+            <a href="../docs/function/index.html#static-function-buildGridGeometry"
+               target="_other">buildGridGeometry</a>
+        </li>
+
+        <li>
+            <a href="../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a>
-            - Phong material
+            <a href="../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";;
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
+    import {Viewer, Mesh, buildGridGeometry, PhongMaterial, VBOGeometry} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera

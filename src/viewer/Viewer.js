@@ -31,9 +31,11 @@ class Viewer {
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
      * @param {Boolean} [cfg.premultipliedAlpha=false]  Whether or not you want alpha composition with premultiplied alpha. Highlighting and selection works best when this is ````false````.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
-     * @param {Boolean} [cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
+     * @param {Boolean} [cfg.gammaOutput=false]  Whether or not to render with pre-multiplied gama.
      * @param {Number} [cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
-     * @param {Boolean} [cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
+     * @param {Number[]} [cfg.backgroundColor=[1,1,1]] Sets the canvas background color to use when ````transparent```` is false.
+     * @param {Boolean} [cfg.backgroundColorFromAmbientLight=true] When ````transparent```` is false, set this ````true````
+     * to derive the canvas background color from {@link AmbientLight#color}, or ````false```` to set the canvas background to ````backgroundColor````.
      * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
      * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
      * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
@@ -45,6 +47,7 @@ class Viewer {
      * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
+     * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      */
     constructor(cfg) {
 
@@ -72,8 +75,9 @@ class Viewer {
             spinnerElementId: cfg.spinnerElementId,
             transparent: (cfg.transparent !== false),
             gammaInput: true,
-            gammaOutput: true,
-            clearColorAmbient: cfg.clearColorAmbient,
+            gammaOutput: false,
+            backgroundColor: cfg.backgroundColor,
+            backgroundColorFromAmbientLight: cfg.backgroundColorFromAmbientLight,
             ticksPerRender: 1,
             ticksPerOcclusionTest: 20,
             units: cfg.units,
@@ -82,7 +86,8 @@ class Viewer {
             saoEnabled: cfg.saoEnabled,
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
-            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled)
+            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
+            pbrEnabled: (!!cfg.pbrEnabled)
         });
 
         /**
@@ -283,6 +288,7 @@ class Viewer {
      * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
      * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
      * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
@@ -293,7 +299,9 @@ class Viewer {
             this.beginSnapshot();
         }
 
-        this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
 
         const resize = (params.width !== undefined && params.height !== undefined);
         const canvas = this.scene.canvas.canvas;
@@ -323,7 +331,9 @@ class Viewer {
             this.scene.glRedraw();
         }
 
-        this.sendToPlugins("snapshotFinished");
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
 
         if (needFinishSnapshot) {
             this.endSnapshot();
@@ -333,7 +343,7 @@ class Viewer {
     }
 
     /**
-     * Exists snapshot mode.
+     * Exits snapshot mode.
      *
      * Switches rendering back to the main canvas.
      *

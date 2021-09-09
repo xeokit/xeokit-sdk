@@ -1,62 +1,40 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel Geometry Instancing</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #pleaseWait {
-            position: absolute;
-            margin: auto;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 350px;
-            height: 100px;
-            border-radius: 3px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 24px;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>PerformanceModel Benchmark</h1>
-    <p>582786 objects using geometry instancing</p>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <h1>PerformanceModel</h1>
+    <h2>Geometry instancing benchmark</h2>
+    <p>In this example, we're building a large model using xeokit's PerformanceModel component and geometry instancing.</p>
+    <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <div id="pleaseWait">Geometry batching benchmark<br>generating 373494 objects, please wait...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a>
-            - high-performance model representation
+            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
         </li>
-        <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User
-                Guide</a>
-        </li>
-
     </ul>
 </div>
-
-<div id="pleaseWait">Geometry instancing benchmark<br>generated <span id="numObjects"></span> of 582786 objects, please
-    wait...
-</div>
-
 </body>
 
 <script type="module">
@@ -65,9 +43,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
+    import {Viewer,PerformanceModel,buildBoxGeometry} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -88,6 +64,9 @@
 
     viewer.scene.gammaInput = false;
     viewer.scene.gammaOutput = false;
+
+    viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.smartPivot = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Generate the buildings
@@ -244,33 +223,33 @@
     // Mouse over Entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
+    // var lastEntity = null;
+    //
+    // viewer.scene.input.on("mousemove", function (coords) {
+    //
+    //     var hit = viewer.scene.pick({
+    //         canvasPos: coords
+    //     });
+    //
+    //     if (hit) {
+    //
+    //         if (!lastEntity || hit.entity.id !== lastEntity.id) {
+    //
+    //             if (lastEntity) {
+    //                 lastEntity.highlighted = false;
+    //             }
+    //
+    //             lastEntity = hit.entity;
+    //             hit.entity.highlighted = true;
+    //         }
+    //     } else {
+    //
+    //         if (lastEntity) {
+    //             lastEntity.highlighted = false;
+    //             lastEntity = null;
+    //         }
+    //     }
+    // });
 
     window.model = performanceModel;
 

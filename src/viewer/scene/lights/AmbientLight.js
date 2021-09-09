@@ -15,13 +15,8 @@ import {Light} from './Light.js';
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#lights_AmbientLight)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
- * import {AmbientLight} from "../src/scene/lights/AmbientLight.js";
+ * import {Viewer, Mesh, buildTorusGeometry,
+ * ReadableGeometry, PhongMaterial, Texture, AmbientLight} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange the camera
  *

@@ -1,23 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Repeatedly creating and destroying a viewer, reusing same canvas</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet" />
-
-    <style>
-        #myCanvas {
-            background: #ffffff;
-        }
- </style>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
+<div class="slideout-sidebar">
     <h1>Repeatedly creating and destroying a viewer, reusing same canvas</h1>
     <br/>
     <ul>
@@ -25,8 +20,12 @@
             A stress test to check for bugs.
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -37,8 +36,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import { Viewer } from "../src/viewer/Viewer.js";
-    import { XKTLoaderPlugin } from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -65,8 +63,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true,
         saoEnabled: true // Allows SAO to be applied to the model (default is true)
     });
@@ -83,8 +80,7 @@
 
             const model2 = xktLoader.load({
                 id: "myModel2",
-                src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-                metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+                src: "../assets/models/xkt/v8/Schependomlaan.xkt",
                 edges: true
             });
         }, 3000);

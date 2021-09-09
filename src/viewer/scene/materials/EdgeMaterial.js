@@ -42,12 +42,8 @@ const PRESETS = {
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_EdgeMaterial)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {EdgeMaterial} from "../src/scene/materials/EdgeMaterial.js";
+ * import {Viewer, Mesh, buildSphereGeometry,
+ *      ReadableGeometry, PhongMaterial, EdgeMaterial} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",

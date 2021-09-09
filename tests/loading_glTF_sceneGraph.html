@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "../assets/models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "../assets/models/gltf/schependomlaan/Schependomlaan.json",
+        edges: true,
+        performance: false
+    });
+
+    model.on("loaded", () => {
+        signalTestComplete(viewer);
+    });
+
+</script>
+</html>

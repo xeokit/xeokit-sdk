@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+
+<script type="module">
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin} from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-19.97542270336751, 16.205714934634766, 21.27927423811135];
+    viewer.scene.camera.look = [4.399925340636383, 3.7249936829903216, 8.89979723643047];
+    viewer.scene.camera.up = [0.3702753431210267, 0.9096883483277403, -0.18805126746011006];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "../assets/models/xkt/v8/Duplex.xkt",
+        edges: true
+    });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1.04, 1.95, 9.74],
+        dir: [1.0, 0.0, 0.0]
+    });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane2",
+        pos: [2.30, 4.46, 14.93],
+        dir: [0.0, -0.09, -0.79]
+    });
+
+    model.on("loaded", () => {
+        signalTestComplete(viewer);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

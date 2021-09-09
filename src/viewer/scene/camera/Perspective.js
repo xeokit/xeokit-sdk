@@ -29,7 +29,9 @@ class Perspective extends Component {
         /**
          * The Camera this Perspective belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 
@@ -89,7 +91,11 @@ class Perspective extends Component {
      * @param {Number} value New field-of-view.
      */
     set fov(value) {
-        this._fov = (value !== undefined && value !== null) ? value : 60.0;
+        value = (value !== undefined && value !== null) ? value : 60.0;
+        if (value === this._fov) {
+            return;
+        }
+        this._fov = value;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         this.fire("fov", this._fov);
     }

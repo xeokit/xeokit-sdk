@@ -29,7 +29,9 @@ class Frustum extends Component {
         /**
          * The Camera this Frustum belongs to.
          *
-         * @property {Camera}
+         * @property camera
+         * @type {Camera}
+         * @final
          */
         this.camera = camera;
 
@@ -37,7 +39,7 @@ class Frustum extends Component {
             matrix: math.mat4(),
             inverseMatrix: math.mat4(),
             transposedMatrix: math.mat4(),
-            near : 0.1,
+            near: 0.1,
             far: 10000.0
         });
 
@@ -242,7 +244,7 @@ class Frustum extends Component {
      *
      * @returns {Number[]} The inverse orthographic projection matrix.
      */
-    inverseMatrix() {
+    get inverseMatrix() {
         if (this._updateScheduled) {
             this._doUpdate();
         }
@@ -258,7 +260,7 @@ class Frustum extends Component {
      *
      * @returns {Number[]} The transpose of {@link Frustum#matrix}.
      */
-    transposedMatrix() {
+    get transposedMatrix() {
         if (this._updateScheduled) {
             this._doUpdate();
         }

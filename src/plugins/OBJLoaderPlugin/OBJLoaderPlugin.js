@@ -1,7 +1,7 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {utils} from "../../viewer/scene/utils.js";
-import {OBJLoader} from "./OBJLoader.js";
+import {OBJSceneGraphLoader} from "./OBJSceneGraphLoader.js";
 
 /**
  * {@link Viewer} plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
@@ -25,8 +25,7 @@ import {OBJLoader} from "./OBJLoader.js";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#loading_OBJ_SportsCar)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {OBJLoaderPlugin} from "../src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
+ * import {Viewer, OBJLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * // Create a xeokit Viewer and arrange the camera
  * const viewer = new Viewer({
@@ -78,7 +77,7 @@ class OBJLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new OBJLoader();
+        this._sceneGraphLoader = new OBJSceneGraphLoader();
     }
 
     /**
@@ -87,7 +86,7 @@ class OBJLoaderPlugin extends Plugin {
      * @param {*} params  Loading parameters.
      * @param {String} params.id ID to assign to the model's root {@link Entity}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to an OBJ file.
-     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file.
      * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
      * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -119,13 +118,13 @@ class OBJLoaderPlugin extends Plugin {
             utils.loadJSON(metaModelSrc,
                 (modelMetadata) => {
                     this.viewer.metaScene.createMetaModel(modelId, modelMetadata);
-                    this._loader.load(modelNode, src, params);
+                    this._sceneGraphLoader.load(modelNode, src, params);
                 },
                 (errMsg) => {
                     this.error(`load(): Failed to load model modelMetadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 });
         } else {
-            this._loader.load(modelNode, src, params);
+            this._sceneGraphLoader.load(modelNode, src, params);
         }
 
         modelNode.once("destroyed", () => {

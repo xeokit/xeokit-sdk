@@ -10,6 +10,8 @@ import {ParserV3} from "./parsers/ParserV3.js";
 import {ParserV4} from "./parsers/ParserV4.js";
 import {ParserV5} from "./parsers/ParserV5.js";
 import {ParserV6} from "./parsers/ParserV6.js";
+import {ParserV7} from "./parsers/ParserV7.js";
+import {ParserV8} from "./parsers/ParserV8.js";
 
 const parsers = {};
 
@@ -19,6 +21,8 @@ parsers[ParserV3.version] = ParserV3;
 parsers[ParserV4.version] = ParserV4;
 parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
+parsers[ParserV7.version] = ParserV7;
+parsers[ParserV8.version] = ParserV8;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -59,30 +63,34 @@ parsers[ParserV6.version] = ParserV6;
  *
  * ## Metadata
  *
- * XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a {@link MetaModel} corresponding
- * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
+ * Since XKT V8, model metadata is included in the XKT file. If the XKT file has metadata, then loading it creates
+ * model metadata components within the Viewer, namely a {@link MetaModel} corresponding to the model {@link Entity},
+ * and a {@link MetaObject} for each object {@link Entity}.
  *
- * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
- * metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, XKTLoaderPlugin
- * uses its own map of default colors and visibilities for IFC element types.
+ * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding
+ * {@link Entity}. When loading metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial
+ * values to set on the properties of each type of {@link Entity}. By default, XKTLoaderPlugin uses its own map of
+ * default colors and visibilities for IFC element types.
+ *
+ * For XKT versions prior to V8, we provided the metadata to XKTLoaderPlugin as an accompanying JSON file to load. We can
+ * still do that for all XKT versions, and for XKT V8+ it will override any metadata provided within the XKT file.
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
- * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
+ * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
  *
- * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
+ * Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
+ * {@link Entity} according to its IFC type in {@link XKTLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,
@@ -109,10 +117,9 @@ parsers[ParserV6.version] = ParserV6;
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * // 2
- * const model = xktLoader.load({                                       // Returns an Entity that represents the model
+ * const model = xktLoader.load({          // Returns an Entity that represents the model
  *     id: "myModel",
- *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",     // Creates a MetaModel (see below)
+ *     src: "./models/xkt/Schependomlaan.xkt",
  *     edges: true
  * });
  *
@@ -164,8 +171,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * ````javascript
  * xktLoader.load({
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json",
+ *      src: "./models/xkt/Duplex.xkt",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -183,8 +189,7 @@ parsers[ParserV6.version] = ParserV6;
  * ````javascript
  * const model2 = xktLoader.load({
  *     id: "myModel2",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt",
  *     includeTypes: ["IfcWallStandardCase"]
  * });
  * ````
@@ -198,8 +203,7 @@ parsers[ParserV6.version] = ParserV6;
  * ````javascript
  * const model3 = xktLoader.load({
  *     id: "myModel3",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt",
  *     excludeTypes: ["IfcSpace"]
  * });
  * ````
@@ -239,8 +243,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * const model4 = xktLoader.load({
  *      id: "myModel4",
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      src: "./models/xkt/Duplex.xkt",
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
@@ -283,7 +286,7 @@ parsers[ParserV6.version] = ParserV6;
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
  * ````javascript
- * import {utils} from "./../src/viewer/scene/utils.js";
+ * import {utils} from "xeokit-sdk.es.js";
  *
  * class MyDataSource {
  *
@@ -321,8 +324,7 @@ parsers[ParserV6.version] = ParserV6;
  *
  * const model5 = xktLoader2.load({
  *      id: "myModel5",
- *      src: "./models/xkt/duplex/duplex.xkt",
- *      metaModelSrc: "./metaModels/duplex/metaModel.json" // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      src: "./models/xkt/Duplex.xkt"
  * });
  * ````
  *
@@ -340,14 +342,12 @@ parsers[ParserV6.version] = ParserV6;
  *
  * const model = xktLoader.load({
  *      id: "model1",
- *      src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ *      src: "./models/xkt/Schependomlaan.xkt"
  * });
  *
  * const model2 = xktLoader.load({
  *    id: "model2",
- *    src: "./models/xkt/schependomlaan/schependomlaan.xkt",
- *    metaModelSrc: "./metaModels/schependomlaan/metaModel.json"
+ *    src: "./models/xkt/Schependomlaan.xkt"
  * });
  * ````
  *
@@ -382,11 +382,6 @@ parsers[ParserV6.version] = ParserV6;
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
- * ## BCFViewpointsPlugin Consequences
- *
- * Using ````XKTLoaderPlugin```` to load models with {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` has consequences
- * for BCF viewpoints created by {@link BCFViewpointsPlugin#getViewpoint}.
- *
  * @class XKTLoaderPlugin
  */
 class XKTLoaderPlugin extends Plugin {
@@ -401,11 +396,18 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Object} [cfg.dataSource] A custom data source through which the XKTLoaderPlugin can load model and metadata files. Defaults to an instance of {@link XKTDefaultDataSource}, which loads uover HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
-     * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
+     * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
+     * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
+     * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
+     * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
+     * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
      */
     constructor(viewer, cfg = {}) {
 
         super("XKTLoader", viewer, cfg);
+
+        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -586,12 +588,18 @@ class XKTLoaderPlugin extends Plugin {
     /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
+     * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
+     * data (eg. an IFC element hierarchy) in the XKT file itself. For XKT 8, we therefore no longer need to
+     * load the metamodel data from a separate accompanying JSON file, as we did with previous XKT versions.
+     * However, if we do choose to specify a separate metamodel JSON file to load (eg. for backward compatibility
+     * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
+     *
      * @param {*} params Loading parameters.
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a *````.xkt````* file, as an alternative to the ````xkt```` parameter.
      * @param {ArrayBuffer} [params.xkt] The *````.xkt````* file data, as an alternative to the ````src```` parameter.
-     * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelData```` parameter (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
+     * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
@@ -601,8 +609,11 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
-     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component.
-     * @param {Boolean} [params.backfaces=false] Indicates if backfaces are visible on the model. Making this ````true```` will reduce rendering performance.
+     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
+     * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Number} [params.backfaces=false] When we set this ````true````, then we force rendering of backfaces for the model. When
+     * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
+     * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
@@ -615,7 +626,8 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+            isModel: true,
+            maxGeometryBatchSize: this._maxGeometryBatchSize
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated
@@ -626,43 +638,44 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         const options = {};
+        const includeTypes = params.includeTypes || this._includeTypes;
+        const excludeTypes = params.excludeTypes || this._excludeTypes;
+        const objectDefaults = params.objectDefaults || this._objectDefaults;
+
+        if (includeTypes) {
+            options.includeTypesMap = {};
+            for (let i = 0, len = includeTypes.length; i < len; i++) {
+                options.includeTypesMap[includeTypes[i]] = true;
+            }
+        }
+
+        if (excludeTypes) {
+            options.excludeTypesMap = {};
+            for (let i = 0, len = excludeTypes.length; i < len; i++) {
+                options.excludeTypesMap[excludeTypes[i]] = true;
+            }
+        }
+
+        if (objectDefaults) {
+            options.objectDefaults = objectDefaults;
+        }
+
+        options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
+        options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
         if (params.metaModelSrc || params.metaModelData) {
 
-            const includeTypes = params.includeTypes || this._includeTypes;
-            const excludeTypes = params.excludeTypes || this._excludeTypes;
-            const objectDefaults = params.objectDefaults || this._objectDefaults;
-
-            if (includeTypes) {
-                options.includeTypesMap = {};
-                for (let i = 0, len = includeTypes.length; i < len; i++) {
-                    options.includeTypesMap[includeTypes[i]] = true;
-                }
-            }
-
-            if (excludeTypes) {
-                options.excludeTypesMap = {};
-                for (let i = 0, len = excludeTypes.length; i < len; i++) {
-                    options.excludeTypesMap[excludeTypes[i]] = true;
-                }
-            }
-
-            if (objectDefaults) {
-                options.objectDefaults = objectDefaults;
-            }
-
-            options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
-            options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
-
             const processMetaModelData = (metaModelData) => {
 
-                this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
+                const metaModel = this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: includeTypes,
                     excludeTypes: excludeTypes,
                     globalizeObjectIds: this.globalizeObjectIds
                 });
 
-                this.viewer.scene.canvas.spinner.processes--;
+                if (!metaModel) {
+                    return false;
+                }
 
                 if (params.src) {
                     this._loadModel(params.src, params, options, performanceModel);
@@ -673,6 +686,8 @@ class XKTLoaderPlugin extends Plugin {
                 performanceModel.once("destroyed", () => {
                     this.viewer.metaScene.destroyMetaModel(performanceModel.id);
                 });
+
+                return true;
             };
 
             if (params.metaModelSrc) {
@@ -683,19 +698,36 @@ class XKTLoaderPlugin extends Plugin {
 
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
-                    this.viewer.scene.canvas.spinner.processes--;
+                    if (performanceModel.destroyed) {
+                        return;
+                    }
 
-                    processMetaModelData(metaModelData);
+                    if (!processMetaModelData(metaModelData)) {
+
+                        this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+
+                        performanceModel.fire("error", "Metadata not valid");
+                    }
+
+                    this.viewer.scene.canvas.spinner.processes--;
 
                 }, (errMsg) => {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
 
+                    performanceModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
+
                     this.viewer.scene.canvas.spinner.processes--;
                 });
 
             } else if (params.metaModelData) {
-                processMetaModelData(params.metaModelData);
+
+                if (!processMetaModelData(params.metaModelData)) {
+
+                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+
+                    performanceModel.fire("error", "Metadata not valid");
+                }
             }
 
         } else {
@@ -728,6 +760,10 @@ class XKTLoaderPlugin extends Plugin {
 
     _parseModel(arrayBuffer, params, options, performanceModel) {
 
+        if (performanceModel.destroyed) {
+            return;
+        }
+
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
         const xktVersion = dataView.getUint32(0, true);
@@ -754,6 +790,9 @@ class XKTLoaderPlugin extends Plugin {
         performanceModel.finalize();
 
         performanceModel.scene.once("tick", () => {
+            if (performanceModel.destroyed) {
+                return;
+            }
             performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
             performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });

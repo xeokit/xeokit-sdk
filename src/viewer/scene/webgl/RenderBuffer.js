@@ -14,6 +14,7 @@ class RenderBuffer {
         this.buffer = null;
         this.bound = false;
         this.size = options.size;
+        this._hasDepthTexture = !!options.depthTexture;
     }
 
     setSize(size) {
@@ -64,16 +65,25 @@ class RenderBuffer {
             }
         }
 
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-
+        const colorTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, colorTexture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+        let depthTexture;
+
+        if (this._hasDepthTexture) {
+            depthTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, width, height, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null)
+        }
 
         const renderbuf = gl.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuf);
@@ -81,8 +91,13 @@ class RenderBuffer {
 
         const framebuf = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuf);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuf);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, colorTexture, 0);
+
+        if (this._hasDepthTexture) {
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, depthTexture, 0);
+        } else {
+            gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuf);
+        }
 
         gl.bindTexture(gl.TEXTURE_2D, null);
         gl.bindRenderbuffer(gl.RENDERBUFFER, null);
@@ -122,7 +137,8 @@ class RenderBuffer {
         this.buffer = {
             framebuf: framebuf,
             renderbuf: renderbuf,
-            texture: texture,
+            texture: colorTexture,
+            depthTexture: depthTexture,
             width: width,
             height: height
         };
@@ -251,10 +267,39 @@ class RenderBuffer {
         });
     }
 
+    hasDepthTexture() {
+        return this._hasDepthTexture;
+    }
+
+    getDepthTexture() {
+        if (!this._hasDepthTexture) {
+            return null;
+        }
+        const self = this;
+        return this._depthTexture || (this._dethTexture = {
+            renderBuffer: this,
+            bind: function (unit) {
+                if (self.buffer && self.buffer.depthTexture) {
+                    self.gl.activeTexture(self.gl["TEXTURE" + unit]);
+                    self.gl.bindTexture(self.gl.TEXTURE_2D, self.buffer.depthTexture);
+                    return true;
+                }
+                return false;
+            },
+            unbind: function (unit) {
+                if (self.buffer && self.buffer.depthTexture) {
+                    self.gl.activeTexture(self.gl["TEXTURE" + unit]);
+                    self.gl.bindTexture(self.gl.TEXTURE_2D, null);
+                }
+            }
+        });
+    }
+
     destroy() {
         if (this.allocated) {
             const gl = this.gl;
             gl.deleteTexture(this.buffer.texture);
+            gl.deleteTexture(this.buffer.depthTexture);
             gl.deleteFramebuffer(this.buffer.framebuf);
             gl.deleteRenderbuffer(this.buffer.renderbuf);
             this.allocated = false;
@@ -263,6 +308,7 @@ class RenderBuffer {
         }
         this._imageDataCache = null;
         this._texture = null;
+        this._depthTexture = null;
     }
 }
 

@@ -41,9 +41,7 @@ const tempVec4b = math.vec4();
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Markers_SimpleExample)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {Marker} from "../src/scene/markers/Marker.js";
+ * import {Viewer, GLTFLoaderPlugin, Marker} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

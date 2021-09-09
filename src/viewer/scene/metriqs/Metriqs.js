@@ -52,8 +52,7 @@ const unitsInfo = {
  * mapping between the Real-space and World-space 3D coordinate systems.
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

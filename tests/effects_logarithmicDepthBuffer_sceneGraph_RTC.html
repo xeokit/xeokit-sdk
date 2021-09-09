@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {
+        Viewer,
+        PhongMaterial,
+        Mesh,
+        Node,
+        ReadableGeometry,
+        buildBoxGeometry,
+        math
+    } from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        logarithmicDepthBufferEnabled: true
+    });
+
+    viewer.scene.camera.eye = [-3232573.3494166965, 5853476.298320034, -11572141.054115657];
+    viewer.scene.camera.look = [-1249999.999999995, -575000.0000000168, -1249999.999999972];
+    viewer.scene.camera.up = [0.09841505341867385, 0.8530939320872357, 0.5123916668882685];
+
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 100000000; // 100000km
+
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 100000000; // 100000km
+
+    const OFFSET = 5000000.0;
+
+    for (let x = -OFFSET; x < OFFSET; x += 2500000.0) {
+        for (let z = -OFFSET; z < OFFSET; z += 2500000.0) {
+            buildTable([x, 0, z], 100000);
+        }
+    }
+
+    signalTestComplete(viewer);
+
+    function buildTable(rtcCenter, size = 1) {
+
+        let modelId = math.createUUID();
+
+        const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+            xSize: 1,
+            ySize: 1,
+            zSize: 1
+        }));
+
+        const model = new Node(viewer.scene, {
+            id: modelId,
+            isModel: true,
+            rotation: [0, 0, 0],
+            position: [0, 0, 0],
+            scale: [size, size, size],
+            edges: true,
+
+            children: [
+
+                new Mesh(viewer.scene, {
+                    isObject: true,
+                    rtcCenter: rtcCenter,
+                    position: [-4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1, 0.3, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {
+                    isObject: true,
+                    rtcCenter: rtcCenter,
+                    position: [4, -6, -4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 1.0, 0.3]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {
+                    isObject: true,
+                    rtcCenter: rtcCenter,
+                    position: [4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [0.3, 0.3, 1.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {
+                    isObject: true,
+                    rtcCenter: rtcCenter,
+                    position: [-4, -6, 4],
+                    scale: [1, 3, 1],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 1.0, 0.0]
+                    })
+                }),
+
+                new Mesh(viewer.scene, {
+                    isObject: true,
+                    rtcCenter: rtcCenter,
+                    position: [0, -3, 0],
+                    scale: [6, 0.5, 6],
+                    rotation: [0, 0, 0],
+                    geometry: boxGeometry,
+                    material: new PhongMaterial(viewer.scene, {
+                        diffuse: [1.0, 0.3, 1.0]
+                    })
+                })
+            ]
+        });
+
+        model.edges = true;
+    }
+
+</script>
+</html>

@@ -1,7 +1,7 @@
 import {utils} from "../../viewer/scene/utils.js"
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {XML3DLoader} from "./XML3DLoader.js";
+import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
 
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
@@ -101,7 +101,7 @@ import {XML3DLoader} from "./XML3DLoader.js";
  * Now we can use {@link TreeViewPlugin} to create a tree view to navigate our model's objects:
  *
  * ````javascript
- * import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+ * import {TreeViewPlugin} from "xeokit-sdk.es.js""xeokit-sdk.es.js";
  *
  * const treeView = new TreeViewPlugin(viewer, {
  *     containerElement: document.getElementById("myTreeViewContainer")
@@ -180,7 +180,7 @@ class XML3DLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new XML3DLoader(this, cfg);
+        this._loader = new XML3DSceneGraphLoader(this, cfg);
 
         /**
          * Supported 3DXML schema versions

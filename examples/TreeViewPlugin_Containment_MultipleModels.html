@@ -1,16 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TreeViewPlugin - Containment Hierarchy with Multiple Instances of Same Model</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
 
-        #myCanvas {
-            background: #c6e4e6;
-        }
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
 
         #myNavCubeCanvas {
             position: absolute;
@@ -26,36 +27,40 @@
         /* ----------------------------------------------------------------------------------------------------------*/
 
         #treeViewContainer {
-            padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
+            background-color: rgba(255, 255, 255, 0.2);
             color: black;
-            top: 0;
+            top: 80px;
             z-index: 200000;
             float: left;
             left: 0;
+            padding-left: 10px;
             font-family: 'Roboto', sans-serif;
             font-size: 15px;
             user-select: none;
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 550px;
+            width: 350px;
         }
 
         #treeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
+            pointer-events: none;
         }
 
         #treeViewContainer ul li {
             position: relative;
             width: 500px;
-
+            pointer-events: none;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
         }
 
         #treeViewContainer ul li a {
@@ -69,18 +74,22 @@
             text-align: center;
             text-decoration: none;
             width: 1.5em;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.plus {
             background-color: #ded;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a.minus {
             background-color: #eee;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li a:active {
             top: 1px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span:hover {
@@ -88,12 +97,15 @@
             cursor: pointer;
             background: black;
             padding-left: 2px;
+            pointer-events: all;
         }
 
         #treeViewContainer ul li span {
             display: inline-block;
             width: calc(100% - 50px);
             padding-left: 2px;
+            pointer-events: all;
+            height: 23px;
         }
 
         #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
@@ -102,6 +114,7 @@
             color: black;
             padding-left: 1px;
             padding-right: 5px;
+            pointer-events: all;
         }
 
         /* ----------------------------------------------------------------------------------------------------------*/
@@ -164,45 +177,54 @@
         }
 
     </style>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
 <canvas id="myNavCubeCanvas"></canvas>
-
 <div id="treeViewContainer"></div>
-
-<div id="info">
-    <h1>TreeViewPlugin - Containment Hierarchy with Multiple Instances of Same Model</h1><br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/tree_view_icon.png"/>
+    <h1>TreeViewPlugin</h1>
+    <h2>IFC Containment Hierarchy</h2>
+    <p>In this example, we're loading two copies of the same BIM model, while showing the IFC containment hierarchy of
+        both models in a tree view.</p>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view of IFC containment hierarchy
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
-            - Camera navigation cube gizmo
+            <a href="../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
 </body>
+
 
 <script type="module">
 
@@ -210,11 +232,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
-    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
-    import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, ContextMenu} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak some emphasis materials
@@ -282,8 +300,7 @@
 
     const model = xktLoader.load({
         id: "model1",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
         edges: true
     });
 
@@ -294,8 +311,7 @@
 
         const model2 = xktLoader.load({
             id: "model2",
-            src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-            metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+            src: "../assets/models/xkt/v8/Schependomlaan.xkt",
             edges: true,
             position: [30, 0, 0]
         });

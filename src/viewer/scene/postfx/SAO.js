@@ -40,8 +40,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * clipping planes. Finally, we'll use {@link XKTLoaderPlugin} to load the OTC Conference Center model.
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+ * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -55,12 +54,13 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * }
  *
  * sao.enabled = true; // Enable SAO - only works if supported (see above)
- * sao.intensity = 0.20;
+ * sao.intensity = 0.15;
  * sao.bias = 0.5;
- * sao.scale = 500.0;
+ * sao.scale = 1.0;
  * sao.minResolution = 0.0;
+ * sao.numSamples = 10;
  * sao.kernelRadius = 100;
- * sao.blendCutoff = 0.2;
+ * sao.blendCutoff = 0.1;
  *
  * const camera = viewer.scene.camera;
  *
@@ -79,8 +79,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt",
- *     metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",
+ *     src: "./models/xkt/OTCConferenceCenter.xkt"
  *     edges: true
  * });
  * ````
@@ -113,8 +112,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  * ````javascript
  * const structure = xktLoader.load({
  *      id: "structure",
- *      src: "./models/xkt/WestRiverSideHospital/structure.xkt",
- *      metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+ *      src: "./models/xkt/WestRiverSideHospital/structure.xkt"
  *      edges: true,
  *      saoEnabled: true
  *  });
@@ -124,7 +122,6 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *      const electrical = xktLoader.load({
  *          id: "electrical",
  *          src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
- *          metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
  *          edges: true
  *      });
  *
@@ -133,9 +130,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *          const plumbing = xktLoader.load({
  *              id: "plumbing",
  *              src: "./models/xkt/WestRiverSideHospital/plumbing.xkt",
- *              metaModelSrc: "./metaModels/WestRiverSideHospital/plumbing.json",
- *                  edges: true
- *              });
+ *              edges: true
  *          });
  *      });
  * });
@@ -181,7 +176,12 @@ class SAO extends Component {
 
         super(owner, cfg);
 
-        this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
+        const ua = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+        const browser = (navigator.userAgent.match(/Edge/i) || navigator.userAgent.match(/Trident.*rv[ :]*11\./i)) ? "msie" : ua[1].toLowerCase();
+        const isSafari = (browser === "safari");
+
+        this._supported = (!isSafari) &&
+            WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
 
         this.enabled = cfg.enabled;
         this.kernelRadius = cfg.kernelRadius;
@@ -189,6 +189,7 @@ class SAO extends Component {
         this.bias = cfg.bias;
         this.scale = cfg.scale;
         this.minResolution = cfg.minResolution;
+        this.numSamples = cfg.numSamples;
         this.blur = cfg.blur;
         this.blendCutoff = cfg.blendCutoff;
         this.blendFactor = cfg.blendFactor;
@@ -220,7 +221,6 @@ class SAO extends Component {
             return;
         }
         this._enabled = value;
-        this.scene._needRecompile = true;
         this.glRedraw();
     }
 
@@ -230,7 +230,7 @@ class SAO extends Component {
      * Even when enabled, SAO will only apply if supported.
      *
      * Default value is ````false````.
-     * 
+     *
      * @type {Boolean}
      */
     get enabled() {
@@ -269,7 +269,7 @@ class SAO extends Component {
     }
 
     /**
-     * Sets the maximum area that SAO takes into account when checking for possible occlusion.
+     * Sets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.
      *
      * Default value is ````100.0````.
      *
@@ -287,10 +287,10 @@ class SAO extends Component {
     }
 
     /**
-     * Gets the maximum area that SAO takes into account when checking for possible occlusion.
+     * Gets the maximum area that SAO takes into account when checking for possible occlusion for each fragment.
      *
      * Default value is ````100.0````.
-     * 
+     *
      * @type {Number}
      */
     get kernelRadius() {
@@ -300,13 +300,13 @@ class SAO extends Component {
     /**
      * Sets the degree of darkening (ambient obscurance) produced by the SAO effect.
      *
-     * Default value is ````0.20````.
+     * Default value is ````0.15````.
      *
      * @type {Number}
      */
     set intensity(value) {
         if (value === undefined || value === null) {
-            value = 0.20;
+            value = 0.15;
         }
         if (this._intensity === value) {
             return;
@@ -318,8 +318,8 @@ class SAO extends Component {
     /**
      * Gets the degree of darkening (ambient obscurance) produced by the SAO effect.
      *
-     * Default value is ````0.25````.
-     * 
+     * Default value is ````0.15````.
+     *
      * @type {Number}
      */
     get intensity() {
@@ -358,13 +358,13 @@ class SAO extends Component {
     /**
      * Sets the SAO occlusion scale.
      *
-     * Default value is ````500.0````.
+     * Default value is ````1.0````.
      *
      * @type {Number}
      */
     set scale(value) {
         if (value === undefined || value === null) {
-            value = 500.0;
+            value = 1.0;
         }
         if (this._scale === value) {
             return;
@@ -376,7 +376,7 @@ class SAO extends Component {
     /**
      * Gets the SAO occlusion scale.
      *
-     * Default value is ````500.0````.
+     * Default value is ````1.0````.
      *
      * @type {Number}
      */
@@ -414,6 +414,37 @@ class SAO extends Component {
     }
 
     /**
+     * Sets the number of SAO samples.
+     *
+     * Default value is ````10````.
+     *
+     * Update this sparingly, since it causes a shader recompile.
+     *
+     * @type {Number}
+     */
+    set numSamples(value) {
+        if (value === undefined || value === null) {
+            value = 10;
+        }
+        if (this._numSamples === value) {
+            return;
+        }
+        this._numSamples = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the number of SAO samples.
+     *
+     * Default value is ````10````.
+     *
+     * @type {Number}
+     */
+    get numSamples() {
+        return this._numSamples;
+    }
+
+    /**
      * Sets whether Guassian blur is enabled.
      *
      * Default value is ````true````.
@@ -443,16 +474,15 @@ class SAO extends Component {
     /**
      * Sets the SAO blend cutoff.
      *
-     * Default value is ````0.2````.
+     * Default value is ````0.3````.
      *
      * Normally you don't need to alter this.
      *
      * @type {Number}
-     * @private
      */
     set blendCutoff(value) {
         if (value === undefined || value === null) {
-            value = 0.2;
+            value = 0.3;
         }
         if (this._blendCutoff === value) {
             return;
@@ -464,12 +494,11 @@ class SAO extends Component {
     /**
      * Gets the SAO blend cutoff.
      *
-     * Default value is ````0.2````.
+     * Default value is ````0.3````.
      *
      * Normally you don't need to alter this.
      *
      * @type {Number}
-     * @private
      */
     get blendCutoff() {
         return this._blendCutoff;
@@ -483,7 +512,6 @@ class SAO extends Component {
      * Normally you don't need to alter this.
      *
      * @type {Number}
-     * @private
      */
     set blendFactor(value) {
         if (value === undefined || value === null) {
@@ -504,7 +532,6 @@ class SAO extends Component {
      * Normally you don't need to alter this.
      *
      * @type {Number}
-     * @private
      */
     get blendFactor() {
         return this._blendFactor;

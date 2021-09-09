@@ -1,27 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>xeokit Annotations Example</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 
     <style>
 
         .annotation-marker {
-            position: absolute;
             color: #000000;
             line-height: 1.8;
             text-align: center;
             font-family: "monospace";
             font-weight: bold;
+            position: absolute;
             width: 25px;
             height: 25px;
             border-radius: 15px;
             border: 2px solid #ffffff;
             background: black;
-            visibility: hidden;
+            visibility: hidden; /* Set markers and labels initially hidden */
             box-shadow: 5px 5px 15px 1px #000000;
-            z-index: -10000;
+            z-index: 0;
         }
 
         .annotation-label {
@@ -38,8 +41,8 @@
             border-radius: 8px;
             border: #ffffff solid 2px;
             box-shadow: 5px 5px 15px 1px #000000;
-            visibility: hidden;
             z-index: 90000;
+            visibility: hidden; /* Set markers and labels initially hidden */
         }
 
         .annotation-label:after {
@@ -79,67 +82,74 @@
             font: normal 14px arial, serif;
         }
 
-    </style>
 
+    </style>
 </head>
 
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<!-- Info area -->
-
-<div id="info">
-    <h1>Annotations using pre-existing DOM elements for makers and labels</h1>
-    <p><br>Shows how to provide IDs of pre-existing DOM elements for Annotations. Annotations fall back on auto-generated
-        empty DIVs by default when they can't find elements with our given IDs.</p><br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/annotation_icon.png"/>
+    <h1>AnnotationsPlugin</h1>
+    <h2>Annotations using pre-existing DOM elements for makers and labels</h2>
+    <p><br>Shows how to provide IDs of pre-existing DOM elements for Annotations. Annotations fall back on
+        auto-generated
+        empty DIVs by default when they can't find elements with our given IDs.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a>
-            - Creates Annotations
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Annotations">User Guide</a>
+            <a href="../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html"
+               target="_other">AnnotationsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
+</body>
 
 <!-- DOM elements which we'll provide for our Annotation markers and labels -->
 
-<div id="myAnnotation1Marker" class='annotation-marker' style='background-color: white;'>A1</div>
-<div id="myAnnotation1Label" class='annotation-label' style='background-color: white;'>
+<div class='annotation-marker' id="myAnnotation1Marker" style='background-color: white;'>A1</div>
+<div class='annotation-label' id="myAnnotation1Label" style='background-color: white;'>
     <div class='annotation-title'>Annotation 1</div>
     <div class='annotation-desc'>Description of Annotation 1</div>
 </div>
 
-<div id="myAnnotation2Marker" class='annotation-marker' style='background-color: white;'>A2</div>
-<div id="myAnnotation2Label" class='annotation-label' style='background-color: white;'>
+<div class='annotation-marker' id="myAnnotation2Marker" style='background-color: white;'>A2</div>
+<div class='annotation-label' id="myAnnotation2Label" style='background-color: white;'>
     <div class='annotation-title'>Annotation 2</div>
     <div class='annotation-desc'>Description of Annotation 2</div>
 </div>
 
-
-<div id="myAnnotation3Marker" class='annotation-marker' style='background-color: white;'>A3</div>
-<div id="myAnnotation3Label" class='annotation-label' style='background-color: white;'>
+<div class='annotation-marker' id="myAnnotation3Marker" style='background-color: white;'>A3</div>
+<div class='annotation-label' id="myAnnotation3Label" style='background-color: white;'>
     <div class='annotation-title'>Annotation 3</div>
     <div class='annotation-desc'>Description of Annotation 3</div>
 </div>
 
-
-<div id="myAnnotation4Marker" class='annotation-marker' style='background-color: white;'>A4</div>
-<div id="myAnnotation4Label" class='annotation-label' style='background-color: white;'>
+<div class='annotation-marker' id="myAnnotation4Marker" style='background-color: white;'>A4</div>
+<div class='annotation-label' id="myAnnotation4Label" style='background-color: white;'>
     <div class='annotation-title'>Annotation 4</div>
     <div class='annotation-desc'>Description of Annotation 4</div>
 </div>
 
-
-<div id="myAnnotation5Marker" class='annotation-marker' style='background-color: white;'>A5</div>
-<div id="myAnnotation5Label" class='annotation-label' style='background-color: white;'>
+<div class='annotation-marker' id="myAnnotation5Marker" style='background-color: white;'>A5</div>
+<div class='annotation-label' id="myAnnotation5Label" style='background-color: white;'>
     <div class='annotation-title'>Annotation 5</div>
     <div class='annotation-desc'>Description of Annotation 5</div>
 </div>
@@ -152,9 +162,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, AnnotationsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -177,8 +185,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true
     });
 

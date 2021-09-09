@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {
+        Viewer, PerformanceModel, buildVectorTextGeometry, buildGridGeometry, buildCylinderGeometry, buildTorusGeometry,
+        buildSphereGeometry, buildBoxLinesGeometry, buildBoxGeometry
+    } from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-10.970825516832445, 12.854221661021146, 24.950601235099196];
+    viewer.scene.camera.look = [8.500572204589844, 2.190000057220459, 0];
+    viewer.scene.camera.up = [0.18, 0.93, -0.25];
+
+    viewer.scene.pointsMaterial.roundPoints = true;
+    viewer.scene.pointsMaterial.perspectivePoints = true;
+    viewer.scene.pointsMaterial.pointSize = 2;
+    viewer.scene.pointsMaterial.minPerspectivePointSize = 2;
+    viewer.scene.pointsMaterial.maxPerspectivePointSize = 6;
+
+    viewer.scene.linesMaterial.lineWidth = 1;
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "myGeometries"
+    });
+
+    // Box triangles
+
+    const box = buildBoxGeometry({
+        xSize: 1,
+        ySize: 1,
+        zSize: 1
+    });
+
+    performanceModel.createMesh({
+        id: "boxMesh",
+        primitive: "triangles",
+        positions: box.positions,
+        normals: box.normals,
+        indices: box.indices,
+        position: [0, 0, 0],
+        color: [1, 0, 0]
+    });
+
+    // Box lines
+
+    const boxLines = buildBoxLinesGeometry({
+        xSize: 1,
+        ySize: 1,
+        zSize: 1
+    });
+
+    performanceModel.createMesh({
+        id: "boxLinesMesh",
+        primitive: "lines",
+        positions: boxLines.positions,
+        indices: boxLines.indices,
+        position: [3, 0, 0],
+        color: [0, 0, 1]
+    });
+
+    // Sphere triangles
+
+    const sphere = buildSphereGeometry({
+        center: [0, 0, 0],
+        radius: 1.5,
+        heightSegments: 60,
+        widthSegments: 60
+    });
+
+    performanceModel.createMesh({
+        id: "sphereMesh",
+        primitive: "triangles",
+        positions: sphere.positions,
+        normals: sphere.normals,
+        indices: sphere.indices,
+        position: [7, 0, 0],
+        color: [0, 0.5, 1]
+    });
+
+    // Torus triangles
+
+    const torus = buildTorusGeometry({
+        center: [0, 0, 0],
+        radius: 1.5,
+        tube: 0.5,
+        radialSegments: 32,
+        tubeSegments: 24,
+        arc: Math.PI * 2.0
+    });
+
+    performanceModel.createMesh({
+        id: "torusMesh",
+        primitive: "triangles",
+        positions: torus.positions,
+        normals: torus.normals,
+        indices: torus.indices,
+        position: [11, 0, 0],
+        color: [0.7, 0, 1]
+    });
+
+    // Cylinder triangles
+
+    const cylinder = buildCylinderGeometry({
+        center: [0, 0, 0],
+        radiusTop: 1.0,
+        radiusBottom: 2.0,
+        height: 2.5,
+        radialSegments: 20,
+        heightSegments: 1,
+        openEnded: false
+    });
+
+    performanceModel.createMesh({
+        id: "cylinderMesh",
+        primitive: "triangles",
+        positions: cylinder.positions,
+        normals: cylinder.normals,
+        indices: cylinder.indices,
+        position: [16, 0, 0],
+        color: [1, .6, 0]
+    });
+
+    // Grid lines
+
+    const grid = buildGridGeometry({
+        size: 10,
+        divisions: 10
+    });
+
+    performanceModel.createMesh({
+        id: "gridMesh",
+        primitive: "lines",
+        positions: grid.positions,
+        indices: grid.indices,
+        position: [25, 0, 0],
+        color: [0, 1, 0]
+    });
+
+    // Text
+
+    const text = buildVectorTextGeometry({
+        origin: [0, 0, 0],
+        text: "An assortment of geometry\nprogrammatically generated\nwithin a PerformanceModel",
+    });
+
+    performanceModel.createMesh({
+        id: "textMesh",
+        primitive: "lines",
+        positions: text.positions,
+        indices: text.indices,
+        position: [0, 7.5, 0],
+        color: [0, 0, 0]
+    });
+
+    // Points
+
+    const positions = [];
+    const colors = [];
+
+    for (let x = 0; x <= 1; x += 0.07) {
+        for (let y = 0; y <= 1; y += 0.07) {
+            for (let z = 0; z <= 1; z += 0.07) {
+
+                positions.push(x);
+                positions.push(y);
+                positions.push(z);
+
+                colors.push(x);
+                colors.push(y);
+                colors.push(z);
+            }
+        }
+    }
+
+    performanceModel.createMesh({
+        id: "pointsMesh",
+        primitive: "points",
+        positions: positions,
+        colors: colors,
+        position: [-7, 0, 0],
+        scale: [4, 4, 4],
+        rotation: [0, 0, 0]
+    });
+
+    performanceModel.createEntity({
+        id: "geometries",
+        meshIds: ["boxMesh", "boxLinesMesh", "sphereMesh", "torusMesh", "cylinderMesh", "gridMesh", "textMesh", "pointsMesh"]
+    });
+
+    performanceModel.finalize();
+
+    signalTestComplete(viewer);
+
+</script>
+
+</html>

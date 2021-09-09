@@ -16,7 +16,7 @@ class Pickable {
     /**
      * Picks a triangle on this Pickable.
      */
-    drawPickTriangles(frameCtx) {
+    drawPickTriangles(renderFlags, frameCtx) {
     }
 
     /**
@@ -44,7 +44,7 @@ class Pickable {
      * Renders color-encoded fragment depths of this Pickable.
      * @param frameCtx
      */
-    drawPickDepths(frameCtx) {
+    drawPickDepths(renderFlags, frameCtx) {
     }
 
     /**

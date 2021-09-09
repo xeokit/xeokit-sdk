@@ -16,6 +16,8 @@ import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
+import {PointsMaterial} from "../materials/PointsMaterial.js";
+import {LinesMaterial} from "../materials/LinesMaterial.js";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -582,10 +584,10 @@ class Scene extends Component {
             canvas: canvas,
             spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
-            backgroundColor: cfg.backgroundColor,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
-            clearColorAmbient: cfg.clearColorAmbient,
+            backgroundColor: cfg.backgroundColor,
+            backgroundColorFromAmbientLight: cfg.backgroundColorFromAmbientLight,
             premultipliedAlpha: cfg.premultipliedAlpha
         });
 
@@ -605,6 +607,8 @@ class Scene extends Component {
         this._sectionPlanesState = new (function () {
 
             this.sectionPlanes = [];
+
+            this.clippingCaps = false;
 
             let hash = null;
 
@@ -646,8 +650,8 @@ class Scene extends Component {
 
         this._lightsState = new (function () {
 
-            const DEFAULT_AMBIENT = math.vec3([0, 0, 0]);
-            const ambientColor = math.vec3();
+            const DEFAULT_AMBIENT = math.vec4([0, 0, 0, 0]);
+            const ambientColorIntensity = math.vec4();
 
             this.lights = [];
             this.reflectionMaps = [];
@@ -733,7 +737,7 @@ class Scene extends Component {
                 }
             };
 
-            this.getAmbientColor = function () {
+            this.getAmbientColorAndIntensity = function () {
                 if (!ambientLight) {
                     for (let i = 0, len = this.lights.length; i < len; i++) {
                         const light = this.lights[i];
@@ -746,10 +750,11 @@ class Scene extends Component {
                 if (ambientLight) {
                     const color = ambientLight.color;
                     const intensity = ambientLight.intensity;
-                    ambientColor[0] = color[0] * intensity;
-                    ambientColor[1] = color[1] * intensity;
-                    ambientColor[2] = color[2] * intensity;
-                    return ambientColor;
+                    ambientColorIntensity[0] = color[0];
+                    ambientColorIntensity[1] = color[1];
+                    ambientColorIntensity[2] = color[2];
+                    ambientColorIntensity[3] = intensity
+                    return ambientColorIntensity;
                 } else {
                     return DEFAULT_AMBIENT;
                 }
@@ -801,6 +806,8 @@ class Scene extends Component {
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._pbrEnabled = !!cfg.pbrEnabled;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -828,24 +835,17 @@ class Scene extends Component {
         });
 
         new DirLight(this, {
-            dir: [0.8, -0.6, -0.8],
-            color: [1.0, 1.0, 1.0],
-            intensity: 0.9,
-            space: "view"
+            dir: [0.8, -.5, -0.5],
+            color: [0.67, 0.67, 1.0],
+            intensity: 0.7,
+            space: "world"
         });
 
         new DirLight(this, {
-            dir: [-0.8, -0.4, -0.4],
-            color: [1.0, 1.0, 1.0],
+            dir: [-0.8, -1.0, 0.5],
+            color: [1, 1, .9],
             intensity: 0.9,
-            space: "view"
-        });
-
-        new DirLight(this, {
-            dir: [0.2, -0.8, 0.8],
-            color: [0.7, 0.7, 0.7],
-            intensity: 0.9,
-            space: "view"
+            space: "world"
         });
 
         this._camera.on("dirty", () => {
@@ -1164,6 +1164,29 @@ class Scene extends Component {
     }
 
     /**
+     * Sets whether physically-based rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    set pbrEnabled(pbrEnabled) {
+        this._pbrEnabled = !!pbrEnabled;
+        this.glRedraw();
+    }
+
+    /**
+     * Sets whether quality rendering is enabled.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} True if quality rendering is enabled.
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled;
+    }
+
+    /**
      * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
      *
      * Sets each {@link Marker#visible} ````true```` if the Marker is currently not occluded by any opaque {@link Entity}s
@@ -1253,17 +1276,17 @@ class Scene extends Component {
     _saveAmbientColor() {
         const canvas = this.canvas;
         if (!canvas.transparent && !canvas.backgroundImage && !canvas.backgroundColor) {
-            const ambientColor = this._lightsState.getAmbientColor();
+            const ambientColorIntensity = this._lightsState.getAmbientColorAndIntensity();
             if (!this._lastAmbientColor ||
-                this._lastAmbientColor[0] !== ambientColor[0] ||
-                this._lastAmbientColor[1] !== ambientColor[1] ||
-                this._lastAmbientColor[2] !== ambientColor[2] ||
-                this._lastAmbientColor[3] !== ambientColor[3]) {
-                canvas.backgroundColor = ambientColor;
+                this._lastAmbientColor[0] !== ambientColorIntensity[0] ||
+                this._lastAmbientColor[1] !== ambientColorIntensity[1] ||
+                this._lastAmbientColor[2] !== ambientColorIntensity[2] ||
+                this._lastAmbientColor[3] !== ambientColorIntensity[3]) {
+                canvas.backgroundColor = ambientColorIntensity;
                 if (!this._lastAmbientColor) {
                     this._lastAmbientColor = math.vec4([0, 0, 0, 1]);
                 }
-                this._lastAmbientColor.set(ambientColor);
+                this._lastAmbientColor.set(ambientColorIntensity);
             }
         } else {
             this._lastAmbientColor = null;
@@ -1570,6 +1593,7 @@ class Scene extends Component {
         }
         this._renderer.gammaInput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1586,17 +1610,18 @@ class Scene extends Component {
     /**
      * Sets whether or not to render pixels with pre-multiplied gama.
      *
-     * Default value is ````true````.
+     * Default value is ````false````.
      *
      * @type {Boolean}
      */
     set gammaOutput(value) {
-        value = value !== false;
+        value = !!value;
         if (value === this._renderer.gammaOutput) {
             return;
         }
         this._renderer.gammaOutput = value;
         this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1745,6 +1770,32 @@ class Scene extends Component {
             edgeColor: [0.0, 0.0, 0.0],
             edgeAlpha: 1.0,
             edgeWidth: 1,
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link PointsMaterial} for this Scene.
+     *
+     * @type {PointsMaterial}
+     */
+    get pointsMaterial() {
+        return this.components["default.pointsMaterial"] || new PointsMaterial(this, {
+            id: "default.pointsMaterial",
+            preset: "default",
+            dontClear: true
+        });
+    }
+
+    /**
+     * Gets the {@link LinesMaterial} for this Scene.
+     *
+     * @type {LinesMaterial}
+     */
+    get linesMaterial() {
+        return this.components["default.linesMaterial"] || new LinesMaterial(this, {
+            id: "default.linesMaterial",
+            preset: "default",
             dontClear: true
         });
     }
@@ -2002,7 +2053,7 @@ class Scene extends Component {
         pickResult = this._renderer.pick(params, pickResult);
 
         if (pickResult) {
-            if (pickResult.entity.fire) {
+            if (pickResult.entity && pickResult.entity.fire) {
                 pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doesn't fire events
             }
             return pickResult;

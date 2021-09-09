@@ -1,49 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>SectionPlanesPlugin</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1><a target="_other"
-           href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-method-flipSectionPlanes">SectionPlanesPlugin#flipSectionPlanes()</a>
-    </h1>
+<div><a href="javascript:flip()">SectionPlanesPlugin.flipSectionPlanes()</a></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin </h1>
+    <h2>Flipping slicing direction with flipSectionPlanes()</h2>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model from file system
-        </li>
-        <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Creates section planes
-        </li>
     </ul>
-
+    <h3>Components used</h3>
     <ul>
         <li>
-            <div><a href="javascript:flip()">SectionPlanesPlugin.flipSectionPlanes()</a></div>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
         </li>
     </ul>
-
-
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
 </div>
 </body>
 
@@ -53,10 +54,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-    import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, math, SectionPlanesPlugin, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -87,15 +85,11 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true
     });
 
-    const sectionPlanes = new SectionPlanesPlugin(viewer, {
-        overviewCanvasId: "mySectionPlanesOverviewCanvas",
-        overviewVisible: true
-    });
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
 
     model.on("loaded", () => {
         var t1 = performance.now();
@@ -124,7 +118,7 @@
 
     });
 
-    window.flip = function() {
+    window.flip = function () {
         sectionPlanes.flipSectionPlanes();
     }
 

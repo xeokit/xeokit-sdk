@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+
+<script type="module" id="source">
+
+    import {Viewer, Mesh, load3DSGeometry, ReadableGeometry, PhongMaterial, Texture} from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.scene.camera.eye = [40.04, 23.46, 79.06];
+    viewer.scene.camera.look = [-6.48, 13.92, -0.56];
+    viewer.scene.camera.up = [-0.04, 0.98, -0.08];
+
+    load3DSGeometry(viewer.scene, {
+        src: "./../assets/models/3ds/lexus.3ds",
+        compressGeometry: false
+
+    })
+        .then(function (geometry) {
+
+                new Mesh(viewer.scene, {
+                    geometry: new ReadableGeometry(viewer.scene, geometry),
+                    material: new PhongMaterial(viewer.scene, {
+                        emissive: [1, 1, 1],
+                        emissiveMap: new Texture(viewer.scene, {  // .3DS has no normals so relies on emissive illumination
+                            src: "./../assets/models/3ds/lexus.jpg"
+                        })
+                    }),
+                    rotation: [-90, 0, 0] // +Z is up for this particular 3DS
+                });
+            },
+            function () {
+                // Error
+            });
+
+    signalTestComplete(viewer);
+
+    window.viewer = viewer;
+
+</script>
+</html>

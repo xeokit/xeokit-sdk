@@ -1,0 +1,46 @@
+{
+  "id": "Default Project",
+  "projectId": "3MD_HkJ6X2EwpfIbCFm0g_",
+  "author": "Architect",
+  "createdAt": "2008-08-01T21:53:56",
+  "schema": "IFC2X3",
+  "creatingApplication": "IFC Engine DLL version 1.02 beta",
+  "metaObjects": [
+    {
+      "id": "3MD_HkJ6X2EwpfIbCFm0g_",
+      "name": "Default Project",
+      "type": "IfcProject",
+      "parent": null
+    },
+    {
+      "id": "3rNg_N55v4CRBpQVbZJoHB",
+      "name": "Default Site",
+      "type": "IfcSite",
+      "parent": "3MD_HkJ6X2EwpfIbCFm0g_"
+    },
+    {
+      "id": "0yf_M5JZv9QQXly4dq_zvI",
+      "name": "Default Building",
+      "type": "IfcBuilding",
+      "parent": "3rNg_N55v4CRBpQVbZJoHB"
+    },
+    {
+      "id": "0C87kaqBXF$xpGmTZ7zxN$",
+      "name": "Default Building Storey",
+      "type": "IfcBuildingStorey",
+      "parent": "0yf_M5JZv9QQXly4dq_zvI"
+    },
+    {
+      "id": "3vB2YO$MX4xv5uCqZZG05x",
+      "name": "Wall xyz",
+      "type": "IfcWallStandardCase",
+      "parent": "0C87kaqBXF$xpGmTZ7zxN$"
+    },
+    {
+      "id": "0LV8Pid0X3IA3jJLVDPidY",
+      "name": "Window xyz",
+      "type": "IfcWindow",
+      "parent": "0C87kaqBXF$xpGmTZ7zxN$"
+    }
+  ]
+}

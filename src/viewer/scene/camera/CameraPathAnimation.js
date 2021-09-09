@@ -13,10 +13,7 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  *  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraPathAnimation)]
  *
  * ````Javascript
- * import {Viewer} from "viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {CameraPath} from "../src/scene/camera/CameraPath.js";
- * import {CameraPathAnimation} from "../src/scene/camera/CameraPathAnimation.js";
+ * import {Viewer, GLTFLoaderPlugin, CameraPath, CameraPathAnimation} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange camera
  *

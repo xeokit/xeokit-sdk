@@ -1,46 +1,69 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>BCFViewpointsPlugin - Saving a BCF Viewpoint with Multiple Instances of Same Model</title>
-    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
+        #downloadLink {
+            position: absolute;
+            font-size: 18px;
+            left: 75px;
+            top: 80px;
+            pointer-events: all;
         }
     </style>
-
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Saving a BCF Viewpoint with Multiple Instances of Same Model</h1>
+<div id="downloadLink"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/bcf_logo.png"/>
+    <h1>BCFViewpointsPlugin</h1>
+    <h2>Saving a BCF viewpoint for multiple copies of a model</h2>
+    <p>The BIM Collaboration Format (BCF) is a structured file format used for issue tracking with a building
+        information model. BCF defines views of a building model and associated information on collisions
+        and errors connected with specific objects in the view. </p>
+    <p>In this example, we're simulating an unusual use case: loading two copies of the same BIM model from the file
+        system, slicing them with a
+        section plane, selecting some objects, then saving
+        the viewer state as a JSON-encoded BCF viewpoint.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <div id="time">Loading JavaScript modules...</div>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads BIM model from the file system
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
-            - Saves and loads BCF viewpoints
+            <a href="../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html"
+               target="_other">BCFViewpointsPlugin</a>
         </li>
-        <li>See source code to examine the BCF JSON record</li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Saving-and-Loading-BCF-Viewpoints-800a5479dc8346848165c88b9ec84fcf"
+               target="_other">Tutorial</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -49,10 +72,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
-    import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -90,21 +110,16 @@
 
     const model = xktLoader.load({
         id: "model1",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
-
-    const t0 = performance.now();
-    document.getElementById("time").innerHTML = "Loading two copies of same model...";
 
     model.on("loaded", function () {
 
         const model2 = xktLoader.load({
             id: "model2",
-            src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-            metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+            src: "../assets/models/xkt/v8/Schependomlaan.xkt",
             edges: true,
             excludeUnclassifiedObjects: false,
             position: [30, 0, 0]
@@ -112,24 +127,12 @@
 
         model2.on("loaded", () => {
 
-            const t1 = performance.now();
-            document.getElementById("time").innerHTML = "Two copies of same model loaded in "
-                + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + (model.numEntities = model2.numEntities);
-
-            viewer.scene.setObjectsOpacity(viewer.scene.objectIds, 0.4);
-
             viewer.scene.setObjectsSelected([
                 "model1#3b2U496P5Ebhz5FROhTwFH"
             ], true);
 
             viewer.scene.setObjectsSelected([
                 "model2#2MGtJUm9nD$Re1_MDIv0g2"
-            ], true);
-
-            viewer.scene.setObjectsHighlighted([
-                "3IbuwYOm5EV9Q6cXmwVWqd",
-                "3lhisrBxL8xgLCRdxNG$2v",
-                "1uDn0xT8LBkP15zQc9MVDW"
             ], true);
 
             const bcfViewpoints = new BCFViewpointsPlugin(viewer);
@@ -143,6 +146,15 @@
             const viewpointStr = JSON.stringify(viewpoint, null, 4);
 
             console.log(viewpointStr);
+
+            // Create download link
+            // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+
+            const pom = document.createElement('a');
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+            pom.setAttribute('download', "bcfViewpoint.json");
+            pom.innerText = "Download BCF Viewpoint JSON";
+            document.getElementById("downloadLink").appendChild(pom);
         });
     });
 

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#anglemeasurementsplugin">AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#annotationsplugin">AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#axisgizmoplugin">AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bcfviewpointsplugin">BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bimserverloaderplugin">BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bimserverloaderplugin-bimserverclient">BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#distancemeasurementsplugin">DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#gltfloaderplugin">GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#ifchelpersplugin">IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#navcubeplugin">NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#objloaderplugin">OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stlloaderplugin">STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#sectionplanesplugin">SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skyboxesplugin">SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#storeyviewsplugin">StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#treeviewplugin">TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy">validateMetaModelForTreeViewContainmentHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy">validateMetaModelForTreeViewStoreysHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy">validateMetaModelForTreeViewTypesHierarchy</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewcullplugin">ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#xktloaderplugin">XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#xml3dloaderplugin">XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lib-culling">lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {utils} from &quot;../../viewer/scene/utils.js&quot;
+import {Node} from &quot;../../viewer/scene/nodes/Node.js&quot;;
+import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
+import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
+
+/**
+ * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
+ *
+ * [&lt;img src=&quot;https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ *
+ * ## Overview
+ *
+ * * Currently supports 3DXML V4.2.
+ * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+ * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
+ * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model&apos;s {@link Entity}s.
+ * * Can optionally load a {@link MetaModel} to classify the objects within the model, from which you can create a tree view using the {@link TreeViewPlugin}.
+ * &lt;br&gt;
+ * Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript class name cannot begin with a numeral.
+ *
+ * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DLoaderPlugin uses the
+ * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses
+ * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DLoaderPlugin requires that we configure it
+ * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See
+ * the example for how to do that.
+ *
+ * ## Usage
+ *
+ * In the example below, we&apos;ll use an XML3DLoaderPlugin to load a 3DXML model. When the model has loaded,
+ * we&apos;ll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We&apos;ll
+ * then get the model&apos;s {@link Entity} from the {@link Scene} and highlight the whole model.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ *
+ * ````javascript
+ * // Create a xeokit Viewer
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;
+ * });
+ *
+ * // Add an XML3DLoaderPlugin to the Viewer
+ * var plugin = new XML3DLoaderPlugin(viewer, {
+ *      id: &quot;XML3DLoader&quot;,  // Default value
+ *      workerScriptsPath : &quot;../../src/plugins/XML3DLoader/zipjs/&quot; // Path to zip.js workers dir
+ * });
+ *
+ * // Load the 3DXML model
+ * var model = plugin.load({ // Model is an Entity
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+ *     scale: [0.1, 0.1, 0.1],
+ *     rotate: [90, 0, 0],
+ *     translate: [100,0,0],
+ *     edges: true
+ * });
+ *
+ * // When the model has loaded, fit it to view
+ * model.on(&quot;loaded&quot;, function() {
+ *      viewer.cameraFlight.flyTo(model);
+ * });
+ *
+ * // Update properties of the model via the entity
+ * model.highlighted = true;
+ *
+ * // Find the model Entity by ID
+ * model = viewer.scene.models[&quot;myModel&quot;];
+ *
+ * // Destroy the model
+ * model.destroy();
+ * ````
+ * ## Loading MetaModels
+ *
+ * We have the option to load a {@link MetaModel} that contains a hierarchy of {@link MetaObject}s that classifes the objects within
+ * our 3DXML model.
+ *
+ * This is useful for building a tree view to navigate the objects, using {@link TreeViewPlugin}.
+ *
+ * Let&apos;s load the model again, this time creating a MetaModel:
+ *
+ * ````javascript
+ * var model = plugin.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+ *     scale: [0.1, 0.1, 0.1],
+ *     rotate: [90, 0, 0],
+ *     translate: [100,0,0],
+ *     edges: true,
+ *
+ *     createMetaModel: true // &lt;&lt;-------- Create a MetaModel
+ * });
+ * ````
+ *
+ * The MetaModel can then be found on the {@link Viewer}&apos;s {@link MetaScene}, using the model&apos;s ID:
+ *
+ * ````javascript
+ * const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];
+ * ````
+ *
+ * Now we can use {@link TreeViewPlugin} to create a tree view to navigate our model&apos;s objects:
+ *
+ * ````javascript
+ * import {TreeViewPlugin} from &quot;../src/plugins/TreeViewPlugin/TreeViewPlugin.js&quot;;
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;)
+ * });
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+ *      autoExpandDepth: 3, // Initially expand tree three storeys deep
+ *      hierarchy: &quot;containment&quot;,
+ *      autoAddModels: false
+ * });
+ *
+ * model.on(&quot;loaded&quot;, () =&gt; {
+ *      treeView.addModel(model.id);
+ * });
+ * ````
+ *
+ * Note that only the TreeViewPlugin &quot;containment&quot; hierarchy makes sense for an XML3D model. A &quot;types&quot; hierarchy
+ * does not make sense because XML3DLoaderPlugin will set each {@link MetaObject#type} to &quot;Default&quot;, and &quot;storeys&quot;
+ * does not make sense because that requires some of the MetaObject#type values to be &quot;IfcBuildingStorey&quot;.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ *
+ * ## Material Type
+ *
+ * Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.
+ *
+ * The plugin supports three material types:
+ *
+ * | Material Type | Material Components Loaded  | Description | Example |
+ * |:--------:|:----:|:-----:|:-----:|
+ * | &quot;PhongMaterial&quot; (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | &quot;MetallicMaterial&quot; | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
+ * | &quot;SpecularMaterial&quot; | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ *
+ * &lt;br&gt;
+ * Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong materials to {@link SpecularMaterial}s:
+ *
+ * ````javascript
+ * var model = plugin.load({ // Model is an Entity
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+ *     materialtype: &quot;SpecularMaterial&quot;: true&quot;
+ * });
+ * ````
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)]
+ *
+ * @class XML3DLoaderPlugin
+ */
+
+class XML3DLoaderPlugin extends Plugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;XML3DLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} cfg.workerScriptsPath Path to the directory that contains the
+     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
+     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.
+     * @param {String} [cfg.materialType=&quot;PhongMaterial&quot;] What type of materials to create while loading: &quot;MetallicMaterial&quot; to create {@link MetallicMaterial}s, &quot;SpecularMaterial&quot; to create {@link SpecularMaterial}s or &quot;PhongMaterial&quot; to create {@link PhongMaterial}s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {Boolean} [cfg.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
+     */
+    constructor(viewer, cfg = {}) {
+
+        super(&quot;XML3DLoader&quot;, viewer, cfg);
+
+        if (!cfg.workerScriptsPath) {
+            this.error(&quot;Config expected: workerScriptsPath&quot;);
+            return
+        }
+
+        this._workerScriptsPath = cfg.workerScriptsPath;
+
+        /**
+         * @private
+         */
+        this._loader = new XML3DLoader(this, cfg);
+
+        /**
+         * Supported 3DXML schema versions
+         * @property supportedSchemas
+         * @type {string[]}
+         */
+        this.supportedSchemas = this._loader.supportedSchemas;
+    }
+
+    /**
+     * Loads a 3DXML model from a file into this XML3DLoaderPlugin&apos;s {@link Viewer}.
+     *
+     * Creates a tree of {@link Entity}s within the Viewer&apos;s {@link Scene} that represents the model.
+     *
+     * @param {*} params  Loading parameters.
+     * @param {String} params.id ID to assign to the model&apos;s root {@link Entity}, unique among all components in the Viewer&apos;s {@link Scene}.
+     * @param {String} [params.src] Path to a 3DXML file.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Entity} with edges emphasized.
+     * @param {Number[]} [params.position=[0,0,0]] The model&apos;s World-space 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model&apos;s World-space scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML. When false, ignores backfaces.
+     * @param {Number} [params.edgeThreshold=20] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {String} [params.materialType=&quot;PhongMaterial&quot;] What type of materials to create while loading: &quot;MetallicMaterial&quot; to create {@link MetallicMaterial}s, &quot;SpecularMaterial&quot; to create {@link SpecularMaterial}s or &quot;PhongMaterial&quot; to create {@link PhongMaterial}s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {Boolean} [params.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+     */
+    load(params = {}) {
+
+        params.workerScriptsPath = this._workerScriptsPath;
+
+        if (params.id &amp;&amp; this.viewer.scene.components[params.id]) {
+            this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);
+            delete params.id;
+        }
+
+        const modelNode = new Node(this.viewer.scene, utils.apply(params, {
+            isModel: true
+        }));
+
+        const src = params.src;
+
+        if (!src) {
+            this.error(&quot;load() param expected: src&quot;);
+            return modelNode; // Return new empty model
+        }
+
+        this._loader.load(this, modelNode, src, params);
+
+        return modelNode;
+    }
+}
+
+export {XML3DLoaderPlugin}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -30,7 +30,7 @@ const tempVec3c = math.vec3();
  *
  * ## Example 1: Loading a model and creating an annotation
  *
- * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and an AnnotationsPlugin
+ * In the example below, we'll use an {@link XKTLoaderPlugin} to load a model, and an AnnotationsPlugin
  * to create an {@link Annotation} on it.
  *
  * We'll configure the AnnotationsPlugin with default HTML templates for each Annotation's position (its "marker") and
@@ -49,9 +49,7 @@ const tempVec3c = math.vec3();
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {AnnotationsPlugin} from "../src/plugins/AnnotationsPlugin/AnnotationsPlugin.js";
+ * import {Viewer, XKTLoaderPlugin,AnnotationsPlugin} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -62,7 +60,7 @@ const tempVec3c = math.vec3();
  * viewer.scene.camera.look = [10.97, 5.82, -11.22];
  * viewer.scene.camera.up = [0.36, 0.83, 0.40];
  *
- * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * const annotations = new AnnotationsPlugin(viewer, {
  *
@@ -83,8 +81,8 @@ const tempVec3c = math.vec3();
  *      }
  * });
  *
- * const model = gltfLoader.load({
- *      src: "./models/gltf/duplex/scene.gltf"
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/geometry.xkt"
  * });
  *
  * model.on("loaded", () => {
@@ -533,7 +531,9 @@ class AnnotationsPlugin extends Plugin {
         this.annotations[annotation.id] = annotation;
         annotation.on("destroyed", () => {
             delete this.annotations[annotation.id];
+            this.fire("annotationDestroyed", annotation.id);
         });
+        this.fire("annotationCreated", annotation.id);
         return annotation;
     }
 

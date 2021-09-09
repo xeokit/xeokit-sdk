@@ -1,24 +1,41 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>PerformanceModel with Geometry Instancing and SAO</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1>PerformanceModel with Geometry Instancing and SAO</h1>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <h1>PerformanceModel</h1>
+    <h2>Geometry reuse and SAO</h2>
+    <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
+        at the same time reusing the same geometry for each object, and rendering with scalable ambient obscurance
+        (SAO).</p>
+    <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
+    <p>SAO emphasises detail by darkening crevices.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html"
+               target="_other">SAO</a>
+        </li>
+    </ul>
 </div>
 </body>
 
@@ -28,8 +45,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -50,13 +66,7 @@
 
     const sao = viewer.scene.sao;
 
-    sao.enabled = true; // Only works if supported
-    sao.intensity = 0.20;
-    sao.bias = 0.5;
-    sao.scale = 230.0; // <<------- Scale the SAO effect for this model
-    sao.minResolution = 0.0;
-    sao.kernelRadius = 100;
-    sao.blur = true;
+    sao.enabled = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a PerformanceModel representing a table with four legs, using geometry instancing
@@ -81,8 +91,7 @@
 
         id: "myBoxGeometry",
 
-        // The primitive type - allowed values are "points", "lines", "line-loop", "line-strip",
-        // "triangles", "triangle-strip" and "triangle-fan".
+        // The primitive type - allowed values are "points", "lines" and "triangles".
         // See the OpenGL/WebGL specification docs for how the coordinate arrays are supposed to be laid out.
         primitive: "triangles",
 

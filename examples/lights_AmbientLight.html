@@ -1,78 +1,75 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>AmbientLight</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/lighting_icon.png"/>
     <h1>AmbientLight</h1>
-    <br>
-    <p>An ambient light source.</p>
-    <br>
+    <h2>An ambient light source</h2>
+    <h3>Components used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a>
-            - xeokit Viewer
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a>
-            - Scene graph mesh
+            <a href="../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
-            - ReadableGeometry
+            <a href="../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/function/index.html#static-function-buildTorusGeometry">buildTorusGeometry()</a>
-            - creates the torus
+            <a href="../docs/function/index.html#static-function-buildTorusGeometry"
+               target="_other">buildTorusGeometry()</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a>
-            - Phong material
+            <a href="../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a>
-            - Texture map
+            <a href="../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a>
-            - Creates ambient light
+            <a href="../docs/class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html"
+               target="_other">AmbientLight</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a>
-            - Directional View-space lights
+            <a href="../docs/class/src/viewer/scene/lights/DirLight.js~DirLight.html"
+               target="_other">DirLight</a>
         </li>
     </ul>
 </div>
 </body>
 
-<script type="module" id="source">
+<script id="source" type="module">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {buildTorusGeometry} from "../src/viewer/scene/geometry/builders/buildTorusGeometry.js";
-    import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
-    import {Texture} from "../src/viewer/scene/materials/Texture.js";
-    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
-    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
+    import {
+        Viewer,
+        Mesh,
+        buildTorusGeometry,
+        ReadableGeometry,
+        PhongMaterial,
+        Texture,
+        AmbientLight,
+        DirLight
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -140,7 +137,7 @@
             ambient: [1.0, 1.0, 1.0],
             shininess: 30,
             diffuseMap: new Texture(viewer.scene, {
-                src: "textures/diffuse/uvGrid2.jpg"
+                src: "../assets/textures/diffuse/uvGrid2.jpg"
             })
         })
     });

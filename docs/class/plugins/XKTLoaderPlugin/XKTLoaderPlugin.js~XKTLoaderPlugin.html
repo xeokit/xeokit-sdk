@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">XKTLoaderPlugin | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#anglemeasurementsplugin">AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#annotationsplugin">AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#axisgizmoplugin">AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bcfviewpointsplugin">BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bimserverloaderplugin">BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bimserverloaderplugin-bimserverclient">BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#distancemeasurementsplugin">DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#gltfloaderplugin">GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#ifchelpersplugin">IFCHelpersPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/IFCHelpersPlugin/IFCHelpersDefaultDataSource.js~IFCHelpersDefaultDataSource.html">IFCHelpersDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/IFCHelpersPlugin/IFCHelpersPlugin.js~IFCHelpersPlugin.html">IFCHelpersPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#navcubeplugin">NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#objloaderplugin">OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stlloaderplugin">STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#sectionplanesplugin">SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skyboxesplugin">SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#storeyviewsplugin">StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#treeviewplugin">TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy">validateMetaModelForTreeViewContainmentHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy">validateMetaModelForTreeViewStoreysHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy">validateMetaModelForTreeViewTypesHierarchy</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewcullplugin">ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#xktloaderplugin">XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#xml3dloaderplugin">XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lib-culling">lib/culling</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getObjectCullStates">getObjectCullStates</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber447">@xeokit/xeokit-sdk/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber447">source</a></span></span>
+</div>
+
+<div class="self-detail detail">
+  <h1 data-ice="name">XKTLoaderPlugin</h1>
+
+  
+
+  
+  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>viewer/Plugin.js~Plugin</span> &#x2192; XKTLoaderPlugin</div></div>
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <div class="description" data-ice="description"><p><span>Viewer</span> plugin that loads models from xeokit&apos;s optimized <em><code>.XKT</code></em> format.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter">Run this example</a>]</p>
+<h2 id="overview">Overview</h2><ul>
+<li>XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.</li>
+<li>An <em><code>.XKT</code></em> file is a single BLOB containing a model, compressed using geometry quantization
+and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
+<li>Supports double-precision coordinates, via <code>.XKT</code> format version 6.</li>
+<li>Set the position, scale and rotation of each model as you load it.</li>
+<li>Filter which IFC types get loaded.</li>
+<li>Configure initial default appearances for IFC types.</li>
+<li>Set a custom data source for <em><code>.XKT</code></em> and IFC metadata files.</li>
+<li>Option to load multiple copies of the same model, without object ID clashes.</li>
+<li>Does not (yet) support textures or physically-based materials.</li>
+</ul>
+<h2 id="credits">Credits</h2><p>XKTLoaderPlugin and the <code>xeokit-gltf-to-xkt</code> tool (see below) are based on prototypes
+by <a href="https://github.com/tmarti">Toni Marti</a> at <a href="https://www.unizite.com/login">uniZite</a>.</p>
+<h2 id="creating--em--code--xkt--code---em--files-and-metadata">Creating <em><code>.XKT</code></em> Files and Metadata</h2><p>See <a href="https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM">Creating Files for Offline BIM</a>.</p>
+<h2 id="scene-representation">Scene representation</h2><p>When loading a model, XKTLoaderPlugin creates an <span>Entity</span> that represents the model, which
+will have <span>Entity#isModel</span> set <code>true</code> and will be registered by <span>Entity#id</span>
+in <span>Scene#models</span>. The XKTLoaderPlugin also creates an <span>Entity</span> for each object within the
+model. Those Entities will have <span>Entity#isObject</span> set <code>true</code> and will be registered
+by <span>Entity#id</span> in <span>Scene#objects</span>.</p>
+<h2 id="metadata">Metadata</h2><p>XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a <span>MetaModel</span> corresponding
+to the model <span>Entity</span> and a <span>MetaObject</span> corresponding to each object <span>Entity</span>.</p>
+<p>Each <span>MetaObject</span> has a <span>MetaObject#type</span>, which indicates the classification of its corresponding <span>Entity</span>. When loading
+metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of <span>Entity</span>. By default, XKTLoaderPlugin
+uses its own map of default colors and visibilities for IFC element types.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.XKT file</a>, along
+with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
+<p>This will create a bunch of <span>Entity</span>s that represents the model and its objects, along with a <span>MetaModel</span> and <span>MetaObject</span>s
+that hold their metadata.</p>
+<p>Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object <span>Entity</span> according to its IFC type in <span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
+<p>Read more about this example in the user guide on <a href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">Viewing BIM Models Offline</a>.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+
+//------------------------------------------------------------------------------------------------------------------
+// 1. Create a Viewer,
+// 2. Arrange the camera
+//------------------------------------------------------------------------------------------------------------------
+
+// 1
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;,
+     transparent: true
+});
+
+// 2
+viewer.camera.eye = [-2.56, 8.38, 8.27];
+viewer.camera.look = [13.44, 3.31, -14.83];
+viewer.camera.up = [0.10, 0.98, -0.14];
+
+//------------------------------------------------------------------------------------------------------------------
+// 1. Create a XKTLoaderPlugin,
+// 2. Load a building model and JSON IFC metadata
+//------------------------------------------------------------------------------------------------------------------
+
+// 1
+const xktLoader = new XKTLoaderPlugin(viewer);
+
+// 2
+const model = xktLoader.load({                                       // Returns an Entity that represents the model
+    id: &quot;myModel&quot;,
+    src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+    metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;,     // Creates a MetaModel (see below)
+    edges: true
+});
+
+model.on(&quot;loaded&quot;, () =&gt; {
+
+    //--------------------------------------------------------------------------------------------------------------
+    // 1. Find metadata on the third storey
+    // 2. Select all the objects in the building&apos;s third storey
+    // 3. Fit the camera to all the objects on the third storey
+    //--------------------------------------------------------------------------------------------------------------
+
+    // 1
+    const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];       // MetaModel with ID &quot;myModel&quot;
+    const metaObject
+         = viewer.metaScene.metaObjects[&quot;0u4wgLe6n0ABVaiXyikbkA&quot;];  // MetaObject with ID &quot;0u4wgLe6n0ABVaiXyikbkA&quot;
+
+    const name = metaObject.name;                                   // &quot;01 eerste verdieping&quot;
+    const type = metaObject.type;                                   // &quot;IfcBuildingStorey&quot;
+    const parent = metaObject.parent;                               // MetaObject with type &quot;IfcBuilding&quot;
+    const children = metaObject.children;                           // Array of child MetaObjects
+    const objectId = metaObject.id;                                 // &quot;0u4wgLe6n0ABVaiXyikbkA&quot;
+    const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
+    const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
+
+    // 2
+    viewer.scene.setObjectsSelected(objectIds, true);
+
+    // 3
+    viewer.cameraFlight.flyTo(aabb);
+});
+
+// Find the model Entity by ID
+model = viewer.scene.models[&quot;myModel&quot;];
+
+// Destroy the model
+model.destroy();</code>
+</code></pre>
+<h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each  <em><code>.XKT</code></em> model as we load it.</p>
+<p>This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.</p>
+<p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+translate it 100 units along its X axis.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.load({
+     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;,
+     rotation: [90,0,0],
+     scale: [0.5, 0.5, 0.5],
+     position: [100, 0, 0]
+});</code>
+</code></pre>
+<h2 id="including-and-excluding-ifc-types">Including and excluding IFC types</h2><p>We can also load only those objects that have the specified IFC types.</p>
+<p>In the example below, we&apos;ll load only the objects that represent walls.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const model2 = xktLoader.load({
+    id: &quot;myModel2&quot;,
+    src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
+    metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+    includeTypes: [&quot;IfcWallStandardCase&quot;]
+});</code>
+</code></pre>
+<p>We can also load only those objects that <strong>don&apos;t</strong> have the specified IFC types.</p>
+<p>In the example below, we&apos;ll load only the objects that do not represent empty space.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const model3 = xktLoader.load({
+    id: &quot;myModel3&quot;,
+    src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
+    metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+    excludeTypes: [&quot;IfcSpace&quot;]
+});</code>
+</code></pre>
+<h2 id="configuring-initial-ifc-object-appearances">Configuring initial IFC object appearances</h2><p>We can specify the custom initial appearance of loaded objects according to their IFC types.</p>
+<p>This is useful for things like:</p>
+<ul>
+<li>setting the colors to our objects according to their IFC types,</li>
+<li>automatically hiding <code>IfcSpace</code> objects, and</li>
+<li><p>ensuring that <code>IfcWindow</code> objects are always transparent.
+<br>
+In the example below, we&apos;ll load a model, while configuring <code>IfcSpace</code> elements to be always initially invisible,
+and <code>IfcWindow</code> types to be always translucent blue.</p>
+</li>
+<li><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults">Run example</a>]</p>
+</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const myObjectDefaults = {
+
+     IfcSpace: {
+         visible: false
+     },
+     IfcWindow: {
+         colorize: [0.337255, 0.303922, 0.870588], // Blue
+         opacity: 0.3
+     },
+
+     //...
+
+     DEFAULT: {
+         colorize: [0.5, 0.5, 0.5]
+     }
+};
+
+const model4 = xktLoader.load({
+     id: &quot;myModel4&quot;,
+     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;, // Creates a MetaObject instances in scene.metaScene.metaObjects
+     objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
+});</code>
+</code></pre>
+<p>When we don&apos;t customize the appearance of IFC types, as just above, then IfcSpace elements tend to obscure other
+elements, which can be confusing.</p>
+<p>It&apos;s often helpful to make IfcSpaces transparent and unpickable, like this:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const xktLoader = new XKTLoaderPlugin(viewer, {
+   objectDefaults: {
+       IfcSpace: {
+           pickable: false,
+           opacity: 0.2
+       }
+   }
+});</code>
+</code></pre>
+<p>Alternatively, we could just make IfcSpaces invisible, which also makes them unpickable:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const xktLoader = new XKTLoaderPlugin(viewer, {
+   objectDefaults: {
+       IfcSpace: {
+           visible: false
+       }
+   }
+});</code>
+</code></pre>
+<h2 id="configuring-a-custom-data-source">Configuring a custom data source</h2><p>By default, XKTLoaderPlugin will load <em><code>.XKT</code></em> files and metadata JSON over HTTP.</p>
+<p>In the example below, we&apos;ll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
+object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {utils} from &quot;./../src/viewer/scene/utils.js&quot;;
+
+class MyDataSource {
+
+     constructor() {
+     }
+
+     // Gets metamodel JSON
+     getMetaModel(metaModelSrc, ok, error) {
+         console.log(&quot;MyDataSource#getMetaModel(&quot; + metaModelSrc + &quot;, ... )&quot;);
+         utils.loadJSON(metaModelSrc,
+             (json) =&gt; {
+                 ok(json);
+             },
+             function (errMsg) {
+                 error(errMsg);
+             });
+     }
+
+     // Gets the contents of the given .XKT file in an arraybuffer
+     getXKT(src, ok, error) {
+         console.log(&quot;MyDataSource#getXKT(&quot; + xKTSrc + &quot;, ... )&quot;);
+         utils.loadArraybuffer(src,
+             (arraybuffer) =&gt; {
+                 ok(arraybuffer);
+             },
+             function (errMsg) {
+                 error(errMsg);
+             });
+     }
+}
+
+const xktLoader2 = new XKTLoaderPlugin(viewer, {
+      dataSource: new MyDataSource()
+});
+
+const model5 = xktLoader2.load({
+     id: &quot;myModel5&quot;,
+     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot; // Creates a MetaObject instances in scene.metaScene.metaObjects
+});</code>
+</code></pre>
+<h2 id="loading-multiple-copies-of-a-model--without-object-id-clashes">Loading multiple copies of a model, without object ID clashes</h2><p>Sometimes we need to load two or more instances of the same model, without having clashes
+between the IDs of the equivalent objects in the model instances.</p>
+<p>As shown in the example below, we do this by setting <span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> before we load our models.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels">Run example</a>]</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.globalizeObjectIds = true;
+
+const model = xktLoader.load({
+     id: &quot;model1&quot;,
+     src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+});
+
+const model2 = xktLoader.load({
+   id: &quot;model2&quot;,
+   src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+   metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;
+});</code>
+</code></pre>
+<p>For each <span>Entity</span> loaded by these two calls, <span>Entity#id</span> and <span>MetaObject#id</span> will get prefixed by
+the ID of their model, in order to avoid ID clashes between the two models.</p>
+<p>An Entity belonging to the first model will get an ID like this:</p>
+<pre><code><code class="source-code prettyprint">myModel1#0BTBFw6f90Nfh9rP1dlXrb</code>
+</code></pre><p>The equivalent Entity in the second model will get an ID like this:</p>
+<pre><code><code class="source-code prettyprint">myModel2#0BTBFw6f90Nfh9rP1dlXrb</code>
+</code></pre><p>Now, to update the visibility of both of those Entities collectively, using <span>Scene#setObjectsVisible</span>, we can
+supply just the IFC product ID part to that method:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">myViewer.scene.setObjectVisibilities(&quot;0BTBFw6f90Nfh9rP1dlXrb&quot;, true);</code>
+</code></pre>
+<p>The method, along with <span>Scene#setObjectsXRayed</span>, <span>Scene#setObjectsHighlighted</span> etc, will internally expand
+the given ID to refer to the instances of that Entity in both models.</p>
+<p>We can also, of course, reference each Entity directly, using its globalized ID:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">myViewer.scene.setObjectVisibilities(&quot;myModel1#0BTBFw6f90Nfh9rP1dlXrb&quot;, true);</code>
+</code></pre>
+<h2 id="validating-the-metadata">Validating the Metadata</h2><p>As mentioned, XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a
+<span>MetaModel</span> corresponding to the model <span>Entity</span> and a <span>MetaObject</span> corresponding to each
+object <span>Entity</span>.</p>
+<p>When loading metadata, we have the option to supply a callback to validate it. Ideally, our metadata should
+be fully validated further up the data pipeline, but this callback gives us one more chance to ensure that the
+metadata is going to work properly with other functionality, such as that provided by <span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.</p>
+<p>The example below shows how we can use the callback to quickly check if our metadata is going to work properly
+with <span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>, and abort the load</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {
+  isModelValidForContainmentHierarchy,
+  isModelValidForStoreysHierarchy,
+  isModelValidForTypesHierarchy
+} from &quot;../src/plugins/TreeViewPlugin/modelValidation.js&quot;;
+
+const metaModelValidationErrors = [];
+
+const model = xktLoader.load({
+
+     id: &quot;Widget&quot;,
+     src: &quot;./models/xkt/schependomlaan/schependomlaan.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/schependomlaanWithErrors/metaModelWithoutIfcBuilding.json&quot;,
+     edges: true,
+
+     validateMetaModel: (metaModel) =&gt; {
+         const valid =
+             validateMetaModelForTreeViewContainmentHierarchy(metaModel, metaModelValidationErrors) &amp;&amp;
+             validateMetaModelForTreeViewStoreysHierarchy(metaModel, metaModelValidationErrors) &amp;&amp;
+             validateMetaModelForTreeViewTypesHierarchy(metaModel, metaModelValidationErrors);
+         return valid;
+     }
+ });
+
+model.on(&quot;loaded&quot;, () =&gt; {
+     const t1 = performance.now();
+     document.getElementById(&quot;time&quot;).innerHTML = &quot;Model loaded in &quot; + Math.floor(t1 - t0) / 1000.0 + &quot; seconds&lt;br&gt;Objects: &quot; + model.numEntities;
+ });
+
+model.on(&quot;error&quot;, (e) =&gt; {
+
+     if (metaModelValidationErrors.length &gt; 0) {
+
+         // We only get validation errors if all else went OK and there
+         // are no other errors (ie. the metamodel JSON loaded and parsed OK)
+
+         console.error(&quot;Error loading model - metadata validation errors:&lt;br&gt;&lt;br&gt; &quot; + metaModelValidationErrors.join(&quot;&lt;br&gt;&quot;));
+
+     } else {
+         console.error(&quot;Error loading model: &quot; + e);
+     }
+
+     model.destroy();
+});</code>
+</code></pre>
+</div>
+  
+
+  
+
+  
+
+  
+
+  
+</div>
+
+
+
+<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(viewer: <span>Viewer</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeTypes">excludeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-excludeTypes">excludeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeUnclassifiedObjects">excludeUnclassifiedObjects</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-excludeUnclassifiedObjects">excludeUnclassifiedObjects</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">globalizeObjectIds</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether XKTLoaderPlugin globalizes each <span>Entity#id</span> and <span>MetaObject#id</span> as it loads a model.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds">globalizeObjectIds</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether XKTLoaderPlugin globalizes each <span>Entity#id</span> and <span>MetaObject#id</span> as it loads a model.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-includeTypes">includeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-includeTypes">includeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets map of initial default states for each loaded <span>Entity</span> that represents an object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets map of initial default states for each loaded <span>Entity</span> that represents an object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-supportedVersions">supportedVersions</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the <code>.xkt</code> format versions supported by this XKTLoaderPlugin/</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Entity</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Loads an <code>.xkt</code> model into this XKTLoaderPlugin&apos;s <span>Viewer</span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+
+<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-constructor-constructor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(viewer: <span>Viewer</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber466">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">viewer</td>
+      <td data-ice="type" class="code"><span>Viewer</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Plugin configuration.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;XKTLoader&quot;</li></ul></td>
+      <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span>Viewer#plugins</span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.objectDefaults</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Map of initial default states for each loaded <span>Entity</span> that represents an object.  Default value is <span>IFCObjectDefaults</span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.dataSource</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>A custom data source through which the XKTLoaderPlugin can load model and metadata files. Defaults to an instance of <span><a href="class/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span>, which loads uover HTTP.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.includeTypes</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>When loading metadata, only loads objects that have <span>MetaObject</span>s with <span>MetaObject#type</span> values in this list.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.excludeTypes</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>When loading metadata, never loads objects that have <span>MetaObject</span>s with <span>MetaObject#type</span> values in this list.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.excludeUnclassifiedObjects</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When loading metadata and this is <code>true</code>, will only load <span>Entity</span>s that have <span>MetaObject</span>s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as <span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.maxGeometryBatchSize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 50000000</li></ul></td>
+      <td data-ice="description"><p>Maximum geometry batch size, as number of vertices. This is optionally supplied
+to limit the size of the batched geometry arrays that <span>PerformanceModel</span> internally creates for batched geometries.
+A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
+slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
+and faster rendering speed. It&apos;s recommended to keep this somewhere roughly between <code>50000</code> and <code>`50000000</code>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dataSource">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber494">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
+<p>Default value is <span><a href="class/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span>, which loads via HTTP.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dataSource">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber505">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
+<p>Default value is <span><a href="class/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span>, which loads via HTTP.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-excludeTypes">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">excludeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber569">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to <strong>not</strong> load objects whose types are in this
+list. An object&apos;s type is indicated by its <span>MetaObject</span>&apos;s <span>MetaObject#type</span>.</p>
+<p>Default value is <code>undefined</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-excludeTypes">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">excludeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber583">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to <strong>not</strong> load objects whose types are in this
+list. An object&apos;s type is indicated by its <span>MetaObject</span>&apos;s <span>MetaObject#type</span>.</p>
+<p>Default value is <code>undefined</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-excludeUnclassifiedObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">excludeUnclassifiedObjects</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber598">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-excludeUnclassifiedObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">excludeUnclassifiedObjects</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber612">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-globalizeObjectIds">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">globalizeObjectIds</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber633">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether XKTLoaderPlugin globalizes each <span>Entity#id</span> and <span>MetaObject#id</span> as it loads a model.</p>
+<p>Set  this <code>true</code> when you need to load multiple instances of the same model, to avoid ID clashes
+between the objects in the different instances.</p>
+<p>When we load a model with this set <code>true</code>, then each <span>Entity#id</span> and <span>MetaObject#id</span> will be
+prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</code>.</p>
+<p><span>Entity#originalSystemId</span> and <span>MetaObject#originalSystemId</span> will always hold the original, un-prefixed, ID values.</p>
+<p>Default value is <code>false</code>.</p>
+<p>See the main <span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> class documentation for usage info.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-globalizeObjectIds">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">globalizeObjectIds</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber644">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether XKTLoaderPlugin globalizes each <span>Entity#id</span> and <span>MetaObject#id</span> as it loads a model.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-includeTypes">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">includeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber541">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
+list. An object&apos;s type is indicated by its <span>MetaObject</span>&apos;s <span>MetaObject#type</span>.</p>
+<p>Default value is <code>undefined</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-includeTypes">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">includeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber555">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
+list. An object&apos;s type is indicated by its <span>MetaObject</span>&apos;s <span>MetaObject#type</span>.</p>
+<p>Default value is <code>undefined</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-objectDefaults">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber516">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets map of initial default states for each loaded <span>Entity</span> that represents an object.</p>
+<p>Default value is <span>IFCObjectDefaults</span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-objectDefaults">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber527">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets map of initial default states for each loaded <span>Entity</span> that represents an object.</p>
+<p>Default value is <span>IFCObjectDefaults</span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-supportedVersions">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">supportedVersions</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber483">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the <code>.xkt</code> format versions supported by this XKTLoaderPlugin/</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-load">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Entity</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber673">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Loads an <code>.xkt</code> model into this XKTLoaderPlugin&apos;s <span>Viewer</span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">params</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Loading parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID to assign to the root <span>Entity#id</span>, unique among all components in the Viewer&apos;s <span>Scene</span>, generated automatically by default.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.src</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to a <em><code>.xkt</code></em> file, as an alternative to the <code>xkt</code> parameter.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.xkt</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The <em><code>.xkt</code></em> file data, as an alternative to the <code>src</code> parameter.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.metaModelSrc</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.metaModelData</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.objectDefaults</td>
+      <td data-ice="type" class="code">{String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Map of initial default states for each loaded <span>Entity</span> that represents an object. Default value is <span>IFCObjectDefaults</span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.includeTypes</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>When loading metadata, only loads objects that have <span>MetaObject</span>s with <span>MetaObject#type</span> values in this list.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.excludeTypes</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>When loading metadata, never loads objects that have <span>MetaObject</span>s with <span>MetaObject#type</span> values in this list.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether or not xeokit renders the model with edges emphasized.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.position</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The model World-space 3D position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.scale</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,1,1]</li></ul></td>
+      <td data-ice="description"><p>The model&apos;s World-space scale.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.rotation</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
+      <td data-ice="description"><p>The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Indicates if the model&apos;s edges are initially emphasized.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.saoEnabled</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene&apos;s <span>SAO</span> component.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.backfaces</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Indicates if backfaces are visible on the model. Making this <code>true</code> will reduce rendering performance.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.excludeUnclassifiedObjects</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When loading metadata and this is <code>true</code>, will only load <span>Entity</span>s that have <span>MetaObject</span>s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as <span><a href="class/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.globalizeObjectIds</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Indicates whether to globalize each <span>Entity#id</span> and <span>MetaObject#id</span>, in case you need to prevent ID clashes with other models. See <span><a href="class/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> for more info.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.validateMetaModel</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional callback to validate the <span>MetaModel</span>, before loading the <em><code>.xkt</code></em>. The callback should return <code>true</code> if the MetaModel is valid, otherwise <code>false</code>, in which case this function then aborts loading and returns an empty <span>PerformanceModel</span>, on which it fires an &quot;error&quot; event.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>Entity</span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Entity representing the model, which will have <span>Entity#isModel</span> set <code>true</code> and will be registered by <span>Entity#id</span> in <span>Scene#models</span>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,39 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>XKTLoaderPlugin - Loading And Transforming Models</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-        #myCanvas {
-            width: 100%;
-            height: 100%;
-            background: lightBlue;
-        }
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>XKTLoaderPlugin - Loading And Transforming Models</h1><br>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading multiple copies of a BIM model</h2>
+    <p>In this example, we're loading multiple copies of the same model from the file system, while independently
+        transforming each model.</p>
+    <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads xeokit XKT model from the file system
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
         <li>
-            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
@@ -44,8 +50,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -74,8 +79,7 @@
 
     var i = 0;
     xktLoader.load({
-        src: "./models/xkt/duplex/duplex.xkt",
-        metaModelSrc: "./metaModels/duplex/metaModel.json",
+        src: "../assets/models/xkt/v8/Duplex.xkt",
         edges: true,
         scale: [0.5, 0.5, 0.5],
         position: [i++ * 10, 0, 0]
@@ -83,8 +87,7 @@
 
         .on("loaded", () => {
             xktLoader.load({
-                src: "./models/xkt/duplex/duplex.xkt",
-                metaModelSrc: "./metaModels/duplex/metaModel.json",
+                src: "../assets/models/xkt/v8/Duplex.xkt",
                 edges: true,
                 scale: [0.5, 0.5, 0.5],
                 position: [i++ * 10, 0, 0]
@@ -92,8 +95,7 @@
 
                 .on("loaded", () => {
                     xktLoader.load({
-                        src: "./models/xkt/duplex/duplex.xkt",
-                        metaModelSrc: "./metaModels/duplex/metaModel.json",
+                        src: "../assets/models/xkt/v8/Duplex.xkt",
                         edges: true,
                         scale: [0.5, 0.5, 0.5],
                         position: [i++ * 10, 0, 0]
@@ -101,8 +103,7 @@
 
                         .on("loaded", () => {
                             xktLoader.load({
-                                src: "./models/xkt/duplex/duplex.xkt",
-                                metaModelSrc: "./metaModels/duplex/metaModel.json",
+                                src: "../assets/models/xkt/v8/Duplex.xkt",
                                 edges: true,
                                 scale: [0.5, 0.5, 0.5],
                                 position: [i++ * 10, 0, 0]
@@ -111,8 +112,7 @@
                                 .on("loaded", () => {
 
                                     xktLoader.load({
-                                        src: "./models/xkt/duplex/duplex.xkt",
-                                        metaModelSrc: "./metaModels/duplex/metaModel.json",
+                                        src: "../assets/models/xkt/v8/Duplex.xkt",
                                         edges: true,
                                         scale: [0.5, 0.5, 0.5],
                                         position: [i++ * 10, 0, 0]

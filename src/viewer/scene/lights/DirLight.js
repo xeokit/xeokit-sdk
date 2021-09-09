@@ -19,14 +19,9 @@ import {math} from '../math/math.js';
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#lights_DirLight_view)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
- * import {buildPlaneGeometry} from "../src/scene/geometry/builders/buildPlaneGeometry.js";
- * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {Texture} from "../src/scene/materials/Texture.js";
- * import {DirLight} from "../src/scene/lights/DirLight.js";
+ * import {Viewer, Mesh, buildSphereGeometry,
+ *      buildPlaneGeometry, ReadableGeometry,
+ *      PhongMaterial, Texture, DirLight} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange the camera
  *

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">metadata/MetaScene.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">metadata/MetaScene.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {MetaModel} from &quot;./MetaModel.js&quot;;
+import {MetaObject} from &quot;./MetaObject.js&quot;;
+import {math} from &quot;../scene/math/math.js&quot;;
+
+/**
+ * @desc Metadata corresponding to a {@link Scene}.
+ *
+ * * Located in {@link Viewer#metaScene}.
+ * * Contains {@link MetaModel}s and {@link MetaObject}s.
+ * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)
+ * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
+ */
+class MetaScene {
+
+    /**
+     * @private
+     */
+    constructor(viewer, scene) {
+
+        /**
+         * The {@link Viewer}.
+         * @property viewer
+         * @type {Viewer}
+         */
+        this.viewer = viewer;
+
+        /**
+         * The {@link Scene}.
+         * @property scene
+         * @type {Scene}
+         */
+        this.scene = scene;
+
+        /**
+         * The {@link MetaModel}s belonging to this MetaScene, each mapped to its {@link MetaModel#modelId}.
+         *
+         * @type {{String:MetaModel}}
+         */
+        this.metaModels = {};
+
+        /**
+         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
+         *
+         * @type {{String:MetaObject}}
+         */
+        this.metaObjects = {};
+
+        /**
+         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#type}.
+         *
+         * @type {{String:MetaObject}}
+         */
+        this.metaObjectsByType = {};
+
+        /**
+         * Tracks number of MetaObjects of each type.
+         * @private
+         */
+        this._typeCounts = {};
+
+        /**
+         * Subscriptions to events sent with {@link fire}.
+         * @private
+         */
+        this._eventSubs = {};
+    }
+
+    /**
+     * Subscribes to an event fired at this Viewer.
+     *
+     * @param {String} event The event
+     * @param {Function} callback Callback fired on the event
+     */
+    on(event, callback) {
+        let subs = this._eventSubs[event];
+        if (!subs) {
+            subs = [];
+            this._eventSubs[event] = subs;
+        }
+        subs.push(callback);
+    }
+
+    /**
+     * Fires an event at this Viewer.
+     *
+     * @param {String} event Event name
+     * @param {Object} value Event parameters
+     */
+    fire(event, value) {
+        const subs = this._eventSubs[event];
+        if (subs) {
+            for (let i = 0, len = subs.length; i &lt; len; i++) {
+                subs[i](value);
+            }
+        }
+    }
+
+    /**
+     * Unsubscribes from an event fired at this Viewer.
+     * @param event
+     */
+    off(event) { // TODO
+
+    }
+
+    /**
+     * Creates a {@link MetaModel} in this MetaScene.
+     *
+     * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
+     * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {Object} [options] Options for creating the {@link MetaModel}.
+     * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
+     * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
+     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
+     * @param {Function} [options.validateMetaModel] Optional callback to validate the {@link MetaModel}. The callback should return ````true```` if it determines the MetaModel to be valid. Otherwise, the callback should return ````false````, in which case ````createMetaModel```` will then return ````null````.
+     * @returns {MetaModel} The new MetaModel, or ````null```` if the ````options.validateMetaModel```` callback was
+     * supplied, and that callback returned ````false````.
+     */
+    createMetaModel(modelId, metaModelData, options = {}) {
+
+        // TODO: validate metadata
+        // TODO: replace MetaModel if ID already used
+
+        const projectId = metaModelData.projectId || &quot;none&quot;;
+        const revisionId = metaModelData.revisionId || &quot;none&quot;;
+        const newObjects = metaModelData.metaObjects;
+        const author = metaModelData.author;
+        const createdAt = metaModelData.createdAt;
+        const creatingApplication = metaModelData.creatingApplication;
+        const schema = metaModelData.schema;
+
+        var includeTypes;
+        // if (options.includeTypes) {
+        //     includeTypes = {};
+        //     for (let i = 0, len = options.includeTypes.length; i &lt; len; i++) {
+        //         includeTypes[options.includeTypes[i]] = true;
+        //     }
+        // }
+        //
+        var excludeTypes;
+        // if (options.excludeTypes) {
+        //     excludeTypes = {};
+        //     for (let i = 0, len = options.excludeTypes.length; i &lt; len; i++) {
+        //         includeTypes[options.excludeTypes[i]] = true;
+        //     }
+        // }
+
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+
+        this.metaModels[modelId] = metaModel;
+
+        for (let i = 0, len = newObjects.length; i &lt; len; i++) {
+            const newObject = newObjects[i];
+            const type = newObject.type;
+            if (excludeTypes &amp;&amp; excludeTypes[type]) {
+                continue;
+            }
+            if (includeTypes &amp;&amp; !includeTypes[type]) {
+                continue;
+            }
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const originalSystemId = newObject.id;
+            const name = newObject.name;
+            const properties = newObject.properties;
+            const parent = null;
+            const children = null;
+            const external = newObject.external;
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            this.metaObjects[objectId] = metaObject;
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
+            if (this._typeCounts[type] === undefined) {
+                this._typeCounts[type] = 1;
+            } else {
+                this._typeCounts[type]++;
+            }
+        }
+
+        for (let i = 0, len = newObjects.length; i &lt; len; i++) {
+            const newObject = newObjects[i];
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
+            const metaObject = this.metaObjects[objectId];
+            if (!metaObject) {
+                continue;
+            }
+            if (newObject.parent === undefined || newObject.parent === null) {
+                metaModel.rootMetaObject = metaObject;
+            } else if (newObject.parent) {
+                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.parent) : newObject.parent;
+                let parentMetaObject = this.metaObjects[parentId];
+                if (parentMetaObject) {
+                    metaObject.parent = parentMetaObject;
+                    parentMetaObject.children = parentMetaObject.children || [];
+                    parentMetaObject.children.push(metaObject);
+                }
+            }
+        }
+
+        if (options.validateMetaModel) {
+            if (options.validateMetaModel(metaModel) === false) {
+                this._removeMetaModel(metaModel);
+                return null;
+            }
+        }
+
+        this.fire(&quot;metaModelCreated&quot;, modelId);
+        return metaModel;
+    }
+
+    /**
+     * Removes a {@link MetaModel} from this MetaScene.
+     *
+     * Fires a &quot;metaModelDestroyed&quot; event with the value of the {@link MetaModel#id}.
+     *
+     * @param {String} id ID of the target {@link MetaModel}.
+     */
+    destroyMetaModel(id) {
+        const metaModel = this.metaModels[id];
+        if (!metaModel) {
+            return;
+        }
+        this._removeMetaModel(metaModel);
+        this.fire(&quot;metaModelDestroyed&quot;, id);
+    }
+
+    _removeMetaModel(metaModel) {
+        const metaObjects = this.metaObjects;
+        const metaObjectsByType = this.metaObjectsByType;
+        let visit = (metaObject) =&gt; {
+            delete metaObjects[metaObject.id];
+            const types = metaObjectsByType[metaObject.type];
+            if (types &amp;&amp; types[metaObject.id]) {
+                delete types[metaObject.id];
+                if (--this._typeCounts[metaObject.type] === 0) {
+                    delete this._typeCounts[metaObject.type];
+                    delete metaObjectsByType[metaObject.type];
+                }
+            }
+            const children = metaObject.children;
+            if (children) {
+                for (let i = 0, len = children.length; i &lt; len; i++) {
+                    const childMetaObject = children[i];
+                    visit(childMetaObject);
+                }
+            }
+        };
+        visit(metaModel.rootMetaObject);
+        delete this.metaModels[metaModel.id];
+    }
+
+    /**
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s that have the given {@link MetaObject#type}.
+     *
+     * @param {String} type The type.
+     * @returns {String[]} Array of {@link MetaObject#id}s.
+     */
+    getObjectIDsByType(type) {
+        const metaObjects = this.metaObjectsByType[type];
+        return metaObjects ? Object.keys(metaObjects) : [];
+    }
+
+    /**
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the given subtree.
+     *
+     * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
+     * @param {String[]} [includeTypes] Optional list of types to include.
+     * @param {String[]} [excludeTypes] Optional list of types to exclude.
+     * @returns {String[]} Array of {@link MetaObject#id}s.
+     */
+    getObjectIDsInSubtree(id, includeTypes, excludeTypes) {
+        const list = [];
+        const metaObject = this.metaObjects[id];
+        const includeMask = (includeTypes &amp;&amp; includeTypes.length &gt; 0) ? arrayToMap(includeTypes) : null;
+        const excludeMask = (excludeTypes &amp;&amp; excludeTypes.length &gt; 0) ? arrayToMap(excludeTypes) : null;
+
+        function visit(metaObject) {
+            if (!metaObject) {
+                return;
+            }
+            var include = true;
+            if (excludeMask &amp;&amp; excludeMask[metaObject.type]) {
+                include = false;
+            } else if (includeMask &amp;&amp; (!includeMask[metaObject.type])) {
+                include = false;
+            }
+            if (include) {
+                list.push(metaObject.id);
+            }
+            const children = metaObject.children;
+            if (children) {
+                for (var i = 0, len = children.length; i &lt; len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+
+        visit(metaObject);
+        return list;
+    }
+
+    /**
+     * Iterates over the {@link MetaObject}s within the subtree.
+     *
+     * @param {String} id ID of root {@link MetaObject}.
+     * @param {Function} callback Callback fired at each {@link MetaObject}.
+     */
+    withMetaObjectsInSubtree(id, callback) {
+        const metaObject = this.metaObjects[id];
+        if (!metaObject) {
+            return;
+        }
+        metaObject.withMetaObjectsInSubtree(callback);
+    }
+}
+
+function arrayToMap(array) {
+    const map = {};
+    for (var i = 0, len = array.length; i &lt; len; i++) {
+        map[array[i]] = true;
+    }
+    return map;
+}
+
+export {MetaScene};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

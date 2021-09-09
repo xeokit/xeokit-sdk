@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>xeokit-sdk Visual Test</title>
+    <link href="./css/pageStyle.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script type="module">
+
+    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {signalTestComplete} from "./lib/utils.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-5.13, 16.83, 39.46];
+    viewer.camera.look = [22.20, 1.86, 4.44];
+    viewer.camera.up = [0.19, 0.94, -0.25];
+
+    const glTFLoader = new GLTFLoaderPlugin(viewer);
+
+    let i = 0;
+
+    glTFLoader.load({
+        src: "../assets/models/gltf/Duplex/scene.gltf",
+        metaModelSrc: "./../assets/models/gltf/Duplex/Duplex.json",
+        edges: true,
+        scale: [0.5, 0.5, 0.5],
+        position: [i++ * 10, 0, 0],
+        performance: true
+    })
+        .on("loaded", () => {
+
+            glTFLoader.load({
+                src: "../assets/models/gltf/Duplex/scene.gltf",
+                metaModelSrc: "./../assets/models/gltf/Duplex/Duplex.json",
+                edges: true,
+                scale: [0.5, 0.5, 0.5],
+                position: [i++ * 10, 0, 0],
+                performance: true
+            })
+                .on("loaded", () => {
+
+                    glTFLoader.load({
+                        src: "../assets/models/gltf/Duplex/scene.gltf",
+                        metaModelSrc: "./../assets/models/gltf/Duplex/Duplex.json",
+                        edges: true,
+                        scale: [0.5, 0.5, 0.5],
+                        position: [i++ * 10, 0, 0],
+                        performance: true
+                    })
+                        .on("loaded", () => {
+
+                            glTFLoader.load({
+                                src: "../assets/models/gltf/Duplex/scene.gltf",
+                                metaModelSrc: "./../assets/models/gltf/Duplex/Duplex.json",
+                                edges: true,
+                                scale: [0.5, 0.5, 0.5],
+                                position: [i++ * 10, 0, 0],
+                                performance: true
+                            })
+                                .on("loaded", () => {
+
+                                    glTFLoader.load({
+                                        src: "../assets/models/gltf/Duplex/scene.gltf",
+                                        metaModelSrc: "./../assets/models/gltf/Duplex/Duplex.json",
+                                        edges: true,
+                                        scale: [0.5, 0.5, 0.5],
+                                        position: [i++ * 10, 0, 0],
+                                        performance: true
+                                    })
+                                        .on("loaded", () => {
+
+                                            signalTestComplete(viewer);
+                                        });
+                                });
+                        });
+                });
+        });
+
+</script>
+</html>

@@ -1,62 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-    <title>CameraControl - First-person navigation mode with double-precision model</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
-    <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
-
-        #my-gui-container {
-            position: absolute;
-            top: 250px;
-            right: 20px;
-            z-index: 10;
-        }
-
-    </style>
-
-    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1><a target="_other"
-           href="./../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a> - First-person navigation mode with double-precision model</h1>
-    <br>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/camera_icon.png"/>
+    <h1>CameraControl</h1>
+    <h2>First-person mode</h2>
+    <p>In this example, we're loading a double-pecision BIM model from the file system, then navigating it using
+        first-person mode.</p>
+    <p>This model is centered at [1842022, 10, -5173301].</p>
+    <h3>Stats</h3>
     <ul>
-        <li><div id="time">Loading JavaScript modules...</div></li>
-        <li>Model is loaded from XKT V6, which supports full-precision geometry</li>
-        <li>Model center is [1842022, 10, -5173301]</li>
-        <li>Model provided by <a target="_other" href="https://bimdata.io">BIMData.io</a></li>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html"
+               target="_other">CameraControl</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
 </div>
-
-
-<div id="my-gui-container"></div>
-
 </body>
-
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {Mesh} from "../src/viewer/scene/mesh/Mesh.js";
-    import {VBOGeometry} from "../src/viewer/scene/geometry/VBOGeometry.js";
-    import {buildGridGeometry} from "../src/viewer/scene/geometry/builders/buildGridGeometry.js";
-    import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        Mesh,
+        VBOGeometry,
+        buildGridGeometry,
+        PhongMaterial
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -89,9 +97,8 @@
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     const model = xktLoader.load({
-        id: "myModel",
-        src: "./models/xkt/MAP/MAP.v6.xkt",
-        metaModelSrc: "./metaModels/MAP/metaModel.json",
+        src: "../assets/models/xkt/v7/MAP/MAP.xkt",
+        metaModelSrc: "../assets/models/xkt/v7/MAP/MAP.json",
         edges: true
     });
 
@@ -181,7 +188,7 @@
 
     update();
 
-    const gui = new dat.GUI({autoPlace: false, width: 300});
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const cameraControlFolder = gui.addFolder('cameraControl');
     cameraControlFolder.add(cameraControlParams, 'active');
@@ -212,7 +219,7 @@
     dollyFolder.add(cameraControlParams, 'dollyMinSpeed', 0.01, 1.0);
     dollyFolder.open();
 
-    const customContainer = document.getElementById('my-gui-container');
+    const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
 
 </script>

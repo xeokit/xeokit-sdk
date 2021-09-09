@@ -1,84 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit StoreyViewsPlugin</title>
-    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
-
-        #myCanvas {
-            background: lightblue;
-        }
-
         #storeys {
+            position: absolute;
+            left: 10px;
+            top: 60px;
             margin-top: 20px;
             overflow-y: scroll;
-            height: 500px;
+            height: calc(100% - 120px);
+            margin-bottom: 10px;
+            width: 320px;
             pointer-events: all;
+            opacity: 0.8;
         }
-
-        #info {
-            position: absolute;
-            top: 0;
-            z-index: 200000;
-            float: right;
-            right: 0;
-            padding: 10px;
-            height: auto;
-            text-align: left;
-            pointer-events: none;
-            background: RGBA(0, 0, 0, 0.4);
-            max-width: 500px;
-            color: white;
-        }
-
-        #myNavCubeCanvas {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            bottom: 50px;
-            right: 10px;
-            z-index: 200000;
-        }
-
     </style>
-
 </head>
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<canvas id="myNavCubeCanvas"></canvas>
-
-<div id="info">
-    <h1>StoreyViewsPlugin UX Recipe #3</h1>
-
-    <br>
-    <p>Click a room in the plan images below to go there in <b>first-person mode</b>.</p>
-    <p>Click empty space in the images to return.</p>
-
-    <div id="storeys"></div>
-
+<div id="storeys"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/storey_views_icon.png"/>
+    <h1>StoreyViewsPlugin</h1>
+    <h2>UX Recipe #3</h2>
+    <p>Click a room in the plan images to go there in <b>first-person mode</b>. Click empty space in the images to
+        return.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
-            - Provides tools for visualizing IfcBuildingStoreys
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
         </li>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            <a href="../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html"
+               target="_other">StoreyViewsPlugin</a>
         </li>
         <li>
-            <a target="_other"
-               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+            <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html"
+               target="_other">CameraFlightAnimation</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
         </li>
     </ul>
 </div>
-
 </body>
 
 <script type="module">
@@ -87,12 +68,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
-    import {CameraMemento} from "../src/viewer/scene/mementos/CameraMemento.js";
-    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -110,25 +86,6 @@
 
     viewer.cameraControl.followPointer = true;
 
-    viewer.scene.highlightMaterial.fill = false;
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Add a NavCubePlugin
-    //------------------------------------------------------------------------------------------------------------------
-
-    new NavCubePlugin(viewer, {
-        canvasId: "myNavCubeCanvas",
-        visible: true,           // Initially visible (default)
-        size: 250,               // NavCube size in pixels (default is 200)
-        alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
-        topMargin: 170,          // 170 pixels margin from top of Viewer canvas
-        cameraFly: true,       // Fly camera to each selected axis/diagonal
-        cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
-        cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
-    });
-
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -137,8 +94,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
         edges: true
     });
 
@@ -192,6 +148,7 @@
             img.style.background = "lightblue";
             img.style.width = storeyMap.width + "px";
             img.style.height = storeyMap.height + "px";
+            img.style.opacity = 0.8;
 
             storeyDiv.appendChild(img);
 

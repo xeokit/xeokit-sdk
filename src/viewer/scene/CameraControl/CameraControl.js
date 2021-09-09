@@ -13,6 +13,7 @@ import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
 import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
 import {utils} from "../utils.js";
 import {math} from "../math/math.js";
+import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -275,7 +276,7 @@ import {math} from "../math/math.js";
  *
  * ````javascript
  * cameraControl.navMode = "planView";
- * cameraControl.followPointer = true;
+ * cameraControl.followPointer = true; // Default
  * ````
  *
  * When the pointer is over empty space, the target will remain the last object that the pointer was over.
@@ -632,7 +633,7 @@ class CameraControl extends Component {
             navMode: "orbit",
             planView: false,
             firstPerson: false,
-            followPointer: false,
+            followPointer: true,
             doublePickFlyTo: true,
             panRightClick: true,
             showPivot: false,
@@ -656,7 +657,7 @@ class CameraControl extends Component {
 
             keyboardDollyRate: 10,
             mouseWheelDollyRate: 100,
-            touchDollyRate: 0.05,
+            touchDollyRate: 0.2,
             dollyInertia: 0,
             dollyProximityThreshold: 30.0,
             dollyMinSpeed: 0.04
@@ -667,7 +668,6 @@ class CameraControl extends Component {
         this._states = {
             pointerCanvasPos: math.vec2(),
             mouseover: false,
-            inputFromMouse: false, // TODO: Is this needed?
             followPointerDirty: true,
             mouseDownClientX: 0,
             mouseDownClientY: 0,
@@ -713,6 +713,7 @@ class CameraControl extends Component {
             new MousePanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardAxisViewHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new MousePickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
+            new TouchPickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];
 
@@ -971,7 +972,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether the {@link Camera} follows the mouse or touch pointer.
+     * Sets whether the {@link Camera} follows the mouse/touch pointer.
      *
      * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
@@ -979,18 +980,18 @@ class CameraControl extends Component {
      *
      * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * See class comments for more info.
      *
      * @param {Boolean} value Set ````true```` to enable the Camera to follow the pointer.
      */
     set followPointer(value) {
-        this._configs.followPointer = !!value;
+        this._configs.followPointer = (value !== false);
     }
 
     /**
-     * Sets whether the {@link Camera} follows the mouse or touch pointer.
+     * Sets whether the {@link Camera} follows the mouse/touch pointer.
      *
      * In orbiting mode, the Camera will orbit about the pointer, and will dolly to and from the pointer.
      *
@@ -998,7 +999,7 @@ class CameraControl extends Component {
      *
      * In plan-view mode, the Camera will dolly to and from the pointer, however the Camera will not rotate.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * See class comments for more info.
      *
@@ -1045,7 +1046,7 @@ class CameraControl extends Component {
      */
     get dollyToPointer() {
         this.warn("dollyToPointer property is deprecated - replaced with followPointer");
-        return this.followPointer = value;
+        return this.followPointer;
     }
 
     /**
@@ -1382,18 +1383,18 @@ class CameraControl extends Component {
     /**
      * Sets how much the {@link Camera} dollys with touch input.
      *
-     * Default is ````0.05````
+     * Default is ````0.2````
      *
      * @param {Number} touchDollyRate The new touch dolly rate.
      */
     set touchDollyRate(touchDollyRate) {
-        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.05;
+        this._configs.touchDollyRate = (touchDollyRate !== null && touchDollyRate !== undefined) ? touchDollyRate : 0.2;
     }
 
     /**
      * Gets how much the {@link Camera} dollys each second with touch input.
      *
-     * Default is ````0.05````.
+     * Default is ````0.2````.
      *
      * @returns {Number} The current touch dolly rate.
      */

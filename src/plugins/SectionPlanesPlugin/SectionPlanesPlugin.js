@@ -31,9 +31,7 @@ const tempVec3 = math.vec3();
  * reposition our second SectionPlane.
  *
  * ````JavaScript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+ * import {Viewer, GLTFLoaderPlugin, SectionPlanesPlugin} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer and arrange its Camera
  *
@@ -112,12 +110,12 @@ class SectionPlanesPlugin extends Plugin {
         this._controls = {};
         this._shownControlId = null;
 
-        if (cfg.overviewCanvasId) {
+        if (cfg.overviewCanvasId !== null && cfg.overviewCanvasId !== undefined) {
 
             const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
 
             if (!overviewCanvas) {
-                this.error("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
+                this.warn("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
 
             } else {
 

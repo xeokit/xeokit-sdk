@@ -53,12 +53,7 @@ const identityMat = math.identityMat4();
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph)]
  *
  * ````javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
- * import {Mesh} from "../src/scene/mesh/Mesh.js";
- * import {Node} from "../src/scene/nodes/Node.js";
- * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
- * import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
- * import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
+ * import {Viewer, Mesh, Node, PhongMaterial, buildBoxGeometry, ReadableGeometry} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
@@ -1588,9 +1583,9 @@ class Mesh extends Component {
             const xrayMaterial = this._xrayMaterial._state;
             if (xrayMaterial.fill) {
                 if (xrayMaterial.fillAlpha < 1.0) {
-                    renderFlags.xrayedFillTransparent = true;
+                    renderFlags.xrayedSilhouetteTransparent = true;
                 } else {
-                    renderFlags.xrayedFillOpaque = true;
+                    renderFlags.xrayedSilhouetteOpaque = true;
                 }
             }
             if (xrayMaterial.edges) {
@@ -1603,25 +1598,25 @@ class Mesh extends Component {
         } else {
             const normalMaterial = this._material._state;
             if (normalMaterial.alpha < 1.0 || state.colorize[3] < 1.0) {
-                renderFlags.normalFillTransparent = true;
+                renderFlags.colorTransparent = true;
             } else {
-                renderFlags.normalFillOpaque = true;
+                renderFlags.colorOpaque = true;
             }
             if (state.edges) {
                 const edgeMaterial = this._edgeMaterial._state;
                 if (edgeMaterial.alpha < 1.0) {
-                    renderFlags.normalEdgesTransparent = true;
+                    renderFlags.edgesTransparent = true;
                 } else {
-                    renderFlags.normalEdgesOpaque = true;
+                    renderFlags.edgesOpaque = true;
                 }
             }
             if (state.selected) {
                 const selectedMaterial = this._selectedMaterial._state;
                 if (selectedMaterial.fill) {
                     if (selectedMaterial.fillAlpha < 1.0) {
-                        renderFlags.selectedFillTransparent = true;
+                        renderFlags.selectedSilhouetteTransparent = true;
                     } else {
-                        renderFlags.selectedFillOpaque = true;
+                        renderFlags.selectedSilhouetteOpaque = true;
                     }
                 }
                 if (selectedMaterial.edges) {
@@ -1635,9 +1630,9 @@ class Mesh extends Component {
                 const highlightMaterial = this._highlightMaterial._state;
                 if (highlightMaterial.fill) {
                     if (highlightMaterial.fillAlpha < 1.0) {
-                        renderFlags.highlightedFillTransparent = true;
+                        renderFlags.highlightedSilhouetteTransparent = true;
                     } else {
-                        renderFlags.highlightedFillOpaque = true;
+                        renderFlags.highlightedSilhouetteOpaque = true;
                     }
                 }
                 if (highlightMaterial.edges) {
@@ -1744,124 +1739,87 @@ class Mesh extends Component {
         return this._edgeMaterial;
     }
 
+    // ---------------------- NORMAL RENDERING -----------------------------------
+
     /** @private  */
-    drawNormalFillOpaque(frameCtx) {
+    drawColorOpaque(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
             this._drawRenderer.drawMesh(frameCtx, this);
         }
     }
 
     /** @private  */
-    drawNormalEdgesOpaque(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
-        }
-    }
-
-    /** @private  */
-    drawNormalFillTransparent(frameCtx) {
+    drawColorTransparent(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
             this._drawRenderer.drawMesh(frameCtx, this);
         }
     }
 
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
+
+    // TODO
+
+    // ---------------------- EMPHASIS RENDERING -----------------------------------
+
     /** @private  */
-    drawNormalEdgesTransparent(frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
+        }
+    }
+
+    /** @private  */
+    drawSilhouetteHighlighted(frameCtx) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+            this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
+        }
+    }
+
+    /** @private  */
+    drawSilhouetteSelected(frameCtx) {
+        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
+            this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
+        }
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    /** @private  */
+    drawEdgesColorOpaque(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
-    drawXRayedFillOpaque(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
+    drawEdgesColorTransparent(frameCtx) {
+        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
+            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 3); // 3 == edges
         }
     }
 
     /** @private  */
-    drawXRayedEdgesOpaque(frameCtx) {
+    drawEdgesXRayed(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawXRayedFillTransparent(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
-    }
-
-    /** @private  */
-    drawXRayedEdgesTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
-        }
-    }
-
-    /** @private  */
-    drawHighlightedFillOpaque(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
-    }
-
-    /** @private  */
-    drawHighlightedEdgesOpaque(frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
         }
     }
 
     /** @private  */
-    drawHighlightedFillTransparent(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
-    }
-
-    /** @private  */
-    drawHighlightedEdgesTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 1); // 1 == highlight
-        }
-    }
-
-    /** @private  */
-    drawSelectedFillOpaque(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
-    }
-
-    /** @private  */
-    drawSelectedEdgesOpaque(frameCtx) {
+    drawEdgesSelected(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
             this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
         }
     }
 
-    /** @private  */
-    drawSelectedFillTransparent(frameCtx) {
-        if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
-    }
-
-    /** @private  */
-    drawSelectedEdgesTransparent(frameCtx) {
-        if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 2); // 2 == selected
-        }
-    }
-
-    /** @private  */
-    drawPickMesh(frameCtx) {
-        if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
-            this._pickMeshRenderer.drawMesh(frameCtx, this);
-        }
-    }
+    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     /** @private  */
     drawOcclusion(frameCtx) {
@@ -1870,10 +1828,21 @@ class Mesh extends Component {
         }
     }
 
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
     /** @private  */
     drawShadow(frameCtx) {
         if (this._shadowRenderer || (this._shadowRenderer = ShadowRenderer.get(this))) {
             this._shadowRenderer.drawMesh(frameCtx, this);
+        }
+    }
+
+    // ---------------------- PICKING RENDERING ----------------------------------
+
+    /** @private  */
+    drawPickMesh(frameCtx) {
+        if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
+            this._pickMeshRenderer.drawMesh(frameCtx, this);
         }
     }
 
