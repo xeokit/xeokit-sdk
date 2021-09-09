@@ -4,7 +4,6 @@ import { Mesh } from "../../../mesh/Mesh.js";
 import { VBOGeometry } from "../../../geometry/VBOGeometry.js";
 import { buildSphereGeometry } from "../../../geometry/builders/buildSphereGeometry.js";
 import { worldToRTCPos } from "../../../math/rtcCoords.js";
-import { Node } from "../../../nodes/Node.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -70,8 +69,8 @@ class PivotController {
         const length = math.distVec3(cameraPos, currentPos);
         let radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
 
-        if (this._camera.projection == "ortho") {
-            radius /= (this._camera.ortho.scale / 2);
+        if (this._scene.camera.projection == "ortho") {
+            radius /= (this._scene.camera.ortho.scale / 2);
         }
 
         worldToRTCPos(currentPos, this._rtcCenter, this._rtcPos);
@@ -374,7 +373,6 @@ class PivotController {
             this.destroyPivotSphere();
         }
         this._shown = false;
-        this.endPivot();
     }
 
     /**

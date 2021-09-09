@@ -12,8 +12,6 @@ class KeyboardPanRotateDollyHandler {
 
         const canvas = scene.canvas.canvas;
 
-        const pickController = controllers.pickController;
-
         let mouseMovedSinceLastKeyboardDolly = true;
 
         document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
@@ -47,6 +45,10 @@ class KeyboardPanRotateDollyHandler {
 
             if (keyCode === input.KEY_SHIFT) {
                 canvas.style.cursor = null;
+            }
+
+            if (controllers.pivotController.getPivoting()) {
+                controllers.pivotController.endPivot()
             }
         });
 
