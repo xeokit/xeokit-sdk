@@ -339,6 +339,10 @@ class TrianglesInstancingColorRenderer {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 src.push("varying float vFragDepth;");
             }
+            src.push("bool isPerspectiveMatrix(mat4 m) {");
+            src.push("    return (m[2][3] == - 1.0);");
+            src.push("}");
+            src.push("varying float isPerspective;");
         }
 
         src.push("uniform vec4 lightAmbient;");
