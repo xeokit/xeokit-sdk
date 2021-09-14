@@ -40,6 +40,8 @@ Multi language support, full-precision measurement, renderer features for more m
   * Fix view-fit distance for NavCube.  [#703](https://github.com/xeokit/xeokit-sdk/issues/703) ([**@xeolabs**](https://github.com/xeolabs))
 * PerformanceModel
   * Fix coordinate quantization for zero-width boundaries. [#709](https://github.com/xeokit/xeokit-sdk/issues/709) ([**@xeolabs**](https://github.com/xeolabs))
+* Scene
+  * Ignore logarithmicDepthBufferEnabled for ortho projection.  [#677](https://github.com/xeokit/xeokit-sdk/issues/677) ([**@xeolabs**](https://github.com/xeolabs))
 * SectionPlane, FastNavPlugin
   * Fix SectionPlanes crash with FastNavPlugin on Windows/FF/Chrome.  [#678](https://github.com/xeokit/xeokit-sdk/issues/678) ([**@xeolabs**](https://github.com/xeolabs))
 * Spinner
