@@ -17,7 +17,7 @@ class PropertySet {
     constructor(id, originalSystemId, name, type, properties) {
 
         /**
-         * Globally-unique ID.
+         * Globally-unique ID for this PropertySet.
          *
          * PropertySet instances are registered by this ID in {@link MetaScene#propertySets} and {@link MetaModel#propertySets}.
          *
@@ -61,7 +61,7 @@ class PropertySet {
         if (properties) {
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(property.label, property.value, property.type, property.valueType, property.description));
+                this.properties.push(new Property(property.name,  property.value, property.type, property.valueType, property.description));
             }
         }
     }
