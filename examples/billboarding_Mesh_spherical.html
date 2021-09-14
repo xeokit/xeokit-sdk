@@ -51,7 +51,7 @@
     viewer.scene.camera.up = [0, 1, 0];
 
     new Mesh(viewer.scene, {
-        geometry: new ReadableGeometry(viewer.scene,{
+        geometry: new ReadableGeometry(viewer.scene, {
             primitive: "triangles",
             positions: [3, 3, 0, -3, 3, 0, -3, -3, 0, 3, -3, 0],
             normals: [-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0],
@@ -66,14 +66,15 @@
             }),
             backfaces: true
         }),
-          position: [-10,0,0],
-          rotation: [90,0,0],
-          billboard: "spherical"
+        scale: [2, 1, 1],
+        position: [-10, 0, 0],
+        rotation: [90, 0, 0],
+        billboard: "spherical"
     });
 
 
     new Mesh(viewer.scene, {
-        geometry: new ReadableGeometry(viewer.scene,{
+        geometry: new ReadableGeometry(viewer.scene, {
             primitive: "triangles",
             positions: [3, 3, 0, -3, 3, 0, -3, -3, 0, 3, -3, 0],
             normals: [-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0],
@@ -88,8 +89,9 @@
             }),
             backfaces: true
         }),
-        position: [10,0,0],
-        rotation: [90,0,0],
+        scale: [1.0, 2, 1],
+        position: [10, 0, 0],
+        rotation: [90, 0, 0],
         billboard: "spherical"
     });
 
