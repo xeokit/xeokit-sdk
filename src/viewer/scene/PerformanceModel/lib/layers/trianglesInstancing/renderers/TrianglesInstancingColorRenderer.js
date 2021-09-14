@@ -442,6 +442,7 @@ class TrianglesInstancingColorRenderer {
                 src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
                 src.push("clipPos.z *= clipPos.w;");
             }
+            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
 
         if (clipping) {
@@ -475,6 +476,7 @@ class TrianglesInstancingColorRenderer {
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+                src.push("varying float isPerspective;");
                 src.push("uniform float logDepthBufFC;");
                 src.push("varying float vFragDepth;");
             }
@@ -521,7 +523,7 @@ class TrianglesInstancingColorRenderer {
         }
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
         // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top

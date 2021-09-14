@@ -336,6 +336,10 @@ class TrianglesBatchingColorQualityRenderer {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 src.push("varying float vFragDepth;");
             }
+            src.push("bool isPerspectiveMatrix(mat4 m) {");
+            src.push("    return (m[2][3] == - 1.0);");
+            src.push("}");
+            src.push("varying float isPerspective;");
         }
 
         src.push("vec3 octDecode(vec2 oct) {");
@@ -383,6 +387,7 @@ class TrianglesBatchingColorQualityRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
+            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 src.push("vFragDepth = 1.0 + clipPos.w;");
             } else {
@@ -440,6 +445,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("#endif");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("varying float vFragDepth;");
         }
@@ -787,7 +793,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("gl_FragColor = fragColor;");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
         src.push("}");
