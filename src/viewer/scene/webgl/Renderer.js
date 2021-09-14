@@ -804,6 +804,7 @@ const Renderer = function (scene, options) {
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
 
+        const randomVec3 = math.vec3();
         const up = math.vec3([0, 1, 0]);
         const _pickResult = new PickResult();
 
@@ -868,6 +869,13 @@ const Renderer = function (scene, options) {
 
                     look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
 
+                    randomVec3[0] = Math.random();
+                    randomVec3[1] = Math.random();
+                    randomVec3[2] = Math.random();
+
+                    math.normalizeVec3(randomVec3);
+                    math.cross3Vec3(worldRayDir, randomVec3, up);
+                    
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
