@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -953,6 +955,7 @@ const Renderer = function (scene, options) {
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
 
+        const randomVec3 = math.vec3();
         const up = math.vec3([0, 1, 0]);
         const _pickResult = new PickResult();
 
@@ -1017,6 +1020,13 @@ const Renderer = function (scene, options) {
 
                     look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
 
+                    randomVec3[0] = Math.random();
+                    randomVec3[1] = Math.random();
+                    randomVec3[2] = Math.random();
+
+                    math.normalizeVec3(randomVec3);
+                    math.cross3Vec3(worldRayDir, randomVec3, up);
+                    
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
@@ -1121,8 +1131,6 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        let i;
-        let len;
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
@@ -1132,7 +1140,7 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableList = drawableInfo.drawableList;
 
-                for (i = 0, len = drawableList.length; i &lt; len; i++) {
+                for (let i = 0, len = drawableList.length; i &lt; len; i++) {
 
                     const drawable = drawableList[i];
 

@@ -1,5 +1,116 @@
 [
   {
+    "name": "BCFViewpointsPlugin#setViewpoint",
+    "filePath": "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
+    "lines": [
+      {
+        "lineNumber": 491,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 492,
+        "line": "     * Sets viewer state to the given BCF viewpoint."
+      },
+      {
+        "lineNumber": 493,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 494,
+        "line": "     * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a"
+      },
+      {
+        "lineNumber": 495,
+        "line": "     * direction vector. Therefore, when loading a BCF viewpoint, we set {@link Camera#look} to the absolute position"
+      },
+      {
+        "lineNumber": 496,
+        "line": "     * obtained by offsetting the BCF ````camera_view_point````  along ````camera_direction````."
+      },
+      {
+        "lineNumber": 497,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 498,
+        "line": "     * When loading a viewpoint, we also have the option to find {@link Camera#look} as the closest point of intersection"
+      },
+      {
+        "lineNumber": 499,
+        "line": "     * (on the surface of any visible and pickable {@link Entity}) with a 3D ray fired from ````camera_view_point```` in"
+      },
+      {
+        "lineNumber": 500,
+        "line": "     * the direction of ````camera_direction````."
+      },
+      {
+        "lineNumber": 501,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 502,
+        "line": "     * @param {*} bcfViewpoint  BCF JSON viewpoint object,"
+      },
+      {
+        "lineNumber": 503,
+        "line": "     * shows default visible entities and restores camera to initial default position."
+      },
+      {
+        "lineNumber": 504,
+        "line": "     * @param {*} [options] Options for setting the viewpoint."
+      },
+      {
+        "lineNumber": 505,
+        "line": "     * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest"
+      },
+      {
+        "lineNumber": 506,
+        "line": "     * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````."
+      },
+      {
+        "lineNumber": 507,
+        "line": "     * @param {Boolean} [options.immediate=true] When ````true```` (default), immediately set camera position."
+      },
+      {
+        "lineNumber": 508,
+        "line": "     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````false````."
+      },
+      {
+        "lineNumber": 509,
+        "line": "     * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects."
+      },
+      {
+        "lineNumber": 510,
+        "line": "     * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)"
+      },
+      {
+        "lineNumber": 511,
+        "line": "     * @param {Boolean} [options.updateCompositeObjects=false] When ````true````, then when visibility and selection updates refer to composite objects (eg. an IfcBuildingStorey),"
+      },
+      {
+        "lineNumber": 512,
+        "line": "     * then this method will apply the updates to objects within those composites."
+      },
+      {
+        "lineNumber": 513,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 514,
+        "line": "    setViewpoint(bcfViewpoint, options = {}, done) {"
+      }
+    ],
+    "codeParams": [
+      "bcfViewpoint",
+      "options",
+      "done"
+    ],
+    "docParams": [
+      "bcfViewpoint",
+      "options"
+    ]
+  },
+  {
     "name": "LinesBatchingLayer#createPortion",
     "filePath": "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
     "lines": [
@@ -156,87 +267,87 @@
     "filePath": "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 129,
+        "lineNumber": 130,
         "line": "    /**"
       },
       {
-        "lineNumber": 130,
+        "lineNumber": 131,
         "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 131,
-        "line": "     *"
-      },
-      {
         "lineNumber": 132,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
+        "line": "     *"
       },
       {
         "lineNumber": 133,
-        "line": "     *"
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 134,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
+        "line": "     *"
       },
       {
         "lineNumber": 135,
-        "line": "     * @param [cfg.normals] Flat float normals array."
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 136,
-        "line": "     * @param [cfg.colors] Flat float colors array."
+        "line": "     * @param [cfg.normals] Flat float normals array."
       },
       {
         "lineNumber": 137,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
         "lineNumber": 138,
-        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 139,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
       },
       {
         "lineNumber": 140,
-        "line": "     * @param cfg.metallic Metalness factor [0..255]"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 141,
-        "line": "     * @param cfg.roughness Roughness factor [0..255]"
+        "line": "     * @param cfg.metallic Metalness factor [0..255]"
       },
       {
         "lineNumber": 142,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     * @param cfg.roughness Roughness factor [0..255]"
       },
       {
         "lineNumber": 143,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 144,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 145,
-        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 146,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
         "lineNumber": 147,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
         "lineNumber": 148,
-        "line": "     */"
+        "line": "     * @returns {number} Portion ID"
       },
       {
         "lineNumber": 149,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 150,
         "line": "    createPortion(cfg) {"
       }
     ],

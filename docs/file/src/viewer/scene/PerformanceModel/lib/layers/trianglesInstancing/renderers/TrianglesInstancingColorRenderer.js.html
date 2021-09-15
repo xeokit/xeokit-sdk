@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -488,6 +490,10 @@ class TrianglesInstancingColorRenderer {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
                 src.push(&quot;varying float vFragDepth;&quot;);
             }
+            src.push(&quot;bool isPerspectiveMatrix(mat4 m) {&quot;);
+            src.push(&quot;    return (m[2][3] == - 1.0);&quot;);
+            src.push(&quot;}&quot;);
+            src.push(&quot;varying float isPerspective;&quot;);
         }
 
         src.push(&quot;uniform vec4 lightAmbient;&quot;);
@@ -591,6 +597,7 @@ class TrianglesInstancingColorRenderer {
                 src.push(&quot;clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;&quot;);
                 src.push(&quot;clipPos.z *= clipPos.w;&quot;);
             }
+            src.push(&quot;isPerspective = float (isPerspectiveMatrix(projMatrix));&quot;);
         }
 
         if (clipping) {
@@ -624,6 +631,7 @@ class TrianglesInstancingColorRenderer {
         src.push(&quot;#endif&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
+                src.push(&quot;varying float isPerspective;&quot;);
                 src.push(&quot;uniform float logDepthBufFC;&quot;);
                 src.push(&quot;varying float vFragDepth;&quot;);
             }
@@ -670,7 +678,7 @@ class TrianglesInstancingColorRenderer {
         }
 
         if (scene.logarithmicDepthBufferEnabled &amp;&amp; WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
-            src.push(&quot;gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+            src.push(&quot;    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
         }
 
         // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top

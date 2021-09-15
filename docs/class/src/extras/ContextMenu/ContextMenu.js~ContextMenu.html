@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -147,13 +149,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber263">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber272">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber263">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber272">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -182,6 +184,7 @@
 <li>A pure JavaScript, lightweight context menu</li>
 <li>Dynamically configure menu items</li>
 <li>Dynamically enable or disable items</li>
+<li>Dynamically show or hide items</li>
 <li>Supports cascading sub-menus</li>
 <li>Configure custom style with custom CSS (see examples above)</li>
 </ul>
@@ -191,14 +194,19 @@ our <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></
 <p>Each item has:</p>
 <ul>
 <li>a <code>title</code> for the item,</li>
-<li>a <code>doAction()</code> callback to fire when the item&apos;s title is clicked, and</li>
-<li>an optional <code>getEnabled()</code> callback that indicates if the item should enabled in the menu or not.</li>
+<li>a <code>doAction()</code> callback to fire when the item&apos;s title is clicked,</li>
+<li>an optional <code>getShown()</code> callback that indicates if the item should shown in the menu or not, and</li>
+<li>an optional <code>getEnabled()</code> callback that indicates if the item should be shown enabled in the menu or not.</li>
 </ul>
 <p><br></p>
-<p>The <code>getEnabled()</code> callbacks are invoked whenever the menu is shown. When an item&apos;s <code>getEnabled()</code> callback
-returns <code>true</code>, then the item is enabled and clickable. When it returns <code>false</code>, then the item is disabled
-and cannot be clicked. An item without a <code>getEnabled()</code> callback is always enabled and clickable.</p>
-<p>Note how the <code>doAction()</code> and <code>getEnabled()</code> callbacks accept a <code>context</code>
+<p>The <code>getShown()</code> and <code>getEnabled()</code> callbacks are invoked whenever the menu is shown.</p>
+<p>When an item&apos;s <code>getShown()</code> callback
+returns <code>true</code>, then the item is shown. When it returns <code>false</code>, then the item is hidden. An item without
+a <code>getShown()</code> callback is always shown.</p>
+<p>When an item&apos;s <code>getEnabled()</code> callback returns <code>true</code>, then the item is enabled and clickable (as long as it&apos;s also shown). When it
+returns <code>false</code>, then the item is disabled and cannot be clicked. An item without a <code>getEnabled()</code>
+callback is always enabled and clickable.</p>
+<p>Note how the <code>doAction()</code>,  <code>getShown()</code> and <code>getEnabled()</code> callbacks accept a <code>context</code>
 object. That must be set on the <code>ContextMenu</code> before we&apos;re able to we show it. The context object can be anything. In this example,
 we&apos;ll use the context object to provide the callbacks with the Entity that we right-clicked.</p>
 <p>We&apos;ll also initially enable the <code>ContextMenu</code>.</p>
@@ -786,7 +794,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber276">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -881,7 +889,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber407">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber421">source</a></span></span>
     </span>
   </h3>
 
@@ -927,7 +935,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -971,7 +979,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber390">source</a></span></span>
     </span>
   </h3>
 
@@ -1016,7 +1024,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber394">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber408">source</a></span></span>
     </span>
   </h3>
 
@@ -1061,7 +1069,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -1107,7 +1115,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber365">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber379">source</a></span></span>
     </span>
   </h3>
 
@@ -1151,7 +1159,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber456">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -1211,7 +1219,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber494">source</a></span></span>
     </span>
   </h3>
 
@@ -1255,7 +1263,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -1323,7 +1331,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber465">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber479">source</a></span></span>
     </span>
   </h3>
 
@@ -1368,7 +1376,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber334">source</a></span></span>
     </span>
   </h3>
 
@@ -1436,7 +1444,7 @@ action of its own.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber432">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber446">source</a></span></span>
     </span>
   </h3>
 

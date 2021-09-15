@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -181,11 +183,12 @@ class Group {
  * @private
  */
 class Item {
-    constructor(id, getTitle, doAction, getEnabled) {
+    constructor(id, getTitle, doAction, getEnabled, getShown) {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
         this.getEnabled = getEnabled;
+        this.getShown = getShown;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -204,6 +207,7 @@ class Item {
  * * A pure JavaScript, lightweight context menu
  * * Dynamically configure menu items
  * * Dynamically enable or disable items
+ * * Dynamically show or hide items
  * * Supports cascading sub-menus
  * * Configure custom style with custom CSS (see examples above)
  *
@@ -217,16 +221,23 @@ class Item {
  * Each item has:
  *
  * * a ````title```` for the item,
- * * a ````doAction()```` callback to fire when the item&apos;s title is clicked, and
- * * an optional ````getEnabled()```` callback that indicates if the item should enabled in the menu or not.
+ * * a ````doAction()```` callback to fire when the item&apos;s title is clicked,
+ * * an optional ````getShown()```` callback that indicates if the item should shown in the menu or not, and
+ * * an optional ````getEnabled()```` callback that indicates if the item should be shown enabled in the menu or not.
  *
  * &lt;br&gt;
  *
- * The ````getEnabled()```` callbacks are invoked whenever the menu is shown. When an item&apos;s ````getEnabled()```` callback
- * returns ````true````, then the item is enabled and clickable. When it returns ````false````, then the item is disabled
- * and cannot be clicked. An item without a ````getEnabled()```` callback is always enabled and clickable.
+ * The ````getShown()```` and ````getEnabled()```` callbacks are invoked whenever the menu is shown.
  *
- * Note how the ````doAction()```` and ````getEnabled()```` callbacks accept a ````context````
+ * When an item&apos;s ````getShown()```` callback
+ * returns ````true````, then the item is shown. When it returns ````false````, then the item is hidden. An item without
+ * a ````getShown()```` callback is always shown.
+ *
+ * When an item&apos;s ````getEnabled()```` callback returns ````true````, then the item is enabled and clickable (as long as it&apos;s also shown). When it
+ * returns ````false````, then the item is disabled and cannot be clicked. An item without a ````getEnabled()````
+ * callback is always enabled and clickable.
+ *
+ * Note how the ````doAction()````,  ````getShown()```` and ````getEnabled()```` callbacks accept a ````context````
  * object. That must be set on the ````ContextMenu```` before we&apos;re able to we show it. The context object can be anything. In this example,
  * we&apos;ll use the context object to provide the callbacks with the Entity that we right-clicked.
  *
@@ -444,6 +455,11 @@ class ContextMenu {
 
         if (cfg.hideOnMouseDown !== false) {
             document.addEventListener(&quot;mousedown&quot;, (event) =&gt; {
+                if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
+                    this.hide();
+                }
+            });
+            document.addEventListener(&quot;touchstart&quot;, this._canvasTouchStartHandler = (event) =&gt; {
                 if (!event.target.classList.contains(&quot;xeokit-context-menu-item&quot;)) {
                     this.hide();
                 }
@@ -682,7 +698,11 @@ class ContextMenu {
                         return true;
                     });
 
-                    const item = new Item(itemId, getTitle, doAction, getEnabled);
+                    const getShown = itemCfg.getShown || (() =&gt; {
+                        return true;
+                    });
+
+                    const item = new Item(itemId, getTitle, doAction, getEnabled, getShown);
 
                     item.parentMenu = menu;
 
@@ -916,6 +936,10 @@ class ContextMenu {
             if (!itemElement) {
                 continue;
             }
+            const getShown = item.getShown;
+            if (!getShown || !getShown(this._context)) {
+                continue;
+            }
             const title = item.getTitle(this._context);
             if (item.subMenu) {
                 itemElement.innerText = title;
@@ -938,6 +962,22 @@ class ContextMenu {
             const getEnabled = item.getEnabled;
             if (!getEnabled) {
                 continue;
+            }
+            const getShown = item.getShown;
+            if (!getShown) {
+                continue;
+            }
+            const shown = getShown(this._context);
+            item.shown = shown;
+            if (!shown) {
+                itemElement.style.visibility = &quot;hidden&quot;;
+                itemElement.style.height = &quot;0&quot;;
+                itemElement.style.padding = &quot;0&quot;;
+                continue;
+            } else {
+                itemElement.style.visibility = &quot;visible&quot;;
+                itemElement.style.height = &quot;auto&quot;;
+                itemElement.style.padding = null;
             }
             const enabled = getEnabled(this._context);
             item.enabled = enabled;

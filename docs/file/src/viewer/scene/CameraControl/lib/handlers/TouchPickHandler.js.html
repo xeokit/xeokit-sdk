@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -163,7 +165,6 @@ class TouchPickHandler {
         this._scene = scene;
 
         const pickController = controllers.pickController;
-        const pivotController = controllers.pivotController;
         const cameraControl = controllers.cameraControl;
 
         let touchStartTime;
@@ -200,6 +201,11 @@ class TouchPickHandler {
                 return;
             }
 
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
+
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
@@ -209,6 +215,23 @@ class TouchPickHandler {
                 tapStartTime = touchStartTime;
                 tapStartPos[0] = touches[0].pageX;
                 tapStartPos[1] = touches[0].pageY;
+
+                const rightClickClientX = touches[0].clientX;
+                const rightClickClientY = touches[0].clientY;
+
+                const rightClickPageX = touches[0].pageX;
+                const rightClickPageY = touches[0].pageY;
+
+                states.longTouchTimeout = setTimeout(() =&gt; {
+                    controllers.cameraControl.fire(&quot;rightClick&quot;, { // For context menus
+                        pagePos: [Math.round(rightClickPageX), Math.round(rightClickPageY)],
+                        canvasPos: [Math.round(rightClickClientX), Math.round(rightClickClientY)],
+                        event: e
+                    }, true);
+
+                    states.longTouchTimeout = null;
+                }, configs.longTapTimeout);
+
             } else {
                 tapStartTime = -1;
             }
@@ -224,8 +247,6 @@ class TouchPickHandler {
 
             activeTouches.length = touches.length;
 
-            e.stopPropagation();
-
         }, {passive: true});
 
 
@@ -239,12 +260,12 @@ class TouchPickHandler {
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
-            const pickedSubs = cameraControl.hasSubs(&quot;picked&quot;);
-            const pickedNothingSubs = cameraControl.hasSubs(&quot;pickedNothing&quot;);
             const pickedSurfaceSubs = cameraControl.hasSubs(&quot;pickedSurface&quot;);
-            const doublePickedSubs = cameraControl.hasSubs(&quot;doublePicked&quot;);
-            const doublePickedSurfaceSubs = cameraControl.hasSubs(&quot;doublePickedSurface&quot;);
-            const doublePickedNothingSubs = cameraControl.hasSubs(&quot;doublePickedNothing&quot;);
+
+            if (states.longTouchTimeout !== null) {
+                clearTimeout(states.longTouchTimeout);
+                states.longTouchTimeout = null;
+            }
 
             // process tap
 
@@ -328,8 +349,8 @@ class TouchPickHandler {
 
     reset() {
         // TODO
-         // tapStartTime = -1;
-         // lastTapTime = -1;
+        // tapStartTime = -1;
+        // lastTapTime = -1;
 
     }
 

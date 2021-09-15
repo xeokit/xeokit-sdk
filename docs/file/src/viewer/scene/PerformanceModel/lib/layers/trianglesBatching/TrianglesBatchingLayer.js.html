@@ -111,6 +111,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
@@ -126,6 +127,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
@@ -172,6 +174,7 @@ const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
 
 /**
  * @private
@@ -1231,9 +1234,13 @@ class TrianglesBatchingLayer {
         const b = tempVec3e;
         const c = tempVec3f;
 
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
         for (let i = 0, len = indices.length; i &lt; len; i += 3) {
 
-            const ia = indices[i + 0] * 3;
+            const ia = indices[i] * 3;
             const ib = indices[i + 1] * 3;
             const ic = indices[i + 2] * 3;
 
@@ -1253,23 +1260,29 @@ class TrianglesBatchingLayer {
             math.decompressPosition(b, state.positionsDecodeMatrix);
             math.decompressPosition(c, state.positionsDecodeMatrix);
 
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, worldSurfacePos)) {
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(this.model.worldMatrix, worldSurfacePos, worldSurfacePos);
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
                 if (offset) {
-                    math.addVec3(worldSurfacePos, offset);
+                    math.addVec3(closestIntersectPos, offset);
                 }
 
                 if (rtcCenter) {
-                    math.addVec3(worldSurfacePos, rtcCenter);
+                    math.addVec3(closestIntersectPos, rtcCenter);
                 }
 
-                return true;
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist &gt; closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    gotIntersect = true;
+                }
             }
         }
 
-        return false;
+        return gotIntersect;
     }
 
     // ---------

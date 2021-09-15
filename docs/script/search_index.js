@@ -150,6 +150,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/drawshadersource.js~drawshadersource",
+    "function/index.html#static-function-DrawShaderSource",
+    "<span>DrawShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/DrawShaderSource.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/edgematerial.js~edgematerial",
     "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
     "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/EdgeMaterial.js</span>",
@@ -519,6 +525,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/paths/splinecurve.js~splinecurve",
     "class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html",
     "<span>SplineCurve</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/SplineCurve.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/marker/spritemarker.js~spritemarker",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html",
+    "<span>SpriteMarker</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/marker/SpriteMarker.js</span>",
     "class"
   ],
   [
@@ -7515,6 +7527,114 @@ window.esdocSearchIndex = [
     "src/viewer/scene/marker/marker.js~marker#worldpos",
     "class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-worldPos",
     "src/viewer/scene/marker/Marker.js~Marker#worldPos",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js",
+    "file/src/viewer/scene/marker/SpriteMarker.js.html",
+    "src/viewer/scene/marker/SpriteMarker.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#clippable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-clippable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#clippable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-clippable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#collidable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-collidable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#collidable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-collidable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#constructor",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-constructor-constructor",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#image",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-image",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#image",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-image",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#opacity",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-opacity",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#opacity",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-opacity",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#pickable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-pickable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#pickable",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-pickable",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#size",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-size",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#size",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#size",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-size",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#size",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#src",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-src",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#src",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-src",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#visible",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-set-visible",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/marker/spritemarker.js~spritemarker#visible",
+    "class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html#instance-get-visible",
+    "src/viewer/scene/marker/SpriteMarker.js~SpriteMarker#visible",
     "member"
   ],
   [
