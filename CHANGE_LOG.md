@@ -26,7 +26,9 @@ Multi language support, full-precision measurement, renderer features for more m
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
 * PropertySet, Property
-  * Support property sets in XKT and metadata.  [#712](https://github.com/xeokit/xeokit-sdk/issues/712) ([**@xeolabs**](https://github.com/xeolabs))
+  * Support property sets in XKT and metadata. [#712](https://github.com/xeokit/xeokit-sdk/issues/712) ([**@xeolabs**](https://github.com/xeolabs))
+* SpriteMarker
+  * New component: SpriteMarker. [#727](https://github.com/xeokit/xeokit-sdk/issues/727) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin
   * Support XKT v9. [#685](https://github.com/xeokit/xeokit-sdk/issues/685) ([**@xeolabs**](https://github.com/xeolabs))
   * Extend XKTLoaderPlugin to auto-generate default MetaModels.  [#658](https://github.com/xeokit/xeokit-sdk/issues/658) ([**@xeolabs**](https://github.com/xeolabs))  
