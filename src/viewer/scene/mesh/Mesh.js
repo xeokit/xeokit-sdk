@@ -199,6 +199,7 @@ class Mesh extends Component {
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Number[]} [cfg.offset=[0,0,0]] World-space 3D translation offset. Translates the Mesh in World space, after modelling transforms.
+     * @param {Boolean} [cfg.occluder=true] Indicates if the Mesh is able to occlude {@link Marker}s.
      * @param {Boolean} [cfg.visible=true] Indicates if the Mesh is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Mesh is initially culled from view.
      * @param {Boolean} [cfg.pickable=true] Indicates if the Mesh is initially pickable.
@@ -241,6 +242,7 @@ class Mesh extends Component {
             pickable: null,
             clippable: null,
             collidable: null,
+            occluder:  (cfg.occluder !== false),
             castsShadow: null,
             receivesShadow: null,
             xrayed: false,
@@ -412,11 +414,13 @@ class Mesh extends Component {
             this._putPickRenderers();
             this._pickMeshRenderer = PickMeshRenderer.get(this);
         }
-        const occlusionHash = this._makeOcclusionHash();
-        if (this._state.occlusionHash !== occlusionHash) {
-            this._state.occlusionHash = occlusionHash;
-            this._putOcclusionRenderer();
-            this._occlusionRenderer = OcclusionRenderer.get(this);
+        if (this._state.occluder) {
+            const occlusionHash = this._makeOcclusionHash();
+            if (this._state.occlusionHash !== occlusionHash) {
+                this._state.occlusionHash = occlusionHash;
+                this._putOcclusionRenderer();
+                this._occlusionRenderer = OcclusionRenderer.get(this);
+            }
         }
     }
 
@@ -1823,7 +1827,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawOcclusion(frameCtx) {
-        if (this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
+        if (this._state.occluder && this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
             this._occlusionRenderer.drawMesh(frameCtx, this);
         }
     }

@@ -101,7 +101,8 @@ class SpriteMarker extends Marker {
             scale: [1, 1, 1], // Note: by design, scale does not work with billboard
             position: cfg.worldPos,
             rotation: [90, 0, 0],
-            billboard: "spherical"
+            billboard: "spherical",
+            occluder: false // Don't occlude SpriteMarkers or Annotations
         });
 
         this.visible = true;
@@ -343,10 +344,10 @@ class SpriteMarker extends Marker {
             ];
         } else {
             this._geometry.positions = [
-                halfSize * aspect, halfSize, 0,
-                -halfSize * aspect, halfSize, 0,
-                -halfSize * aspect, -halfSize, 0,
-                halfSize * aspect, -halfSize, 0
+                halfSize / aspect, halfSize, 0,
+                -halfSize / aspect, halfSize, 0,
+                -halfSize / aspect, -halfSize, 0,
+                halfSize / aspect, -halfSize, 0
             ];
         }
     }
