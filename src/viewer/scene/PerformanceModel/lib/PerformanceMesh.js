@@ -229,8 +229,8 @@ class PerformanceMesh {
     }
 
     /** @private */
-    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos) {
-        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos) : false;
+    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
+        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
     }
 
     /** @private */

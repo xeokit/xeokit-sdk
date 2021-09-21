@@ -815,6 +815,7 @@ const Renderer = function (scene, options) {
         const worldRayOrigin = math.vec3();
         const worldRayDir = math.vec3();
         const worldSurfacePos = math.vec3();
+        const worldSurfaceNormal = math.vec3();
 
         return function (params, pickResult = _pickResult) {
 
@@ -855,7 +856,7 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, scene.camera.project.near, scene.camera.project.far, tempMat4a);
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.01, scene.camera.project.far, tempMat4a);
 
                 if (params.matrix) {
 
@@ -875,7 +876,7 @@ const Renderer = function (scene, options) {
 
                     math.normalizeVec3(randomVec3);
                     math.cross3Vec3(worldRayDir, randomVec3, up);
-                    
+
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
@@ -913,13 +914,17 @@ const Renderer = function (scene, options) {
                         math.canvasPosToWorldRay(scene.canvas.canvas, pickViewMatrix, pickProjMatrix, canvasPos, worldRayOrigin, worldRayDir);
                     }
 
-                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos)) {
+                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal)) {
 
                         pickResult.worldPos = worldSurfacePos;
 
                         if (params.pickSurfaceNormal !== false) {
-                            gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                            pickResult.worldNormal = worldSurfaceNormal;
                         }
+
+                        // if (params.pickSurfaceNormal !== false) {
+                        //     gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                        // }
 
                         pickResult.pickSurfacePrecision = true;
                     }

@@ -15897,6 +15897,7 @@ const Renderer = function (scene, options) {
         const worldRayOrigin = math.vec3();
         const worldRayDir = math.vec3();
         const worldSurfacePos = math.vec3();
+        const worldSurfaceNormal = math.vec3();
 
         return function (params, pickResult = _pickResult) {
 
@@ -15937,7 +15938,7 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, scene.camera.project.near, scene.camera.project.far, tempMat4a);
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.01, scene.camera.project.far, tempMat4a);
 
                 if (params.matrix) {
 
@@ -15957,7 +15958,7 @@ const Renderer = function (scene, options) {
 
                     math.normalizeVec3(randomVec3);
                     math.cross3Vec3(worldRayDir, randomVec3, up);
-                    
+
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
@@ -15995,13 +15996,17 @@ const Renderer = function (scene, options) {
                         math.canvasPosToWorldRay(scene.canvas.canvas, pickViewMatrix, pickProjMatrix, canvasPos, worldRayOrigin, worldRayDir);
                     }
 
-                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos)) {
+                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal)) {
 
                         pickResult.worldPos = worldSurfacePos;
 
                         if (params.pickSurfaceNormal !== false) {
-                            gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                            pickResult.worldNormal = worldSurfaceNormal;
                         }
+
+                        // if (params.pickSurfaceNormal !== false) {
+                        //     gpuPickWorldNormal(pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                        // }
 
                         pickResult.pickSurfacePrecision = true;
                     }
@@ -37846,7 +37851,7 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.updateCompositeObjects=false] When ````true````, then when visibility and selection updates refer to composite objects (eg. an IfcBuildingStorey),
      * then this method will apply the updates to objects within those composites.
      */
-    setViewpoint(bcfViewpoint, options = {}, done) {
+    setViewpoint(bcfViewpoint, options = {}) {
         if (!bcfViewpoint) {
             return;
         }
@@ -38001,11 +38006,8 @@ class BCFViewpointsPlugin extends Plugin {
                 camera.look = look;
                 camera.up = up;
                 camera.projection = projection;
-                if (done) {
-                    done();
-                }
             } else {
-                viewer.cameraFlight.flyTo({eye, look, up, duration: options.duration, projection}, done);
+                viewer.cameraFlight.flyTo({eye, look, up, duration: options.duration, projection});
             }
         }
     }
@@ -39876,8 +39878,8 @@ class PerformanceMesh {
     }
 
     /** @private */
-    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos) {
-        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos) : false;
+    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
+        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
     }
 
     /** @private */
@@ -46635,7 +46637,7 @@ class TrianglesBatchingLayer {
 
     //------------------------------------------------------------------------------------------------
 
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos) {
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
         if (!this.model.scene.pickSurfacePrecisionEnabled) {
             return false;
@@ -46713,9 +46715,17 @@ class TrianglesBatchingLayer {
                 if (!gotIntersect || dist > closestDist) {
                     closestDist = dist;
                     worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
                     gotIntersect = true;
                 }
             }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
         }
 
         return gotIntersect;
@@ -53044,6 +53054,7 @@ class TrianglesInstancingLayer {
         if (this.model.scene.pickSurfacePrecisionEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
+            portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
         }
 
         this._portions.push(portion);
@@ -53674,7 +53685,7 @@ class TrianglesInstancingLayer {
 
     //-----------------------------------------------------------------------------------------
 
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos) {
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
         if (!this.model.scene.pickSurfacePrecisionEnabled) {
             return false;
@@ -53690,6 +53701,10 @@ class TrianglesInstancingLayer {
 
         if (!portion.inverseMatrix) {
             portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
+        }
+
+        if (worldNormal && !portion.normalMatrix) {
+            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
         }
 
         const quantizedPositions = state.quantizedPositions;
@@ -53760,9 +53775,18 @@ class TrianglesInstancingLayer {
                 if (!gotIntersect || dist > closestDist) {
                     closestDist = dist;
                     worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
                     gotIntersect = true;
                 }
             }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
         }
 
         return gotIntersect;

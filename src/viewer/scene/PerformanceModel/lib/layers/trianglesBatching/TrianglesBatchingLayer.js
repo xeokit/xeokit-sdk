@@ -1048,7 +1048,7 @@ class TrianglesBatchingLayer {
 
     //------------------------------------------------------------------------------------------------
 
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos) {
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
         if (!this.model.scene.pickSurfacePrecisionEnabled) {
             return false;
@@ -1126,9 +1126,17 @@ class TrianglesBatchingLayer {
                 if (!gotIntersect || dist > closestDist) {
                     closestDist = dist;
                     worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
                     gotIntersect = true;
                 }
             }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
         }
 
         return gotIntersect;

@@ -8,7 +8,7 @@ import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
-import {quantizePositions, octEncodeNormals} from "../../compression.js";
+import {octEncodeNormals, quantizePositions} from "../../compression.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 
@@ -326,6 +326,7 @@ class TrianglesInstancingLayer {
         if (this.model.scene.pickSurfacePrecisionEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
+            portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
         }
 
         this._portions.push(portion);
@@ -956,7 +957,7 @@ class TrianglesInstancingLayer {
 
     //-----------------------------------------------------------------------------------------
 
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos) {
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
         if (!this.model.scene.pickSurfacePrecisionEnabled) {
             return false;
@@ -972,6 +973,10 @@ class TrianglesInstancingLayer {
 
         if (!portion.inverseMatrix) {
             portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
+        }
+
+        if (worldNormal && !portion.normalMatrix) {
+            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
         }
 
         const quantizedPositions = state.quantizedPositions;
@@ -1042,9 +1047,18 @@ class TrianglesInstancingLayer {
                 if (!gotIntersect || dist > closestDist) {
                     closestDist = dist;
                     worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
                     gotIntersect = true;
                 }
             }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
         }
 
         return gotIntersect;
