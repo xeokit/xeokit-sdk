@@ -69879,14 +69879,16 @@ var parseGLTF$1 = (function () {
             var geometry;
 
             for (var i = 0, len = primitivesInfo.length; i < len; i++) {
-
+                primitiveInfo = primitivesInfo[i];
+                if (primitiveInfo.mode < 4 ) {
+                    continue;
+                }
                 geometryCfg = {
                     primitive: "triangles",
                     compressGeometry: true,
                     edgeThreshold: ctx.edgeThreshold
                 };
 
-                primitiveInfo = primitivesInfo[i];
                 indicesIndex = primitiveInfo.indices;
 
                 if (indicesIndex !== null && indicesIndex !== undefined) {
@@ -70570,11 +70572,14 @@ const parseGLTF = (function () {
                     const meshIds = [];
 
                     for (let i = 0; i < numPrimitives; i++) {
+                        const primitiveInfo = meshInfo.primitives[i];
+                        if (primitiveInfo.mode < 4 ) {
+                            continue;
+                        }
                         const meshCfg = {
                             id: performanceModel.id + "." + ctx.numObjects++,
                             matrix: worldMatrix
                         };
-                        const primitiveInfo = meshInfo.primitives[i];
 
                         const materialIndex = primitiveInfo.material;
                         let materialInfo;
@@ -100462,13 +100467,13 @@ const tempCameraTarget = {
  */
 class KeyboardAxisViewHandler {
 
-    constructor(scene, controllers, configs, states, updates) {
+    constructor(scene, controllers, configs, states) {
 
         this._scene = scene;
         const cameraControl = controllers.cameraControl;
         const camera = scene.camera;
 
-        scene.input.on("keydown", this._documentKeyDownHandler = (e) => {
+        this._onSceneKeyDown = scene.input.on("keydown", () => {
 
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -100560,7 +100565,7 @@ class KeyboardAxisViewHandler {
     }
 
     destroy() {
-        document.removeEventListener("keydown", this._documentKeyDownHandler);
+        this._scene.input.off(this._onSceneKeyDown);
     }
 }
 
@@ -100934,22 +100939,19 @@ class KeyboardPanRotateDollyHandler {
 
         const canvas = scene.canvas.canvas;
 
-        controllers.pickController;
-
         let mouseMovedSinceLastKeyboardDolly = true;
 
-        document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
+        this._onSceneMouseMove = input.on("mousemove", () => {
             mouseMovedSinceLastKeyboardDolly = true;
         });
 
-        document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
+        this._onSceneKeyDown = input.on("keydown", (keyCode) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
             if (!states.mouseover) {
                 return;
             }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = true;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -100957,14 +100959,13 @@ class KeyboardPanRotateDollyHandler {
             }
         });
 
-        document.addEventListener("keyup", this._documentKeyUpHandler = (e) => {
+        this._onSceneKeyUp = input.on("keyup", (keyCode) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
             if (!states.mouseover) {
                 return;
             }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -101099,9 +101100,9 @@ class KeyboardPanRotateDollyHandler {
 
         this._scene.off(this._onTick);
 
-        document.removeEventListener("mousemove", this._documentMouseMoveHandler);
-        document.removeEventListener("keydown", this._documentKeyDownHandler);
-        document.removeEventListener("keyup", this._documentKeyUpHandler);
+        this._scene.input.off(this._onSceneMouseMove);
+        this._scene.input.off(this._onSceneKeyDown);
+        this._scene.input.off(this._onSceneKeyUp);
     }
 }
 
