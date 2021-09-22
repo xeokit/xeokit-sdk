@@ -21,6 +21,8 @@ Multi language support, full-precision measurement, renderer features for more m
   * Full-precision distance measurement. [#692](https://github.com/xeokit/xeokit-sdk/issues/692) ([**@xeolabs**](https://github.com/xeolabs))
 * FastNavPlugin
   * Make FastNavPlugin ignore simple click input. [#697](https://github.com/xeokit/xeokit-sdk/issues/697) ([**@xeolabs**](https://github.com/xeolabs))
+* Input
+  * Make keyboard handlers listen to scene inputs instead of document events [#707](https://github.com/xeokit/xeokit-sdk/pull/707) ([**@Kurtil**](https://github.com/Kurtil))
 * PerformanceModel
   * Full-precision triangle picking for PerformanceModel. [#690](https://github.com/xeokit/xeokit-sdk/issues/690) ([**@xeolabs**](https://github.com/xeolabs))
   * Support PerformanceModel point cloud intensities. [#683](https://github.com/xeokit/xeokit-sdk/issues/683) ([**@xeolabs**](https://github.com/xeolabs))
