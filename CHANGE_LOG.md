@@ -7,6 +7,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 Sep 22, 2021
 
 Multi language support, full-precision measurement, renderer features for more model types, various fixes. 
+ * [Release notes](https://www.notion.so/xeokit/What-s-New-in-xeokit-2-0-ee2bfa8bb51648e380003b17d2b9fa05)
 
 ### Features
 
