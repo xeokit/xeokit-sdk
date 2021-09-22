@@ -4,7 +4,7 @@ Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit
 
 # 2.0.0
 
-Unreleased
+Sep 22, 2021
 
 Multi language support, full-precision measurement, renderer features for more model types, various fixes. 
 
