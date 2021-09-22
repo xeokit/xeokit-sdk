@@ -343,6 +343,7 @@ function buildVertexDraw(mesh) {
     let len;
     let light;
     const billboard = meshState.billboard;
+    const background = meshState.background;
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
@@ -474,6 +475,8 @@ function buildVertexDraw(mesh) {
     src.push("mat4 modelMatrix2          = modelMatrix;");
     if (stationary) {
         src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
+    } else if (background) {
+        src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
@@ -551,6 +554,9 @@ function buildVertexDraw(mesh) {
             src.push("clipPos.z *= clipPos.w;");
         }
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+    }
+    if (background) {
+        src.push("clipPos.z = clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
     if (receivesShadow) {

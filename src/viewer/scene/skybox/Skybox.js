@@ -45,6 +45,7 @@ class Skybox extends Component {
                     12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
                 ]
             }),
+            background: true,
             scale: [2000, 2000, 2000], // Overridden when we initialize the 'size' property, below
             rotation: [0, -90, 0],
             material: new PhongMaterial(this, {
@@ -55,6 +56,8 @@ class Skybox extends Component {
                 emissiveMap: new Texture(this, {
                     src: cfg.src,
                     flipY: true,
+                    wrapS: "clampToEdge",
+                    wrapT: "clampToEdge",
                     encoding: cfg.encoding || "sRGB"
                 }),
                 backfaces: true // Show interior faces of our skybox geometry
