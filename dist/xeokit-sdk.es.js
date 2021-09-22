@@ -27888,6 +27888,7 @@ function buildVertexDraw(mesh) {
     const lightsState = scene._lightsState;
     let light;
     const billboard = meshState.billboard;
+    const background = meshState.background;
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals$1(mesh);
@@ -28019,6 +28020,8 @@ function buildVertexDraw(mesh) {
     src.push("mat4 modelMatrix2          = modelMatrix;");
     if (stationary) {
         src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;");
+    } else if (background) {
+        src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
@@ -28096,6 +28099,9 @@ function buildVertexDraw(mesh) {
             src.push("clipPos.z *= clipPos.w;");
         }
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+    }
+    if (background) {
+        src.push("clipPos.z = clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
     if (receivesShadow) {
@@ -29197,9 +29203,13 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const geometryState = mesh._geometry._state;
     const camera = scene.camera;
     const rtcCenter = mesh.rtcCenter;
+    const background = meshState.background;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
+        if (background) {
+            gl.depthFunc(gl.LEQUAL);
+        }
         this._bindProgram(frameCtx);
     }
 
@@ -29715,6 +29725,10 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     } else if (geometryState.positions) {
         gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
         frameCtx.drawArrays++;
+    }
+
+    if (background) {
+        gl.depthFunc(gl.LESS);
     }
 };
 
@@ -32747,6 +32761,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Mesh is initially highlighted.
      * @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
      * @param {Boolean} [cfg.edges=false] Indicates if the Mesh's edges are initially emphasized.
+     * @param {Boolean} [cfg.background=false] Indicates if the Mesh should act as background, e.g., it can be used for a skybox.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] Mesh's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] Mesh's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {String} [cfg.billboard="none"] Mesh's billboarding behaviour. Options are "none" for no billboarding, "spherical" to always directly face {@link Camera.eye}, rotating both vertically and horizontally, or "cylindrical" to face the {@link Camera#eye} while rotating only about its vertically axis (use that mode for things like trees on a landscape).
@@ -32786,6 +32801,7 @@ class Mesh extends Component {
             selected: false,
             edges: false,
             stationary: !!cfg.stationary,
+            background: !!cfg.background,
             billboard: this._checkBillboard(cfg.billboard),
             layer: null,
             colorize: null,
@@ -75313,6 +75329,7 @@ class Skybox extends Component {
                     12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
                 ]
             }),
+            background: true,
             scale: [2000, 2000, 2000], // Overridden when we initialize the 'size' property, below
             rotation: [0, -90, 0],
             material: new PhongMaterial(this, {
@@ -75323,6 +75340,8 @@ class Skybox extends Component {
                 emissiveMap: new Texture(this, {
                     src: cfg.src,
                     flipY: true,
+                    wrapS: "clampToEdge",
+                    wrapT: "clampToEdge",
                     encoding: cfg.encoding || "sRGB"
                 }),
                 backfaces: true // Show interior faces of our skybox geometry
