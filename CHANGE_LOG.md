@@ -27,6 +27,8 @@ Multi language support, full-precision measurement, renderer features for more m
   * PerformanceModel normals optional. [#684](https://github.com/xeokit/xeokit-sdk/issues/684) ([**@xeolabs**](https://github.com/xeolabs))
 * PropertySet, Property
   * Support property sets in XKT and metadata. [#712](https://github.com/xeokit/xeokit-sdk/issues/712) ([**@xeolabs**](https://github.com/xeolabs))
+* SkyBox
+* Enhance Skybox effect - keep SkyBox in background. [#720](https://github.com/xeokit/xeokit-sdk/issues/712) ([**@whucj**](https://github.com/whucj))
 * SpriteMarker
   * New component: SpriteMarker. [#727](https://github.com/xeokit/xeokit-sdk/issues/727) ([**@xeolabs**](https://github.com/xeolabs))
 * XKTLoaderPlugin
