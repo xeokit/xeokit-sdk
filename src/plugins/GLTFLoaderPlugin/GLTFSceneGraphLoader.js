@@ -593,14 +593,16 @@ var parseGLTF = (function () {
             var geometry;
 
             for (var i = 0, len = primitivesInfo.length; i < len; i++) {
-
+                primitiveInfo = primitivesInfo[i];
+                if (primitiveInfo.mode < 4 ) {
+                    continue;
+                }
                 geometryCfg = {
                     primitive: "triangles",
                     compressGeometry: true,
                     edgeThreshold: ctx.edgeThreshold
                 };
 
-                primitiveInfo = primitivesInfo[i];
                 indicesIndex = primitiveInfo.indices;
 
                 if (indicesIndex !== null && indicesIndex !== undefined) {
