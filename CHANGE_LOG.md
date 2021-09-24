@@ -2,6 +2,11 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 2.0.1
+
+* XML3DLoaderPlugin
+  * Fix XML3DLoaderPlugin error logging for unsupported 3DXML version. [#661](https://github.com/xeokit/xeokit-sdk/issues/661) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 2.0.0
 
 Sep 22, 2021
