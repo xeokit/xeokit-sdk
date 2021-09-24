@@ -229,7 +229,7 @@ var parse3DXML = (function () {
                 case "SchemaVersion":
                     metaData.schemaVersion = child.children[0];
                     if (!isSchemaVersionSupported(ctx, metaData.schemaVersion)) {
-                        ctx.plugin.error("Schema version not supported: " + metaData.schemaVersion + " - supported versions are: " + ctx.modelNode.supportedSchemas.join(","));
+                        ctx.plugin.error("Schema version not supported: " + metaData.schemaVersion + " - supported versions are: " + supportedSchemas.join(","));
                     } else {
                         //ctx.plugin.log("Parsing schema version: " + metaData.schemaVersion);
                     }
