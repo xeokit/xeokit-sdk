@@ -71542,6 +71542,7 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.canvasId] ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas to display the NavCube - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {Boolean} [cfg.visible=true] Initial visibility.
+     * @param {Boolean} [cfg.shadowVisible=true] Whether the shadow of the cube is visible.
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
      * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
@@ -71668,7 +71669,7 @@ class NavCubePlugin extends Plugin {
             edges: true
         });
 
-        this._shadow = new Mesh(navCubeScene, {
+        this._shadow = cfg.shadowVisible === false ? null : new Mesh(navCubeScene, {
             geometry: new ReadableGeometry(navCubeScene, buildCylinderGeometry({
                 center: [0, 0, 0],
                 radiusTop: 0.001,
@@ -71960,7 +71961,9 @@ class NavCubePlugin extends Plugin {
             return;
         }
         this._cubeMesh.visible = visible;
-        this._shadow.visible = visible;
+        if (this._shadow) {
+            this._shadow.visible = visible;
+        }
         this._navCubeCanvas.style.visibility = visible ? "visible" : "hidden";
     }
 
