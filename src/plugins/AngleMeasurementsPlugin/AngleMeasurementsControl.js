@@ -199,6 +199,9 @@ class AngleMeasurementsControl extends Component {
                                 this._currentAngleMeasurement.approximate = false;
                             }
                         }
+
+                        this.fire("targetFound", this._currentAngleMeasurement);
+
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement = null;

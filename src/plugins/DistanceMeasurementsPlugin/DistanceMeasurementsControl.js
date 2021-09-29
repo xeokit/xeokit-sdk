@@ -158,6 +158,8 @@ class DistanceMeasurementsControl extends Component {
                             this._currentDistMeasurement.approximate = false;
                         }
 
+                        this.fire("targetFound", this._currentDistMeasurement);
+
                         this._currentDistMeasurement.axisVisible = true;
                         this._currentDistMeasurement.targetVisible = true;
                         this._currentDistMeasurement = null;

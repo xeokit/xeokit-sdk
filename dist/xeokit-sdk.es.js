@@ -10200,6 +10200,9 @@ class AngleMeasurementsControl extends Component {
                                 this._currentAngleMeasurement.approximate = false;
                             }
                         }
+
+                        this.fire("targetFound", this._currentAngleMeasurement);
+
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement = null;
@@ -38820,6 +38823,8 @@ class DistanceMeasurementsControl extends Component {
                             }
                             this._currentDistMeasurement.approximate = false;
                         }
+
+                        this.fire("targetFound", this._currentDistMeasurement);
 
                         this._currentDistMeasurement.axisVisible = true;
                         this._currentDistMeasurement.targetVisible = true;
@@ -79787,6 +79792,14 @@ class XKTDefaultDataSource {
         error = error || defaultCallback;
         const dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
         const dataUriRegexResult = src.match(dataUriRegex);
+        // for making running local test simple
+        // if the src starts with local prefix, using nodejs fs module to read the file.
+        const localPrefix = "local://";
+        if(src.startsWith(localPrefix)){
+            const fs = require("fs");
+            ok(fs.readFileSync(src.slice(localPrefix.length)).buffer);
+            return;
+        }
         if (dataUriRegexResult) { // Safari can't handle data URIs through XMLHttpRequest
             const isBase64 = !!dataUriRegexResult[2];
             var data = dataUriRegexResult[3];
