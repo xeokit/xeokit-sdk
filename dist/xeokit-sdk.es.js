@@ -79787,6 +79787,14 @@ class XKTDefaultDataSource {
         error = error || defaultCallback;
         const dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
         const dataUriRegexResult = src.match(dataUriRegex);
+        // for making running local test simple
+        // if the src starts with local prefix, using nodejs fs module to read the file.
+        const localPrefix = "local://";
+        if(src.startsWith(localPrefix)){
+            const fs = require("fs");
+            ok(fs.readFileSync(src.slice(localPrefix.length)).buffer);
+            return;
+        }
         if (dataUriRegexResult) { // Safari can't handle data URIs through XMLHttpRequest
             const isBase64 = !!dataUriRegexResult[2];
             var data = dataUriRegexResult[3];
