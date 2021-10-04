@@ -97437,7 +97437,6 @@ class ImagePlane extends Component {
      * @destroy
      */
     destroy() {
-        this._state.destroy();
         super.destroy();
     }
 
@@ -100148,7 +100147,7 @@ class PickController {
 
 const canvasPos = math.vec2();
 
-const getCanvasPosFromEvent$2 = function (event, canvasPos) {
+const getCanvasPosFromEvent$3 = function (event, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -100392,7 +100391,7 @@ class MousePanRotateDollyHandler {
             }
             switch (e.which) {
                 case 3: // Right button
-                    getCanvasPosFromEvent$2(e, canvasPos);
+                    getCanvasPosFromEvent$3(e, canvasPos);
                     const x = canvasPos[0];
                     const y = canvasPos[1];
                     if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
@@ -101452,14 +101451,14 @@ class MouseMiscHandler {
         });
 
         document.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
-            getCanvasPosFromEvent$1(e, canvas, states.pointerCanvasPos);
+            getCanvasPosFromEvent$2(e, canvas, states.pointerCanvasPos);
         });
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-            getCanvasPosFromEvent$1(e, canvas, states.pointerCanvasPos);
+            getCanvasPosFromEvent$2(e, canvas, states.pointerCanvasPos);
             states.mouseover = true;
         });
 
@@ -101485,7 +101484,7 @@ class MouseMiscHandler {
     }
 }
 
-function getCanvasPosFromEvent$1(event, canvas, canvasPos) {
+function getCanvasPosFromEvent$2(event, canvas, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -101498,7 +101497,7 @@ function getCanvasPosFromEvent$1(event, canvas, canvasPos) {
     return canvasPos;
 }
 
-const getCanvasPosFromEvent = function (event, canvasPos) {
+const getCanvasPosFromEvent$1 = function (event, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -101562,7 +101561,7 @@ class TouchPanRotateAndDollyHandler {
 
                 states.touchStartTime;
 
-                getCanvasPosFromEvent(touches[0], tapStartCanvasPos);
+                getCanvasPosFromEvent$1(touches[0], tapStartCanvasPos);
 
                 if (configs.followPointer) {
 
@@ -101602,7 +101601,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent$1(touches[i], lastCanvasTouchPosList[i]);
             }
 
             numTouches = touches.length;
@@ -101640,7 +101639,7 @@ class TouchPanRotateAndDollyHandler {
 
             if (numTouches === 1) {
 
-                getCanvasPosFromEvent(touches[0], tapCanvasPos0);
+                getCanvasPosFromEvent$1(touches[0], tapCanvasPos0);
 
                 //-----------------------------------------------------------------------------------------------
                 // Drag rotation
@@ -101686,8 +101685,8 @@ class TouchPanRotateAndDollyHandler {
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
-                getCanvasPosFromEvent(touch0, tapCanvasPos0);
-                getCanvasPosFromEvent(touch1, tapCanvasPos1);
+                getCanvasPosFromEvent$1(touch0, tapCanvasPos0);
+                getCanvasPosFromEvent$1(touch1, tapCanvasPos1);
 
                 const lastMiddleTouch = math.geometricMeanVec2(lastCanvasTouchPosList[0], lastCanvasTouchPosList[1]);
                 const currentMiddleTouch = math.geometricMeanVec2(tapCanvasPos0, tapCanvasPos1);
@@ -101735,7 +101734,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0; i < numTouches; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent$1(touches[i], lastCanvasTouchPosList[i]);
             }
         });
     }
@@ -101754,6 +101753,26 @@ class TouchPanRotateAndDollyHandler {
 const TAP_INTERVAL = 150;
 const DBL_TAP_INTERVAL = 325;
 const TAP_DISTANCE_THRESHOLD = 4;
+
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
 
 /**
  * @private
@@ -101813,11 +101832,11 @@ class TouchPickHandler {
 
             if (touches.length === 1 && changedTouches.length === 1) {
                 tapStartTime = touchStartTime;
-                tapStartPos[0] = touches[0].pageX;
-                tapStartPos[1] = touches[0].pageY;
 
-                const rightClickClientX = touches[0].clientX;
-                const rightClickClientY = touches[0].clientY;
+                getCanvasPosFromEvent(touches[0], tapStartPos);
+
+                const rightClickClientX = tapStartPos[0];
+                const rightClickClientY = tapStartPos[1];
 
                 const rightClickPageX = touches[0].pageX;
                 const rightClickPageY = touches[0].pageY;
@@ -101841,8 +101860,7 @@ class TouchPickHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                activeTouches[i][0] = touches[i].pageX;
-                activeTouches[i][1] = touches[i].pageY;
+                getCanvasPosFromEvent(touches[i], activeTouches[i]);
             }
 
             activeTouches.length = touches.length;
@@ -101877,8 +101895,7 @@ class TouchPickHandler {
 
                         // Double-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 
@@ -101908,8 +101925,7 @@ class TouchPickHandler {
 
                         // Single-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 
