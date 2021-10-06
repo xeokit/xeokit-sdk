@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+    "url": "git+https://github.com:tuxmart/xeokit-sdk.git"
   },
   "keywords": [
     "webgl",
@@ -39,7 +39,7 @@
   "author": "Lindsay Kay",
   "license": "See LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/xeokit/xeokit-sdk/issues"
+    "url": "https://github.com/tuxmart/xeokit-sdk/issues"
   },
   "homepage": "https://xeokit.io",
   "devDependencies": {
