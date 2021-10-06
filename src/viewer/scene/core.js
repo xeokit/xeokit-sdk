@@ -151,7 +151,7 @@ const frame = function () {
     }
     runTasks(time);
     fireTickEvents(time);
-    renderScenes();
+    core.scheduleTask(renderScenes);
     lastTime = time;
     window.requestAnimationFrame(frame);
 };
@@ -229,6 +229,6 @@ function renderScenes() {
     }
 }
 
-window.requestAnimationFrame(frame);
+setInterval(frame, 16);
 
 export {core};

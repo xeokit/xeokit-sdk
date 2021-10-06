@@ -1,8 +1,8 @@
 {
-  "name": "@xeokit/xeokit-sdk",
+  "name": "@tuxmart/xeokit-sdk",
   "version": "2.0.7",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "/dist/xeokit-sdk.es.js",
+  "main": "/dist/xeokit-sdk.min.es.js",
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "test": "percy exec -- node ./snapshots.js",
