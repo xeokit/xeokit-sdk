@@ -48,7 +48,6 @@
     "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
     "@percy/script": "^1.1.0",
-    "babel": "^6.23.0",
     "babel-jest": "^27.2.2",
     "esdoc": "^1.0.4",
     "esdoc-custom-theme": "^1.4.2",
