@@ -339,6 +339,7 @@ class Scene extends Component {
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
@@ -771,7 +772,8 @@ class Scene extends Component {
          */
         this.input = new Input(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
-            element: this.canvas.canvas
+            element: this.canvas.canvas,
+            keyboardEventsElement: cfg.keyboardEventsElement
         });
 
         /**
