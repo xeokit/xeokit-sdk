@@ -2,7 +2,18 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 2.0.5
+
+Oct 7, 2021
+
+* NavCubePlugin
+  * Make NavCubePlugin robust for custom Camera projection.  [#742](https://github.com/xeokit/xeokit-sdk/issues/742) ([**@xeolabs**](https://github.com/xeolabs))
+* Viewer
+  * Option to configure HTML element on which to listen for KB events. [#741](https://github.com/xeokit/xeokit-sdk/issues/741) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 2.0.1
+
+Oct 1, 2021
 
 * XML3DLoaderPlugin
   * Fix XML3DLoaderPlugin error logging for unsupported 3DXML version. [#661](https://github.com/xeokit/xeokit-sdk/issues/661) ([**@xeolabs**](https://github.com/xeolabs))
