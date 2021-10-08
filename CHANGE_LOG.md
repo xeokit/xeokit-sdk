@@ -2,6 +2,13 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 2.0.7
+
+Oct 8, 2021
+
+* XKTLoaderPlugin
+  * Fix: fs Module not found. [#745](https://github.com/xeokit/xeokit-sdk/issues/745) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 2.0.6
 
 Oct 7, 2021
