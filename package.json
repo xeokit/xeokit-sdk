@@ -7,7 +7,6 @@
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
-    "publish": "npm publish --access public"
   },
   "repository": {
     "type": "git",
