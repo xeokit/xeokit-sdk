@@ -1,17 +1,16 @@
 {
-  "name": "@xeokit/xeokit-sdk",
+  "name": "@tuxmart/xeokit-sdk",
   "version": "2.0.7",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "/dist/xeokit-sdk.es.js",
+  "main": "/dist/xeokit-sdk.min.es.js",
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "test": "percy exec -- node ./snapshots.js",
-    "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
-    "publish": "npm publish --access public"
+    "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+    "url": "git+https://github.com:tuxmart/xeokit-sdk.git"
   },
   "keywords": [
     "webgl",
@@ -39,7 +38,7 @@
   "author": "Lindsay Kay",
   "license": "See LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/xeokit/xeokit-sdk/issues"
+    "url": "https://github.com/tuxmart/xeokit-sdk/issues"
   },
   "homepage": "https://xeokit.io",
   "devDependencies": {
@@ -48,7 +47,6 @@
     "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
     "@percy/script": "^1.1.0",
-    "babel": "^6.23.0",
     "babel-jest": "^27.2.2",
     "esdoc": "^1.0.4",
     "esdoc-custom-theme": "^1.4.2",

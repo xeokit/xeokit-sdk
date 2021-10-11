@@ -154,7 +154,6 @@ const frame = function () {
     runTasks(time);
     fireTickEvents(time);
     core.scheduleTask(renderScenes);
-    
     lastTime = time;
     
 };
@@ -235,5 +234,6 @@ function renderScenes() {
 setInterval(() => {
     frame();
 }, 16);
+
 
 export {core};
