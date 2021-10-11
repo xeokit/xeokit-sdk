@@ -4,6 +4,26 @@ const TAP_INTERVAL = 150;
 const DBL_TAP_INTERVAL = 325;
 const TAP_DISTANCE_THRESHOLD = 4;
 
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
+
 /**
  * @private
  */
@@ -62,11 +82,11 @@ class TouchPickHandler {
 
             if (touches.length === 1 && changedTouches.length === 1) {
                 tapStartTime = touchStartTime;
-                tapStartPos[0] = touches[0].pageX;
-                tapStartPos[1] = touches[0].pageY;
 
-                const rightClickClientX = touches[0].clientX;
-                const rightClickClientY = touches[0].clientY;
+                getCanvasPosFromEvent(touches[0], tapStartPos);
+
+                const rightClickClientX = tapStartPos[0];
+                const rightClickClientY = tapStartPos[1];
 
                 const rightClickPageX = touches[0].pageX;
                 const rightClickPageY = touches[0].pageY;
@@ -90,8 +110,7 @@ class TouchPickHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                activeTouches[i][0] = touches[i].pageX;
-                activeTouches[i][1] = touches[i].pageY;
+                getCanvasPosFromEvent(touches[i], activeTouches[i]);
             }
 
             activeTouches.length = touches.length;
@@ -126,8 +145,7 @@ class TouchPickHandler {
 
                         // Double-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 
@@ -157,8 +175,7 @@ class TouchPickHandler {
 
                         // Single-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 

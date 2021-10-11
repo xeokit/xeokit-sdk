@@ -24,6 +24,7 @@ class Viewer {
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted.
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
@@ -83,6 +84,7 @@ class Viewer {
         this.scene = new Scene(this, {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
+            keyboardEventsElement: cfg.keyboardEventsElement,
             webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,

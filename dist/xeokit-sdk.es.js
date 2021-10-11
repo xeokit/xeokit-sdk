@@ -17434,6 +17434,8 @@ class Input extends Component {
          */
         this.mouseCanvasPos = math.vec2();
 
+        this._keyboardEventsElement = cfg.keyboardEventsElement || document;
+
         this._bindEvents();
     }
 
@@ -17443,7 +17445,7 @@ class Input extends Component {
             return;
         }
 
-        document.addEventListener("keydown", this._keyDownListener = (e) => {
+        this._keyboardEventsElement.addEventListener("keydown", this._keyDownListener = (e) => {
             if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
@@ -17460,7 +17462,7 @@ class Input extends Component {
             }
         }, false);
 
-        document.addEventListener("keyup", this._keyUpListener = (e) => {
+        this._keyboardEventsElement.addEventListener("keyup", this._keyUpListener = (e) => {
             if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
@@ -17627,134 +17629,6 @@ class Input extends Component {
             });
         }
 
-        // VR
-
-        {
-
-            const orientationAngleLookup = {
-                'landscape-primary': 90,
-                'landscape-secondary': -90,
-                'portrait-secondary': 180,
-                'portrait-primary': 0
-            };
-
-            let orientation;
-            let orientationAngle;
-            const acceleration = math.vec3();
-            const accelerationIncludingGravity = math.vec3();
-
-            const orientationChangeEvent = {
-                orientation: null,
-                orientationAngle: 0
-            };
-
-            const deviceMotionEvent = {
-                orientationAngle: 0,
-                acceleration: null,
-                accelerationIncludingGravity: accelerationIncludingGravity,
-                rotationRate: math.vec3(),
-                interval: 0
-            };
-
-            const deviceOrientationEvent = {
-                alpha: 0,
-                beta: 0,
-                gamma: 0,
-                absolute: false
-            };
-
-            if (window.OrientationChangeEvent) {
-                window.addEventListener('orientationchange', this._orientationchangedListener = () => {
-
-                        orientation = window.screen.orientation || window.screen.mozOrientation || window.msOrientation || null;
-                        orientationAngle = orientation ? (orientationAngleLookup[orientation] || 0) : 0;
-
-                        orientationChangeEvent.orientation = orientation;
-                        orientationChangeEvent.orientationAngle = orientationAngle;
-
-                        /**
-                         * Fired when the orientation of the device has changed.
-                         *
-                         * @event orientationchange
-                         * @param orientation The orientation: "landscape-primary", "landscape-secondary", "portrait-secondary" or "portrait-primary"
-                         * @param orientationAngle The orientation angle in degrees: 90 for landscape-primary, -90 for landscape-secondary, 180 for portrait-secondary or 0 for portrait-primary.
-                         */
-                        this.fire("orientationchange", orientationChangeEvent);
-                    },
-                    false);
-            }
-
-            if (window.DeviceMotionEvent) {
-                window.addEventListener('devicemotion', this._deviceMotionListener = (e) => {
-
-                        deviceMotionEvent.interval = e.interval;
-                        deviceMotionEvent.orientationAngle = orientationAngle;
-
-                        const accel = e.acceleration;
-
-                        if (accel) {
-                            acceleration[0] = accel.x;
-                            acceleration[1] = accel.y;
-                            acceleration[2] = accel.z;
-                            deviceMotionEvent.acceleration = acceleration;
-                        } else {
-                            deviceMotionEvent.acceleration = null;
-                        }
-
-                        const accelGrav = e.accelerationIncludingGravity;
-
-                        if (accelGrav) {
-                            accelerationIncludingGravity[0] = accelGrav.x;
-                            accelerationIncludingGravity[1] = accelGrav.y;
-                            accelerationIncludingGravity[2] = accelGrav.z;
-                            deviceMotionEvent.accelerationIncludingGravity = accelerationIncludingGravity;
-                        } else {
-                            deviceMotionEvent.accelerationIncludingGravity = null;
-                        }
-
-                        deviceMotionEvent.rotationRate = e.rotationRate;
-
-                        /**
-                         * Fires on a regular interval and returns data about the rotation
-                         * (in degrees per second) and acceleration (in meters per second squared) of the device, at that moment in
-                         * time. Some devices do not have the hardware to exclude the effect of gravity.
-                         *
-                         * @event devicemotion
-                         * @param Float32Array acceleration The acceleration of the device, in meters per second squared, as a 3-element vector. This value has taken into account the effect of gravity and removed it from the figures. This value may not exist if the hardware doesn't know how to remove gravity from the acceleration data.
-                         * @param Float32Array accelerationIncludingGravity The acceleration of the device, in meters per second squared, as a 3-element vector. This value includes the effect of gravity, and may be the only value available on devices that don't have a gyroscope to allow them to properly remove gravity from the data.
-                         * @param, Number interval The interval, in milliseconds, at which this event is fired. The next event will be fired in approximately this amount of time.
-                         * @param  Float32Array rotationRate The rates of rotation of the device about each axis, in degrees per second.
-                         */
-                        this.fire("devicemotion", deviceMotionEvent);
-                    },
-                    false);
-            }
-
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener("deviceorientation", this._deviceOrientListener = (e) => {
-
-                        deviceOrientationEvent.gamma = e.gamma;
-                        deviceOrientationEvent.beta = e.beta;
-                        deviceOrientationEvent.alpha = e.alpha;
-                        deviceOrientationEvent.absolute = e.absolute;
-
-                        /**
-                         * Fired when fresh data is available from an orientation sensor about the current orientation
-                         * of the device as compared to the Earth coordinate frame. This data is gathered from a
-                         * magnetometer inside the device. See
-                         * <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Orientation_and_motion_data_explained">Orientation and motion data explained</a> for more info.
-                         *
-                         * @event deviceorientation
-                         * @param Number alpha The current orientation of the device around the Z axis in degrees; that is, how far the device is rotated around a line perpendicular to the device.
-                         * @param Number beta The current orientation of the device around the X axis in degrees; that is, how far the device is tipped forward or backward.
-                         * @param Number gamma The current orientation of the device around the Y axis in degrees; that is, how far the device is turned left or right.
-                         * @param Boolean absolute This value is true if the orientation is provided as a difference between the device coordinate frame and the Earth coordinate frame; if the device can't detect the Earth coordinate frame, this value is false.
-                         */
-                        this.fire("deviceorientation", deviceOrientationEvent);
-                    },
-                    false);
-            }
-        }
         this._eventsBound = true;
     }
 
@@ -17762,8 +17636,8 @@ class Input extends Component {
         if (!this._eventsBound) {
             return;
         }
-        document.removeEventListener("keydown", this._keyDownListener);
-        document.removeEventListener("keyup", this._keyUpListener);
+        this._keyboardEventsElement.removeEventListener("keydown", this._keyDownListener);
+        this._keyboardEventsElement.removeEventListener("keyup", this._keyUpListener);
         this.element.removeEventListener("mouseenter", this._mouseEnterListener);
         this.element.removeEventListener("mouseleave", this._mouseLeaveListener);
         this.element.removeEventListener("mousedown", this._mouseDownListener);
@@ -25470,6 +25344,7 @@ class Scene extends Component {
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
@@ -25901,7 +25776,8 @@ class Scene extends Component {
          */
         this.input = new Input(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
-            element: this.canvas.canvas
+            element: this.canvas.canvas,
+            keyboardEventsElement: cfg.keyboardEventsElement
         });
 
         /**
@@ -71709,7 +71585,7 @@ class NavCubePlugin extends Plugin {
         });
         this._onCameraProjection = viewer.camera.on("projection", (projection) => {
             if (this._synchProjection) {
-                this._navCubeCamera.projection = projection;
+                this._navCubeCamera.projection = (projection === "ortho" || projection === "perspective") ? projection : "perspective";
             }
         });
 
@@ -97424,7 +97300,6 @@ class ImagePlane extends Component {
      * @destroy
      */
     destroy() {
-        this._state.destroy();
         super.destroy();
     }
 
@@ -100135,7 +100010,7 @@ class PickController {
 
 const canvasPos = math.vec2();
 
-const getCanvasPosFromEvent$2 = function (event, canvasPos) {
+const getCanvasPosFromEvent$3 = function (event, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -100379,7 +100254,7 @@ class MousePanRotateDollyHandler {
             }
             switch (e.which) {
                 case 3: // Right button
-                    getCanvasPosFromEvent$2(e, canvasPos);
+                    getCanvasPosFromEvent$3(e, canvasPos);
                     const x = canvasPos[0];
                     const y = canvasPos[1];
                     if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
@@ -101439,14 +101314,14 @@ class MouseMiscHandler {
         });
 
         document.addEventListener("mousemove", this._mouseMoveHandler = (e) => {
-            getCanvasPosFromEvent$1(e, canvas, states.pointerCanvasPos);
+            getCanvasPosFromEvent$2(e, canvas, states.pointerCanvasPos);
         });
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-            getCanvasPosFromEvent$1(e, canvas, states.pointerCanvasPos);
+            getCanvasPosFromEvent$2(e, canvas, states.pointerCanvasPos);
             states.mouseover = true;
         });
 
@@ -101472,7 +101347,7 @@ class MouseMiscHandler {
     }
 }
 
-function getCanvasPosFromEvent$1(event, canvas, canvasPos) {
+function getCanvasPosFromEvent$2(event, canvas, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -101485,7 +101360,7 @@ function getCanvasPosFromEvent$1(event, canvas, canvasPos) {
     return canvasPos;
 }
 
-const getCanvasPosFromEvent = function (event, canvasPos) {
+const getCanvasPosFromEvent$1 = function (event, canvasPos) {
     if (!event) {
         event = window.event;
         canvasPos[0] = event.x;
@@ -101549,7 +101424,7 @@ class TouchPanRotateAndDollyHandler {
 
                 states.touchStartTime;
 
-                getCanvasPosFromEvent(touches[0], tapStartCanvasPos);
+                getCanvasPosFromEvent$1(touches[0], tapStartCanvasPos);
 
                 if (configs.followPointer) {
 
@@ -101589,7 +101464,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent$1(touches[i], lastCanvasTouchPosList[i]);
             }
 
             numTouches = touches.length;
@@ -101627,7 +101502,7 @@ class TouchPanRotateAndDollyHandler {
 
             if (numTouches === 1) {
 
-                getCanvasPosFromEvent(touches[0], tapCanvasPos0);
+                getCanvasPosFromEvent$1(touches[0], tapCanvasPos0);
 
                 //-----------------------------------------------------------------------------------------------
                 // Drag rotation
@@ -101673,8 +101548,8 @@ class TouchPanRotateAndDollyHandler {
                 const touch0 = touches[0];
                 const touch1 = touches[1];
 
-                getCanvasPosFromEvent(touch0, tapCanvasPos0);
-                getCanvasPosFromEvent(touch1, tapCanvasPos1);
+                getCanvasPosFromEvent$1(touch0, tapCanvasPos0);
+                getCanvasPosFromEvent$1(touch1, tapCanvasPos1);
 
                 const lastMiddleTouch = math.geometricMeanVec2(lastCanvasTouchPosList[0], lastCanvasTouchPosList[1]);
                 const currentMiddleTouch = math.geometricMeanVec2(tapCanvasPos0, tapCanvasPos1);
@@ -101722,7 +101597,7 @@ class TouchPanRotateAndDollyHandler {
             }
 
             for (let i = 0; i < numTouches; ++i) {
-                getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+                getCanvasPosFromEvent$1(touches[i], lastCanvasTouchPosList[i]);
             }
         });
     }
@@ -101741,6 +101616,26 @@ class TouchPanRotateAndDollyHandler {
 const TAP_INTERVAL = 150;
 const DBL_TAP_INTERVAL = 325;
 const TAP_DISTANCE_THRESHOLD = 4;
+
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
 
 /**
  * @private
@@ -101800,11 +101695,11 @@ class TouchPickHandler {
 
             if (touches.length === 1 && changedTouches.length === 1) {
                 tapStartTime = touchStartTime;
-                tapStartPos[0] = touches[0].pageX;
-                tapStartPos[1] = touches[0].pageY;
 
-                const rightClickClientX = touches[0].clientX;
-                const rightClickClientY = touches[0].clientY;
+                getCanvasPosFromEvent(touches[0], tapStartPos);
+
+                const rightClickClientX = tapStartPos[0];
+                const rightClickClientY = tapStartPos[1];
 
                 const rightClickPageX = touches[0].pageX;
                 const rightClickPageY = touches[0].pageY;
@@ -101828,8 +101723,7 @@ class TouchPickHandler {
             }
 
             for (let i = 0, len = touches.length; i < len; ++i) {
-                activeTouches[i][0] = touches[i].pageX;
-                activeTouches[i][1] = touches[i].pageY;
+                getCanvasPosFromEvent(touches[i], activeTouches[i]);
             }
 
             activeTouches.length = touches.length;
@@ -101864,8 +101758,7 @@ class TouchPickHandler {
 
                         // Double-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 
@@ -101895,8 +101788,7 @@ class TouchPickHandler {
 
                         // Single-tap
 
-                        pickController.pickCursorPos[0] = Math.round(changedTouches[0].clientX);
-                        pickController.pickCursorPos[1] = Math.round(changedTouches[0].clientY);
+                        getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
                         pickController.schedulePickSurface = pickedSurfaceSubs;
 
@@ -104435,6 +104327,7 @@ class Viewer {
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted.
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
@@ -104494,6 +104387,7 @@ class Viewer {
         this.scene = new Scene(this, {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
+            keyboardEventsElement: cfg.keyboardEventsElement,
             webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,

@@ -246,7 +246,7 @@ class NavCubePlugin extends Plugin {
         });
         this._onCameraProjection = viewer.camera.on("projection", (projection) => {
             if (this._synchProjection) {
-                this._navCubeCamera.projection = projection;
+                this._navCubeCamera.projection = (projection === "ortho" || projection === "perspective") ? projection : "perspective";
             }
         });
 

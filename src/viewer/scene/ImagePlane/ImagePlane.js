@@ -550,7 +550,6 @@ class ImagePlane extends Component {
      * @destroy
      */
     destroy() {
-        this._state.destroy();
         super.destroy();
     }
 
