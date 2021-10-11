@@ -21,10 +21,8 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       - working-directory: src
         run: |
-          npm install
-          npm run build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          yarn
+          yarn build
       - name: Publish Package
         run: npm publish
         env:
