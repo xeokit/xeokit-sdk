@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
     "test": "percy exec -- node ./snapshots.js",
-    "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
+    "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc"
   },
   "repository": {
     "type": "git",
