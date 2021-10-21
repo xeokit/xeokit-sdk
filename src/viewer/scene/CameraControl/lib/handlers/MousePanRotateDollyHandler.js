@@ -316,7 +316,7 @@ class MousePanRotateDollyHandler {
             }
 
             e.preventDefault();
-        });
+        }, {passive: true});
     }
 
     reset() {
