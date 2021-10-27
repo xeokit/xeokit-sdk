@@ -254,7 +254,7 @@ class AngleMeasurement extends Component {
         }
     }
 
-        /**
+    /**
      * Sets whether this AngleMeasurement indicates that its measurement is approximate.
      *
      * This is ````true```` by default.
@@ -281,7 +281,7 @@ class AngleMeasurement extends Component {
     get approximate() {
         return this._approximate;
     }
-    
+
     /**
      * Gets the origin {@link Marker}.
      *

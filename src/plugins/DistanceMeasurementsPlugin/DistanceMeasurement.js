@@ -341,33 +341,33 @@ class DistanceMeasurement extends Component {
         }
     }
 
-       /**
+    /**
      * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
      *
      * This is ````true```` by default.
      *
      * @type {Boolean}
      */
-        set approximate(approximate) {
-            approximate = approximate !== false;
-            if (this._approximate === approximate) {
-                return;
-            }
-            this._approximate = approximate;
-            this._cpDirty = true;
-            this._needUpdate(0);
+    set approximate(approximate) {
+        approximate = approximate !== false;
+        if (this._approximate === approximate) {
+            return;
         }
-    
-        /**
-         * Gets whether this DistanceMeasurement indicates that its measurement is approximate.
-         *
-         * This is ````true```` by default.
-         *
-         * @type {Boolean}
-         */
-        get approximate() {
-            return this._approximate;
-        }
+        this._approximate = approximate;
+        this._cpDirty = true;
+        this._needUpdate(0);
+    }
+
+    /**
+     * Gets whether this DistanceMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    get approximate() {
+        return this._approximate;
+    }
     
     /**
      * Gets the origin {@link Marker}.
