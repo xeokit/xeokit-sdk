@@ -222,6 +222,7 @@ class DistanceMeasurementsControl extends Component {
         const input = this.plugin.viewer.scene.input;
 
         input.off(this._onInputMouseDown);
+        input.off(this._onInputMouseUp);
 
         cameraControl.off(this._onHoverSurface);
         cameraControl.off(this._onHoverOff);
