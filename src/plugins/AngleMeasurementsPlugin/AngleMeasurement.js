@@ -33,6 +33,8 @@ class AngleMeasurement extends Component {
             throw "config missing: container";
         }
 
+        this._color = cfg.color || plugin.defaultColor;
+
         var scene = this.plugin.viewer.scene;
 
         this._originMarker = new Marker(scene, cfg.origin);
@@ -48,14 +50,23 @@ class AngleMeasurement extends Component {
         this._pp = new Float64Array(12);
         this._cp = new Int16Array(6);
 
-        this._originDot = new Dot(this._container, {});
-        this._cornerDot = new Dot(this._container, {});
-        this._targetDot = new Dot(this._container, {});
+        this._originDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
+        this._cornerDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
+        this._targetDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
 
-        this._originWire = new Wire(this._container, {color: "blue", thickness: 1});
-        this._targetWire = new Wire(this._container, {color: "red", thickness: 1});
+        this._originWire = new Wire(this._container, {color: this._color || "blue", thickness: 1, zIndex: plugin.zIndex});
+        this._targetWire = new Wire(this._container, {color: this._color || "red", thickness: 1, zIndex: plugin.zIndex});
 
-        this._angleLabel = new Label(this._container, {fillColor: "#00BBFF", prefix: "", text: ""});
+        this._angleLabel = new Label(this._container, {fillColor: this._color || "#00BBFF", prefix: "", text: "", zIndex: plugin.zIndex + 2});
 
         this._wpDirty = false;
         this._vpDirty = false;
@@ -243,7 +254,7 @@ class AngleMeasurement extends Component {
         }
     }
 
-    /**
+        /**
      * Sets whether this AngleMeasurement indicates that its measurement is approximate.
      *
      * This is ````true```` by default.
@@ -270,7 +281,7 @@ class AngleMeasurement extends Component {
     get approximate() {
         return this._approximate;
     }
-
+    
     /**
      * Gets the origin {@link Marker}.
      *
@@ -307,6 +318,21 @@ class AngleMeasurement extends Component {
     get angle() {
         this._update();
         return this._angle;
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        this._originDot.setFillColor(value);
+        this._cornerDot.setFillColor(value);
+        this._targetDot.setFillColor(value);
+        this._originWire.setColor(value || "blue");
+        this._targetWire.setColor(value || "red");
+        this._angleLabel.setFillColor(value || "#00BBFF");
+
+        this._color = value;
     }
 
     /**
