@@ -58,52 +58,68 @@ class DistanceMeasurement extends Component {
         this._yAxisLabelCulled = false;
         this._zAxisLabelCulled = false;
 
-        this._originDot = new Dot(this._container, {});
+        this._color = cfg.color || this.plugin.defaultColor;
 
-        this._targetDot = new Dot(this._container, {});
+        this._originDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
+
+        this._targetDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
 
         this._lengthWire = new Wire(this._container, {
-            color: "#00BBFF",
-            thickness: 2
+            color: this._color,
+            thickness: 2,
+            zIndex: plugin.zIndex
         });
 
         this._xAxisWire = new Wire(this._container, {
             color: "red",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._yAxisWire = new Wire(this._container, {
             color: "green",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._zAxisWire = new Wire(this._container, {
             color: "blue",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._lengthLabel = new Label(this._container, {
-            fillColor: "#00BBFF",
+            fillColor: this._color,
             prefix: "",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._xAxisLabel = new Label(this._container, {
             fillColor: "red",
             prefix: "X",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._yAxisLabel = new Label(this._container, {
             fillColor: "green",
             prefix: "Y",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._zAxisLabel = new Label(this._container, {
             fillColor: "blue",
             prefix: "Z",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._wpDirty = false;
@@ -294,65 +310,65 @@ class DistanceMeasurement extends Component {
 
             if (!this._xAxisLabelCulled) {
                 this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
-                this._xAxisLabel.setVisible(true);
+                this._xAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
                 this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
-                this._yAxisLabel.setVisible(true);
+                this._yAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
                 this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
-                this._zAxisLabel.setVisible(true);
+                this._zAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._zAxisLabel.setVisible(false);
             }
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);
-            this._xAxisWire.setVisible(true);
-            this._yAxisWire.setVisible(true);
-            this._zAxisWire.setVisible(true);
-            this._lengthWire.setVisible(true);
-            this._lengthLabel.setVisible(true);
+            this._xAxisWire.setVisible(this.axisVisible);
+            this._yAxisWire.setVisible(this.axisVisible);
+            this._zAxisWire.setVisible(this.axisVisible);
+            this._lengthWire.setVisible(this.wireVisible);
+            this._lengthLabel.setVisible(this.wireVisible);
 
             this._cpDirty = false;
         }
     }
 
-    /**
+       /**
      * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
      *
      * This is ````true```` by default.
      *
      * @type {Boolean}
      */
-    set approximate(approximate) {
-        approximate = approximate !== false;
-        if (this._approximate === approximate) {
-            return;
+        set approximate(approximate) {
+            approximate = approximate !== false;
+            if (this._approximate === approximate) {
+                return;
+            }
+            this._approximate = approximate;
+            this._cpDirty = true;
+            this._needUpdate(0);
         }
-        this._approximate = approximate;
-        this._cpDirty = true;
-        this._needUpdate(0);
-    }
-
-    /**
-     * Gets whether this DistanceMeasurement indicates that its measurement is approximate.
-     *
-     * This is ````true```` by default.
-     *
-     * @type {Boolean}
-     */
-    get approximate() {
-        return this._approximate;
-    }
-
+    
+        /**
+         * Gets whether this DistanceMeasurement indicates that its measurement is approximate.
+         *
+         * This is ````true```` by default.
+         *
+         * @type {Boolean}
+         */
+        get approximate() {
+            return this._approximate;
+        }
+    
     /**
      * Gets the origin {@link Marker}.
      *
@@ -382,22 +398,34 @@ class DistanceMeasurement extends Component {
         return this._length * scale;
     }
 
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        this._color = value;
+        this._originDot.setFillColor(value);
+        this._targetDot.setFillColor(value);
+        this._lengthWire.setColor(value);
+        this._lengthLabel.setFillColor(value);
+    }
+
     /**
      * Sets whether this DistanceMeasurement is visible or not.
      *
      * @type Boolean
      */
     set visible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultVisible;
         this._visible = value;
         this._originDot.setVisible(this._visible && this._originVisible);
         this._targetDot.setVisible(this._visible && this._targetVisible);
         this._lengthWire.setVisible(this._visible && this._wireVisible);
+        this._lengthLabel.setVisible(this._visible && this._wireVisible);
         var axisVisible = this._visible && this._axisVisible;
         this._xAxisWire.setVisible(axisVisible);
         this._yAxisWire.setVisible(axisVisible);
         this._zAxisWire.setVisible(axisVisible);
-        this._lengthLabel.setVisible(axisVisible);
         this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
         this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
         this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
@@ -418,7 +446,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set originVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultOriginVisible;
         this._originVisible = value;
         this._originDot.setVisible(this._visible && this._originVisible);
     }
@@ -438,7 +466,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set targetVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultTargetVisible;
         this._targetVisible = value;
         this._targetDot.setVisible(this._visible && this._targetVisible);
     }
@@ -458,7 +486,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set axisVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
         this._axisVisible = value;
         var axisVisible = this._visible && this._axisVisible;
         this._xAxisWire.setVisible(axisVisible);
@@ -484,7 +512,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set wireVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultWireVisible;
         this._wireVisible = value;
         var wireVisible = this._visible && this._wireVisible;
         this._lengthLabel.setVisible(wireVisible);
