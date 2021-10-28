@@ -20,7 +20,7 @@ class Label {
         style.border = "solid 0px white";
         style.background = "lightgreen";
         style.position = "absolute";
-        style["z-index"] = "5000005";
+        style["z-index"] = cfg.zIndex === undefined ? "5000005" : cfg.zIndex;
         style.width = "auto";
         style.height = "auto";
         style.visibility = "visible";

@@ -1,3 +1,4 @@
+import {Dot} from "../lib/html/Dot";
 import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
 
@@ -33,7 +34,6 @@ class AngleMeasurementsControl extends Component {
         this._active = false;
         this._state = HOVERING;
         this._currentAngleMeasurement = null;
-        this._previousAngleMeasurement = null;
         this._onhoverSurface = null;
         this._onPickedSurface = null;
         this._onHoverNothing = null;
@@ -57,6 +57,12 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
+        this.startDot = new Dot(this.plugin._container,
+            {
+                fillColor: this.plugin.defaultColor,
+                zIndex: this.plugin.zIndex + 1
+            });
+
         const cameraControl = this.plugin.viewer.cameraControl;
 
         let over = false;
@@ -70,7 +76,11 @@ class AngleMeasurementsControl extends Component {
             worldPos.set(e.worldPos);
 
             if (this._state === HOVERING) {
-                document.body.style.cursor = "pointer";
+                if (this.startDot) {
+                    this.startDot.setVisible(true);
+                    this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
+                }
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                 return;
             }
 
@@ -83,7 +93,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = false;
                         this._currentAngleMeasurement.corner.entity = e.entity;
                         this._currentAngleMeasurement.corner.worldPos = e.worldPos;
-                        document.body.style.cursor = "pointer";
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                         break;
                     case FINDING_TARGET:
                         this._currentAngleMeasurement.targetWireVisible = true;
@@ -91,7 +101,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement.target.entity = e.entity;
                         this._currentAngleMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = "pointer";
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                         break;
                 }
             }
@@ -115,14 +125,14 @@ class AngleMeasurementsControl extends Component {
                 return;
             }
 
+            if (this.startDot) {
+                this.startDot.destroy();
+                this.startDot = null;
+            }
+
             switch (this._state) {
 
                 case HOVERING:
-                    if (this._previousAngleMeasurement) {
-                        this._previousAngleMeasurement.originVisible = true;
-                        this._previousAngleMeasurement.cornerVisible = true;
-                        this._previousAngleMeasurement.targetVisible = true;
-                    }
                     if (over) {
                         this._currentAngleMeasurement = this.plugin.createMeasurement({
                             id: math.createUUID(),
@@ -145,8 +155,9 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
-                        this._previousAngleMeasurement = this._currentAngleMeasurement;
                         this._state = FINDING_CORNER;
+
+                        this.fire("measurementStart", this._currentAngleMeasurement);
                     }
                     break;
 
@@ -160,8 +171,9 @@ class AngleMeasurementsControl extends Component {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
                             this._state = HOVERING
+
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -170,15 +182,16 @@ class AngleMeasurementsControl extends Component {
                     if (over) {
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this.fire("measurementEnd", this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
-                        this._previousAngleMeasurement = null;
                         this._state = HOVERING;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
                             this._state = HOVERING;
+
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -186,6 +199,9 @@ class AngleMeasurementsControl extends Component {
         });
 
         this._onHoverNothing = cameraControl.on("hoverOff", e => {
+            if (this.startDot) {
+                this.startDot.setVisible(false);
+            }
             over = false;
             if (this._currentAngleMeasurement) {
                 switch (this._state) {
@@ -207,7 +223,7 @@ class AngleMeasurementsControl extends Component {
                         break;
 
                 }
-                document.body.style.cursor = "default";
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = "default";
             }
         });
 
@@ -223,6 +239,11 @@ class AngleMeasurementsControl extends Component {
 
         if (!this._active) {
             return;
+        }
+
+        if (this.startDot) {
+            this.startDot.destroy();
+            this.startDot = null;
         }
 
         this.reset();
@@ -251,18 +272,16 @@ class AngleMeasurementsControl extends Component {
      * Does nothing if the AngleMeasurementsControl is not active.
      */
     reset() {
-        
+
         if (!this._active) {
             return;
         }
-        
+
         if (this._currentAngleMeasurement) {
             this._currentAngleMeasurement.destroy();
             this._currentAngleMeasurement = null;
         }
-        
-        this._previousAngleMeasurement = null;
-        
+
         this._state = HOVERING;
     }
 

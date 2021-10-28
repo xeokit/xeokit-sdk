@@ -5,7 +5,6 @@ class Wire {
 
         this._wire = document.createElement('div');
         this._wire.className += this._wire.className ? ' viewer-ruler-wire' : 'viewer-ruler-wire';
-        this._visible = true;
 
         var wire = this._wire;
         var style = wire.style;
@@ -14,7 +13,7 @@ class Wire {
 
         style.border = "solid " + this._thickness + "px " + (cfg.color || "black");
         style.position = "absolute";
-        style["z-index"] = "2000001";
+        style["z-index"] = cfg.zIndex === undefined ? "2000001" : cfg.zIndex ;
         style.width = 0 + "px";
         style.height = 0 + "px";
         style.visibility = "visible";
@@ -41,6 +40,10 @@ class Wire {
         this._y2 = 0;
 
         this._update();
+    }
+
+    get _visible() {
+        return this._wire.style.visibility === "visible";
     }
 
     _update() {
@@ -81,8 +84,7 @@ class Wire {
         if (this._visible === visible) {
             return;
         }
-        this._visible = visible;
-        this._wire.style.visibility = this._visible ? "visible" : "hidden";
+        this._wire.style.visibility = visible ? "visible" : "hidden";
     }
 
     destroy(visible) {
