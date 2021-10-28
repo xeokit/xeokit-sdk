@@ -17,7 +17,7 @@ class Dot {
         style.border = "solid 2px white";
         style.background = "lightgreen";
         style.position = "absolute";
-        style["z-index"] = "40000005";
+        style["z-index"] = cfg.zIndex === undefined ? "40000005" : cfg.zIndex ;
         style.width = 8 + "px";
         style.height = 8 + "px";
         style.visibility = "visible";

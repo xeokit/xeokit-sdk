@@ -132,6 +132,8 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
+     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     */
     constructor(viewer, cfg = {}) {
 
@@ -142,6 +144,9 @@ class AngleMeasurementsPlugin extends Plugin {
         this._control = new AngleMeasurementsControl(this);
 
         this._measurements = {};
+
+        this.defaultColor = cfg.defaultColor;
+        this.zIndex = cfg.zIndex;
     }
 
     /**
@@ -221,6 +226,7 @@ class AngleMeasurementsPlugin extends Plugin {
         measurement.on("destroyed", () => {
             delete this._measurements[measurement.id];
         });
+        this.fire("measurementCreated", measurement);
         return measurement;
     }
 
@@ -236,6 +242,7 @@ class AngleMeasurementsPlugin extends Plugin {
             return;
         }
         measurement.destroy();
+        this.fire("measurementDestroyed", measurement);
     }
 
     /**
