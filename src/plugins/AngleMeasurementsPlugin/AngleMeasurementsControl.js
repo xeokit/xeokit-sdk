@@ -169,7 +169,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = false;
                         this._state = FINDING_CORNER;
 
-                        this.fire("measurement-start", this._currentAngleMeasurement);
+                        this.fire("measurementStart", this._currentAngleMeasurement);
                     }
                     break;
 
@@ -195,7 +195,7 @@ class AngleMeasurementsControl extends Component {
                             this._currentAngleMeasurement = null;
                             this._state = HOVERING
 
-                            this.fire("measurement-cancel", this._currentAngleMeasurement);
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -215,7 +215,7 @@ class AngleMeasurementsControl extends Component {
                         }
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
-                        this.fire("measurement-end", this._currentAngleMeasurement);
+                        this.fire("measurementEnd", this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
                         this._state = HOVERING;
                     } else {
@@ -224,7 +224,7 @@ class AngleMeasurementsControl extends Component {
                             this._currentAngleMeasurement = null;
                             this._state = HOVERING;
 
-                            this.fire("measurement-cancel", this._currentAngleMeasurement);
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
