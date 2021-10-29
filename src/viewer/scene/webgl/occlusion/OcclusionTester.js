@@ -52,11 +52,11 @@ class OcclusionTester {
      * @param marker
      */
     addMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
-            occlusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-            this._occlusionLayers[occlusionLayer.rtcCenterHash] = occlusionLayer;
+            occlusionLayer = new OcclusionLayer(this._scene, marker.origin);
+            this._occlusionLayers[occlusionLayer.originHash] = occlusionLayer;
             this._occlusionLayersListDirty = true;
         }
         occlusionLayer.addMarker(marker);
@@ -74,19 +74,19 @@ class OcclusionTester {
             marker.error("Marker has not been added to OcclusionTester");
             return;
         }
-        const rtcCenterHash = marker.rtcCenter.join();
-        if (rtcCenterHash !== occlusionLayer.rtcCenterHash) {
+        const originHash = marker.origin.join();
+        if (originHash !== occlusionLayer.originHash) {
             if (occlusionLayer.numMarkers === 1) {
                 occlusionLayer.destroy();
-                delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+                delete this._occlusionLayers[occlusionLayer.originHash];
                 this._occlusionLayersListDirty = true;
             } else {
                 occlusionLayer.removeMarker(marker);
             }
-            let newOcclusionLayer = this._occlusionLayers[rtcCenterHash];
+            let newOcclusionLayer = this._occlusionLayers[originHash];
             if (!newOcclusionLayer) {
-                newOcclusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-                this._occlusionLayers[rtcCenterHash] = occlusionLayer;
+                newOcclusionLayer = new OcclusionLayer(this._scene, marker.origin);
+                this._occlusionLayers[originHash] = occlusionLayer;
                 this._occlusionLayersListDirty = true;
             }
             newOcclusionLayer.addMarker(marker);
@@ -101,14 +101,14 @@ class OcclusionTester {
      * @param marker
      */
     removeMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
             return;
         }
         if (occlusionLayer.numMarkers === 1) {
             occlusionLayer.destroy();
-            delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+            delete this._occlusionLayers[occlusionLayer.originHash];
             this._occlusionLayersListDirty = true;
         } else {
             occlusionLayer.removeMarker(marker);
@@ -172,9 +172,9 @@ class OcclusionTester {
 
     _buildOcclusionLayersList() {
         let numOcclusionLayers = 0;
-        for (let rtcCenterHash in this._occlusionLayers) {
-            if (this._occlusionLayers.hasOwnProperty(rtcCenterHash)) {
-                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[rtcCenterHash];
+        for (let originHash in this._occlusionLayers) {
+            if (this._occlusionLayers.hasOwnProperty(originHash)) {
+                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[originHash];
             }
         }
         this._occlusionLayersList.length = numOcclusionLayers;
@@ -340,9 +340,9 @@ class OcclusionTester {
                 continue;
             }
 
-            const rtcCenter = occlusionLayer.rtcCenter;
+            const origin = occlusionLayer.origin;
 
-            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, rtcCenter));
+            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, origin));
 
             const numSectionPlanes = sectionPlanesState.sectionPlanes.length;
             if (numSectionPlanes > 0) {
@@ -354,7 +354,7 @@ class OcclusionTester {
                         gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a));
+                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a));
                             gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                         }
                     }

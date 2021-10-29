@@ -38,7 +38,7 @@ class Control {
 
         this._visible = false;
         this._pos = math.vec3(); // Full-precision position of the center of the Control
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
 
         this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
@@ -97,9 +97,9 @@ class Control {
 
         this._pos.set(xyz);
 
-        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
+        worldToRTCPos(this._pos, this._origin, this._rtcPos);
 
-        this._rootNode.rtcCenter = this._rtcCenter;
+        this._rootNode.origin = this._origin;
         this._rootNode.position = this._rtcPos;
     }
 

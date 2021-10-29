@@ -1,100 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Relative-to-center (RTC) coordinates with batched geometry</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        #myCanvas {
-            background: lightblue;
-        }
-
-        .annotation-marker {
-            color: #ffffff;
-            line-height: 1.8;
-            text-align: center;
-            font-family: "monospace";
-            font-weight: bold;
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            border-radius: 15px;
-            border: 2px solid #ffffff;
-            background: black;
-            visibility: hidden;
-            box-shadow: 5px 5px 15px 1px #000000;
-            z-index: 0;
-        }
-
-        .annotation-label {
-            position: absolute;
-            max-width: 250px;
-            min-height: 50px;
-            padding: 8px;
-            padding-left: 12px;
-            padding-right: 12px;
-            background: #ffffff;
-            color: #000000;
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            border-radius: 8px;
-            border: #ffffff solid 2px;
-            box-shadow: 5px 5px 15px 1px #000000;
-            z-index: 90000;
-        }
-
-        .annotation-label:after {
-            content: '';
-            position: absolute;
-            border-style: solid;
-            border-width: 8px 12px 8px 0;
-            border-color: transparent white;
-            display: block;
-            width: 0;
-            z-index: 1;
-            margin-top: -11px;
-            left: -12px;
-            top: 20px;
-        }
-
-        .annotation-label:before {
-            content: '';
-            position: absolute;
-            border-style: solid;
-            border-width: 9px 13px 9px 0;
-            border-color: transparent #ffffff;
-            display: block;
-            width: 0;
-            z-index: 0;
-            margin-top: -12px;
-            left: -15px;
-            top: 20px;
-        }
-
-        .annotation-title {
-            font: normal 20px arial, serif;
-            margin-bottom: 8px;
-        }
-
-        .annotation-desc {
-            font: normal 14px arial, serif;
-        }
-
-    </style>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
-
 <body>
-
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
-
-<div id="info">
-    <h1><a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-           target="_other">PerformanceModel</a>
-    </h1>
-    <p>Relative-to-center (RTC) coordinates with batched geometry. Each of these four tables has a different RTC
-        center.</p>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <h1>PerformanceModel</h1>
+    <h2>Geometry batching, RTC and SAO</h2>
+    <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
+        at the same providing a separate geometry for each object, providing geometry vertex positions as
+        relative-to-center (RTC) coordinates, and rendering with scalable ambient obscurance (SAO).</p>
+    <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
+    <p>SAO emphasises detail by darkening crevices.</p>
+    <h3>Components Used</h3>
     <ul>
         <li>
             <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
@@ -103,6 +30,10 @@
         <li>
             <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
                target="_other">PerformanceModel</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html"
+               target="_other">SAO</a>
         </li>
     </ul>
 </div>
@@ -114,10 +45,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer} from "../src/viewer/Viewer.js";
-    import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
-    import {math} from "../src/viewer/scene/math/math.js";
-    import {DistanceMeasurementsPlugin} from "../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js";
+    import {Viewer, PerformanceModel, math} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -128,9 +56,13 @@
         transparent: true
     });
 
-    const cameraControl = viewer.cameraControl;
-    cameraControl.navMode = "orbit";
-    cameraControl.followPointer = true;
+    //------------------------------------------------------------------------------------------------------------------
+    // Enable and configure Scalable Ambient Obscurance (SAO)
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sao = viewer.scene.sao;
+
+    sao.enabled = true; // Only works if supported
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a PerformanceModel representing a table with four legs, using geometry batching
@@ -141,20 +73,21 @@
         isModel: true,
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
-        edges: true
+        edges: true,
+        saoEnabled: true
     });
 
     //-----------------------------------------------------------
-    // Create several RTC center points
+    // Create several origin points
     //-----------------------------------------------------------
 
-    const OFFSET = 10000000.0;
+    //const OFFSET = 1000000000.0;
 
-    //const OFFSET = 40.0;
+    const OFFSET = 40.0;
 
     //const OFFSET = 100.0;
 
-    const rtcCenters = [
+    const origins = [
         [0, 0, 0],
         [OFFSET, 0, 0],
         [0, 0, OFFSET],
@@ -163,12 +96,12 @@
 
     //-----------------------------------------------------------
     // Within out PerformanceModel, create a simple table model
-    // at each of our RTC centers. This will result in several
+    // at each of our origins. This will result in several
     // tables, positioned very far apart from each other.
     //-----------------------------------------------------------
 
-    for (let i = 0, len = rtcCenters.length; i < len; i++) {
-        buildTable(performanceModel, rtcCenters[i]);
+    for (let i = 0, len = origins.length; i < len; i++) {
+        buildTable(performanceModel, origins[i]);
     }
 
     //------------------------------------------------------------
@@ -180,52 +113,73 @@
     viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Continually orbit the point-of-interest
+    // Mouse over Entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    viewer.scene.on("tick", () => {
-        //viewer.camera.orbitYaw(0.4);
+    var lastPickedEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastPickedEntity || hit.entity.id !== lastPickedEntity.id) {
+                if (lastPickedEntity) {
+                    lastPickedEntity.highlighted = false;
+                }
+                lastPickedEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastPickedEntity) {
+                lastPickedEntity.highlighted = false;
+                lastPickedEntity = null;
+            }
+        }
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Flies camera to the specified RTC center
+    // Continually orbit the point-of-interest
+    //------------------------------------------------------------------------------------------------------------------
+
+    // viewer.scene.on("tick", () => {
+    //     viewer.camera.orbitYaw(0.4);
+    // });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Flies camera to the specified origin
     //------------------------------------------------------------------------------------------------------------------
 
     window.gotoRTCCenter = function (i) {
 
-        const rtcCenter = rtcCenters[i];
+        const origin = origins[i];
 
-        if (!rtcCenter) {
+        if (!origin) {
             return;
         }
 
         viewer.cameraFlight.flyTo({
-            eye: [rtcCenter[0], 0, rtcCenter[2] - 10],
-            look: rtcCenter,
+            eye: [origin[0], 0, origin[2] - 10],
+            look: origin,
             up: [0, 1, 0]
         });
     };
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
-    //------------------------------------------------------------------------------------------------------------------
-
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
-
-    distanceMeasurements.control.activate();
-
-    //------------------------------------------------------------------------------------------------------------------
     // Creates a simple table-shaped model with the given PerformanceModel,
-    // without reusing geometry, and centered at the given RTC center
+    // without reusing geometry, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter) {
+    function buildTable(performanceModel, origin) {
 
         let meshId = math.createUUID();
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+            origin: origin, // This mesh's positions and transforms are relative to the origin
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -256,7 +210,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -286,7 +240,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -316,7 +270,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -345,7 +299,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,

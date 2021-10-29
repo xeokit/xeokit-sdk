@@ -1096,11 +1096,11 @@ const Renderer = function (scene, options) {
             const x = (canvasPos[0] - canvas.width / 2) / (canvas.width / 2);
             const y = -(canvasPos[1] - canvas.height / 2) / (canvas.height / 2);
 
-            const rtcCenter = pickable.rtcCenter;
+            const origin = pickable.origin;
             let pvMat;
 
-            if (rtcCenter) {
-                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, rtcCenter, tempMat4a);
+            if (origin) {
+                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
                 pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
 
             } else {
@@ -1128,8 +1128,8 @@ const Renderer = function (scene, options) {
             const dir = math.subVec3(world2, world1, tempVec4c);
             const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
 
-            if (rtcCenter) {
-                math.addVec3(worldPos, rtcCenter);
+            if (origin) {
+                math.addVec3(worldPos, origin);
             }
 
             pickResult.worldPos = worldPos;

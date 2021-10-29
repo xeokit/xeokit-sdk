@@ -421,17 +421,6 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
-     *
-     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
-     *
-     * @type {Object}
-     */
-    set dataSource(value) {
-        this._dataSource = value || new XKTDefaultDataSource();
-    }
-
-    /**
      * Gets the custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
      * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
@@ -443,14 +432,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
-     * Default value is {@link IFCObjectDefaults}.
+     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
      *
-     * @type {{String: Object}}
+     * @type {Object}
      */
-    set objectDefaults(value) {
-        this._objectDefaults = value || IFCObjectDefaults;
+    set dataSource(value) {
+        this._dataSource = value || new XKTDefaultDataSource();
     }
 
     /**
@@ -465,17 +454,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
+     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     * Default value is {@link IFCObjectDefaults}.
      *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
+     * @type {{String: Object}}
      */
-    set includeTypes(value) {
-        this._includeTypes = value;
+    set objectDefaults(value) {
+        this._objectDefaults = value || IFCObjectDefaults;
     }
 
     /**
@@ -493,17 +479,17 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
      *
      * @type {String[]}
      */
-    set excludeTypes(value) {
-        this._excludeTypes = value;
+    set includeTypes(value) {
+        this._includeTypes = value;
     }
 
     /**
@@ -520,6 +506,33 @@ class XKTLoaderPlugin extends Plugin {
         return this._excludeTypes;
     }
 
+    /**
+     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    set excludeTypes(value) {
+        this._excludeTypes = value;
+    }
+
+    /**
+     * Gets whether we load objects that don't have IFC types.
+     *
+     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
+     * that don't have IFC types.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get excludeUnclassifiedObjects() {
+        return this._excludeUnclassifiedObjects;
+    }
 
     /**
      * Sets whether we load objects that don't have IFC types.
@@ -536,17 +549,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether we load objects that don't have IFC types.
-     *
-     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
-     * that don't have IFC types.
+     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
      *
      * Default value is ````false````.
      *
      * @type {Boolean}
      */
-    get excludeUnclassifiedObjects() {
-        return this._excludeUnclassifiedObjects;
+    get globalizeObjectIds() {
+        return this._globalizeObjectIds;
     }
 
     /**
@@ -571,17 +581,6 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
-     *
-     * Default value is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get globalizeObjectIds() {
-        return this._globalizeObjectIds;
-    }
-
-    /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
      * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
@@ -600,9 +599,10 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.origin=[0,0,0]] The World-space origin of the model's coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model's position, relative to the model's origin.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
@@ -623,7 +623,8 @@ class XKTLoaderPlugin extends Plugin {
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
-            maxGeometryBatchSize: this._maxGeometryBatchSize
+            maxGeometryBatchSize: this._maxGeometryBatchSize,
+            origin: params.origin
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated
