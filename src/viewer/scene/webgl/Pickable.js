@@ -62,7 +62,7 @@ class Pickable {
      *
      * @type {Float64Array}
      */
-    get rtcCenter() {
+    get origin() {
     }
 }
 

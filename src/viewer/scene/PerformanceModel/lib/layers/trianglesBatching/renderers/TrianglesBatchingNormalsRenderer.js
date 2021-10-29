@@ -31,7 +31,7 @@ class TrianglesBatchingNormalsRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -47,7 +47,7 @@ class TrianglesBatchingNormalsRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -65,8 +65,8 @@ class TrianglesBatchingNormalsRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

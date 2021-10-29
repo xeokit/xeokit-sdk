@@ -153,7 +153,8 @@ class Node extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Node.
+     * @param {Number[]} [cfg.origin] World-space origin for this Node.
+     * @param {Number[]} [cfg.rtcCenter] Deprecated - renamed to ````origin````.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -222,7 +223,7 @@ class Node extends Component {
             this.scene._registerObject(this);
         }
 
-        this.rtcCenter = cfg.rtcCenter;
+        this.origin = cfg.origin;
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -317,33 +318,57 @@ class Node extends Component {
     }
 
     /**
-     * Sets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     * Sets the World-space origin for this Node.
      *
      * @type {Float64Array}
      */
-    set rtcCenter(rtcCenter) {
-        if (rtcCenter) {
-            if (!this._rtcCenter) {
-                this._rtcCenter = math.vec3();
+    set origin(origin) {
+        if (origin) {
+            if (!this._origin) {
+                this._origin = math.vec3();
             }
-            this._rtcCenter.set(rtcCenter);
+            this._origin.set(origin);
         } else {
-            if (this._rtcCenter) {
-                this._rtcCenter = null;
+            if (this._origin) {
+                this._origin = null;
             }
         }
         for (let i = 0, len = this._children.length; i < len; i++) {
-            this._children[i].rtcCenter = rtcCenter;
+            this._children[i].origin = origin;
         }
     }
 
     /**
-     *  Gets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *  Gets the World-space origin for this Node.
      *
      * @type {Float64Array}
      */
+    get origin() {
+        return this._origin;
+    }
+
+    /**
+     * Sets the World-space origin for this Node.
+     *
+     * Deprecated and replaced by {@link Node#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        this.origin = rtcCenter;
+    }
+
+    /**
+     * Gets the World-space origin for this Node.
+     *
+     * Deprecated and replaced by {@link Node#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
     get rtcCenter() {
-        return this._rtcCenter;
+        return this.origin;
     }
 
     /**

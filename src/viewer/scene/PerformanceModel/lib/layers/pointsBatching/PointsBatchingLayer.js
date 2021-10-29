@@ -27,7 +27,7 @@ class PointsBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      */
     constructor(model, cfg) {
@@ -56,7 +56,7 @@ class PointsBatchingLayer {
             flagsBuf: null,
             flags2Buf: null,
             positionsDecodeMatrix: math.mat4(),
-            rtcCenter: null
+            origin: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -77,8 +77,8 @@ class PointsBatchingLayer {
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -214,14 +214,14 @@ class PointsBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);

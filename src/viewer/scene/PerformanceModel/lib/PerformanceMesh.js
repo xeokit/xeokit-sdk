@@ -85,10 +85,10 @@ class PerformanceMesh {
          *
          * When this is defined, then the positions are RTC, which means that they are relative to this position.
          *
-         * @property rtcCenter
+         * @property origin
          * @type {Float64Array}
          */
-        this.rtcCenter = null;
+        this.origin = null;
     }
 
     /**

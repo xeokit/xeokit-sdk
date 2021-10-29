@@ -83,7 +83,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
     const camera = scene.camera;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
     const background = meshState.background;
 
     if (frameCtx.lastProgramId !== this._program.id) {
@@ -94,7 +94,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         this._bindProgram(frameCtx);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
@@ -109,7 +109,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }

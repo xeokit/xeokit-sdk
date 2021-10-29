@@ -706,9 +706,9 @@ function createMeshes(modelNode, state) {
         }
         geometryCfg.indices = indices;
 
-        const rtcCenter = tempVec3a;
+        const origin = tempVec3a;
 
-        worldToRTCPositions(geometry.positions, geometry.positions, rtcCenter);
+        worldToRTCPositions(geometry.positions, geometry.positions, origin);
 
         var readableGeometry = new ReadableGeometry(modelNode, geometryCfg);
 
@@ -732,7 +732,7 @@ function createMeshes(modelNode, state) {
 
         var mesh = new Mesh(modelNode, {
             id: modelNode.id + "#" + object.id,
-            rtcCenter: (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0) ? rtcCenter : null,
+            origin: (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0) ? origin : null,
             isObject: true,
             geometry: readableGeometry,
             material: material,
