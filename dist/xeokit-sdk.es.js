@@ -8773,7 +8773,7 @@ class PerformanceNode {
 
 }
 
-const tempVec3a$$ = math.vec3();
+const tempVec3a$10 = math.vec3();
 
 /**
  * Given a view matrix and a relative-to-center (RTC) coordinate origin, returns a view matrix
@@ -8850,7 +8850,7 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
  */
 function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 10000000) {
 
-    const center = math.getPositionsCenter(worldPositions, tempVec3a$$);
+    const center = math.getPositionsCenter(worldPositions, tempVec3a$10);
 
     const rtcCenterX = Math.round(center[0] / cellSize) * cellSize;
     const rtcCenterY = Math.round(center[1] / cellSize) * cellSize;
@@ -8884,7 +8884,7 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
  */
 function getPlaneRTCPos(dist, dir, rtcCenter, rtcPlanePos) {
     const rtcCenterToPlaneDist = math.dotVec3(dir, rtcCenter) + dist;
-    const dirNormalized = math.normalizeVec3(dir, tempVec3a$$);
+    const dirNormalized = math.normalizeVec3(dir, tempVec3a$10);
     math.mulVec3Scalar(dirNormalized, -rtcCenterToPlaneDist, rtcPlanePos);
     return rtcPlanePos;
 }
@@ -9017,7 +9017,7 @@ class Marker extends Component {
         this._entity = null;
         this._visible = null;
         this._worldPos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._viewPos = math.vec3();
         this._canvasPos = math.vec2();
@@ -9154,7 +9154,7 @@ class Marker extends Component {
      */
     set worldPos(worldPos) {
         this._worldPos.set(worldPos || [0, 0, 0]);
-        worldToRTCPos(this._worldPos, this._rtcCenter, this._rtcPos);
+        worldToRTCPos(this._worldPos, this._origin, this._rtcPos);
         if (this._occludable) {
             this._renderer.markerWorldPosUpdated(this);
         }
@@ -9178,8 +9178,8 @@ class Marker extends Component {
      *
      * @type {Number[]}
      */
-    get rtcCenter() {
-        return this._rtcCenter;
+    get origin() {
+        return this._origin;
     }
 
     /**
@@ -9270,7 +9270,6 @@ class Wire {
 
         this._wire = document.createElement('div');
         this._wire.className += this._wire.className ? ' viewer-ruler-wire' : 'viewer-ruler-wire';
-        this._visible = true;
 
         var wire = this._wire;
         var style = wire.style;
@@ -9279,7 +9278,7 @@ class Wire {
 
         style.border = "solid " + this._thickness + "px " + (cfg.color || "black");
         style.position = "absolute";
-        style["z-index"] = "2000001";
+        style["z-index"] = cfg.zIndex === undefined ? "2000001" : cfg.zIndex ;
         style.width = 0 + "px";
         style.height = 0 + "px";
         style.visibility = "visible";
@@ -9306,6 +9305,10 @@ class Wire {
         this._y2 = 0;
 
         this._update();
+    }
+
+    get _visible() {
+        return this._wire.style.visibility === "visible";
     }
 
     _update() {
@@ -9346,8 +9349,7 @@ class Wire {
         if (this._visible === visible) {
             return;
         }
-        this._visible = visible;
-        this._wire.style.visibility = this._visible ? "visible" : "hidden";
+        this._wire.style.visibility = visible ? "visible" : "hidden";
     }
 
     destroy(visible) {
@@ -9374,7 +9376,7 @@ class Dot {
         style.border = "solid 2px white";
         style.background = "lightgreen";
         style.position = "absolute";
-        style["z-index"] = "40000005";
+        style["z-index"] = cfg.zIndex === undefined ? "40000005" : cfg.zIndex ;
         style.width = 8 + "px";
         style.height = 8 + "px";
         style.visibility = "visible";
@@ -9452,7 +9454,7 @@ class Label {
         style.border = "solid 0px white";
         style.background = "lightgreen";
         style.position = "absolute";
-        style["z-index"] = "5000005";
+        style["z-index"] = cfg.zIndex === undefined ? "5000005" : cfg.zIndex;
         style.width = "auto";
         style.height = "auto";
         style.visibility = "visible";
@@ -9551,6 +9553,8 @@ class AngleMeasurement extends Component {
             throw "config missing: container";
         }
 
+        this._color = cfg.color || plugin.defaultColor;
+
         var scene = this.plugin.viewer.scene;
 
         this._originMarker = new Marker(scene, cfg.origin);
@@ -9566,14 +9570,23 @@ class AngleMeasurement extends Component {
         this._pp = new Float64Array(12);
         this._cp = new Int16Array(6);
 
-        this._originDot = new Dot(this._container, {});
-        this._cornerDot = new Dot(this._container, {});
-        this._targetDot = new Dot(this._container, {});
+        this._originDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
+        this._cornerDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
+        this._targetDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex + 1
+        });
 
-        this._originWire = new Wire(this._container, {color: "blue", thickness: 1});
-        this._targetWire = new Wire(this._container, {color: "red", thickness: 1});
+        this._originWire = new Wire(this._container, {color: this._color || "blue", thickness: 1, zIndex: plugin.zIndex});
+        this._targetWire = new Wire(this._container, {color: this._color || "red", thickness: 1, zIndex: plugin.zIndex});
 
-        this._angleLabel = new Label(this._container, {fillColor: "#00BBFF", prefix: "", text: ""});
+        this._angleLabel = new Label(this._container, {fillColor: this._color || "#00BBFF", prefix: "", text: "", zIndex: plugin.zIndex + 2});
 
         this._wpDirty = false;
         this._vpDirty = false;
@@ -9827,6 +9840,21 @@ class AngleMeasurement extends Component {
         return this._angle;
     }
 
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        this._originDot.setFillColor(value);
+        this._cornerDot.setFillColor(value);
+        this._targetDot.setFillColor(value);
+        this._originWire.setColor(value || "blue");
+        this._targetWire.setColor(value || "red");
+        this._angleLabel.setFillColor(value || "#00BBFF");
+
+        this._color = value;
+    }
+
     /**
      * Sets whether this AngleMeasurement is visible or not.
      *
@@ -10002,10 +10030,10 @@ class AngleMeasurement extends Component {
     }
 }
 
-const HOVERING$1 = 0;
-const FINDING_ORIGIN$1 = 1;
+const HOVERING = 0;
+const FINDING_ORIGIN = 1;
 const FINDING_CORNER = 2;
-const FINDING_TARGET$1 = 3;
+const FINDING_TARGET = 3;
 
 /**
  * Creates {@link AngleMeasurement}s from mouse and touch input.
@@ -10032,11 +10060,12 @@ class AngleMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
-        this._state = HOVERING$1;
+        this._state = HOVERING;
         this._currentAngleMeasurement = null;
-        this._previousAngleMeasurement = null;
         this._onhoverSurface = null;
+        this._onPickedSurface = null;
         this._onHoverNothing = null;
+        this._onPickedNothing = null;
     }
 
     /** Gets if this AngleMeasurementsControl is currently active, where it is responding to input.
@@ -10056,6 +10085,12 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
+        this.startDot = new Dot(this.plugin._container,
+            {
+                fillColor: this.plugin.defaultColor,
+                zIndex: this.plugin.zIndex + 1
+            });
+
         const cameraControl = this.plugin.viewer.cameraControl;
 
         let over = false;
@@ -10072,8 +10107,12 @@ class AngleMeasurementsControl extends Component {
             worldPos.set(e.worldPos);
             hoverCanvasPos.set(e.canvasPos);
 
-            if (this._state === HOVERING$1) {
-                document.body.style.cursor = "pointer";
+            if (this._state === HOVERING) {
+                if (this.startDot) {
+                    this.startDot.setVisible(true);
+                    this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
+                }
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                 return;
             }
 
@@ -10086,15 +10125,15 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = false;
                         this._currentAngleMeasurement.corner.entity = e.entity;
                         this._currentAngleMeasurement.corner.worldPos = e.worldPos;
-                        document.body.style.cursor = "pointer";
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                         break;
-                    case FINDING_TARGET$1:
+                    case FINDING_TARGET:
                         this._currentAngleMeasurement.targetWireVisible = true;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement.target.entity = e.entity;
                         this._currentAngleMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = "pointer";
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
                         break;
                 }
             }
@@ -10115,14 +10154,14 @@ class AngleMeasurementsControl extends Component {
                 return;
             }
 
+            if (this.startDot) {
+                this.startDot.destroy();
+                this.startDot = null;
+            }
+
             switch (this._state) {
 
-                case HOVERING$1:
-                    if (this._previousAngleMeasurement) {
-                        this._previousAngleMeasurement.originVisible = true;
-                        this._previousAngleMeasurement.cornerVisible = true;
-                        this._previousAngleMeasurement.targetVisible = true;
-                    }
+                case HOVERING:
                     if (over) {
                         if (pickSurfacePrecisionEnabled) {
                             const pickResult = this.plugin.viewer.scene.pick({
@@ -10156,8 +10195,9 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
-                        this._previousAngleMeasurement = this._currentAngleMeasurement;
                         this._state = FINDING_CORNER;
+
+                        this.fire("measurementStart", this._currentAngleMeasurement);
                     }
                     break;
 
@@ -10176,18 +10216,19 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
-                        this._state = FINDING_TARGET$1;
+                        this._state = FINDING_TARGET;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
-                            this._state = HOVERING$1;
+                            this._state = HOVERING;
+
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
 
-                case FINDING_TARGET$1:
+                case FINDING_TARGET:
                     if (over) {
                         if (pickSurfacePrecisionEnabled) {
                             const pickResult = this.plugin.viewer.scene.pick({
@@ -10202,15 +10243,16 @@ class AngleMeasurementsControl extends Component {
                         }
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this.fire("measurementEnd", this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
-                        this._previousAngleMeasurement = null;
-                        this._state = HOVERING$1;
+                        this._state = HOVERING;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
-                            this._state = HOVERING$1;
+                            this._state = HOVERING;
+
+                            this.fire("measurementCancel", this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -10218,11 +10260,14 @@ class AngleMeasurementsControl extends Component {
         });
 
         this._onHoverNothing = cameraControl.on("hoverOff", e => {
+            if (this.startDot) {
+                this.startDot.setVisible(false);
+            }
             over = false;
             if (this._currentAngleMeasurement) {
                 switch (this._state) {
-                    case HOVERING$1:
-                    case FINDING_ORIGIN$1:
+                    case HOVERING:
+                    case FINDING_ORIGIN:
                         this._currentAngleMeasurement.originVisible = false;
                         break;
                     case FINDING_CORNER:
@@ -10232,14 +10277,14 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
                         break;
-                    case FINDING_TARGET$1:
+                    case FINDING_TARGET:
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
                         break;
 
                 }
-                document.body.style.cursor = "default";
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = "default";
             }
         });
 
@@ -10257,6 +10302,11 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
+        if (this.startDot) {
+            this.startDot.destroy();
+            this.startDot = null;
+        }
+
         this.reset();
 
         const cameraControl = this.plugin.viewer.cameraControl;
@@ -10266,7 +10316,9 @@ class AngleMeasurementsControl extends Component {
         input.off(this._onInputMouseUp);
 
         cameraControl.off(this._onhoverSurface);
+        cameraControl.off(this._onPickedSurface);
         cameraControl.off(this._onHoverNothing);
+        cameraControl.off(this._onPickedNothing);
 
         this._currentAngleMeasurement = null;
 
@@ -10281,19 +10333,17 @@ class AngleMeasurementsControl extends Component {
      * Does nothing if the AngleMeasurementsControl is not active.
      */
     reset() {
-        
+
         if (!this._active) {
             return;
         }
-        
+
         if (this._currentAngleMeasurement) {
             this._currentAngleMeasurement.destroy();
             this._currentAngleMeasurement = null;
         }
-        
-        this._previousAngleMeasurement = null;
-        
-        this._state = HOVERING$1;
+
+        this._state = HOVERING;
     }
 
     /**
@@ -10436,6 +10486,8 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
+     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     */
     constructor(viewer, cfg = {}) {
 
@@ -10446,6 +10498,9 @@ class AngleMeasurementsPlugin extends Plugin {
         this._control = new AngleMeasurementsControl(this);
 
         this._measurements = {};
+
+        this.defaultColor = cfg.defaultColor;
+        this.zIndex = cfg.zIndex;
     }
 
     /**
@@ -10525,6 +10580,7 @@ class AngleMeasurementsPlugin extends Plugin {
         measurement.on("destroyed", () => {
             delete this._measurements[measurement.id];
         });
+        this.fire("measurementCreated", measurement);
         return measurement;
     }
 
@@ -10540,6 +10596,7 @@ class AngleMeasurementsPlugin extends Plugin {
             return;
         }
         measurement.destroy();
+        this.fire("measurementDestroyed", measurement);
     }
 
     /**
@@ -10921,7 +10978,7 @@ class Annotation extends Marker {
     }
 }
 
-const tempVec3a$_ = math.vec3();
+const tempVec3a$$ = math.vec3();
 const tempVec3b$9 = math.vec3();
 const tempVec3c$6 = math.vec3();
 
@@ -11399,7 +11456,7 @@ class AnnotationsPlugin extends Plugin {
             if (!pickResult.worldPos || !pickResult.worldNormal) {
                 this.error("Param 'pickResult' does not have both worldPos and worldNormal");
             } else {
-                const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a$_);
+                const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a$$);
                 const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, this._surfaceOffset, tempVec3b$9);
                 const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c$6);
                 worldPos = offsetWorldPos;
@@ -12533,12 +12590,12 @@ class FrameContext {
     /**
      * Get View matrix for the given RTC center.
      */
-    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+    getRTCViewMatrix(originHash, origin) {
+        let rtcViewMat = this._rtcViewMats[originHash];
         if (!rtcViewMat) {
             rtcViewMat = this._getNewMat();
-            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
-            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
+            createRTCViewMat(this._scene.camera.viewMatrix, origin, rtcViewMat);
+            this._rtcViewMats[originHash] = rtcViewMat;
         }
         return rtcViewMat;
     }
@@ -12546,13 +12603,13 @@ class FrameContext {
     /**
      * Get picking View RTC matrix for the given RTC center.
      */
-    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
+    getRTCPickViewMatrix(originHash, origin) {
+        let rtcPickViewMat = this._rtcPickViewMats[originHash];
         if (!rtcPickViewMat) {
             rtcPickViewMat = this._getNewMat();
             const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
-            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
-            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
+            createRTCViewMat(pickViewMat, origin, rtcPickViewMat);
+            this._rtcPickViewMats[originHash] = rtcPickViewMat;
         }
         return rtcPickViewMat;
     }
@@ -13802,12 +13859,12 @@ class ArrayBuf {
 
 class OcclusionLayer {
 
-    constructor(scene, rtcCenter) {
+    constructor(scene, origin) {
 
         this.scene = scene;
         this.aabb = math.AABB3();
-        this.rtcCenter = math.vec3(rtcCenter);
-        this.rtcCenterHash = this.rtcCenter.join();
+        this.origin = math.vec3(origin);
+        this.originHash = this.origin.join();
         this.numMarkers = 0;
         this.markers = {};
         this.markerList = [];                  // Ordered array of Markers
@@ -13910,13 +13967,13 @@ class OcclusionLayer {
         const aabb = this.aabb;
         math.collapseAABB3(aabb);
         math.expandAABB3Points3(aabb, this.positions);
-        const rtcCenter = this.rtcCenter;
-        aabb[0] += rtcCenter[0];
-        aabb[1] += rtcCenter[1];
-        aabb[2] += rtcCenter[2];
-        aabb[3] += rtcCenter[0];
-        aabb[4] += rtcCenter[1];
-        aabb[5] += rtcCenter[2];
+        const origin = this.origin;
+        aabb[0] += origin[0];
+        aabb[1] += origin[1];
+        aabb[2] += origin[2];
+        aabb[3] += origin[0];
+        aabb[4] += origin[1];
+        aabb[5] += origin[2];
     }
 
     _buildVBOs() {
@@ -14012,7 +14069,7 @@ class OcclusionLayer {
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
 
-const tempVec3a$Z = math.vec3();
+const tempVec3a$_ = math.vec3();
 
 /**
  * Manages occlusion testing. Private member of a Renderer.
@@ -14055,11 +14112,11 @@ class OcclusionTester {
      * @param marker
      */
     addMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
-            occlusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-            this._occlusionLayers[occlusionLayer.rtcCenterHash] = occlusionLayer;
+            occlusionLayer = new OcclusionLayer(this._scene, marker.origin);
+            this._occlusionLayers[occlusionLayer.originHash] = occlusionLayer;
             this._occlusionLayersListDirty = true;
         }
         occlusionLayer.addMarker(marker);
@@ -14077,19 +14134,19 @@ class OcclusionTester {
             marker.error("Marker has not been added to OcclusionTester");
             return;
         }
-        const rtcCenterHash = marker.rtcCenter.join();
-        if (rtcCenterHash !== occlusionLayer.rtcCenterHash) {
+        const originHash = marker.origin.join();
+        if (originHash !== occlusionLayer.originHash) {
             if (occlusionLayer.numMarkers === 1) {
                 occlusionLayer.destroy();
-                delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+                delete this._occlusionLayers[occlusionLayer.originHash];
                 this._occlusionLayersListDirty = true;
             } else {
                 occlusionLayer.removeMarker(marker);
             }
-            let newOcclusionLayer = this._occlusionLayers[rtcCenterHash];
+            let newOcclusionLayer = this._occlusionLayers[originHash];
             if (!newOcclusionLayer) {
-                newOcclusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-                this._occlusionLayers[rtcCenterHash] = occlusionLayer;
+                newOcclusionLayer = new OcclusionLayer(this._scene, marker.origin);
+                this._occlusionLayers[originHash] = occlusionLayer;
                 this._occlusionLayersListDirty = true;
             }
             newOcclusionLayer.addMarker(marker);
@@ -14104,14 +14161,14 @@ class OcclusionTester {
      * @param marker
      */
     removeMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
             return;
         }
         if (occlusionLayer.numMarkers === 1) {
             occlusionLayer.destroy();
-            delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+            delete this._occlusionLayers[occlusionLayer.originHash];
             this._occlusionLayersListDirty = true;
         } else {
             occlusionLayer.removeMarker(marker);
@@ -14175,9 +14232,9 @@ class OcclusionTester {
 
     _buildOcclusionLayersList() {
         let numOcclusionLayers = 0;
-        for (let rtcCenterHash in this._occlusionLayers) {
-            if (this._occlusionLayers.hasOwnProperty(rtcCenterHash)) {
-                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[rtcCenterHash];
+        for (let originHash in this._occlusionLayers) {
+            if (this._occlusionLayers.hasOwnProperty(originHash)) {
+                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[originHash];
             }
         }
         this._occlusionLayersList.length = numOcclusionLayers;
@@ -14343,9 +14400,9 @@ class OcclusionTester {
                 continue;
             }
 
-            const rtcCenter = occlusionLayer.rtcCenter;
+            const origin = occlusionLayer.origin;
 
-            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, rtcCenter));
+            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, origin));
 
             const numSectionPlanes = sectionPlanesState.sectionPlanes.length;
             if (numSectionPlanes > 0) {
@@ -14357,7 +14414,7 @@ class OcclusionTester {
                         gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$Z));
+                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$_));
                             gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                         }
                     }
@@ -16178,11 +16235,11 @@ const Renderer = function (scene, options) {
             const x = (canvasPos[0] - canvas.width / 2) / (canvas.width / 2);
             const y = -(canvasPos[1] - canvas.height / 2) / (canvas.height / 2);
 
-            const rtcCenter = pickable.rtcCenter;
+            const origin = pickable.origin;
             let pvMat;
 
-            if (rtcCenter) {
-                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, rtcCenter, tempMat4a);
+            if (origin) {
+                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
                 pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
 
             } else {
@@ -16210,8 +16267,8 @@ const Renderer = function (scene, options) {
             const dir = math.subVec3(world2, world1, tempVec4c);
             const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
 
-            if (rtcCenter) {
-                math.addVec3(worldPos, rtcCenter);
+            if (origin) {
+                math.addVec3(worldPos, origin);
             }
 
             pickResult.worldPos = worldPos;
@@ -29005,7 +29062,7 @@ function buildFragmentDraw(mesh) {
  * @author xeolabs / https://github.com/xeolabs
  */
 
-const tempVec3a$Y = math.vec3();
+const tempVec3a$Z = math.vec3();
 
 const ids$2 = new Map({});
 
@@ -29078,7 +29135,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
     const camera = scene.camera;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
     const background = meshState.background;
 
     if (frameCtx.lastProgramId !== this._program.id) {
@@ -29089,7 +29146,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         this._bindProgram(frameCtx);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
@@ -29104,7 +29161,7 @@ DrawRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$Y) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$Z) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -30256,7 +30313,7 @@ function buildFragment$5(mesh) {
 
 const ids$1 = new Map({});
 
-const tempVec3a$X = math.vec3();
+const tempVec3a$Y = math.vec3();
 
 /**
  * @private
@@ -30318,14 +30375,14 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const materialState = mode === 0 ? mesh._xrayMaterial._state : (mode === 1 ? mesh._highlightMaterial._state : mesh._selectedMaterial._state);
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
@@ -30340,7 +30397,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$X) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$Y) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -30687,7 +30744,7 @@ function buildFragment$4(mesh) {
 
 const ids = new Map({});
 
-const tempVec3a$W = math.vec3();
+const tempVec3a$X = math.vec3();
 
 /**
  * @private
@@ -30749,14 +30806,14 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     const meshState = mesh._state;
     const geometry = mesh._geometry;
     const geometryState = geometry._state;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
 
     if (meshState.clippable) {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -30770,7 +30827,7 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$W) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$X) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -31075,7 +31132,7 @@ function buildFragment$3(mesh) {
  * @author xeolabs / https://github.com/xeolabs
  */
 
-const tempVec3a$V = math.vec3();
+const tempVec3a$W = math.vec3();
 
 // No ID, because there is exactly one PickMeshRenderer per scene
 
@@ -31138,14 +31195,14 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const meshState = mesh._state;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
 
     if (meshState.clippable) {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -31159,7 +31216,7 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$V) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$W) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -31402,7 +31459,7 @@ function buildFragment$2(mesh) {
  * @author xeolabs / https://github.com/xeolabs
  */
 
-const tempVec3a$U = math.vec3();
+const tempVec3a$V = math.vec3();
 
 /**
  * @private
@@ -31464,7 +31521,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const materialState = mesh._material._state;
     const geometry = mesh._geometry;
     const geometryState = mesh._geometry._state;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
     const backfaces = materialState.backfaces;
     const frontface = materialState.frontface;
     const project = scene.camera.project;
@@ -31480,7 +31537,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
         gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
     }
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCPickViewMatrix(meshState.rtcCenterHash, rtcCenter) : frameCtx.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCPickViewMatrix(meshState.originHash, origin) : frameCtx.pickViewMatrix);
 
     if (meshState.clippable) {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -31494,7 +31551,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$U) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$V) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -31737,7 +31794,7 @@ function buildFragment$1(mesh) {
  * @author xeolabs / https://github.com/xeolabs
  */
 
-const tempVec3a$T = math.vec3();
+const tempVec3a$U = math.vec3();
 
 // No ID, because there is exactly one PickMeshRenderer per scene
 
@@ -31800,7 +31857,7 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const materialState = mesh._material._state;
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
-    const rtcCenter = mesh.rtcCenter;
+    const origin = mesh.origin;
 
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
@@ -31831,7 +31888,7 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
 
     const camera = scene.camera;
 
-    gl.uniformMatrix4fv(this._uViewMatrix, false, rtcCenter ? frameCtx.getRTCViewMatrix(meshState.rtcCenterHash, rtcCenter) : camera.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, origin ? frameCtx.getRTCViewMatrix(meshState.originHash, origin) : camera.viewMatrix);
 
     if (meshState.clippable) {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -31845,7 +31902,7 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcCenter ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$T) : sectionPlane.pos);
+                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$U) : sectionPlane.pos);
                         gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
                 }
@@ -32604,13 +32661,6 @@ const identityMat$1 = math.identityMat4();
 class Mesh extends Component {
 
     /**
-     @private
-     */
-    get type() {
-        return "Mesh";
-    }
-
-    /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
@@ -32619,8 +32669,9 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.origin] World-space origin for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
+     * @param {Number[]} [cfg.rtcCenter] Deprecated - renamed to ````origin````.
+     * @param {Number[]} [cfg.position=[0,0,0]] 3D position of this Mesh, relative to ````origin````.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
@@ -32669,7 +32720,7 @@ class Mesh extends Component {
             pickable: null,
             clippable: null,
             collidable: null,
-            occluder:  (cfg.occluder !== false),
+            occluder: (cfg.occluder !== false),
             castsShadow: null,
             receivesShadow: null,
             xrayed: false,
@@ -32685,8 +32736,8 @@ class Mesh extends Component {
             drawHash: "",
             pickHash: "",
             offset: math.vec3(),
-            rtcCenter: null,
-            rtcCenterHash: null
+            origin: null,
+            originHash: null
         });
 
         this._drawRenderer = null;
@@ -32725,9 +32776,10 @@ class Mesh extends Component {
         this._worldMatrixDirty = true;
         this._worldNormalMatrixDirty = true;
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
-            this._state.rtcCenterHash = cfg.rtcCenter.join();
+        const origin = cfg.origin || cfg.rtcCenter;
+        if (origin) {
+            this._state.origin = math.vec3(origin);
+            this._state.originHash = origin.join();
         }
 
         if (cfg.matrix) {
@@ -32787,6 +32839,13 @@ class Mesh extends Component {
         this.compile();
     }
 
+    /**
+     @private
+     */
+    get type() {
+        return "Mesh";
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Mesh members
     //------------------------------------------------------------------------------------------------------------------
@@ -32809,6 +32868,885 @@ class Mesh extends Component {
      */
     get parent() {
         return this._parentNode;
+    }
+
+    /**
+     * Defines the shape of this Mesh.
+     *
+     * Set to {@link Scene#geometry} by default.
+     *
+     * @type {Geometry}
+     */
+    get geometry() {
+        return this._geometry;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
+     *
+     * Set to {@link Scene#material} by default.
+     *
+     * @type {Material}
+     */
+    get material() {
+        return this._material;
+    }
+
+    /**
+     * Gets the Mesh's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get position() {
+        return this._position;
+    }
+
+    /**
+     * Sets the Mesh's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set position(value) {
+        this._position.set(value || [0, 0, 0]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get rotation() {
+        return this._rotation;
+    }
+
+    /**
+     * Sets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set rotation(value) {
+        this._rotation.set(value || [0, 0, 0]);
+        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
+     */
+    get quaternion() {
+        return this._quaternion;
+    }
+
+    /**
+     * Sets the Mesh's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
+     */
+    set quaternion(value) {
+        this._quaternion.set(value || [0, 0, 0, 1]);
+        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
+     */
+    get scale() {
+        return this._scale;
+    }
+
+    /**
+     * Sets the Mesh's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
+     */
+    set scale(value) {
+        this._scale.set(value || [1, 1, 1]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {Number[]}
+     */
+    get matrix() {
+        if (this._localMatrixDirty) {
+            if (!this.__localMatrix) {
+                this.__localMatrix = math.identityMat4();
+            }
+            math.composeMat4(this._position, this._quaternion, this._scale, this.__localMatrix);
+            this._localMatrixDirty = false;
+        }
+        return this.__localMatrix;
+    }
+
+    /**
+     * Sets the Mesh's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {Number[]}
+     */
+    set matrix(value) {
+        if (!this.__localMatrix) {
+            this.__localMatrix = math.identityMat4();
+        }
+        this.__localMatrix.set(value || identityMat$1);
+        math.decomposeMat4(this.__localMatrix, this._position, this._quaternion, this._scale);
+        this._localMatrixDirty = false;
+        this._setWorldMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's World matrix.
+     *
+     * @property worldMatrix
+     * @type {Number[]}
+     */
+    get worldMatrix() {
+        if (this._worldMatrixDirty) {
+            this._buildWorldMatrix();
+        }
+        return this._worldMatrix;
+    }
+
+    /**
+     * Gets the Mesh's World normal matrix.
+     *
+     * @type {Number[]}
+     */
+    get worldNormalMatrix() {
+        if (this._worldNormalMatrixDirty) {
+            this._buildWorldNormalMatrix();
+        }
+        return this._worldNormalMatrix;
+    }
+
+    /**
+     * Returns true to indicate that Mesh implements {@link Entity}.
+     *
+     * @returns {Boolean}
+     */
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Returns ````true```` if this Mesh represents a model.
+     *
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+     * may also have a corresponding {@link MetaModel}.
+     *
+     * @type {Boolean}
+     */
+    get isModel() {
+        return this._isModel;
+    }
+
+    /**
+     * Returns ````true```` if this Mesh represents an object.
+     *
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
+     * may also have a corresponding {@link MetaObject}.
+     *
+     * @type {Boolean}
+     */
+    get isObject() {
+        return this._isObject;
+    }
+
+    /**
+     * Gets the Mesh's World-space 3D axis-aligned bounding box.
+     *
+     * Represented by a six-element Float64Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Number[]}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            this._updateAABB();
+        }
+        return this._aabb;
+    }
+
+    /**
+     * Gets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    get origin() {
+        return this._state.origin;
+    }
+
+    /**
+     * Sets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    set origin(origin) {
+        if (origin) {
+            if (!this._state.origin) {
+                this._state.origin = math.vec3();
+            }
+            this._state.origin.set(origin);
+            this._state.originHash = origin.join();
+            this._setAABBDirty();
+            this.scene._aabbDirty = true;
+        } else {
+            if (this._state.origin) {
+                this._state.origin = null;
+                this._state.originHash = null;
+                this._setAABBDirty();
+                this.scene._aabbDirty = true;
+            }
+        }
+    }
+
+    /**
+     * Gets the World-space origin for this Mesh.
+     *
+     * Deprecated and replaced by {@link Mesh#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this.origin;
+    }
+
+    /**
+     * Sets the World-space origin for this Mesh.
+     *
+     * Deprecated and replaced by {@link Mesh#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        this.origin = rtcCenter;
+    }
+
+    /**
+     * The approximate number of triangles in this Mesh.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
+    }
+
+    /**
+     * Gets if this Mesh is visible.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return this._state.visible;
+    }
+
+    /**
+     * Sets if this Mesh is visible.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    set visible(visible) {
+        visible = visible !== false;
+        this._state.visible = visible;
+        if (this._isObject) {
+            this.scene._objectVisibilityUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is xrayed.
+     *
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get xrayed() {
+        return this._state.xrayed;
+    }
+
+    /**
+     * Sets if this Mesh is xrayed.
+     *
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        if (this._state.xrayed === xrayed) {
+            return;
+        }
+        this._state.xrayed = xrayed;
+        if (this._isObject) {
+            this.scene._objectXRayedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is highlighted.
+     *
+     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get highlighted() {
+        return this._state.highlighted;
+    }
+
+    /**
+     * Sets if this Mesh is highlighted.
+     *
+     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set highlighted(highlighted) {
+        highlighted = !!highlighted;
+        if (highlighted === this._state.highlighted) {
+            return;
+        }
+        this._state.highlighted = highlighted;
+        if (this._isObject) {
+            this.scene._objectHighlightedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is selected.
+     *
+     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get selected() {
+        return this._state.selected;
+    }
+
+    /**
+     * Sets if this Mesh is selected.
+     *
+     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set selected(selected) {
+        selected = !!selected;
+        if (selected === this._state.selected) {
+            return;
+        }
+        this._state.selected = selected;
+        if (this._isObject) {
+            this.scene._objectSelectedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is edge-enhanced.
+     *
+     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return this._state.edges;
+    }
+
+    /**
+     * Sets if this Mesh is edge-enhanced.
+     *
+     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+     *
+     * @type {Boolean}
+     */
+    set edges(edges) {
+        edges = !!edges;
+        if (edges === this._state.edges) {
+            return;
+        }
+        this._state.edges = edges;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is culled.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get culled() {
+        return this._state.culled;
+    }
+
+    /**
+     * Sets if this Mesh is culled.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set culled(value) {
+        this._state.culled = !!value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._state.clippable;
+    }
+
+    /**
+     * Sets if this Mesh is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    set clippable(value) {
+        value = value !== false;
+        if (this._state.clippable === value) {
+            return;
+        }
+        this._state.clippable = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._state.collidable;
+    }
+
+    /**
+     * Sets if this Mesh included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
+    set collidable(value) {
+        value = value !== false;
+        if (value === this._state.collidable) {
+            return;
+        }
+        this._state.collidable = value;
+        this._setAABBDirty();
+        this.scene._aabbDirty = true;
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Gets if this Mesh is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return this._state.pickable;
+    }
+
+    /**
+     * Sets if this Mesh is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    set pickable(value) {
+        value = value !== false;
+        if (this._state.pickable === value) {
+            return;
+        }
+        this._state.pickable = value;
+        // No need to trigger a render;
+        // state is only used when picking
+    }
+
+    /**
+     * Gets if this Mesh casts shadows.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() {
+        return this._state.castsShadow;
+    }
+
+    /**
+     * Sets if this Mesh casts shadows.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(value) {
+        value = value !== false;
+        if (value === this._state.castsShadow) {
+            return;
+        }
+        this._state.castsShadow = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh can have shadows cast upon it.
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() {
+        return this._state.receivesShadow;
+    }
+
+    /**
+     * Sets if this Mesh can have shadows cast upon it.
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(value) {
+        value = value !== false;
+        if (value === this._state.receivesShadow) {
+            return;
+        }
+        this._state.receivesShadow = value;
+        this._state.hash = value ? "/mod/rs;" : "/mod;";
+        this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
+    }
+
+    /**
+     * Gets if this Mesh can have Scalable Ambient Obscurance (SAO) applied to it.
+     *
+     * SAO is configured by {@link SAO}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return false; // TODO: Support SAO on Meshes
+    }
+
+    /**
+     * Gets the RGB colorize color for this Mesh.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    get colorize() {
+        return this._state.colorize;
+    }
+
+    /**
+     * Sets the RGB colorize color for this Mesh.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    set colorize(value) {
+        let colorize = this._state.colorize;
+        if (!colorize) {
+            colorize = this._state.colorize = new Float32Array(4);
+            colorize[3] = 1;
+        }
+        if (value) {
+            colorize[0] = value[0];
+            colorize[1] = value[1];
+            colorize[2] = value[2];
+        } else {
+            colorize[0] = 1;
+            colorize[1] = 1;
+            colorize[2] = 1;
+        }
+        const colorized = (!!value);
+        this.scene._objectColorizeUpdated(this, colorized);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the opacity factor for this Mesh.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() {
+        return this._state.colorize[3];
+    }
+
+    /**
+     * Sets the opacity factor for this Mesh.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) {
+        let colorize = this._state.colorize;
+        if (!colorize) {
+            colorize = this._state.colorize = new Float32Array(4);
+            colorize[0] = 1;
+            colorize[1] = 1;
+            colorize[2] = 1;
+        }
+        const opacityUpdated = (opacity !== null && opacity !== undefined);
+        colorize[3] = opacityUpdated ? opacity : 1.0;
+        this.scene._objectOpacityUpdated(this, opacityUpdated);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is transparent.
+     * @returns {Boolean}
+     */
+    get transparent() {
+        return this._material.alphaMode === 2 /* blend */ || this._state.colorize[3] < 1
+    }
+
+    /**
+     * Gets the Mesh's rendering order relative to other Meshes.
+     *
+     * Default value is ````0````.
+     *
+     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
+     *
+     * @type {Number}
+     */
+    get layer() {
+        return this._state.layer;
+    }
+
+    /**
+     * Sets the Mesh's rendering order relative to other Meshes.
+     *
+     * Default value is ````0````.
+     *
+     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
+     *
+     * @type {Number}
+     */
+    set layer(value) {
+        // TODO: Only accept rendering layer in range [0...MAX_layer]
+        value = value || 0;
+        value = Math.round(value);
+        if (value === this._state.layer) {
+            return;
+        }
+        this._state.layer = value;
+        this._renderer.needStateSort();
+    }
+
+    /**
+     * Gets if the Node's position is stationary.
+     *
+     * When true, will disable the effect of {@link Camera} translations for this Mesh, while still allowing it to rotate. This is useful for skyboxes.
+     *
+     * @type {Boolean}
+     */
+    get stationary() {
+        return this._state.stationary;
+    }
+
+    /**
+     * Gets the Node's billboarding behaviour.
+     *
+     * Options are:
+     * * ````"none"```` -  (default) - No billboarding.
+     * * ````"spherical"```` - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
+     * * ````"cylindrical"```` - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
+     * @type {String}
+     */
+    get billboard() {
+        return this._state.billboard;
+    }
+
+    /**
+     * Gets the Mesh's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get offset() {
+        return this._state.offset;
+    }
+
+    /**
+     * Sets the Mesh's 3D World-space offset.
+     *
+     * The offset dynamically translates the Mesh in World-space.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
+     *
+     * @type {Number[]}
+     */
+    set offset(value) {
+        this._state.offset.set(value || [0, 0, 0]);
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Returns true to indicate that Mesh implements {@link Drawable}.
+     * @final
+     * @type {Boolean}
+     */
+    get isDrawable() {
+        return true;
+    }
+
+    /**
+     * Property with final value ````true```` to indicate that xeokit should render this Mesh in sorted order, relative to other Meshes.
+     *
+     * The sort order is determined by {@link Mesh#stateSortCompare}.
+     *
+     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
+     *
+     * @type {Boolean}
+     */
+    get isStateSortable() {
+        return true;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when xrayed.
+     *
+     * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
+     *
+     * Set to {@link Scene#xrayMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get xrayMaterial() {
+        return this._xrayMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when highlighted.
+     *
+     * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
+     *
+     * Set to {@link Scene#highlightMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get highlightMaterial() {
+        return this._highlightMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when selected.
+     *
+     * Mesh is xrayed when {@link Mesh#selected} is ````true````.
+     *
+     * Set to {@link Scene#selectedMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get selectedMaterial() {
+        return this._selectedMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when edges are enhanced.
+     *
+     * Mesh is xrayed when {@link Mesh#edges} is ````true````.
+     *
+     * Set to {@link Scene#edgeMaterial} by default.
+     *
+     * @type {EdgeMaterial}
+     */
+    get edgeMaterial() {
+        return this._edgeMaterial;
     }
 
     _checkBillboard(value) {
@@ -33009,201 +33947,15 @@ class Mesh extends Component {
         aabb[4] += offset[1];
         aabb[5] += offset[2];
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            aabb[0] += rtcCenter[0];
-            aabb[1] += rtcCenter[1];
-            aabb[2] += rtcCenter[2];
-            aabb[3] += rtcCenter[0];
-            aabb[4] += rtcCenter[1];
-            aabb[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            aabb[0] += origin[0];
+            aabb[1] += origin[1];
+            aabb[2] += origin[2];
+            aabb[3] += origin[0];
+            aabb[4] += origin[1];
+            aabb[5] += origin[2];
         }
-    }
-
-    /**
-     * Defines the shape of this Mesh.
-     *
-     * Set to {@link Scene#geometry} by default.
-     *
-     * @type {Geometry}
-     */
-    get geometry() {
-        return this._geometry;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
-     *
-     * Set to {@link Scene#material} by default.
-     *
-     * @type {Material}
-     */
-    get material() {
-        return this._material;
-    }
-
-    /**
-     * Sets the Mesh's local translation.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    set position(value) {
-        this._position.set(value || [0, 0, 0]);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local translation.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get position() {
-        return this._position;
-    }
-
-    /**
-     * Sets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    set rotation(value) {
-        this._rotation.set(value || [0, 0, 0]);
-        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get rotation() {
-        return this._rotation;
-    }
-
-    /**
-     * Sets the Mesh's local rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {Number[]}
-     */
-    set quaternion(value) {
-        this._quaternion.set(value || [0, 0, 0, 1]);
-        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {Number[]}
-     */
-    get quaternion() {
-        return this._quaternion;
-    }
-
-    /**
-     * Sets the Mesh's local scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {Number[]}
-     */
-    set scale(value) {
-        this._scale.set(value || [1, 1, 1]);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {Number[]}
-     */
-    get scale() {
-        return this._scale;
-    }
-
-    /**
-     * Sets the Mesh's local modeling transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-     *
-     * @type {Number[]}
-     */
-    set matrix(value) {
-        if (!this.__localMatrix) {
-            this.__localMatrix = math.identityMat4();
-        }
-        this.__localMatrix.set(value || identityMat$1);
-        math.decomposeMat4(this.__localMatrix, this._position, this._quaternion, this._scale);
-        this._localMatrixDirty = false;
-        this._setWorldMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local modeling transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-     *
-     * @type {Number[]}
-     */
-    get matrix() {
-        if (this._localMatrixDirty) {
-            if (!this.__localMatrix) {
-                this.__localMatrix = math.identityMat4();
-            }
-            math.composeMat4(this._position, this._quaternion, this._scale, this.__localMatrix);
-            this._localMatrixDirty = false;
-        }
-        return this.__localMatrix;
-    }
-
-    /**
-     * Gets the Mesh's World matrix.
-     *
-     * @property worldMatrix
-     * @type {Number[]}
-     */
-    get worldMatrix() {
-        if (this._worldMatrixDirty) {
-            this._buildWorldMatrix();
-        }
-        return this._worldMatrix;
-    }
-
-    /**
-     * Gets the Mesh's World normal matrix.
-     *
-     * @type {Number[]}
-     */
-    get worldNormalMatrix() {
-        if (this._worldNormalMatrixDirty) {
-            this._buildWorldNormalMatrix();
-        }
-        return this._worldNormalMatrix;
     }
 
     /**
@@ -33286,6 +34038,10 @@ class Mesh extends Component {
         return this;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Drawable members
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
      * Translates the Mesh along the local X-axis by the given increment.
      *
@@ -33348,627 +34104,6 @@ class Mesh extends Component {
             this._occlusionRenderer.put();
             this._occlusionRenderer = null;
         }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Entity members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that Mesh implements {@link Entity}.
-     *
-     * @returns {Boolean}
-     */
-    get isEntity() {
-        return true;
-    }
-
-    /**
-     * Returns ````true```` if this Mesh represents a model.
-     *
-     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
-     * may also have a corresponding {@link MetaModel}.
-     *
-     * @type {Boolean}
-     */
-    get isModel() {
-        return this._isModel;
-    }
-
-    /**
-     * Returns ````true```` if this Mesh represents an object.
-     *
-     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
-     * may also have a corresponding {@link MetaObject}.
-     *
-     * @type {Boolean}
-     */
-    get isObject() {
-        return this._isObject;
-    }
-
-    /**
-     * Gets the Mesh's World-space 3D axis-aligned bounding box.
-     *
-     * Represented by a six-element Float64Array containing the min/max extents of the
-     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-     *
-     * @type {Number[]}
-     */
-    get aabb() {
-        if (this._aabbDirty) {
-            this._updateAABB();
-        }
-        return this._aabb;
-    }
-
-    /**
-     * Center of the relative-to-center (RTC) coordinate system for this Mesh.
-     *
-     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
-     *
-     * @type {Float64Array}
-     */
-    set rtcCenter(rtcCenter) {
-        if (rtcCenter) {
-            if (!this._state.rtcCenter) {
-                this._state.rtcCenter = math.vec3();
-            }
-            this._state.rtcCenter.set(rtcCenter);
-            this._state.rtcCenterHash = rtcCenter.join();
-            this._setAABBDirty();
-            this.scene._aabbDirty = true;
-        } else {
-            if (this._state.rtcCenter) {
-                this._state.rtcCenter = null;
-                this._state.rtcCenterHash = null;
-                this._setAABBDirty();
-                this.scene._aabbDirty = true;
-            }
-        }
-    }
-
-    /**
-     * 3D origin of the Mesh's {@link Geometry}'s vertex positions.
-     *
-     * When this is defined, then the positions are RTC, which means that they are relative to this position.
-     *
-     * @type {Float64Array}
-     */
-    get rtcCenter() {
-        return this._state.rtcCenter;
-    }
-
-    /**
-     * The approximate number of triangles in this Mesh.
-     *
-     * @type {Number}
-     */
-    get numTriangles() {
-        return this._numTriangles;
-    }
-
-    /**
-     * Sets if this Mesh is visible.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
-     *
-     * @type {Boolean}
-     */
-    set visible(visible) {
-        visible = visible !== false;
-        this._state.visible = visible;
-        if (this._isObject) {
-            this.scene._objectVisibilityUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is visible.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
-     *
-     * @type {Boolean}
-     */
-    get visible() {
-        return this._state.visible;
-    }
-
-    /**
-     * Sets if this Mesh is xrayed.
-     *
-     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set xrayed(xrayed) {
-        xrayed = !!xrayed;
-        if (this._state.xrayed === xrayed) {
-            return;
-        }
-        this._state.xrayed = xrayed;
-        if (this._isObject) {
-            this.scene._objectXRayedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is xrayed.
-     *
-     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get xrayed() {
-        return this._state.xrayed;
-    }
-
-    /**
-     * Sets if this Mesh is highlighted.
-     *
-     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set highlighted(highlighted) {
-        highlighted = !!highlighted;
-        if (highlighted === this._state.highlighted) {
-            return;
-        }
-        this._state.highlighted = highlighted;
-        if (this._isObject) {
-            this.scene._objectHighlightedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is highlighted.
-     *
-     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get highlighted() {
-        return this._state.highlighted;
-    }
-
-    /**
-     * Sets if this Mesh is selected.
-     *
-     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set selected(selected) {
-        selected = !!selected;
-        if (selected === this._state.selected) {
-            return;
-        }
-        this._state.selected = selected;
-        if (this._isObject) {
-            this.scene._objectSelectedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is selected.
-     *
-     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get selected() {
-        return this._state.selected;
-    }
-
-    /**
-     * Sets if this Mesh is edge-enhanced.
-     *
-     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
-     *
-     * @type {Boolean}
-     */
-    set edges(edges) {
-        edges = !!edges;
-        if (edges === this._state.edges) {
-            return;
-        }
-        this._state.edges = edges;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is edge-enhanced.
-     *
-     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
-     *
-     * @type {Boolean}
-     */
-    get edges() {
-        return this._state.edges;
-    }
-
-    /**
-     * Sets if this Mesh is culled.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    set culled(value) {
-        this._state.culled = !!value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is culled.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get culled() {
-        return this._state.culled;
-    }
-
-    /**
-     * Sets if this Mesh is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    set clippable(value) {
-        value = value !== false;
-        if (this._state.clippable === value) {
-            return;
-        }
-        this._state.clippable = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    get clippable() {
-        return this._state.clippable;
-    }
-
-    /**
-     * Sets if this Mesh included in boundary calculations.
-     *
-     * @type {Boolean}
-     */
-    set collidable(value) {
-        value = value !== false;
-        if (value === this._state.collidable) {
-            return;
-        }
-        this._state.collidable = value;
-        this._setAABBDirty();
-        this.scene._aabbDirty = true;
-
-    }
-
-    /**
-     * Gets if this Mesh included in boundary calculations.
-     *
-     * @type {Boolean}
-     */
-    get collidable() {
-        return this._state.collidable;
-    }
-
-    /**
-     * Sets if this Mesh is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    set pickable(value) {
-        value = value !== false;
-        if (this._state.pickable === value) {
-            return;
-        }
-        this._state.pickable = value;
-        // No need to trigger a render;
-        // state is only used when picking
-    }
-
-    /**
-     * Gets if this Mesh is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    get pickable() {
-        return this._state.pickable;
-    }
-
-    /**
-     * Sets if this Mesh casts shadows.
-     *
-     * @type {Boolean}
-     */
-    set castsShadow(value) {
-        value = value !== false;
-        if (value === this._state.castsShadow) {
-            return;
-        }
-        this._state.castsShadow = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh casts shadows.
-     *
-     * @type {Boolean}
-     */
-    get castsShadow() {
-        return this._state.castsShadow;
-    }
-
-    /**
-     * Sets if this Mesh can have shadows cast upon it.
-     *
-     * @type {Boolean}
-     */
-    set receivesShadow(value) {
-        value = value !== false;
-        if (value === this._state.receivesShadow) {
-            return;
-        }
-        this._state.receivesShadow = value;
-        this._state.hash = value ? "/mod/rs;" : "/mod;";
-        this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
-    }
-
-    /**
-     * Gets if this Mesh can have shadows cast upon it.
-     *
-     * @type {Boolean}
-     */
-    get receivesShadow() {
-        return this._state.receivesShadow;
-    }
-
-    /**
-     * Gets if this Mesh can have Scalable Ambient Obscurance (SAO) applied to it.
-     *
-     * SAO is configured by {@link SAO}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get saoEnabled() {
-        return false; // TODO: Support SAO on Meshes
-    }
-
-    /**
-     * Sets the RGB colorize color for this Mesh.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    set colorize(value) {
-        let colorize = this._state.colorize;
-        if (!colorize) {
-            colorize = this._state.colorize = new Float32Array(4);
-            colorize[3] = 1;
-        }
-        if (value) {
-            colorize[0] = value[0];
-            colorize[1] = value[1];
-            colorize[2] = value[2];
-        } else {
-            colorize[0] = 1;
-            colorize[1] = 1;
-            colorize[2] = 1;
-        }
-        const colorized = (!!value);
-        this.scene._objectColorizeUpdated(this, colorized);
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the RGB colorize color for this Mesh.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    get colorize() {
-        return this._state.colorize;
-    }
-
-    /**
-     * Sets the opacity factor for this Mesh.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    set opacity(opacity) {
-        let colorize = this._state.colorize;
-        if (!colorize) {
-            colorize = this._state.colorize = new Float32Array(4);
-            colorize[0] = 1;
-            colorize[1] = 1;
-            colorize[2] = 1;
-        }
-        const opacityUpdated = (opacity !== null && opacity !== undefined);
-        colorize[3] = opacityUpdated ? opacity : 1.0;
-        this.scene._objectOpacityUpdated(this, opacityUpdated);
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the opacity factor for this Mesh.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    get opacity() {
-        return this._state.colorize[3];
-    }
-
-    /**
-     * Gets if this Mesh is transparent.
-     * @returns {Boolean}
-     */
-    get transparent() {
-        return this._material.alphaMode === 2 /* blend */ || this._state.colorize[3] < 1
-    }
-
-    /**
-     * Sets the Mesh's rendering order relative to other Meshes.
-     *
-     * Default value is ````0````.
-     *
-     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
-     *
-     * @type {Number}
-     */
-    set layer(value) {
-        // TODO: Only accept rendering layer in range [0...MAX_layer]
-        value = value || 0;
-        value = Math.round(value);
-        if (value === this._state.layer) {
-            return;
-        }
-        this._state.layer = value;
-        this._renderer.needStateSort();
-    }
-
-    /**
-     * Gets the Mesh's rendering order relative to other Meshes.
-     *
-     * Default value is ````0````.
-     *
-     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
-     *
-     * @type {Number}
-     */
-    get layer() {
-        return this._state.layer;
-    }
-
-    /**
-     * Gets if the Node's position is stationary.
-     *
-     * When true, will disable the effect of {@link Camera} translations for this Mesh, while still allowing it to rotate. This is useful for skyboxes.
-     *
-     * @type {Boolean}
-     */
-    get stationary() {
-        return this._state.stationary;
-    }
-
-    /**
-     * Gets the Node's billboarding behaviour.
-     *
-     * Options are:
-     * * ````"none"```` -  (default) - No billboarding.
-     * * ````"spherical"```` - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
-     * * ````"cylindrical"```` - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
-     * @type {String}
-     */
-    get billboard() {
-        return this._state.billboard;
-    }
-
-    /**
-     * Sets the Mesh's 3D World-space offset.
-     *
-     * The offset dynamically translates the Mesh in World-space.
-     *
-     * Default value is ````[0, 0, 0]````.
-     *
-     * Provide a null or undefined value to reset to the default value.
-     *
-     * @type {Number[]}
-     */
-    set offset(value) {
-        this._state.offset.set(value || [0, 0, 0]);
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's 3D World-space offset.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get offset() {
-        return this._state.offset;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Drawable members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that Mesh implements {@link Drawable}.
-     * @final
-     * @type {Boolean}
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    /**
-     * Property with final value ````true```` to indicate that xeokit should render this Mesh in sorted order, relative to other Meshes.
-     *
-     * The sort order is determined by {@link Mesh#stateSortCompare}.
-     *
-     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
-     *
-     * @type {Boolean}
-     */
-    get isStateSortable() {
-        return true;
     }
 
     /**
@@ -34095,7 +34230,7 @@ class Mesh extends Component {
 
                     } else {
 
-                        if (this._state.rtcCenter) {
+                        if (this._state.origin) {
 
                             const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
                             const outside = (intersect === -1);
@@ -34116,58 +34251,6 @@ class Mesh extends Component {
         }
 
         return true;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when xrayed.
-     *
-     * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
-     *
-     * Set to {@link Scene#xrayMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get xrayMaterial() {
-        return this._xrayMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when highlighted.
-     *
-     * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
-     *
-     * Set to {@link Scene#highlightMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get highlightMaterial() {
-        return this._highlightMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when selected.
-     *
-     * Mesh is xrayed when {@link Mesh#selected} is ````true````.
-     *
-     * Set to {@link Scene#selectedMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get selectedMaterial() {
-        return this._selectedMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when edges are enhanced.
-     *
-     * Mesh is xrayed when {@link Mesh#edges} is ````true````.
-     *
-     * Set to {@link Scene#edgeMaterial} by default.
-     *
-     * @type {EdgeMaterial}
-     */
-    get edgeMaterial() {
-        return this._edgeMaterial;
     }
 
     // ---------------------- NORMAL RENDERING -----------------------------------
@@ -34548,8 +34631,8 @@ const pickTriangleSurface = (function () {
                     }
 
                     const normal = math.addVec3(math.addVec3(
-                        math.mulVec3Scalar(normalA, bary[0], tempVec3),
-                        math.mulVec3Scalar(normalB, bary[1], tempVec3b), tempVec3c),
+                            math.mulVec3Scalar(normalA, bary[0], tempVec3),
+                            math.mulVec3Scalar(normalB, bary[1], tempVec3b), tempVec3c),
                         math.mulVec3Scalar(normalC, bary[2], tempVec3d), tempVec3e);
 
                     pickResult.worldNormal = math.normalizeVec3(math.transformVec3(mesh.worldNormalMatrix, normal, tempVec3f));
@@ -38055,52 +38138,68 @@ class DistanceMeasurement extends Component {
         this._yAxisLabelCulled = false;
         this._zAxisLabelCulled = false;
 
-        this._originDot = new Dot(this._container, {});
+        this._color = cfg.color || this.plugin.defaultColor;
 
-        this._targetDot = new Dot(this._container, {});
+        this._originDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
+
+        this._targetDot = new Dot(this._container, {
+            fillColor: this._color,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
 
         this._lengthWire = new Wire(this._container, {
-            color: "#00BBFF",
-            thickness: 2
+            color: this._color,
+            thickness: 2,
+            zIndex: plugin.zIndex
         });
 
         this._xAxisWire = new Wire(this._container, {
             color: "red",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._yAxisWire = new Wire(this._container, {
             color: "green",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._zAxisWire = new Wire(this._container, {
             color: "blue",
-            thickness: 1
+            thickness: 1,
+            zIndex: plugin.zIndex
         });
 
         this._lengthLabel = new Label(this._container, {
-            fillColor: "#00BBFF",
+            fillColor: this._color,
             prefix: "",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._xAxisLabel = new Label(this._container, {
             fillColor: "red",
             prefix: "X",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._yAxisLabel = new Label(this._container, {
             fillColor: "green",
             prefix: "Y",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._zAxisLabel = new Label(this._container, {
             fillColor: "blue",
             prefix: "Z",
-            text: ""
+            text: "",
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._wpDirty = false;
@@ -38291,32 +38390,32 @@ class DistanceMeasurement extends Component {
 
             if (!this._xAxisLabelCulled) {
                 this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
-                this._xAxisLabel.setVisible(true);
+                this._xAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
                 this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
-                this._yAxisLabel.setVisible(true);
+                this._yAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
                 this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
-                this._zAxisLabel.setVisible(true);
+                this._zAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._zAxisLabel.setVisible(false);
             }
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);
-            this._xAxisWire.setVisible(true);
-            this._yAxisWire.setVisible(true);
-            this._zAxisWire.setVisible(true);
-            this._lengthWire.setVisible(true);
-            this._lengthLabel.setVisible(true);
+            this._xAxisWire.setVisible(this.axisVisible);
+            this._yAxisWire.setVisible(this.axisVisible);
+            this._zAxisWire.setVisible(this.axisVisible);
+            this._lengthWire.setVisible(this.wireVisible);
+            this._lengthLabel.setVisible(this.wireVisible);
 
             this._cpDirty = false;
         }
@@ -38349,7 +38448,7 @@ class DistanceMeasurement extends Component {
     get approximate() {
         return this._approximate;
     }
-
+    
     /**
      * Gets the origin {@link Marker}.
      *
@@ -38379,22 +38478,34 @@ class DistanceMeasurement extends Component {
         return this._length * scale;
     }
 
+    get color() {
+        return this._color;
+    }
+
+    set color(value) {
+        this._color = value;
+        this._originDot.setFillColor(value);
+        this._targetDot.setFillColor(value);
+        this._lengthWire.setColor(value);
+        this._lengthLabel.setFillColor(value);
+    }
+
     /**
      * Sets whether this DistanceMeasurement is visible or not.
      *
      * @type Boolean
      */
     set visible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultVisible;
         this._visible = value;
         this._originDot.setVisible(this._visible && this._originVisible);
         this._targetDot.setVisible(this._visible && this._targetVisible);
         this._lengthWire.setVisible(this._visible && this._wireVisible);
+        this._lengthLabel.setVisible(this._visible && this._wireVisible);
         var axisVisible = this._visible && this._axisVisible;
         this._xAxisWire.setVisible(axisVisible);
         this._yAxisWire.setVisible(axisVisible);
         this._zAxisWire.setVisible(axisVisible);
-        this._lengthLabel.setVisible(axisVisible);
         this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
         this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
         this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
@@ -38415,7 +38526,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set originVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultOriginVisible;
         this._originVisible = value;
         this._originDot.setVisible(this._visible && this._originVisible);
     }
@@ -38435,7 +38546,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set targetVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultTargetVisible;
         this._targetVisible = value;
         this._targetDot.setVisible(this._visible && this._targetVisible);
     }
@@ -38455,7 +38566,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set axisVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
         this._axisVisible = value;
         var axisVisible = this._visible && this._axisVisible;
         this._xAxisWire.setVisible(axisVisible);
@@ -38481,7 +38592,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set wireVisible(value) {
-        value = value !== false;
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultWireVisible;
         this._wireVisible = value;
         var wireVisible = this._visible && this._wireVisible;
         this._lengthLabel.setVisible(wireVisible);
@@ -38540,10 +38651,6 @@ class DistanceMeasurement extends Component {
     }
 }
 
-const HOVERING = 0;
-const FINDING_ORIGIN = 1;
-const FINDING_TARGET = 2;
-
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
  *
@@ -38569,11 +38676,21 @@ class DistanceMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
-        this._state = HOVERING;
+
         this._currentDistMeasurement = null;
-        this._prevDistMeasurement = null;
+        // Keep initial measurement state values to do not force values but put the default ones.
+        this._currentDistMeasurementInitState = {
+            wireVisible: null,
+            axisVisible: null,
+            targetVisible: null,
+        };
+
         this._onHoverSurface = null;
         this._onHoverOff = null;
+        this._onPickedNothing = null;
+
+        this._onInputMouseDown = null;
+        this._onInputMouseUp = null;
     }
 
     /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
@@ -38595,35 +38712,35 @@ class DistanceMeasurementsControl extends Component {
 
         const cameraControl = this.plugin.viewer.cameraControl;
 
-        let over = false;
-        let entity = null;
-        let worldPos = math.vec3();
+        let hoveredEntity = null;
+        const worldPos = math.vec3();
         const hoverCanvasPos = math.vec2();
 
         const pickSurfacePrecisionEnabled = this.plugin.viewer.scene.pickSurfacePrecisionEnabled;
 
+        this.startDot = new Dot(this.plugin._container,
+            {
+                fillColor: this.plugin.defaultColor,
+                zIndex: this.plugin.zIndex + 1
+            });
+
         this._onHoverSurface = cameraControl.on("hoverSurface", e => {
 
-            over = true;
-            entity = e.entity;
+            hoveredEntity = e.entity;
             worldPos.set(e.worldPos);
             hoverCanvasPos.set(e.canvasPos);
 
-            if (this._state === HOVERING) {
-                document.body.style.cursor = "pointer";
-                return;
-            }
+            this.plugin.viewer.scene.canvas.canvas.style.cursor = "pointer";
 
             if (this._currentDistMeasurement) {
-                switch (this._state) {
-                    case FINDING_TARGET:
-                        this._currentDistMeasurement.wireVisible = true;
-                        this._currentDistMeasurement.axisVisible = true;
-                        this._currentDistMeasurement.target.entity = e.entity;
-                        this._currentDistMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = "pointer";
-                        break;
-                }
+                this._currentDistMeasurement.wireVisible = this._currentDistMeasurementInitState.wireVisible;
+                this._currentDistMeasurement.axisVisible = this._currentDistMeasurementInitState.axisVisible;
+                this._currentDistMeasurement.targetVisible = this._currentDistMeasurementInitState.targetVisible;
+                this._currentDistMeasurement.target.entity = hoveredEntity;
+                this._currentDistMeasurement.target.worldPos = worldPos;
+            } else if (this.startDot) {
+                this.startDot.setVisible(true);
+                this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
             }
         });
 
@@ -38642,100 +38759,84 @@ class DistanceMeasurementsControl extends Component {
                 return;
             }
 
-            switch (this._state) {
+            if (this.startDot) {
+                this.startDot.destroy();
+                this.startDot = null;
+            }
 
-                case HOVERING:
-
-                    if (this._prevDistMeasurement) {
-                        this._prevDistMeasurement.originVisible = true;
-                        this._prevDistMeasurement.targetVisible = true;
-                        this._prevDistMeasurement.axisVisible = true;
-                    }
-                    if (over) {
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = this.plugin.viewer.scene.pick({
-                                canvasPos: hoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult && pickResult.worldPos) {
-                                worldPos.set(pickResult.worldPos);
-                            }
-                        }
-                        this._currentDistMeasurement = this.plugin.createMeasurement({
-                            id: math.createUUID(),
-                            origin: {
-                                entity: entity,
-                                worldPos: worldPos
-                            },
-                            target: {
-                                entity: entity,
-                                worldPos: worldPos
-                            },
-                            approximate: true
+            if (this._currentDistMeasurement) {
+                if (hoveredEntity) {
+                    if (pickSurfacePrecisionEnabled) {
+                        const pickResult = this.plugin.viewer.scene.pick({
+                            canvasPos: hoverCanvasPos,
+                            pickSurface: true,
+                            pickSurfacePrecision: true
                         });
-                        this._currentDistMeasurement.axisVisible = false;
-                        this._currentDistMeasurement.targetVisible = true;
-                        this._prevDistMeasurement = this._currentDistMeasurement;
-                        this._state = FINDING_TARGET;
-                    }
-                    break;
-
-                case FINDING_TARGET:
-
-                    if (over) {
-
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = this.plugin.viewer.scene.pick({
-                                canvasPos: hoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult && pickResult.worldPos) {
-                                this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
-                            }
-                            this._currentDistMeasurement.approximate = false;
+                        if (pickResult && pickResult.worldPos) {
+                            this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
                         }
+                        this._currentDistMeasurement.approximate = false;
+                    }
 
-                        this._currentDistMeasurement.axisVisible = true;
-                        this._currentDistMeasurement.targetVisible = true;
-                        this._currentDistMeasurement = null;
-                        this._prevDistMeasurement = null;
-
-                        this._state = HOVERING;
-
-                    } else {
-
-                        if (this._currentDistMeasurement) {
-                            this._currentDistMeasurement.destroy();
-                            this._currentDistMeasurement = null;
-                            this._prevDistMeasurement = null;
-                            this._state = HOVERING;
+                    this.fire("measurementEnd", this._currentDistMeasurement);
+                    this._currentDistMeasurement = null;
+                } else {
+                    this._currentDistMeasurement.destroy();
+                    this.fire("measurementCancel", this._currentDistMeasurement);
+                    this._currentDistMeasurement = null;
+                }
+            } else {
+                if (hoveredEntity) {
+                    if (pickSurfacePrecisionEnabled) {
+                        const pickResult = this.plugin.viewer.scene.pick({
+                            canvasPos: hoverCanvasPos,
+                            pickSurface: true,
+                            pickSurfacePrecision: true
+                        });
+                        if (pickResult && pickResult.worldPos) {
+                            worldPos.set(pickResult.worldPos);
                         }
                     }
-                    break;
+                    this._currentDistMeasurement = this.plugin.createMeasurement({
+                        id: math.createUUID(),
+                        origin: {
+                            entity: hoveredEntity,
+                            worldPos: worldPos
+                        },
+                        target: {
+                            entity: hoveredEntity,
+                            worldPos: worldPos
+                        },
+                        approximate: true
+                    });
+
+                    this._currentDistMeasurementInitState.axisVisible = this._currentDistMeasurement.axisVisible;
+                    this._currentDistMeasurementInitState.wireVisible = this._currentDistMeasurement.wireVisible;
+                    this._currentDistMeasurementInitState.targetVisible = this._currentDistMeasurement.targetVisible;
+
+                    this.fire("measurementStart", this._currentDistMeasurement);
+                }
             }
         });
 
         this._onHoverOff = cameraControl.on("hoverOff", e => {
-            over = false;
-            if (this._currentDistMeasurement) {
-                switch (this._state) {
-                    case HOVERING:
-                        break;
-                    case FINDING_ORIGIN:
-                        this._currentDistMeasurement.wireVisible = false;
-                        this._currentDistMeasurement.originVisible = false;
-                        this._currentDistMeasurement.axisVisible = false;
-                        break;
-                    case FINDING_TARGET:
-                        this._currentDistMeasurement.wireVisible = false;
-                        this._currentDistMeasurement.targetVisible = false;
-                        this._currentDistMeasurement.axisVisible = false;
-                        break;
-                }
+            if (this.startDot) {
+                this.startDot.setVisible(false);
             }
-            document.body.style.cursor = "default";
+            hoveredEntity = null;
+            if (this._currentDistMeasurement) {
+                this._currentDistMeasurement.wireVisible = false;
+                this._currentDistMeasurement.targetVisible = false;
+                this._currentDistMeasurement.axisVisible = false;
+            }
+            this.plugin.viewer.scene.canvas.canvas.style.cursor = "default";
+        });
+
+        this._onPickedNothing = cameraControl.on("pickedNothing", e => {
+            if (this._currentDistMeasurement) {
+                this._currentDistMeasurement.destroy();
+                this._currentDistMeasurement = null;
+            }
         });
 
         this._active = true;
@@ -38752,16 +38853,23 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
 
+        if (this.startDot) {
+            this.startDot.destroy();
+            this.startDot = null;
+        }
+
         this.reset();
 
-        const cameraControl = this.plugin.viewer.cameraControl;
         const input = this.plugin.viewer.scene.input;
 
         input.off(this._onInputMouseDown);
         input.off(this._onInputMouseUp);
 
+        const cameraControl = this.plugin.viewer.cameraControl;
+
         cameraControl.off(this._onHoverSurface);
         cameraControl.off(this._onHoverOff);
+        cameraControl.off(this._onPickedNothing);
 
         this._currentDistMeasurement = null;
 
@@ -38785,8 +38893,6 @@ class DistanceMeasurementsControl extends Component {
             this._currentDistMeasurement.destroy();
             this._currentDistMeasurement = null;
         }
-        this._prevDistMeasurement = null;
-        this._state = HOVERING;
     }
 
     /**
@@ -38939,6 +39045,13 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {boolean} [cfg.defaultVisible=true] The default value of the DistanceMeasurements `visible` property.
+     * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
+     * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
+     * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
+     * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
+     * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
+     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
      */
     constructor(viewer, cfg = {}) {
 
@@ -38951,6 +39064,14 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._measurements = {};
 
         this.labelMinAxisLength = cfg.labelMinAxisLength;
+
+        this.defaultVisible = cfg.defaultVisible !== false;
+        this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
+        this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
+        this.defaultWireVisible = cfg.defaultWireVisible !== false;
+        this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
+        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
+        this.zIndex = cfg.zIndex;
     }
 
     /**
@@ -39021,6 +39142,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
      * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {string} [params.color] The color of the length dot, wire and label.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
      */
     createMeasurement(params = {}) {
@@ -39046,11 +39168,13 @@ class DistanceMeasurementsPlugin extends Plugin {
             wireVisible: params.wireVisible,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
+            color: params.color
         });
         this._measurements[measurement.id] = measurement;
         measurement.on("destroyed", () => {
             delete this._measurements[measurement.id];
         });
+        this.fire("measurementCreated", measurement);
         return measurement;
     }
 
@@ -39066,6 +39190,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             return;
         }
         measurement.destroy();
+        this.fire("measurementDestroyed", measurement);
     }
 
     /**
@@ -39627,10 +39752,10 @@ class PerformanceMesh {
          *
          * When this is defined, then the positions are RTC, which means that they are relative to this position.
          *
-         * @property rtcCenter
+         * @property origin
          * @type {Float64Array}
          */
-        this.rtcCenter = null;
+        this.origin = null;
     }
 
     /**
@@ -39902,7 +40027,7 @@ const RENDER_PASSES = {
 };
 
 const tempVec4$5 = math.vec4();
-const tempVec3a$S = math.vec3();
+const tempVec3a$T = math.vec3();
 
 /**
  * @private
@@ -39932,7 +40057,7 @@ class TrianglesBatchingColorRenderer {
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -39948,7 +40073,7 @@ class TrianglesBatchingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -39966,8 +40091,8 @@ class TrianglesBatchingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$S);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$T);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -40406,7 +40531,7 @@ class TrianglesBatchingColorRenderer {
 }
 
 const tempVec4$4 = math.vec4();
-const tempVec3a$R = math.vec3();
+const tempVec3a$S = math.vec3();
 
 /**
  * @private
@@ -40436,7 +40561,7 @@ class TrianglesBatchingFlatColorRenderer {
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -40452,7 +40577,7 @@ class TrianglesBatchingFlatColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -40467,8 +40592,8 @@ class TrianglesBatchingFlatColorRenderer {
                 gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                 if (active) {
                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$R);
+                    if (origin) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$S);
                         gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                     } else {
                         gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -40897,7 +41022,7 @@ class TrianglesBatchingFlatColorRenderer {
 }
 
 const defaultColor$4 = new Float32Array([1, 1, 1]);
-const tempVec3a$Q = math.vec3();
+const tempVec3a$R = math.vec3();
 
 /**
  * @private
@@ -40925,7 +41050,7 @@ class TrianglesBatchingSilhouetteRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -40963,7 +41088,7 @@ class TrianglesBatchingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, defaultColor$4);
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
+        const viewMat = (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix;
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -40980,8 +41105,8 @@ class TrianglesBatchingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$Q);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$R);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -41218,7 +41343,7 @@ class TrianglesBatchingSilhouetteRenderer {
     }
 }
 
-const tempVec3a$P = math.vec3();
+const tempVec3a$Q = math.vec3();
 const defaultColor$3 = new Float32Array([0,0,0,1]);
 
 /**
@@ -41247,7 +41372,7 @@ class TrianglesBatchingEdgesRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -41285,7 +41410,7 @@ class TrianglesBatchingEdgesRenderer {
             gl.uniform4fv(this._uColor, defaultColor$3);
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -41300,8 +41425,8 @@ class TrianglesBatchingEdgesRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$P);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$Q);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -41539,7 +41664,7 @@ class TrianglesBatchingEdgesRenderer {
     }
 }
 
-const tempVec3a$O = math.vec3();
+const tempVec3a$P = math.vec3();
 
 /**
  * @private
@@ -41567,7 +41692,7 @@ class TrianglesBatchingEdgesColorRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -41583,7 +41708,7 @@ class TrianglesBatchingEdgesColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -41598,8 +41723,8 @@ class TrianglesBatchingEdgesColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$O);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$P);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -41839,7 +41964,7 @@ class TrianglesBatchingEdgesColorRenderer {
     }
 }
 
-const tempVec3a$N = math.vec3();
+const tempVec3a$O = math.vec3();
 
 /**
  * @private
@@ -41867,7 +41992,7 @@ class TrianglesBatchingPickMeshRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -41882,7 +42007,7 @@ class TrianglesBatchingPickMeshRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -41904,8 +42029,8 @@ class TrianglesBatchingPickMeshRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$N);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$O);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -42144,7 +42269,7 @@ class TrianglesBatchingPickMeshRenderer {
     }
 }
 
-const tempVec3a$M = math.vec3();
+const tempVec3a$N = math.vec3();
 
 /**
  * @private
@@ -42172,7 +42297,7 @@ class TrianglesBatchingPickDepthRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -42188,7 +42313,7 @@ class TrianglesBatchingPickDepthRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -42214,8 +42339,8 @@ class TrianglesBatchingPickDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$M);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$N);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -42463,7 +42588,7 @@ class TrianglesBatchingPickDepthRenderer {
     }
 }
 
-const tempVec3a$L = math.vec3();
+const tempVec3a$M = math.vec3();
 
 /**
  * @private
@@ -42491,7 +42616,7 @@ class TrianglesBatchingPickNormalsRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -42508,7 +42633,7 @@ class TrianglesBatchingPickNormalsRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
@@ -42530,8 +42655,8 @@ class TrianglesBatchingPickNormalsRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$L);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$M);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -42763,7 +42888,7 @@ class TrianglesBatchingPickNormalsRenderer {
     }
 }
 
-const tempVec3a$K = math.vec3();
+const tempVec3a$L = math.vec3();
 
 /**
  * @private
@@ -42791,7 +42916,7 @@ class TrianglesBatchingOcclusionRenderer {
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const camera = scene.camera;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -42807,7 +42932,7 @@ class TrianglesBatchingOcclusionRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -42822,8 +42947,8 @@ class TrianglesBatchingOcclusionRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$K);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$L);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -43054,7 +43179,7 @@ class TrianglesBatchingOcclusionRenderer {
     }
 }
 
-const tempVec3a$J = math.vec3();
+const tempVec3a$K = math.vec3();
 
 /**
  * @private
@@ -43082,7 +43207,7 @@ class TrianglesBatchingDepthRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -43099,7 +43224,7 @@ class TrianglesBatchingDepthRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -43113,8 +43238,8 @@ class TrianglesBatchingDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$J);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$K);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -43350,7 +43475,7 @@ class TrianglesBatchingDepthRenderer {
     }
 }
 
-const tempVec3a$I = math.vec3();
+const tempVec3a$J = math.vec3();
 
 /**
  * @private
@@ -43378,7 +43503,7 @@ class TrianglesBatchingNormalsRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -43394,7 +43519,7 @@ class TrianglesBatchingNormalsRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -43412,8 +43537,8 @@ class TrianglesBatchingNormalsRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$I);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$J);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -43661,7 +43786,7 @@ class TrianglesBatchingNormalsRenderer {
     }
 }
 
-const tempVec3a$H = math.vec3();
+const tempVec3a$I = math.vec3();
 
 /**
  * Renders BatchingLayer fragment depths to a shadow map.
@@ -43721,7 +43846,7 @@ class TrianglesBatchingShadowRenderer {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            const rtcCenter = batchingLayer._state.rtcCenter;
+            const origin = batchingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
@@ -43729,8 +43854,8 @@ class TrianglesBatchingShadowRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$H);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$I);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -43899,7 +44024,7 @@ class TrianglesBatchingShadowRenderer {
 }
 
 const tempVec4$3 = math.vec4();
-const tempVec3a$G = math.vec3();
+const tempVec3a$H = math.vec3();
 
 const TEXTURE_DECODE_FUNCS$1 = {
     "linear": "linearToLinear",
@@ -43935,7 +44060,7 @@ class TrianglesBatchingColorQualityRenderer {
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -43951,7 +44076,7 @@ class TrianglesBatchingColorQualityRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -43969,8 +44094,8 @@ class TrianglesBatchingColorQualityRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$G);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$H);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -44707,7 +44832,7 @@ class TrianglesBatchingColorQualityRenderer {
     }
 }
 
-const tempVec3a$F = math.vec3();
+const tempVec3a$G = math.vec3();
 
 /**
  * @private
@@ -44735,7 +44860,7 @@ class TrianglesBatchingPickNormalsFlatRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(batchingLayer);
@@ -44752,7 +44877,7 @@ class TrianglesBatchingPickNormalsFlatRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
@@ -44773,8 +44898,8 @@ class TrianglesBatchingPickNormalsFlatRenderer {
                 gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                 if (active) {
                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$F);
+                    if (origin) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$G);
                         gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                     } else {
                         gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -45499,7 +45624,7 @@ const tempVec4b$7 = math.vec4([0, 0, 0, 1]);
 const tempVec4c$7 = math.vec4([0, 0, 0, 1]);
 const tempOBB3$2 = math.OBB3();
 
-const tempVec3a$E = math.vec3();
+const tempVec3a$F = math.vec3();
 const tempVec3b$7 = math.vec3();
 const tempVec3c$4 = math.vec3();
 const tempVec3d$2 = math.vec3();
@@ -45519,7 +45644,7 @@ class TrianglesBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      * @param cfg.solid
      */
@@ -45579,8 +45704,8 @@ class TrianglesBatchingLayer {
             this._preCompressed = false;
         }
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -45733,14 +45858,14 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -46546,13 +46671,13 @@ class TrianglesBatchingLayer {
 
         const positions = portion.quantizedPositions;
         const indices = portion.indices;
-        const rtcCenter = state.rtcCenter;
+        const origin = state.origin;
         const offset = portion.offset;
 
-        const rtcRayOrigin = tempVec3a$E;
+        const rtcRayOrigin = tempVec3a$F;
         const rtcRayDir = tempVec3b$7;
 
-        rtcRayOrigin.set(rtcCenter ? math.subVec3(worldRayOrigin, rtcCenter, tempVec3c$4) : worldRayOrigin);  // World -> RTC
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c$4) : worldRayOrigin);  // World -> RTC
         rtcRayDir.set(worldRayDir);
 
         if (offset) {
@@ -46599,8 +46724,8 @@ class TrianglesBatchingLayer {
                     math.addVec3(closestIntersectPos, offset);
                 }
 
-                if (rtcCenter) {
-                    math.addVec3(closestIntersectPos, rtcCenter);
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
                 }
 
                 const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
@@ -46673,7 +46798,7 @@ class TrianglesBatchingLayer {
 }
 
 const tempVec4$2 = math.vec4();
-const tempVec3a$D = math.vec3();
+const tempVec3a$E = math.vec3();
 
 /**
  * @private
@@ -46704,7 +46829,7 @@ class TrianglesInstancingColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -46720,7 +46845,7 @@ class TrianglesInstancingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -46738,8 +46863,8 @@ class TrianglesInstancingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$D);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$E);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -47228,7 +47353,7 @@ class TrianglesInstancingColorRenderer {
 }
 
 const tempVec4$1 = math.vec4();
-const tempVec3a$C = math.vec3();
+const tempVec3a$D = math.vec3();
 
 /**
  * @private
@@ -47259,7 +47384,7 @@ class TrianglesInstancingFlatColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -47275,7 +47400,7 @@ class TrianglesInstancingFlatColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -47289,8 +47414,8 @@ class TrianglesInstancingFlatColorRenderer {
                 gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                 if (active) {
                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$C);
+                    if (origin) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$D);
                         gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                     } else {
                         gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -47753,7 +47878,7 @@ class TrianglesInstancingFlatColorRenderer {
     }
 }
 
-const tempVec3a$B = math.vec3();
+const tempVec3a$C = math.vec3();
 
 /**
  * @private
@@ -47782,7 +47907,7 @@ class TrianglesInstancingSilhouetteRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer.model.scene);
@@ -47820,7 +47945,7 @@ class TrianglesInstancingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -47835,8 +47960,8 @@ class TrianglesInstancingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$B);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$C);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -48106,7 +48231,7 @@ class TrianglesInstancingSilhouetteRenderer {
     }
 }
 
-const tempVec3a$A = math.vec3();
+const tempVec3a$B = math.vec3();
 const defaultColor$2 = new Float32Array([0,0,0,1]);
 
 /**
@@ -48136,7 +48261,7 @@ class TrianglesInstancingEdgesRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -48174,7 +48299,7 @@ class TrianglesInstancingEdgesRenderer {
             gl.uniform4fv(this._uColor, defaultColor$2);
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -48189,8 +48314,8 @@ class TrianglesInstancingEdgesRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$A);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$B);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -48461,7 +48586,7 @@ class TrianglesInstancingEdgesRenderer {
     }
 }
 
-const tempVec3a$z = math.vec3();
+const tempVec3a$A = math.vec3();
 
 /**
  * @private
@@ -48490,7 +48615,7 @@ class TrianglesInstancingEdgesColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -48506,7 +48631,7 @@ class TrianglesInstancingEdgesColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -48521,8 +48646,8 @@ class TrianglesInstancingEdgesColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$z);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$A);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -48798,7 +48923,7 @@ class TrianglesInstancingEdgesColorRenderer {
     }
 }
 
-const tempVec3a$y = math.vec3();
+const tempVec3a$z = math.vec3();
 
 /**
  * @private
@@ -48829,7 +48954,7 @@ class TrianglesInstancingPickMeshRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -48846,7 +48971,7 @@ class TrianglesInstancingPickMeshRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -48900,8 +49025,8 @@ class TrianglesInstancingPickMeshRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$y);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$z);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -49147,7 +49272,7 @@ class TrianglesInstancingPickMeshRenderer {
     }
 }
 
-const tempVec3a$x = math.vec3();
+const tempVec3a$y = math.vec3();
 
 /**
  * @private
@@ -49175,7 +49300,7 @@ class TrianglesInstancingPickDepthRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -49196,7 +49321,7 @@ class TrianglesInstancingPickDepthRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -49223,8 +49348,8 @@ class TrianglesInstancingPickDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$x);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$y);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -49505,7 +49630,7 @@ class TrianglesInstancingPickDepthRenderer {
     }
 }
 
-const tempVec3a$w = math.vec3();
+const tempVec3a$x = math.vec3();
 
 /**
  * @private
@@ -49534,7 +49659,7 @@ class TrianglesInstancingPickNormalsRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -49556,7 +49681,7 @@ class TrianglesInstancingPickNormalsRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
@@ -49581,8 +49706,8 @@ class TrianglesInstancingPickNormalsRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$w);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$x);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -49868,7 +49993,7 @@ class TrianglesInstancingPickNormalsRenderer {
     }
 }
 
-const tempVec3a$v = math.vec3();
+const tempVec3a$w = math.vec3();
 
 /**
  * @private
@@ -49897,7 +50022,7 @@ class TrianglesInstancingOcclusionRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -49913,7 +50038,7 @@ class TrianglesInstancingOcclusionRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -49928,8 +50053,8 @@ class TrianglesInstancingOcclusionRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$v);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$w);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -50197,7 +50322,7 @@ class TrianglesInstancingOcclusionRenderer {
     }
 }
 
-const tempVec3a$u = math.vec3();
+const tempVec3a$v = math.vec3();
 
 /**
  * @private
@@ -50226,7 +50351,7 @@ class TrianglesInstancingDepthRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -50243,7 +50368,7 @@ class TrianglesInstancingDepthRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -50257,8 +50382,8 @@ class TrianglesInstancingDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$u);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$v);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -50538,7 +50663,7 @@ class TrianglesInstancingDepthRenderer {
     }
 }
 
-const tempVec3a$t = math.vec3();
+const tempVec3a$u = math.vec3();
 
 /**
  * @private
@@ -50567,7 +50692,7 @@ class TrianglesInstancingNormalsRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -50583,7 +50708,7 @@ class TrianglesInstancingNormalsRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -50601,8 +50726,8 @@ class TrianglesInstancingNormalsRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$t);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$u);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -50892,7 +51017,7 @@ class TrianglesInstancingNormalsRenderer {
     }
 }
 
-const tempVec3a$s = math.vec3();
+const tempVec3a$t = math.vec3();
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
@@ -50970,7 +51095,7 @@ class TrianglesInstancingShadowRenderer {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            const rtcCenter = instancingLayer._state.rtcCenter;
+            const origin = instancingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
@@ -50978,8 +51103,8 @@ class TrianglesInstancingShadowRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$s);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$t);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -51172,7 +51297,7 @@ class TrianglesInstancingShadowRenderer {
 }
 
 const tempVec4 = math.vec4();
-const tempVec3a$r = math.vec3();
+const tempVec3a$s = math.vec3();
 
 const TEXTURE_DECODE_FUNCS = {
     "linear": "linearToLinear",
@@ -51209,7 +51334,7 @@ class TrianglesInstancingColorQualityRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -51225,7 +51350,7 @@ class TrianglesInstancingColorQualityRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -51243,8 +51368,8 @@ class TrianglesInstancingColorQualityRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$r);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$s);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -52030,7 +52155,7 @@ class TrianglesInstancingColorQualityRenderer {
     }
 }
 
-const tempVec3a$q = math.vec3();
+const tempVec3a$r = math.vec3();
 
 /**
  * @private
@@ -52059,7 +52184,7 @@ class TrianglesInstancingPickNormalsFlatRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -52081,7 +52206,7 @@ class TrianglesInstancingPickNormalsFlatRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
@@ -52104,8 +52229,8 @@ class TrianglesInstancingPickNormalsFlatRenderer {
                 gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                 if (active) {
                     const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$q);
+                    if (origin) {
+                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$r);
                         gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                     } else {
                         gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -52639,7 +52764,7 @@ const tempVec4b$6 = math.vec4([0, 0, 0, 1]);
 const tempVec4c$6 = math.vec4([0, 0, 0, 1]);
 const tempVec3fa$2 = new Float32Array(3);
 
-const tempVec3a$p = math.vec3();
+const tempVec3a$q = math.vec3();
 const tempVec3b$6 = math.vec3();
 const tempVec3c$3 = math.vec3();
 const tempVec3d$1 = math.vec3();
@@ -52661,7 +52786,7 @@ class TrianglesInstancingLayer {
      * @param cfg.indices Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.edgeThreshold
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @params cfg.solid
      */
     constructor(model, cfg) {
@@ -52686,7 +52811,7 @@ class TrianglesInstancingLayer {
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
-            rtcCenter: null
+            origin: null
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
@@ -52790,8 +52915,8 @@ class TrianglesInstancingLayer {
 
         this._portions = [];
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         this._finalized = false;
@@ -52926,14 +53051,14 @@ class TrianglesInstancingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -53602,13 +53727,13 @@ class TrianglesInstancingLayer {
 
         const quantizedPositions = state.quantizedPositions;
         const indices = state.indices;
-        const rtcCenter = state.rtcCenter;
+        const origin = state.origin;
         const offset = portion.offset;
 
-        const rtcRayOrigin = tempVec3a$p;
+        const rtcRayOrigin = tempVec3a$q;
         const rtcRayDir = tempVec3b$6;
 
-        rtcRayOrigin.set(rtcCenter ? math.subVec3(worldRayOrigin, rtcCenter, tempVec3c$3) : worldRayOrigin);  // World -> RTC
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c$3) : worldRayOrigin);  // World -> RTC
         rtcRayDir.set(worldRayDir);
 
         if (offset) {
@@ -53659,8 +53784,8 @@ class TrianglesInstancingLayer {
                     math.addVec3(closestIntersectPos, offset);
                 }
 
-                if (rtcCenter) {
-                    math.addVec3(closestIntersectPos, rtcCenter);
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
                 }
 
                 const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
@@ -53755,7 +53880,7 @@ class TrianglesInstancingLayer {
     }
 }
 
-const tempVec3a$o = math.vec3();
+const tempVec3a$p = math.vec3();
 
 /**
  * @private
@@ -53783,7 +53908,7 @@ class LinesBatchingColorRenderer {
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -53799,7 +53924,7 @@ class LinesBatchingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         gl.lineWidth(scene.linesMaterial.lineWidth);
@@ -53816,8 +53941,8 @@ class LinesBatchingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$o);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$p);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -54045,7 +54170,7 @@ class LinesBatchingColorRenderer {
 }
 
 const defaultColor$1 = new Float32Array([1, 1, 1]);
-const tempVec3a$n = math.vec3();
+const tempVec3a$o = math.vec3();
 
 /**
  * @private
@@ -54073,7 +54198,7 @@ class LinesBatchingSilhouetteRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
-        const rtcCenter = batchingLayer._state.rtcCenter;
+        const origin = batchingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -54111,7 +54236,7 @@ class LinesBatchingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, defaultColor$1);
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
+        const viewMat = (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix;
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -54130,8 +54255,8 @@ class LinesBatchingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$n);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$o);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -54477,7 +54602,7 @@ class LinesBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      */
     constructor(model, cfg) {
@@ -54501,7 +54626,7 @@ class LinesBatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
-            rtcCenter: null
+            origin: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -54523,8 +54648,8 @@ class LinesBatchingLayer {
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -54660,14 +54785,14 @@ class LinesBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -55183,7 +55308,7 @@ class LinesBatchingLayer {
     }
 }
 
-const tempVec3a$m = math.vec3();
+const tempVec3a$n = math.vec3();
 
 /**
  * @private
@@ -55212,7 +55337,7 @@ class LinesInstancingColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -55228,7 +55353,7 @@ class LinesInstancingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         gl.lineWidth(scene.linesMaterial.lineWidth);
@@ -55245,8 +55370,8 @@ class LinesInstancingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$m);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$n);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -55541,7 +55666,7 @@ class LinesInstancingColorRenderer {
     }
 }
 
-const tempVec3a$l = math.vec3();
+const tempVec3a$m = math.vec3();
 
 /**
  * @private
@@ -55570,7 +55695,7 @@ class LinesInstancingSilhouetteRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate(instancingLayer.model.scene);
@@ -55608,7 +55733,7 @@ class LinesInstancingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         gl.lineWidth(scene.linesMaterial.lineWidth);
@@ -55625,8 +55750,8 @@ class LinesInstancingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$l);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$m);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -55978,7 +56103,7 @@ class LinesInstancingLayer {
      * @param cfg.layerIndex
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.indices Flat int indices array.
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      */
     constructor(model, cfg) {
 
@@ -56004,7 +56129,7 @@ class LinesInstancingLayer {
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
-            rtcCenter: null
+            origin: null
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
@@ -56066,8 +56191,8 @@ class LinesInstancingLayer {
 
         this._portions = [];
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         this._finalized = false;
@@ -56157,14 +56282,14 @@ class LinesInstancingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -56643,7 +56768,7 @@ class LinesInstancingLayer {
     }
 }
 
-const tempVec3a$k = math.vec3();
+const tempVec3a$l = math.vec3();
 
 /**
  * @private
@@ -56671,7 +56796,7 @@ class PointsBatchingColorRenderer {
         const model = pointsBatchingLayer.model;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial;
 
         if (!this._program) {
@@ -56688,7 +56813,7 @@ class PointsBatchingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -56703,8 +56828,8 @@ class PointsBatchingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$k);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$l);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -57001,7 +57126,7 @@ class PointsBatchingColorRenderer {
 }
 
 const defaultColor = new Float32Array([1, 1, 1]);
-const tempVec3a$j = math.vec3();
+const tempVec3a$k = math.vec3();
 
 /**
  * @private
@@ -57029,7 +57154,7 @@ class PointsBatchingSilhouetteRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -57068,7 +57193,7 @@ class PointsBatchingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, defaultColor);
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
+        const viewMat = (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix;
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -57085,8 +57210,8 @@ class PointsBatchingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$j);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$k);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -57341,7 +57466,7 @@ class PointsBatchingSilhouetteRenderer {
     }
 }
 
-const tempVec3a$i = math.vec3();
+const tempVec3a$j = math.vec3();
 
 /**
  * @private
@@ -57369,7 +57494,7 @@ class PointsBatchingPickMeshRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -57385,7 +57510,7 @@ class PointsBatchingPickMeshRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -57407,8 +57532,8 @@ class PointsBatchingPickMeshRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$i);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$j);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -57666,7 +57791,7 @@ class PointsBatchingPickMeshRenderer {
     }
 }
 
-const tempVec3a$h = math.vec3();
+const tempVec3a$i = math.vec3();
 
 /**
  * @private
@@ -57694,7 +57819,7 @@ class PointsBatchingPickDepthRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -57711,7 +57836,7 @@ class PointsBatchingPickDepthRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -57737,8 +57862,8 @@ class PointsBatchingPickDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$h);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$i);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -58003,7 +58128,7 @@ class PointsBatchingPickDepthRenderer {
     }
 }
 
-const tempVec3a$g = math.vec3();
+const tempVec3a$h = math.vec3();
 
 /**
  * @private
@@ -58031,7 +58156,7 @@ class PointsBatchingOcclusionRenderer {
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
         const camera = scene.camera;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -58048,7 +58173,7 @@ class PointsBatchingOcclusionRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -58063,8 +58188,8 @@ class PointsBatchingOcclusionRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$g);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$h);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -58449,7 +58574,7 @@ class PointsBatchingBuffer {
     }
 }
 
-const tempVec3a$f = math.vec4();
+const tempVec3a$g = math.vec4();
 const tempVec3b$5 = math.vec4();
 const tempVec4a$3 = math.vec4([0, 0, 0, 1]);
 const tempVec4b$3 = math.vec4([0, 0, 0, 1]);
@@ -58467,7 +58592,7 @@ class PointsBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      */
     constructor(model, cfg) {
@@ -58496,7 +58621,7 @@ class PointsBatchingLayer {
             flagsBuf: null,
             flags2Buf: null,
             positionsDecodeMatrix: math.mat4(),
-            rtcCenter: null
+            origin: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -58517,8 +58642,8 @@ class PointsBatchingLayer {
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -58586,7 +58711,7 @@ class PointsBatchingLayer {
 
             const bounds = geometryCompressionUtils.getPositionsBounds(positions);
 
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, tempVec3a$f);
+            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, tempVec3a$g);
             const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, tempVec3b$5);
 
             worldAABB[0] = min[0];
@@ -58654,14 +58779,14 @@ class PointsBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -59213,7 +59338,7 @@ class PointsBatchingLayer {
     }
 }
 
-const tempVec3a$e = math.vec3();
+const tempVec3a$f = math.vec3();
 
 /**
  * @private
@@ -59242,7 +59367,7 @@ class PointsInstancingColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -59259,7 +59384,7 @@ class PointsInstancingColorRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
@@ -59281,8 +59406,8 @@ class PointsInstancingColorRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$e);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$f);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -59603,7 +59728,7 @@ class PointsInstancingColorRenderer {
     }
 }
 
-const tempVec3a$d = math.vec3();
+const tempVec3a$e = math.vec3();
 
 /**
  * @private
@@ -59632,7 +59757,7 @@ class PointsInstancingSilhouetteRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -59671,7 +59796,7 @@ class PointsInstancingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -59686,8 +59811,8 @@ class PointsInstancingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$d);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$e);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -59978,7 +60103,7 @@ class PointsInstancingSilhouetteRenderer {
     }
 }
 
-const tempVec3a$c = math.vec3();
+const tempVec3a$d = math.vec3();
 
 /**
  * @private
@@ -60009,7 +60134,7 @@ class PointsInstancingPickMeshRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -60027,7 +60152,7 @@ class PointsInstancingPickMeshRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -60083,8 +60208,8 @@ class PointsInstancingPickMeshRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$c);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$d);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -60348,7 +60473,7 @@ class PointsInstancingPickMeshRenderer {
     }
 }
 
-const tempVec3a$b = math.vec3();
+const tempVec3a$c = math.vec3();
 
 /**
  * @private
@@ -60376,7 +60501,7 @@ class PointsInstancingPickDepthRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -60398,7 +60523,7 @@ class PointsInstancingPickDepthRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -60425,8 +60550,8 @@ class PointsInstancingPickDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$b);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$c);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -60728,7 +60853,7 @@ class PointsInstancingPickDepthRenderer {
     }
 }
 
-const tempVec3a$a = math.vec3();
+const tempVec3a$b = math.vec3();
 
 /**
  * @private
@@ -60757,7 +60882,7 @@ class PointsInstancingOcclusionRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -60774,7 +60899,7 @@ class PointsInstancingOcclusionRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -60789,8 +60914,8 @@ class PointsInstancingOcclusionRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$a);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$b);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -61092,7 +61217,7 @@ class PointsInstancingOcclusionRenderer {
     }
 }
 
-const tempVec3a$9 = math.vec3();
+const tempVec3a$a = math.vec3();
 
 /**
  * @private
@@ -61121,7 +61246,7 @@ class PointsInstancingDepthRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -61139,7 +61264,7 @@ class PointsInstancingDepthRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -61153,8 +61278,8 @@ class PointsInstancingDepthRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$9);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$a);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -61452,7 +61577,7 @@ class PointsInstancingDepthRenderer {
     }
 }
 
-const tempVec3a$8 = math.vec3();
+const tempVec3a$9 = math.vec3();
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
@@ -61531,7 +61656,7 @@ class PointsInstancingShadowRenderer {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            const rtcCenter = instancingLayer._state.rtcCenter;
+            const origin = instancingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
@@ -61539,8 +61664,8 @@ class PointsInstancingShadowRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a$8);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a$9);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -61893,7 +62018,7 @@ class PointsInstancingLayer {
      * @param cfg
      * @param cfg.layerIndex
      * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      */
     constructor(model, cfg) {
 
@@ -61919,7 +62044,7 @@ class PointsInstancingLayer {
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
-            rtcCenter: null
+            origin: null
         };
 
         const preCompressedPositions = (!!cfg.positionsDecodeMatrix);
@@ -62000,8 +62125,8 @@ class PointsInstancingLayer {
 
         this._portions = [];
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         this._finalized = false;
@@ -62084,14 +62209,14 @@ class PointsInstancingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -62617,6 +62742,7 @@ class PointsInstancingLayer {
 
 const instancedArraysSupported = WEBGL_INFO$1.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
+const tempVec3a$8 = math.vec3();
 const tempMat4$1 = math.mat4();
 
 const defaultScale = math.vec3([1, 1, 1]);
@@ -62630,9 +62756,9 @@ const defaultQuaternion = math.identityQuaternion();
  * # Examples
  *
  * * [PerformanceModel using geometry batching](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
- * * [PerformanceModel using geometry batching and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter)
+ * * [PerformanceModel using geometry batching and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin)
  * * [PerformanceModel using geometry instancing](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)
- * * [PerformanceModel using geometry instancing and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter)
+ * * [PerformanceModel using geometry instancing and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin)
  *
  * # Overview
  *
@@ -63203,7 +63329,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## RTC Coordinates with Geometry Instancing
  *
- * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````rtcCenter````.
+ * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````origin````.
  *
  * For simplicity, our example's meshes all instance the same geometry. Therefore, our example model has only one RTC center.
  *
@@ -63211,14 +63337,14 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin)]
  *
  * ````javascript
- * const rtcCenter = [100000000, 0, 100000000];
+ * const origin = [100000000, 0, 100000000];
  *
  * performanceModel.createGeometry({
  *     id: "box",
- *     rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+ *     origin: origin, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63298,7 +63424,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## RTC Coordinates with Geometry Batching
  *
- * To use RTC with ````PerformanceModel```` geometry batching, we specify an RTC center (````rtcCenter````) for each mesh. For performance, we try to have as many meshes share the same value for ````rtcCenter```` as possible. Each mesh's ````positions````, ````position```` and ````rotation```` properties are assumed to be relative to ````rtcCenter````.
+ * To use RTC with ````PerformanceModel```` geometry batching, we specify an RTC center (````origin````) for each mesh. For performance, we try to have as many meshes share the same value for ````origin```` as possible. Each mesh's ````positions````, ````position```` and ````rotation```` properties are assumed to be relative to ````origin````.
  *
  * For simplicity, the meshes in our example all share the same RTC center.
  *
@@ -63306,14 +63432,14 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin)]
  *
  * ````javascript
- * const rtcCenter = [100000000, 0, 100000000];
+ * const origin = [100000000, 0, 100000000];
  *
  * performanceModel.createMesh({
  *     id: "leg1",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63331,7 +63457,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg2",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63349,7 +63475,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg3",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63367,7 +63493,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg4",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63385,7 +63511,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "top",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -63413,6 +63539,7 @@ class PerformanceModel extends Component {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this PerformanceModel represents a model, in which case the PerformanceModel will be registered by {@link PerformanceModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
+     * @param {Number[]} [cfg.origin=[0,0,0]] World-space 3D origin.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -63451,7 +63578,7 @@ class PerformanceModel extends Component {
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
 
-        this._lastRTCCenter = null;
+        this._lastOrigin = null;
         this._lastDecodeMatrix = null;
         this._lastNormals = null;
 
@@ -63554,6 +63681,7 @@ class PerformanceModel extends Component {
 
         // Build static matrix
 
+        this._origin = new Float64Array(cfg.origin || [0, 0, 0]);
         this._position = new Float32Array(cfg.position || [0, 0, 0]);
         this._rotation = new Float32Array(cfg.rotation || [0, 0, 0]);
         this._quaternion = new Float32Array(cfg.quaternion || [0, 0, 0, 1]);
@@ -63601,6 +63729,20 @@ class PerformanceModel extends Component {
      */
     get isPerformanceModel() {
         return true;
+    }
+
+    /**
+     * Gets the 3D World-space origin for this PerformanceModel.
+     *
+     * Each geometry or mesh origin, if supplied, is relative to this origin.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Float64Array}
+     * @abstract
+     */
+    get origin() {
+        return this._origin;
     }
 
     /**
@@ -63698,19 +63840,6 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * Called by private renderers in ./lib, returns the picking view matrix with which to
-     * ray-pick on this PerformanceModel.
-     *
-     * @private
-     */
-    getPickViewMatrix(pickViewMatrix) {
-        if (!this._viewMatrix) {
-            return pickViewMatrix;
-        }
-        return this._viewMatrix;
-    }
-
-    /**
      * Called by private renderers in ./lib, returns the view normal matrix with which to render this PerformanceModel.
      *
      * @private
@@ -63726,6 +63855,543 @@ class PerformanceModel extends Component {
             this._viewMatrixDirty = false;
         }
         return this._viewNormalMatrix;
+    }
+
+    /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get backfaces() {
+        return this._backfaces;
+    }
+
+    /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
+     *
+     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
+     * the Viewer will:
+     *
+     *  * hide backfaces on watertight meshes,
+     *  * show backfaces on open meshes, and
+     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
+     *
+     * @type {Boolean}
+     */
+    set backfaces(backfaces) {
+        backfaces = !!backfaces;
+        this._backfaces = backfaces;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the list of {@link Entity}s within this PerformanceModel.
+     *
+     * @returns {Entity[]}
+     */
+    get entityList() {
+        return this._nodeList;
+    }
+
+    /**
+     * Returns true to indicate that PerformanceModel is an {@link Entity}.
+     * @type {Boolean}
+     */
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Returns ````true```` if this PerformanceModel represents a model.
+     *
+     * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
+     * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
+     *
+     * @type {Boolean}
+     */
+    get isModel() {
+        return this._isModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // PerformanceModel members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns ````false```` to indicate that PerformanceModel never represents an object.
+     *
+     * @type {Boolean}
+     */
+    get isObject() {
+        return false;
+    }
+
+    /**
+     * Gets the PerformanceModel's World-space 3D axis-aligned bounding box.
+     *
+     * Represented by a six-element Float64Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Number[]}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            this._rebuildAABB();
+        }
+        return this._aabb;
+    }
+
+    /**
+     * The approximate number of triangle primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The approximate number of line primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numLines() {
+        return this._numLines;
+    }
+
+    /**
+     * The approximate number of point primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numPoints() {
+        return this._numPoints;
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are visible.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return (this.numVisibleLayerPortions > 0);
+    }
+
+    /**
+     * Sets if this PerformanceModel is visible.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+     **
+     * @type {Boolean}
+     */
+    set visible(visible) {
+        visible = visible !== false;
+        this._visible = visible;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].visible = visible;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are xrayed.
+     *
+     * @type {Boolean}
+     */
+    get xrayed() {
+        return (this.numXRayedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are xrayed.
+     *
+     * @type {Boolean}
+     */
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        this._xrayed = xrayed;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].xrayed = xrayed;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    get highlighted() {
+        return (this.numHighlightedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    set highlighted(highlighted) {
+        highlighted = !!highlighted;
+        this._highlighted = highlighted;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].highlighted = highlighted;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are selected.
+     *
+     * @type {Boolean}
+     */
+    get selected() {
+        return (this.numSelectedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are selected.
+     *
+     * @type {Boolean}
+     */
+    set selected(selected) {
+        selected = !!selected;
+        this._selected = selected;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].selected = selected;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return (this.numEdgesLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    set edges(edges) {
+        edges = !!edges;
+        this._edges = edges;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].edges = edges;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this PerformanceModel is culled from view.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    get culled() {
+        return this._culled;
+    }
+
+    /**
+     * Sets if this PerformanceModel is culled from view.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    set culled(culled) {
+        culled = !!culled;
+        this._culled = culled;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].culled = culled;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if {@link Entity}s in this PerformanceModel are clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._clippable;
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    set clippable(clippable) {
+        clippable = clippable !== false;
+        this._clippable = clippable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].clippable = clippable;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this PerformanceModel is collidable.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._collidable;
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are collidable.
+     *
+     * @type {Boolean}
+     */
+    set collidable(collidable) {
+        collidable = collidable !== false;
+        this._collidable = collidable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].collidable = collidable;
+        }
+    }
+
+    /**
+     * Gets if this PerformanceModel is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return (this.numPickableLayerPortions > 0);
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    set pickable(pickable) {
+        pickable = pickable !== false;
+        this._pickable = pickable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].pickable = pickable;
+        }
+    }
+
+    /**
+     * Gets the RGB colorize color for this PerformanceModel.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    get colorize() {
+        return this._colorize;
+    }
+
+    /**
+     * Sets the RGB colorize color for this PerformanceModel.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    set colorize(colorize) {
+        this._colorize = colorize;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].colorize = colorize;
+        }
+    }
+
+    /**
+     * Gets this PerformanceModel's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() {
+        return this._opacity;
+    }
+
+    /**
+     * Sets the opacity factor for this PerformanceModel.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) {
+        this._opacity = opacity;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].opacity = opacity;
+        }
+    }
+
+    /**
+     * Gets if this PerformanceModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() {
+        return this._castsShadow;
+    }
+
+    /**
+     * Sets if this PerformanceModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(castsShadow) {
+        castsShadow = (castsShadow !== false);
+        if (castsShadow !== this._castsShadow) {
+            this._castsShadow = castsShadow;
+            this.glRedraw();
+        }
+    }
+
+    /**
+     * Sets if this PerformanceModel can have shadow cast upon it.
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() {
+        return this._receivesShadow;
+    }
+
+    /**
+     * Sets if this PerformanceModel can have shadow cast upon it.
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(receivesShadow) {
+        receivesShadow = (receivesShadow !== false);
+        if (receivesShadow !== this._receivesShadow) {
+            this._receivesShadow = receivesShadow;
+            this.glRedraw();
+        }
+    }
+
+    /**
+     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel.
+     *
+     * SAO is configured by the Scene's {@link SAO} component.
+     *
+     *  Only works when {@link SAO#enabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get saoEnabled() {
+        return this._saoEnabled;
+    }
+
+    /**
+     * Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.
+     *
+     * Only works when {@link Scene#pbrEnabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled;
+    }
+
+    /**
+     * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
+     *
+     * @type {Boolean}
+     */
+    get isDrawable() {
+        return true;
+    }
+
+    /** @private */
+    get isStateSortable() {
+        return false
+    }
+
+    /**
+     * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#xrayMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get xrayMaterial() {
+        return this.scene.xrayMaterial;
+    }
+
+    /**
+     * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#highlightMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get highlightMaterial() {
+        return this.scene.highlightMaterial;
+    }
+
+    /**
+     * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#selectedMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get selectedMaterial() {
+        return this.scene.selectedMaterial;
+    }
+
+    /**
+     * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#edgeMaterial}.
+     *
+     * @type {EdgeMaterial}
+     */
+    get edgeMaterial() {
+        return this.scene.edgeMaterial;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Drawable members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Called by private renderers in ./lib, returns the picking view matrix with which to
+     * ray-pick on this PerformanceModel.
+     *
+     * @private
+     */
+    getPickViewMatrix(pickViewMatrix) {
+        if (!this._viewMatrix) {
+            return pickViewMatrix;
+        }
+        return this._viewMatrix;
     }
 
     /**
@@ -63749,7 +64415,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -63771,9 +64437,11 @@ class PerformanceModel extends Component {
             this.error("Config missing: primitive");
             return;
         }
+        const origin = (cfg.origin || cfg.rtcCenter) ? math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a$8) : null;
         switch (primitive) {
             case "triangles":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: true
                 }, cfg));
@@ -63781,6 +64449,7 @@ class PerformanceModel extends Component {
                 break;
             case "solid":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: true
                 }, cfg));
@@ -63788,6 +64457,7 @@ class PerformanceModel extends Component {
                 break;
             case "surface":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: false
                 }, cfg));
@@ -63795,12 +64465,14 @@ class PerformanceModel extends Component {
                 break;
             case "lines":
                 instancingLayer = new LinesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0
                 }, cfg));
                 this._numLines += (cfg.indices ? Math.round(cfg.indices.length / 2) : 0);
                 break;
             case "points":
                 instancingLayer = new PointsInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0
                 }, cfg));
                 this._numPoints += (cfg.positions ? Math.round(cfg.positions.length / 3) : 0);
@@ -63828,14 +64500,14 @@ class PerformanceModel extends Component {
      * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
      * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
      *
-     * If you accompany the arrays with an  ````rtcCenter````, then ````createMesh()```` will assume
-     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````rtcCenter```` being the origin of their
+     * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
+     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the origin of their
      * RTC coordinate system.
      *
-     * When providing either ````positionsDecodeMatrix```` or ````rtcCenter````, ````createMesh()```` will start a new
+     * When providing either ````positionsDecodeMatrix```` or ````origin````, ````createMesh()```` will start a new
      * batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
      * minimum number of batches, it's best for performance to create your shared meshes in runs that have the same value
-     * for ````positionsDecodeMatrix```` and ````rtcCenter````.
+     * for ````positionsDecodeMatrix```` and ````origin````.
      *
      * Note that ````positions````, ````normals```` and ````indices```` are all required together.
      *
@@ -63848,7 +64520,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
      * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
@@ -63943,7 +64615,7 @@ class PerformanceModel extends Component {
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
 
-            mesh.rtcCenter = instancingLayer.rtcCenter;
+            mesh.origin = instancingLayer.origin;
 
         } else { // Batching
 
@@ -63971,14 +64643,16 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            if (cfg.rtcCenter) {
-                if (!this._lastRTCCenter) {
+            const origin = (cfg.origin || cfg.rtcCenter) ? math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a$8) : null;
+
+            if (origin) {
+                if (!this._lastOrigin) {
                     needNewBatchingLayers = true;
-                    this._lastRTCCenter = math.vec3(cfg.rtcCenter);
+                    this._lastOrigin = math.vec3(origin);
                 } else {
-                    if (!math.compareVec3(this._lastRTCCenter, cfg.rtcCenter)) {
+                    if (!math.compareVec3(this._lastOrigin, origin)) {
                         needNewBatchingLayers = true;
-                        this._lastRTCCenter.set(cfg.rtcCenter);
+                        this._lastOrigin.set(origin);
                     }
                 }
             }
@@ -64055,7 +64729,7 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize,
                             solid: (primitive === "solid"),
                             autoNormals: (!normalsProvided)
@@ -64106,7 +64780,7 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
@@ -64145,7 +64819,7 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
@@ -64173,7 +64847,7 @@ class PerformanceModel extends Component {
 
             this.numGeometries++;
 
-            mesh.rtcCenter = cfg.rtcCenter;
+            mesh.origin = origin;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
@@ -64337,100 +65011,6 @@ class PerformanceModel extends Component {
         this.scene._aabbDirty = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // PerformanceModel members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Sets if backfaces are rendered for this PerformanceModel.
-     *
-     * Default is ````false````.
-     *
-     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
-     *
-     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
-     * the Viewer will:
-     *
-     *  * hide backfaces on watertight meshes,
-     *  * show backfaces on open meshes, and
-     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
-     *
-     * @type {Boolean}
-     */
-    set backfaces(backfaces) {
-        backfaces = !!backfaces;
-        this._backfaces = backfaces;
-        this.glRedraw();
-    }
-
-    /**
-     * Sets if backfaces are rendered for this PerformanceModel.
-     *
-     * Default is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get backfaces() {
-        return this._backfaces;
-    }
-
-    /**
-     * Gets the list of {@link Entity}s within this PerformanceModel.
-     *
-     * @returns {Entity[]}
-     */
-    get entityList() {
-        return this._nodeList;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Entity members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that PerformanceModel is an {@link Entity}.
-     * @type {Boolean}
-     */
-    get isEntity() {
-        return true;
-    }
-
-    /**
-     * Returns ````true```` if this PerformanceModel represents a model.
-     *
-     * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
-     * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
-     *
-     * @type {Boolean}
-     */
-    get isModel() {
-        return this._isModel;
-    }
-
-    /**
-     * Returns ````false```` to indicate that PerformanceModel never represents an object.
-     *
-     * @type {Boolean}
-     */
-    get isObject() {
-        return false;
-    }
-
-    /**
-     * Gets the PerformanceModel's World-space 3D axis-aligned bounding box.
-     *
-     * Represented by a six-element Float64Array containing the min/max extents of the
-     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-     *
-     * @type {Number[]}
-     */
-    get aabb() {
-        if (this._aabbDirty) {
-            this._rebuildAABB();
-        }
-        return this._aabb;
-    }
-
     _rebuildAABB() {
         math.collapseAABB3(this._aabb);
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
@@ -64438,392 +65018,6 @@ class PerformanceModel extends Component {
             math.expandAABB3(this._aabb, node.aabb);
         }
         this._aabbDirty = false;
-    }
-
-    /**
-     * The approximate number of triangle primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numTriangles() {
-        return this._numTriangles;
-    }
-
-    /**
-     * The approximate number of line primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numLines() {
-        return this._numLines;
-    }
-
-    /**
-     * The approximate number of point primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numPoints() {
-        return this._numPoints;
-    }
-
-    /**
-     * Sets if this PerformanceModel is visible.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
-     **
-     * @type {Boolean}
-     */
-    set visible(visible) {
-        visible = visible !== false;
-        this._visible = visible;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].visible = visible;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are visible.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get visible() {
-        return (this.numVisibleLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are xrayed.
-     *
-     * @type {Boolean}
-     */
-    set xrayed(xrayed) {
-        xrayed = !!xrayed;
-        this._xrayed = xrayed;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].xrayed = xrayed;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are xrayed.
-     *
-     * @type {Boolean}
-     */
-    get xrayed() {
-        return (this.numXRayedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are highlighted.
-     *
-     * @type {Boolean}
-     */
-    set highlighted(highlighted) {
-        highlighted = !!highlighted;
-        this._highlighted = highlighted;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].highlighted = highlighted;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are highlighted.
-     *
-     * @type {Boolean}
-     */
-    get highlighted() {
-        return (this.numHighlightedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are selected.
-     *
-     * @type {Boolean}
-     */
-    set selected(selected) {
-        selected = !!selected;
-        this._selected = selected;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].selected = selected;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are selected.
-     *
-     * @type {Boolean}
-     */
-    get selected() {
-        return (this.numSelectedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    set edges(edges) {
-        edges = !!edges;
-        this._edges = edges;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].edges = edges;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    get edges() {
-        return (this.numEdgesLayerPortions > 0);
-    }
-
-    /**
-     * Sets if this PerformanceModel is culled from view.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
-     *
-     * @type {Boolean}
-     */
-    set culled(culled) {
-        culled = !!culled;
-        this._culled = culled;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].culled = culled;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this PerformanceModel is culled from view.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
-     *
-     * @type {Boolean}
-     */
-    get culled() {
-        return this._culled;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    set clippable(clippable) {
-        clippable = clippable !== false;
-        this._clippable = clippable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].clippable = clippable;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if {@link Entity}s in this PerformanceModel are clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    get clippable() {
-        return this._clippable;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are collidable.
-     *
-     * @type {Boolean}
-     */
-    set collidable(collidable) {
-        collidable = collidable !== false;
-        this._collidable = collidable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].collidable = collidable;
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel is collidable.
-     *
-     * @type {Boolean}
-     */
-    get collidable() {
-        return this._collidable;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    set pickable(pickable) {
-        pickable = pickable !== false;
-        this._pickable = pickable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].pickable = pickable;
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    get pickable() {
-        return (this.numPickableLayerPortions > 0);
-    }
-
-    /**
-     * Sets the RGB colorize color for this PerformanceModel.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    set colorize(colorize) {
-        this._colorize = colorize;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].colorize = colorize;
-        }
-    }
-
-    /**
-     * Gets the RGB colorize color for this PerformanceModel.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    get colorize() {
-        return this._colorize;
-    }
-
-    /**
-     * Sets the opacity factor for this PerformanceModel.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    set opacity(opacity) {
-        this._opacity = opacity;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].opacity = opacity;
-        }
-    }
-
-    /**
-     * Gets this PerformanceModel's opacity factor.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    get opacity() {
-        return this._opacity;
-    }
-
-    /**
-     * Sets if this PerformanceModel casts a shadow.
-     *
-     * @type {Boolean}
-     */
-    set castsShadow(castsShadow) {
-        castsShadow = (castsShadow !== false);
-        if (castsShadow !== this._castsShadow) {
-            this._castsShadow = castsShadow;
-            this.glRedraw();
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel casts a shadow.
-     *
-     * @type {Boolean}
-     */
-    get castsShadow() {
-        return this._castsShadow;
-    }
-
-    /**
-     * Sets if this PerformanceModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    set receivesShadow(receivesShadow) {
-        receivesShadow = (receivesShadow !== false);
-        if (receivesShadow !== this._receivesShadow) {
-            this._receivesShadow = receivesShadow;
-            this.glRedraw();
-        }
-    }
-
-    /**
-     * Sets if this PerformanceModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    get receivesShadow() {
-        return this._receivesShadow;
-    }
-
-    /**
-     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel.
-     *
-     * SAO is configured by the Scene's {@link SAO} component.
-     *
-     *  Only works when {@link SAO#enabled} is also true.
-     *
-     * @type {Boolean}
-     */
-    get saoEnabled() {
-        return this._saoEnabled;
-    }
-
-    /**
-     * Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.
-     *
-     * Only works when {@link Scene#pbrEnabled} is also true.
-     *
-     * @type {Boolean}
-     */
-    get pbrEnabled() {
-        return this._pbrEnabled;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Drawable members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
-     *
-     * @type {Boolean}
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    /** @private */
-    get isStateSortable() {
-        return false
     }
 
     /** @private */
@@ -64965,50 +65159,6 @@ class PerformanceModel extends Component {
                 }
             }
         }
-    }
-
-    /**
-     * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#xrayMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get xrayMaterial() {
-        return this.scene.xrayMaterial;
-    }
-
-    /**
-     * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#highlightMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get highlightMaterial() {
-        return this.scene.highlightMaterial;
-    }
-
-    /**
-     * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#selectedMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get selectedMaterial() {
-        return this.scene.selectedMaterial;
-    }
-
-    /**
-     * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#edgeMaterial}.
-     *
-     * @type {EdgeMaterial}
-     */
-    get edgeMaterial() {
-        return this.scene.edgeMaterial;
     }
 
     // -------------- RENDERING ---------------------------------------------------------------------------------------
@@ -65372,7 +65522,8 @@ class Node extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Node.
+     * @param {Number[]} [cfg.origin] World-space origin for this Node.
+     * @param {Number[]} [cfg.rtcCenter] Deprecated - renamed to ````origin````.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -65440,7 +65591,7 @@ class Node extends Component {
             this.scene._registerObject(this);
         }
 
-        this.rtcCenter = cfg.rtcCenter;
+        this.origin = cfg.origin;
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -65535,33 +65686,57 @@ class Node extends Component {
     }
 
     /**
-     * Sets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     * Sets the World-space origin for this Node.
      *
      * @type {Float64Array}
      */
-    set rtcCenter(rtcCenter) {
-        if (rtcCenter) {
-            if (!this._rtcCenter) {
-                this._rtcCenter = math.vec3();
+    set origin(origin) {
+        if (origin) {
+            if (!this._origin) {
+                this._origin = math.vec3();
             }
-            this._rtcCenter.set(rtcCenter);
+            this._origin.set(origin);
         } else {
-            if (this._rtcCenter) {
-                this._rtcCenter = null;
+            if (this._origin) {
+                this._origin = null;
             }
         }
         for (let i = 0, len = this._children.length; i < len; i++) {
-            this._children[i].rtcCenter = rtcCenter;
+            this._children[i].origin = origin;
         }
     }
 
     /**
-     *  Gets the center of the relative-to-center (RTC) coordinate system for this Node and all child Nodes and {@link Mesh}s.
+     *  Gets the World-space origin for this Node.
      *
      * @type {Float64Array}
      */
+    get origin() {
+        return this._origin;
+    }
+
+    /**
+     * Sets the World-space origin for this Node.
+     *
+     * Deprecated and replaced by {@link Node#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        this.origin = rtcCenter;
+    }
+
+    /**
+     * Gets the World-space origin for this Node.
+     *
+     * Deprecated and replaced by {@link Node#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
     get rtcCenter() {
-        return this._rtcCenter;
+        return this.origin;
     }
 
     /**
@@ -70882,6 +71057,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @params {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @params {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
+     * @param {Number[]} [params.origin=[0,0,0]] The World-space origin of the model's coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
      * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -72709,9 +72885,9 @@ function createMeshes(modelNode, state) {
         }
         geometryCfg.indices = indices;
 
-        const rtcCenter = tempVec3a$7;
+        const origin = tempVec3a$7;
 
-        worldToRTCPositions(geometry.positions, geometry.positions, rtcCenter);
+        worldToRTCPositions(geometry.positions, geometry.positions, origin);
 
         var readableGeometry = new ReadableGeometry(modelNode, geometryCfg);
 
@@ -72735,7 +72911,7 @@ function createMeshes(modelNode, state) {
 
         var mesh = new Mesh(modelNode, {
             id: modelNode.id + "#" + object.id,
-            rtcCenter: (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0) ? rtcCenter : null,
+            origin: (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0) ? origin : null,
             isObject: true,
             geometry: readableGeometry,
             material: material,
@@ -73111,7 +73287,7 @@ class Control {
 
         this._visible = false;
         this._pos = math.vec3(); // Full-precision position of the center of the Control
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
 
         this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
@@ -73170,9 +73346,9 @@ class Control {
 
         this._pos.set(xyz);
 
-        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
+        worldToRTCPos(this._pos, this._origin, this._rtcPos);
 
-        this._rootNode.rtcCenter = this._rtcCenter;
+        this._rootNode.origin = this._origin;
         this._rootNode.position = this._rtcPos;
     }
 
@@ -75702,9 +75878,9 @@ function addMesh(modelNode, positions, normals, colors, material, options) {
         math.faceToVertexNormals(positions, normals, options);
     }
 
-    const rtcCenter = tempVec3a$6;
+    const origin = tempVec3a$6;
 
-    worldToRTCPositions(positions, positions, rtcCenter);
+    worldToRTCPositions(positions, positions, origin);
 
     const geometry = new ReadableGeometry(modelNode, {
         primitive: "triangles",
@@ -75715,7 +75891,7 @@ function addMesh(modelNode, positions, normals, colors, material, options) {
     });
 
     const mesh = new Mesh(modelNode, {
-        rtcCenter: (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0) ? rtcCenter : null,
+        origin: (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0) ? origin : null,
         geometry: geometry,
         material: material,
         edges: options.edges
@@ -87840,7 +88016,7 @@ function load$3(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createGeometry({
                             id: geometryId,
-                            rtcCenter: tileCenter,
+                            origin: tileCenter,
                             primitive: "triangles",
                             positions: primitivePositions,
                             normals: primitiveNormals,
@@ -87866,7 +88042,7 @@ function load$3(viewer, options, inflatedData, performanceModel) {
 
                     performanceModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
-                        rtcCenter: tileCenter,
+                        origin: tileCenter,
                         primitive: "triangles",
                         positions: primitivePositions,
                         normals: primitiveNormals,
@@ -88227,7 +88403,7 @@ function load$2(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createGeometry({
                             id: geometryId,
-                            rtcCenter: tileCenter,
+                            origin: tileCenter,
                             primitive: primitiveName,
                             positions: geometryPositions,
                             normals: geometryNormals,
@@ -88294,7 +88470,7 @@ function load$2(viewer, options, inflatedData, performanceModel) {
 
                     performanceModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
-                        rtcCenter: tileCenter,
+                        origin: tileCenter,
                         primitive: primitiveName,
                         positions: geometryPositions,
                         normals: geometryNormals,
@@ -88718,7 +88894,7 @@ function load$1(viewer, options, inflatedData, performanceModel) {
 
                             performanceModel.createGeometry({
                                 id: geometryId,
-                                rtcCenter: tileCenter,
+                                origin: tileCenter,
                                 primitive: primitiveName,
                                 positions: geometryPositions,
                                 normals: geometryNormals,
@@ -88796,7 +88972,7 @@ function load$1(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
-                            rtcCenter: tileCenter,
+                            origin: tileCenter,
                             primitive: primitiveName,
                             positions: geometryPositions,
                             normals: geometryNormals,
@@ -89174,7 +89350,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                             performanceModel.createGeometry({
                                 id: geometryId,
-                                rtcCenter: tileCenter,
+                                origin: tileCenter,
                                 primitive: primitiveName,
                                 positions: geometryPositions,
                                 normals: geometryNormals,
@@ -89252,7 +89428,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
-                            rtcCenter: tileCenter,
+                            origin: tileCenter,
                             primitive: primitiveName,
                             positions: geometryPositions,
                             normals: geometryNormals,
@@ -89700,17 +89876,6 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
-     *
-     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
-     *
-     * @type {Object}
-     */
-    set dataSource(value) {
-        this._dataSource = value || new XKTDefaultDataSource();
-    }
-
-    /**
      * Gets the custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
      * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
@@ -89722,14 +89887,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
-     * Default value is {@link IFCObjectDefaults}.
+     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
      *
-     * @type {{String: Object}}
+     * @type {Object}
      */
-    set objectDefaults(value) {
-        this._objectDefaults = value || IFCObjectDefaults;
+    set dataSource(value) {
+        this._dataSource = value || new XKTDefaultDataSource();
     }
 
     /**
@@ -89744,17 +89909,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
+     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     * Default value is {@link IFCObjectDefaults}.
      *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
+     * @type {{String: Object}}
      */
-    set includeTypes(value) {
-        this._includeTypes = value;
+    set objectDefaults(value) {
+        this._objectDefaults = value || IFCObjectDefaults;
     }
 
     /**
@@ -89772,17 +89934,17 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
      *
      * @type {String[]}
      */
-    set excludeTypes(value) {
-        this._excludeTypes = value;
+    set includeTypes(value) {
+        this._includeTypes = value;
     }
 
     /**
@@ -89799,6 +89961,33 @@ class XKTLoaderPlugin extends Plugin {
         return this._excludeTypes;
     }
 
+    /**
+     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    set excludeTypes(value) {
+        this._excludeTypes = value;
+    }
+
+    /**
+     * Gets whether we load objects that don't have IFC types.
+     *
+     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
+     * that don't have IFC types.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get excludeUnclassifiedObjects() {
+        return this._excludeUnclassifiedObjects;
+    }
 
     /**
      * Sets whether we load objects that don't have IFC types.
@@ -89815,17 +90004,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether we load objects that don't have IFC types.
-     *
-     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
-     * that don't have IFC types.
+     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
      *
      * Default value is ````false````.
      *
      * @type {Boolean}
      */
-    get excludeUnclassifiedObjects() {
-        return this._excludeUnclassifiedObjects;
+    get globalizeObjectIds() {
+        return this._globalizeObjectIds;
     }
 
     /**
@@ -89850,17 +90036,6 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
-     *
-     * Default value is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get globalizeObjectIds() {
-        return this._globalizeObjectIds;
-    }
-
-    /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin's {@link Viewer}.
      *
      * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
@@ -89879,9 +90054,10 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.origin=[0,0,0]] The World-space origin of the model's coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model's position, relative to the model's origin.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
@@ -89902,7 +90078,8 @@ class XKTLoaderPlugin extends Plugin {
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
-            maxGeometryBatchSize: this._maxGeometryBatchSize
+            maxGeometryBatchSize: this._maxGeometryBatchSize,
+            origin: params.origin
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated
@@ -96910,7 +97087,7 @@ class ImagePlane extends Component {
         this._src = null;
         this._image = null;
         this._pos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;
@@ -97106,8 +97283,8 @@ class ImagePlane extends Component {
      */
     set position(value) {
         this._pos.set(value || [0, 0, 0]);
-        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
-        this._node.rtcCenter = this._rtcCenter;
+        worldToRTCPos(this._pos, this._origin, this._rtcPos);
+        this._node.origin = this._origin;
         this._node.position = this._rtcPos;
     }
 
@@ -98291,7 +98468,7 @@ class SpriteMarker extends Marker {
         this._src = null;
         this._image = null;
         this._pos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;
@@ -100307,7 +100484,7 @@ class MousePanRotateDollyHandler {
             }
 
             e.preventDefault();
-        });
+        }, {passive: true});
     }
 
     reset() {
