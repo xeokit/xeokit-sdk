@@ -89,7 +89,7 @@ class DistanceMeasurementsControl extends Component {
                 this._currentDistMeasurement.targetVisible = this._currentDistMeasurementInitState.targetVisible;
                 this._currentDistMeasurement.target.entity = hoveredEntity;
                 this._currentDistMeasurement.target.worldPos = worldPos;
-            } else {
+            } else if (this.startDot) {
                 this.startDot.setVisible(true);
                 this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
             }
