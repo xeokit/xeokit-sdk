@@ -258,9 +258,9 @@ function addMesh(modelNode, positions, normals, colors, material, options) {
         math.faceToVertexNormals(positions, normals, options);
     }
 
-    const rtcCenter = tempVec3a;
+    const origin = tempVec3a;
 
-    worldToRTCPositions(positions, positions, rtcCenter);
+    worldToRTCPositions(positions, positions, origin);
 
     const geometry = new ReadableGeometry(modelNode, {
         primitive: "triangles",
@@ -271,7 +271,7 @@ function addMesh(modelNode, positions, normals, colors, material, options) {
     });
 
     const mesh = new Mesh(modelNode, {
-        rtcCenter: (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0) ? rtcCenter : null,
+        origin: (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0) ? origin : null,
         geometry: geometry,
         material: material,
         edges: options.edges

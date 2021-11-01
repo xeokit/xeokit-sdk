@@ -1,6 +1,6 @@
 {
-  "name": "@tuxmart/xeokit-sdk",
-  "version": "2.0.7",
+  "name": "@xeokit/xeokit-sdk",
+  "version": "2.0.8",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "/dist/xeokit-sdk.min.es.js",
   "scripts": {

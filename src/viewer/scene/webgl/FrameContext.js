@@ -221,12 +221,12 @@ class FrameContext {
     /**
      * Get View matrix for the given RTC center.
      */
-    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+    getRTCViewMatrix(originHash, origin) {
+        let rtcViewMat = this._rtcViewMats[originHash];
         if (!rtcViewMat) {
             rtcViewMat = this._getNewMat();
-            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
-            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
+            createRTCViewMat(this._scene.camera.viewMatrix, origin, rtcViewMat);
+            this._rtcViewMats[originHash] = rtcViewMat;
         }
         return rtcViewMat;
     }
@@ -234,13 +234,13 @@ class FrameContext {
     /**
      * Get picking View RTC matrix for the given RTC center.
      */
-    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
+    getRTCPickViewMatrix(originHash, origin) {
+        let rtcPickViewMat = this._rtcPickViewMats[originHash];
         if (!rtcPickViewMat) {
             rtcPickViewMat = this._getNewMat();
             const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
-            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
-            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
+            createRTCViewMat(pickViewMat, origin, rtcPickViewMat);
+            this._rtcPickViewMats[originHash] = rtcPickViewMat;
         }
         return rtcPickViewMat;
     }

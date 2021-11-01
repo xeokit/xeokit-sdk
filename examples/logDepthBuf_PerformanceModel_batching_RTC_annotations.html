@@ -357,8 +357,8 @@
 
     for (let x = -OFFSET; x < OFFSET; x += 2500.0) {
         for (let z = -OFFSET; z < OFFSET; z += 2500.0) {
-            const rtcCenter = [x, 0, z];
-            buildTable(performanceModel, rtcCenter, SIZE);
+            const origin = [x, 0, z];
+            buildTable(performanceModel, origin, SIZE);
         }
     }
 
@@ -368,16 +368,16 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Creates a simple table-shaped model with the given PerformanceModel,
-    // without reusing geometry, and centered at the given RTC center
+    // without reusing geometry, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter, size = 1) {
+    function buildTable(performanceModel, origin, size = 1) {
 
         let meshId = math.createUUID();
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+            origin: origin, // This mesh's positions and transforms are relative to the origin
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -408,7 +408,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -438,7 +438,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -468,7 +468,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -497,7 +497,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,

@@ -62,7 +62,7 @@ class TrianglesBatchingShadowRenderer {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            const rtcCenter = batchingLayer._state.rtcCenter;
+            const origin = batchingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
@@ -70,8 +70,8 @@ class TrianglesBatchingShadowRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

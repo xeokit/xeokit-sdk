@@ -3,12 +3,12 @@ import {ArrayBuf} from "../ArrayBuf.js";
 
 class OcclusionLayer {
 
-    constructor(scene, rtcCenter) {
+    constructor(scene, origin) {
 
         this.scene = scene;
         this.aabb = math.AABB3();
-        this.rtcCenter = math.vec3(rtcCenter);
-        this.rtcCenterHash = this.rtcCenter.join();
+        this.origin = math.vec3(origin);
+        this.originHash = this.origin.join();
         this.numMarkers = 0;
         this.markers = {};
         this.markerList = [];                  // Ordered array of Markers
@@ -111,13 +111,13 @@ class OcclusionLayer {
         const aabb = this.aabb;
         math.collapseAABB3(aabb);
         math.expandAABB3Points3(aabb, this.positions);
-        const rtcCenter = this.rtcCenter;
-        aabb[0] += rtcCenter[0];
-        aabb[1] += rtcCenter[1];
-        aabb[2] += rtcCenter[2];
-        aabb[3] += rtcCenter[0];
-        aabb[4] += rtcCenter[1];
-        aabb[5] += rtcCenter[2];
+        const origin = this.origin;
+        aabb[0] += origin[0];
+        aabb[1] += origin[1];
+        aabb[2] += origin[2];
+        aabb[3] += origin[0];
+        aabb[4] += origin[1];
+        aabb[5] += origin[2];
     }
 
     _buildVBOs() {

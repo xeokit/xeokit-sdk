@@ -33,7 +33,7 @@ class PointsBatchingSilhouetteRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -72,7 +72,7 @@ class PointsBatchingSilhouetteRenderer {
             gl.uniform4fv(this._uColor, defaultColor);
         }
 
-        const viewMat = (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix;
+        const viewMat = (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix;
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMat);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -89,8 +89,8 @@ class PointsBatchingSilhouetteRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

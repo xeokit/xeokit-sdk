@@ -131,7 +131,7 @@ class Marker extends Component {
         this._entity = null;
         this._visible = null;
         this._worldPos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._viewPos = math.vec3();
         this._canvasPos = math.vec2();
@@ -270,7 +270,7 @@ class Marker extends Component {
      */
     set worldPos(worldPos) {
         this._worldPos.set(worldPos || [0, 0, 0]);
-        worldToRTCPos(this._worldPos, this._rtcCenter, this._rtcPos);
+        worldToRTCPos(this._worldPos, this._origin, this._rtcPos);
         if (this._occludable) {
             this._renderer.markerWorldPosUpdated(this);
         }
@@ -294,8 +294,8 @@ class Marker extends Component {
      *
      * @type {Number[]}
      */
-    get rtcCenter() {
-        return this._rtcCenter;
+    get origin() {
+        return this._origin;
     }
 
     /**

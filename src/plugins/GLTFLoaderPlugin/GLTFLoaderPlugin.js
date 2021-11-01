@@ -268,6 +268,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @params {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @params {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
+     * @param {Number[]} [params.origin=[0,0,0]] The World-space origin of the model's coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
      * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.

@@ -31,7 +31,7 @@ class PointsBatchingPickMeshRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -47,7 +47,7 @@ class PointsBatchingPickMeshRenderer {
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -69,8 +69,8 @@ class PointsBatchingPickMeshRenderer {
                     gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (rtcCenter) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

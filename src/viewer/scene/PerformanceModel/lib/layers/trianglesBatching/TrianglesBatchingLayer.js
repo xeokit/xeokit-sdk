@@ -37,7 +37,7 @@ class TrianglesBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      * @param cfg.solid
      */
@@ -97,8 +97,8 @@ class TrianglesBatchingLayer {
             this._preCompressed = false;
         }
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -251,14 +251,14 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -1064,13 +1064,13 @@ class TrianglesBatchingLayer {
 
         const positions = portion.quantizedPositions;
         const indices = portion.indices;
-        const rtcCenter = state.rtcCenter;
+        const origin = state.origin;
         const offset = portion.offset;
 
         const rtcRayOrigin = tempVec3a;
         const rtcRayDir = tempVec3b;
 
-        rtcRayOrigin.set(rtcCenter ? math.subVec3(worldRayOrigin, rtcCenter, tempVec3c) : worldRayOrigin);  // World -> RTC
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
         rtcRayDir.set(worldRayDir);
 
         if (offset) {
@@ -1117,8 +1117,8 @@ class TrianglesBatchingLayer {
                     math.addVec3(closestIntersectPos, offset);
                 }
 
-                if (rtcCenter) {
-                    math.addVec3(closestIntersectPos, rtcCenter);
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
                 }
 
                 const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));

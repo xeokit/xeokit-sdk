@@ -178,13 +178,6 @@ const identityMat = math.identityMat4();
 class Mesh extends Component {
 
     /**
-     @private
-     */
-    get type() {
-        return "Mesh";
-    }
-
-    /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
@@ -193,8 +186,9 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.origin] World-space origin for this Mesh. When this is given, then ````matrix````, ````position```` and ````geometry```` are all assumed to be relative to this center.
+     * @param {Number[]} [cfg.rtcCenter] Deprecated - renamed to ````origin````.
+     * @param {Number[]} [cfg.position=[0,0,0]] 3D position of this Mesh, relative to ````origin````.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
@@ -243,7 +237,7 @@ class Mesh extends Component {
             pickable: null,
             clippable: null,
             collidable: null,
-            occluder:  (cfg.occluder !== false),
+            occluder: (cfg.occluder !== false),
             castsShadow: null,
             receivesShadow: null,
             xrayed: false,
@@ -259,8 +253,8 @@ class Mesh extends Component {
             drawHash: "",
             pickHash: "",
             offset: math.vec3(),
-            rtcCenter: null,
-            rtcCenterHash: null
+            origin: null,
+            originHash: null
         });
 
         this._drawRenderer = null;
@@ -299,9 +293,10 @@ class Mesh extends Component {
         this._worldMatrixDirty = true;
         this._worldNormalMatrixDirty = true;
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
-            this._state.rtcCenterHash = cfg.rtcCenter.join();
+        const origin = cfg.origin || cfg.rtcCenter;
+        if (origin) {
+            this._state.origin = math.vec3(origin);
+            this._state.originHash = origin.join();
         }
 
         if (cfg.matrix) {
@@ -362,6 +357,13 @@ class Mesh extends Component {
         this.compile();
     }
 
+    /**
+     @private
+     */
+    get type() {
+        return "Mesh";
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Mesh members
     //------------------------------------------------------------------------------------------------------------------
@@ -384,6 +386,885 @@ class Mesh extends Component {
      */
     get parent() {
         return this._parentNode;
+    }
+
+    /**
+     * Defines the shape of this Mesh.
+     *
+     * Set to {@link Scene#geometry} by default.
+     *
+     * @type {Geometry}
+     */
+    get geometry() {
+        return this._geometry;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
+     *
+     * Set to {@link Scene#material} by default.
+     *
+     * @type {Material}
+     */
+    get material() {
+        return this._material;
+    }
+
+    /**
+     * Gets the Mesh's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get position() {
+        return this._position;
+    }
+
+    /**
+     * Sets the Mesh's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set position(value) {
+        this._position.set(value || [0, 0, 0]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get rotation() {
+        return this._rotation;
+    }
+
+    /**
+     * Sets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set rotation(value) {
+        this._rotation.set(value || [0, 0, 0]);
+        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
+     */
+    get quaternion() {
+        return this._quaternion;
+    }
+
+    /**
+     * Sets the Mesh's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
+     */
+    set quaternion(value) {
+        this._quaternion.set(value || [0, 0, 0, 1]);
+        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
+     */
+    get scale() {
+        return this._scale;
+    }
+
+    /**
+     * Sets the Mesh's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
+     */
+    set scale(value) {
+        this._scale.set(value || [1, 1, 1]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {Number[]}
+     */
+    get matrix() {
+        if (this._localMatrixDirty) {
+            if (!this.__localMatrix) {
+                this.__localMatrix = math.identityMat4();
+            }
+            math.composeMat4(this._position, this._quaternion, this._scale, this.__localMatrix);
+            this._localMatrixDirty = false;
+        }
+        return this.__localMatrix;
+    }
+
+    /**
+     * Sets the Mesh's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {Number[]}
+     */
+    set matrix(value) {
+        if (!this.__localMatrix) {
+            this.__localMatrix = math.identityMat4();
+        }
+        this.__localMatrix.set(value || identityMat);
+        math.decomposeMat4(this.__localMatrix, this._position, this._quaternion, this._scale);
+        this._localMatrixDirty = false;
+        this._setWorldMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the Mesh's World matrix.
+     *
+     * @property worldMatrix
+     * @type {Number[]}
+     */
+    get worldMatrix() {
+        if (this._worldMatrixDirty) {
+            this._buildWorldMatrix();
+        }
+        return this._worldMatrix;
+    }
+
+    /**
+     * Gets the Mesh's World normal matrix.
+     *
+     * @type {Number[]}
+     */
+    get worldNormalMatrix() {
+        if (this._worldNormalMatrixDirty) {
+            this._buildWorldNormalMatrix();
+        }
+        return this._worldNormalMatrix;
+    }
+
+    /**
+     * Returns true to indicate that Mesh implements {@link Entity}.
+     *
+     * @returns {Boolean}
+     */
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Returns ````true```` if this Mesh represents a model.
+     *
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+     * may also have a corresponding {@link MetaModel}.
+     *
+     * @type {Boolean}
+     */
+    get isModel() {
+        return this._isModel;
+    }
+
+    /**
+     * Returns ````true```` if this Mesh represents an object.
+     *
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
+     * may also have a corresponding {@link MetaObject}.
+     *
+     * @type {Boolean}
+     */
+    get isObject() {
+        return this._isObject;
+    }
+
+    /**
+     * Gets the Mesh's World-space 3D axis-aligned bounding box.
+     *
+     * Represented by a six-element Float64Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Number[]}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            this._updateAABB();
+        }
+        return this._aabb;
+    }
+
+    /**
+     * Gets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    get origin() {
+        return this._state.origin;
+    }
+
+    /**
+     * Sets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
+     *
+     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+     *
+     * @type {Float64Array}
+     */
+    set origin(origin) {
+        if (origin) {
+            if (!this._state.origin) {
+                this._state.origin = math.vec3();
+            }
+            this._state.origin.set(origin);
+            this._state.originHash = origin.join();
+            this._setAABBDirty();
+            this.scene._aabbDirty = true;
+        } else {
+            if (this._state.origin) {
+                this._state.origin = null;
+                this._state.originHash = null;
+                this._setAABBDirty();
+                this.scene._aabbDirty = true;
+            }
+        }
+    }
+
+    /**
+     * Gets the World-space origin for this Mesh.
+     *
+     * Deprecated and replaced by {@link Mesh#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    get rtcCenter() {
+        return this.origin;
+    }
+
+    /**
+     * Sets the World-space origin for this Mesh.
+     *
+     * Deprecated and replaced by {@link Mesh#origin}.
+     *
+     * @deprecated
+     * @type {Float64Array}
+     */
+    set rtcCenter(rtcCenter) {
+        this.origin = rtcCenter;
+    }
+
+    /**
+     * The approximate number of triangles in this Mesh.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
+    }
+
+    /**
+     * Gets if this Mesh is visible.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return this._state.visible;
+    }
+
+    /**
+     * Sets if this Mesh is visible.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    set visible(visible) {
+        visible = visible !== false;
+        this._state.visible = visible;
+        if (this._isObject) {
+            this.scene._objectVisibilityUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is xrayed.
+     *
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get xrayed() {
+        return this._state.xrayed;
+    }
+
+    /**
+     * Sets if this Mesh is xrayed.
+     *
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        if (this._state.xrayed === xrayed) {
+            return;
+        }
+        this._state.xrayed = xrayed;
+        if (this._isObject) {
+            this.scene._objectXRayedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is highlighted.
+     *
+     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get highlighted() {
+        return this._state.highlighted;
+    }
+
+    /**
+     * Sets if this Mesh is highlighted.
+     *
+     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set highlighted(highlighted) {
+        highlighted = !!highlighted;
+        if (highlighted === this._state.highlighted) {
+            return;
+        }
+        this._state.highlighted = highlighted;
+        if (this._isObject) {
+            this.scene._objectHighlightedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is selected.
+     *
+     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
+    get selected() {
+        return this._state.selected;
+    }
+
+    /**
+     * Sets if this Mesh is selected.
+     *
+     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+     *
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
+    set selected(selected) {
+        selected = !!selected;
+        if (selected === this._state.selected) {
+            return;
+        }
+        this._state.selected = selected;
+        if (this._isObject) {
+            this.scene._objectSelectedUpdated(this);
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is edge-enhanced.
+     *
+     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return this._state.edges;
+    }
+
+    /**
+     * Sets if this Mesh is edge-enhanced.
+     *
+     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+     *
+     * @type {Boolean}
+     */
+    set edges(edges) {
+        edges = !!edges;
+        if (edges === this._state.edges) {
+            return;
+        }
+        this._state.edges = edges;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is culled.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get culled() {
+        return this._state.culled;
+    }
+
+    /**
+     * Sets if this Mesh is culled.
+     *
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set culled(value) {
+        this._state.culled = !!value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._state.clippable;
+    }
+
+    /**
+     * Sets if this Mesh is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    set clippable(value) {
+        value = value !== false;
+        if (this._state.clippable === value) {
+            return;
+        }
+        this._state.clippable = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._state.collidable;
+    }
+
+    /**
+     * Sets if this Mesh included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
+    set collidable(value) {
+        value = value !== false;
+        if (value === this._state.collidable) {
+            return;
+        }
+        this._state.collidable = value;
+        this._setAABBDirty();
+        this.scene._aabbDirty = true;
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Gets if this Mesh is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return this._state.pickable;
+    }
+
+    /**
+     * Sets if this Mesh is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    set pickable(value) {
+        value = value !== false;
+        if (this._state.pickable === value) {
+            return;
+        }
+        this._state.pickable = value;
+        // No need to trigger a render;
+        // state is only used when picking
+    }
+
+    /**
+     * Gets if this Mesh casts shadows.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() {
+        return this._state.castsShadow;
+    }
+
+    /**
+     * Sets if this Mesh casts shadows.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(value) {
+        value = value !== false;
+        if (value === this._state.castsShadow) {
+            return;
+        }
+        this._state.castsShadow = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh can have shadows cast upon it.
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() {
+        return this._state.receivesShadow;
+    }
+
+    /**
+     * Sets if this Mesh can have shadows cast upon it.
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(value) {
+        value = value !== false;
+        if (value === this._state.receivesShadow) {
+            return;
+        }
+        this._state.receivesShadow = value;
+        this._state.hash = value ? "/mod/rs;" : "/mod;";
+        this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
+    }
+
+    /**
+     * Gets if this Mesh can have Scalable Ambient Obscurance (SAO) applied to it.
+     *
+     * SAO is configured by {@link SAO}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get saoEnabled() {
+        return false; // TODO: Support SAO on Meshes
+    }
+
+    /**
+     * Gets the RGB colorize color for this Mesh.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    get colorize() {
+        return this._state.colorize;
+    }
+
+    /**
+     * Sets the RGB colorize color for this Mesh.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    set colorize(value) {
+        let colorize = this._state.colorize;
+        if (!colorize) {
+            colorize = this._state.colorize = new Float32Array(4);
+            colorize[3] = 1;
+        }
+        if (value) {
+            colorize[0] = value[0];
+            colorize[1] = value[1];
+            colorize[2] = value[2];
+        } else {
+            colorize[0] = 1;
+            colorize[1] = 1;
+            colorize[2] = 1;
+        }
+        const colorized = (!!value);
+        this.scene._objectColorizeUpdated(this, colorized);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the opacity factor for this Mesh.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() {
+        return this._state.colorize[3];
+    }
+
+    /**
+     * Sets the opacity factor for this Mesh.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) {
+        let colorize = this._state.colorize;
+        if (!colorize) {
+            colorize = this._state.colorize = new Float32Array(4);
+            colorize[0] = 1;
+            colorize[1] = 1;
+            colorize[2] = 1;
+        }
+        const opacityUpdated = (opacity !== null && opacity !== undefined);
+        colorize[3] = opacityUpdated ? opacity : 1.0;
+        this.scene._objectOpacityUpdated(this, opacityUpdated);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this Mesh is transparent.
+     * @returns {Boolean}
+     */
+    get transparent() {
+        return this._material.alphaMode === 2 /* blend */ || this._state.colorize[3] < 1
+    }
+
+    /**
+     * Gets the Mesh's rendering order relative to other Meshes.
+     *
+     * Default value is ````0````.
+     *
+     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
+     *
+     * @type {Number}
+     */
+    get layer() {
+        return this._state.layer;
+    }
+
+    /**
+     * Sets the Mesh's rendering order relative to other Meshes.
+     *
+     * Default value is ````0````.
+     *
+     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
+     *
+     * @type {Number}
+     */
+    set layer(value) {
+        // TODO: Only accept rendering layer in range [0...MAX_layer]
+        value = value || 0;
+        value = Math.round(value);
+        if (value === this._state.layer) {
+            return;
+        }
+        this._state.layer = value;
+        this._renderer.needStateSort();
+    }
+
+    /**
+     * Gets if the Node's position is stationary.
+     *
+     * When true, will disable the effect of {@link Camera} translations for this Mesh, while still allowing it to rotate. This is useful for skyboxes.
+     *
+     * @type {Boolean}
+     */
+    get stationary() {
+        return this._state.stationary;
+    }
+
+    /**
+     * Gets the Node's billboarding behaviour.
+     *
+     * Options are:
+     * * ````"none"```` -  (default) - No billboarding.
+     * * ````"spherical"```` - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
+     * * ````"cylindrical"```` - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
+     * @type {String}
+     */
+    get billboard() {
+        return this._state.billboard;
+    }
+
+    /**
+     * Gets the Mesh's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    get offset() {
+        return this._state.offset;
+    }
+
+    /**
+     * Sets the Mesh's 3D World-space offset.
+     *
+     * The offset dynamically translates the Mesh in World-space.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * Provide a null or undefined value to reset to the default value.
+     *
+     * @type {Number[]}
+     */
+    set offset(value) {
+        this._state.offset.set(value || [0, 0, 0]);
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Returns true to indicate that Mesh implements {@link Drawable}.
+     * @final
+     * @type {Boolean}
+     */
+    get isDrawable() {
+        return true;
+    }
+
+    /**
+     * Property with final value ````true```` to indicate that xeokit should render this Mesh in sorted order, relative to other Meshes.
+     *
+     * The sort order is determined by {@link Mesh#stateSortCompare}.
+     *
+     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
+     *
+     * @type {Boolean}
+     */
+    get isStateSortable() {
+        return true;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when xrayed.
+     *
+     * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
+     *
+     * Set to {@link Scene#xrayMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get xrayMaterial() {
+        return this._xrayMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when highlighted.
+     *
+     * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
+     *
+     * Set to {@link Scene#highlightMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get highlightMaterial() {
+        return this._highlightMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when selected.
+     *
+     * Mesh is xrayed when {@link Mesh#selected} is ````true````.
+     *
+     * Set to {@link Scene#selectedMaterial} by default.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get selectedMaterial() {
+        return this._selectedMaterial;
+    }
+
+    /**
+     * Defines the appearance of this Mesh when edges are enhanced.
+     *
+     * Mesh is xrayed when {@link Mesh#edges} is ````true````.
+     *
+     * Set to {@link Scene#edgeMaterial} by default.
+     *
+     * @type {EdgeMaterial}
+     */
+    get edgeMaterial() {
+        return this._edgeMaterial;
     }
 
     _checkBillboard(value) {
@@ -584,201 +1465,15 @@ class Mesh extends Component {
         aabb[4] += offset[1];
         aabb[5] += offset[2];
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            aabb[0] += rtcCenter[0];
-            aabb[1] += rtcCenter[1];
-            aabb[2] += rtcCenter[2];
-            aabb[3] += rtcCenter[0];
-            aabb[4] += rtcCenter[1];
-            aabb[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            aabb[0] += origin[0];
+            aabb[1] += origin[1];
+            aabb[2] += origin[2];
+            aabb[3] += origin[0];
+            aabb[4] += origin[1];
+            aabb[5] += origin[2];
         }
-    }
-
-    /**
-     * Defines the shape of this Mesh.
-     *
-     * Set to {@link Scene#geometry} by default.
-     *
-     * @type {Geometry}
-     */
-    get geometry() {
-        return this._geometry;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
-     *
-     * Set to {@link Scene#material} by default.
-     *
-     * @type {Material}
-     */
-    get material() {
-        return this._material;
-    }
-
-    /**
-     * Sets the Mesh's local translation.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    set position(value) {
-        this._position.set(value || [0, 0, 0]);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local translation.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get position() {
-        return this._position;
-    }
-
-    /**
-     * Sets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    set rotation(value) {
-        this._rotation.set(value || [0, 0, 0]);
-        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get rotation() {
-        return this._rotation;
-    }
-
-    /**
-     * Sets the Mesh's local rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {Number[]}
-     */
-    set quaternion(value) {
-        this._quaternion.set(value || [0, 0, 0, 1]);
-        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local rotation quaternion.
-     *
-     * Default value is ````[0,0,0,1]````.
-     *
-     * @type {Number[]}
-     */
-    get quaternion() {
-        return this._quaternion;
-    }
-
-    /**
-     * Sets the Mesh's local scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {Number[]}
-     */
-    set scale(value) {
-        this._scale.set(value || [1, 1, 1]);
-        this._setLocalMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local scale.
-     *
-     * Default value is ````[1,1,1]````.
-     *
-     * @type {Number[]}
-     */
-    get scale() {
-        return this._scale;
-    }
-
-    /**
-     * Sets the Mesh's local modeling transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-     *
-     * @type {Number[]}
-     */
-    set matrix(value) {
-        if (!this.__localMatrix) {
-            this.__localMatrix = math.identityMat4();
-        }
-        this.__localMatrix.set(value || identityMat);
-        math.decomposeMat4(this.__localMatrix, this._position, this._quaternion, this._scale);
-        this._localMatrixDirty = false;
-        this._setWorldMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's local modeling transform matrix.
-     *
-     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
-     *
-     * @type {Number[]}
-     */
-    get matrix() {
-        if (this._localMatrixDirty) {
-            if (!this.__localMatrix) {
-                this.__localMatrix = math.identityMat4();
-            }
-            math.composeMat4(this._position, this._quaternion, this._scale, this.__localMatrix);
-            this._localMatrixDirty = false;
-        }
-        return this.__localMatrix;
-    }
-
-    /**
-     * Gets the Mesh's World matrix.
-     *
-     * @property worldMatrix
-     * @type {Number[]}
-     */
-    get worldMatrix() {
-        if (this._worldMatrixDirty) {
-            this._buildWorldMatrix();
-        }
-        return this._worldMatrix;
-    }
-
-    /**
-     * Gets the Mesh's World normal matrix.
-     *
-     * @type {Number[]}
-     */
-    get worldNormalMatrix() {
-        if (this._worldNormalMatrixDirty) {
-            this._buildWorldNormalMatrix();
-        }
-        return this._worldNormalMatrix;
     }
 
     /**
@@ -861,6 +1556,10 @@ class Mesh extends Component {
         return this;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Drawable members
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
      * Translates the Mesh along the local X-axis by the given increment.
      *
@@ -923,627 +1622,6 @@ class Mesh extends Component {
             this._occlusionRenderer.put();
             this._occlusionRenderer = null;
         }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Entity members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that Mesh implements {@link Entity}.
-     *
-     * @returns {Boolean}
-     */
-    get isEntity() {
-        return true;
-    }
-
-    /**
-     * Returns ````true```` if this Mesh represents a model.
-     *
-     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
-     * may also have a corresponding {@link MetaModel}.
-     *
-     * @type {Boolean}
-     */
-    get isModel() {
-        return this._isModel;
-    }
-
-    /**
-     * Returns ````true```` if this Mesh represents an object.
-     *
-     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
-     * may also have a corresponding {@link MetaObject}.
-     *
-     * @type {Boolean}
-     */
-    get isObject() {
-        return this._isObject;
-    }
-
-    /**
-     * Gets the Mesh's World-space 3D axis-aligned bounding box.
-     *
-     * Represented by a six-element Float64Array containing the min/max extents of the
-     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-     *
-     * @type {Number[]}
-     */
-    get aabb() {
-        if (this._aabbDirty) {
-            this._updateAABB();
-        }
-        return this._aabb;
-    }
-
-    /**
-     * Center of the relative-to-center (RTC) coordinate system for this Mesh.
-     *
-     * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
-     *
-     * @type {Float64Array}
-     */
-    set rtcCenter(rtcCenter) {
-        if (rtcCenter) {
-            if (!this._state.rtcCenter) {
-                this._state.rtcCenter = math.vec3();
-            }
-            this._state.rtcCenter.set(rtcCenter);
-            this._state.rtcCenterHash = rtcCenter.join();
-            this._setAABBDirty();
-            this.scene._aabbDirty = true;
-        } else {
-            if (this._state.rtcCenter) {
-                this._state.rtcCenter = null;
-                this._state.rtcCenterHash = null;
-                this._setAABBDirty();
-                this.scene._aabbDirty = true;
-            }
-        }
-    }
-
-    /**
-     * 3D origin of the Mesh's {@link Geometry}'s vertex positions.
-     *
-     * When this is defined, then the positions are RTC, which means that they are relative to this position.
-     *
-     * @type {Float64Array}
-     */
-    get rtcCenter() {
-        return this._state.rtcCenter;
-    }
-
-    /**
-     * The approximate number of triangles in this Mesh.
-     *
-     * @type {Number}
-     */
-    get numTriangles() {
-        return this._numTriangles;
-    }
-
-    /**
-     * Sets if this Mesh is visible.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
-     *
-     * @type {Boolean}
-     */
-    set visible(visible) {
-        visible = visible !== false;
-        this._state.visible = visible;
-        if (this._isObject) {
-            this.scene._objectVisibilityUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is visible.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
-     *
-     * @type {Boolean}
-     */
-    get visible() {
-        return this._state.visible;
-    }
-
-    /**
-     * Sets if this Mesh is xrayed.
-     *
-     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set xrayed(xrayed) {
-        xrayed = !!xrayed;
-        if (this._state.xrayed === xrayed) {
-            return;
-        }
-        this._state.xrayed = xrayed;
-        if (this._isObject) {
-            this.scene._objectXRayedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is xrayed.
-     *
-     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get xrayed() {
-        return this._state.xrayed;
-    }
-
-    /**
-     * Sets if this Mesh is highlighted.
-     *
-     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set highlighted(highlighted) {
-        highlighted = !!highlighted;
-        if (highlighted === this._state.highlighted) {
-            return;
-        }
-        this._state.highlighted = highlighted;
-        if (this._isObject) {
-            this.scene._objectHighlightedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is highlighted.
-     *
-     * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get highlighted() {
-        return this._state.highlighted;
-    }
-
-    /**
-     * Sets if this Mesh is selected.
-     *
-     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
-     *
-     * @type {Boolean}
-     */
-    set selected(selected) {
-        selected = !!selected;
-        if (selected === this._state.selected) {
-            return;
-        }
-        this._state.selected = selected;
-        if (this._isObject) {
-            this.scene._objectSelectedUpdated(this);
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is selected.
-     *
-     * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
-     *
-     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
-     *
-     * @type {Boolean}
-     */
-    get selected() {
-        return this._state.selected;
-    }
-
-    /**
-     * Sets if this Mesh is edge-enhanced.
-     *
-     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
-     *
-     * @type {Boolean}
-     */
-    set edges(edges) {
-        edges = !!edges;
-        if (edges === this._state.edges) {
-            return;
-        }
-        this._state.edges = edges;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is edge-enhanced.
-     *
-     * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
-     *
-     * @type {Boolean}
-     */
-    get edges() {
-        return this._state.edges;
-    }
-
-    /**
-     * Sets if this Mesh is culled.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    set culled(value) {
-        this._state.culled = !!value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is culled.
-     *
-     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get culled() {
-        return this._state.culled;
-    }
-
-    /**
-     * Sets if this Mesh is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    set clippable(value) {
-        value = value !== false;
-        if (this._state.clippable === value) {
-            return;
-        }
-        this._state.clippable = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    get clippable() {
-        return this._state.clippable;
-    }
-
-    /**
-     * Sets if this Mesh included in boundary calculations.
-     *
-     * @type {Boolean}
-     */
-    set collidable(value) {
-        value = value !== false;
-        if (value === this._state.collidable) {
-            return;
-        }
-        this._state.collidable = value;
-        this._setAABBDirty();
-        this.scene._aabbDirty = true;
-
-    }
-
-    /**
-     * Gets if this Mesh included in boundary calculations.
-     *
-     * @type {Boolean}
-     */
-    get collidable() {
-        return this._state.collidable;
-    }
-
-    /**
-     * Sets if this Mesh is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    set pickable(value) {
-        value = value !== false;
-        if (this._state.pickable === value) {
-            return;
-        }
-        this._state.pickable = value;
-        // No need to trigger a render;
-        // state is only used when picking
-    }
-
-    /**
-     * Gets if this Mesh is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    get pickable() {
-        return this._state.pickable;
-    }
-
-    /**
-     * Sets if this Mesh casts shadows.
-     *
-     * @type {Boolean}
-     */
-    set castsShadow(value) {
-        value = value !== false;
-        if (value === this._state.castsShadow) {
-            return;
-        }
-        this._state.castsShadow = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this Mesh casts shadows.
-     *
-     * @type {Boolean}
-     */
-    get castsShadow() {
-        return this._state.castsShadow;
-    }
-
-    /**
-     * Sets if this Mesh can have shadows cast upon it.
-     *
-     * @type {Boolean}
-     */
-    set receivesShadow(value) {
-        value = value !== false;
-        if (value === this._state.receivesShadow) {
-            return;
-        }
-        this._state.receivesShadow = value;
-        this._state.hash = value ? "/mod/rs;" : "/mod;";
-        this.fire("dirty", this); // Now need to (re)compile objectRenderers to include/exclude shadow mapping
-    }
-
-    /**
-     * Gets if this Mesh can have shadows cast upon it.
-     *
-     * @type {Boolean}
-     */
-    get receivesShadow() {
-        return this._state.receivesShadow;
-    }
-
-    /**
-     * Gets if this Mesh can have Scalable Ambient Obscurance (SAO) applied to it.
-     *
-     * SAO is configured by {@link SAO}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get saoEnabled() {
-        return false; // TODO: Support SAO on Meshes
-    }
-
-    /**
-     * Sets the RGB colorize color for this Mesh.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    set colorize(value) {
-        let colorize = this._state.colorize;
-        if (!colorize) {
-            colorize = this._state.colorize = new Float32Array(4);
-            colorize[3] = 1;
-        }
-        if (value) {
-            colorize[0] = value[0];
-            colorize[1] = value[1];
-            colorize[2] = value[2];
-        } else {
-            colorize[0] = 1;
-            colorize[1] = 1;
-            colorize[2] = 1;
-        }
-        const colorized = (!!value);
-        this.scene._objectColorizeUpdated(this, colorized);
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the RGB colorize color for this Mesh.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    get colorize() {
-        return this._state.colorize;
-    }
-
-    /**
-     * Sets the opacity factor for this Mesh.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    set opacity(opacity) {
-        let colorize = this._state.colorize;
-        if (!colorize) {
-            colorize = this._state.colorize = new Float32Array(4);
-            colorize[0] = 1;
-            colorize[1] = 1;
-            colorize[2] = 1;
-        }
-        const opacityUpdated = (opacity !== null && opacity !== undefined);
-        colorize[3] = opacityUpdated ? opacity : 1.0;
-        this.scene._objectOpacityUpdated(this, opacityUpdated);
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the opacity factor for this Mesh.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    get opacity() {
-        return this._state.colorize[3];
-    }
-
-    /**
-     * Gets if this Mesh is transparent.
-     * @returns {Boolean}
-     */
-    get transparent() {
-        return this._material.alphaMode === 2 /* blend */ || this._state.colorize[3] < 1
-    }
-
-    /**
-     * Sets the Mesh's rendering order relative to other Meshes.
-     *
-     * Default value is ````0````.
-     *
-     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
-     *
-     * @type {Number}
-     */
-    set layer(value) {
-        // TODO: Only accept rendering layer in range [0...MAX_layer]
-        value = value || 0;
-        value = Math.round(value);
-        if (value === this._state.layer) {
-            return;
-        }
-        this._state.layer = value;
-        this._renderer.needStateSort();
-    }
-
-    /**
-     * Gets the Mesh's rendering order relative to other Meshes.
-     *
-     * Default value is ````0````.
-     *
-     * This can be set on multiple transparent Meshes, to make them render in a specific order for correct alpha blending.
-     *
-     * @type {Number}
-     */
-    get layer() {
-        return this._state.layer;
-    }
-
-    /**
-     * Gets if the Node's position is stationary.
-     *
-     * When true, will disable the effect of {@link Camera} translations for this Mesh, while still allowing it to rotate. This is useful for skyboxes.
-     *
-     * @type {Boolean}
-     */
-    get stationary() {
-        return this._state.stationary;
-    }
-
-    /**
-     * Gets the Node's billboarding behaviour.
-     *
-     * Options are:
-     * * ````"none"```` -  (default) - No billboarding.
-     * * ````"spherical"```` - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
-     * * ````"cylindrical"```` - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
-     * @type {String}
-     */
-    get billboard() {
-        return this._state.billboard;
-    }
-
-    /**
-     * Sets the Mesh's 3D World-space offset.
-     *
-     * The offset dynamically translates the Mesh in World-space.
-     *
-     * Default value is ````[0, 0, 0]````.
-     *
-     * Provide a null or undefined value to reset to the default value.
-     *
-     * @type {Number[]}
-     */
-    set offset(value) {
-        this._state.offset.set(value || [0, 0, 0]);
-        this._setAABBDirty();
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Mesh's 3D World-space offset.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get offset() {
-        return this._state.offset;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Drawable members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that Mesh implements {@link Drawable}.
-     * @final
-     * @type {Boolean}
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    /**
-     * Property with final value ````true```` to indicate that xeokit should render this Mesh in sorted order, relative to other Meshes.
-     *
-     * The sort order is determined by {@link Mesh#stateSortCompare}.
-     *
-     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
-     *
-     * @type {Boolean}
-     */
-    get isStateSortable() {
-        return true;
     }
 
     /**
@@ -1670,7 +1748,7 @@ class Mesh extends Component {
 
                     } else {
 
-                        if (this._state.rtcCenter) {
+                        if (this._state.origin) {
 
                             const intersect = math.planeAABB3Intersect(sectionPlane.dir, sectionPlane.dist, this.aabb);
                             const outside = (intersect === -1);
@@ -1691,58 +1769,6 @@ class Mesh extends Component {
         }
 
         return true;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when xrayed.
-     *
-     * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
-     *
-     * Set to {@link Scene#xrayMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get xrayMaterial() {
-        return this._xrayMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when highlighted.
-     *
-     * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
-     *
-     * Set to {@link Scene#highlightMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get highlightMaterial() {
-        return this._highlightMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when selected.
-     *
-     * Mesh is xrayed when {@link Mesh#selected} is ````true````.
-     *
-     * Set to {@link Scene#selectedMaterial} by default.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get selectedMaterial() {
-        return this._selectedMaterial;
-    }
-
-    /**
-     * Defines the appearance of this Mesh when edges are enhanced.
-     *
-     * Mesh is xrayed when {@link Mesh#edges} is ````true````.
-     *
-     * Set to {@link Scene#edgeMaterial} by default.
-     *
-     * @type {EdgeMaterial}
-     */
-    get edgeMaterial() {
-        return this._edgeMaterial;
     }
 
     // ---------------------- NORMAL RENDERING -----------------------------------
@@ -2123,8 +2149,8 @@ const pickTriangleSurface = (function () {
                     }
 
                     const normal = math.addVec3(math.addVec3(
-                        math.mulVec3Scalar(normalA, bary[0], tempVec3),
-                        math.mulVec3Scalar(normalB, bary[1], tempVec3b), tempVec3c),
+                            math.mulVec3Scalar(normalA, bary[0], tempVec3),
+                            math.mulVec3Scalar(normalB, bary[1], tempVec3b), tempVec3c),
                         math.mulVec3Scalar(normalC, bary[2], tempVec3d), tempVec3e);
 
                     pickResult.worldNormal = math.normalizeVec3(math.transformVec3(mesh.worldNormalMatrix, normal, tempVec3f));

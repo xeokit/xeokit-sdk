@@ -177,8 +177,8 @@
 
     for (let x = -OFFSET; x < OFFSET; x += 250000.0) {
         for (let z = -OFFSET; z < OFFSET; z += 250000.0) {
-            const rtcCenter = [x, 0, z];
-            buildTable(performanceModel, rtcCenter, SIZE);
+            const origin = [x, 0, z];
+            buildTable(performanceModel, origin, SIZE);
         }
     }
 
@@ -188,16 +188,16 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Creates a simple table-shaped model with the given PerformanceModel,
-    // reusing geometry amongst the meshes, and centered at the given RTC center
+    // reusing geometry amongst the meshes, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter, size = 1) {
+    function buildTable(performanceModel, origin, size = 1) {
 
         const geometryId = math.createUUID();
 
         performanceModel.createGeometry({
             id: geometryId,
-            rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+            origin: origin, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the origin
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,

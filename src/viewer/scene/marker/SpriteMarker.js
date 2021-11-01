@@ -72,7 +72,7 @@ class SpriteMarker extends Marker {
         this._src = null;
         this._image = null;
         this._pos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;

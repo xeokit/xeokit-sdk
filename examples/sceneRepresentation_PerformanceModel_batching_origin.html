@@ -13,10 +13,24 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1><a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-           target="_other">PerformanceModel</a>
-        with Batched Geometries, RTC Coordinates and Moving SectionPlane
-    </h1>
+    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <h1>PerformanceModel</h1>
+    <h2>Geometry batching and RTC coordinates</h2>
+    <p>In this example, we're programmatically building a simple model using xeokit's PerformanceModel component, while
+        at the same using a separate geometry for each object, and providing geometry vertex positions as
+        relative-to-center (RTC) coordinates.</p>
+    <p>RTC coordinates are xeokit's mechanism for full-precision emulation.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
+               target="_other">PerformanceModel</a>
+        </li>
+    </ul>
 </div>
 </body>
 
@@ -26,7 +40,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, PerformanceModel, math, SectionPlanesPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, PerformanceModel, math} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -37,33 +51,13 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
-    viewer.scene.camera.look = [0, -5.75, 0];
-    viewer.scene.camera.up = [0.37, 0.91, -0.11];
-
     const cameraControl = viewer.cameraControl;
     cameraControl.navMode = "orbit";
     cameraControl.followPointer = true;
 
-    //-----------------------------------------------------------
-    // Create several RTC center points
-    //-----------------------------------------------------------
-
-    //const OFFSET = 1000000000.0;
-    const OFFSET = 40.0;
-
-    const rtcCenters = [
-        [0, 0, 0],
-        [OFFSET, 0, 0],
-        [0, 0, OFFSET],
-        [OFFSET, 0, OFFSET]
-    ];
-
-    //-----------------------------------------------------------
-    // Create a simple table model
-    // at each of our RTC centers. This will result in several
-    // tables, positioned apart from each other.
-    //-----------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel representing a table with four legs, using geometry batching
+    //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
         id: "tables",
@@ -73,68 +67,109 @@
         edges: true
     });
 
-    for (let i = 0, len = rtcCenters.length; i < len; i++) {
-        buildTable(performanceModel, rtcCenters[i]);
+    //-----------------------------------------------------------
+    // Create several origin points
+    //-----------------------------------------------------------
+
+    // const OFFSET = 1000000000.0;
+
+    const OFFSET = 40.0;
+
+    //const OFFSET = 100.0;
+
+    const origins = [
+        [0, 0, 0],
+        [OFFSET, 0, 0],
+        [0, 0, OFFSET],
+        [OFFSET, 0, OFFSET]
+    ];
+
+    //-----------------------------------------------------------
+    // Within out PerformanceModel, create a simple table model
+    // at each of our origins. This will result in several
+    // tables, positioned very far apart from each other.
+    //-----------------------------------------------------------
+
+    for (let i = 0, len = origins.length; i < len; i++) {
+        buildTable(performanceModel, origins[i]);
     }
+
+    //------------------------------------------------------------
+    // Finalize the PerformanceModel.
+    //------------------------------------------------------------
 
     performanceModel.finalize();
 
     viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a moving SectionPlane, that moves through the table models
+    // Mouse over Entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    const sectionPlanes = new SectionPlanesPlugin(viewer, {
-        overviewCanvasId: "mySectionPlanesOverviewCanvas",
-        overviewVisible: true
+    var lastPickedEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastPickedEntity || hit.entity.id !== lastPickedEntity.id) {
+                if (lastPickedEntity) {
+                    lastPickedEntity.highlighted = false;
+                }
+                lastPickedEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastPickedEntity) {
+                lastPickedEntity.highlighted = false;
+                lastPickedEntity = null;
+            }
+        }
     });
 
-    const sectionPlane = sectionPlanes.createSectionPlane({
-        id: "mySectionPlane",
-        pos: [rtcCenters[0][0] - 10, -10, rtcCenters[0][2] - 10],
-        dir: math.normalizeVec3([1.0, 0.01, 1])
-    });
+    //------------------------------------------------------------------------------------------------------------------
+    // Continually orbit the point-of-interest
+    //------------------------------------------------------------------------------------------------------------------
 
-    sectionPlanes.showControl(sectionPlane.id);
-
-    let i = 0;
     viewer.scene.on("tick", () => {
-        sectionPlane.pos = [sectionPlane.pos[0] + i, sectionPlane.pos[1], sectionPlane.pos[2] + i];
-        i += 0.001;
+        //viewer.camera.orbitYaw(0.4);
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Flies camera to the specified RTC center
+    // Flies camera to the specified origin
     //------------------------------------------------------------------------------------------------------------------
 
     window.gotoRTCCenter = function (i) {
 
-        const rtcCenter = rtcCenters[i];
+        const origin = origins[i];
 
-        if (!rtcCenter) {
+        if (!origin) {
             return;
         }
 
         viewer.cameraFlight.flyTo({
-            eye: [rtcCenter[0], 0, rtcCenter[2] - 10],
-            look: rtcCenter,
+            eye: [origin[0], 0, origin[2] - 10],
+            look: origin,
             up: [0, 1, 0]
         });
     };
 
     //------------------------------------------------------------------------------------------------------------------
     // Creates a simple table-shaped model with the given PerformanceModel,
-    // without reusing geometry, and centered at the given RTC center
+    // without reusing geometry, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter) {
+    function buildTable(performanceModel, origin) {
 
         let meshId = math.createUUID();
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+            origin: origin, // This mesh's positions and transforms are relative to the origin
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -165,7 +200,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
@@ -195,7 +230,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -225,7 +260,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
@@ -254,7 +289,7 @@
 
         performanceModel.createMesh({
             id: meshId,
-            rtcCenter: rtcCenter,
+            origin: origin,
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
                 -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,

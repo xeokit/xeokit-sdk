@@ -79,14 +79,14 @@
     });
 
     //-----------------------------------------------------------
-    // Create several RTC center points
+    // Create several origin points
     //-----------------------------------------------------------
 
     const OFFSET = 40.0;
 
     //const OFFSET = 100.0;
 
-    const rtcCenters = [
+    const origins = [
         [0, 0, 0],
         [OFFSET, 0, 0],
         [0, 0, OFFSET],
@@ -95,12 +95,12 @@
 
     //-----------------------------------------------------------
     // Within out PerformanceModel, create a simple table model
-    // at each of our RTC centers. This will result in several
+    // at each of our origins. This will result in several
     // tables, positioned very far apart from each other.
     //-----------------------------------------------------------
 
-    for (let i = 0, len = rtcCenters.length; i < len; i++) {
-        buildTable(performanceModel, rtcCenters[i]);
+    for (let i = 0, len = origins.length; i < len; i++) {
+        buildTable(performanceModel, origins[i]);
     }
 
     //------------------------------------------------------------
@@ -141,36 +141,36 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Flies camera to the specified RTC center
+    // Flies camera to the specified origin
     //------------------------------------------------------------------------------------------------------------------
 
     window.gotoRTCCenter = function (i) {
 
-        const rtcCenter = rtcCenters[i];
+        const origin = origins[i];
 
-        if (!rtcCenter) {
+        if (!origin) {
             return;
         }
 
         viewer.cameraFlight.flyTo({
-            eye: [rtcCenter[0], 0, rtcCenter[2] - 10],
-            look: rtcCenter,
+            eye: [origin[0], 0, origin[2] - 10],
+            look: origin,
             up: [0, 1, 0]
         });
     };
 
     //------------------------------------------------------------------------------------------------------------------
     // Creates a simple table-shaped model with the given PerformanceModel, reusing geometry amongst all
-    // meshes, and centered at the given RTC center
+    // meshes, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(performanceModel, rtcCenter) {
+    function buildTable(performanceModel, origin) {
 
         const geometryId = math.createUUID();
 
         performanceModel.createGeometry({
             id: geometryId,
-            rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+            origin: origin, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the origin
             primitive: "triangles",
             positions: [
                 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
