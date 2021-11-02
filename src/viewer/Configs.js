@@ -7,7 +7,8 @@ import {core} from "./scene/core";
  * ## Usage
  *
  * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost
- * on low-power devices, but means that we can no longer render double-precision models without jittering.
+ * on low-power devices, but means that we can no longer render double-precision models without jittering. This is OK
+ * if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.
  *
  * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a
  * performance boost in some cases.
