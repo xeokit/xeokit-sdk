@@ -150,13 +150,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Configs} from &apos;<span><a href="file/src/viewer/Configs.js.html#lineNumber48">@xeokit/xeokit-sdk/src/viewer/Configs.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Configs} from &apos;<span><a href="file/src/viewer/Configs.js.html#lineNumber51">@xeokit/xeokit-sdk/src/viewer/Configs.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/Configs.js.html#lineNumber48">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/Configs.js.html#lineNumber51">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -177,10 +177,11 @@
   
   
   <div class="description" data-ice="description"><p>Manages global configurations for all <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
-<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll disable xeokit&apos;s double-precision support, which gives a performance and memory boost
-on low-power devices, but means that we can no longer render double-precision models without jittering.</p>
-<p>We&apos;ll also switch from window.requestAnimationFrame to window.setInterval for xeokit&apos;s animations, which can also give a
-performance boost in some cases.</p>
+<h2 id="example">Example</h2><p>In the example below, we&apos;ll disable xeokit&apos;s double-precision support, which gives a performance and memory boost
+on low-power devices, but also means that we can no longer render double-precision models without jittering.</p>
+<p>That&apos;s OK if we know that we&apos;re not going to view models that are geographically vast, or offset far from the World coordinate origin.</p>
+<p>We&apos;ll also switch xeokit from using <code>window.requestAnimationFrame</code> to <code>window.setInterval</code> for its render loop,
+which may give a smoother experience in some cases.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Configs, Viewer, XKTLoaderPlugin} from &quot;../dist/xeokit-sdk.min.es.js&quot;;
 
@@ -197,6 +198,7 @@ configs.doublePrecisionEnabled = false;
 // This config can be switched dynamically, if needed.
 configs.rafEnabled = false;
 
+// Create a Viewer, to which our configs apply
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
  });
@@ -285,7 +287,7 @@ const model = xktLoader.load({
       <div>
         
         
-        <div data-ice="description"><p>Sets whether double precision mode is enabled for <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
+        <div data-ice="description"><p>Sets whether double precision mode is enabled for Viewers.</p>
 </div>
       </div>
     </td>
@@ -314,7 +316,7 @@ const model = xktLoader.load({
       <div>
         
         
-        <div data-ice="description"><p>Gets whether double precision mode is enabled for all <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
+        <div data-ice="description"><p>Gets whether double precision mode is enabled for all Viewers.</p>
 </div>
       </div>
     </td>
@@ -343,7 +345,7 @@ const model = xktLoader.load({
       <div>
         
         
-        <div data-ice="description"><p>Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.</p>
+        <div data-ice="description"><p>Sets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
 </div>
       </div>
     </td>
@@ -372,7 +374,7 @@ const model = xktLoader.load({
       <div>
         
         
-        <div data-ice="description"><p>Gets whether <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.</p>
+        <div data-ice="description"><p>Gets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
 </div>
       </div>
     </td>
@@ -404,7 +406,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -451,20 +453,20 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether double precision mode is enabled for <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
-<p>When double precision mode is enabled (default), <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s will accurately render models that contain
+  <div data-ice="description"><p>Sets whether double precision mode is enabled for Viewers.</p>
+<p>When double precision mode is enabled (default), Viewers will accurately render models that contain
 double-precision coordinates, without jittering.</p>
 <p>Internally, double precision incurs extra performance and memory overhead, so if we&apos;re certain that
 we&apos;re not going to render models that rely on double-precision coordinates, then it&apos;s a good idea to disable
 it, especially on low-power devices.</p>
-<p>This should only be set once, before creating any <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
+<p>This should only be set once, before creating any Viewers.</p>
 </div>
 
   
@@ -513,14 +515,14 @@ it, especially on low-power devices.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether double precision mode is enabled for all <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s.</p>
+  <div data-ice="description"><p>Gets whether double precision mode is enabled for all Viewers.</p>
 </div>
 
   
@@ -569,16 +571,16 @@ it, especially on low-power devices.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber99">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.</p>
+  <div data-ice="description"><p>Sets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
 <p>With RAF, the render loop is suspended whenever we switch away from the browser tab that
-contains our application. With setInterval, the render loop will continue running. Since a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> only
+contains our application. With setInterval, the render loop will continue running. Since a Viewer only
 renders frames when the view has actually updated, disabling RAF can actually give a performance boost.</p>
 <p>This is <code>true</code> by default, to use RAF.</p>
 <p>This can be dynamically set at any time.</p>
@@ -630,14 +632,14 @@ renders frames when the view has actually updated, disabling RAF can actually gi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber109">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.</p>
+  <div data-ice="description"><p>Gets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
 </div>
 
   

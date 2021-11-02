@@ -4,14 +4,15 @@ import {core} from "./scene/core";
 /**
  * Manages global configurations for all {@link Viewer}s.
  *
- * ## Usage
+ * ## Example
  *
  * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost
- * on low-power devices, but means that we can no longer render double-precision models without jittering. This is OK
- * if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.
+ * on low-power devices, but also means that we can no longer render double-precision models without jittering.
  *
- * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a
- * performance boost in some cases.
+ * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.
+ *
+ * We'll also switch xeokit from using ````window.requestAnimationFrame```` to ````window.setInterval```` for its render loop,
+ * which may give a smoother experience in some cases.
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]
  *
@@ -31,6 +32,7 @@ import {core} from "./scene/core";
  * // This config can be switched dynamically, if needed.
  * configs.rafEnabled = false;
  *
+ * // Create a Viewer, to which our configs apply
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  *  });
@@ -56,16 +58,16 @@ class Configs {
     }
 
     /**
-     * Sets whether double precision mode is enabled for {@link Viewer}s.
+     * Sets whether double precision mode is enabled for Viewers.
      *
-     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain
+     * When double precision mode is enabled (default), Viewers will accurately render models that contain
      * double-precision coordinates, without jittering.
      *
      * Internally, double precision incurs extra performance and memory overhead, so if we're certain that
      * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable
      * it, especially on low-power devices.
      *
-     * This should only be set once, before creating any {@link Viewer}s.
+     * This should only be set once, before creating any Viewers.
      *
      * @returns {boolean}
      */
@@ -74,7 +76,7 @@ class Configs {
     }
 
     /**
-     * Gets whether double precision mode is enabled for all {@link Viewer}s.
+     * Gets whether double precision mode is enabled for all Viewers.
      *
      * @returns {boolean}
      */
@@ -82,13 +84,11 @@ class Configs {
         return math.getDoublePrecisionEnabled();
     }
 
-
-
     /**
-     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.
+     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.
      *
      * With RAF, the render loop is suspended whenever we switch away from the browser tab that
-     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only
+     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only
      * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.
      *
      * This is ````true```` by default, to use RAF.
@@ -102,7 +102,7 @@ class Configs {
     }
 
     /**
-     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.
+     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.
      *
      * @returns {boolean}
      */

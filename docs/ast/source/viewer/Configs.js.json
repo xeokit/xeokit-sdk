@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 3666,
+  "end": 3868,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 115,
+      "line": 116,
       "column": 17
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 3666,
+    "end": 3868,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 115,
+        "line": 116,
         "column": 17
       }
     },
@@ -202,16 +202,16 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Usage\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but means that we can no longer render double-precision models without jittering.\n *\n * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a\n * performance boost in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * We'll also switch xeokit from using ````window.requestAnimationFrame```` to ````window.setInterval```` for its render loop,\n * which may give a smoother experience in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
             "start": 79,
-            "end": 1638,
+            "end": 1858,
             "loc": {
               "start": {
                 "line": 4,
                 "column": 0
               },
               "end": {
-                "line": 47,
+                "line": 50,
                 "column": 3
               }
             }
@@ -220,29 +220,29 @@
       },
       {
         "type": "Identifier",
-        "start": 1639,
-        "end": 3647,
+        "start": 1859,
+        "end": 3849,
         "loc": {
           "start": {
-            "line": 48,
+            "line": 51,
             "column": 0
           },
           "end": {
-            "line": 113,
+            "line": 114,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 1645,
-          "end": 1652,
+          "start": 1865,
+          "end": 1872,
           "loc": {
             "start": {
-              "line": 48,
+              "line": 51,
               "column": 6
             },
             "end": {
-              "line": 48,
+              "line": 51,
               "column": 13
             },
             "identifierName": "Configs"
@@ -253,30 +253,30 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 1653,
-          "end": 3647,
+          "start": 1873,
+          "end": 3849,
           "loc": {
             "start": {
-              "line": 48,
+              "line": 51,
               "column": 14
             },
             "end": {
-              "line": 113,
+              "line": 114,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 1702,
-              "end": 1724,
+              "start": 1922,
+              "end": 1944,
               "loc": {
                 "start": {
-                  "line": 53,
+                  "line": 56,
                   "column": 4
                 },
                 "end": {
-                  "line": 55,
+                  "line": 58,
                   "column": 5
                 }
               },
@@ -284,15 +284,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1702,
-                "end": 1713,
+                "start": 1922,
+                "end": 1933,
                 "loc": {
                   "start": {
-                    "line": 53,
+                    "line": 56,
                     "column": 4
                   },
                   "end": {
-                    "line": 53,
+                    "line": 56,
                     "column": 15
                   },
                   "identifierName": "constructor"
@@ -308,15 +308,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1716,
-                "end": 1724,
+                "start": 1936,
+                "end": 1944,
                 "loc": {
                   "start": {
-                    "line": 53,
+                    "line": 56,
                     "column": 18
                   },
                   "end": {
-                    "line": 55,
+                    "line": 58,
                     "column": 5
                   }
                 },
@@ -329,15 +329,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Creates a Configs.\n     ",
-                  "start": 1660,
-                  "end": 1697,
+                  "start": 1880,
+                  "end": 1917,
                   "loc": {
                     "start": {
-                      "line": 50,
+                      "line": 53,
                       "column": 4
                     },
                     "end": {
-                      "line": 52,
+                      "line": 55,
                       "column": 7
                     }
                   }
@@ -346,16 +346,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 1730,
-                  "end": 2381,
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 1950,
+                  "end": 2577,
                   "loc": {
                     "start": {
-                      "line": 57,
+                      "line": 60,
                       "column": 4
                     },
                     "end": {
-                      "line": 70,
+                      "line": 73,
                       "column": 7
                     }
                   }
@@ -364,15 +364,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 2386,
-              "end": 2494,
+              "start": 2582,
+              "end": 2690,
               "loc": {
                 "start": {
-                  "line": 71,
+                  "line": 74,
                   "column": 4
                 },
                 "end": {
-                  "line": 73,
+                  "line": 76,
                   "column": 5
                 }
               },
@@ -380,15 +380,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 2390,
-                "end": 2412,
+                "start": 2586,
+                "end": 2608,
                 "loc": {
                   "start": {
-                    "line": 71,
+                    "line": 74,
                     "column": 8
                   },
                   "end": {
-                    "line": 71,
+                    "line": 74,
                     "column": 30
                   },
                   "identifierName": "doublePrecisionEnabled"
@@ -403,15 +403,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 2413,
-                  "end": 2428,
+                  "start": 2609,
+                  "end": 2624,
                   "loc": {
                     "start": {
-                      "line": 71,
+                      "line": 74,
                       "column": 31
                     },
                     "end": {
-                      "line": 71,
+                      "line": 74,
                       "column": 46
                     },
                     "identifierName": "doublePrecision"
@@ -421,72 +421,72 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 2430,
-                "end": 2494,
+                "start": 2626,
+                "end": 2690,
                 "loc": {
                   "start": {
-                    "line": 71,
+                    "line": 74,
                     "column": 48
                   },
                   "end": {
-                    "line": 73,
+                    "line": 76,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 2440,
-                    "end": 2488,
+                    "start": 2636,
+                    "end": 2684,
                     "loc": {
                       "start": {
-                        "line": 72,
+                        "line": 75,
                         "column": 8
                       },
                       "end": {
-                        "line": 72,
+                        "line": 75,
                         "column": 56
                       }
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 2440,
-                      "end": 2487,
+                      "start": 2636,
+                      "end": 2683,
                       "loc": {
                         "start": {
-                          "line": 72,
+                          "line": 75,
                           "column": 8
                         },
                         "end": {
-                          "line": 72,
+                          "line": 75,
                           "column": 55
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 2440,
-                        "end": 2470,
+                        "start": 2636,
+                        "end": 2666,
                         "loc": {
                           "start": {
-                            "line": 72,
+                            "line": 75,
                             "column": 8
                           },
                           "end": {
-                            "line": 72,
+                            "line": 75,
                             "column": 38
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 2440,
-                          "end": 2444,
+                          "start": 2636,
+                          "end": 2640,
                           "loc": {
                             "start": {
-                              "line": 72,
+                              "line": 75,
                               "column": 8
                             },
                             "end": {
-                              "line": 72,
+                              "line": 75,
                               "column": 12
                             },
                             "identifierName": "math"
@@ -495,15 +495,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2445,
-                          "end": 2470,
+                          "start": 2641,
+                          "end": 2666,
                           "loc": {
                             "start": {
-                              "line": 72,
+                              "line": 75,
                               "column": 13
                             },
                             "end": {
-                              "line": 72,
+                              "line": 75,
                               "column": 38
                             },
                             "identifierName": "setDoublePrecisionEnabled"
@@ -515,15 +515,15 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 2471,
-                          "end": 2486,
+                          "start": 2667,
+                          "end": 2682,
                           "loc": {
                             "start": {
-                              "line": 72,
+                              "line": 75,
                               "column": 39
                             },
                             "end": {
-                              "line": 72,
+                              "line": 75,
                               "column": 54
                             },
                             "identifierName": "doublePrecision"
@@ -540,16 +540,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 1730,
-                  "end": 2381,
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 1950,
+                  "end": 2577,
                   "loc": {
                     "start": {
-                      "line": 57,
+                      "line": 60,
                       "column": 4
                     },
                     "end": {
-                      "line": 70,
+                      "line": 73,
                       "column": 7
                     }
                   }
@@ -558,16 +558,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 2500,
-                  "end": 2622,
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2696,
+                  "end": 2810,
                   "loc": {
                     "start": {
-                      "line": 75,
+                      "line": 78,
                       "column": 4
                     },
                     "end": {
-                      "line": 79,
+                      "line": 82,
                       "column": 7
                     }
                   }
@@ -576,15 +576,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 2627,
-              "end": 2712,
+              "start": 2815,
+              "end": 2900,
               "loc": {
                 "start": {
-                  "line": 80,
+                  "line": 83,
                   "column": 4
                 },
                 "end": {
-                  "line": 82,
+                  "line": 85,
                   "column": 5
                 }
               },
@@ -592,15 +592,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 2631,
-                "end": 2653,
+                "start": 2819,
+                "end": 2841,
                 "loc": {
                   "start": {
-                    "line": 80,
+                    "line": 83,
                     "column": 8
                   },
                   "end": {
-                    "line": 80,
+                    "line": 83,
                     "column": 30
                   },
                   "identifierName": "doublePrecisionEnabled"
@@ -615,72 +615,72 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 2656,
-                "end": 2712,
+                "start": 2844,
+                "end": 2900,
                 "loc": {
                   "start": {
-                    "line": 80,
+                    "line": 83,
                     "column": 33
                   },
                   "end": {
-                    "line": 82,
+                    "line": 85,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 2666,
-                    "end": 2706,
+                    "start": 2854,
+                    "end": 2894,
                     "loc": {
                       "start": {
-                        "line": 81,
+                        "line": 84,
                         "column": 8
                       },
                       "end": {
-                        "line": 81,
+                        "line": 84,
                         "column": 48
                       }
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 2673,
-                      "end": 2705,
+                      "start": 2861,
+                      "end": 2893,
                       "loc": {
                         "start": {
-                          "line": 81,
+                          "line": 84,
                           "column": 15
                         },
                         "end": {
-                          "line": 81,
+                          "line": 84,
                           "column": 47
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 2673,
-                        "end": 2703,
+                        "start": 2861,
+                        "end": 2891,
                         "loc": {
                           "start": {
-                            "line": 81,
+                            "line": 84,
                             "column": 15
                           },
                           "end": {
-                            "line": 81,
+                            "line": 84,
                             "column": 45
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 2673,
-                          "end": 2677,
+                          "start": 2861,
+                          "end": 2865,
                           "loc": {
                             "start": {
-                              "line": 81,
+                              "line": 84,
                               "column": 15
                             },
                             "end": {
-                              "line": 81,
+                              "line": 84,
                               "column": 19
                             },
                             "identifierName": "math"
@@ -689,15 +689,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2678,
-                          "end": 2703,
+                          "start": 2866,
+                          "end": 2891,
                           "loc": {
                             "start": {
-                              "line": 81,
+                              "line": 84,
                               "column": 20
                             },
                             "end": {
-                              "line": 81,
+                              "line": 84,
                               "column": 45
                             },
                             "identifierName": "getDoublePrecisionEnabled"
@@ -716,16 +716,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 2500,
-                  "end": 2622,
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2696,
+                  "end": 2810,
                   "loc": {
                     "start": {
-                      "line": 75,
+                      "line": 78,
                       "column": 4
                     },
                     "end": {
-                      "line": 79,
+                      "line": 82,
                       "column": 7
                     }
                   }
@@ -734,16 +734,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 2720,
-                  "end": 3325,
+                  "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2906,
+                  "end": 3519,
                   "loc": {
                     "start": {
-                      "line": 86,
+                      "line": 87,
                       "column": 4
                     },
                     "end": {
-                      "line": 98,
+                      "line": 99,
                       "column": 7
                     }
                   }
@@ -752,15 +752,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 3330,
-              "end": 3404,
+              "start": 3524,
+              "end": 3598,
               "loc": {
                 "start": {
-                  "line": 99,
+                  "line": 100,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 102,
                   "column": 5
                 }
               },
@@ -768,15 +768,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 3334,
-                "end": 3344,
+                "start": 3528,
+                "end": 3538,
                 "loc": {
                   "start": {
-                    "line": 99,
+                    "line": 100,
                     "column": 8
                   },
                   "end": {
-                    "line": 99,
+                    "line": 100,
                     "column": 18
                   },
                   "identifierName": "rafEnabled"
@@ -791,15 +791,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 3345,
-                  "end": 3355,
+                  "start": 3539,
+                  "end": 3549,
                   "loc": {
                     "start": {
-                      "line": 99,
+                      "line": 100,
                       "column": 19
                     },
                     "end": {
-                      "line": 99,
+                      "line": 100,
                       "column": 29
                     },
                     "identifierName": "rafEnabled"
@@ -809,72 +809,72 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 3357,
-                "end": 3404,
+                "start": 3551,
+                "end": 3598,
                 "loc": {
                   "start": {
-                    "line": 99,
+                    "line": 100,
                     "column": 31
                   },
                   "end": {
-                    "line": 101,
+                    "line": 102,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 3367,
-                    "end": 3398,
+                    "start": 3561,
+                    "end": 3592,
                     "loc": {
                       "start": {
-                        "line": 100,
+                        "line": 101,
                         "column": 8
                       },
                       "end": {
-                        "line": 100,
+                        "line": 101,
                         "column": 39
                       }
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 3367,
-                      "end": 3397,
+                      "start": 3561,
+                      "end": 3591,
                       "loc": {
                         "start": {
-                          "line": 100,
+                          "line": 101,
                           "column": 8
                         },
                         "end": {
-                          "line": 100,
+                          "line": 101,
                           "column": 38
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 3367,
-                        "end": 3385,
+                        "start": 3561,
+                        "end": 3579,
                         "loc": {
                           "start": {
-                            "line": 100,
+                            "line": 101,
                             "column": 8
                           },
                           "end": {
-                            "line": 100,
+                            "line": 101,
                             "column": 26
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 3367,
-                          "end": 3371,
+                          "start": 3561,
+                          "end": 3565,
                           "loc": {
                             "start": {
-                              "line": 100,
+                              "line": 101,
                               "column": 8
                             },
                             "end": {
-                              "line": 100,
+                              "line": 101,
                               "column": 12
                             },
                             "identifierName": "core"
@@ -883,15 +883,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3372,
-                          "end": 3385,
+                          "start": 3566,
+                          "end": 3579,
                           "loc": {
                             "start": {
-                              "line": 100,
+                              "line": 101,
                               "column": 13
                             },
                             "end": {
-                              "line": 100,
+                              "line": 101,
                               "column": 26
                             },
                             "identifierName": "setRAFEnabled"
@@ -903,15 +903,15 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 3386,
-                          "end": 3396,
+                          "start": 3580,
+                          "end": 3590,
                           "loc": {
                             "start": {
-                              "line": 100,
+                              "line": 101,
                               "column": 27
                             },
                             "end": {
-                              "line": 100,
+                              "line": 101,
                               "column": 37
                             },
                             "identifierName": "rafEnabled"
@@ -928,16 +928,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 2720,
-                  "end": 3325,
+                  "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2906,
+                  "end": 3519,
                   "loc": {
                     "start": {
-                      "line": 86,
+                      "line": 87,
                       "column": 4
                     },
                     "end": {
-                      "line": 98,
+                      "line": 99,
                       "column": 7
                     }
                   }
@@ -946,16 +946,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 3410,
-                  "end": 3577,
+                  "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 3604,
+                  "end": 3779,
                   "loc": {
                     "start": {
-                      "line": 103,
+                      "line": 104,
                       "column": 4
                     },
                     "end": {
-                      "line": 107,
+                      "line": 108,
                       "column": 7
                     }
                   }
@@ -964,15 +964,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 3582,
-              "end": 3643,
+              "start": 3784,
+              "end": 3845,
               "loc": {
                 "start": {
-                  "line": 108,
+                  "line": 109,
                   "column": 4
                 },
                 "end": {
-                  "line": 110,
+                  "line": 111,
                   "column": 5
                 }
               },
@@ -980,15 +980,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 3586,
-                "end": 3596,
+                "start": 3788,
+                "end": 3798,
                 "loc": {
                   "start": {
-                    "line": 108,
+                    "line": 109,
                     "column": 8
                   },
                   "end": {
-                    "line": 108,
+                    "line": 109,
                     "column": 18
                   },
                   "identifierName": "rafEnabled"
@@ -1003,72 +1003,72 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 3599,
-                "end": 3643,
+                "start": 3801,
+                "end": 3845,
                 "loc": {
                   "start": {
-                    "line": 108,
+                    "line": 109,
                     "column": 21
                   },
                   "end": {
-                    "line": 110,
+                    "line": 111,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 3609,
-                    "end": 3637,
+                    "start": 3811,
+                    "end": 3839,
                     "loc": {
                       "start": {
-                        "line": 109,
+                        "line": 110,
                         "column": 8
                       },
                       "end": {
-                        "line": 109,
+                        "line": 110,
                         "column": 36
                       }
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 3616,
-                      "end": 3636,
+                      "start": 3818,
+                      "end": 3838,
                       "loc": {
                         "start": {
-                          "line": 109,
+                          "line": 110,
                           "column": 15
                         },
                         "end": {
-                          "line": 109,
+                          "line": 110,
                           "column": 35
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 3616,
-                        "end": 3634,
+                        "start": 3818,
+                        "end": 3836,
                         "loc": {
                           "start": {
-                            "line": 109,
+                            "line": 110,
                             "column": 15
                           },
                           "end": {
-                            "line": 109,
+                            "line": 110,
                             "column": 33
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 3616,
-                          "end": 3620,
+                          "start": 3818,
+                          "end": 3822,
                           "loc": {
                             "start": {
-                              "line": 109,
+                              "line": 110,
                               "column": 15
                             },
                             "end": {
-                              "line": 109,
+                              "line": 110,
                               "column": 19
                             },
                             "identifierName": "core"
@@ -1077,15 +1077,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3621,
-                          "end": 3634,
+                          "start": 3823,
+                          "end": 3836,
                           "loc": {
                             "start": {
-                              "line": 109,
+                              "line": 110,
                               "column": 20
                             },
                             "end": {
-                              "line": 109,
+                              "line": 110,
                               "column": 33
                             },
                             "identifierName": "getRAFEnabled"
@@ -1103,16 +1103,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-                  "start": 3410,
-                  "end": 3577,
+                  "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 3604,
+                  "end": 3779,
                   "loc": {
                     "start": {
-                      "line": 103,
+                      "line": 104,
                       "column": 4
                     },
                     "end": {
-                      "line": 107,
+                      "line": 108,
                       "column": 7
                     }
                   }
@@ -1127,15 +1127,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 3649,
-        "end": 3666,
+        "start": 3851,
+        "end": 3868,
         "loc": {
           "start": {
-            "line": 115,
+            "line": 116,
             "column": 0
           },
           "end": {
-            "line": 115,
+            "line": 116,
             "column": 17
           }
         },
@@ -1143,29 +1143,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 3657,
-            "end": 3664,
+            "start": 3859,
+            "end": 3866,
             "loc": {
               "start": {
-                "line": 115,
+                "line": 116,
                 "column": 8
               },
               "end": {
-                "line": 115,
+                "line": 116,
                 "column": 15
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 3657,
-              "end": 3664,
+              "start": 3859,
+              "end": 3866,
               "loc": {
                 "start": {
-                  "line": 115,
+                  "line": 116,
                   "column": 8
                 },
                 "end": {
-                  "line": 115,
+                  "line": 116,
                   "column": 15
                 },
                 "identifierName": "Configs"
@@ -1174,15 +1174,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 3657,
-              "end": 3664,
+              "start": 3859,
+              "end": 3866,
               "loc": {
                 "start": {
-                  "line": 115,
+                  "line": 116,
                   "column": 8
                 },
                 "end": {
-                  "line": 115,
+                  "line": 116,
                   "column": 15
                 },
                 "identifierName": "Configs"
@@ -1195,43 +1195,43 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 3649,
-        "end": 3666,
+        "start": 3851,
+        "end": 3868,
         "loc": {
           "start": {
-            "line": 115,
+            "line": 116,
             "column": 0
           },
           "end": {
-            "line": 115,
+            "line": 116,
             "column": 17
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1639,
-          "end": 3647,
+          "start": 1859,
+          "end": 3849,
           "loc": {
             "start": {
-              "line": 48,
+              "line": 51,
               "column": 0
             },
             "end": {
-              "line": 113,
+              "line": 114,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 1645,
-            "end": 1652,
+            "start": 1865,
+            "end": 1872,
             "loc": {
               "start": {
-                "line": 48,
+                "line": 51,
                 "column": 6
               },
               "end": {
-                "line": 48,
+                "line": 51,
                 "column": 13
               },
               "identifierName": "Configs"
@@ -1242,30 +1242,30 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 1653,
-            "end": 3647,
+            "start": 1873,
+            "end": 3849,
             "loc": {
               "start": {
-                "line": 48,
+                "line": 51,
                 "column": 14
               },
               "end": {
-                "line": 113,
+                "line": 114,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 1702,
-                "end": 1724,
+                "start": 1922,
+                "end": 1944,
                 "loc": {
                   "start": {
-                    "line": 53,
+                    "line": 56,
                     "column": 4
                   },
                   "end": {
-                    "line": 55,
+                    "line": 58,
                     "column": 5
                   }
                 },
@@ -1273,15 +1273,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1702,
-                  "end": 1713,
+                  "start": 1922,
+                  "end": 1933,
                   "loc": {
                     "start": {
-                      "line": 53,
+                      "line": 56,
                       "column": 4
                     },
                     "end": {
-                      "line": 53,
+                      "line": 56,
                       "column": 15
                     },
                     "identifierName": "constructor"
@@ -1297,15 +1297,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1716,
-                  "end": 1724,
+                  "start": 1936,
+                  "end": 1944,
                   "loc": {
                     "start": {
-                      "line": 53,
+                      "line": 56,
                       "column": 18
                     },
                     "end": {
-                      "line": 55,
+                      "line": 58,
                       "column": 5
                     }
                   },
@@ -1318,15 +1318,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Creates a Configs.\n     ",
-                    "start": 1660,
-                    "end": 1697,
+                    "start": 1880,
+                    "end": 1917,
                     "loc": {
                       "start": {
-                        "line": 50,
+                        "line": 53,
                         "column": 4
                       },
                       "end": {
-                        "line": 52,
+                        "line": 55,
                         "column": 7
                       }
                     }
@@ -1335,16 +1335,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 1730,
-                    "end": 2381,
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 1950,
+                    "end": 2577,
                     "loc": {
                       "start": {
-                        "line": 57,
+                        "line": 60,
                         "column": 4
                       },
                       "end": {
-                        "line": 70,
+                        "line": 73,
                         "column": 7
                       }
                     }
@@ -1353,15 +1353,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2386,
-                "end": 2494,
+                "start": 2582,
+                "end": 2690,
                 "loc": {
                   "start": {
-                    "line": 71,
+                    "line": 74,
                     "column": 4
                   },
                   "end": {
-                    "line": 73,
+                    "line": 76,
                     "column": 5
                   }
                 },
@@ -1369,15 +1369,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2390,
-                  "end": 2412,
+                  "start": 2586,
+                  "end": 2608,
                   "loc": {
                     "start": {
-                      "line": 71,
+                      "line": 74,
                       "column": 8
                     },
                     "end": {
-                      "line": 71,
+                      "line": 74,
                       "column": 30
                     },
                     "identifierName": "doublePrecisionEnabled"
@@ -1392,15 +1392,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 2413,
-                    "end": 2428,
+                    "start": 2609,
+                    "end": 2624,
                     "loc": {
                       "start": {
-                        "line": 71,
+                        "line": 74,
                         "column": 31
                       },
                       "end": {
-                        "line": 71,
+                        "line": 74,
                         "column": 46
                       },
                       "identifierName": "doublePrecision"
@@ -1410,72 +1410,72 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2430,
-                  "end": 2494,
+                  "start": 2626,
+                  "end": 2690,
                   "loc": {
                     "start": {
-                      "line": 71,
+                      "line": 74,
                       "column": 48
                     },
                     "end": {
-                      "line": 73,
+                      "line": 76,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 2440,
-                      "end": 2488,
+                      "start": 2636,
+                      "end": 2684,
                       "loc": {
                         "start": {
-                          "line": 72,
+                          "line": 75,
                           "column": 8
                         },
                         "end": {
-                          "line": 72,
+                          "line": 75,
                           "column": 56
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 2440,
-                        "end": 2487,
+                        "start": 2636,
+                        "end": 2683,
                         "loc": {
                           "start": {
-                            "line": 72,
+                            "line": 75,
                             "column": 8
                           },
                           "end": {
-                            "line": 72,
+                            "line": 75,
                             "column": 55
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 2440,
-                          "end": 2470,
+                          "start": 2636,
+                          "end": 2666,
                           "loc": {
                             "start": {
-                              "line": 72,
+                              "line": 75,
                               "column": 8
                             },
                             "end": {
-                              "line": 72,
+                              "line": 75,
                               "column": 38
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 2440,
-                            "end": 2444,
+                            "start": 2636,
+                            "end": 2640,
                             "loc": {
                               "start": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 8
                               },
                               "end": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 12
                               },
                               "identifierName": "math"
@@ -1484,15 +1484,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2445,
-                            "end": 2470,
+                            "start": 2641,
+                            "end": 2666,
                             "loc": {
                               "start": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 13
                               },
                               "end": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 38
                               },
                               "identifierName": "setDoublePrecisionEnabled"
@@ -1504,15 +1504,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 2471,
-                            "end": 2486,
+                            "start": 2667,
+                            "end": 2682,
                             "loc": {
                               "start": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 39
                               },
                               "end": {
-                                "line": 72,
+                                "line": 75,
                                 "column": 54
                               },
                               "identifierName": "doublePrecision"
@@ -1529,16 +1529,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 1730,
-                    "end": 2381,
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 1950,
+                    "end": 2577,
                     "loc": {
                       "start": {
-                        "line": 57,
+                        "line": 60,
                         "column": 4
                       },
                       "end": {
-                        "line": 70,
+                        "line": 73,
                         "column": 7
                       }
                     }
@@ -1547,16 +1547,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 2500,
-                    "end": 2622,
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2696,
+                    "end": 2810,
                     "loc": {
                       "start": {
-                        "line": 75,
+                        "line": 78,
                         "column": 4
                       },
                       "end": {
-                        "line": 79,
+                        "line": 82,
                         "column": 7
                       }
                     }
@@ -1565,15 +1565,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2627,
-                "end": 2712,
+                "start": 2815,
+                "end": 2900,
                 "loc": {
                   "start": {
-                    "line": 80,
+                    "line": 83,
                     "column": 4
                   },
                   "end": {
-                    "line": 82,
+                    "line": 85,
                     "column": 5
                   }
                 },
@@ -1581,15 +1581,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2631,
-                  "end": 2653,
+                  "start": 2819,
+                  "end": 2841,
                   "loc": {
                     "start": {
-                      "line": 80,
+                      "line": 83,
                       "column": 8
                     },
                     "end": {
-                      "line": 80,
+                      "line": 83,
                       "column": 30
                     },
                     "identifierName": "doublePrecisionEnabled"
@@ -1604,72 +1604,72 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2656,
-                  "end": 2712,
+                  "start": 2844,
+                  "end": 2900,
                   "loc": {
                     "start": {
-                      "line": 80,
+                      "line": 83,
                       "column": 33
                     },
                     "end": {
-                      "line": 82,
+                      "line": 85,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 2666,
-                      "end": 2706,
+                      "start": 2854,
+                      "end": 2894,
                       "loc": {
                         "start": {
-                          "line": 81,
+                          "line": 84,
                           "column": 8
                         },
                         "end": {
-                          "line": 81,
+                          "line": 84,
                           "column": 48
                         }
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 2673,
-                        "end": 2705,
+                        "start": 2861,
+                        "end": 2893,
                         "loc": {
                           "start": {
-                            "line": 81,
+                            "line": 84,
                             "column": 15
                           },
                           "end": {
-                            "line": 81,
+                            "line": 84,
                             "column": 47
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 2673,
-                          "end": 2703,
+                          "start": 2861,
+                          "end": 2891,
                           "loc": {
                             "start": {
-                              "line": 81,
+                              "line": 84,
                               "column": 15
                             },
                             "end": {
-                              "line": 81,
+                              "line": 84,
                               "column": 45
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 2673,
-                            "end": 2677,
+                            "start": 2861,
+                            "end": 2865,
                             "loc": {
                               "start": {
-                                "line": 81,
+                                "line": 84,
                                 "column": 15
                               },
                               "end": {
-                                "line": 81,
+                                "line": 84,
                                 "column": 19
                               },
                               "identifierName": "math"
@@ -1678,15 +1678,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2678,
-                            "end": 2703,
+                            "start": 2866,
+                            "end": 2891,
                             "loc": {
                               "start": {
-                                "line": 81,
+                                "line": 84,
                                 "column": 20
                               },
                               "end": {
-                                "line": 81,
+                                "line": 84,
                                 "column": 45
                               },
                               "identifierName": "getDoublePrecisionEnabled"
@@ -1705,16 +1705,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 2500,
-                    "end": 2622,
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2696,
+                    "end": 2810,
                     "loc": {
                       "start": {
-                        "line": 75,
+                        "line": 78,
                         "column": 4
                       },
                       "end": {
-                        "line": 79,
+                        "line": 82,
                         "column": 7
                       }
                     }
@@ -1723,16 +1723,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 2720,
-                    "end": 3325,
+                    "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2906,
+                    "end": 3519,
                     "loc": {
                       "start": {
-                        "line": 86,
+                        "line": 87,
                         "column": 4
                       },
                       "end": {
-                        "line": 98,
+                        "line": 99,
                         "column": 7
                       }
                     }
@@ -1741,15 +1741,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3330,
-                "end": 3404,
+                "start": 3524,
+                "end": 3598,
                 "loc": {
                   "start": {
-                    "line": 99,
+                    "line": 100,
                     "column": 4
                   },
                   "end": {
-                    "line": 101,
+                    "line": 102,
                     "column": 5
                   }
                 },
@@ -1757,15 +1757,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3334,
-                  "end": 3344,
+                  "start": 3528,
+                  "end": 3538,
                   "loc": {
                     "start": {
-                      "line": 99,
+                      "line": 100,
                       "column": 8
                     },
                     "end": {
-                      "line": 99,
+                      "line": 100,
                       "column": 18
                     },
                     "identifierName": "rafEnabled"
@@ -1780,15 +1780,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 3345,
-                    "end": 3355,
+                    "start": 3539,
+                    "end": 3549,
                     "loc": {
                       "start": {
-                        "line": 99,
+                        "line": 100,
                         "column": 19
                       },
                       "end": {
-                        "line": 99,
+                        "line": 100,
                         "column": 29
                       },
                       "identifierName": "rafEnabled"
@@ -1798,72 +1798,72 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3357,
-                  "end": 3404,
+                  "start": 3551,
+                  "end": 3598,
                   "loc": {
                     "start": {
-                      "line": 99,
+                      "line": 100,
                       "column": 31
                     },
                     "end": {
-                      "line": 101,
+                      "line": 102,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 3367,
-                      "end": 3398,
+                      "start": 3561,
+                      "end": 3592,
                       "loc": {
                         "start": {
-                          "line": 100,
+                          "line": 101,
                           "column": 8
                         },
                         "end": {
-                          "line": 100,
+                          "line": 101,
                           "column": 39
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 3367,
-                        "end": 3397,
+                        "start": 3561,
+                        "end": 3591,
                         "loc": {
                           "start": {
-                            "line": 100,
+                            "line": 101,
                             "column": 8
                           },
                           "end": {
-                            "line": 100,
+                            "line": 101,
                             "column": 38
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 3367,
-                          "end": 3385,
+                          "start": 3561,
+                          "end": 3579,
                           "loc": {
                             "start": {
-                              "line": 100,
+                              "line": 101,
                               "column": 8
                             },
                             "end": {
-                              "line": 100,
+                              "line": 101,
                               "column": 26
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 3367,
-                            "end": 3371,
+                            "start": 3561,
+                            "end": 3565,
                             "loc": {
                               "start": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 8
                               },
                               "end": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 12
                               },
                               "identifierName": "core"
@@ -1872,15 +1872,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3372,
-                            "end": 3385,
+                            "start": 3566,
+                            "end": 3579,
                             "loc": {
                               "start": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 13
                               },
                               "end": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 26
                               },
                               "identifierName": "setRAFEnabled"
@@ -1892,15 +1892,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 3386,
-                            "end": 3396,
+                            "start": 3580,
+                            "end": 3590,
                             "loc": {
                               "start": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 27
                               },
                               "end": {
-                                "line": 100,
+                                "line": 101,
                                 "column": 37
                               },
                               "identifierName": "rafEnabled"
@@ -1917,16 +1917,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 2720,
-                    "end": 3325,
+                    "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2906,
+                    "end": 3519,
                     "loc": {
                       "start": {
-                        "line": 86,
+                        "line": 87,
                         "column": 4
                       },
                       "end": {
-                        "line": 98,
+                        "line": 99,
                         "column": 7
                       }
                     }
@@ -1935,16 +1935,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 3410,
-                    "end": 3577,
+                    "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 3604,
+                    "end": 3779,
                     "loc": {
                       "start": {
-                        "line": 103,
+                        "line": 104,
                         "column": 4
                       },
                       "end": {
-                        "line": 107,
+                        "line": 108,
                         "column": 7
                       }
                     }
@@ -1953,15 +1953,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3582,
-                "end": 3643,
+                "start": 3784,
+                "end": 3845,
                 "loc": {
                   "start": {
-                    "line": 108,
+                    "line": 109,
                     "column": 4
                   },
                   "end": {
-                    "line": 110,
+                    "line": 111,
                     "column": 5
                   }
                 },
@@ -1969,15 +1969,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3586,
-                  "end": 3596,
+                  "start": 3788,
+                  "end": 3798,
                   "loc": {
                     "start": {
-                      "line": 108,
+                      "line": 109,
                       "column": 8
                     },
                     "end": {
-                      "line": 108,
+                      "line": 109,
                       "column": 18
                     },
                     "identifierName": "rafEnabled"
@@ -1992,72 +1992,72 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3599,
-                  "end": 3643,
+                  "start": 3801,
+                  "end": 3845,
                   "loc": {
                     "start": {
-                      "line": 108,
+                      "line": 109,
                       "column": 21
                     },
                     "end": {
-                      "line": 110,
+                      "line": 111,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 3609,
-                      "end": 3637,
+                      "start": 3811,
+                      "end": 3839,
                       "loc": {
                         "start": {
-                          "line": 109,
+                          "line": 110,
                           "column": 8
                         },
                         "end": {
-                          "line": 109,
+                          "line": 110,
                           "column": 36
                         }
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 3616,
-                        "end": 3636,
+                        "start": 3818,
+                        "end": 3838,
                         "loc": {
                           "start": {
-                            "line": 109,
+                            "line": 110,
                             "column": 15
                           },
                           "end": {
-                            "line": 109,
+                            "line": 110,
                             "column": 35
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 3616,
-                          "end": 3634,
+                          "start": 3818,
+                          "end": 3836,
                           "loc": {
                             "start": {
-                              "line": 109,
+                              "line": 110,
                               "column": 15
                             },
                             "end": {
-                              "line": 109,
+                              "line": 110,
                               "column": 33
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 3616,
-                            "end": 3620,
+                            "start": 3818,
+                            "end": 3822,
                             "loc": {
                               "start": {
-                                "line": 109,
+                                "line": 110,
                                 "column": 15
                               },
                               "end": {
-                                "line": 109,
+                                "line": 110,
                                 "column": 19
                               },
                               "identifierName": "core"
@@ -2066,15 +2066,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3621,
-                            "end": 3634,
+                            "start": 3823,
+                            "end": 3836,
                             "loc": {
                               "start": {
-                                "line": 109,
+                                "line": 110,
                                 "column": 20
                               },
                               "end": {
-                                "line": 109,
+                                "line": 110,
                                 "column": 33
                               },
                               "identifierName": "getRAFEnabled"
@@ -2092,16 +2092,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-                    "start": 3410,
-                    "end": 3577,
+                    "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 3604,
+                    "end": 3779,
                     "loc": {
                       "start": {
-                        "line": 103,
+                        "line": 104,
                         "column": 4
                       },
                       "end": {
-                        "line": 107,
+                        "line": 108,
                         "column": 7
                       }
                     }
@@ -2113,16 +2113,16 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Usage\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but means that we can no longer render double-precision models without jittering.\n *\n * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a\n * performance boost in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+              "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * We'll also switch xeokit from using ````window.requestAnimationFrame```` to ````window.setInterval```` for its render loop,\n * which may give a smoother experience in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
               "start": 79,
-              "end": 1638,
+              "end": 1858,
               "loc": {
                 "start": {
                   "line": 4,
                   "column": 0
                 },
                 "end": {
-                  "line": 47,
+                  "line": 50,
                   "column": 3
                 }
               }
@@ -2141,16 +2141,16 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Usage\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but means that we can no longer render double-precision models without jittering.\n *\n * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a\n * performance boost in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * We'll also switch xeokit from using ````window.requestAnimationFrame```` to ````window.setInterval```` for its render loop,\n * which may give a smoother experience in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
       "start": 79,
-      "end": 1638,
+      "end": 1858,
       "loc": {
         "start": {
           "line": 4,
           "column": 0
         },
         "end": {
-          "line": 47,
+          "line": 50,
           "column": 3
         }
       }
@@ -2158,79 +2158,79 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Creates a Configs.\n     ",
-      "start": 1660,
-      "end": 1697,
+      "start": 1880,
+      "end": 1917,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 53,
           "column": 4
         },
         "end": {
-          "line": 52,
+          "line": 55,
           "column": 7
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-      "start": 1730,
-      "end": 2381,
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 1950,
+      "end": 2577,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 60,
           "column": 4
         },
         "end": {
-          "line": 70,
+          "line": 73,
           "column": 7
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-      "start": 2500,
-      "end": 2622,
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2696,
+      "end": 2810,
       "loc": {
         "start": {
-          "line": 75,
+          "line": 78,
           "column": 4
         },
         "end": {
-          "line": 79,
+          "line": 82,
           "column": 7
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-      "start": 2720,
-      "end": 3325,
+      "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2906,
+      "end": 3519,
       "loc": {
         "start": {
-          "line": 86,
+          "line": 87,
           "column": 4
         },
         "end": {
-          "line": 98,
+          "line": 99,
           "column": 7
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-      "start": 3410,
-      "end": 3577,
+      "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+      "start": 3604,
+      "end": 3779,
       "loc": {
         "start": {
-          "line": 103,
+          "line": 104,
           "column": 4
         },
         "end": {
-          "line": 107,
+          "line": 108,
           "column": 7
         }
       }
@@ -2605,16 +2605,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Usage\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but means that we can no longer render double-precision models without jittering.\n *\n * We'll also switch from window.requestAnimationFrame to window.setInterval for xeokit's animations, which can also give a\n * performance boost in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * We'll also switch xeokit from using ````window.requestAnimationFrame```` to ````window.setInterval```` for its render loop,\n * which may give a smoother experience in some cases.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Disable window.requestAnimationFrame (RAF) and use\n * // window.setInterval for Viewer render loops.\n * // This config can be switched dynamically, if needed.\n * configs.rafEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
       "start": 79,
-      "end": 1638,
+      "end": 1858,
       "loc": {
         "start": {
           "line": 4,
           "column": 0
         },
         "end": {
-          "line": 47,
+          "line": 50,
           "column": 3
         }
       }
@@ -2634,15 +2634,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1639,
-      "end": 1644,
+      "start": 1859,
+      "end": 1864,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 51,
           "column": 0
         },
         "end": {
-          "line": 48,
+          "line": 51,
           "column": 5
         }
       }
@@ -2660,15 +2660,15 @@
         "binop": null
       },
       "value": "Configs",
-      "start": 1645,
-      "end": 1652,
+      "start": 1865,
+      "end": 1872,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 51,
           "column": 6
         },
         "end": {
-          "line": 48,
+          "line": 51,
           "column": 13
         }
       }
@@ -2685,15 +2685,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1653,
-      "end": 1654,
+      "start": 1873,
+      "end": 1874,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 51,
           "column": 14
         },
         "end": {
-          "line": 48,
+          "line": 51,
           "column": 15
         }
       }
@@ -2701,15 +2701,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Creates a Configs.\n     ",
-      "start": 1660,
-      "end": 1697,
+      "start": 1880,
+      "end": 1917,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 53,
           "column": 4
         },
         "end": {
-          "line": 52,
+          "line": 55,
           "column": 7
         }
       }
@@ -2727,15 +2727,15 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 1702,
-      "end": 1713,
+      "start": 1922,
+      "end": 1933,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 56,
           "column": 4
         },
         "end": {
-          "line": 53,
+          "line": 56,
           "column": 15
         }
       }
@@ -2752,15 +2752,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1713,
-      "end": 1714,
+      "start": 1933,
+      "end": 1934,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 56,
           "column": 15
         },
         "end": {
-          "line": 53,
+          "line": 56,
           "column": 16
         }
       }
@@ -2777,15 +2777,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1714,
-      "end": 1715,
+      "start": 1934,
+      "end": 1935,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 56,
           "column": 16
         },
         "end": {
-          "line": 53,
+          "line": 56,
           "column": 17
         }
       }
@@ -2802,15 +2802,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1716,
-      "end": 1717,
+      "start": 1936,
+      "end": 1937,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 56,
           "column": 18
         },
         "end": {
-          "line": 53,
+          "line": 56,
           "column": 19
         }
       }
@@ -2827,31 +2827,31 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1723,
-      "end": 1724,
+      "start": 1943,
+      "end": 1944,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 58,
           "column": 4
         },
         "end": {
-          "line": 55,
+          "line": 58,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether double precision mode is enabled for {@link Viewer}s.\n     *\n     * When double precision mode is enabled (default), {@link Viewer}s will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-      "start": 1730,
-      "end": 2381,
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 1950,
+      "end": 2577,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 60,
           "column": 4
         },
         "end": {
-          "line": 70,
+          "line": 73,
           "column": 7
         }
       }
@@ -2869,15 +2869,15 @@
         "binop": null
       },
       "value": "set",
-      "start": 2386,
-      "end": 2389,
+      "start": 2582,
+      "end": 2585,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 4
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 7
         }
       }
@@ -2895,15 +2895,15 @@
         "binop": null
       },
       "value": "doublePrecisionEnabled",
-      "start": 2390,
-      "end": 2412,
+      "start": 2586,
+      "end": 2608,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 8
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 30
         }
       }
@@ -2920,15 +2920,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2412,
-      "end": 2413,
+      "start": 2608,
+      "end": 2609,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 30
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 31
         }
       }
@@ -2946,15 +2946,15 @@
         "binop": null
       },
       "value": "doublePrecision",
-      "start": 2413,
-      "end": 2428,
+      "start": 2609,
+      "end": 2624,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 31
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 46
         }
       }
@@ -2971,15 +2971,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2428,
-      "end": 2429,
+      "start": 2624,
+      "end": 2625,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 46
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 47
         }
       }
@@ -2996,15 +2996,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2430,
-      "end": 2431,
+      "start": 2626,
+      "end": 2627,
       "loc": {
         "start": {
-          "line": 71,
+          "line": 74,
           "column": 48
         },
         "end": {
-          "line": 71,
+          "line": 74,
           "column": 49
         }
       }
@@ -3022,15 +3022,15 @@
         "binop": null
       },
       "value": "math",
-      "start": 2440,
-      "end": 2444,
+      "start": 2636,
+      "end": 2640,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 8
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 12
         }
       }
@@ -3048,15 +3048,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2444,
-      "end": 2445,
+      "start": 2640,
+      "end": 2641,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 12
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 13
         }
       }
@@ -3074,15 +3074,15 @@
         "binop": null
       },
       "value": "setDoublePrecisionEnabled",
-      "start": 2445,
-      "end": 2470,
+      "start": 2641,
+      "end": 2666,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 13
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 38
         }
       }
@@ -3099,15 +3099,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2470,
-      "end": 2471,
+      "start": 2666,
+      "end": 2667,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 38
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 39
         }
       }
@@ -3125,15 +3125,15 @@
         "binop": null
       },
       "value": "doublePrecision",
-      "start": 2471,
-      "end": 2486,
+      "start": 2667,
+      "end": 2682,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 39
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 54
         }
       }
@@ -3150,15 +3150,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2486,
-      "end": 2487,
+      "start": 2682,
+      "end": 2683,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 54
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 55
         }
       }
@@ -3176,15 +3176,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2487,
-      "end": 2488,
+      "start": 2683,
+      "end": 2684,
       "loc": {
         "start": {
-          "line": 72,
+          "line": 75,
           "column": 55
         },
         "end": {
-          "line": 72,
+          "line": 75,
           "column": 56
         }
       }
@@ -3201,31 +3201,31 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2493,
-      "end": 2494,
+      "start": 2689,
+      "end": 2690,
       "loc": {
         "start": {
-          "line": 73,
+          "line": 76,
           "column": 4
         },
         "end": {
-          "line": 73,
+          "line": 76,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether double precision mode is enabled for all {@link Viewer}s.\n     *\n     * @returns {boolean}\n     ",
-      "start": 2500,
-      "end": 2622,
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2696,
+      "end": 2810,
       "loc": {
         "start": {
-          "line": 75,
+          "line": 78,
           "column": 4
         },
         "end": {
-          "line": 79,
+          "line": 82,
           "column": 7
         }
       }
@@ -3243,15 +3243,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 2627,
-      "end": 2630,
+      "start": 2815,
+      "end": 2818,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 83,
           "column": 4
         },
         "end": {
-          "line": 80,
+          "line": 83,
           "column": 7
         }
       }
@@ -3269,15 +3269,15 @@
         "binop": null
       },
       "value": "doublePrecisionEnabled",
-      "start": 2631,
-      "end": 2653,
+      "start": 2819,
+      "end": 2841,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 83,
           "column": 8
         },
         "end": {
-          "line": 80,
+          "line": 83,
           "column": 30
         }
       }
@@ -3294,15 +3294,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2653,
-      "end": 2654,
+      "start": 2841,
+      "end": 2842,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 83,
           "column": 30
         },
         "end": {
-          "line": 80,
+          "line": 83,
           "column": 31
         }
       }
@@ -3319,15 +3319,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2654,
-      "end": 2655,
+      "start": 2842,
+      "end": 2843,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 83,
           "column": 31
         },
         "end": {
-          "line": 80,
+          "line": 83,
           "column": 32
         }
       }
@@ -3344,15 +3344,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2656,
-      "end": 2657,
+      "start": 2844,
+      "end": 2845,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 83,
           "column": 33
         },
         "end": {
-          "line": 80,
+          "line": 83,
           "column": 34
         }
       }
@@ -3372,15 +3372,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 2666,
-      "end": 2672,
+      "start": 2854,
+      "end": 2860,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 8
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 14
         }
       }
@@ -3398,15 +3398,15 @@
         "binop": null
       },
       "value": "math",
-      "start": 2673,
-      "end": 2677,
+      "start": 2861,
+      "end": 2865,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 15
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 19
         }
       }
@@ -3424,15 +3424,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2677,
-      "end": 2678,
+      "start": 2865,
+      "end": 2866,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 19
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 20
         }
       }
@@ -3450,15 +3450,15 @@
         "binop": null
       },
       "value": "getDoublePrecisionEnabled",
-      "start": 2678,
-      "end": 2703,
+      "start": 2866,
+      "end": 2891,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 20
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 45
         }
       }
@@ -3475,15 +3475,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2703,
-      "end": 2704,
+      "start": 2891,
+      "end": 2892,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 45
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 46
         }
       }
@@ -3500,15 +3500,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2704,
-      "end": 2705,
+      "start": 2892,
+      "end": 2893,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 46
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 47
         }
       }
@@ -3526,15 +3526,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2705,
-      "end": 2706,
+      "start": 2893,
+      "end": 2894,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 84,
           "column": 47
         },
         "end": {
-          "line": 81,
+          "line": 84,
           "column": 48
         }
       }
@@ -3551,31 +3551,31 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2711,
-      "end": 2712,
+      "start": 2899,
+      "end": 2900,
       "loc": {
         "start": {
-          "line": 82,
+          "line": 85,
           "column": 4
         },
         "end": {
-          "line": 82,
+          "line": 85,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether Viewers currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a {@link Viewer} only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
-      "start": 2720,
-      "end": 3325,
+      "value": "*\n     * Sets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * With RAF, the render loop is suspended whenever we switch away from the browser tab that\n     * contains our application. With setInterval, the render loop will continue running. Since a Viewer only\n     * renders frames when the view has actually updated, disabling RAF can actually give a performance boost.\n     *\n     * This is ````true```` by default, to use RAF.\n     *\n     * This can be dynamically set at any time.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2906,
+      "end": 3519,
       "loc": {
         "start": {
-          "line": 86,
+          "line": 87,
           "column": 4
         },
         "end": {
-          "line": 98,
+          "line": 99,
           "column": 7
         }
       }
@@ -3593,15 +3593,15 @@
         "binop": null
       },
       "value": "set",
-      "start": 3330,
-      "end": 3333,
+      "start": 3524,
+      "end": 3527,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 4
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 7
         }
       }
@@ -3619,15 +3619,15 @@
         "binop": null
       },
       "value": "rafEnabled",
-      "start": 3334,
-      "end": 3344,
+      "start": 3528,
+      "end": 3538,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 8
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 18
         }
       }
@@ -3644,15 +3644,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3344,
-      "end": 3345,
+      "start": 3538,
+      "end": 3539,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 18
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 19
         }
       }
@@ -3670,15 +3670,15 @@
         "binop": null
       },
       "value": "rafEnabled",
-      "start": 3345,
-      "end": 3355,
+      "start": 3539,
+      "end": 3549,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 19
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 29
         }
       }
@@ -3695,15 +3695,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3355,
-      "end": 3356,
+      "start": 3549,
+      "end": 3550,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 29
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 30
         }
       }
@@ -3720,15 +3720,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3357,
-      "end": 3358,
+      "start": 3551,
+      "end": 3552,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 31
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 32
         }
       }
@@ -3746,15 +3746,15 @@
         "binop": null
       },
       "value": "core",
-      "start": 3367,
-      "end": 3371,
+      "start": 3561,
+      "end": 3565,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 8
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 12
         }
       }
@@ -3772,15 +3772,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3371,
-      "end": 3372,
+      "start": 3565,
+      "end": 3566,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 12
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 13
         }
       }
@@ -3798,15 +3798,15 @@
         "binop": null
       },
       "value": "setRAFEnabled",
-      "start": 3372,
-      "end": 3385,
+      "start": 3566,
+      "end": 3579,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 13
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 26
         }
       }
@@ -3823,15 +3823,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3385,
-      "end": 3386,
+      "start": 3579,
+      "end": 3580,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 26
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 27
         }
       }
@@ -3849,15 +3849,15 @@
         "binop": null
       },
       "value": "rafEnabled",
-      "start": 3386,
-      "end": 3396,
+      "start": 3580,
+      "end": 3590,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 27
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 37
         }
       }
@@ -3874,15 +3874,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3396,
-      "end": 3397,
+      "start": 3590,
+      "end": 3591,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 37
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 38
         }
       }
@@ -3900,15 +3900,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3397,
-      "end": 3398,
+      "start": 3591,
+      "end": 3592,
       "loc": {
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 38
         },
         "end": {
-          "line": 100,
+          "line": 101,
           "column": 39
         }
       }
@@ -3925,31 +3925,31 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3403,
-      "end": 3404,
+      "start": 3597,
+      "end": 3598,
       "loc": {
         "start": {
-          "line": 101,
+          "line": 102,
           "column": 4
         },
         "end": {
-          "line": 101,
+          "line": 102,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether {@link Viewer}s currently use window.requestAnimationFrame (RAF) or window.setInterval for animations.\n     *\n     * @returns {boolean}\n     ",
-      "start": 3410,
-      "end": 3577,
+      "value": "*\n     * Gets whether Viewers currently use ````window.requestAnimationFrame```` (RAF) or ````window.setInterval```` for animations.\n     *\n     * @returns {boolean}\n     ",
+      "start": 3604,
+      "end": 3779,
       "loc": {
         "start": {
-          "line": 103,
+          "line": 104,
           "column": 4
         },
         "end": {
-          "line": 107,
+          "line": 108,
           "column": 7
         }
       }
@@ -3967,15 +3967,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 3582,
-      "end": 3585,
+      "start": 3784,
+      "end": 3787,
       "loc": {
         "start": {
-          "line": 108,
+          "line": 109,
           "column": 4
         },
         "end": {
-          "line": 108,
+          "line": 109,
           "column": 7
         }
       }
@@ -3993,15 +3993,15 @@
         "binop": null
       },
       "value": "rafEnabled",
-      "start": 3586,
-      "end": 3596,
+      "start": 3788,
+      "end": 3798,
       "loc": {
         "start": {
-          "line": 108,
+          "line": 109,
           "column": 8
         },
         "end": {
-          "line": 108,
+          "line": 109,
           "column": 18
         }
       }
@@ -4018,15 +4018,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3596,
-      "end": 3597,
+      "start": 3798,
+      "end": 3799,
       "loc": {
         "start": {
-          "line": 108,
+          "line": 109,
           "column": 18
         },
         "end": {
-          "line": 108,
+          "line": 109,
           "column": 19
         }
       }
@@ -4043,15 +4043,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3597,
-      "end": 3598,
+      "start": 3799,
+      "end": 3800,
       "loc": {
         "start": {
-          "line": 108,
+          "line": 109,
           "column": 19
         },
         "end": {
-          "line": 108,
+          "line": 109,
           "column": 20
         }
       }
@@ -4068,15 +4068,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3599,
-      "end": 3600,
+      "start": 3801,
+      "end": 3802,
       "loc": {
         "start": {
-          "line": 108,
+          "line": 109,
           "column": 21
         },
         "end": {
-          "line": 108,
+          "line": 109,
           "column": 22
         }
       }
@@ -4096,15 +4096,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 3609,
-      "end": 3615,
+      "start": 3811,
+      "end": 3817,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 8
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 14
         }
       }
@@ -4122,15 +4122,15 @@
         "binop": null
       },
       "value": "core",
-      "start": 3616,
-      "end": 3620,
+      "start": 3818,
+      "end": 3822,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 15
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 19
         }
       }
@@ -4148,15 +4148,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3620,
-      "end": 3621,
+      "start": 3822,
+      "end": 3823,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 19
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 20
         }
       }
@@ -4174,15 +4174,15 @@
         "binop": null
       },
       "value": "getRAFEnabled",
-      "start": 3621,
-      "end": 3634,
+      "start": 3823,
+      "end": 3836,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 20
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 33
         }
       }
@@ -4199,15 +4199,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3634,
-      "end": 3635,
+      "start": 3836,
+      "end": 3837,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 33
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 34
         }
       }
@@ -4224,15 +4224,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3635,
-      "end": 3636,
+      "start": 3837,
+      "end": 3838,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 34
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 35
         }
       }
@@ -4250,15 +4250,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3636,
-      "end": 3637,
+      "start": 3838,
+      "end": 3839,
       "loc": {
         "start": {
-          "line": 109,
+          "line": 110,
           "column": 35
         },
         "end": {
-          "line": 109,
+          "line": 110,
           "column": 36
         }
       }
@@ -4275,15 +4275,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3642,
-      "end": 3643,
+      "start": 3844,
+      "end": 3845,
       "loc": {
         "start": {
-          "line": 110,
+          "line": 111,
           "column": 4
         },
         "end": {
-          "line": 110,
+          "line": 111,
           "column": 5
         }
       }
@@ -4300,15 +4300,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3646,
-      "end": 3647,
+      "start": 3848,
+      "end": 3849,
       "loc": {
         "start": {
-          "line": 113,
+          "line": 114,
           "column": 0
         },
         "end": {
-          "line": 113,
+          "line": 114,
           "column": 1
         }
       }
@@ -4328,15 +4328,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 3649,
-      "end": 3655,
+      "start": 3851,
+      "end": 3857,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 0
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 6
         }
       }
@@ -4353,15 +4353,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3656,
-      "end": 3657,
+      "start": 3858,
+      "end": 3859,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 7
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 8
         }
       }
@@ -4379,15 +4379,15 @@
         "binop": null
       },
       "value": "Configs",
-      "start": 3657,
-      "end": 3664,
+      "start": 3859,
+      "end": 3866,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 8
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 15
         }
       }
@@ -4404,15 +4404,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3664,
-      "end": 3665,
+      "start": 3866,
+      "end": 3867,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 15
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 16
         }
       }
@@ -4430,15 +4430,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3665,
-      "end": 3666,
+      "start": 3867,
+      "end": 3868,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 16
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 17
         }
       }
@@ -4456,15 +4456,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3666,
-      "end": 3666,
+      "start": 3868,
+      "end": 3868,
       "loc": {
         "start": {
-          "line": 115,
+          "line": 116,
           "column": 17
         },
         "end": {
-          "line": 115,
+          "line": 116,
           "column": 17
         }
       }
