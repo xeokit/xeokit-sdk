@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -163,22 +164,19 @@ class KeyboardPanRotateDollyHandler {
 
         const canvas = scene.canvas.canvas;
 
-        const pickController = controllers.pickController;
-
         let mouseMovedSinceLastKeyboardDolly = true;
 
-        document.addEventListener(&quot;mousemove&quot;, this._documentMouseMoveHandler = () =&gt; {
+        this._onSceneMouseMove = input.on(&quot;mousemove&quot;, () =&gt; {
             mouseMovedSinceLastKeyboardDolly = true;
         });
 
-        document.addEventListener(&quot;keydown&quot;, this._documentKeyDownHandler = (e) =&gt; {
+        this._onSceneKeyDown = input.on(&quot;keydown&quot;, (keyCode) =&gt; {
             if (!(configs.active &amp;&amp; configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
             if (!states.mouseover) {
                 return;
             }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = true;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -186,14 +184,13 @@ class KeyboardPanRotateDollyHandler {
             }
         });
 
-        document.addEventListener(&quot;keyup&quot;, this._documentKeyUpHandler = (e) =&gt; {
+        this._onSceneKeyUp = input.on(&quot;keyup&quot;, (keyCode) =&gt; {
             if (!(configs.active &amp;&amp; configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
             if (!states.mouseover) {
                 return;
             }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -328,13 +325,14 @@ class KeyboardPanRotateDollyHandler {
 
         this._scene.off(this._onTick);
 
-        document.removeEventListener(&quot;mousemove&quot;, this._documentMouseMoveHandler);
-        document.removeEventListener(&quot;keydown&quot;, this._documentKeyDownHandler);
-        document.removeEventListener(&quot;keyup&quot;, this._documentKeyUpHandler);
+        this._scene.input.off(this._onSceneMouseMove);
+        this._scene.input.off(this._onSceneKeyDown);
+        this._scene.input.off(this._onSceneKeyUp);
     }
 }
 
-export {KeyboardPanRotateDollyHandler};</code></pre>
+export {KeyboardPanRotateDollyHandler};
+</code></pre>
 
 </div>
 

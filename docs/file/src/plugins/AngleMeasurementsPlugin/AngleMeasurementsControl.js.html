@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -149,7 +150,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Component} from &quot;../../viewer/scene/Component.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Dot} from &quot;../lib/html/Dot&quot;;
+import {Component} from &quot;../../viewer/scene/Component.js&quot;;
 import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
 const HOVERING = 0;
@@ -184,9 +186,10 @@ class AngleMeasurementsControl extends Component {
         this._active = false;
         this._state = HOVERING;
         this._currentAngleMeasurement = null;
-        this._previousAngleMeasurement = null;
         this._onhoverSurface = null;
+        this._onPickedSurface = null;
         this._onHoverNothing = null;
+        this._onPickedNothing = null;
     }
 
     /** Gets if this AngleMeasurementsControl is currently active, where it is responding to input.
@@ -206,6 +209,12 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
+        this.startDot = new Dot(this.plugin._container,
+            {
+                fillColor: this.plugin.defaultColor,
+                zIndex: this.plugin.zIndex + 1
+            });
+
         const cameraControl = this.plugin.viewer.cameraControl;
 
         let over = false;
@@ -223,7 +232,11 @@ class AngleMeasurementsControl extends Component {
             hoverCanvasPos.set(e.canvasPos);
 
             if (this._state === HOVERING) {
-                document.body.style.cursor = &quot;pointer&quot;;
+                if (this.startDot) {
+                    this.startDot.setVisible(true);
+                    this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
+                }
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;pointer&quot;;
                 return;
             }
 
@@ -236,7 +249,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = false;
                         this._currentAngleMeasurement.corner.entity = e.entity;
                         this._currentAngleMeasurement.corner.worldPos = e.worldPos;
-                        document.body.style.cursor = &quot;pointer&quot;;
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;pointer&quot;;
                         break;
                     case FINDING_TARGET:
                         this._currentAngleMeasurement.targetWireVisible = true;
@@ -244,7 +257,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement.target.entity = e.entity;
                         this._currentAngleMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = &quot;pointer&quot;;
+                        this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;pointer&quot;;
                         break;
                 }
             }
@@ -265,14 +278,14 @@ class AngleMeasurementsControl extends Component {
                 return;
             }
 
+            if (this.startDot) {
+                this.startDot.destroy();
+                this.startDot = null;
+            }
+
             switch (this._state) {
 
                 case HOVERING:
-                    if (this._previousAngleMeasurement) {
-                        this._previousAngleMeasurement.originVisible = true;
-                        this._previousAngleMeasurement.cornerVisible = true;
-                        this._previousAngleMeasurement.targetVisible = true;
-                    }
                     if (over) {
                         if (pickSurfacePrecisionEnabled) {
                             const pickResult = this.plugin.viewer.scene.pick({
@@ -306,8 +319,9 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
-                        this._previousAngleMeasurement = this._currentAngleMeasurement;
                         this._state = FINDING_CORNER;
+
+                        this.fire(&quot;measurementStart&quot;, this._currentAngleMeasurement);
                     }
                     break;
 
@@ -331,8 +345,9 @@ class AngleMeasurementsControl extends Component {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
                             this._state = HOVERING
+
+                            this.fire(&quot;measurementCancel&quot;, this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -352,15 +367,16 @@ class AngleMeasurementsControl extends Component {
                         }
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this.fire(&quot;measurementEnd&quot;, this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
-                        this._previousAngleMeasurement = null;
                         this._state = HOVERING;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
-                            this._previousAngleMeasurement = null;
                             this._state = HOVERING;
+
+                            this.fire(&quot;measurementCancel&quot;, this._currentAngleMeasurement);
                         }
                     }
                     break;
@@ -368,6 +384,9 @@ class AngleMeasurementsControl extends Component {
         });
 
         this._onHoverNothing = cameraControl.on(&quot;hoverOff&quot;, e =&gt; {
+            if (this.startDot) {
+                this.startDot.setVisible(false);
+            }
             over = false;
             if (this._currentAngleMeasurement) {
                 switch (this._state) {
@@ -389,7 +408,7 @@ class AngleMeasurementsControl extends Component {
                         break;
 
                 }
-                document.body.style.cursor = &quot;default&quot;;
+                this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;default&quot;;
             }
         });
 
@@ -407,6 +426,11 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
+        if (this.startDot) {
+            this.startDot.destroy();
+            this.startDot = null;
+        }
+
         this.reset();
 
         const cameraControl = this.plugin.viewer.cameraControl;
@@ -416,7 +440,9 @@ class AngleMeasurementsControl extends Component {
         input.off(this._onInputMouseUp);
 
         cameraControl.off(this._onhoverSurface);
+        cameraControl.off(this._onPickedSurface);
         cameraControl.off(this._onHoverNothing);
+        cameraControl.off(this._onPickedNothing);
 
         this._currentAngleMeasurement = null;
 
@@ -431,18 +457,16 @@ class AngleMeasurementsControl extends Component {
      * Does nothing if the AngleMeasurementsControl is not active.
      */
     reset() {
-        
+
         if (!this._active) {
             return;
         }
-        
+
         if (this._currentAngleMeasurement) {
             this._currentAngleMeasurement.destroy();
             this._currentAngleMeasurement = null;
         }
-        
-        this._previousAngleMeasurement = null;
-        
+
         this._state = HOVERING;
     }
 
@@ -456,7 +480,8 @@ class AngleMeasurementsControl extends Component {
 
 }
 
-export {AngleMeasurementsControl};</code></pre>
+export {AngleMeasurementsControl};
+</code></pre>
 
 </div>
 

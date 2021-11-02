@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -768,7 +769,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
@@ -813,6 +814,13 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
       <td data-ice="type" class="code"><span>HTMLCanvasElement</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>Reference of an existing HTML canvas for the <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-scene">Viewer#scene</a></span> - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.keyboardEventsElement</td>
+      <td data-ice="type" class="code"><span>HTMLElement</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1042,7 +1050,7 @@ that it does not clip huge models.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 
@@ -1102,7 +1110,7 @@ that it does not clip huge models.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1163,7 +1171,7 @@ controls the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Sc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1224,7 +1232,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -1284,7 +1292,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -1344,7 +1352,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       <span class="since" data-ice="since">since 2.0</span>
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -1407,7 +1415,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -1467,7 +1475,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -1530,7 +1538,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber287">source</a></span></span>
     </span>
   </h3>
 
@@ -1576,7 +1584,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -1620,7 +1628,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -1665,7 +1673,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber216">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber218">source</a></span></span>
     </span>
   </h3>
 
@@ -1726,7 +1734,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber185">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -1794,7 +1802,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -1904,7 +1912,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -1965,7 +1973,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber198">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber200">source</a></span></span>
     </span>
   </h3>
 
@@ -2025,7 +2033,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber170">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 

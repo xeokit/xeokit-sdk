@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -365,6 +366,34 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <td>
       <span class="access" data-ice="access">public</span>
       
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-member-defaultColor">defaultColor</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -383,6 +412,34 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
         
         <div data-ice="description"><p>Gets the existing <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s, each mapped to its <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span>.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-member-zIndex">zIndex</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -773,7 +830,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber138">source</a></span></span>
     </span>
   </h3>
 
@@ -822,6 +879,21 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
       <td data-ice="description"><p>Container DOM element for markers and labels. Defaults to <code>document.body</code>.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.defaultColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: null</li></ul></td>
+      <td data-ice="description"><p>The default color of the dots, wire and label.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.zIndex</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -859,7 +931,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -868,6 +940,49 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
   
   <div data-ice="description"><p>Gets the <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span>, which creates <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s from user input.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-defaultColor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">defaultColor</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber148">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -903,7 +1018,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -912,6 +1027,49 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
   
   <div data-ice="description"><p>Gets the existing <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s, each mapped to its <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span>.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-zIndex">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">zIndex</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber149">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -950,7 +1108,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber251">source</a></span></span>
     </span>
   </h3>
 
@@ -994,7 +1152,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber188">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber193">source</a></span></span>
     </span>
   </h3>
 
@@ -1126,7 +1284,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
@@ -1171,7 +1329,7 @@ angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMea
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 

@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -149,12 +150,9 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Component} from &quot;../../viewer/scene/Component.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Dot} from &quot;../lib/html/Dot.js&quot;;
+import {Component} from &quot;../../viewer/scene/Component.js&quot;;
 import {math} from &quot;../../viewer/scene/math/math.js&quot;;
-
-const HOVERING = 0;
-const FINDING_ORIGIN = 1;
-const FINDING_TARGET = 2;
 
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
@@ -181,11 +179,21 @@ class DistanceMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
-        this._state = HOVERING;
+
         this._currentDistMeasurement = null;
-        this._prevDistMeasurement = null;
+        // Keep initial measurement state values to do not force values but put the default ones.
+        this._currentDistMeasurementInitState = {
+            wireVisible: null,
+            axisVisible: null,
+            targetVisible: null,
+        }
+
         this._onHoverSurface = null;
         this._onHoverOff = null;
+        this._onPickedNothing = null;
+
+        this._onInputMouseDown = null;
+        this._onInputMouseUp = null;
     }
 
     /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
@@ -207,35 +215,35 @@ class DistanceMeasurementsControl extends Component {
 
         const cameraControl = this.plugin.viewer.cameraControl;
 
-        let over = false;
-        let entity = null;
-        let worldPos = math.vec3();
+        let hoveredEntity = null;
+        const worldPos = math.vec3();
         const hoverCanvasPos = math.vec2();
 
         const pickSurfacePrecisionEnabled = this.plugin.viewer.scene.pickSurfacePrecisionEnabled;
 
+        this.startDot = new Dot(this.plugin._container,
+            {
+                fillColor: this.plugin.defaultColor,
+                zIndex: this.plugin.zIndex + 1
+            });
+
         this._onHoverSurface = cameraControl.on(&quot;hoverSurface&quot;, e =&gt; {
 
-            over = true;
-            entity = e.entity;
+            hoveredEntity = e.entity;
             worldPos.set(e.worldPos);
             hoverCanvasPos.set(e.canvasPos);
 
-            if (this._state === HOVERING) {
-                document.body.style.cursor = &quot;pointer&quot;;
-                return;
-            }
+            this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;pointer&quot;;
 
             if (this._currentDistMeasurement) {
-                switch (this._state) {
-                    case FINDING_TARGET:
-                        this._currentDistMeasurement.wireVisible = true;
-                        this._currentDistMeasurement.axisVisible = true;
-                        this._currentDistMeasurement.target.entity = e.entity;
-                        this._currentDistMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = &quot;pointer&quot;;
-                        break;
-                }
+                this._currentDistMeasurement.wireVisible = this._currentDistMeasurementInitState.wireVisible;
+                this._currentDistMeasurement.axisVisible = this._currentDistMeasurementInitState.axisVisible;
+                this._currentDistMeasurement.targetVisible = this._currentDistMeasurementInitState.targetVisible;
+                this._currentDistMeasurement.target.entity = hoveredEntity;
+                this._currentDistMeasurement.target.worldPos = worldPos;
+            } else if (this.startDot) {
+                this.startDot.setVisible(true);
+                this.startDot.setPos(e.canvasPos[0], e.canvasPos[1]);
             }
         });
 
@@ -254,103 +262,84 @@ class DistanceMeasurementsControl extends Component {
                 return;
             }
 
-            switch (this._state) {
+            if (this.startDot) {
+                this.startDot.destroy();
+                this.startDot = null;
+            }
 
-                case HOVERING:
-
-                    if (this._prevDistMeasurement) {
-                        this._prevDistMeasurement.originVisible = true;
-                        this._prevDistMeasurement.targetVisible = true;
-                        this._prevDistMeasurement.axisVisible = true;
-                    }
-                    if (over) {
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = this.plugin.viewer.scene.pick({
-                                canvasPos: hoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult &amp;&amp; pickResult.worldPos) {
-                                worldPos.set(pickResult.worldPos);
-                            }
-                        }
-                        this._currentDistMeasurement = this.plugin.createMeasurement({
-                            id: math.createUUID(),
-                            origin: {
-                                entity: entity,
-                                worldPos: worldPos
-                            },
-                            target: {
-                                entity: entity,
-                                worldPos: worldPos
-                            },
-                            approximate: true
+            if (this._currentDistMeasurement) {
+                if (hoveredEntity) {
+                    if (pickSurfacePrecisionEnabled) {
+                        const pickResult = this.plugin.viewer.scene.pick({
+                            canvasPos: hoverCanvasPos,
+                            pickSurface: true,
+                            pickSurfacePrecision: true
                         });
-                        this._currentDistMeasurement.axisVisible = false;
-                        this._currentDistMeasurement.targetVisible = true;
-                        this._prevDistMeasurement = this._currentDistMeasurement;
-                        this._state = FINDING_TARGET;
-                    }
-                    break;
-
-                case FINDING_TARGET:
-
-                    if (over) {
-
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = this.plugin.viewer.scene.pick({
-                                canvasPos: hoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult &amp;&amp; pickResult.worldPos) {
-                                this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
-                            }
-                            this._currentDistMeasurement.approximate = false;
+                        if (pickResult &amp;&amp; pickResult.worldPos) {
+                            this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
                         }
+                        this._currentDistMeasurement.approximate = false;
+                    }
 
-                        this._currentDistMeasurement.axisVisible = true;
-                        this._currentDistMeasurement.targetVisible = true;
-                        this._currentDistMeasurement = null;
-                        this._prevDistMeasurement = null;
-
-                        this._state = HOVERING;
-
-                    } else {
-
-                        if (this._currentDistMeasurement) {
-                            this._currentDistMeasurement.destroy();
-                            this._currentDistMeasurement = null;
-                            this._prevDistMeasurement = null;
-                            this._state = HOVERING;
+                    this.fire(&quot;measurementEnd&quot;, this._currentDistMeasurement);
+                    this._currentDistMeasurement = null;
+                } else {
+                    this._currentDistMeasurement.destroy();
+                    this.fire(&quot;measurementCancel&quot;, this._currentDistMeasurement);
+                    this._currentDistMeasurement = null;
+                }
+            } else {
+                if (hoveredEntity) {
+                    if (pickSurfacePrecisionEnabled) {
+                        const pickResult = this.plugin.viewer.scene.pick({
+                            canvasPos: hoverCanvasPos,
+                            pickSurface: true,
+                            pickSurfacePrecision: true
+                        });
+                        if (pickResult &amp;&amp; pickResult.worldPos) {
+                            worldPos.set(pickResult.worldPos);
                         }
                     }
-                    break;
+                    this._currentDistMeasurement = this.plugin.createMeasurement({
+                        id: math.createUUID(),
+                        origin: {
+                            entity: hoveredEntity,
+                            worldPos: worldPos
+                        },
+                        target: {
+                            entity: hoveredEntity,
+                            worldPos: worldPos
+                        },
+                        approximate: true
+                    });
 
-                default:
-                    break;
+                    this._currentDistMeasurementInitState.axisVisible = this._currentDistMeasurement.axisVisible;
+                    this._currentDistMeasurementInitState.wireVisible = this._currentDistMeasurement.wireVisible;
+                    this._currentDistMeasurementInitState.targetVisible = this._currentDistMeasurement.targetVisible;
+
+                    this.fire(&quot;measurementStart&quot;, this._currentDistMeasurement);
+                }
             }
         });
 
         this._onHoverOff = cameraControl.on(&quot;hoverOff&quot;, e =&gt; {
-            over = false;
-            if (this._currentDistMeasurement) {
-                switch (this._state) {
-                    case HOVERING:
-                        break;
-                    case FINDING_ORIGIN:
-                        this._currentDistMeasurement.wireVisible = false;
-                        this._currentDistMeasurement.originVisible = false;
-                        this._currentDistMeasurement.axisVisible = false;
-                        break;
-                    case FINDING_TARGET:
-                        this._currentDistMeasurement.wireVisible = false;
-                        this._currentDistMeasurement.targetVisible = false;
-                        this._currentDistMeasurement.axisVisible = false;
-                        break;
-                }
+            if (this.startDot) {
+                this.startDot.setVisible(false);
             }
-            document.body.style.cursor = &quot;default&quot;;
+            hoveredEntity = null;
+            if (this._currentDistMeasurement) {
+                this._currentDistMeasurement.wireVisible = false;
+                this._currentDistMeasurement.targetVisible = false;
+                this._currentDistMeasurement.axisVisible = false;
+            }
+            this.plugin.viewer.scene.canvas.canvas.style.cursor = &quot;default&quot;;
+        });
+
+        this._onPickedNothing = cameraControl.on(&quot;pickedNothing&quot;, e =&gt; {
+            if (this._currentDistMeasurement) {
+                this._currentDistMeasurement.destroy();
+                this._currentDistMeasurement = null;
+            }
         });
 
         this._active = true;
@@ -367,15 +356,23 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
 
+        if (this.startDot) {
+            this.startDot.destroy();
+            this.startDot = null;
+        }
+
         this.reset();
 
-        const cameraControl = this.plugin.viewer.cameraControl;
         const input = this.plugin.viewer.scene.input;
 
         input.off(this._onInputMouseDown);
+        input.off(this._onInputMouseUp);
+
+        const cameraControl = this.plugin.viewer.cameraControl;
 
         cameraControl.off(this._onHoverSurface);
         cameraControl.off(this._onHoverOff);
+        cameraControl.off(this._onPickedNothing);
 
         this._currentDistMeasurement = null;
 
@@ -399,8 +396,6 @@ class DistanceMeasurementsControl extends Component {
             this._currentDistMeasurement.destroy();
             this._currentDistMeasurement = null;
         }
-        this._prevDistMeasurement = null;
-        this._state = HOVERING;
     }
 
     /**

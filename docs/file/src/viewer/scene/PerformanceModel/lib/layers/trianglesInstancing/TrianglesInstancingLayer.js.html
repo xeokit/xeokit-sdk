@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -159,7 +160,7 @@ import {RenderState} from &quot;../../../../webgl/RenderState.js&quot;;
 import {ArrayBuf} from &quot;../../../../webgl/ArrayBuf.js&quot;;
 import {geometryCompressionUtils} from &quot;../../../../math/geometryCompressionUtils.js&quot;;
 import {getInstancingRenderers} from &quot;./TrianglesInstancingRenderers.js&quot;;
-import {quantizePositions, octEncodeNormals} from &quot;../../compression.js&quot;;
+import {octEncodeNormals, quantizePositions} from &quot;../../compression.js&quot;;
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;OES_element_index_uint&quot;];
 
@@ -191,7 +192,7 @@ class TrianglesInstancingLayer {
      * @param cfg.indices Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.edgeThreshold
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @params cfg.solid
      */
     constructor(model, cfg) {
@@ -216,7 +217,7 @@ class TrianglesInstancingLayer {
             positionsDecodeMatrix: math.mat4(),
             numInstances: 0,
             obb: math.OBB3(),
-            rtcCenter: null
+            origin: null
         };
 
         const preCompressed = (!!cfg.positionsDecodeMatrix);
@@ -320,8 +321,8 @@ class TrianglesInstancingLayer {
 
         this._portions = [];
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         this._finalized = false;
@@ -456,14 +457,14 @@ class TrianglesInstancingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -477,6 +478,7 @@ class TrianglesInstancingLayer {
         if (this.model.scene.pickSurfacePrecisionEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
+            portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
         }
 
         this._portions.push(portion);
@@ -1107,7 +1109,7 @@ class TrianglesInstancingLayer {
 
     //-----------------------------------------------------------------------------------------
 
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos) {
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
         if (!this.model.scene.pickSurfacePrecisionEnabled) {
             return false;
@@ -1125,15 +1127,19 @@ class TrianglesInstancingLayer {
             portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
         }
 
+        if (worldNormal &amp;&amp; !portion.normalMatrix) {
+            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
+        }
+
         const quantizedPositions = state.quantizedPositions;
         const indices = state.indices;
-        const rtcCenter = state.rtcCenter;
+        const origin = state.origin;
         const offset = portion.offset;
 
         const rtcRayOrigin = tempVec3a;
         const rtcRayDir = tempVec3b;
 
-        rtcRayOrigin.set(rtcCenter ? math.subVec3(worldRayOrigin, rtcCenter, tempVec3c) : worldRayOrigin);  // World -&gt; RTC
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -&gt; RTC
         rtcRayDir.set(worldRayDir);
 
         if (offset) {
@@ -1184,8 +1190,8 @@ class TrianglesInstancingLayer {
                     math.addVec3(closestIntersectPos, offset);
                 }
 
-                if (rtcCenter) {
-                    math.addVec3(closestIntersectPos, rtcCenter);
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
                 }
 
                 const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
@@ -1193,9 +1199,18 @@ class TrianglesInstancingLayer {
                 if (!gotIntersect || dist &gt; closestDist) {
                     closestDist = dist;
                     worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit &gt;2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
                     gotIntersect = true;
                 }
             }
+        }
+
+        if (gotIntersect &amp;&amp; worldNormal) {
+            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
         }
 
         return gotIntersect;

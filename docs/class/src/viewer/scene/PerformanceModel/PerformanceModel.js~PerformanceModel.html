@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -149,13 +150,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber811">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber812">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber811">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber812">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -178,9 +179,9 @@
   <div class="description" data-ice="description"><p>A high-performance model representation for efficient rendering and low memory usage.</p>
 <h1 id="examples">Examples</h1><ul>
 <li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching">PerformanceModel using geometry batching</a></li>
-<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter">PerformanceModel using geometry batching and RTC coordinates</a></li>
+<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin">PerformanceModel using geometry batching and RTC coordinates</a></li>
 <li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing">PerformanceModel using geometry instancing</a></li>
-<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter">PerformanceModel using geometry instancing and RTC coordinates</a></li>
+<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin">PerformanceModel using geometry instancing and RTC coordinates</a></li>
 </ul>
 <h1 id="overview">Overview</h1><p>While xeokit&apos;s standard <a href="https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs">scene graph</a> is great for gizmos and medium-sized models, it doesn&apos;t scale up to millions of objects in terms of memory and rendering efficiency.</p>
 <p>For huge models, we have the <code>PerformanceModel</code> representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.</p>
@@ -678,18 +679,18 @@ has a non-hierarchical scene representation).</p>
 <p>Internally, when rendering an object with RTC coordinates, xeokit first temporarily translates the camera viewing matrix by the object&apos;s tile&apos;s RTC center, on the CPU, using 64-bit math.</p>
 <p>Then xeokit loads the viewing matrix into its WebGL shaders, where math happens at 32-bit precision. Within the shaders, the matrix is effectively down-cast to 32-bit precision, and the object&apos;s 32-bit vertex positions are transformed by the matrix.</p>
 <p>We see no jittering, because with RTC a detectable loss of GPU accuracy only starts happening to objects as they become very distant from the camera viewpoint, at which point they are too small to be discernible anyway.</p>
-<h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>rtcCenter</code>.</p>
+<h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>origin</code>.</p>
 <p>For simplicity, our example&apos;s meshes all instance the same geometry. Therefore, our example model has only one RTC center.</p>
 <p>Note that the axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter">Run this example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin">Run this example</a>]</li>
 </ul>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const rtcCenter = [100000000, 0, 100000000];
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const origin = [100000000, 0, 100000000];
 
 performanceModel.createGeometry({
     id: &quot;box&quot;,
-    rtcCenter: rtcCenter, // This geometry&apos;s positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+    origin: origin, // This geometry&apos;s positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -766,18 +767,18 @@ performanceModel.createEntity({
     isObject: true
 });</code>
 </code></pre>
-<h2 id="rtc-coordinates-with-geometry-batching">RTC Coordinates with Geometry Batching</h2><p>To use RTC with <code>PerformanceModel</code> geometry batching, we specify an RTC center (<code>rtcCenter</code>) for each mesh. For performance, we try to have as many meshes share the same value for <code>rtcCenter</code> as possible. Each mesh&apos;s <code>positions</code>, <code>position</code> and <code>rotation</code> properties are assumed to be relative to <code>rtcCenter</code>.</p>
+<h2 id="rtc-coordinates-with-geometry-batching">RTC Coordinates with Geometry Batching</h2><p>To use RTC with <code>PerformanceModel</code> geometry batching, we specify an RTC center (<code>origin</code>) for each mesh. For performance, we try to have as many meshes share the same value for <code>origin</code> as possible. Each mesh&apos;s <code>positions</code>, <code>position</code> and <code>rotation</code> properties are assumed to be relative to <code>origin</code>.</p>
 <p>For simplicity, the meshes in our example all share the same RTC center.</p>
 <p>The axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter">Run this example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin">Run this example</a>]</li>
 </ul>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const rtcCenter = [100000000, 0, 100000000];
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const origin = [100000000, 0, 100000000];
 
 performanceModel.createMesh({
     id: &quot;leg1&quot;,
-    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    origin: origin, // This mesh&apos;s positions and transforms are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -795,7 +796,7 @@ performanceModel.createEntity({
 
 performanceModel.createMesh({
     id: &quot;leg2&quot;,
-    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    origin: origin, // This mesh&apos;s positions and transforms are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -813,7 +814,7 @@ performanceModel.createEntity({
 
 performanceModel.createMesh({
     id: &quot;leg3&quot;,
-    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    origin: origin, // This mesh&apos;s positions and transforms are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -831,7 +832,7 @@ performanceModel.createEntity({
 
 performanceModel.createMesh({
     id: &quot;leg4&quot;,
-    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    origin: origin, // This mesh&apos;s positions and transforms are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -849,7 +850,7 @@ performanceModel.createEntity({
 
 performanceModel.createMesh({
     id: &quot;top&quot;,
-    rtcCenter: rtcCenter, // This mesh&apos;s positions and transforms are relative to the RTC center
+    origin: origin, // This mesh&apos;s positions and transforms are relative to the RTC center
     primitive: &quot;triangles&quot;,
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -953,35 +954,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-backfaces">backfaces</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if backfaces are rendered for this PerformanceModel.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1021,13 +993,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-castsShadow">castsShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-backfaces">backfaces</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if this PerformanceModel casts a shadow.</p>
+        <div data-ice="description"><p>Sets if backfaces are rendered for this PerformanceModel.</p>
 </div>
       </div>
     </td>
@@ -1079,13 +1051,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-clippable">clippable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-castsShadow">castsShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are clippable.</p>
+        <div data-ice="description"><p>Sets if this PerformanceModel casts a shadow.</p>
 </div>
       </div>
     </td>
@@ -1137,13 +1109,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-collidable">collidable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-clippable">clippable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are collidable.</p>
+        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are clippable.</p>
 </div>
       </div>
     </td>
@@ -1195,13 +1167,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-colorize">colorize</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-collidable">collidable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the RGB colorize color for this PerformanceModel.</p>
+        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are collidable.</p>
 </div>
       </div>
     </td>
@@ -1253,13 +1225,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">culled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-colorize">colorize</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if this PerformanceModel is culled from view.</p>
+        <div data-ice="description"><p>Sets the RGB colorize color for this PerformanceModel.</p>
 </div>
       </div>
     </td>
@@ -1301,6 +1273,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">culled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if this PerformanceModel is culled from view.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1330,35 +1331,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-edges">edges</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1376,6 +1348,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-edges">edges</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
 </div>
       </div>
     </td>
@@ -1446,35 +1447,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-highlighted">highlighted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1492,6 +1464,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-highlighted">highlighted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
 </div>
       </div>
     </td>
@@ -1766,6 +1767,36 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity">opacity</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets this PerformanceModel&apos;s opacity factor.</p>
+<p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -1796,7 +1827,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
       <span class="access" data-ice="access">public</span>
       
       <span class="kind" data-ice="kind">get</span>
-      
+      <span class="abstract" data-ice="abstract">abstract</span>
       <span class="override" data-ice="override"></span>
     </td>
     <td>
@@ -1805,14 +1836,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity">opacity</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-origin">origin</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets this PerformanceModel&apos;s opacity factor.</p>
-<p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+        <div data-ice="description"><p>Gets the 3D World-space origin for this PerformanceModel.</p>
 </div>
       </div>
     </td>
@@ -1854,35 +1884,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-pickable">pickable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are pickable.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1900,6 +1901,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if this PerformanceModel is pickable.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-pickable">pickable</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are pickable.</p>
 </div>
       </div>
     </td>
@@ -1972,7 +2002,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -1982,7 +2012,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -2001,7 +2031,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
+      <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -2011,7 +2041,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-receivesShadow">receivesShadow</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -2119,35 +2149,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-selected">selected</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -2165,6 +2166,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-selected">selected</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
 </div>
       </div>
     </td>
@@ -2206,35 +2236,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">visible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if this PerformanceModel is visible.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -2252,6 +2253,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">visible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if this PerformanceModel is visible.</p>
 </div>
       </div>
     </td>
@@ -2351,35 +2381,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -2397,6 +2398,35 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
 </div>
       </div>
     </td>
@@ -3078,7 +3108,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber846">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber848">source</a></span></span>
     </span>
   </h3>
 
@@ -3123,6 +3153,14 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>Specify <code>true</code> if this PerformanceModel represents a model, in which case the PerformanceModel will be registered by <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">PerformanceModel#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span> and may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> with matching <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-id">MetaModel#id</a></span>, registered by that ID in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaModels">MetaScene#metaModels</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.origin</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>World-space 3D origin.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -3327,7 +3365,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1221">source</a></span></span>
     </span>
   </h3>
 
@@ -3337,6 +3375,51 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
   <div data-ice="description"><p>Gets the PerformanceModel&apos;s World-space 3D axis-aligned bounding box.</p>
 <p>Represented by a six-element Float64Array containing the min/max extents of the
 axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-backfaces">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">backfaces</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1145">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if backfaces are rendered for this PerformanceModel.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -3373,7 +3456,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1763">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1165">source</a></span></span>
     </span>
   </h3>
 
@@ -3415,26 +3498,25 @@ the Viewer will:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-backfaces">
+  <h3 data-ice="anchor" id="instance-get-castsShadow">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">backfaces</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">castsShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1776">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1537">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets if backfaces are rendered for this PerformanceModel.</p>
-<p>Default is <code>false</code>.</p>
+  <div data-ice="description"><p>Gets if this PerformanceModel casts a shadow.</p>
 </div>
 
   
@@ -3471,7 +3553,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1546">source</a></span></span>
     </span>
   </h3>
 
@@ -3479,95 +3561,6 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Sets if this PerformanceModel casts a shadow.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-castsShadow">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">castsShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2164">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets if this PerformanceModel casts a shadow.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-clippable">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">clippable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2026">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are clippable.</p>
-<p>Clipping is done by the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-sectionPlanes">Scene#sectionPlanes</a></span>.</p>
 </div>
 
   
@@ -3604,7 +3597,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2042">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1412">source</a></span></span>
     </span>
   </h3>
 
@@ -3638,25 +3631,26 @@ the Viewer will:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-collidable">
+  <h3 data-ice="anchor" id="instance-set-clippable">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">collidable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">clippable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2051">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1423">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are collidable.</p>
+  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are clippable.</p>
+<p>Clipping is done by the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-sectionPlanes">Scene#sectionPlanes</a></span>.</p>
 </div>
 
   
@@ -3693,7 +3687,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2064">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1437">source</a></span></span>
     </span>
   </h3>
 
@@ -3726,27 +3720,25 @@ the Viewer will:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-colorize">
+  <h3 data-ice="anchor" id="instance-set-collidable">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">colorize</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">collidable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2103">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1446">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the RGB colorize color for this PerformanceModel.</p>
-<p>Multiplies by rendered fragment colors.</p>
-<p>Each element of the color is in range <code>[0..1]</code>.</p>
+  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are collidable.</p>
 </div>
 
   
@@ -3783,7 +3775,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1487">source</a></span></span>
     </span>
   </h3>
 
@@ -3817,26 +3809,27 @@ the Viewer will:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-culled">
+  <h3 data-ice="anchor" id="instance-set-colorize">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">culled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">colorize</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1999">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1500">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets if this PerformanceModel is culled from view.</p>
-<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">PerformanceModel#visible</a></span> is true and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">PerformanceModel#culled</a></span> is false.</p>
+  <div data-ice="description"><p>Sets the RGB colorize color for this PerformanceModel.</p>
+<p>Multiplies by rendered fragment colors.</p>
+<p>Each element of the color is in range <code>[0..1]</code>.</p>
 </div>
 
   
@@ -3873,7 +3866,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2015">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1385">source</a></span></span>
     </span>
   </h3>
 
@@ -3881,7 +3874,52 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if this PerformanceModel is culled from view.</p>
-<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">PerformanceModel#visible</a></span> is true and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">PerformanceModel#culled</a></span> is false.</p>
+<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible">PerformanceModel#visible</a></span> is true and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled">PerformanceModel#culled</a></span> is false.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-culled">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">culled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1396">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if this PerformanceModel is culled from view.</p>
+<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible">PerformanceModel#visible</a></span> is true and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled">PerformanceModel#culled</a></span> is false.</p>
 </div>
 
   
@@ -3918,7 +3956,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1654">source</a></span></span>
     </span>
   </h3>
 
@@ -3927,50 +3965,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Configures the appearance of edges of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within this PerformanceModel.</p>
 <p>This is the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-edgeMaterial">Scene#edgeMaterial</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-edges">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">edges</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1974">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
 </div>
 
   
@@ -4007,7 +4001,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1988">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1360">source</a></span></span>
     </span>
   </h3>
 
@@ -4015,6 +4009,50 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-edges">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">edges</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1369">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel have edges emphasised.</p>
 </div>
 
   
@@ -4051,7 +4089,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1176">source</a></span></span>
     </span>
   </h3>
 
@@ -4107,7 +4145,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2391">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1632">source</a></span></span>
     </span>
   </h3>
 
@@ -4116,50 +4154,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Configures the appearance of highlighted <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within this PerformanceModel.</p>
 <p>This is the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-highlighted">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">highlighted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1928">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
 </div>
 
   
@@ -4196,7 +4190,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1942">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1314">source</a></span></span>
     </span>
   </h3>
 
@@ -4204,6 +4198,50 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-highlighted">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">highlighted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1323">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are highlighted.</p>
 </div>
 
   
@@ -4240,7 +4278,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1605">source</a></span></span>
     </span>
   </h3>
 
@@ -4284,7 +4322,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1797">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1184">source</a></span></span>
     </span>
   </h3>
 
@@ -4328,7 +4366,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1809">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1196">source</a></span></span>
     </span>
   </h3>
 
@@ -4374,7 +4412,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1818">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1209">source</a></span></span>
     </span>
   </h3>
 
@@ -4418,7 +4456,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1005">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1008">source</a></span></span>
     </span>
   </h3>
 
@@ -4462,7 +4500,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1060">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1077">source</a></span></span>
     </span>
   </h3>
 
@@ -4507,7 +4545,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1860">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1246">source</a></span></span>
     </span>
   </h3>
 
@@ -4551,7 +4589,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1869">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1255">source</a></span></span>
     </span>
   </h3>
 
@@ -4595,7 +4633,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1851">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1233">source</a></span></span>
     </span>
   </h3>
 
@@ -4603,51 +4641,6 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>The approximate number of triangle primitives in this PerformanceModel.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-opacity">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">opacity</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2128">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the opacity factor for this PerformanceModel.</p>
-<p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
 </div>
 
   
@@ -4684,7 +4677,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2142">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1514">source</a></span></span>
     </span>
   </h3>
 
@@ -4693,6 +4686,97 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Gets this PerformanceModel&apos;s opacity factor.</p>
 <p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-opacity">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">opacity</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1525">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the opacity factor for this PerformanceModel.</p>
+<p>This is a factor in range <code>[0..1]</code> which multiplies by the rendered fragment alphas.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-origin">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    <span class="abstract" data-ice="abstract">abstract</span>
+    
+    
+    <span class="code" data-ice="name">origin</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1022">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the 3D World-space origin for this PerformanceModel.</p>
+<p>Each geometry or mesh origin, if supplied, is relative to this origin.</p>
+<p>Default value is <code>[0,0,0]</code>.</p>
 </div>
 
   
@@ -4729,7 +4813,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2210">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1596">source</a></span></span>
     </span>
   </h3>
 
@@ -4738,51 +4822,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.</p>
 <p>Only works when <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-pbrEnabled">Scene#pbrEnabled</a></span> is also true.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-pickable">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">pickable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2075">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are pickable.</p>
-<p>Picking is done via calls to <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>.</p>
 </div>
 
   
@@ -4819,7 +4858,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2090">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1461">source</a></span></span>
     </span>
   </h3>
 
@@ -4827,6 +4866,51 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if this PerformanceModel is pickable.</p>
+<p>Picking is done via calls to <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-pickable">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">pickable</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1472">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are pickable.</p>
 <p>Picking is done via calls to <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>.</p>
 </div>
 
@@ -4864,7 +4948,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1016">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1033">source</a></span></span>
     </span>
   </h3>
 
@@ -4909,7 +4993,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1038">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1055">source</a></span></span>
     </span>
   </h3>
 
@@ -4918,50 +5002,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Gets the PerformanceModels&apos;s local rotation quaternion.</p>
 <p>Default value is <code>[0,0,0,1]</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-receivesShadow">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">receivesShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2173">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if this PerformanceModel can have shadow cast upon it.</p>
 </div>
 
   
@@ -4998,7 +5038,51 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1559">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if this PerformanceModel can have shadow cast upon it.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-receivesShadow">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">receivesShadow</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1568">source</a></span></span>
     </span>
   </h3>
 
@@ -5042,7 +5126,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1027">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1044">source</a></span></span>
     </span>
   </h3>
 
@@ -5087,7 +5171,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2199">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1585">source</a></span></span>
     </span>
   </h3>
 
@@ -5133,7 +5217,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1049">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1066">source</a></span></span>
     </span>
   </h3>
 
@@ -5142,50 +5226,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Gets the PerformanceModel&apos;s local scale.</p>
 <p>Default value is <code>[1,1,1]</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-selected">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">selected</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1951">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
 </div>
 
   
@@ -5222,7 +5262,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1965">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1337">source</a></span></span>
     </span>
   </h3>
 
@@ -5230,6 +5270,50 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-selected">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">selected</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1346">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are selected.</p>
 </div>
 
   
@@ -5266,7 +5350,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2402">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1643">source</a></span></span>
     </span>
   </h3>
 
@@ -5275,52 +5359,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Configures the appearance of selected <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within this PerformanceModel.</p>
 <p>This is the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial">Scene#selectedMaterial</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-visible">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">visible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1880">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if this PerformanceModel is visible.</p>
-<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">PerformanceModel#visible</a></span> is <code>true</code> and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">PerformanceModel#culled</a></span> is <code>false</code>.
-*</p>
 </div>
 
   
@@ -5357,7 +5395,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1896">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1266">source</a></span></span>
     </span>
   </h3>
 
@@ -5365,7 +5403,53 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are visible.</p>
-<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible">PerformanceModel#visible</a></span> is <code>true</code> and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled">PerformanceModel#culled</a></span> is <code>false</code>.</p>
+<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible">PerformanceModel#visible</a></span> is <code>true</code> and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled">PerformanceModel#culled</a></span> is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-visible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">visible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1277">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if this PerformanceModel is visible.</p>
+<p>The PerformanceModel is only rendered when <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible">PerformanceModel#visible</a></span> is <code>true</code> and <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled">PerformanceModel#culled</a></span> is <code>false</code>.
+*</p>
 </div>
 
   
@@ -5402,7 +5486,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1070">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1087">source</a></span></span>
     </span>
   </h3>
 
@@ -5462,7 +5546,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1079">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1096">source</a></span></span>
     </span>
   </h3>
 
@@ -5506,7 +5590,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1621">source</a></span></span>
     </span>
   </h3>
 
@@ -5515,50 +5599,6 @@ the Viewer will:</p>
   
   <div data-ice="description"><p>Configures the appearance of xrayed <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within this PerformanceModel.</p>
 <p>This is the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial">Scene#xrayMaterial</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-xrayed">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1905">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
 </div>
 
   
@@ -5595,7 +5635,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1919">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1291">source</a></span></span>
     </span>
   </h3>
 
@@ -5603,6 +5643,50 @@ the Viewer will:</p>
   
   
   <div data-ice="description"><p>Gets if any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-xrayed">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1300">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if all <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in this PerformanceModel are xrayed.</p>
 </div>
 
   
@@ -5642,7 +5726,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1613">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2162">source</a></span></span>
     </span>
   </h3>
 
@@ -5825,7 +5909,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1698">source</a></span></span>
     </span>
   </h3>
 
@@ -5921,10 +6005,10 @@ quantized and in World-space, and <code>normals</code> will be oct-encoded and i
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.rtcCenter</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.origin</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Relative-to-center (RTC) coordinate system center. When this is given, then <code>positions</code> are assumed to be relative to this center.</p>
+      <td data-ice="description"><p>Optional geometry origin, relative to <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-origin">PerformanceModel#origin</a></span>. When this is given, then <code>positions</code> are assumed to be relative to this.</p>
 </td>
     </tr>
 </tbody>
@@ -5961,7 +6045,7 @@ quantized and in World-space, and <code>normals</code> will be oct-encoded and i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1813">source</a></span></span>
     </span>
   </h3>
 
@@ -5978,13 +6062,13 @@ rendering performance.</p>
 <p>If you accompany the arrays with a  <code>positionsDecodeMatrix</code> , then <code>createMesh()</code> will assume
 that the <code>positions</code> and <code>normals</code> arrays are compressed. When compressed, <code>positions</code> will be
 quantized and in World-space, and <code>normals</code> will be oct-encoded and in World-space.</p>
-<p>If you accompany the arrays with an  <code>rtcCenter</code>, then <code>createMesh()</code> will assume
-that the <code>positions</code> are in relative-to-center (RTC) coordinates, with <code>rtcCenter</code> being the origin of their
+<p>If you accompany the arrays with an  <code>origin</code>, then <code>createMesh()</code> will assume
+that the <code>positions</code> are in relative-to-center (RTC) coordinates, with <code>origin</code> being the origin of their
 RTC coordinate system.</p>
-<p>When providing either <code>positionsDecodeMatrix</code> or <code>rtcCenter</code>, <code>createMesh()</code> will start a new
+<p>When providing either <code>positionsDecodeMatrix</code> or <code>origin</code>, <code>createMesh()</code> will start a new
 batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
 minimum number of batches, it&apos;s best for performance to create your shared meshes in runs that have the same value
-for <code>positionsDecodeMatrix</code> and <code>rtcCenter</code>.</p>
+for <code>positionsDecodeMatrix</code> and <code>origin</code>.</p>
 <p>Note that <code>positions</code>, <code>normals</code> and <code>indices</code> are all required together.</p>
 </div>
 
@@ -6063,10 +6147,10 @@ for <code>positionsDecodeMatrix</code> and <code>rtcCenter</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.rtcCenter</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.origin</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Relative-to-center (RTC) coordinate system center. When this is given, then <code>positions</code> are assumed to be relative to this center.</p>
+      <td data-ice="description"><p>Optional geometry origin, relative to <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-origin">PerformanceModel#origin</a></span>. When this is given, then <code>positions</code> are assumed to be relative to this.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -6179,7 +6263,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2604">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2629">source</a></span></span>
     </span>
   </h3>
 
@@ -6223,7 +6307,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1697">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2246">source</a></span></span>
     </span>
   </h3>
 

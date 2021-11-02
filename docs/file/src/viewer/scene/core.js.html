@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -154,6 +155,9 @@ import {Map} from &apos;./utils/Map.js&apos;;
 import {stats} from &apos;./stats.js&apos;;
 import {utils} from &apos;./utils.js&apos;;
 
+let rafEnabled = true;
+let interval = null;
+
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
 const taskQueue = new Queue(); // Task queue, which is pumped on each frame; tasks are pushed to it with calls to xeokit.schedule
@@ -162,7 +166,6 @@ const taskBudget = 10; // Millisecs we&apos;re allowed to spend on tasks in each
 const fpsSamples = [];
 const numFPSSamples = 30;
 
-let defaultScene = null;// Default singleton Scene, lazy-initialized in getter
 let lastTime = 0;
 let elapsedTime;
 let totalFPS = 0;
@@ -221,6 +224,32 @@ function Core() {
             stats.components.scenes--;
         });
     };
+
+    /**
+     * @private
+     */
+    this.setRAFEnabled = function(value) {
+        if (value === rafEnabled) {
+            return;
+        }
+        rafEnabled = value;
+        if (rafEnabled) {
+            if (interval !== null) {
+                clearInterval(interval);
+                interval = null;
+            }
+            window.requestAnimationFrame(frame);
+        } else {
+            interval = setInterval(frame, 16);
+        }
+    };
+
+    /**
+     * @private
+     */
+    this.getRAFEnabled = function() {
+        return rafEnabled;
+    }
 
     /**
      * @private
@@ -304,7 +333,9 @@ const frame = function () {
     fireTickEvents(time);
     renderScenes();
     lastTime = time;
-    window.requestAnimationFrame(frame);
+    if (rafEnabled) {
+        window.requestAnimationFrame(frame);
+    }
 };
 
 function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
@@ -380,7 +411,11 @@ function renderScenes() {
     }
 }
 
-window.requestAnimationFrame(frame);
+if (rafEnabled) {
+    window.requestAnimationFrame(frame);
+} else {
+    interval = setInterval(frame, 16);
+}
 
 export {core};</code></pre>
 

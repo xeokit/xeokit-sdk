@@ -1050,7 +1050,9 @@ class Plugin {
 }
 
 // Some temporary vars to help avoid garbage collection
-const FloatArrayType = Float64Array ;
+
+let doublePrecision = true;
+let FloatArrayType = doublePrecision ? Float64Array : Float32Array;
 
 const tempMat1 = new FloatArrayType(16);
 const tempMat2 = new FloatArrayType(16);
@@ -1061,6 +1063,15 @@ const tempVec4$6 = new FloatArrayType(4);
  * @private
  */
 const math = {
+
+    setDoublePrecisionEnabled(enable) {
+        doublePrecision = enable;
+        FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+    },
+
+    getDoublePrecisionEnabled() {
+        return doublePrecision;
+    },
 
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
     MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
@@ -6937,6 +6948,9 @@ const utils = {
     flattenParentChildHierarchy: flattenParentChildHierarchy
 };
 
+let rafEnabled = true;
+let interval = null;
+
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
 const taskQueue = new Queue(); // Task queue, which is pumped on each frame; tasks are pushed to it with calls to xeokit.schedule
@@ -6944,6 +6958,7 @@ const tickEvent = {sceneId: null, time: null, startTime: null, prevTime: null, d
 const taskBudget = 10; // Millisecs we're allowed to spend on tasks in each frame
 const fpsSamples = [];
 const numFPSSamples = 30;
+
 let lastTime = 0;
 let elapsedTime;
 let totalFPS = 0;
@@ -7001,6 +7016,32 @@ function Core() {
             delete scenesRenderInfo[scene.id];
             stats.components.scenes--;
         });
+    };
+
+    /**
+     * @private
+     */
+    this.setRAFEnabled = function(value) {
+        if (value === rafEnabled) {
+            return;
+        }
+        rafEnabled = value;
+        if (rafEnabled) {
+            if (interval !== null) {
+                clearInterval(interval);
+                interval = null;
+            }
+            window.requestAnimationFrame(frame);
+        } else {
+            interval = setInterval(frame, 16);
+        }
+    };
+
+    /**
+     * @private
+     */
+    this.getRAFEnabled = function() {
+        return rafEnabled;
     };
 
     /**
@@ -7085,7 +7126,9 @@ const frame = function () {
     fireTickEvents(time);
     renderScenes();
     lastTime = time;
-    window.requestAnimationFrame(frame);
+    if (rafEnabled) {
+        window.requestAnimationFrame(frame);
+    }
 };
 
 function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
@@ -7161,7 +7204,11 @@ function renderScenes() {
     }
 }
 
-window.requestAnimationFrame(frame);
+if (rafEnabled) {
+    window.requestAnimationFrame(frame);
+} else {
+    interval = setInterval(frame, 16);
+}
 
 /**
  * @desc Base class for all xeokit components.
@@ -104870,4 +104917,31 @@ class Viewer {
     }
 }
 
-export { AmbientLight, AngleMeasurementsPlugin, AnnotationsPlugin, AxisGizmoPlugin, BCFViewpointsPlugin, CameraMemento, CameraPath, CameraPathAnimation, Component, ContextMenu, CubicBezierCurve, Curve, DirLight, DistanceMeasurementsPlugin, EdgeMaterial, EmphasisMaterial, FastNavPlugin, Fresnel, GLTFDefaultDataSource, GLTFLoaderPlugin, ImagePlane, LambertMaterial, LightMap, LocaleService, Map, Marker, Mesh, MetallicMaterial, ModelMemento, NavCubePlugin, Node, OBJLoaderPlugin, ObjectsMemento, Path, PerformanceModel, PhongMaterial, Plugin, PointLight, QuadraticBezierCurve, Queue, ReadableGeometry, ReflectionMap, STLDefaultDataSource, STLLoaderPlugin, SectionPlane, SectionPlanesPlugin, Skybox, SkyboxesPlugin, SpecularMaterial, SplineCurve, SpriteMarker, StoreyViewsPlugin, Texture, TreeViewPlugin, VBOGeometry, ViewCullPlugin, Viewer, XKTDefaultDataSource, XKTLoaderPlugin, XML3DLoaderPlugin, buildBoxGeometry, buildBoxLinesGeometry, buildCylinderGeometry, buildGridGeometry, buildPlaneGeometry, buildSphereGeometry, buildTorusGeometry, buildVectorTextGeometry, load3DSGeometry, loadOBJGeometry, math, utils };
+/**
+ * @private
+ * @type {{WEBGL: boolean, SUPPORTED_EXTENSIONS: {}}}
+ */
+class Configs {
+
+    constructor() {
+
+    }
+
+    get doublePrecisionEnabled() {
+        return math.getDoublePrecisionEnabled();
+    }
+
+    set doublePrecisionEnabled(doublePrecision) {
+        math.setDoublePrecisionEnabled(doublePrecision);
+    }
+
+    get rafEnabled() {
+        return core.getRAFEnabled();
+    }
+
+    set rafEnabled(rafEnabled) {
+        core.setRAFEnabled(rafEnabled);
+    }
+}
+
+export { AmbientLight, AngleMeasurementsPlugin, AnnotationsPlugin, AxisGizmoPlugin, BCFViewpointsPlugin, CameraMemento, CameraPath, CameraPathAnimation, Component, Configs, ContextMenu, CubicBezierCurve, Curve, DirLight, DistanceMeasurementsPlugin, EdgeMaterial, EmphasisMaterial, FastNavPlugin, Fresnel, GLTFDefaultDataSource, GLTFLoaderPlugin, ImagePlane, LambertMaterial, LightMap, LocaleService, Map, Marker, Mesh, MetallicMaterial, ModelMemento, NavCubePlugin, Node, OBJLoaderPlugin, ObjectsMemento, Path, PerformanceModel, PhongMaterial, Plugin, PointLight, QuadraticBezierCurve, Queue, ReadableGeometry, ReflectionMap, STLDefaultDataSource, STLLoaderPlugin, SectionPlane, SectionPlanesPlugin, Skybox, SkyboxesPlugin, SpecularMaterial, SplineCurve, SpriteMarker, StoreyViewsPlugin, Texture, TreeViewPlugin, VBOGeometry, ViewCullPlugin, Viewer, XKTDefaultDataSource, XKTLoaderPlugin, XML3DLoaderPlugin, buildBoxGeometry, buildBoxLinesGeometry, buildCylinderGeometry, buildGridGeometry, buildPlaneGeometry, buildSphereGeometry, buildTorusGeometry, buildVectorTextGeometry, load3DSGeometry, loadOBJGeometry, math, utils };

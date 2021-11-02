@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -1163,6 +1164,8 @@ class Input extends Component {
          */
         this.mouseCanvasPos = math.vec2();
 
+        this._keyboardEventsElement = cfg.keyboardEventsElement || document;
+
         this._bindEvents();
     }
 
@@ -1172,7 +1175,7 @@ class Input extends Component {
             return;
         }
 
-        document.addEventListener(&quot;keydown&quot;, this._keyDownListener = (e) =&gt; {
+        this._keyboardEventsElement.addEventListener(&quot;keydown&quot;, this._keyDownListener = (e) =&gt; {
             if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
@@ -1189,7 +1192,7 @@ class Input extends Component {
             }
         }, false);
 
-        document.addEventListener(&quot;keyup&quot;, this._keyUpListener = (e) =&gt; {
+        this._keyboardEventsElement.addEventListener(&quot;keyup&quot;, this._keyUpListener = (e) =&gt; {
             if (!this.enabled || (!this.keyboardEnabled)) {
                 return;
             }
@@ -1364,134 +1367,6 @@ class Input extends Component {
             });
         }
 
-        // VR
-
-        {
-
-            const orientationAngleLookup = {
-                &apos;landscape-primary&apos;: 90,
-                &apos;landscape-secondary&apos;: -90,
-                &apos;portrait-secondary&apos;: 180,
-                &apos;portrait-primary&apos;: 0
-            };
-
-            let orientation;
-            let orientationAngle;
-            const acceleration = math.vec3();
-            const accelerationIncludingGravity = math.vec3();
-
-            const orientationChangeEvent = {
-                orientation: null,
-                orientationAngle: 0
-            };
-
-            const deviceMotionEvent = {
-                orientationAngle: 0,
-                acceleration: null,
-                accelerationIncludingGravity: accelerationIncludingGravity,
-                rotationRate: math.vec3(),
-                interval: 0
-            };
-
-            const deviceOrientationEvent = {
-                alpha: 0,
-                beta: 0,
-                gamma: 0,
-                absolute: false
-            };
-
-            if (window.OrientationChangeEvent) {
-                window.addEventListener(&apos;orientationchange&apos;, this._orientationchangedListener = () =&gt; {
-
-                        orientation = window.screen.orientation || window.screen.mozOrientation || window.msOrientation || null;
-                        orientationAngle = orientation ? (orientationAngleLookup[orientation] || 0) : 0;
-
-                        orientationChangeEvent.orientation = orientation;
-                        orientationChangeEvent.orientationAngle = orientationAngle;
-
-                        /**
-                         * Fired when the orientation of the device has changed.
-                         *
-                         * @event orientationchange
-                         * @param orientation The orientation: &quot;landscape-primary&quot;, &quot;landscape-secondary&quot;, &quot;portrait-secondary&quot; or &quot;portrait-primary&quot;
-                         * @param orientationAngle The orientation angle in degrees: 90 for landscape-primary, -90 for landscape-secondary, 180 for portrait-secondary or 0 for portrait-primary.
-                         */
-                        this.fire(&quot;orientationchange&quot;, orientationChangeEvent);
-                    },
-                    false);
-            }
-
-            if (window.DeviceMotionEvent) {
-                window.addEventListener(&apos;devicemotion&apos;, this._deviceMotionListener = (e) =&gt; {
-
-                        deviceMotionEvent.interval = e.interval;
-                        deviceMotionEvent.orientationAngle = orientationAngle;
-
-                        const accel = e.acceleration;
-
-                        if (accel) {
-                            acceleration[0] = accel.x;
-                            acceleration[1] = accel.y;
-                            acceleration[2] = accel.z;
-                            deviceMotionEvent.acceleration = acceleration;
-                        } else {
-                            deviceMotionEvent.acceleration = null;
-                        }
-
-                        const accelGrav = e.accelerationIncludingGravity;
-
-                        if (accelGrav) {
-                            accelerationIncludingGravity[0] = accelGrav.x;
-                            accelerationIncludingGravity[1] = accelGrav.y;
-                            accelerationIncludingGravity[2] = accelGrav.z;
-                            deviceMotionEvent.accelerationIncludingGravity = accelerationIncludingGravity;
-                        } else {
-                            deviceMotionEvent.accelerationIncludingGravity = null;
-                        }
-
-                        deviceMotionEvent.rotationRate = e.rotationRate;
-
-                        /**
-                         * Fires on a regular interval and returns data about the rotation
-                         * (in degrees per second) and acceleration (in meters per second squared) of the device, at that moment in
-                         * time. Some devices do not have the hardware to exclude the effect of gravity.
-                         *
-                         * @event devicemotion
-                         * @param Float32Array acceleration The acceleration of the device, in meters per second squared, as a 3-element vector. This value has taken into account the effect of gravity and removed it from the figures. This value may not exist if the hardware doesn&apos;t know how to remove gravity from the acceleration data.
-                         * @param Float32Array accelerationIncludingGravity The acceleration of the device, in meters per second squared, as a 3-element vector. This value includes the effect of gravity, and may be the only value available on devices that don&apos;t have a gyroscope to allow them to properly remove gravity from the data.
-                         * @param, Number interval The interval, in milliseconds, at which this event is fired. The next event will be fired in approximately this amount of time.
-                         * @param  Float32Array rotationRate The rates of rotation of the device about each axis, in degrees per second.
-                         */
-                        this.fire(&quot;devicemotion&quot;, deviceMotionEvent);
-                    },
-                    false);
-            }
-
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener(&quot;deviceorientation&quot;, this._deviceOrientListener = (e) =&gt; {
-
-                        deviceOrientationEvent.gamma = e.gamma;
-                        deviceOrientationEvent.beta = e.beta;
-                        deviceOrientationEvent.alpha = e.alpha;
-                        deviceOrientationEvent.absolute = e.absolute;
-
-                        /**
-                         * Fired when fresh data is available from an orientation sensor about the current orientation
-                         * of the device as compared to the Earth coordinate frame. This data is gathered from a
-                         * magnetometer inside the device. See
-                         * &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Orientation_and_motion_data_explained&quot;&gt;Orientation and motion data explained&lt;/a&gt; for more info.
-                         *
-                         * @event deviceorientation
-                         * @param Number alpha The current orientation of the device around the Z axis in degrees; that is, how far the device is rotated around a line perpendicular to the device.
-                         * @param Number beta The current orientation of the device around the X axis in degrees; that is, how far the device is tipped forward or backward.
-                         * @param Number gamma The current orientation of the device around the Y axis in degrees; that is, how far the device is turned left or right.
-                         * @param Boolean absolute This value is true if the orientation is provided as a difference between the device coordinate frame and the Earth coordinate frame; if the device can&apos;t detect the Earth coordinate frame, this value is false.
-                         */
-                        this.fire(&quot;deviceorientation&quot;, deviceOrientationEvent);
-                    },
-                    false);
-            }
-        }
         this._eventsBound = true;
     }
 
@@ -1499,8 +1374,8 @@ class Input extends Component {
         if (!this._eventsBound) {
             return;
         }
-        document.removeEventListener(&quot;keydown&quot;, this._keyDownListener);
-        document.removeEventListener(&quot;keyup&quot;, this._keyUpListener);
+        this._keyboardEventsElement.removeEventListener(&quot;keydown&quot;, this._keyDownListener);
+        this._keyboardEventsElement.removeEventListener(&quot;keyup&quot;, this._keyUpListener);
         this.element.removeEventListener(&quot;mouseenter&quot;, this._mouseEnterListener);
         this.element.removeEventListener(&quot;mouseleave&quot;, this._mouseLeaveListener);
         this.element.removeEventListener(&quot;mousedown&quot;, this._mouseDownListener);

@@ -63,7 +63,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
@@ -208,7 +209,7 @@ still do that for all XKT versions, and for XKT V8+ it will override any metadat
 <p>This will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s
 that hold their metadata.</p>
 <p>Since this model contains IFC types, the XKTLoaderPlugin will set the initial appearance of each object
-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
 <p>Read more about this example in the user guide on <a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee">Viewing BIM Models Offline</a>.</p>
 <ul>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan">Run example</a>]</li>
@@ -422,7 +423,7 @@ const model5 = xktLoader2.load({
 </code></pre>
 <h2 id="loading-multiple-copies-of-a-model--without-object-id-clashes">Loading multiple copies of a model, without object ID clashes</h2><p>Sometimes we need to load two or more instances of the same model, without having clashes
 between the IDs of the equivalent objects in the model instances.</p>
-<p>As shown in the example below, we do this by setting <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> before we load our models.</p>
+<p>As shown in the example below, we do this by setting <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> before we load our models.</p>
 <ul>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels">Run example</a>]</li>
 </ul>
@@ -510,35 +511,6 @@ the given ID to refer to the instances of that Entity in both models.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -578,13 +550,13 @@ the given ID to refer to the instances of that Entity in both models.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeTypes">excludeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+        <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
 </div>
       </div>
     </td>
@@ -636,15 +608,13 @@ the given ID to refer to the instances of that Entity in both models.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeUnclassifiedObjects">excludeUnclassifiedObjects</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeTypes">excludeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
-<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
-that don&apos;t have IFC types.</p>
+        <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
 </div>
       </div>
     </td>
@@ -698,13 +668,15 @@ that don&apos;t have IFC types.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">globalizeObjectIds</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-excludeUnclassifiedObjects">excludeUnclassifiedObjects</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether XKTLoaderPlugin globalizes each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> as it loads a model.</p>
+        <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
 </div>
       </div>
     </td>
@@ -756,13 +728,13 @@ that don&apos;t have IFC types.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-includeTypes">includeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">globalizeObjectIds</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+        <div data-ice="description"><p>Sets whether XKTLoaderPlugin globalizes each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> as it loads a model.</p>
 </div>
       </div>
     </td>
@@ -814,13 +786,13 @@ that don&apos;t have IFC types.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-includeTypes">includeTypes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
+        <div data-ice="description"><p>Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
 </div>
       </div>
     </td>
@@ -850,6 +822,35 @@ that don&apos;t have IFC types.</p>
         
         
         <div data-ice="description"><p>Gets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
 </div>
       </div>
     </td>
@@ -1304,51 +1305,6 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dataSource">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber430">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
-<p>Default value is <span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span>, which loads via HTTP.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-dataSource">
     <span class="access" data-ice="access">public</span>
     
@@ -1360,7 +1316,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber441">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -1394,28 +1350,26 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-excludeTypes">
+  <h3 data-ice="anchor" id="instance-set-dataSource">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">excludeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber505">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber441">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
-<p>When loading models with metadata, causes this XKTLoaderPlugin to <strong>not</strong> load objects whose types are in this
-list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>.</p>
-<p>Default value is <code>undefined</code>.</p>
+  <div data-ice="description"><p>Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.</p>
+<p>Default value is <span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span>, which loads via HTTP.</p>
 </div>
 
   
@@ -1452,7 +1406,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber519">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 
@@ -1488,28 +1442,28 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-excludeUnclassifiedObjects">
+  <h3 data-ice="anchor" id="instance-set-excludeTypes">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">excludeUnclassifiedObjects</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">excludeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber534">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber519">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
-<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
-that don&apos;t have IFC types.</p>
-<p>Default value is <code>false</code>.</p>
+  <div data-ice="description"><p>Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to <strong>not</strong> load objects whose types are in this
+list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>.</p>
+<p>Default value is <code>undefined</code>.</p>
 </div>
 
   
@@ -1546,7 +1500,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber548">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber533">source</a></span></span>
     </span>
   </h3>
 
@@ -1556,6 +1510,98 @@ that don&apos;t have IFC types.</p>
   <div data-ice="description"><p>Gets whether we load objects that don&apos;t have IFC types.</p>
 <p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
 that don&apos;t have IFC types.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-excludeUnclassifiedObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">excludeUnclassifiedObjects</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber547">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether we load objects that don&apos;t have IFC types.</p>
+<p>When loading models with metadata and this is <code>true</code>, XKTLoaderPlugin will not load objects
+that don&apos;t have IFC types.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-globalizeObjectIds">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">globalizeObjectIds</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber558">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether XKTLoaderPlugin globalizes each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> as it loads a model.</p>
 <p>Default value is <code>false</code>.</p>
 </div>
 
@@ -1593,7 +1639,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber569">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber579">source</a></span></span>
     </span>
   </h3>
 
@@ -1633,26 +1679,28 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-globalizeObjectIds">
+  <h3 data-ice="anchor" id="instance-get-includeTypes">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">globalizeObjectIds</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">includeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber580">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber477">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether XKTLoaderPlugin globalizes each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> as it loads a model.</p>
-<p>Default value is <code>false</code>.</p>
+  <div data-ice="description"><p>Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
+<p>When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
+list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>.</p>
+<p>Default value is <code>undefined</code>.</p>
 </div>
 
   
@@ -1689,7 +1737,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber491">source</a></span></span>
     </span>
   </h3>
 
@@ -1700,98 +1748,6 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
 <p>When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
 list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>.</p>
 <p>Default value is <code>undefined</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-includeTypes">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">includeTypes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber491">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.</p>
-<p>When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>.</p>
-<p>Default value is <code>undefined</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-objectDefaults">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber452">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
-<p>Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
 </div>
 
   
@@ -1828,7 +1784,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber463">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber452">source</a></span></span>
     </span>
   </h3>
 
@@ -1836,6 +1792,51 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
   
   
   <div data-ice="description"><p>Gets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
+<p>Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-objectDefaults">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber463">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.</p>
 <p>Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
 </div>
 
@@ -2029,11 +2030,19 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.origin</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The World-space origin of the model&apos;s coordinates.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.position</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model World-space 3D position.</p>
+      <td data-ice="description"><p>The model&apos;s position, relative to the model&apos;s origin.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2041,7 +2050,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,1,1]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space scale.</p>
+      <td data-ice="description"><p>The model&apos;s scale.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2049,7 +2058,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+      <td data-ice="description"><p>The model&apos;s rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2107,7 +2116,7 @@ Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, 
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>Indicates whether to globalize each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span>, in case you need to prevent ID clashes with other models. See <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> for more info.</p>
+      <td data-ice="description"><p>Indicates whether to globalize each <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span>, in case you need to prevent ID clashes with other models. See <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> for more info.</p>
 </td>
     </tr>
 </tbody>
