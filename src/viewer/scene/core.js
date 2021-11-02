@@ -3,6 +3,9 @@ import {Map} from './utils/Map.js';
 import {stats} from './stats.js';
 import {utils} from './utils.js';
 
+let rafEnabled = true;
+let interval = null;
+
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
 const taskQueue = new Queue(); // Task queue, which is pumped on each frame; tasks are pushed to it with calls to xeokit.schedule
@@ -11,7 +14,6 @@ const taskBudget = 10; // Millisecs we're allowed to spend on tasks in each fram
 const fpsSamples = [];
 const numFPSSamples = 30;
 
-let defaultScene = null;// Default singleton Scene, lazy-initialized in getter
 let lastTime = 0;
 let elapsedTime;
 let totalFPS = 0;
@@ -70,6 +72,32 @@ function Core() {
             stats.components.scenes--;
         });
     };
+
+    /**
+     * @private
+     */
+    this.setRAFEnabled = function(value) {
+        if (value === rafEnabled) {
+            return;
+        }
+        rafEnabled = value;
+        if (rafEnabled) {
+            if (interval !== null) {
+                clearInterval(interval);
+                interval = null;
+            }
+            window.requestAnimationFrame(frame);
+        } else {
+            interval = setInterval(frame, 16);
+        }
+    };
+
+    /**
+     * @private
+     */
+    this.getRAFEnabled = function() {
+        return rafEnabled;
+    }
 
     /**
      * @private
@@ -153,7 +181,9 @@ const frame = function () {
     fireTickEvents(time);
     renderScenes();
     lastTime = time;
-    window.requestAnimationFrame(frame);
+    if (rafEnabled) {
+        window.requestAnimationFrame(frame);
+    }
 };
 
 function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
@@ -229,6 +259,10 @@ function renderScenes() {
     }
 }
 
-window.requestAnimationFrame(frame);
+if (rafEnabled) {
+    window.requestAnimationFrame(frame);
+} else {
+    interval = setInterval(frame, 16);
+}
 
 export {core};

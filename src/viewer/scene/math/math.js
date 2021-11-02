@@ -1,7 +1,7 @@
 // Some temporary vars to help avoid garbage collection
 
-const doublePrecision = true;
-const FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+let doublePrecision = true;
+let FloatArrayType = doublePrecision ? Float64Array : Float32Array;
 
 const tempMat1 = new FloatArrayType(16);
 const tempMat2 = new FloatArrayType(16);
@@ -12,6 +12,15 @@ const tempVec4 = new FloatArrayType(4);
  * @private
  */
 const math = {
+
+    setDoublePrecisionEnabled(enable) {
+        doublePrecision = enable;
+        FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+    },
+
+    getDoublePrecisionEnabled() {
+        return doublePrecision;
+    },
 
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
     MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
