@@ -152,10 +152,6 @@
 
             const meshId = "mesh" + numObjects++;
 
-            if (numObjects % 1000 === 0) {
-                numObjectsSpan.innerHTML = "" + numObjects;
-            }
-
             performanceModel.createMesh({
                 id: meshId,
                 geometryId: "myBoxGeometry",
