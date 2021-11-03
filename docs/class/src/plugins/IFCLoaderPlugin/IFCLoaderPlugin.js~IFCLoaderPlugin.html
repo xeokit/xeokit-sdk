@@ -152,13 +152,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {IFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber347">@xeokit/xeokit-sdk/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {IFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber344">@xeokit/xeokit-sdk/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.13</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber347">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber344">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -195,13 +195,12 @@
 </ul>
 <h2 id="limitations">Limitations</h2><p>IFCLoaderPlugin has certain limitations:</p>
 <ul>
-<li>Downloads IFC files over the network, which can be large and verbose.</li>
-<li>Can crash browser when parsing large IFC files (suspect overrunning browser memory limits).</li>
-<li>Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).
+<li>Downloads IFC files over the network, which can be large.</li>
+<li>Parsing large IFC files can crash the browser (suspect overrunning browser memory limits).</li>
+<li>No IFC geometry reuse yet.
 <br><br>
 Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
-applications. For viewing large IFC models, however, we recommend using <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>, which loads
-large models more efficiently from a pre-converted compact binary format.</li>
+applications, and for getting started with xeokit and IFC in general.</li>
 </ul>
 <h2 id="scene-representation">Scene representation</h2><p>When loading a model, IFCLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
 will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
@@ -212,8 +211,7 @@ by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">
 a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each IFC element, plus a <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span> for each IFC property set. Loading metadata can be very slow, so we can also optionally disable it if we
 don&apos;t need it.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Duplex BIM model from
-an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc">IFC file</a>.</p>
-<p>Within our <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, this will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s and <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span>s
+an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc">IFC file</a>. Within our <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, this will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s and <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span>s
 that hold their metadata.</p>
 <p>Since this model contains IFC types, the IFCLoaderPlugin will set the initial appearance of each object
 <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-objectDefaults">IFCLoaderPlugin#objectDefaults</a></span>.</p>
@@ -1166,7 +1164,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber364">source</a></span></span>
     </span>
   </h3>
 
@@ -1300,7 +1298,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber407">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -1345,7 +1343,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber415">source</a></span></span>
     </span>
   </h3>
 
@@ -1390,7 +1388,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber479">source</a></span></span>
     </span>
   </h3>
 
@@ -1437,7 +1435,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber493">source</a></span></span>
     </span>
   </h3>
 
@@ -1484,7 +1482,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber507">source</a></span></span>
     </span>
   </h3>
 
@@ -1531,7 +1529,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber524">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -1578,7 +1576,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber535">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber532">source</a></span></span>
     </span>
   </h3>
 
@@ -1623,7 +1621,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber556">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber553">source</a></span></span>
     </span>
   </h3>
 
@@ -1674,7 +1672,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber451">source</a></span></span>
     </span>
   </h3>
 
@@ -1721,7 +1719,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber465">source</a></span></span>
     </span>
   </h3>
 
@@ -1768,7 +1766,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber429">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -1813,7 +1811,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -1858,7 +1856,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber396">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber393">source</a></span></span>
     </span>
   </h3>
 
@@ -1917,7 +1915,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber585">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html#lineNumber582">source</a></span></span>
     </span>
   </h3>
 

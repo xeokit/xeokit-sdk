@@ -31,13 +31,12 @@ import {math} from "../../viewer";
  *
  * IFCLoaderPlugin has certain limitations:
  *
- * * Downloads IFC files over the network, which can be large and verbose.
- * * Can crash browser when parsing large IFC files (suspect overrunning browser memory limits).
- * * Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).
+ * * Downloads IFC files over the network, which can be large.
+ * * Parsing large IFC files can crash the browser (suspect overrunning browser memory limits).
+ * * No IFC geometry reuse yet.
  * <br><br>
  * Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
- * applications. For viewing large IFC models, however, we recommend using {@link XKTLoaderPlugin}, which loads
- * large models more efficiently from a pre-converted compact binary format.
+ * applications, and for getting started with xeokit and IFC in general.
  *
  * ## Scene representation
  *
