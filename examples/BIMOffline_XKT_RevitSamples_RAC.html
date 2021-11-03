@@ -182,14 +182,9 @@
         saoEnabled: true
     });
 
-    viewer.cameraControl.followPointer = true;
-
     viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987]
     viewer.camera.look = [35.0291287591034, -3.5295781673428905, -20.312957533628705]
     viewer.camera.up = [-0.48646319926706455, 0.8385999559445908, 0.24516049773277654]
-
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     new FastNavPlugin(viewer);
 
