@@ -1,7 +1,7 @@
 {
-  "coverage": "36.84%",
-  "expectCount": 6134,
-  "actualCount": 2260,
+  "coverage": "36.92%",
+  "expectCount": 6169,
+  "actualCount": 2278,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -327,6 +327,35 @@
         18,
         22,
         46
+      ]
+    },
+    "src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        6
+      ]
+    },
+    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js": {
+      "expectCount": 32,
+      "actualCount": 16,
+      "undocumentLines": [
+        358,
+        366,
+        406,
+        428,
+        456,
+        484,
+        512,
+        544,
+        632,
+        646,
+        736,
+        743,
+        757,
+        772,
+        800,
+        862
       ]
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {

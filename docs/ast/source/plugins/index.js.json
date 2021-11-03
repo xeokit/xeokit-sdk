@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 774,
+  "end": 818,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 17,
-      "column": 45
+      "line": 18,
+      "column": 43
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 774,
+    "end": 818,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 17,
-        "column": 45
+        "line": 18,
+        "column": 43
       }
     },
     "sourceType": "module",
@@ -621,6 +621,41 @@
             "raw": "\"./XML3DLoaderPlugin/index.js\""
           },
           "value": "./XML3DLoaderPlugin/index.js"
+        }
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start": 775,
+        "end": 818,
+        "loc": {
+          "start": {
+            "line": 18,
+            "column": 0
+          },
+          "end": {
+            "line": 18,
+            "column": 43
+          }
+        },
+        "source": {
+          "type": "StringLiteral",
+          "start": 789,
+          "end": 817,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 14
+            },
+            "end": {
+              "line": 18,
+              "column": 42
+            }
+          },
+          "extra": {
+            "rawValue": "./IFCLoaderPlugin/index.js",
+            "raw": "\"./IFCLoaderPlugin/index.js\""
+          },
+          "value": "./IFCLoaderPlugin/index.js"
         }
       }
     ],
@@ -2908,6 +2943,140 @@
     },
     {
       "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 775,
+      "end": 781,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "*",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": 10,
+        "updateContext": null
+      },
+      "value": "*",
+      "start": 782,
+      "end": 783,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 7
+        },
+        "end": {
+          "line": 18,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 784,
+      "end": 788,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 9
+        },
+        "end": {
+          "line": 18,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./IFCLoaderPlugin/index.js",
+      "start": 789,
+      "end": 817,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 14
+        },
+        "end": {
+          "line": 18,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 817,
+      "end": 818,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 42
+        },
+        "end": {
+          "line": 18,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": {
         "label": "eof",
         "beforeExpr": false,
         "startsExpr": false,
@@ -2919,16 +3088,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 774,
-      "end": 774,
+      "start": 818,
+      "end": 818,
       "loc": {
         "start": {
-          "line": 17,
-          "column": 45
+          "line": 18,
+          "column": 43
         },
         "end": {
-          "line": 17,
-          "column": 45
+          "line": 18,
+          "column": 43
         }
       }
     }
