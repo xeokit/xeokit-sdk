@@ -34,7 +34,7 @@ import {math} from "../../viewer";
  * * Downloads IFC files over the network, which can be large and verbose.
  * * Can crash browser when parsing large IFC files (suspect overrunning browser memory limits).
  * * Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).
- *
+ * <br><br>
  * Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
  * applications. For viewing large IFC models, however, we recommend using {@link XKTLoaderPlugin}, which loads
  * large models more efficiently from a pre-converted compact binary format.
@@ -50,15 +50,13 @@ import {math} from "../../viewer";
  * ## Metadata
  *
  * When loading a model, IFCLoaderPlugin also creates a {@link MetaModel} that represents the model, which contains
- * a {@link MetaObject} for each IFC element. Loading metadata can be very slow, so we can also optionally disable it if we
+ * a {@link MetaObject} for each IFC element, plus a {@link PropertySet} for each IFC property set. Loading metadata can be very slow, so we can also optionally disable it if we
  * don't need it.
  *
  * ## Usage
  *
  * In the example below we'll load the Duplex BIM model from
- * an [IFC file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc).
- *
- * Within our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel}, {@link MetaObject}s and {@link PropertySets}
+ * an [IFC file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc). Within our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel}, {@link MetaObject}s and {@link PropertySet}s
  * that hold their metadata.
  *
  * Since this model contains IFC types, the IFCLoaderPlugin will set the initial appearance of each object

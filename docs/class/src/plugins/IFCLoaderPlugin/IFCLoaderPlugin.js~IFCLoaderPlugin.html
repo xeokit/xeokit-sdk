@@ -197,22 +197,23 @@
 <ul>
 <li>Downloads IFC files over the network, which can be large and verbose.</li>
 <li>Can crash browser when parsing large IFC files (suspect overrunning browser memory limits).</li>
-<li>Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).</li>
-</ul>
-<p>Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
+<li>Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).
+<br><br>
+Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
 applications. For viewing large IFC models, however, we recommend using <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>, which loads
-large models more efficiently from a pre-converted compact binary format.</p>
+large models more efficiently from a pre-converted compact binary format.</li>
+</ul>
 <h2 id="scene-representation">Scene representation</h2><p>When loading a model, IFCLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
 will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The IFCLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
 model. Those Entities will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered
 by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</p>
 <h2 id="metadata">Metadata</h2><p>When loading a model, IFCLoaderPlugin also creates a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> that represents the model, which contains
-a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each IFC element. Loading metadata can be very slow, so we can also optionally disable it if we
+a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each IFC element, plus a <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span> for each IFC property set. Loading metadata can be very slow, so we can also optionally disable it if we
 don&apos;t need it.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Duplex BIM model from
 an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc">IFC file</a>.</p>
-<p>Within our <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, this will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s and <span>PropertySets</span>
+<p>Within our <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, this will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s and <span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span>s
 that hold their metadata.</p>
 <p>Since this model contains IFC types, the IFCLoaderPlugin will set the initial appearance of each object
 <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-objectDefaults">IFCLoaderPlugin#objectDefaults</a></span>.</p>
