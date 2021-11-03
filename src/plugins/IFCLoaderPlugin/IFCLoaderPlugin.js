@@ -10,9 +10,9 @@ import {math} from "../../viewer";
 /**
  * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_IFC_Duplex)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex)]
  *
  * ## Overview
  *
