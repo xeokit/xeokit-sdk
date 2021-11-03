@@ -171,15 +171,27 @@ import {math} from &quot;../../viewer&quot;;
  * ## Overview
  *
  * * Loads small-to-medium sized BIM models directly from IFC files.
- * * Uses [web-ifc](https://github.com/tomvandig/web-ifc) internally, to parse IFC STEP files in the browser.
- * * Not for large models - for more performance, especially on mobile devices, use {@link XKTLoaderPlugin}.
- * * Loads double-precision coordinates.
+ * * Uses [web-ifc](https://github.com/tomvandig/web-ifc) internally, to parse IFC files in the browser.
+ * * Loads IFC geometry, element structure metadata, and property sets.
+ * * Not for large models. For best performance with large models, we recommend using {@link XKTLoaderPlugin}.
+ * * Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.
  * * Allows to set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
- * * Configure initial default appearances for IFC types.
+ * * Configure initial appearances of specified IFC types.
  * * Set a custom data source for IFC files.
- * * Option to load multiple copies of the same model, without object ID clashes.
- * * Loads IFC element metadata and property sets.
+ * * Load multiple copies of the same model.
+ *
+ * ## Limitations
+ *
+ * IFCLoaderPlugin has certain limitations:
+ *
+ * * Downloads IFC files over the network, which can be large and verbose.
+ * * Can crash browser when parsing large IFC files (suspect overrunning browser memory limits).
+ * * Does not yet handle IFC geometry reuse (a limitation of web-ifc currently).
+ *
+ * Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
+ * applications. For viewing large IFC models, however, we recommend using {@link XKTLoaderPlugin}, which loads
+ * large models more efficiently from a pre-converted compact binary format.
  *
  * ## Scene representation
  *
@@ -484,6 +496,7 @@ import {math} from &quot;../../viewer&quot;;
  *````
  *
  * @class IFCLoaderPlugin
+ * @since 2.0.13
  */
 class IFCLoaderPlugin extends Plugin {
 
