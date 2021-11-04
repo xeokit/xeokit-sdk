@@ -6,6 +6,7 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {IFCDefaultDataSource} from "./IFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {math} from "../../viewer";
+import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 
 /**
  * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
@@ -887,6 +888,8 @@ class IFCLoaderPlugin extends Plugin {
                     return;
                 }
             }
+            const matrix = math.mat4();
+            const origin = math.vec3();
             for (let j = 0, lenj = placedGeometries.size(); j < lenj; j++) {
                 const placedGeometry = placedGeometries.get(j);
                 const geometry = this._ifcAPI.GetGeometry(ctx.modelID, placedGeometry.geometryExpressID);
@@ -900,6 +903,9 @@ class IFCLoaderPlugin extends Plugin {
                     positions.push(vertexData[k * 6 + 1]);
                     positions.push(vertexData[k * 6 + 2]);
                 }
+                matrix.set(placedGeometry.flatTransformation);
+                math.transformPositions3(matrix, positions);
+                const rtcNeeded = worldToRTCPositions(positions, positions, origin);
                 if (!ctx.options.autoNormals) {
                     for (let k = 0, lenk = vertexData.length / 6; k < lenk; k++) {
                         normals.push(vertexData[k * 6 + 3]);
@@ -914,10 +920,10 @@ class IFCLoaderPlugin extends Plugin {
                 ctx.performanceModel.createMesh({
                     id: meshId,
                     primitive: "triangles", // TODO
+                    origin: rtcNeeded ? origin : null,
                     positions: positions,
                     normals: ctx.options.autoNormals ? null : normals,
                     indices: indices,
-                    matrix: new Float32Array(placedGeometry.flatTransformation),
                     color: [placedGeometry.color.x, placedGeometry.color.y, placedGeometry.color.z],
                     opacity: placedGeometry.color.w
                 });
