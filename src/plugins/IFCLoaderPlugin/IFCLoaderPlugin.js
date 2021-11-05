@@ -8,6 +8,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {math} from "../../viewer";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 
+const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - smaller size for increasing distance
+
 /**
  * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
  *
@@ -905,7 +907,7 @@ class IFCLoaderPlugin extends Plugin {
                 }
                 matrix.set(placedGeometry.flatTransformation);
                 math.transformPositions3(matrix, positions);
-                const rtcNeeded = worldToRTCPositions(positions, positions, origin);
+                const rtcNeeded = worldToRTCPositions(positions, positions, origin, RTC_TILE_SIZE);
                 if (!ctx.options.autoNormals) {
                     for (let k = 0, lenk = vertexData.length / 6; k < lenk; k++) {
                         normals.push(vertexData[k * 6 + 3]);
