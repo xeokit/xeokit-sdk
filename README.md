@@ -11,7 +11,7 @@ high-detail, full-precision 3D engineering and BIM models in the browser.
 
 ## Usage
 
-To install from npm:
+To install:
 
 ````bash
 npm i @xeokit/xeokit-sdk
@@ -28,6 +28,8 @@ npm i @xeokit/xeokit-sdk
  * [FAQ](https://xeokit.io/index.html?foo=1#faq)  
  * [Blog](https://xeokit.io/blog.html)
  * [License](https://xeokit.io/index.html#pricing)
+
+
 
 
 
