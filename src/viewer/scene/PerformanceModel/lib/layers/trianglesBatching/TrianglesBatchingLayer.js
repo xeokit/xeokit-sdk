@@ -88,6 +88,8 @@ class TrianglesBatchingLayer {
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
 
+        this._numVerts = 0;
+
         this._finalized = false;
 
         if (cfg.positionsDecodeMatrix) {
@@ -370,6 +372,8 @@ class TrianglesBatchingLayer {
         this._numPortions++;
         this.model.numPortions++;
 
+        this._numVerts += portion.numVerts;
+
         return portionId;
     }
 
@@ -502,8 +506,14 @@ class TrianglesBatchingLayer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        this._setFlags(portionId, flags, meshTransparent);
-        this._setFlags2(portionId, flags);
+        const deferred = true;
+        this._setFlags(portionId, flags, meshTransparent, deferred);
+        this._setFlags2(portionId, flags, deferred);
+    }
+
+    flushInitFlags() {
+        this._setDeferredFlags();
+        this._setDeferredFlags2();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -661,7 +671,7 @@ class TrianglesBatchingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    _setFlags(portionId, flags, transparent) {
+    _setFlags(portionId, flags, transparent, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
@@ -673,7 +683,6 @@ class TrianglesBatchingLayer {
         const numVerts = portion.numVerts;
         const firstFlag = vertexBase * 4;
         const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -736,19 +745,37 @@ class TrianglesBatchingLayer {
 
         let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = f0; // x - normal fill
-            tempArray[i + 1] = f1; // y - emphasis fill
-            tempArray[i + 2] = f2; // z - edges
-            tempArray[i + 3] = f3; // w - pick
-        }
-
-        if (this._state.flagsBuf) {
+        if (deferred) {
+            // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
+            if (!this._deferredFlagValues) {
+                this._deferredFlagValues = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._deferredFlagValues[i + 0] = f0;
+                this._deferredFlagValues[i + 1] = f1;
+                this._deferredFlagValues[i + 2] = f2;
+                this._deferredFlagValues[i + 3] = f3;
+            }
+        } else if (this._state.flagsBuf) {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = f0; // x - normal fill
+                tempArray[i + 1] = f1; // y - emphasis fill
+                tempArray[i + 2] = f2; // z - edges
+                tempArray[i + 3] = f3; // w - pick
+            }
             this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
         }
     }
 
-    _setFlags2(portionId, flags) {
+    _setDeferredFlags() {
+        if (this._deferredFlagValues) {
+            this._state.flagsBuf.setData(this._deferredFlagValues);
+            this._deferredFlagValues = null;
+        }
+    }
+
+    _setFlags2(portionId, flags, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
@@ -760,16 +787,28 @@ class TrianglesBatchingLayer {
         const numVerts = portion.numVerts;
         const firstFlag = vertexBase * 4;
         const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
-
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
 
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = clippable;
-        }
-
-        if (this._state.flags2Buf) {
+        if (deferred) {
+            if (!this._setDeferredFlag2Values) {
+                this._setDeferredFlag2Values = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._setDeferredFlag2Values[i] = clippable;
+            }
+        } else if (this._state.flags2Buf) {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = clippable;
+            }
             this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+        }
+    }
+
+    _setDeferredFlags2() {
+        if (this._setDeferredFlag2Values) {
+            this._state.flags2Buf.setData(this._setDeferredFlag2Values);
+            this._setDeferredFlag2Values = null;
         }
     }
 

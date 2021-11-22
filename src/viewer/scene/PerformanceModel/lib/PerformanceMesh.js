@@ -101,6 +101,15 @@ class PerformanceMesh {
     /**
      * @private
      */
+    _finalize2() {
+        if (this._layer.flushInitFlags) {
+            this._layer.flushInitFlags();
+        }
+    }
+
+    /**
+     * @private
+     */
     _setVisible(entityFlags) {
         this._layer.setVisible(this._portionId, entityFlags, this._transparent);
     }
