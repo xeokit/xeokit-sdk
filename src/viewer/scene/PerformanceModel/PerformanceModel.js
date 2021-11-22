@@ -1010,6 +1010,14 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Returns the {@link Entity}s in this PerformanceModel.
+     * @returns {*|{}}
+     */
+    get objects() {
+        return this._nodes;
+    }
+
+    /**
      * Gets the 3D World-space origin for this PerformanceModel.
      *
      * Each geometry or mesh origin, if supplied, is relative to this origin.
@@ -2267,6 +2275,12 @@ class PerformanceModel extends Component {
             const node = this._nodeList[i];
             node._finalize();
         }
+
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            const node = this._nodeList[i];
+            node._finalize2();
+        }
+
 
         // Sort layers to reduce WebGL shader switching when rendering them
 
