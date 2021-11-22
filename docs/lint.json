@@ -4,20 +4,12 @@
     "filePath": "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 99,
+        "lineNumber": 101,
         "line": "    /**"
       },
       {
-        "lineNumber": 100,
-        "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
-      },
-      {
-        "lineNumber": 101,
-        "line": "     *"
-      },
-      {
         "lineNumber": 102,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
+        "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
       },
       {
         "lineNumber": 103,
@@ -25,46 +17,54 @@
       },
       {
         "lineNumber": 104,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 105,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     *"
       },
       {
         "lineNumber": 106,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 107,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 108,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 109,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 110,
-        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 111,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 112,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
         "lineNumber": 113,
-        "line": "     */"
+        "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
         "lineNumber": 114,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 116,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -156,20 +156,12 @@
     "filePath": "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 130,
+        "lineNumber": 132,
         "line": "    /**"
       },
       {
-        "lineNumber": 131,
-        "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
-      },
-      {
-        "lineNumber": 132,
-        "line": "     *"
-      },
-      {
         "lineNumber": 133,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
+        "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
       },
       {
         "lineNumber": 134,
@@ -177,66 +169,74 @@
       },
       {
         "lineNumber": 135,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 136,
-        "line": "     * @param [cfg.normals] Flat float normals array."
+        "line": "     *"
       },
       {
         "lineNumber": 137,
-        "line": "     * @param [cfg.colors] Flat float colors array."
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 138,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     * @param [cfg.normals] Flat float normals array."
       },
       {
         "lineNumber": 139,
-        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
+        "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
         "lineNumber": 140,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 141,
-        "line": "     * @param cfg.metallic Metalness factor [0..255]"
+        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
       },
       {
         "lineNumber": 142,
-        "line": "     * @param cfg.roughness Roughness factor [0..255]"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 143,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     * @param cfg.metallic Metalness factor [0..255]"
       },
       {
         "lineNumber": 144,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.roughness Roughness factor [0..255]"
       },
       {
         "lineNumber": 145,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 146,
-        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 147,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 148,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
         "lineNumber": 149,
-        "line": "     */"
+        "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
         "lineNumber": 150,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 151,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 152,
         "line": "    createPortion(cfg) {"
       }
     ],

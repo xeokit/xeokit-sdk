@@ -2964,6 +2964,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#reusegeometries",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-reuseGeometries",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#reuseGeometries",
+    "member"
+  ],
+  [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#reusegeometries",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-reuseGeometries",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#reuseGeometries",
+    "member"
+  ],
+  [
     "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#supportedversions",
     "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-supportedVersions",
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#supportedVersions",
@@ -4983,6 +4995,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#numtriangles",
     "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-numTriangles",
     "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#numTriangles",
+    "member"
+  ],
+  [
+    "src/viewer/scene/performancemodel/performancemodel.js~performancemodel#objects",
+    "class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-objects",
+    "src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#objects",
     "member"
   ],
   [

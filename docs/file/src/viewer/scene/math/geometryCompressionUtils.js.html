@@ -239,6 +239,17 @@ var compressPositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     };
 })();
 
+function compressPosition(p, aabb, q) {
+    const multiplier = new Float32Array([
+        aabb[3] !== aabb[0] ? 65535 / (aabb[3] - aabb[0]) : 0,
+        aabb[4] !== aabb[1] ? 65535 / (aabb[4] - aabb[1]) : 0,
+        aabb[5] !== aabb[2] ? 65535 / (aabb[5] - aabb[2]) : 0
+    ]);
+    q[0] = Math.floor((p[0] - aabb[0]) * multiplier[0]);
+    q[1] = Math.floor((p[1] - aabb[1]) * multiplier[1]);
+    q[2] = Math.floor((p[2] - aabb[2]) * multiplier[2]);
+}
+
 function decompressPosition(position, decodeMatrix, dest) {
     dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
@@ -246,7 +257,7 @@ function decompressPosition(position, decodeMatrix, dest) {
     return dest;
 }
 
-function decompressAABB(aabb, decodeMatrix, dest=aabb) {
+function decompressAABB(aabb, decodeMatrix, dest = aabb) {
     dest[0] = aabb[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = aabb[1] * decodeMatrix[5] + decodeMatrix[13];
     dest[2] = aabb[2] * decodeMatrix[10] + decodeMatrix[14];
@@ -490,6 +501,7 @@ const geometryCompressionUtils = {
     getPositionsBounds: getPositionsBounds,
     createPositionsDecodeMatrix: createPositionsDecodeMatrix,
     compressPositions: compressPositions,
+    compressPosition:compressPosition,
     decompressPositions: decompressPositions,
     decompressPosition: decompressPosition,
     decompressAABB: decompressAABB,

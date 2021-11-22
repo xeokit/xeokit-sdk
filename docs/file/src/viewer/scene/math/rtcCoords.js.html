@@ -213,12 +213,14 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
 
 
 /**
- * Converts a flat array of double-precision positions to RTC positions.
+ * Converts a flat array of double-precision positions to RTC positions, if necessary.
  *
- * Returns the RTC positions, along with a computed RTC center for those positions.
+ * Conversion is necessary if the coordinates have values larger than can be expressed at single-precision. When
+ * that&apos;s the case, then this function will compute the RTC coordinates and RTC center and return true. Otherwise
+ * this function does nothing and returns false.
  *
  * When computing the RTC position, this function uses a modulus operation to ensure that, whenever possible,
- * identical RTC positions are reused for different positions arrays.
+ * identical RTC centers are reused for different positions arrays.
  *
  * @private
  * @param {Float64Array} worldPositions Flat array of World-space 3D positions.
@@ -229,7 +231,7 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
  * ````false````, we can safely ignore the data returned in ````rtcPositions```` and ````rtcCenter````,
  * since ````rtcCenter```` will equal ````[0,0,0]````, and ````rtcPositions```` will contain identical values to ````positions````.
  */
-function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 10000000) {
+function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 1000000) {
 
     const center = math.getPositionsCenter(worldPositions, tempVec3a);
 
@@ -237,17 +239,19 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
     const rtcCenterY = Math.round(center[1] / cellSize) * cellSize;
     const rtcCenterZ = Math.round(center[2] / cellSize) * cellSize;
 
-    for (let i = 0, len = worldPositions.length; i &lt; len; i += 3) {
-        rtcPositions[i + 0] = worldPositions[i + 0] - rtcCenterX;
-        rtcPositions[i + 1] = worldPositions[i + 1] - rtcCenterY;
-        rtcPositions[i + 2] = worldPositions[i + 2] - rtcCenterZ;
-    }
-
     rtcCenter[0] = rtcCenterX;
     rtcCenter[1] = rtcCenterY;
     rtcCenter[2] = rtcCenterZ;
 
     const rtcNeeded = (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0);
+
+    if (rtcNeeded) {
+        for (let i = 0, len = worldPositions.length; i &lt; len; i += 3) {
+            rtcPositions[i + 0] = worldPositions[i + 0] - rtcCenterX;
+            rtcPositions[i + 1] = worldPositions[i + 1] - rtcCenterY;
+            rtcPositions[i + 2] = worldPositions[i + 2] - rtcCenterZ;
+        }
+    }
 
     return rtcNeeded;
 }

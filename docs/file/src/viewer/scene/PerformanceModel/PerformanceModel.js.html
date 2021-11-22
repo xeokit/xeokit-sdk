@@ -1164,6 +1164,14 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Returns the {@link Entity}s in this PerformanceModel.
+     * @returns {*|{}}
+     */
+    get objects() {
+        return this._nodes;
+    }
+
+    /**
      * Gets the 3D World-space origin for this PerformanceModel.
      *
      * Each geometry or mesh origin, if supplied, is relative to this origin.
@@ -1847,7 +1855,8 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for &apos;triangles&apos; primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then every mesh created with {@link PerformanceModel#createMesh} that uses this geometry will
+     * be transformed relative to this origin.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -2420,6 +2429,12 @@ class PerformanceModel extends Component {
             const node = this._nodeList[i];
             node._finalize();
         }
+
+        for (let i = 0, len = this._nodeList.length; i &lt; len; i++) {
+            const node = this._nodeList[i];
+            node._finalize2();
+        }
+
 
         // Sort layers to reduce WebGL shader switching when rendering them
 

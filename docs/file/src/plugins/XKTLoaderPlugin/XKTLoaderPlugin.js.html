@@ -547,6 +547,10 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Boolean} [cfg.reuseGeometries=true] Indicates whether to enable geometry reuse (````true```` by default) or whether to internally expand
+     * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
+     * improve Viewer performance for models that have a lot of geometry reuse, but may also increase the amount of
+     * browser and GPU memory they require. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
      * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
@@ -564,6 +568,7 @@ class XKTLoaderPlugin extends Plugin {
         this.includeTypes = cfg.includeTypes;
         this.excludeTypes = cfg.excludeTypes;
         this.excludeUnclassifiedObjects = cfg.excludeUnclassifiedObjects;
+        this.reuseGeometries = cfg.reuseGeometries;
     }
 
     /**
@@ -735,6 +740,36 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
+     * Gets whether XKTLoaderPlugin enables geometry reuse when loading models.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get reuseGeometries() {
+        return this._reuseGeometries;
+    }
+
+    /**
+     * Sets whether XKTLoaderPlugin enables geometry reuse when loading models.
+     *
+     * Default value is ````true````.
+     *
+     * Geometry reuse saves memory, but can impact Viewer performance when there are many reused geometries. For
+     * this reason, we can set this ````false```` to disable geometry reuse for models loaded by this XKTLoaderPlugin
+     * (which will then &quot;expand&quot; the geometry instances into batches instead).
+     *
+     * The result will be be less WebGL draw calls (which are expensive), at the cost of increased memory footprint.
+     *
+     * See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
+     *
+     * @type {Boolean}
+     */
+    set reuseGeometries(value) {
+        this._reuseGeometries = value !== false;
+    }
+
+    /**
      * Loads an ````.xkt```` model into this XKTLoaderPlugin&apos;s {@link Viewer}.
      *
      * Since xeokit/xeokit-sdk 1.9.0, XKTLoaderPlugin has supported XKT 8, which bundles the metamodel
@@ -766,6 +801,10 @@ class XKTLoaderPlugin extends Plugin {
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
+     * @param {Boolean} [params.reuseGeometries=true] Indicates whether to enable geometry reuse (````true```` by default) or whether to expand
+     * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
+     * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
+     * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -792,6 +831,8 @@ class XKTLoaderPlugin extends Plugin {
         const includeTypes = params.includeTypes || this._includeTypes;
         const excludeTypes = params.excludeTypes || this._excludeTypes;
         const objectDefaults = params.objectDefaults || this._objectDefaults;
+
+        options.reuseGeometries = (params.reuseGeometries !== null &amp;&amp; params.reuseGeometries !== undefined ) ? params.reuseGeometries : (this._reuseGeometries !== false);
 
         if (includeTypes) {
             options.includeTypesMap = {};
