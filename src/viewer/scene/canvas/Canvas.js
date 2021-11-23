@@ -22,13 +22,6 @@ const WEBGL_CONTEXT_NAMES = [
 class Canvas extends Component {
 
     /**
-     @private
-     */
-    get type() {
-        return "Canvas";
-    }
-
-    /**
      * @constructor
      * @private
      */
@@ -95,8 +88,10 @@ class Canvas extends Component {
         // If the canvas uses css styles to specify the sizes make sure the basic
         // width and height attributes match or the WebGL context will use 300 x 150
 
-        this.canvas.width = this.canvas.clientWidth;
-        this.canvas.height = this.canvas.clientHeight;
+        this.resolutionScale = cfg.resolutionScale;
+
+        this.canvas.width = Math.round(this.canvas.clientWidth * this._resolutionScale);
+        this.canvas.height = Math.round(this.canvas.clientHeight * this._resolutionScale);
 
         /**
          * Boundary of the Canvas in absolute browser window coordinates.
@@ -159,6 +154,8 @@ class Canvas extends Component {
 
         // Publish canvas size and position changes on each scene tick
 
+        let lastResolutionScale = null;
+
         let lastWindowWidth = null;
         let lastWindowHeight = null;
 
@@ -170,10 +167,11 @@ class Canvas extends Component {
 
         let lastParent = null;
 
-        this._tick = this.scene.on("tick", function () {
+        this._tick = this.scene.on("tick", () => {
 
-            const canvas = self.canvas;
+            const canvas = this.canvas;
 
+            const newResolutionScale = (this._resolutionScale !== lastResolutionScale);
             const newWindowSize = (window.innerWidth !== lastWindowWidth || window.innerHeight !== lastWindowHeight);
             const newCanvasSize = (canvas.clientWidth !== lastCanvasWidth || canvas.clientHeight !== lastCanvasHeight);
             const newCanvasPos = (canvas.offsetLeft !== lastCanvasOffsetLeft || canvas.offsetTop !== lastCanvasOffsetTop);
@@ -181,32 +179,32 @@ class Canvas extends Component {
             const parent = canvas.parentElement;
             const newParent = (parent !== lastParent);
 
-            if (newWindowSize || newCanvasSize || newCanvasPos || newParent) {
+            if (newResolutionScale || newWindowSize || newCanvasSize || newCanvasPos || newParent) {
 
-                self._spinner._adjustPosition();
+                this._spinner._adjustPosition();
 
-                if (newCanvasSize || newCanvasPos) {
+                if (newResolutionScale || newCanvasSize || newCanvasPos) {
 
                     const newWidth = canvas.clientWidth;
                     const newHeight = canvas.clientHeight;
 
                     // TODO: Wasteful to re-count pixel size of each canvas on each canvas' resize
-                    if (newCanvasSize) {
+                    if (newResolutionScale || newCanvasSize) {
                         let countPixels = 0;
                         let scene;
                         for (const sceneId in core.scenes) {
                             if (core.scenes.hasOwnProperty(sceneId)) {
                                 scene = core.scenes[sceneId];
-                                countPixels += scene.canvas.canvas.clientWidth * scene.canvas.canvas.clientHeight;
+                                countPixels += Math.round((scene.canvas.canvas.clientWidth * this._resolutionScale) * (scene.canvas.canvas.clientHeight * this._resolutionScale));
                             }
                         }
                         stats.memory.pixels = countPixels;
 
-                        canvas.width = canvas.clientWidth;
-                        canvas.height = canvas.clientHeight;
+                        canvas.width = Math.round(canvas.clientWidth * this._resolutionScale);
+                        canvas.height = Math.round(canvas.clientHeight * this._resolutionScale);
                     }
 
-                    const boundary = self.boundary;
+                    const boundary = this.boundary;
 
                     boundary[0] = canvas.offsetLeft;
                     boundary[1] = canvas.offsetTop;
@@ -219,10 +217,16 @@ class Canvas extends Component {
                      * @event boundary
                      * @param value The property's new value
                      */
-                    self.fire("boundary", boundary);
+                    if (!newResolutionScale) {
+                        this.fire("boundary", boundary);
+                    }
 
                     lastCanvasWidth = newWidth;
                     lastCanvasHeight = newHeight;
+                }
+
+                if (newResolutionScale) {
+                    lastResolutionScale = this._resolutionScale;
                 }
 
                 if (newWindowSize) {
@@ -243,6 +247,119 @@ class Canvas extends Component {
             canvas: this.canvas,
             elementId: cfg.spinnerElementId
         });
+    }
+
+    /**
+     @private
+     */
+    get type() {
+        return "Canvas";
+    }
+
+    /**
+     * Gets whether the canvas clear color will be derived from {@link AmbientLight} or {@link Canvas#backgroundColor}
+     * when {@link Canvas#transparent} is ```true```.
+     *
+     * When {@link Canvas#transparent} is ```true``` and this is ````true````, then the canvas clear color will
+     * be taken from the {@link Scene}'s ambient light color.
+     *
+     * When {@link Canvas#transparent} is ```true``` and this is ````false````, then the canvas clear color will
+     * be taken from {@link Canvas#backgroundColor}.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get backgroundColorFromAmbientLight() {
+        return this._backgroundColorFromAmbientLight;
+    }
+
+    /**
+     * Sets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set backgroundColorFromAmbientLight(backgroundColorFromAmbientLight) {
+        this._backgroundColorFromAmbientLight = (backgroundColorFromAmbientLight !== false);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the canvas clear color.
+     *
+     * Default value is ````[1, 1, 1]````.
+     *
+     * @type {Number[]}
+     */
+    get backgroundColor() {
+        return this._backgroundColor;
+    }
+
+    /**
+     * Sets the canvas clear color.
+     *
+     * Default value is ````[1, 1, 1]````.
+     *
+     * @type {Number[]}
+     */
+    set backgroundColor(value) {
+        if (value) {
+            this._backgroundColor[0] = value[0];
+            this._backgroundColor[1] = value[1];
+            this._backgroundColor[2] = value[2];
+        } else {
+            this._backgroundColor[0] = 1.0;
+            this._backgroundColor[1] = 1.0;
+            this._backgroundColor[2] = 1.0;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.
+     *
+     * This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+     * setting this to a value between ````[0..1]```` (eg ````0.5````) will render into a smaller back buffer, giving
+     * a performance boost.
+     *
+     * @returns {*|number} The resolution scale.
+     */
+    get resolutionScale() {
+        return this._resolutionScale;
+    }
+
+    /**
+     * Sets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.
+     *
+     * This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+     * setting this to a value between ````[0..1]```` (eg ````0.5````) will render into a smaller back buffer, giving
+     * a performance boost.
+     *
+     * @param {*|number} resolutionScale The resolution scale.
+     */
+    set resolutionScale(resolutionScale) {
+        resolutionScale = resolutionScale || 1.0;
+        if (resolutionScale === this._resolutionScale) {
+            return;
+        }
+        this._resolutionScale = resolutionScale;
+        this.glRedraw();
+    }
+
+    /**
+     * The busy {@link Spinner} for this Canvas.
+     *
+     * @property spinner
+     * @type Spinner
+     * @final
+     */
+    get spinner() {
+        return this._spinner;
     }
 
     /**
@@ -334,69 +451,6 @@ class Canvas extends Component {
     }
 
     /**
-     * Sets if the canvas background color is derived from an {@link AmbientLight}.
-     *
-     * This only has effect when the canvas is not transparent. When not enabled, the background color
-     * will be the canvas element's HTML/CSS background color.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    set backgroundColorFromAmbientLight(backgroundColorFromAmbientLight) {
-        this._backgroundColorFromAmbientLight = (backgroundColorFromAmbientLight !== false);
-    }
-
-    /**
-     * Gets whether the canvas clear color will be derived from {@link AmbientLight} or {@link Canvas#backgroundColor}
-     * when {@link Canvas#transparent} is ```true```.
-     *
-     * When {@link Canvas#transparent} is ```true``` and this is ````true````, then the canvas clear color will
-     * be taken from the {@link Scene}'s ambient light color.
-     *
-     * When {@link Canvas#transparent} is ```true``` and this is ````false````, then the canvas clear color will
-     * be taken from {@link Canvas#backgroundColor}.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    get backgroundColorFromAmbientLight() {
-        return this._backgroundColorFromAmbientLight;
-    }
-
-    /**
-     * Sets the canvas clear color.
-     *
-     * Default value is ````[1, 1, 1]````.
-     *
-     * @type {Number[]}
-     */
-    set backgroundColor(value) {
-        if (value) {
-            this._backgroundColor[0] = value[0];
-            this._backgroundColor[1] = value[1];
-            this._backgroundColor[2] = value[2];
-        } else {
-            this._backgroundColor[0] = 1.0;
-            this._backgroundColor[1] = 1.0;
-            this._backgroundColor[2] = 1.0;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the canvas clear color.
-     *
-     * Default value is ````[1, 1, 1]````.
-     *
-     * @type {Number[]}
-     */
-    get backgroundColor() {
-        return this._backgroundColor;
-    }
-
-    /**
      * @private
      * @deprecated
      */
@@ -437,17 +491,6 @@ class Canvas extends Component {
         if (this.canvas.loseContext) {
             this.canvas.loseContext();
         }
-    }
-
-    /**
-     * The busy {@link Spinner} for this Canvas.
-     *
-     * @property spinner
-     * @type Spinner
-     * @final
-     */
-    get spinner() {
-        return this._spinner;
     }
 
     destroy() {

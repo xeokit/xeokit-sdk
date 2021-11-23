@@ -7,6 +7,8 @@
     <title>xeokit Example</title>
     <link href="css/pageStyle.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="css/dat-gui-light-style.css" rel="stylesheet"/>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
@@ -16,14 +18,18 @@
     <img class="info-icon" src="../assets/images/performance_icon.png"/>
     <h1>FastNavPlugin</h1>
     <h2>Makes interaction smoother</h2>
-    <p>FastNavPlugin makes interaction smoother by disabling expensive rendering effects (eg. edge enhancement and SAO)
-        while the camera is moving.</p>
+    <p>Whenever the camera moves, <a href="../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
+                                     target="_other">FastNavPlugin</a> temporarily reduces the canvas resolution and
+        disables certain rendering
+        effects, to make interaction smoother.</p>
     <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
     </ul>
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -47,55 +53,85 @@
 </body>
 <script type="module">
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Import the modules we need for this example
-    //------------------------------------------------------------------------------------------------------------------
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        FastNavPlugin,
+        Mesh,
+        ReadableGeometry,
+        buildPlaneGeometry,
+        PhongMaterial,
+        Skybox
+    } from "../dist/xeokit-sdk.es.js";
 
-    import {Viewer, XKTLoaderPlugin, FastNavPlugin} from "../dist/xeokit-sdk.min.es.js";
-
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera
+    // Create a Viewer
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        logarithmicDepthBufferEnabled: false,
-        antialias: true
+        pbrEnabled: false
     });
 
-    const cameraControl = viewer.cameraControl;
-    const scene = viewer.scene;
-    const cameraFlight = viewer.cameraFlight;
-    const sao = scene.sao;
-    const camera = scene.camera;
-
-    // Higher-quality SAO settings
-
-    sao.enabled = true;
-    sao.numSamples = 40;
-    sao.kernelRadius = 150;
-
-    cameraControl.followPointer = true;
-    cameraControl.doublePickFlyTo = false;
+    viewer.scene.sao.enabled = true; // Higher-quality SAO settings
+    viewer.scene.sao.numSamples = 60;
+    viewer.scene.sao.kernelRadius = 170;
 
     viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
     viewer.scene.camera.look = [42.45, 49.62, -43.59];
     viewer.scene.camera.up = [0.05, 0.95, 0.15];
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Add a FastNavPlugin
-    //------------------------------------------------------------------------------------------------------------------
-
-    new FastNavPlugin(viewer, {});
+    viewer.scene.edgeMaterial.edgeAlpha = 0.3;
+    viewer.scene.edgeMaterial.edgeColor = [0, 0, 0];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an XKT loader plugin, load a model
+    // Install FastNavPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-    const xktLoader = new XKTLoaderPlugin(viewer);
+  //  viewer.scene.canvas.resolutionScale = 0.5;
 
-    var t0 = performance.now();
+    const fastNavPlugin = new FastNavPlugin(viewer, {
+        dynamicEdges: false,
+        dynamicSAO: false,
+        dynamicPBR: false,
+        dynamicTransparent: false,
+        dynamicCanvasResolution: true,
+        dynamicCanvasResolutionScale: 0.5,
+        delayBeforeStatic: true,
+        delayBeforeStaticDuration: 0.4
+    });
+
+    // Ground plane
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 3500,
+            zSize: 3500
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0.2, 0.7, 0.2],
+            backfaces: true
+        }),
+        position: [0, -8, 0],
+        pickable: false,
+        collidable: false
+    });
+
+    // new Skybox(viewer.scene, {
+    //     src: "../assets/textures/skybox/cloudySkyBox.jpg",
+    //     size: 1000
+    // });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer, {
+        reuseGeometries: false
+    });
+
+    const t0 = performance.now();
 
     document.getElementById("time").innerHTML = "Loading model...";
 
@@ -104,14 +140,128 @@
         src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         edges: true,
         saoEnabled: true,
-        pbrEnabled: false,
+        pbrEnabled: true,
         backfaces: false
     });
 
     model.on("loaded", () => {
-        var t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${model.numEntities}`;
     });
+
+    window.viewer = viewer;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with FastNavPlugin, SAO and camera configurations
+    //------------------------------------------------------------------------------------------------------------------
+
+    const edgeParams = new function () {
+        this.edges = viewer.scene.edgeMaterial.edges;
+    }();
+
+    const saoParams = new function () {
+        const sao = viewer.scene.sao;
+        const camera = viewer.scene.camera;
+        this.enabled = sao.enabled;
+        this.kernelRadius = sao.kernelRadius;
+        this.intensity = sao.intensity;
+        this.bias = sao.bias;
+        this.scale = sao.scale;
+        this.minResolution = sao.minResolution;
+        this.numSamples = sao.numSamples;
+        this.blendFactor = sao.blendFactor;
+        this.blendCutoff = sao.blendCutoff;
+        this.blur = sao.blur;
+        this.perspective = (camera.projection === "perspective");
+        this.far = camera.perspective.far;
+        this.fov = camera.perspective.fov;
+    }();
+
+    const fastNavParams = new function () {
+        this.dynamicPBR = fastNavPlugin.dynamicPBR;
+        this.dynamicSAO = fastNavPlugin.dynamicSAO;
+        this.dynamicEdges = fastNavPlugin.dynamicEdges;
+        this.dynamicTransparent = fastNavPlugin.dynamicTransparent;
+        this.dynamicCanvasResolution = fastNavPlugin.dynamicCanvasResolution;
+        this.dynamicCanvasResolutionScale = fastNavPlugin.dynamicCanvasResolutionScale;
+        this.delayBeforeStatic = fastNavPlugin.delayBeforeStatic;
+        this.delayBeforeStaticDuration = fastNavPlugin.delayBeforeStaticDuration;
+    }();
+
+    const update = function () {
+
+        const sao = viewer.scene.sao;
+        const camera = viewer.scene.camera;
+
+        viewer.scene.edgeMaterial.edges = edgeParams.edges;
+
+        sao.enabled = saoParams.enabled;
+        sao.kernelRadius = saoParams.kernelRadius;
+        sao.intensity = saoParams.intensity;
+        sao.bias = saoParams.bias;
+        sao.scale = saoParams.scale;
+        sao.minResolution = saoParams.minResolution;
+        sao.numSamples = saoParams.numSamples;
+        sao.blendFactor = saoParams.blendFactor;
+        sao.blendCutoff = saoParams.blendCutoff;
+        sao.blur = saoParams.blur;
+
+        camera.projection = saoParams.perspective ? "perspective" : "ortho";
+        camera.perspective.far = saoParams.far;
+        camera.ortho.far = saoParams.far;
+        camera.perspective.fov = saoParams.fov;
+
+        fastNavPlugin.dynamicPBR = fastNavParams.dynamicPBR;
+        fastNavPlugin.dynamicSAO = fastNavParams.dynamicSAO;
+        fastNavPlugin.dynamicEdges = fastNavParams.dynamicEdges;
+        fastNavPlugin.dynamicTransparent = fastNavParams.dynamicTransparent;
+        fastNavPlugin.dynamicCanvasResolution = fastNavParams.dynamicCanvasResolution;
+        fastNavPlugin.dynamicCanvasResolutionScale = fastNavParams.dynamicCanvasResolutionScale;
+        fastNavPlugin.delayBeforeStatic = fastNavParams.delayBeforeStatic;
+        fastNavPlugin.delayBeforeStaticDuration = fastNavParams.delayBeforeStaticDuration;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
+
+    const fastNavFolder = gui.addFolder('FastNavPlugin');
+    fastNavFolder.add(fastNavParams, 'dynamicPBR');
+    fastNavFolder.add(fastNavParams, 'dynamicSAO');
+    fastNavFolder.add(fastNavParams, 'dynamicEdges');
+    fastNavFolder.add(fastNavParams, 'dynamicTransparent');
+    fastNavFolder.add(fastNavParams, 'dynamicCanvasResolution');
+    fastNavFolder.add(fastNavParams, 'dynamicCanvasResolutionScale', 0.0, 1.0);
+    fastNavFolder.add(fastNavParams, 'delayBeforeStatic');
+    fastNavFolder.add(fastNavParams, 'delayBeforeStaticDuration', 0, 2.0);
+    fastNavFolder.open();
+
+    const edgesFolder = gui.addFolder('Edges');
+    edgesFolder.add(edgeParams, 'edges');
+    edgesFolder.open();
+
+    const saoFolder = gui.addFolder('SAO');
+    saoFolder.add(saoParams, 'enabled');
+    saoFolder.add(saoParams, 'bias', -2, 2);
+    saoFolder.add(saoParams, 'intensity', 0, 1.0);
+    saoFolder.add(saoParams, 'scale', .05, 5);
+    saoFolder.add(saoParams, 'kernelRadius', 1, 200);
+    saoFolder.add(saoParams, 'minResolution', 0, 0.001);
+    saoFolder.add(saoParams, 'numSamples', 4, 100);
+    saoFolder.add(saoParams, 'blendFactor', 0, 2);
+    saoFolder.add(saoParams, 'blendCutoff', 0, 2);
+    saoFolder.add(saoParams, 'blur');
+    saoFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(saoParams, 'perspective');
+    cameraFolder.add(saoParams, 'far', 100, 20000);
+    cameraFolder.add(saoParams, 'fov', 10, 120);
+    cameraFolder.open();
+
+    const customContainer = document.getElementById('myDatGuiContainer');
+    customContainer.appendChild(gui.domElement);
 
 </script>
 </html>

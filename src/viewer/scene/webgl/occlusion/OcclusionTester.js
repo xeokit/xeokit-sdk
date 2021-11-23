@@ -16,9 +16,11 @@ const tempVec3a = math.vec3();
  */
 class OcclusionTester {
 
-    constructor(scene) {
+    constructor(scene, renderBufferManager) {
 
         this._scene = scene;
+
+        this._renderBufferManager = renderBufferManager;
 
         this._occlusionLayers = {};
         this._occlusionLayersList = [];
@@ -164,7 +166,7 @@ class OcclusionTester {
         }
 
         if (!TEST_MODE) {
-            this._readPixelBuf = this._readPixelBuf || (this._readPixelBuf = new RenderBuffer(this._scene.canvas.canvas, this._scene.canvas.gl));
+            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
