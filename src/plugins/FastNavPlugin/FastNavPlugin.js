@@ -4,6 +4,8 @@ import {Plugin} from "../../viewer/Plugin.js";
  * {@link Viewer} plugin that improves interactivity by temporarily switching to fast and simple rendering while the
  * {@link Camera} is moving or the {@link Canvas} is resizing.
  *
+ * [<img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)
+ *
  * FastNavPlugin works by disabling specified rendering features, and optionally down-scaling the canvas, whenever we
  * move the Camera or resize the Canvas. Then, once the Camera or Canvas has been at rest after a certain time, FastNavPlugin
  * restores those rendering features and original canvas scale again.
@@ -26,7 +28,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * * disable physically-based materials (switching to non-PBR),
  * * hide transparent objects, and
  * * down-scale the canvas by 0.5, causing 75% less pixels to render.
- *
+ * <br><br>
  * We'll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we're
  * not continually flipping between low and high quality as we interact.
  *

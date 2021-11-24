@@ -270,20 +270,20 @@
       "expectCount": 34,
       "actualCount": 20,
       "undocumentLines": [
-        98,
-        99,
         100,
         101,
         102,
         103,
         104,
         105,
-        135,
-        136,
+        106,
+        107,
+        137,
         138,
-        150,
-        154,
-        158
+        140,
+        152,
+        156,
+        160
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {

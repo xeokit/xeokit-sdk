@@ -152,13 +152,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {FastNavPlugin} from &apos;<span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber78">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {FastNavPlugin} from &apos;<span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber80">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber78">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber80">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -180,6 +180,7 @@
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that improves interactivity by temporarily switching to fast and simple rendering while the
 <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving or the <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span> is resizing.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin"><img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif"></a></p>
 <p>FastNavPlugin works by disabling specified rendering features, and optionally down-scaling the canvas, whenever we
 move the Camera or resize the Canvas. Then, once the Camera or Canvas has been at rest after a certain time, FastNavPlugin
 restores those rendering features and original canvas scale again.</p>
@@ -195,12 +196,13 @@ with big models.</p>
 <li>disable ambient shadows,</li>
 <li>disable physically-based materials (switching to non-PBR),</li>
 <li>hide transparent objects, and</li>
-<li>down-scale the canvas by 0.5, causing 75% less pixels to render.</li>
-</ul>
-<p>We&apos;ll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we&apos;re
+<li><p>down-scale the canvas by 0.5, causing 75% less pixels to render.
+<br><br>
+We&apos;ll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we&apos;re
 not continually flipping between low and high quality as we interact.</p>
-<ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin">Run this example</a>]</li>
+</li>
+<li><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin">Run this example</a>]</p>
+</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, FastNavPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
@@ -1054,7 +1056,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber94">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -1197,7 +1199,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber321">source</a></span></span>
     </span>
   </h3>
 
@@ -1256,7 +1258,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber334">source</a></span></span>
     </span>
   </h3>
 
@@ -1302,7 +1304,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -1361,7 +1363,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber358">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber360">source</a></span></span>
     </span>
   </h3>
 
@@ -1407,7 +1409,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber265">source</a></span></span>
     </span>
   </h3>
 
@@ -1466,7 +1468,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber276">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -1512,7 +1514,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
@@ -1572,7 +1574,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber306">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -1619,7 +1621,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1677,7 +1679,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber228">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -1722,7 +1724,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1780,7 +1782,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -1825,7 +1827,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
@@ -1883,7 +1885,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
@@ -1928,7 +1930,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber241">source</a></span></span>
     </span>
   </h3>
 
@@ -1986,7 +1988,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber252">source</a></span></span>
     </span>
   </h3>
 
@@ -2034,7 +2036,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber375">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
