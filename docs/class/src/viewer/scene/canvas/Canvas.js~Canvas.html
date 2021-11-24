@@ -45,6 +45,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifcloaderplugin">plugins/IFCLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource.html">IFCDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html">IFCLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lazloaderplugin">plugins/LAZLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource.html">LAZDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html">LAZLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -206,35 +208,6 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor">backgroundColor</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the canvas clear color.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -274,13 +247,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColorFromAmbientLight">backgroundColorFromAmbientLight</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor">backgroundColor</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if the canvas background color is derived from an <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span>.</p>
+        <div data-ice="description"><p>Sets the canvas clear color.</p>
 </div>
       </div>
     </td>
@@ -309,8 +282,37 @@
       <div>
         
         
-        <div data-ice="description"><p>Gets whether the canvas clear color will be derived from <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span> or <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor">Canvas#backgroundColor</a></span>
+        <div data-ice="description"><p>Gets whether the canvas clear color will be derived from <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span> or <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor">Canvas#backgroundColor</a></span>
 when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent">Canvas#transparent</a></span> is <code>true</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColorFromAmbientLight">backgroundColorFromAmbientLight</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if the canvas background color is derived from an <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span>.</p>
 </div>
       </div>
     </td>
@@ -427,6 +429,64 @@ when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance
         
         
         <div data-ice="description"><p>The WebGL rendering context.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-resolutionScale">resolutionScale</a></span></span><span class="code" data-ice="signature">: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-resolutionScale">resolutionScale</a></span></span><span class="code" data-ice="signature">(resolutionScale: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.</p>
 </div>
       </div>
     </td>
@@ -1126,51 +1186,6 @@ when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-backgroundColor">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">backgroundColor</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber375">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the canvas clear color.</p>
-<p>Default value is <code>[1, 1, 1]</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-backgroundColor">
     <span class="access" data-ice="access">public</span>
     
@@ -1182,7 +1197,7 @@ when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber395">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -1216,28 +1231,26 @@ when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-backgroundColorFromAmbientLight">
+  <h3 data-ice="anchor" id="instance-set-backgroundColor">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">backgroundColorFromAmbientLight</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">backgroundColor</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber346">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets if the canvas background color is derived from an <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span>.</p>
-<p>This only has effect when the canvas is not transparent. When not enabled, the background color
-will be the canvas element&apos;s HTML/CSS background color.</p>
-<p>Default value is <code>true</code>.</p>
+  <div data-ice="description"><p>Sets the canvas clear color.</p>
+<p>Default value is <code>[1, 1, 1]</code>.</p>
 </div>
 
   
@@ -1274,19 +1287,66 @@ will be the canvas element&apos;s HTML/CSS background color.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber364">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether the canvas clear color will be derived from <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span> or <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor">Canvas#backgroundColor</a></span>
+  <div data-ice="description"><p>Gets whether the canvas clear color will be derived from <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span> or <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor">Canvas#backgroundColor</a></span>
 when <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent">Canvas#transparent</a></span> is <code>true</code>.</p>
 <p>When <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent">Canvas#transparent</a></span> is <code>true</code> and this is <code>true</code>, then the canvas clear color will
 be taken from the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s ambient light color.</p>
 <p>When <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent">Canvas#transparent</a></span> is <code>true</code> and this is <code>false</code>, then the canvas clear color will
-be taken from <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor">Canvas#backgroundColor</a></span>.</p>
+be taken from <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor">Canvas#backgroundColor</a></span>.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-backgroundColorFromAmbientLight">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">backgroundColorFromAmbientLight</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber287">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if the canvas background color is derived from an <span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span>.</p>
+<p>This only has effect when the canvas is not transparent. When not enabled, the background color
+will be the canvas element&apos;s HTML/CSS background color.</p>
 <p>Default value is <code>true</code>.</p>
 </div>
 
@@ -1324,7 +1384,7 @@ be taken from <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber114">source</a></span></span>
     </span>
   </h3>
 
@@ -1391,7 +1451,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1451,7 +1511,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber87">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -1495,7 +1555,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
@@ -1544,6 +1604,113 @@ var height = boundary[3];</code>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-resolutionScale">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">resolutionScale</span><span class="code" data-ice="signature">: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber332">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.</p>
+<p>This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+setting this to a value between <code>[0..1]</code> (eg <code>0.5</code>) will render into a smaller back buffer, giving
+a performance boost.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The resolution scale.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-resolutionScale">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">resolutionScale</span><span class="code" data-ice="signature">(resolutionScale: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber345">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.</p>
+<p>This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+setting this to a value between <code>[0..1]</code> (eg <code>0.5</code>) will render into a smaller back buffer, giving
+a performance boost.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-spinner">
     <span class="access" data-ice="access">public</span>
     
@@ -1555,7 +1722,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -1615,7 +1782,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
@@ -1675,7 +1842,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -1738,7 +1905,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -1782,7 +1949,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber436">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber490">source</a></span></span>
     </span>
   </h3>
 
@@ -1826,7 +1993,7 @@ var height = boundary[3];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber429">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/canvas/Canvas.js.html#lineNumber483">source</a></span></span>
     </span>
   </h3>
 

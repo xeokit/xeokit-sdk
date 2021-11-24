@@ -258,6 +258,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lazloaderplugin/lazdefaultdatasource.js~lazdefaultdatasource",
+    "class/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource.html",
+    "<span>LAZDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html",
+    "<span>LAZLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/lambertmaterial.js~lambertmaterial",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html",
     "<span>LambertMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LambertMaterial.js</span>",
@@ -1848,45 +1860,105 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestatic",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStatic",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStatic",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestatic",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStatic",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStatic",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestaticduration",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStaticDuration",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStaticDuration",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestaticduration",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStaticDuration",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStaticDuration",
+    "member"
+  ],
+  [
     "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#destroy",
     "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-method-destroy",
     "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#destroy",
     "method"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#edgesenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-edgesEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#edgesEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolution",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolution",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolution",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#edgesenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-edgesEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#edgesEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolution",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolution",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolution",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#pbrenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-pbrEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#pbrEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolutionscale",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolutionScale",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolutionScale",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#pbrenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-pbrEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#pbrEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolutionscale",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolutionScale",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolutionScale",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#saoenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-saoEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#saoEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicedges",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicEdges",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicEdges",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#saoenabled",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-saoEnabled",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#saoEnabled",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicedges",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicEdges",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicEdges",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicpbr",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicPBR",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicPBR",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicpbr",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicPBR",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicPBR",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicsao",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicSAO",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicSAO",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicsao",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicSAO",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicSAO",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamictransparent",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicTransparent",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicTransparent",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamictransparent",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicTransparent",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicTransparent",
     "member"
   ],
   [
@@ -2109,6 +2181,126 @@ window.esdocSearchIndex = [
     "src/plugins/ifcloaderplugin/index.js",
     "file/src/plugins/IFCLoaderPlugin/index.js.html",
     "src/plugins/IFCLoaderPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazdefaultdatasource.js",
+    "file/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js.html",
+    "src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazdefaultdatasource.js~lazdefaultdatasource#constructor",
+    "class/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazdefaultdatasource.js~lazdefaultdatasource#getifc",
+    "class/src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource.html#instance-method-getIFC",
+    "src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js~LAZDefaultDataSource#getIFC",
+    "method"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js",
+    "file/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js.html",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#constructor",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#datasource",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-dataSource",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#datasource",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#excludetypes",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-excludeTypes",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#excludeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#excludetypes",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-excludeTypes",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#excludeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#excludeunclassifiedobjects",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-excludeUnclassifiedObjects",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#excludeUnclassifiedObjects",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#excludeunclassifiedobjects",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-excludeUnclassifiedObjects",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#excludeUnclassifiedObjects",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#globalizeobjectids",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-globalizeObjectIds",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#globalizeobjectids",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-globalizeObjectIds",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#includetypes",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-includeTypes",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#includeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#includetypes",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-includeTypes",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#includeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#load",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-method-load",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#objectdefaults",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-objectDefaults",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#objectdefaults",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-set-objectDefaults",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/lazloaderplugin.js~lazloaderplugin#supportedversions",
+    "class/src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin.html#instance-get-supportedVersions",
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js~LAZLoaderPlugin#supportedVersions",
+    "member"
+  ],
+  [
+    "src/plugins/lazloaderplugin/index.js",
+    "file/src/plugins/LAZLoaderPlugin/index.js.html",
+    "src/plugins/LAZLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -6367,25 +6559,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolor",
-    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor",
-    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColor",
-    "member"
-  ],
-  [
-    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolor",
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor",
     "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColor",
     "member"
   ],
   [
-    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolorfromambientlight",
-    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColorFromAmbientLight",
-    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColorFromAmbientLight",
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolor",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColor",
     "member"
   ],
   [
     "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolorfromambientlight",
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColorFromAmbientLight",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColorFromAmbientLight",
+    "member"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#backgroundcolorfromambientlight",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColorFromAmbientLight",
     "src/viewer/scene/canvas/Canvas.js~Canvas#backgroundColorFromAmbientLight",
     "member"
   ],
@@ -6430,6 +6622,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-method-readPixels",
     "src/viewer/scene/canvas/Canvas.js~Canvas#readPixels",
     "method"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#resolutionscale",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-get-resolutionScale",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#resolutionScale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/canvas/canvas.js~canvas#resolutionscale",
+    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-set-resolutionScale",
+    "src/viewer/scene/canvas/Canvas.js~Canvas#resolutionScale",
+    "member"
   ],
   [
     "src/viewer/scene/canvas/canvas.js~canvas#spinner",
@@ -11883,6 +12087,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/renderbuffer.js",
     "file/src/viewer/scene/webgl/RenderBuffer.js.html",
     "src/viewer/scene/webgl/RenderBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/renderbuffermanager.js",
+    "file/src/viewer/scene/webgl/RenderBufferManager.js.html",
+    "src/viewer/scene/webgl/RenderBufferManager.js",
     "file"
   ],
   [

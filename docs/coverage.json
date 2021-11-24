@@ -1,7 +1,7 @@
 {
-  "coverage": "36.85%",
-  "expectCount": 6192,
-  "actualCount": 2282,
+  "coverage": "37.02%",
+  "expectCount": 6247,
+  "actualCount": 2313,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -267,26 +267,24 @@
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
-      "expectCount": 27,
-      "actualCount": 10,
+      "expectCount": 35,
+      "actualCount": 20,
       "undocumentLines": [
-        323,
-        65,
-        66,
-        67,
-        69,
-        70,
-        76,
-        87,
         98,
-        106,
-        119,
-        123,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        126,
         127,
-        142,
-        202,
-        203,
-        223
+        129,
+        148,
+        152,
+        156,
+        383
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -336,6 +334,36 @@
       ]
     },
     "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js": {
+      "expectCount": 33,
+      "actualCount": 16,
+      "undocumentLines": [
+        11,
+        371,
+        379,
+        419,
+        441,
+        469,
+        497,
+        525,
+        557,
+        645,
+        659,
+        749,
+        756,
+        770,
+        785,
+        813,
+        875
+      ]
+    },
+    "src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        6
+      ]
+    },
+    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js": {
       "expectCount": 33,
       "actualCount": 16,
       "undocumentLines": [
@@ -3940,16 +3968,17 @@
       ]
     },
     "src/viewer/scene/canvas/Canvas.js": {
-      "expectCount": 26,
-      "actualCount": 19,
+      "expectCount": 29,
+      "actualCount": 21,
       "undocumentLines": [
         8,
-        39,
-        43,
-        173,
-        242,
-        278,
-        453
+        32,
+        36,
+        170,
+        246,
+        350,
+        395,
+        496
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
@@ -5185,6 +5214,18 @@
         311
       ]
     },
+    "src/viewer/scene/webgl/RenderBufferManager.js": {
+      "expectCount": 7,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        9,
+        10,
+        11,
+        14,
+        24
+      ]
+    },
     "src/viewer/scene/webgl/RenderFlags.js": {
       "expectCount": 25,
       "actualCount": 25,
@@ -5290,7 +5331,7 @@
       ]
     },
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js": {
-      "expectCount": 42,
+      "expectCount": 43,
       "actualCount": 10,
       "undocumentLines": [
         8,
@@ -5300,31 +5341,32 @@
         19,
         21,
         23,
-        24,
         25,
+        26,
         27,
-        28,
+        29,
         30,
         32,
-        33,
+        34,
         35,
         37,
-        38,
-        41,
-        45,
-        167,
-        173,
-        183,
-        190,
-        232,
-        278,
-        287,
-        291,
-        292,
+        39,
+        40,
+        43,
+        47,
+        169,
+        175,
+        185,
+        192,
+        234,
+        280,
+        289,
         293,
-        302,
+        294,
+        295,
         304,
-        428
+        306,
+        432
       ]
     },
     "src/viewer/scene/webgl/sao/SAODepthLimitedBlurRenderer.js": {
