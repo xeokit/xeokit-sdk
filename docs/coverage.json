@@ -1,7 +1,7 @@
 {
-  "coverage": "37.02%",
-  "expectCount": 6247,
-  "actualCount": 2313,
+  "coverage": "36.95%",
+  "expectCount": 6210,
+  "actualCount": 2295,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -267,7 +267,7 @@
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
-      "expectCount": 35,
+      "expectCount": 34,
       "actualCount": 20,
       "undocumentLines": [
         98,
@@ -278,13 +278,12 @@
         103,
         104,
         105,
-        126,
-        127,
-        129,
-        148,
-        152,
-        156,
-        383
+        135,
+        136,
+        138,
+        150,
+        154,
+        158
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -334,36 +333,6 @@
       ]
     },
     "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js": {
-      "expectCount": 33,
-      "actualCount": 16,
-      "undocumentLines": [
-        11,
-        371,
-        379,
-        419,
-        441,
-        469,
-        497,
-        525,
-        557,
-        645,
-        659,
-        749,
-        756,
-        770,
-        785,
-        813,
-        875
-      ]
-    },
-    "src/plugins/LAZLoaderPlugin/LAZDefaultDataSource.js": {
-      "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        6
-      ]
-    },
-    "src/plugins/LAZLoaderPlugin/LAZLoaderPlugin.js": {
       "expectCount": 33,
       "actualCount": 16,
       "undocumentLines": [
@@ -3977,8 +3946,8 @@
         170,
         246,
         350,
-        395,
-        496
+        398,
+        499
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
