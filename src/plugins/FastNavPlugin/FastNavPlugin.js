@@ -1,47 +1,75 @@
 import {Plugin} from "../../viewer/Plugin.js";
 
 /**
- * {@link Viewer} plugin that improves interactivity by disabling expensive rendering effects while the {@link Camera} is moving.
+ * {@link Viewer} plugin that improves interactivity by temporarily switching to fast and simple rendering while the
+ * {@link Camera} is moving or the {@link Canvas} is resizing.
+ *
+ * FastNavPlugin works by disabling specified rendering features, and optionally down-scaling the canvas, whenever we
+ * move the Camera or resize the Canvas. Then, once the Camera or Canvas has been at rest after a certain time, FastNavPlugin
+ * restores those rendering features and original canvas scale again.
+ *
+ * The effect we experience is a low-quality view while moving, then a high-quality view
+ * after we stop, following an optional delay.
+ *
+ * Down-scaling the canvas resolution gives particularly good results. For example, scaling by ````0.5````
+ * means that we're rendering a quarter of the pixels while moving, which makes the Viewer noticeably smoother
+ * with big models.
  *
  * # Usage
  *
  * In the example below, we'll create a {@link Viewer}, add a {@link FastNavPlugin}, then use an {@link XKTLoaderPlugin} to load a model.
  *
- * This viewer will only render the model with enhanced edges, physically-based rendering (PBR) and scalable
- * ambient obscurance (SAO) when the camera is not moving.
+ * Whenever our Camera moves, the FastNavPlugin will:
  *
- * Note how we enable SAO and PBR on the ````Scene```` and the model.
+ * * disable edges,
+ * * disable ambient shadows,
+ * * disable physically-based materials (switching to non-PBR),
+ * * hide transparent objects, and
+ * * down-scale the canvas by 0.5, causing 75% less pixels to render.
+ *
+ * We'll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we're
+ * not continually flipping between low and high quality as we interact.
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, FastNavPlugin} from "xeokit-sdk.es.js";
  *
+ * // Create a Viewer with PBR and SAO enabled
+ *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",
  *      transparent: true,
- *      pbrEnabled: true,
- *      saoEnabled: true
+ *      pbr: true,                          // Enable physically-based rendering for Viewer
+ *      sao: true                           // Enable ambient shadows for Viewer
  *  });
  *
  * viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
  * viewer.scene.camera.look = [42.45, 49.62, -43.59];
  * viewer.scene.camera.up = [0.05, 0.95, 0.15];
  *
+ * // Install a FastNavPlugin
+ *
  * new FastNavPlugin(viewer, {
- *     pbrEnabled: true,
- *     saoEnabled: true,
- *     edgesEnabled: true
+ *      dynamicEdges: false,                // Don't show edges while moving (default is false)
+ *      dynamicSAO: false,                  // Don't show ambient shadows while moving (default is false)
+ *      dynamicPBR: false,                  // Non-physically-based rendering while moving (default is false)
+ *      dynamicTransparent: false,          // Hide transparent objects while moving (default is false)
+ *      dynamicCanvasResolution: true,      // Reduce canvas resolution while moving (default is false)
+ *      dynamicCanvasResolutionScale: 0.5,  // Factor by which we reduce canvas resolution when moving (default is 0.6)
+ *      delayBeforeStatic: true,            // When we stop, delay before returning to quality static render (default is true)
+ *      delayBeforeStaticDuration: 0.5      // The delay duration, in seconds (default is 0.5)
  * });
+ *
+ * // Load a BIM model from XKT
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * const model = xktLoader.load({
  *      id: "myModel",
  *      src: "./models/xkt/HolterTower.xkt",
- *      edges: true,
- *      saoEnabled: true,
- *      pbrEnabled: true
+ *      sao: true,                          // Enable ambient shadows for this model
+ *      pbr: true                           // Enable physically-based rendering for this model
  * });
  * ````
  *
@@ -54,63 +82,66 @@ class FastNavPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg FastNavPlugin configuration.
      * @param {String} [cfg.id="FastNav"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Boolean} [cfg.pbrEnabled] Whether to enable physically-based rendering (PBR) when the camera stops moving. When not specified, PBR will be enabled if its currently enabled for the Viewer (see {@link Viewer#pbrEnabled}).
-     * @param {Boolean} [cfg.saoEnabled] Whether to enable scalable ambient occlusion (SAO) when the camera stops moving. When not specified, SAO will be enabled if its currently enabled for the Viewer (see {@link Scene#pbrEnabled}).
-     * @param {Boolean} [cfg.edgesEnabled] Whether to show enhanced edges when the camera stops moving. When not specified, edges will be enabled if they're currently enabled for the Viewer (see {@link EdgeMaterial#edges}).
+     * @param {Boolean} [cfg.dynamicPBR=false] Whether to enable physically-based rendering (PBR) while the camera is moving.
+     * @param {Boolean} [cfg.dynamicSAO=false] Whether to enable scalable ambient occlusion (SAO) while the camera is moving.
+     * @param {Boolean} [cfg.dynamicEdges=false] Whether to enable enhanced edges while the camera is moving.
+     * @param {Boolean} [cfg.dynamicTransparent=true] Whether to show transparent objects when the camera is moving.
+     * @param {Number} [cfg.dynamicCanvasResolution=false] Whether to down-scale the canvas resolution while the camera is moving.
+     * @param {Number} [cfg.dynamicCanvasResolutionScale=0.6] The factor by which we downscale the canvas resolution while the camera is moving.
+     * @param {Boolean} [cfg.delayBeforeStatic=true] Once the camera stops moving, whether to have a delay before transitioning back to normal rendering.
+     * @param {Number} [cfg.delayBeforeStaticDuration=0.5] Delay in seconds before transitioning back to normal rendering when camera stops moving. Only works when ````delayBeforeStatic```` is ````true````.
      */
     constructor(viewer, cfg = {}) {
 
         super("FastNav", viewer);
 
-        this._pbrEnabled = (cfg.pbrEnabled !== undefined && cfg.pbrEnabled !== null) ? cfg.pbrEnabled : viewer.scene.pbrEnabled;
-        this._saoEnabled = (cfg.saoEnabled !== undefined && cfg.saoEnabled !== null) ? cfg.saoEnabled : viewer.scene.sao.enabled;
-        this._edgesEnabled = (cfg.edgesEnabled !== undefined && cfg.edgesEnabled !== null) ? cfg.edgesEnabled : viewer.scene.edgeMaterial.edges;
+        this._dynamicPBR = !!cfg.dynamicPBR;
+        this._dynamicSAO = !!cfg.dynamicSAO;
+        this._dynamicEdges = !!cfg.dynamicEdges;
+        this._dynamicTransparent = (cfg.dynamicTransparent !== false);
+        this._dynamicCanvasResolution = !!cfg.dynamicCanvasResolution;
+        this._dynamicCanvasResolutionScale = cfg.dynamicCanvasResolutionScale || 0.6;
+        this._delayBeforeStatic = (cfg.delayBeforeStatic !== false);
+        this._delayBeforeStaticDuration = cfg.delayBeforeStaticDuration || 0.5;
 
-        this._pInterval = null;
-        this._fadeMillisecs = 500;
-
-        let timeoutDuration = 600; // Milliseconds
-        let timer = timeoutDuration;
+        let timer = this._delayBeforeStaticDuration * 1000;
         let fastMode = false;
 
-        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", () => {
-            timer = timeoutDuration;
+        const switchToLowQuality = () => {
+            timer = (this._delayBeforeStaticDuration * 1000);
             if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
+                viewer.scene._renderer.setPBREnabled(this._dynamicPBR);
+                viewer.scene._renderer.setSAOEnabled(this._dynamicSAO);
+                viewer.scene._renderer.setTransparentEnabled(this._dynamicTransparent);
+                viewer.scene._renderer.setEdgesEnabled(this._dynamicEdges);
+                if (this._dynamicCanvasResolution) {
+                    viewer.scene.canvas.resolutionScale = this._dynamicCanvasResolutionScale;
+                } else {
+                    viewer.scene.canvas.resolutionScale = 1;
+                }
                 fastMode = true;
             }
-        });
+        };
 
-        this._onCameraMatrix = viewer.scene.camera.on("matrix", () => {
-            timer = timeoutDuration;
-            if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
-                fastMode = true;
-            }
-        });
+        const switchToHighQuality = () => {
+            viewer.scene.canvas.resolutionScale = 1;
+            viewer.scene._renderer.setEdgesEnabled(true);
+            viewer.scene._renderer.setPBREnabled(true);
+            viewer.scene._renderer.setSAOEnabled(true);
+            viewer.scene._renderer.setTransparentEnabled(true);
+            fastMode = false;
+        };
 
-        this._onSceneTick = viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
+        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", switchToLowQuality);
+        this._onCameraMatrix = viewer.scene.camera.on("matrix", switchToLowQuality);
+
+        this._onSceneTick = viewer.scene.on("tick", (tickEvent) => {
             if (!fastMode) {
                 return;
             }
             timer -= tickEvent.deltaTime;
-            if (timer <= 0) {
-                if (fastMode) {
-                    this._startFade();
-                    this._pInterval2 = setTimeout(() => { // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
-                        viewer.scene.pbrEnabled = this._pbrEnabled;
-                        viewer.scene.sao.enabled = this._saoEnabled;
-                        viewer.scene.edgeMaterial.edges = this._edgesEnabled;
-                    }, 100);
-
-                    fastMode = false;
-                }
+            if ((!this._delayBeforeStatic) || timer <= 0) {
+                switchToHighQuality();
             }
         });
 
@@ -128,166 +159,204 @@ class FastNavPlugin extends Plugin {
             if (!down) {
                 return;
             }
-            timer = timeoutDuration;
-            if (!fastMode) {
-                this._cancelFade();
-                viewer.scene.pbrEnabled = false;
-                viewer.scene.sao.enabled = false;
-                viewer.scene.edgeMaterial.edges = false;
-                fastMode = true;
-            }
+            switchToLowQuality();
         });
     }
 
-    _startFade() {
-
-        if (!this._img) {
-            this._initFade();
-        }
-
-        const interval = 50;
-        const inc = 1 / (this._fadeMillisecs / interval);
-
-        if (this._pInterval) {
-            clearInterval(this._pInterval);
-            this._pInterval = null;
-        }
-
-        const viewer = this.viewer;
-
-        const canvas = viewer.scene.canvas.canvas;
-        const canvasOffset = cumulativeOffset(canvas);
-        const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
-        this._img.style.position = "fixed";
-        this._img.style["margin"] = 0 + "px";
-        this._img.style["z-index"] = zIndex;
-        this._img.style["background"] = canvas.style.background;
-        this._img.style.left = canvasOffset.left + "px";
-        this._img.style.top = canvasOffset.top + "px";
-        this._img.style.width = canvas.width + "px";
-        this._img.style.height = canvas.height + "px";
-        this._img.width = canvas.width;
-        this._img.height = canvas.height;
-        this._img.src = ""; // Needed by Firefox - https://github.com/xeokit/xeokit-sdk/issues/624
-        this._img.src = viewer.getSnapshot({
-            format: "png",
-            includeGizmos: true
-        });
-        this._img.style.visibility = "visible";
-        this._img.style.opacity = 1;
-
-        let opacity = 1;
-        this._pInterval = setInterval(() => {
-            opacity -= inc;
-            if (opacity > 0) {
-                this._img.style.opacity = opacity;
-                const canvasOffset = cumulativeOffset(canvas);
-                this._img.style.left = canvasOffset.left + "px";
-                this._img.style.top = canvasOffset.top + "px";
-                this._img.style.width = canvas.width + "px";
-                this._img.style.height = canvas.height + "px";
-                this._img.style.opacity = opacity;
-                this._img.width = canvas.width;
-                this._img.height = canvas.height;
-
-            } else {
-                this._img.style.opacity = 0;
-                this._img.style.visibility = "hidden";
-                clearInterval(this._pInterval);
-                this._pInterval = null;
-            }
-        }, interval);
-    }
-
-    _initFade() {
-        this._img = document.createElement('img');
-        const canvas = this.viewer.scene.canvas.canvas;
-        const canvasOffset = cumulativeOffset(canvas);
-        const zIndex = (parseInt(canvas.style["z-index"]) || 0) + 1;
-        this._img.style.position = "absolute";
-        this._img.style.visibility = "hidden";
-        this._img.style["pointer-events"] = "none";
-        this._img.style["z-index"] = 5;
-        this._img.style.left = canvasOffset.left + "px";
-        this._img.style.top = canvasOffset.top + "px";
-        this._img.style.width = canvas.width + "px";
-        this._img.style.height = canvas.height + "px";
-        this._img.style.opacity = 1;
-        this._img.width = canvas.width;
-        this._img.height = canvas.height;
-        this._img.left = canvasOffset.left;
-        this._img.top = canvasOffset.top;
-        canvas.parentNode.insertBefore(this._img, canvas.nextSibling);
-    }
-
-    _cancelFade() {
-        if (!this._img) {
-            return;
-        }
-        if (this._pInterval) {
-            clearInterval(this._pInterval);
-            this._pInterval = null;
-        }
-        if (this._pInterval2) {
-            clearInterval(this._pInterval2);
-            this._pInterval2 = null;
-        }
-        this._img.style.opacity = 0;
-        this._img.style.visibility = "hidden";
-    }
-
     /**
-     * Sets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     * Gets whether to enable physically-based rendering (PBR) while the camera is moving.
      *
-     * @return {Boolean} Whether PBR will be enabled.
-     */
-    set pbrEnabled(pbrEnabled) {
-        this._pbrEnabled = pbrEnabled;
-    }
-
-    /**
-     * Gets whether to enable physically-based rendering (PBR) when the camera stops moving.
+     * Default is ````false````.
      *
-     * @return {Boolean} Whether PBR will be enabled.
+     * @return {Boolean} Whether PBR will be enabled while the camera is moving.
      */
-    get pbrEnabled() {
-        return this._pbrEnabled
+    get dynamicPBR() {
+        return this._dynamicPBR;
     }
 
     /**
-     * Sets whether to enable scalable ambient occlusion (SAO) when the camera stops moving.
+     * Sets whether to enable physically-based rendering (PBR) while the camera is moving.
+     *
+     * Default is ````false````.
+     *
+     * @param {Boolean} dynamicPBR Whether PBR will be enabled while the camera is moving.
+     */
+    set dynamicPBR(dynamicPBR) {
+        this._dynamicPBR = dynamicPBR;
+    }
+
+    /**
+     * Gets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.
+     *
+     * Default is ````false````.
      *
      * @return {Boolean} Whether SAO will be enabled.
      */
-    set saoEnabled(saoEnabled) {
-        this._saoEnabled = saoEnabled;
+    get dynamicSAO() {
+        return this._dynamicSAO;
     }
 
     /**
-     * Gets whether the FastNavPlugin enables SAO when switching to quality rendering.
+     * Sets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.
      *
-     * @return {Boolean} Whether SAO will be enabled.
+     * Default is ````false````.
+     *
+     * @param {Boolean} dynamicSAO Whether SAO will be enabled while the camera is moving.
      */
-    get saoEnabled() {
-        return this._saoEnabled
+    set dynamicSAO(dynamicSAO) {
+        this._dynamicSAO = dynamicSAO;
     }
 
     /**
-     * Sets whether to show enhanced edges when the camera stops moving.
+     * Gets whether to enable enhanced edges while the camera is moving.
      *
-     * @return {Boolean} Whether edge enhancement will be enabled.
+     * Default is ````false````.
+     *
+     * @return {Boolean} Whether edges will be enabled while the camera is moving.
      */
-    set edgesEnabled(edgesEnabled) {
-        this._edgesEnabled = edgesEnabled;
+    get dynamicEdges() {
+        return this._dynamicEdges;
     }
 
     /**
-     * Gets whether to show enhanced edges when the camera stops moving.
+     * Sets whether to enable enhanced edges while the camera is moving.
      *
-     * @return {Boolean} Whether edge enhancement will be enabled.
+     * Default is ````false````.
+     *
+     * @param {Boolean} dynamicEdges Whether edge enhancement will be enabled while the camera is moving.
      */
-    get edgesEnabled() {
-        return this._edgesEnabled
+    set dynamicEdges(dynamicEdges) {
+        this._dynamicEdges = dynamicEdges;
+    }
+
+    /**
+     * Gets whether to show transparent objects while the camera is moving.
+     *
+     * Default is ````true````.
+     *
+     * @return {Boolean} Whether to show transparent objects while the camera is moving.
+     */
+    get dynamicTransparent() {
+        return this._dynamicTransparent
+    }
+
+    /**
+     * Sets whether to show transparent objects while the camera is moving.
+     *
+     * Default is ````true````.
+     *
+     * @param {Boolean} dynamicTransparent Whether to show transparent objects while the camera is moving.
+     */
+    set dynamicTransparent(dynamicTransparent) {
+        this._dynamicTransparent = (dynamicTransparent !== false);
+    }
+
+    /**
+     * Gets whether to down-scale the canvas resolution while the camera is moving.
+     *
+     * Default is ````true````.
+     *
+     * The down-scaling factor is configured via {@link FastNavPlugin#dynamicCanvasResolutionScale}.
+     *
+     * @return {Boolean} Whether to down-scale the canvas resolution while the camera is moving.
+     */
+    get dynamicCanvasResolution() {
+        return this._dynamicCanvasResolution;
+    }
+
+    /**
+     * Sets whether to down-scale the canvas resolution while the camera is moving.
+     *
+     * Default is ````true````.
+     *
+     * The down-scaling factor is configured via {@link FastNavPlugin#dynamicCanvasResolutionScale}.
+     *
+     * @param {Boolean} dynamicCanvasResolution Whether to down-scale the canvas resolution while the camera is moving.
+     */
+    set dynamicCanvasResolution(dynamicCanvasResolution) {
+        this._dynamicCanvasResolution = dynamicCanvasResolution;
+    }
+
+    /**
+     * Gets the factor by which we downscale the canvas resolution while the camera is moving.
+     *
+     * This allows us to render a low-resolution image to the canvas while we're moving the camera.
+     *
+     * Accepted range is ````[0.0 .. 1.0]````.
+     *
+     * Default is ````0.6````.
+     *
+     * @return {Number} Factor by which we downscale the canvas resolution while the camera is moving.
+     */
+    get dynamicCanvasResolutionScale() {
+        return this._dynamicCanvasResolutionScale;
+    }
+
+    /**
+     * Sets the factor by which we downscale the canvas resolution while the camera is moving.
+     *
+     * This allows us to render a low-resolution image to the canvas while we're moving the camera.
+     *
+     * Accepted range is ````[0.0 .. 1.0]````.
+     *
+     * Default is ````0.6````.
+     *
+     * @param {Number} dynamicCanvasResolutionScale Factor by which we downscale the canvas resolution while the camera is moving.
+     */
+    set dynamicCanvasResolutionScale(dynamicCanvasResolutionScale) {
+        this._dynamicCanvasResolutionScale = dynamicCanvasResolutionScale || 0.6;
+    }
+
+    /**
+     * Gets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.
+     *
+     * The delay duration is configured via {@link FastNavPlugin#delayBeforeStaticDuration}.
+     *
+     * Default is ````true````.
+     *
+     * @return {Boolean} Whether to have a delay.
+     */
+    get delayBeforeStatic() {
+        return this._delayBeforeStatic;
+    }
+
+    /**
+     * Sets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.
+     *
+     * The delay duration is configured via {@link FastNavPlugin#delayBeforeStaticDuration}.
+     *
+     * Default is ````true````.
+     *
+     * @param {Boolean} delayBeforeStatic Whether to have a delay.
+     */
+    set delayBeforeStatic(delayBeforeStatic) {
+        this._delayBeforeStatic = delayBeforeStatic;
+    }
+
+    /**
+     * Gets the delay in seconds before transitioning back to normal static rendering when camera stops moving.
+     *
+     * The delay is enabled when {@link FastNavPlugin#delayBeforeStatic} is ````true````.
+     *
+     * Default is ````0.5```` seconds.
+     *
+     * @return {Number} Timeout duration in seconds.
+     */
+    get delayBeforeStaticDuration() {
+        return this._delayBeforeStaticDuration;
+    }
+
+    /**
+     * Sets the delay in seconds before transitioning back to normal static rendering when camera stops moving.
+     *
+     * The delay is enabled when {@link FastNavPlugin#delayBeforeStatic} is ````true````.
+     *
+     * Default is ````0.5```` seconds.
+     *
+     * @param {Number} delayBeforeStaticDuration Timeout duration in seconds.
+     */
+    set delayBeforeStaticDuration(delayBeforeStaticDuration) {
+        this._delayBeforeStaticDuration = delayBeforeStaticDuration !== null && delayBeforeStaticDuration !== undefined ? delayBeforeStaticDuration : 0.5;
     }
 
     /**
@@ -296,7 +365,6 @@ class FastNavPlugin extends Plugin {
     send(name, value) {
         switch (name) {
             case "clear":
-                this._cancelFade();
                 break;
         }
     }
@@ -305,7 +373,6 @@ class FastNavPlugin extends Plugin {
      * Destroys this plugin.
      */
     destroy() {
-        this._cancelFade();
         this.viewer.scene.camera.off(this._onCameraMatrix);
         this.viewer.scene.canvas.off(this._onCanvasBoundary);
         this.viewer.scene.input.off(this._onSceneMouseDown);
@@ -313,25 +380,7 @@ class FastNavPlugin extends Plugin {
         this.viewer.scene.input.off(this._onSceneMouseMove);
         this.viewer.scene.off(this._onSceneTick);
         super.destroy();
-        if (this._img) {
-            this._img.parentNode.removeChild(this._img);
-            this._img = null;
-        }
     }
 }
 
-function cumulativeOffset(element) {
-    let top = 0, left = 0;
-    do {
-        top += element.offsetTop || 0;
-        left += element.offsetLeft || 0;
-        element = element.offsetParent;
-    } while (element);
-
-    return {
-        top: top,
-        left: left
-    };
-}
-
-export {FastNavPlugin}
+export {FastNavPlugin};

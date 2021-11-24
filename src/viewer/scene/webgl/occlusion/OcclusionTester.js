@@ -16,9 +16,11 @@ const tempVec3a = math.vec3();
  */
 class OcclusionTester {
 
-    constructor(scene) {
+    constructor(scene, renderBufferManager) {
 
         this._scene = scene;
+
+        this._renderBufferManager = renderBufferManager;
 
         this._occlusionLayers = {};
         this._occlusionLayersList = [];
@@ -164,7 +166,7 @@ class OcclusionTester {
         }
 
         if (!TEST_MODE) {
-            this._readPixelBuf = this._readPixelBuf || (this._readPixelBuf = new RenderBuffer(this._scene.canvas.canvas, this._scene.canvas.gl));
+            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
@@ -376,6 +378,8 @@ class OcclusionTester {
 
         if (!TEST_MODE) {
 
+            const resolutionScale = this._scene.canvas.resolutionScale;
+
             const markerR = MARKER_COLOR[0] * 255;
             const markerG = MARKER_COLOR[1] * 255;
             const markerB = MARKER_COLOR[2] * 255;
@@ -388,7 +392,7 @@ class OcclusionTester {
 
                     const marker = occlusionLayer.occlusionTestList[i];
                     const j = i * 2;
-                    const color = this._readPixelBuf.read(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
+                    const color = this._readPixelBuf.read(Math.round(occlusionLayer.pixels[j] * resolutionScale), Math.round(occlusionLayer.pixels[j + 1] * resolutionScale));
                     const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
 
                     marker._setVisible(visible);

@@ -76,7 +76,7 @@ function Core() {
     /**
      * @private
      */
-    this.setRAFEnabled = function(value) {
+    this.setRAFEnabled = function (value) {
         if (value === rafEnabled) {
             return;
         }
@@ -86,7 +86,7 @@ function Core() {
                 clearInterval(interval);
                 interval = null;
             }
-            window.requestAnimationFrame(frame);
+            (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
         } else {
             interval = setInterval(frame, 16);
         }
@@ -95,7 +95,7 @@ function Core() {
     /**
      * @private
      */
-    this.getRAFEnabled = function() {
+    this.getRAFEnabled = function () {
         return rafEnabled;
     }
 
@@ -182,7 +182,7 @@ const frame = function () {
     renderScenes();
     lastTime = time;
     if (rafEnabled) {
-        window.requestAnimationFrame(frame);
+        (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
     }
 };
 
@@ -260,7 +260,7 @@ function renderScenes() {
 }
 
 if (rafEnabled) {
-    window.requestAnimationFrame(frame);
+    (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 } else {
     interval = setInterval(frame, 16);
 }
