@@ -8,8 +8,8 @@ import {Plugin} from "../../viewer/Plugin.js";
  * move the Camera or resize the Canvas. Then, once the Camera or Canvas has been at rest after a certain time, FastNavPlugin
  * restores those rendering features and original canvas scale again.
  *
- * The effect we experience is a low-fidelity view while moving, then a high-fidelity view
- * once we're at rest again, after an optional delay.
+ * The effect we experience is a low-quality view while moving, then a high-quality view
+ * after we stop, following an optional delay.
  *
  * Down-scaling the canvas resolution gives particularly good results. For example, scaling by ````0.5````
  * means that we're rendering a quarter of the pixels while moving, which makes the Viewer noticeably smoother
@@ -19,16 +19,23 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * In the example below, we'll create a {@link Viewer}, add a {@link FastNavPlugin}, then use an {@link XKTLoaderPlugin} to load a model.
  *
- * We'll configure our FastNavPlugin to disable edges, ambient shadows and physically-based materials when
- * the camera is moving ("dynamic"), as well as reduce the canvas resolution.
+ * Whenever our Camera moves, the FastNavPlugin will:
  *
- * We'll also have a 0.4 second delay before we transition to high-fidelity each time we stop
- * moving.
+ * * disable edges,
+ * * disable ambient shadows,
+ * * disable physically-based materials (switching to non-PBR),
+ * * hide transparent objects, and
+ * * down-scale the canvas by 0.5, causing 75% less pixels to render.
+ *
+ * We'll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we're
+ * not continually flipping between low and high quality as we interact.
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, FastNavPlugin} from "xeokit-sdk.es.js";
+ *
+ * // Create a Viewer with PBR and SAO enabled
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",
@@ -41,16 +48,20 @@ import {Plugin} from "../../viewer/Plugin.js";
  * viewer.scene.camera.look = [42.45, 49.62, -43.59];
  * viewer.scene.camera.up = [0.05, 0.95, 0.15];
  *
+ * // Install a FastNavPlugin
+ *
  * new FastNavPlugin(viewer, {
- *      dynamicEdges: false,                // Don't show edges while moving
- *      dynamicSAO: false,                  // Don't show ambient shadows while moving
- *      dynamicPBR: false,                  // Non-physically-based rendering while moving
- *      dynamicTransparent: false,          // Hide transparent objects while moving
- *      dynamicCanvasResolution: true,      // Reduce canvas resolution while moving
- *      dynamicCanvasResolutionScale: 0.6,  // Factor by which we reduce canvas resolution
- *      delayBeforeStatic: true,            // When we stop, delay before returning to quality render
- *      delayBeforeStaticDuration: 0.4      // The delay duration, in seconds
+ *      dynamicEdges: false,                // Don't show edges while moving (default is false)
+ *      dynamicSAO: false,                  // Don't show ambient shadows while moving (default is false)
+ *      dynamicPBR: false,                  // Non-physically-based rendering while moving (default is false)
+ *      dynamicTransparent: false,          // Hide transparent objects while moving (default is false)
+ *      dynamicCanvasResolution: true,      // Reduce canvas resolution while moving (default is false)
+ *      dynamicCanvasResolutionScale: 0.5,  // Factor by which we reduce canvas resolution when moving (default is 0.6)
+ *      delayBeforeStatic: true,            // When we stop, delay before returning to quality static render (default is true)
+ *      delayBeforeStaticDuration: 0.5      // The delay duration, in seconds (default is 0.5)
  * });
+ *
+ * // Load a BIM model from XKT
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
@@ -75,7 +86,7 @@ class FastNavPlugin extends Plugin {
      * @param {Boolean} [cfg.dynamicSAO=false] Whether to enable scalable ambient occlusion (SAO) while the camera is moving.
      * @param {Boolean} [cfg.dynamicEdges=false] Whether to enable enhanced edges while the camera is moving.
      * @param {Boolean} [cfg.dynamicTransparent=true] Whether to show transparent objects when the camera is moving.
-     * @param {Number} [cfg.dynamicCanvasResolution=true] Whether to down-scale the canvas resolution while the camera is moving.
+     * @param {Number} [cfg.dynamicCanvasResolution=false] Whether to down-scale the canvas resolution while the camera is moving.
      * @param {Number} [cfg.dynamicCanvasResolutionScale=0.6] The factor by which we downscale the canvas resolution while the camera is moving.
      * @param {Boolean} [cfg.delayBeforeStatic=true] Once the camera stops moving, whether to have a delay before transitioning back to normal rendering.
      * @param {Number} [cfg.delayBeforeStaticDuration=0.5] Delay in seconds before transitioning back to normal rendering when camera stops moving. Only works when ````delayBeforeStatic```` is ````true````.
@@ -88,7 +99,7 @@ class FastNavPlugin extends Plugin {
         this._dynamicSAO = !!cfg.dynamicSAO;
         this._dynamicEdges = !!cfg.dynamicEdges;
         this._dynamicTransparent = (cfg.dynamicTransparent !== false);
-        this._dynamicCanvasResolution = (cfg.dynamicCanvasResolution !== false);
+        this._dynamicCanvasResolution = !!cfg.dynamicCanvasResolution;
         this._dynamicCanvasResolutionScale = cfg.dynamicCanvasResolutionScale || 0.6;
         this._delayBeforeStatic = (cfg.delayBeforeStatic !== false);
         this._delayBeforeStaticDuration = cfg.delayBeforeStaticDuration || 0.5;
@@ -96,7 +107,7 @@ class FastNavPlugin extends Plugin {
         let timer = this._delayBeforeStaticDuration * 1000;
         let fastMode = false;
 
-        const goFast = () => {
+        const switchToLowQuality = () => {
             timer = (this._delayBeforeStaticDuration * 1000);
             if (!fastMode) {
                 viewer.scene._renderer.setPBREnabled(this._dynamicPBR);
@@ -112,23 +123,25 @@ class FastNavPlugin extends Plugin {
             }
         };
 
-        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", goFast);
-        this._onCameraMatrix = viewer.scene.camera.on("matrix", goFast);
+        const switchToHighQuality = () => {
+            viewer.scene.canvas.resolutionScale = 1;
+            viewer.scene._renderer.setEdgesEnabled(true);
+            viewer.scene._renderer.setPBREnabled(true);
+            viewer.scene._renderer.setSAOEnabled(true);
+            viewer.scene._renderer.setTransparentEnabled(true);
+            fastMode = false;
+        };
 
-        this._onSceneTick = viewer.scene.on("tick", (tickEvent) => {  // Milliseconds
+        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", switchToLowQuality);
+        this._onCameraMatrix = viewer.scene.camera.on("matrix", switchToLowQuality);
+
+        this._onSceneTick = viewer.scene.on("tick", (tickEvent) => {
             if (!fastMode) {
                 return;
             }
             timer -= tickEvent.deltaTime;
             if ((!this._delayBeforeStatic) || timer <= 0) {
-                requestAnimationFrame(() => {
-                    viewer.scene.canvas.resolutionScale = 1;
-                    viewer.scene._renderer.setEdgesEnabled(true);
-                    viewer.scene._renderer.setPBREnabled(true);
-                    viewer.scene._renderer.setSAOEnabled(true);
-                    viewer.scene._renderer.setTransparentEnabled(true);
-                });
-                fastMode = false;
+                switchToHighQuality();
             }
         });
 
@@ -146,7 +159,7 @@ class FastNavPlugin extends Plugin {
             if (!down) {
                 return;
             }
-            goFast();
+            switchToLowQuality();
         });
     }
 
@@ -367,10 +380,6 @@ class FastNavPlugin extends Plugin {
         this.viewer.scene.input.off(this._onSceneMouseMove);
         this.viewer.scene.off(this._onSceneTick);
         super.destroy();
-        if (this._img) {
-            this._img.parentNode.removeChild(this._img);
-            this._img = null;
-        }
     }
 }
 

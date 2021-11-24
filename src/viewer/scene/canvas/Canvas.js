@@ -348,6 +348,9 @@ class Canvas extends Component {
             return;
         }
         this._resolutionScale = resolutionScale;
+        const canvas = this.canvas;
+        canvas.width = Math.round(canvas.clientWidth * this._resolutionScale);
+        canvas.height = Math.round(canvas.clientHeight * this._resolutionScale);
         this.glRedraw();
     }
 
