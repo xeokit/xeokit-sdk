@@ -60,9 +60,8 @@
         Mesh,
         ReadableGeometry,
         buildPlaneGeometry,
-        PhongMaterial,
-        Skybox
-    } from "../dist/xeokit-sdk.es.js";
+        PhongMaterial
+    } from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -89,13 +88,11 @@
     // Install FastNavPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-  //  viewer.scene.canvas.resolutionScale = 0.5;
-
     const fastNavPlugin = new FastNavPlugin(viewer, {
         dynamicEdges: false,
         dynamicSAO: false,
         dynamicPBR: false,
-        dynamicTransparent: false,
+        dynamicTransparent: true,
         dynamicCanvasResolution: true,
         dynamicCanvasResolutionScale: 0.5,
         delayBeforeStatic: true,
@@ -117,11 +114,6 @@
         pickable: false,
         collidable: false
     });
-
-    // new Skybox(viewer.scene, {
-    //     src: "../assets/textures/skybox/cloudySkyBox.jpg",
-    //     size: 1000
-    // });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
