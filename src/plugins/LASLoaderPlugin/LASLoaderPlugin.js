@@ -141,7 +141,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  * ````
  *
  * @class LASLoaderPlugin
- * @since 2.0.13
+ * @since 2.0.17
  */
 class LASLoaderPlugin extends Plugin {
 
