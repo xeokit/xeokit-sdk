@@ -1,4 +1,4 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
 
 export default {
     input: './src/index.js',
@@ -10,6 +10,9 @@ export default {
         }
     ],
     plugins: [
-        nodeResolve()
+        resolve({
+            browser: true,
+            preferBuiltins: false
+        })
     ]
 }
