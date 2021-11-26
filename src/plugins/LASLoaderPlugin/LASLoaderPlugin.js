@@ -9,7 +9,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  *
- * <a href="/examples/#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.io/img/docs/LASLoaderPlugin/LASLoaderPlugin.png"></a>
+ * <a href="/examples/#loading_LASLoaderPlugin_Autzen"><img src="/assets/images/autzen.png"></a>
  *
  * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
  *
@@ -24,10 +24,8 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  *
  * ## Performance
  *
- * If you need faster loading, consider pre-converting your LAS files to XKT format, then loading them
- * with {@link XKTLoaderPlugin}. The LAS-to-XKT conversion performs a lot expensive pre-processing in advance that
- * LASLoaderPlugin needs to perform on-the-fly while loading. Therefore, if you're able to perform that pre-conversion,
- * then loading your LAS via XKT can provide a faster loading experience for application users.
+ * If you need faster loading, consider pre-converting your LAS files to XKT format using [xeokit-convert](https://github.com/xeokit/xeokit-convert), then loading them
+ * with {@link XKTLoaderPlugin}.
  *
  * ## Scene and metadata representation
  *
@@ -52,7 +50,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  * a [LAS file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/las/Duplex.las). Once the model has
  * loaded, we'll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
+ * * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
  *
  * ````javascript
  * import {Viewer, LASLoaderPlugin} from "xeokit-sdk.es.js";
