@@ -154,13 +154,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber346">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber345">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber346">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber345">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -182,8 +182,8 @@
   
   <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides an HTML tree view to navigate the IFC elements in models.
 <br></p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital">Run this example</a>]</p>
+<p><a href="/examples/#BIMOffline_XKT_WestRiverSideHospital"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a></p>
+<p>[<a href="/examples/#BIMOffline_XKT_WestRiverSideHospital">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><ul>
 <li>A fast HTML tree view, with zero external dependencies, that works with huge numbers of objects.</li>
 <li>Each tree node has a checkbox to control the visibility of its object.</li>
@@ -197,9 +197,8 @@
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll add a TreeViewPlugin which, by default, will automatically show the structural
 hierarchy of the IFC elements in each model we load.</p>
 <p>Then we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load the Schependomlaan model from an
-<a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>, along
-with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan">Run this example</a>]</p>
+<a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>.</p>
+<p>[<a href="/examples/#BIMOffline_XKT_Schependomlaan">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -338,7 +337,7 @@ to have nodes for those objects (perhaps for debugging the model):</p>
 <br><br></li>
 </ul>
 <p>Let&apos;s use <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span> to show a simple context menu for the node we clicked.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
+<p>[<a href="/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {ContextMenu} from &quot;../src/extras/ContextMenu/ContextMenu.js&quot;;
 
 const treeViewContextMenu = new ContextMenu({
@@ -422,7 +421,7 @@ treeView.on(&quot;contextmenu&quot;, (e) =&gt; {
 </ul>
 <p>Let&apos;s register a callback to isolate and fit-to-view the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>(s) represented by the node. This callback is
 going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
+<p>[<a href="/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">treeView.on(&quot;nodeTitleClicked&quot;, (e) =&gt; {
     const scene = viewer.scene;
     const objectIds = [];
@@ -1092,7 +1091,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -1211,7 +1210,7 @@ vertical World axis. For all hierarchy types, other node types will be ordered i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber421">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber420">source</a></span></span>
     </span>
   </h3>
 
@@ -1264,7 +1263,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber439">source</a></span></span>
     </span>
   </h3>
 
@@ -1308,7 +1307,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -1368,7 +1367,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber461">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -1463,7 +1462,7 @@ and <span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeVi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 
@@ -1507,7 +1506,7 @@ and <span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeVi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber611">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber610">source</a></span></span>
     </span>
   </h3>
 
@@ -1551,7 +1550,7 @@ and <span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeVi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber580">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber579">source</a></span></span>
     </span>
   </h3>
 
@@ -1613,7 +1612,7 @@ and <span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeVi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber499">source</a></span></span>
     </span>
   </h3>
 
@@ -1675,7 +1674,7 @@ and <span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeVi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber540">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber539">source</a></span></span>
     </span>
   </h3>
 
@@ -1743,7 +1742,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber564">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber563">source</a></span></span>
     </span>
   </h3>
 
@@ -1789,7 +1788,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber597">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber596">source</a></span></span>
     </span>
   </h3>
 

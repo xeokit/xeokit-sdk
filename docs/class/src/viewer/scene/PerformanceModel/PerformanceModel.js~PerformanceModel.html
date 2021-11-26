@@ -240,8 +240,8 @@ to build a simple table model using geometry instancing.</p>
 <p>We&apos;ll start by adding a reusable box-shaped geometry to our <code>PerformanceModel</code>.</p>
 <p>Then, for each object in our model we&apos;ll add an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>
 that has a mesh that instances our box geometry, transforming and coloring the instance.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing">Run this example</a>]</p>
+<p><a href="/examples/#sceneRepresentation_PerformanceModel_instancing"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<p>[<a href="/examples/#sceneRepresentation_PerformanceModel_instancing">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, PerformanceModel} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -422,9 +422,9 @@ const blueLeg = viewer.scene.objects[&quot;blueLeg&quot;];</code>
 </code></pre>
 <h2 id="example-2--geometry-batching">Example 2: Geometry Batching</h2><p>Let&apos;s once more use a <code>PerformanceModel</code>
 to build the simple table model, this time exploiting geometry batching.</p>
-<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<p> <a href="/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching">Run this example</a>]</li>
+<li>[<a href="/examples/#sceneRepresentation_PerformanceModel_batching">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, PerformanceModel} from &quot;xeokit-sdk.es.js&quot;;
 
@@ -670,7 +670,7 @@ const blueLegMetaObject = tableMetaObject.children[2];
 const yellowLegMetaObject = tableMetaObject.children[3];</code>
 </code></pre>
 <p>Given an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, we can find the object or model of which it is a part, or the objects that comprise it. We can also generate UI
-components from the metadata, such as the tree view demonstrated in <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter">this demo</a>.</p>
+components from the metadata, such as the tree view demonstrated in <a href="/examples/#BIMOffline_glTF_OTCConferenceCenter">this demo</a>.</p>
 <p>This hierarchy allows us to express the hierarchical structure of a model while representing it in
 various ways in the 3D scene (such as with <code>PerformanceModel</code>, which
 has a non-hierarchical scene representation).</p>
@@ -686,9 +686,9 @@ has a non-hierarchical scene representation).</p>
 <h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>origin</code>.</p>
 <p>For simplicity, our example&apos;s meshes all instance the same geometry. Therefore, our example model has only one RTC center.</p>
 <p>Note that the axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<p><a href="/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin">Run this example</a>]</li>
+<li>[<a href="/examples/#sceneRepresentation_PerformanceModel_instancing_origin">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const origin = [100000000, 0, 100000000];
 
@@ -774,9 +774,9 @@ performanceModel.createEntity({
 <h2 id="rtc-coordinates-with-geometry-batching">RTC Coordinates with Geometry Batching</h2><p>To use RTC with <code>PerformanceModel</code> geometry batching, we specify an RTC center (<code>origin</code>) for each mesh. For performance, we try to have as many meshes share the same value for <code>origin</code> as possible. Each mesh&apos;s <code>positions</code>, <code>position</code> and <code>rotation</code> properties are assumed to be relative to <code>origin</code>.</p>
 <p>For simplicity, the meshes in our example all share the same RTC center.</p>
 <p>The axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
+<p><a href="/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin">Run this example</a>]</li>
+<li>[<a href="/examples/#sceneRepresentation_PerformanceModel_batching_origin">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const origin = [100000000, 0, 100000000];
 

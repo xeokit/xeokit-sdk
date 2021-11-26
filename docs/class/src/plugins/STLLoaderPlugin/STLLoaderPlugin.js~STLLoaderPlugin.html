@@ -206,7 +206,7 @@ only works with binary STL files.</p>
 we&apos;ll use the <span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span> to fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at boundary of the model. We&apos;ll
 then get the model&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> from the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> and highlight the whole model.</p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_SpurGear">Run this example</a>]</li>
+<li>[<a href="/examples/#loading_STL_SpurGear">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">// Create a xeokit Viewer
 const viewer = new Viewer({
@@ -247,7 +247,7 @@ model.destroy();</code>
 file data straight into the <span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-load">STLLoaderPlugin#load</a></span> method. In the example below, to show how it&apos;s done, we&apos;ll pre-load
 our STL file data, then pass it straight into that method.</p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataAsParam">Run this example</a>]</li>
+<li>[<a href="/examples/#loading_STL_dataAsParam">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">loadSTL(&quot;./models/stl/binary/spurGear.stl&quot;, (stlData) =&gt;{
 
@@ -286,7 +286,7 @@ function loadSTL(src, ok, error) {
 custom data source object, through which it can load STL files. For this example, our data source just loads
 them via HTTP, for simplicity. Once we&apos;ve created the STLLoaderPlugin, we&apos;ll load our STL file as before.</p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataSource">Run this example</a>]</li>
+<li>[<a href="/examples/#loading_STL_dataSource">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">// Our custom STL data access strategy - implementation happens to be the same as STLDefaultDataSource
 

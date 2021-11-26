@@ -47,7 +47,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  * ## Usage
  *
  * In the example below we'll load the Autzen model from
- * a [LAS file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/las/Duplex.las). Once the model has
+ * a [LAS file](/assets/models/las/). Once the model has
  * loaded, we'll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
  *
  * * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
@@ -91,7 +91,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  * We have the option to rotate, scale and translate each LAS model as we load it.
  *
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
- * translate it 100 units along its X axis.
+ * position it at [1842022, 10, -5173301] within xeokit's world coordinate system.
  *
  * ````javascript
  * const modelEntity = lasLoader.load({
@@ -99,7 +99,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  *      src: "../assets/models/las/autzen.laz"
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
- *      origin: [100, 0, 0]
+ *      origin: [1842022, 10, -5173301]
  * });
  * ````
  *

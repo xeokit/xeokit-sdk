@@ -204,7 +204,7 @@ by <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance
 <p>Finally, the MetaObject registers the point cloud as an object within the <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span>. The MetaObject will be registered
 by <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id">MetaObject#id</a></span> in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaObjects">MetaScene#metaObjects</a></span>.</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Autzen model from
-a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/las/Duplex.las">LAS file</a>. Once the model has
+a <a href="/assets/models/las/">LAS file</a>. Once the model has
 loaded, we&apos;ll then find its <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, and the <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represent its point cloud.</p>
 <ul>
 <li>[<a href="/examples/#loading_LASLoaderPlugin_Autzen">Run this example</a>]</li>
@@ -243,13 +243,13 @@ modelEntity.on(&quot;loaded&quot;, () =&gt; {
 </code></pre>
 <h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each LAS model as we load it.</p>
 <p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
-translate it 100 units along its X axis.</p>
+position it at [1842022, 10, -5173301] within xeokit&apos;s world coordinate system.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const modelEntity = lasLoader.load({
      id: &quot;myModel&quot;,
      src: &quot;../assets/models/las/autzen.laz&quot;
      rotation: [90,0,0],
      scale: [0.5, 0.5, 0.5],
-     origin: [100, 0, 0]
+     origin: [1842022, 10, -5173301]
 });</code>
 </code></pre>
 <h2 id="configuring-a-custom-data-source">Configuring a custom data source</h2><p>By default, LASLoaderPlugin will load LAS files over HTTP.</p>
