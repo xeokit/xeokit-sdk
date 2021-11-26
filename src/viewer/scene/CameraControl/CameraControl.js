@@ -65,12 +65,12 @@ import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
  *
  * # Examples
  *
- * * [Orbit Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_Duplex)
- * * [Orbit Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_HolterTower)
- * * [First-Person Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_Duplex)
- * * [First-Person Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_HolterTower)
- * * [Plan-view Navigation - Schependomlaan Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView_Schependomlaan)
- * * [Custom Keyboard Mapping](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_keyMap)
+ * * [Orbit Navigation - Duplex Model](/examples/#CameraControl_orbit_Duplex)
+ * * [Orbit Navigation - Holter Tower Model](/examples/#CameraControl_orbit_HolterTower)
+ * * [First-Person Navigation - Duplex Model](/examples/#CameraControl_firstPerson_Duplex)
+ * * [First-Person Navigation - Holter Tower Model](/examples/#CameraControl_firstPerson_HolterTower)
+ * * [Plan-view Navigation - Schependomlaan Model](/examples/#CameraControl_planView_Schependomlaan)
+ * * [Custom Keyboard Mapping](/examples/#CameraControl_keyMap)
  * <br><br>
  *
  * # Orbit Mode

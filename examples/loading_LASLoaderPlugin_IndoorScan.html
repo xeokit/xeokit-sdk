@@ -31,7 +31,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/bim_icon.png"/>
+    <img class="info-icon" src="../assets/images/laserScan.png"/>
     <h1>LASLoaderPlugin</h1>
     <h2>Loading an uncolored interior lidar point cloud from LAS format</h2>
     <h3>Stats</h3>
@@ -77,9 +77,9 @@
         transparent: true
     });
 
-    viewer.scene.camera.eye = [1.3632842220105608, 15.594672069826032, -30.2565391710817];
-    viewer.scene.camera.look = [-8.679999828338682, 2.7900000810622405, 2.2299997806551097];
-    viewer.scene.camera.up = [-0.10408770461113341, 0.9358457165838644, 0.3366876066926411];
+    viewer.scene.camera.eye = [-24.43006395972494, 3.685603935382002, -20.793590144109228];
+    viewer.scene.camera.look = [-9.242215699442017, 1.7472554061058474, -0.7315506128841385];
+    viewer.scene.camera.up = [0.04635883560475075, 0.9970461034040738, 0.06123663975207172];
 
     viewer.scene.camera.project.far = 100000;
 
@@ -180,6 +180,6 @@
     const customContainer = document.getElementById('myDatGuiContainer');
     customContainer.appendChild(gui.domElement);
 
-
+window.viewer = viewer
 </script>
 </html>

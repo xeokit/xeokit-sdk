@@ -13,9 +13,9 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
 /**
  * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
+ * <a href="/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex)]
+ * [[Run this example](/examples/#BIMOffline_IFC_Duplex)]
  *
  * ## Overview
  *
@@ -64,7 +64,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * Since this model contains IFC types, the IFCLoaderPlugin will set the initial appearance of each object
  * {@link Entity} according to its IFC type in {@link IFCLoaderPlugin#objectDefaults}.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_isolateStorey)]
+ * * [[Run example](/examples/#BIMOffline_IFC_isolateStorey)]
  *
  * ````javascript
  * import {Viewer, IFCLoaderPlugin} from "xeokit-sdk.es.js";

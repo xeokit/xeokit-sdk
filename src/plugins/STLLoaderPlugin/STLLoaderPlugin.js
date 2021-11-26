@@ -43,7 +43,7 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
  * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_SpurGear)]
+ *  * [[Run this example](/examples/#loading_STL_SpurGear)]
  *
  * ````javascript
  * // Create a xeokit Viewer
@@ -88,7 +88,7 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * file data straight into the {@link STLLoaderPlugin#load} method. In the example below, to show how it's done, we'll pre-load
  * our STL file data, then pass it straight into that method.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataAsParam)]
+ *  * [[Run this example](/examples/#loading_STL_dataAsParam)]
  *
  * ````javascript
  * loadSTL("./models/stl/binary/spurGear.stl", (stlData) =>{
@@ -131,7 +131,7 @@ import {STLDefaultDataSource} from "./STLDefaultDataSource.js";
  * custom data source object, through which it can load STL files. For this example, our data source just loads
  * them via HTTP, for simplicity. Once we've created the STLLoaderPlugin, we'll load our STL file as before.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataSource)]
+ *  * [[Run this example](/examples/#loading_STL_dataSource)]
  *
  * ````javascript
  * // Our custom STL data access strategy - implementation happens to be the same as STLDefaultDataSource

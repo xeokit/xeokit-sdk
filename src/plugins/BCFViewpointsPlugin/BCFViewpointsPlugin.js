@@ -183,8 +183,8 @@ const tempVec3 = math.vec3();
  * capture the states of the individual ````Entitys```` that represent the duplicate IFC elements. Take a look at the
  * following two examples to learn more.
  *
- * * [Example: Saving a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_MultipleModels)
- * * [Example: Loading a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_MultipleModels)
+ * * [Example: Saving a BCF viewpoint containing duplicate models](/examples/#BCF_SaveViewpoint_MultipleModels)
+ * * [Example: Loading a BCF viewpoint containing duplicate models](/examples/#BCF_LoadViewpoint_MultipleModels)
  *
  * **Caveat:** when loading a BCF viewpoint, we always assume that we have loaded in our target BIM viewer the same models that were
  * loaded in the viewpoint's original authoring application when the viewpoint was created.  In the case of multi-model
