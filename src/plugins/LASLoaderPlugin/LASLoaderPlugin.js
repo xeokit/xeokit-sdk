@@ -9,7 +9,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  *
- * <a href="/examples/#loading_LASLoaderPlugin_Autzen"><img src="/assets/images/autzen.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
  *
  * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
  *

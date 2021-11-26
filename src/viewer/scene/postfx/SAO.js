@@ -4,7 +4,7 @@ import {WEBGL_INFO} from "../webglInfo.js";
 /**
  * @desc Configures Scalable Ambient Obscurance (SAO) for a {@link Scene}.
  *
- *  <a href="/examples/#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a>
+ *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a>
  *
  * [[Run this example](/examples/#postEeffects_SAO_OTCConferenceCenter)]
  *

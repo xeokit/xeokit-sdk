@@ -29,7 +29,7 @@ parsers[ParserV9.version] = ParserV9;
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
  *
- * <a href="/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
  * [[Run this example](/examples/#loading_XKT_OTCConferenceCenter)]
  *

@@ -13,7 +13,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
 /**
  * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
  *
- * <a href="/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
  *
  * [[Run this example](/examples/#BIMOffline_IFC_Duplex)]
  *

@@ -16,7 +16,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
 /**
  * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
- *  <a href="/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif"></a>
+ *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif"></a>
  *
  * [[Run this example](/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *
@@ -117,7 +117,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * });
  * ````
  *
- * <a href="/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a>
  *
  * [[Run this example](/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects)]
  *
@@ -151,7 +151,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * The {@link StoreyViewsPlugin#gotoStoreyCamera} method positions the {@link Camera} for a plan view of
  * the {@link Entity}s within the given storey.
  *
- * <a href="/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a>
  *
  * [[Run this example](/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera)]
  *
@@ -201,7 +201,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * The {@link StoreyViewsPlugin#createStoreyMap} method creates a 2D orthographic plan image of the given storey.
  *
- * <a href="/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a>
  *
  * [[Run this example](/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap)]
  *
@@ -251,7 +251,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * We can use {@link StoreyViewsPlugin#pickStoreyMap} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyMap}'s 2D plan image.
  *
- * <a href="/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a>
  *
  * [[Run this example](/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *

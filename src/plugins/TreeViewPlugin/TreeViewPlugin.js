@@ -5,7 +5,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.
  * <br>
  *
- * <a href="/examples/#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
  *
  * [[Run this example](/examples/#BIMOffline_XKT_WestRiverSideHospital)]
  *
