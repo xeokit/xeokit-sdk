@@ -258,6 +258,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/lasloaderplugin/lasdefaultdatasource.js~lasdefaultdatasource",
+    "class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html",
+    "<span>LASDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html",
+    "<span>LASLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/lambertmaterial.js~lambertmaterial",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html",
     "<span>LambertMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LambertMaterial.js</span>",
@@ -2169,6 +2181,96 @@ window.esdocSearchIndex = [
     "src/plugins/ifcloaderplugin/index.js",
     "file/src/plugins/IFCLoaderPlugin/index.js.html",
     "src/plugins/IFCLoaderPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasdefaultdatasource.js",
+    "file/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js.html",
+    "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasdefaultdatasource.js~lasdefaultdatasource#constructor",
+    "class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasdefaultdatasource.js~lasdefaultdatasource#getlas",
+    "class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html#instance-method-getLAS",
+    "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource#getLAS",
+    "method"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js",
+    "file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#colordepth",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-colorDepth",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#colorDepth",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#colordepth",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-colorDepth",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#colorDepth",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#constructor",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#datasource",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-dataSource",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#datasource",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#fp64",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-fp64",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#fp64",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#fp64",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-fp64",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#fp64",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#load",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-method-load",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#skip",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-skip",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#skip",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#skip",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-skip",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#skip",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/index.js",
+    "file/src/plugins/LASLoaderPlugin/index.js.html",
+    "src/plugins/LASLoaderPlugin/index.js",
     "file"
   ],
   [

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/plugins/LASLoaderPlugin/LASLoaderPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-ifcloaderplugin">plugins/IFCLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource.html">IFCDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html">IFCLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html">ModelTreeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy">validateMetaModelForTreeViewContainmentHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy">validateMetaModelForTreeViewStoreysHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy">validateMetaModelForTreeViewTypesHierarchy</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html">LinesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/LASLoaderPlugin/LASLoaderPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {utils} from &quot;../../viewer/scene/utils.js&quot;;
+import {PerformanceModel} from &quot;../../viewer/scene/PerformanceModel/PerformanceModel.js&quot;;
+import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
+import {LASDefaultDataSource} from &quot;./LASDefaultDataSource.js&quot;;
+import {math} from &quot;../../viewer&quot;;
+import {parse} from &apos;../../../node_modules/@loaders.gl/core/dist/esm/index.js&apos;;
+import {LASLoader} from &apos;../../../node_modules/@loaders.gl/las/dist/esm/las-loader.js&apos;;
+
+/**
+ * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
+ *
+ * &lt;a href=&quot;/examples/#loading_LASLoaderPlugin_Autzen&quot;&gt;&lt;img src=&quot;/assets/images/autzen.png&quot;&gt;&lt;/a&gt;
+ *
+ * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
+ *
+ * ## Summary
+ *
+ * * Loads [LAS 1.4 Format](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities) from both *.las* and *.laz* files.
+ * * Loads lidar point cloud positions, colors and intensities.
+ * * Supports 32 and 64-bit positions.
+ * * Supports 8 and 16-bit color depths.
+ * * Option to load every *n* points.
+ * * Does not (yet) load [point classifications](https://www.usna.edu/Users/oceano/pguth/md_help/html/las_format_classification_codes.htm).
+ *
+ * ## Performance
+ *
+ * If you need faster loading, consider pre-converting your LAS files to XKT format using [xeokit-convert](https://github.com/xeokit/xeokit-convert), then loading them
+ * with {@link XKTLoaderPlugin}.
+ *
+ * ## Scene and metadata representation
+ *
+ * When LASLoaderPlugin loads a LAS file, it creates two {@link Entity}s, a {@link MetaModel} and a {@link MetaObject}.
+ *
+ * The first Entity represents the file as a model within the Viewer&apos;s {@link Scene}. To indicate that it represents a model,
+ * this Entity will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+ *
+ * The second Entity represents the the point cloud itself, as an object within the Scene. To indicate that it
+ * represents an object, this Entity will have {@link Entity#isObject} set ````true```` and will be registered
+ * by {@link Entity#id} in {@link Scene#objects}.
+ *
+ * The MetaModel registers the LAS file as a model within the Viewer&apos;s {@link MetaScene}. The MetaModel will be registered
+ * by {@link MetaModel#id} in {@link MetaScene#metaModels} .
+ *
+ * Finally, the MetaObject registers the point cloud as an object within the {@link MetaScene}. The MetaObject will be registered
+ * by {@link MetaObject#id} in {@link MetaScene#metaObjects}.
+ *
+ * ## Usage
+ *
+ * In the example below we&apos;ll load the Autzen model from
+ * a [LAS file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/las/Duplex.las). Once the model has
+ * loaded, we&apos;ll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
+ *
+ * * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
+ *
+ * ````javascript
+ * import {Viewer, LASLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;,
+ *      transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * const lasLoader = new LASLoaderPlugin(viewer, {
+ *     colorDepth: 8, // Default
+ *     fp64: false,   // Default
+ *     skip: 1        // Default
+ * });
+ *
+ * const modelEntity = lasLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;../assets/models/las/autzen.laz&quot;
+ * });
+ *
+ * modelEntity.on(&quot;loaded&quot;, () =&gt; {
+ *
+ *      const metaModel = viewer.metaScene.metaModels[modelEntity.id];
+ *      const pointCloudMetaObject = metaModel.rootMetaObject;
+ *
+ *      const pointCloudEntity = viewer.scene.objects[pointCloudMetaObject.id];
+ *
+ *      //...
+ * });
+ * ````
+ *
+ * ## Transforming
+ *
+ * We have the option to rotate, scale and translate each LAS model as we load it.
+ *
+ * In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+ * translate it 100 units along its X axis.
+ *
+ * ````javascript
+ * const modelEntity = lasLoader.load({
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;../assets/models/las/autzen.laz&quot;
+ *      rotation: [90,0,0],
+ *      scale: [0.5, 0.5, 0.5],
+ *      origin: [100, 0, 0]
+ * });
+ * ````
+ *
+ * ## Configuring a custom data source
+ *
+ * By default, LASLoaderPlugin will load LAS files over HTTP.
+ *
+ * In the example below, we&apos;ll customize the way LASLoaderPlugin loads the files by configuring it with our own data source
+ * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
+ *
+ * ````javascript
+ * import {utils} from &quot;xeokit-sdk.es.js&quot;;
+ *
+ * class MyDataSource {
+ *
+ *      constructor() {
+ *      }
+ *
+ *      // Gets the contents of the given LAS file in an arraybuffer
+ *      getLAS(src, ok, error) {
+ *          utils.loadArraybuffer(src,
+ *              (arraybuffer) =&gt; {
+ *                  ok(arraybuffer);
+ *              },
+ *              (errMsg) =&gt; {
+ *                  error(errMsg);
+ *              });
+ *      }
+ * }
+ *
+ * const lasLoader = new LASLoaderPlugin(viewer, {
+ *       dataSource: new MyDataSource()
+ * });
+ *
+ * const modelEntity = lasLoader.load({
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;../assets/models/las/autzen.laz&quot;
+ * });
+ * ````
+ *
+ * @class LASLoaderPlugin
+ * @since 2.0.13
+ */
+class LASLoaderPlugin extends Plugin {
+
+    /**
+     * @constructor
+     *
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;lasLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Object} [cfg.dataSource] A custom data source through which the LASLoaderPlugin can load model and metadata files. Defaults to an instance of {@link LASDefaultDataSource}, which loads uover HTTP.
+     * @param {Number} [cfg.skip=1] Configures LASLoaderPlugin to load every **n** points.
+     * @param {Number} [cfg.fp64=false] Configures if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
+     * @param {Number} [cfg.colorDepth=8] Configures whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits. Accepted values are 8, 16 an &quot;auto&quot;.
+     */
+    constructor(viewer, cfg = {}) {
+
+        super(&quot;lasLoader&quot;, viewer, cfg);
+
+        this.dataSource = cfg.dataSource;
+        this.skip = cfg.skip;
+        this.fp64 = cfg.fp64;
+        this.colorDepth = cfg.colorDepth;
+    }
+
+    /**
+     * Gets the custom data source through which the LASLoaderPlugin can load LAS files.
+     *
+     * Default value is {@link LASDefaultDataSource}, which loads via HTTP.
+     *
+     * @type {Object}
+     */
+    get dataSource() {
+        return this._dataSource;
+    }
+
+    /**
+     * Sets a custom data source through which the LASLoaderPlugin can load LAS files.
+     *
+     * Default value is {@link LASDefaultDataSource}, which loads via HTTP.
+     *
+     * @type {Object}
+     */
+    set dataSource(value) {
+        this._dataSource = value || new LASDefaultDataSource();
+    }
+
+    /**
+     * When LASLoaderPlugin is configured to load every **n** points, returns the value of **n**.
+     *
+     * Default value is ````1````.
+     *
+     * @returns {Number} The **n**th point that LASLoaderPlugin will read.
+     */
+    get skip() {
+        return this._skip;
+    }
+
+    /**
+     * Configures LASLoaderPlugin to load every **n** points.
+     *
+     * Default value is ````1````.
+     *
+     * @param {Number} value The **n**th point that LASLoaderPlugin will read.
+     */
+    set skip(value) {
+        this._skip = value || 1;
+    }
+
+    /**
+     * Gets if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} True if LASLoaderPlugin assumes that positions are stored in 64-bit floats instead of 32-bit.
+     */
+    get fp64() {
+        return this._fp64;
+    }
+
+    /**
+     * Configures if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value True if LASLoaderPlugin assumes that positions are stored in 64-bit floats instead of 32-bit.
+     */
+    set fp64(value) {
+        this._fp64 = !!value;
+    }
+
+    /**
+     * Gets whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits.
+     *
+     * Default value is ````8````.
+     *
+     * Note: LAS specification recommends 16 bits.
+     *
+     * @returns {Number|String} Possible returned values are 8, 16 and &quot;auto&quot;.
+     */
+    get colorDepth() {
+        return this._colorDepth;
+    }
+
+    /**
+     * Configures whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits.
+     *
+     * Default value is ````8````.
+     *
+     * Note: LAS specification recommends 16 bits.
+     *
+     * @param {Number|String} value Valid values are 8, 16 and &quot;auto&quot;.
+     */
+    set colorDepth(value) {
+        this._colorDepth = !!value;
+    }
+
+    /**
+     * Loads an ````LAS```` model into this LASLoaderPlugin&apos;s {@link Viewer}.
+     *
+     * @param {*} params Loading parameters.
+     * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer&apos;s {@link Scene}, generated automatically by default.
+     * @param {String} [params.src] Path to a LAS file, as an alternative to the ````las```` parameter.
+     * @param {ArrayBuffer} [params.las] The LAS file data, as an alternative to the ````src```` parameter.
+     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model&apos;s World-space scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Object} [params.stats] Collects model statistics.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+     */
+    load(params = {}) {
+
+        if (params.id &amp;&amp; this.viewer.scene.components[params.id]) {
+            this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);
+            delete params.id;
+        }
+
+        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            maxGeometryBatchSize: this._maxGeometryBatchSize
+        }));
+
+        if (!params.src &amp;&amp; !params.las) {
+            this.error(&quot;load() param expected: src or las&quot;);
+            return performanceModel; // Return new empty model
+        }
+
+        const options = {
+            skip: this._skip,
+            fp64: this._fp64,
+            colorDepth: this._colorDepth
+        };
+
+        if (params.src) {
+            this._loadModel(params.src, params, options, performanceModel);
+        } else {
+            const spinner = this.viewer.scene.canvas.spinner;
+            spinner.processes++;
+            this._parseModel(params.las, params, options, performanceModel).then(() =&gt; {
+                spinner.processes--;
+            }, (errMsg) =&gt; {
+                spinner.processes--;
+                this.error(errMsg);
+                performanceModel.fire(&quot;error&quot;, errMsg);
+            });
+        }
+
+        return performanceModel;
+    }
+
+    _loadModel(src, params, options, performanceModel) {
+        const spinner = this.viewer.scene.canvas.spinner;
+        spinner.processes++;
+        this._dataSource.getLAS(params.src, (arrayBuffer) =&gt; {
+                this._parseModel(arrayBuffer, params, options, performanceModel).then(() =&gt; {
+                    spinner.processes--;
+                }, (errMsg) =&gt; {
+                    spinner.processes--;
+                    this.error(errMsg);
+                    performanceModel.fire(&quot;error&quot;, errMsg);
+                });
+            },
+            (errMsg) =&gt; {
+                spinner.processes--;
+                this.error(errMsg);
+                performanceModel.fire(&quot;error&quot;, errMsg);
+            });
+    }
+
+    _parseModel(arrayBuffer, params, options, performanceModel) {
+
+        return new Promise((resolve, reject) =&gt; {
+
+            if (performanceModel.destroyed) {
+                reject();
+                return;
+            }
+
+            const stats = params.stats || {};
+            stats.sourceFormat = &quot;LAS&quot;;
+            stats.schemaVersion = &quot;&quot;;
+            stats.title = &quot;&quot;;
+            stats.author = &quot;&quot;;
+            stats.created = &quot;&quot;;
+            stats.numMetaObjects = 0;
+            stats.numPropertySets = 0;
+            stats.numObjects = 0;
+            stats.numGeometries = 0;
+            stats.numTriangles = 0;
+            stats.numVertices = 0;
+
+            try {
+                parse(arrayBuffer, LASLoader, options).then((parsedData) =&gt; {
+
+                    const attributes = parsedData.attributes;
+                    const attributesPosition = attributes.POSITION;
+                    const attributesColor = attributes.COLOR_0;
+                    //  const attributesColor_0 = attributes.COLOR_0;
+                    const attributesIntensity = attributes.intensity;
+                    const attributesClassification = attributes.classification;
+
+                    if (!attributesPosition) {
+                        performanceModel.finalize();
+                        reject(&quot;No positions found in file&quot;);
+                        return;
+                    }
+
+                    const positionsValue = attributesPosition.value;
+
+                    if (params.rotateX) {
+                        if (positionsValue) {
+                            for (let i = 0, len = positionsValue.length; i &lt; len; i += 3) {
+                                const temp = positionsValue[i + 1];
+                                positionsValue[i + 1] = positionsValue[i + 2];
+                                positionsValue[i + 2] = temp;
+                            }
+                        }
+                    }
+
+                    let colorsCompressed = null;
+
+                    if (attributesColor) {
+                        colorsCompressed = attributesColor.value;
+                    } else {
+
+                    }
+
+                    if (attributesIntensity) {
+                        const intensities = attributesIntensity.value;
+                        colorsCompressed = new Uint8Array(intensities.length * 4);
+
+                        if (attributesColor) { // Intensities with colors
+                            const colors = attributesColor.value;
+                            const colorsSize = attributesColor.size;
+                            for (let i = 0, j = 0, len = intensities.length; i &lt; len; i++, j += 4) {
+                                const intensity = Math.round((intensities[i] / 65536) * 255); // FIXME: Precision loss converting intensity from 16 to 8 bits
+                                colorsCompressed[j + 0] = colors[i * colorsSize];
+                                colorsCompressed[j + 1] = colors[i * colorsSize + 1];
+                                colorsCompressed[j + 2] = colors[i * colorsSize + 2];
+                                colorsCompressed[j + 3] = intensity;
+                            }
+                        } else { // Intensities without colors
+                            for (let i = 0, j = 0, len = intensities.length; i &lt; len; i++, j += 4) {
+                                const intensity = Math.round((intensities[i] / 65536) * 255);
+                                colorsCompressed[j + 0] = 125; // Gray
+                                colorsCompressed[j + 1] = 125;
+                                colorsCompressed[j + 2] = 125;
+                                colorsCompressed[j + 3] = intensity;
+                            }
+                        }
+                    } else if (attributesColor) { // Colors without intensities
+                        const colors = attributesColor.value;
+                        const colorsSize = attributesColor.size;
+                        for (let i = 0, j = 0, len = colors.length / colorsSize; i &lt; len; i++, j += 4) {
+                            colorsCompressed[j + 0] = colors[i * colorsSize];
+                            colorsCompressed[j + 1] = colors[i * colorsSize + 1];
+                            colorsCompressed[j + 2] = colors[i * colorsSize + 2];
+                            colorsCompressed[j + 3] = (colorsSize === 4) ? colors[i * colorsSize + 3] : 255;
+                        }
+                    }
+
+                    performanceModel.createMesh({
+                        id: &quot;pointsMesh&quot;,
+                        primitive: &quot;points&quot;,
+                        positions: positionsValue,
+                        colorsCompressed
+                    });
+
+                    performanceModel.createEntity({
+                        id: math.createUUID(),
+                        meshIds: [&quot;pointsMesh&quot;],
+                        isObject: true
+                    });
+
+                    performanceModel.finalize();
+
+                    // TODO: Create metamodel
+
+
+                    performanceModel.scene.once(&quot;tick&quot;, () =&gt; {
+                        if (performanceModel.destroyed) {
+                            return;
+                        }
+                        performanceModel.scene.fire(&quot;modelLoaded&quot;, performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                        performanceModel.fire(&quot;loaded&quot;, true, false); // Don&apos;t forget the event, for late subscribers
+                    });
+
+                    resolve();
+                });
+            } catch (e) {
+                performanceModel.finalize();
+                reject(e);
+            }
+        });
+    }
+}
+
+export {LASLoaderPlugin};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
