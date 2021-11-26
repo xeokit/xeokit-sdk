@@ -5,11 +5,11 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](/examples/#measurements_distance_createWithMouse)
+ * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)
  *
- * * [[Example 1: Model with distance measurements](/examples/#measurements_distance_modelWithMeasurements)]
- * * [[Example 2: Create distance measurements with mouse](/examples/#measurements_distance_createWithMouse)]
- * * [[Example 3: Configuring units and scale](/examples/#measurements_distance_unitsAndScale)]
+ * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
  *
  * ## Overview
  *
@@ -29,7 +29,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
  *
- * [[Run example](/examples/#measurements_distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -93,7 +93,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
  * another DistanceMeasurement, and so on, until deactivated again.
  *
- * [[Run example](/examples/#measurements_distance_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -124,7 +124,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  *
  * The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.
  *
- * * [[Run example](/examples/#measurements_distance_unitsAndScale)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
  *
  * ````JavaScript
  * const metrics = viewer.scene.metrics;

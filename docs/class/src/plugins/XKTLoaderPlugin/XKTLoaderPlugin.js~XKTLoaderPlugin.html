@@ -182,7 +182,7 @@
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from xeokit&apos;s optimized <em><code>.XKT</code></em> format.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a></p>
-<p>[<a href="/examples/#loading_XKT_OTCConferenceCenter">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><ul>
 <li>XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.</li>
 <li>An <em><code>.XKT</code></em> file is a single BLOB containing a model, compressed using geometry quantization
@@ -216,7 +216,7 @@ that hold their metadata.</p>
 <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> according to its IFC type in <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-objectDefaults">XKTLoaderPlugin#objectDefaults</a></span>.</p>
 <p>Read more about this example in the user guide on <a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee">Viewing BIM Models Offline</a>.</p>
 <ul>
-<li>[<a href="/examples/#BIMOffline_XKT_metadata_Schependomlaan">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
@@ -290,7 +290,7 @@ model.destroy();</code>
 <p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
 translate it 100 units along its X axis.</p>
 <ul>
-<li>[<a href="/examples/#loading_XKT_Duplex_transform">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.load({
      src: &quot;./models/xkt/Duplex.ifc.xkt&quot;,
@@ -302,7 +302,7 @@ translate it 100 units along its X axis.</p>
 <h2 id="including-and-excluding-ifc-types">Including and excluding IFC types</h2><p>We can also load only those objects that have the specified IFC types.</p>
 <p>In the example below, we&apos;ll load only the objects that represent walls.</p>
 <ul>
-<li>[<a href="/examples/#BIMOffline_XKT_includeTypes">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model2 = xktLoader.load({
     id: &quot;myModel2&quot;,
@@ -313,7 +313,7 @@ translate it 100 units along its X axis.</p>
 <p>We can also load only those objects that <strong>don&apos;t</strong> have the specified IFC types.</p>
 <p>In the example below, we&apos;ll load only the objects that do not represent empty space.</p>
 <ul>
-<li>[<a href="/examples/#BIMOffline_XKT_excludeTypes">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model3 = xktLoader.load({
     id: &quot;myModel3&quot;,
@@ -331,7 +331,7 @@ translate it 100 units along its X axis.</p>
 In the example below, we&apos;ll load a model, while configuring <code>IfcSpace</code> elements to be always initially invisible,
 and <code>IfcWindow</code> types to be always translucent blue.</p>
 </li>
-<li><p>[<a href="/examples/#BIMOffline_XKT_objectDefaults">Run example</a>]</p>
+<li><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults">Run example</a>]</p>
 </li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const myObjectDefaults = {
@@ -382,7 +382,7 @@ elements, which can be confusing.</p>
 <p>In the example below, we&apos;ll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
 object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.</p>
 <ul>
-<li>[<a href="/examples/#loading_XKT_dataSource">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {utils} from &quot;xeokit-sdk.es.js&quot;;
 
@@ -429,7 +429,7 @@ const model5 = xktLoader2.load({
 between the IDs of the equivalent objects in the model instances.</p>
 <p>As shown in the example below, we do this by setting <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> before we load our models.</p>
 <ul>
-<li>[<a href="/examples/#TreeViewPlugin_Containment_MultipleModels">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.globalizeObjectIds = true;
 

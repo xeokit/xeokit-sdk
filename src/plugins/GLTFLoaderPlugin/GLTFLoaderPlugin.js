@@ -141,7 +141,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * [[Run example](/examples/#loading_glTF_Duplex_transform)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_glTF_Duplex_transform)]
  *
  * ````javascript
  * const model = gltfLoader.load({

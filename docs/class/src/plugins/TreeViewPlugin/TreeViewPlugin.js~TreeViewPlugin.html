@@ -183,7 +183,7 @@
   <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides an HTML tree view to navigate the IFC elements in models.
 <br></p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a></p>
-<p>[<a href="/examples/#BIMOffline_XKT_WestRiverSideHospital">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><ul>
 <li>A fast HTML tree view, with zero external dependencies, that works with huge numbers of objects.</li>
 <li>Each tree node has a checkbox to control the visibility of its object.</li>
@@ -198,7 +198,7 @@
 hierarchy of the IFC elements in each model we load.</p>
 <p>Then we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load the Schependomlaan model from an
 <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>.</p>
-<p>[<a href="/examples/#BIMOffline_XKT_Schependomlaan">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -337,7 +337,7 @@ to have nodes for those objects (perhaps for debugging the model):</p>
 <br><br></li>
 </ul>
 <p>Let&apos;s use <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span> to show a simple context menu for the node we clicked.</p>
-<p>[<a href="/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {ContextMenu} from &quot;../src/extras/ContextMenu/ContextMenu.js&quot;;
 
 const treeViewContextMenu = new ContextMenu({
@@ -421,7 +421,7 @@ treeView.on(&quot;contextmenu&quot;, (e) =&gt; {
 </ul>
 <p>Let&apos;s register a callback to isolate and fit-to-view the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>(s) represented by the node. This callback is
 going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.</p>
-<p>[<a href="/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">treeView.on(&quot;nodeTitleClicked&quot;, (e) =&gt; {
     const scene = viewer.scene;
     const objectIds = [];

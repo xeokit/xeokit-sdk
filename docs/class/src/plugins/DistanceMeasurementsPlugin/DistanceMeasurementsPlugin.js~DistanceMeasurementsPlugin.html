@@ -181,11 +181,11 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin for measuring point-to-point distances.</p>
-<p><a href="/examples/#measurements_distance_createWithMouse"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif"></a></p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif"></a></p>
 <ul>
-<li>[<a href="/examples/#measurements_distance_modelWithMeasurements">Example 1: Model with distance measurements</a>]</li>
-<li>[<a href="/examples/#measurements_distance_createWithMouse">Example 2: Create distance measurements with mouse</a>]</li>
-<li>[<a href="/examples/#measurements_distance_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements">Example 1: Model with distance measurements</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse">Example 2: Create distance measurements with mouse</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
 <li>A <span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span> represents a point-to-point measurement between two 3D points on one or two <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
@@ -200,7 +200,7 @@ and three more wires (red, green and blue) that show the distance on each of the
 <h2 id="example-1--creating-distancemeasurements-programmatically">Example 1: Creating DistanceMeasurements Programmatically</h2><p>In our first example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, and then use a DistanceMeasurementsPlugin to programmatically create two <span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span>s.</p>
 <p>Note how each DistanceMeasurement has <code>origin</code> and <code>target</code> endpoints, which each indicate a 3D World-space
 position on the surface of an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. The endpoints can be attached to the same Entity, or to different Entitys.</p>
-<p>[<a href="/examples/#measurements_distance_modelWithMeasurements">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -256,7 +256,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
 origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity.</p>
 <p>The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
 another DistanceMeasurement, and so on, until deactivated again.</p>
-<p>[<a href="/examples/#measurements_distance_createWithMouse">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -281,7 +281,7 @@ distanceMeasurements.control.activate();  // &lt;------------ Activate the Dista
 <h2 id="example-3--configuring-measurement-units-and-scale">Example 3: Configuring Measurement Units and Scale</h2><p>In our third example, we&apos;ll use the  <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span> to set the global unit of measurement to <code>&quot;meters&quot;</code>. We&apos;ll also specify that a unit within the World-space coordinate system represents ten meters.</p>
 <p>The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.</p>
 <ul>
-<li>[<a href="/examples/#measurements_distance_unitsAndScale">Run example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale">Run example</a>]</li>
 </ul>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">const metrics = viewer.scene.metrics;
 

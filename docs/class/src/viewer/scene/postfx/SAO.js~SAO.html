@@ -182,7 +182,7 @@
   
   <div class="description" data-ice="description"><p>Configures Scalable Ambient Obscurance (SAO) for a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
 <p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a></p>
-<p>[<a href="/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><p>SAO approximates <a href="https://en.wikipedia.org/wiki/Ambient_occlusion">Ambient Occlusion</a> in realtime. It darkens creases, cavities and surfaces
 that are close to each other, which tend to be occluded from ambient light and appear darker.</p>
 <p>The animated GIF above shows the effect as we repeatedly enable and disable SAO. When SAO is enabled, we can see darkening
@@ -195,7 +195,7 @@ either &quot;perspective&quot; or &quot;ortho&quot;.</p>
 <p><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale">SAO#scale</a></span> and <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-intensity">SAO#intensity</a></span> must be tuned to the distance
 between <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-near">Perspective#near</a></span> and <span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html#instance-set-far">Perspective#far</a></span>, or the distance
 between <span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-near">Ortho#near</a></span> and <span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html#instance-set-far">Ortho#far</a></span>, depending on which of those two projections the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is currently
-using. Use the <a href="/examples/#postEeffects_SAO_OTCConferenceCenter">live example</a> to get a
+using. Use the <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">live example</a> to get a
 feel for that.</p>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll start by logging a warning message to the console if SAO is not supported by the
 system.</p>
@@ -244,7 +244,7 @@ const model = xktLoader.load({
     edges: true
 });</code>
 </code></pre>
-<p>[<a href="/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
 <h2 id="efficiency">Efficiency</h2><p>SAO can incur some rendering overhead, especially on objects that are viewed close to the camera. For this reason,
 it&apos;s recommended to use a low value for <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-kernelRadius">SAO#kernelRadius</a></span>.  A low radius will sample pixels that are close
 to the source pixel, which will allow the GPU to efficiently cache those pixels. When <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is &quot;perspective&quot;,
@@ -310,7 +310,7 @@ const onSceneTick = scene.on(&quot;tick&quot;, (tickEvent) =&gt; {
     }
 });</code>
 </code></pre>
-<p>[<a href="/examples/#techniques_nonInteractiveQuality">Run this example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#techniques_nonInteractiveQuality">Run this example</a>]</p>
 </div>
   
 

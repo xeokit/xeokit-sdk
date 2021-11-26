@@ -31,7 +31,7 @@ parsers[ParserV9.version] = ParserV9;
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
- * [[Run this example](/examples/#loading_XKT_OTCConferenceCenter)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter)]
  *
  * ## Overview
  *
@@ -83,7 +83,7 @@ parsers[ParserV9.version] = ParserV9;
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
- * * [[Run example](/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -163,7 +163,7 @@ parsers[ParserV9.version] = ParserV9;
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * * [[Run example](/examples/#loading_XKT_Duplex_transform)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform)]
  *
  * ````javascript
  * xktLoader.load({
@@ -180,7 +180,7 @@ parsers[ParserV9.version] = ParserV9;
  *
  * In the example below, we'll load only the objects that represent walls.
  *
- * * [[Run example](/examples/#BIMOffline_XKT_includeTypes)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
  *
  * ````javascript
  * const model2 = xktLoader.load({
@@ -194,7 +194,7 @@ parsers[ParserV9.version] = ParserV9;
  *
  * In the example below, we'll load only the objects that do not represent empty space.
  *
- * * [[Run example](/examples/#BIMOffline_XKT_excludeTypes)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
  *
  * ````javascript
  * const model3 = xktLoader.load({
@@ -217,7 +217,7 @@ parsers[ParserV9.version] = ParserV9;
  * In the example below, we'll load a model, while configuring ````IfcSpace```` elements to be always initially invisible,
  * and ````IfcWindow```` types to be always translucent blue.
  *
- * * [[Run example](/examples/#BIMOffline_XKT_objectDefaults)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
  *
  * ````javascript
  * const myObjectDefaults = {
@@ -279,7 +279,7 @@ parsers[ParserV9.version] = ParserV9;
  * In the example below, we'll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
- * * [[Run example](/examples/#loading_XKT_dataSource)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
  * ````javascript
  * import {utils} from "xeokit-sdk.es.js";
@@ -331,7 +331,7 @@ parsers[ParserV9.version] = ParserV9;
  *
  * As shown in the example below, we do this by setting {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
  *
- * * [[Run example](/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
  *
  * ````javascript
  * xktLoader.globalizeObjectIds = true;

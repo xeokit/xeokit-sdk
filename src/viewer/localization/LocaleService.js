@@ -39,7 +39,7 @@ import {Map} from "./../scene/utils/Map.js";
  * If we didn't provide that particular translation in our LocaleService, or any translations for that locale,
  * then the NavCubePlugin will just fall back on its own default hard-coded translation, which in this case is "BACK".
  *
- * [[Run example](/examples/#localization_NavCubePlugin)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#localization_NavCubePlugin)]
  *
  * ````javascript
  * import {Viewer, LocaleService, NavCubePlugin, XKTLoaderPlugin} from "xeokit-sdk.es.js";

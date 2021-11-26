@@ -10,13 +10,13 @@ const tempVec3c = math.vec3();
 /**
  * {@link Viewer} plugin that creates {@link Annotation}s.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](/examples/#annotations_clickFlyToPosition)
+ * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)
  *
- * * [[Example 1: Create annotations with mouse](/examples/#annotations_createWithMouse)]
- * * [[Example 2: Click annotations to toggle labels](/examples/#annotations_clickShowLabels)]
- * * [[Example 3: Hover annotations to show labels](/examples/#annotations_hoverShowLabels)]
- * * [[Example 4: Click annotations to fly to viewpoint](/examples/#annotations_clickFlyToPosition)]
- * * [[Example 5: Create Annotations with externally-created elements](/examples/#annotations_externalElements)]
+ * * [[Example 1: Create annotations with mouse](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
+ * * [[Example 2: Click annotations to toggle labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
+ * * [[Example 3: Hover annotations to show labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
+ * * [[Example 4: Click annotations to fly to viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)]
+ * * [[Example 5: Create Annotations with externally-created elements](https://xeokit.github.io/xeokit-sdk/examples/#annotations_externalElements)]
  *
  * ## Overview
  *
@@ -46,7 +46,7 @@ const tempVec3c = math.vec3();
  *
  * Finally, we'll query the Annotation's position occlusion/visibility status, and subscribe to change events on those properties.
  *
- * [[Run example](/examples/#annotations_clickShowLabels)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin,AnnotationsPlugin} from "xeokit-sdk.es.js";
@@ -319,7 +319,7 @@ const tempVec3c = math.vec3();
  *
  * Let's now extend our example to create an Annotation wherever we click on the surface of of our model:
  *
- * [[Run example](/examples/#annotations_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
  *
  * ````javascript
  * var i = 1; // Used to create unique Annotation IDs

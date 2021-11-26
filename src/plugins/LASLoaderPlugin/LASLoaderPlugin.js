@@ -11,7 +11,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
  *
- * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
  *
  * ## Summary
  *
@@ -50,7 +50,7 @@ import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-load
  * a [LAS file](/assets/models/las/). Once the model has
  * loaded, we'll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
  *
- * * [[Run this example](/examples/#loading_LASLoaderPlugin_Autzen)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
  *
  * ````javascript
  * import {Viewer, LASLoaderPlugin} from "xeokit-sdk.es.js";

@@ -15,7 +15,7 @@ import {math} from "../../viewer/scene/math/math.js";
  *
  * ## Usage
  *
- * [[Run this example](/examples/#gizmos_AxisGizmoPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin)]
  *
  * ````JavaScript````
  * import {Viewer, XKTLoaderPlugin, AxisGizmoPlugin} from "xeokit-sdk.es.js";
