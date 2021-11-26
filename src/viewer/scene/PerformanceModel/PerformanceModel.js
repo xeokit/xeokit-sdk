@@ -17,6 +17,7 @@ import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstanc
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
+import {worldToRTCPositions} from "../math/rtcCoords";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -1930,7 +1931,21 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            const origin = (cfg.origin || cfg.rtcCenter) ? math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a) : null;
+            const cellSize = 100000;
+
+            let origin = null;
+
+            if (cfg.origin || cfg.rtcCenter) {
+                origin = math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a);
+            } else if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
+                const rtcCenter = math.vec3();
+                const rtcPositions = [];
+                const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter, cellSize);
+                if (rtcNeeded) {
+                    positions = rtcPositions;
+                    origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
+                }
+            }
 
             if (origin) {
                 if (!this._lastOrigin) {
