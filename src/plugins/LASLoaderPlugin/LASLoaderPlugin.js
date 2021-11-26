@@ -359,7 +359,6 @@ class LASLoaderPlugin extends Plugin {
                     const attributes = parsedData.attributes;
                     const attributesPosition = attributes.POSITION;
                     const attributesColor = attributes.COLOR_0;
-                    //  const attributesColor_0 = attributes.COLOR_0;
                     const attributesIntensity = attributes.intensity;
                     const attributesClassification = attributes.classification;
 
