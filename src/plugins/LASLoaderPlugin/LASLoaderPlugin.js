@@ -333,6 +333,48 @@ class LASLoaderPlugin extends Plugin {
 
     _parseModel(arrayBuffer, params, options, performanceModel) {
 
+        function readPositions(attributesPosition) {
+            const positionsValue = attributesPosition.value;
+            if (params.rotateX) {
+                if (positionsValue) {
+                    for (let i = 0, len = positionsValue.length; i < len; i += 3) {
+                        const temp = positionsValue[i + 1];
+                        positionsValue[i + 1] = positionsValue[i + 2];
+                        positionsValue[i + 2] = temp;
+                    }
+                }
+            }
+            return positionsValue;
+        }
+
+        function readColorsAndIntensities(attributesColor, attributesIntensity) {
+            const colors = attributesColor.value;
+            const colorSize = attributesColor.size;
+            const intensities = attributesIntensity.value;
+            const colorsCompressedSize = intensities.length * 4;
+            const colorsCompressed = new Uint8Array(colorsCompressedSize);
+            for (let i = 0, j = 0, k = 0, len = intensities.length; i < len; i++, k += colorSize, j += 4) {
+                colorsCompressed[j + 0] = colors[k + 0];
+                colorsCompressed[j + 1] = colors[k + 1];
+                colorsCompressed[j + 2] = colors[k + 2];
+                colorsCompressed[j + 3] = Math.round((intensities[i] / 65536) * 255);
+            }
+            return colorsCompressed;
+        }
+
+        function readIntensities(attributesIntensity) {
+            const intensities = attributesIntensity.intensity;
+            const colorsCompressedSize = intensities.length * 4;
+            const colorsCompressed = new Uint8Array(colorsCompressedSize);
+            for (let i = 0, j = 0, k = 0, len = intensities.length; i < len; i++, k += 3, j += 4) {
+                colorsCompressed[j + 0] = 0;
+                colorsCompressed[j + 1] = 0;
+                colorsCompressed[j + 2] = 0;
+                colorsCompressed[j + 3] = Math.round((intensities[i] / 65536) * 255);
+            }
+            return colorsCompressed;
+        }
+
         return new Promise((resolve, reject) => {
 
             if (performanceModel.destroyed) {
@@ -356,77 +398,60 @@ class LASLoaderPlugin extends Plugin {
             try {
                 parse(arrayBuffer, LASLoader, options).then((parsedData) => {
 
-                    const attributes = parsedData.attributes;
-                    const attributesPosition = attributes.POSITION;
-                    const attributesColor = attributes.COLOR_0;
-                    const attributesIntensity = attributes.intensity;
-                    const attributesClassification = attributes.classification;
+                    const loaderData = parsedData.loaderData;
+                    const loaderDataHeader = loaderData.header;
+                    const pointsFormatId = loaderDataHeader.pointsFormatId;
 
-                    if (!attributesPosition) {
+                    const attributes = parsedData.attributes;
+
+                    if (!attributes.POSITION) {
                         performanceModel.finalize();
                         reject("No positions found in file");
                         return;
                     }
-
-                    const positionsValue = attributesPosition.value;
-
-                    if (params.rotateX) {
-                        if (positionsValue) {
-                            for (let i = 0, len = positionsValue.length; i < len; i += 3) {
-                                const temp = positionsValue[i + 1];
-                                positionsValue[i + 1] = positionsValue[i + 2];
-                                positionsValue[i + 2] = temp;
+                    
+                    let positionsValue
+                    let colorsCompressed;
+                    
+                    switch (pointsFormatId) {
+                        case 0:
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readIntensities(attributes.intensity);
+                            break;
+                        case 1:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject("No positions found in file");
+                                return;
                             }
-                        }
-                    }
-
-                    let colorsCompressed = null;
-
-                    if (attributesColor) {
-                        colorsCompressed = attributesColor.value;
-                    } else {
-
-                    }
-
-                    if (attributesIntensity) {
-                        const intensities = attributesIntensity.value;
-                        colorsCompressed = new Uint8Array(intensities.length * 4);
-
-                        if (attributesColor) { // Intensities with colors
-                            const colors = attributesColor.value;
-                            const colorsSize = attributesColor.size;
-                            for (let i = 0, j = 0, len = intensities.length; i < len; i++, j += 4) {
-                                const intensity = Math.round((intensities[i] / 65536) * 255); // FIXME: Precision loss converting intensity from 16 to 8 bits
-                                colorsCompressed[j + 0] = colors[i * colorsSize];
-                                colorsCompressed[j + 1] = colors[i * colorsSize + 1];
-                                colorsCompressed[j + 2] = colors[i * colorsSize + 2];
-                                colorsCompressed[j + 3] = intensity;
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readIntensities(attributes.intensity);
+                            break;
+                        case 2:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject("No positions found in file");
+                                return;
                             }
-                        } else { // Intensities without colors
-                            for (let i = 0, j = 0, len = intensities.length; i < len; i++, j += 4) {
-                                const intensity = Math.round((intensities[i] / 65536) * 255);
-                                colorsCompressed[j + 0] = 125; // Gray
-                                colorsCompressed[j + 1] = 125;
-                                colorsCompressed[j + 2] = 125;
-                                colorsCompressed[j + 3] = intensity;
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readColorsAndIntensities(attributes.COLOR_0, attributes.intensity);
+                            break;
+                        case 3:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject("No positions found in file");
+                                return;
                             }
-                        }
-                    } else if (attributesColor) { // Colors without intensities
-                        const colors = attributesColor.value;
-                        const colorsSize = attributesColor.size;
-                        for (let i = 0, j = 0, len = colors.length / colorsSize; i < len; i++, j += 4) {
-                            colorsCompressed[j + 0] = colors[i * colorsSize];
-                            colorsCompressed[j + 1] = colors[i * colorsSize + 1];
-                            colorsCompressed[j + 2] = colors[i * colorsSize + 2];
-                            colorsCompressed[j + 3] = (colorsSize === 4) ? colors[i * colorsSize + 3] : 255;
-                        }
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readColorsAndIntensities(attributes.COLOR_0, attributes.intensity);
+                            break;
                     }
 
                     performanceModel.createMesh({
                         id: "pointsMesh",
                         primitive: "points",
                         positions: positionsValue,
-                        colorsCompressed
+                        colorsCompressed: colorsCompressed
                     });
 
                     performanceModel.createEntity({
@@ -438,7 +463,6 @@ class LASLoaderPlugin extends Plugin {
                     performanceModel.finalize();
 
                     // TODO: Create metamodel
-
 
                     performanceModel.scene.once("tick", () => {
                         if (performanceModel.destroyed) {
