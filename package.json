@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.0.18",
+  "version": "2.0.20",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "main": "/dist/xeokit-sdk.es.js",
   "scripts": {
@@ -43,7 +43,7 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "web-ifc": "0.0.26",
+    "web-ifc": "0.0.29",
     "@loaders.gl/core": "^3.0.13",
     "@loaders.gl/las": "^3.0.13"
   },
