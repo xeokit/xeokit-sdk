@@ -104,6 +104,8 @@ class PointsBatchingColorRenderer {
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
         gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+
+        frameCtx.drawArrays++;
     }
 
     _allocate() {

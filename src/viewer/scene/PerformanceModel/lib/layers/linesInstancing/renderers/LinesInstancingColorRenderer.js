@@ -109,6 +109,8 @@ class LinesInstancingColorRenderer {
 
         instanceExt.drawElementsInstancedANGLE(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
+        frameCtx.drawElements++;
+
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);

@@ -107,6 +107,8 @@ class TrianglesBatchingColorRenderer {
         state.indicesBuf.bind();
 
         gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+
+        frameCtx.drawElements++;
     }
 
     _allocate() {
