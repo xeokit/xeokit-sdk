@@ -613,30 +613,29 @@ const Renderer = function (scene, options) {
                             if (renderFlags.edgesTransparent) {
                                 normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
                             }
+                        }
+                        if (renderFlags.selectedEdgesTransparent) {
+                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                        }
 
-                            if (renderFlags.selectedEdgesTransparent) {
-                                selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                            }
+                        if (renderFlags.selectedEdgesOpaque) {
+                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                        }
 
-                            if (renderFlags.selectedEdgesOpaque) {
-                                selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
-                            }
+                        if (renderFlags.xrayedEdgesTransparent) {
+                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
+                        }
 
-                            if (renderFlags.xrayedEdgesTransparent) {
-                                xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
-                            }
+                        if (renderFlags.xrayedEdgesOpaque) {
+                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
+                        }
 
-                            if (renderFlags.xrayedEdgesOpaque) {
-                                xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
-                            }
+                        if (renderFlags.highlightedEdgesTransparent) {
+                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                        }
 
-                            if (renderFlags.highlightedEdgesTransparent) {
-                                highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
-                            }
-
-                            if (renderFlags.highlightedEdgesOpaque) {
-                                highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
-                            }
+                        if (renderFlags.highlightedEdgesOpaque) {
+                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
                         }
                     }
                 }
@@ -805,6 +804,7 @@ const Renderer = function (scene, options) {
 
             frameStats.renderTime = (endTime - startTime) / 1000.0;
             frameStats.drawElements = frameCtx.drawElements;
+            frameStats.drawArrays = frameCtx.drawArrays;
             frameStats.useProgram = frameCtx.useProgram;
             frameStats.bindTexture = frameCtx.bindTexture;
             frameStats.bindArray = frameCtx.bindArray;
