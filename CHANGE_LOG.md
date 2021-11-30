@@ -2,6 +2,45 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
+# 2.1.0-beta.1
+
+Unreleased
+
+### Features
+
+* General
+  * Add commonjs build. [#773](https://github.com/xeokit/xeokit-sdk/pull/773) ([**@amir-arad**](https://github.com/amir-arad))
+* AngleMeasurementsPlugin, DistanceMeasurementsPlugin
+  * Events + More flexible API for Distance & Angle Measurement Plugins. [#751](https://github.com/xeokit/xeokit-sdk/pull/751) ([**@Kurtil**](https://github.com/Kurtil)
+* SkyBox
+  * Set SkyBox unclippable. [#746](https://github.com/xeokit/xeokit-sdk/pull/746) ([**@dengzer1001**](https://github.com/dengzer1001)
+* GLTFLoaderPlugin
+  * Double precision support for GLTFLoaderPlugin performance mode. [#761](https://github.com/xeokit/xeokit-sdk/issues/761) ([**@xeolabs**](https://github.com/xeolabs))
+* IFCLoaderPlugin
+  * Create IFCLoaderPlugin. [#759](https://github.com/xeokit/xeokit-sdk/issues/759) ([**@xeolabs**](https://github.com/xeolabs))
+* LASLoaderPlugin
+  * Create LASLoaderPlugin. [#776](https://github.com/xeokit/xeokit-sdk/issues/776) ([**@xeolabs**](https://github.com/xeolabs))
+* Configs
+  * Create singleton Configs class for managing global configurations. [#758](https://github.com/xeokit/xeokit-sdk/issues/758) ([**@xeolabs**](https://github.com/xeolabs))
+* stats
+  * Expose rendering stats via API. [#779](https://github.com/xeokit/xeokit-sdk/issues/779) ([**@xeolabs**](https://github.com/xeolabs))
+ 
+### Optimizations
+
+* PerformanceModel
+  * Optimize PerformanceModel finalize. [#771](https://github.com/xeokit/xeokit-sdk/issues/771) ([**@xeolabs**](https://github.com/xeolabs))
+* XKTLoaderPlugin
+  * Optimization: selectively batch instanced geometries. [#769](https://github.com/xeokit/xeokit-sdk/issues/769) ([**@xeolabs**](https://github.com/xeolabs))
+
+### Breaking Changes
+
+* FastNavPlugin
+  * Improved FastNavPlugin. [#774](https://github.com/xeokit/xeokit-sdk/issues/774) ([**@xeolabs**](https://github.com/xeolabs))
+
+### Deprecations
+
+* API change: rename "rtcCenter" as "origin". [#752](https://github.com/xeokit/xeokit-sdk/issues/752) ([**@xeolabs**](https://github.com/xeolabs))
+
 # 2.0.7
 
 Oct 8, 2021
