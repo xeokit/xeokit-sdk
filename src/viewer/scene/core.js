@@ -3,9 +3,6 @@ import {Map} from './utils/Map.js';
 import {stats} from './stats.js';
 import {utils} from './utils.js';
 
-let rafEnabled = true;
-let interval = null;
-
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
 const taskQueue = new Queue(); // Task queue, which is pumped on each frame; tasks are pushed to it with calls to xeokit.schedule
@@ -72,32 +69,6 @@ function Core() {
             stats.components.scenes--;
         });
     };
-
-    /**
-     * @private
-     */
-    this.setRAFEnabled = function (value) {
-        if (value === rafEnabled) {
-            return;
-        }
-        rafEnabled = value;
-        if (rafEnabled) {
-            if (interval !== null) {
-                clearInterval(interval);
-                interval = null;
-            }
-            (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
-        } else {
-            interval = setInterval(frame, 16);
-        }
-    };
-
-    /**
-     * @private
-     */
-    this.getRAFEnabled = function () {
-        return rafEnabled;
-    }
 
     /**
      * @private
@@ -181,9 +152,7 @@ const frame = function () {
     fireTickEvents(time);
     renderScenes();
     lastTime = time;
-    if (rafEnabled) {
-        (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
-    }
+    (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 };
 
 function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
@@ -259,10 +228,6 @@ function renderScenes() {
     }
 }
 
-if (rafEnabled) {
-    (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
-} else {
-    interval = setInterval(frame, 16);
-}
+(window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 
 export {core};

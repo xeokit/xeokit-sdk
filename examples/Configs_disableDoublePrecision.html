@@ -13,13 +13,11 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1>Configs - disabling double precision and RAF</h1><br>
+    <h1>Configs - disabling double precision</h1><br>
     <p>In this example we use a <a href="../docs/class/src/viewer/Configs.js~Configs.html"
                                    target="_other">Configs</a> to disable xeokit's double-precision support, which gives a performance and memory boost
         on low-power devices. This however also means that we can no longer render double-precision models without jittering.</p>
 
-        <p>We're also switching xeokit from using window.requestAnimationFrame to window.setInterval for its main render loop, which can also
-        give a performance boost for some cases.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -60,7 +58,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     configs.doublePrecisionEnabled = false; // Disable 64-bit precision for extra speed. Set this once, before you create any Viewers.
-    configs.rafEnabled = false; // Disable window.requestAnimationFrame (RAF) and use window.setInterval for Viewer render loops. Can be switched dynamically.
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
