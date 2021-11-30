@@ -350,6 +350,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                             }
                             if (geometryArrays.batchThisMesh) {
                                 geometryArrays.decompressedPositions = new Float32Array(geometryArrays.geometryPositions.length);
+                                geometryArrays.transformedAndRecompressedPositions = new Uint16Array(geometryArrays.geometryPositions.length)
                                 const geometryPositions = geometryArrays.geometryPositions;
                                 const decompressedPositions = geometryArrays.decompressedPositions;
                                 for (let i = 0, len = geometryPositions.length; i < len; i += 3) {
@@ -368,7 +369,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                         if (geometryArrays.batchThisMesh) {
 
                             const decompressedPositions = geometryArrays.decompressedPositions;
-                            const transformedAndRecompressedPositions = new Uint16Array(decompressedPositions.length);
+                            const transformedAndRecompressedPositions = geometryArrays.transformedAndRecompressedPositions;
 
                             for (let i = 0, len = decompressedPositions.length; i < len; i += 3) {
                                 tempVec4a[0] = decompressedPositions[i + 0];
