@@ -2,7 +2,8 @@
   "name": "@xeokit/xeokit-sdk",
   "version": "2.0.20",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
-  "main": "/dist/xeokit-sdk.es.js",
+  "module": "/dist/xeokit-sdk.es.js",
+  "main": "/dist/xeokit-sdk.cjs.js",
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
     "test": "percy exec -- node ./snapshots.js",

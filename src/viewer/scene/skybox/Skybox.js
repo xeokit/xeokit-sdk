@@ -65,6 +65,7 @@ class Skybox extends Component {
             // stationary: true,
             visible: false,
             pickable: false,
+            clippable: false,
             collidable: false
         });
 
