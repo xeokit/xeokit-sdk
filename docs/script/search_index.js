@@ -702,6 +702,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/stats.js~stats",
+    "variable/index.html#static-variable-stats",
+    "<span>stats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/stats.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewcontainmenthierarchy",
     "function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy",
     "<span>validateMetaModelForTreeViewContainmentHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",

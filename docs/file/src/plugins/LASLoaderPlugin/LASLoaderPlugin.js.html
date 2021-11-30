@@ -80,6 +80,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
@@ -489,6 +490,48 @@ class LASLoaderPlugin extends Plugin {
 
     _parseModel(arrayBuffer, params, options, performanceModel) {
 
+        function readPositions(attributesPosition) {
+            const positionsValue = attributesPosition.value;
+            if (params.rotateX) {
+                if (positionsValue) {
+                    for (let i = 0, len = positionsValue.length; i &lt; len; i += 3) {
+                        const temp = positionsValue[i + 1];
+                        positionsValue[i + 1] = positionsValue[i + 2];
+                        positionsValue[i + 2] = temp;
+                    }
+                }
+            }
+            return positionsValue;
+        }
+
+        function readColorsAndIntensities(attributesColor, attributesIntensity) {
+            const colors = attributesColor.value;
+            const colorSize = attributesColor.size;
+            const intensities = attributesIntensity.value;
+            const colorsCompressedSize = intensities.length * 4;
+            const colorsCompressed = new Uint8Array(colorsCompressedSize);
+            for (let i = 0, j = 0, k = 0, len = intensities.length; i &lt; len; i++, k += colorSize, j += 4) {
+                colorsCompressed[j + 0] = colors[k + 0];
+                colorsCompressed[j + 1] = colors[k + 1];
+                colorsCompressed[j + 2] = colors[k + 2];
+                colorsCompressed[j + 3] = Math.round((intensities[i] / 65536) * 255);
+            }
+            return colorsCompressed;
+        }
+
+        function readIntensities(attributesIntensity) {
+            const intensities = attributesIntensity.intensity;
+            const colorsCompressedSize = intensities.length * 4;
+            const colorsCompressed = new Uint8Array(colorsCompressedSize);
+            for (let i = 0, j = 0, k = 0, len = intensities.length; i &lt; len; i++, k += 3, j += 4) {
+                colorsCompressed[j + 0] = 0;
+                colorsCompressed[j + 1] = 0;
+                colorsCompressed[j + 2] = 0;
+                colorsCompressed[j + 3] = Math.round((intensities[i] / 65536) * 255);
+            }
+            return colorsCompressed;
+        }
+
         return new Promise((resolve, reject) =&gt; {
 
             if (performanceModel.destroyed) {
@@ -512,77 +555,60 @@ class LASLoaderPlugin extends Plugin {
             try {
                 parse(arrayBuffer, LASLoader, options).then((parsedData) =&gt; {
 
-                    const attributes = parsedData.attributes;
-                    const attributesPosition = attributes.POSITION;
-                    const attributesColor = attributes.COLOR_0;
-                    const attributesIntensity = attributes.intensity;
-                    const attributesClassification = attributes.classification;
+                    const loaderData = parsedData.loaderData;
+                    const loaderDataHeader = loaderData.header;
+                    const pointsFormatId = loaderDataHeader.pointsFormatId;
 
-                    if (!attributesPosition) {
+                    const attributes = parsedData.attributes;
+
+                    if (!attributes.POSITION) {
                         performanceModel.finalize();
                         reject(&quot;No positions found in file&quot;);
                         return;
                     }
-
-                    const positionsValue = attributesPosition.value;
-
-                    if (params.rotateX) {
-                        if (positionsValue) {
-                            for (let i = 0, len = positionsValue.length; i &lt; len; i += 3) {
-                                const temp = positionsValue[i + 1];
-                                positionsValue[i + 1] = positionsValue[i + 2];
-                                positionsValue[i + 2] = temp;
+                    
+                    let positionsValue
+                    let colorsCompressed;
+                    
+                    switch (pointsFormatId) {
+                        case 0:
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readIntensities(attributes.intensity);
+                            break;
+                        case 1:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject(&quot;No positions found in file&quot;);
+                                return;
                             }
-                        }
-                    }
-
-                    let colorsCompressed = null;
-
-                    if (attributesColor) {
-                        colorsCompressed = attributesColor.value;
-                    } else {
-
-                    }
-
-                    if (attributesIntensity) {
-                        const intensities = attributesIntensity.value;
-                        colorsCompressed = new Uint8Array(intensities.length * 4);
-
-                        if (attributesColor) { // Intensities with colors
-                            const colors = attributesColor.value;
-                            const colorsSize = attributesColor.size;
-                            for (let i = 0, j = 0, len = intensities.length; i &lt; len; i++, j += 4) {
-                                const intensity = Math.round((intensities[i] / 65536) * 255); // FIXME: Precision loss converting intensity from 16 to 8 bits
-                                colorsCompressed[j + 0] = colors[i * colorsSize];
-                                colorsCompressed[j + 1] = colors[i * colorsSize + 1];
-                                colorsCompressed[j + 2] = colors[i * colorsSize + 2];
-                                colorsCompressed[j + 3] = intensity;
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readIntensities(attributes.intensity);
+                            break;
+                        case 2:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject(&quot;No positions found in file&quot;);
+                                return;
                             }
-                        } else { // Intensities without colors
-                            for (let i = 0, j = 0, len = intensities.length; i &lt; len; i++, j += 4) {
-                                const intensity = Math.round((intensities[i] / 65536) * 255);
-                                colorsCompressed[j + 0] = 125; // Gray
-                                colorsCompressed[j + 1] = 125;
-                                colorsCompressed[j + 2] = 125;
-                                colorsCompressed[j + 3] = intensity;
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readColorsAndIntensities(attributes.COLOR_0, attributes.intensity);
+                            break;
+                        case 3:
+                            if (!attributes.intensity) {
+                                performanceModel.finalize();
+                                reject(&quot;No positions found in file&quot;);
+                                return;
                             }
-                        }
-                    } else if (attributesColor) { // Colors without intensities
-                        const colors = attributesColor.value;
-                        const colorsSize = attributesColor.size;
-                        for (let i = 0, j = 0, len = colors.length / colorsSize; i &lt; len; i++, j += 4) {
-                            colorsCompressed[j + 0] = colors[i * colorsSize];
-                            colorsCompressed[j + 1] = colors[i * colorsSize + 1];
-                            colorsCompressed[j + 2] = colors[i * colorsSize + 2];
-                            colorsCompressed[j + 3] = (colorsSize === 4) ? colors[i * colorsSize + 3] : 255;
-                        }
+                            positionsValue = readPositions(attributes.POSITION);
+                            colorsCompressed = readColorsAndIntensities(attributes.COLOR_0, attributes.intensity);
+                            break;
                     }
 
                     performanceModel.createMesh({
                         id: &quot;pointsMesh&quot;,
                         primitive: &quot;points&quot;,
                         positions: positionsValue,
-                        colorsCompressed
+                        colorsCompressed: colorsCompressed
                     });
 
                     performanceModel.createEntity({
@@ -594,7 +620,6 @@ class LASLoaderPlugin extends Plugin {
                     performanceModel.finalize();
 
                     // TODO: Create metamodel
-
 
                     performanceModel.scene.once(&quot;tick&quot;, () =&gt; {
                         if (performanceModel.destroyed) {

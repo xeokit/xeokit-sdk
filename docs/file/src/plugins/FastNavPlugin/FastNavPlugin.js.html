@@ -80,6 +80,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
@@ -155,6 +156,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/FastNavPlugin/FastNavPlugin.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
+import {stats} from &quot;../../viewer/scene/stats&quot;;
 
 /**
  * {@link Viewer} plugin that improves interactivity by temporarily switching to fast and simple rendering while the
@@ -303,6 +305,10 @@ class FastNavPlugin extends Plugin {
             }
         });
 
+        this._onSceneRendered = viewer.scene.on(&quot;rendered&quot;, ()=&gt; {
+            this.dynamicCanvasResolution = (this._getNumDrawCalls() &gt; 100);
+        });
+
         let down = false;
 
         this._onSceneMouseDown = viewer.scene.input.on(&quot;mousedown&quot;, () =&gt; {
@@ -319,6 +325,10 @@ class FastNavPlugin extends Plugin {
             }
             switchToLowQuality();
         });
+    }
+
+    _getNumDrawCalls() {
+        return (stats.frame.drawElements + stats.frame.drawArrays);
     }
 
     /**
@@ -537,6 +547,7 @@ class FastNavPlugin extends Plugin {
         this.viewer.scene.input.off(this._onSceneMouseUp);
         this.viewer.scene.input.off(this._onSceneMouseMove);
         this.viewer.scene.off(this._onSceneTick);
+        this.viewer.scene.off(this._onSceneRendered);
         super.destroy();
     }
 }
