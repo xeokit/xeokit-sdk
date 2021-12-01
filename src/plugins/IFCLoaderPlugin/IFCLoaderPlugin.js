@@ -354,7 +354,7 @@ class IFCLoaderPlugin extends Plugin {
      * @param {String} [cfg.id="ifcLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} cfg.wasmPath Path to ````web-ifc.wasm````, required by IFCLoaderlugin.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
-     * @param {Object} [cfg.dataSource] A custom data source through which the IFCLoaderPlugin can load model and metadata files. Defaults to an instance of {@link IFCDefaultDataSource}, which loads uover HTTP.
+     * @param {Object} [cfg.dataSource] A custom data source through which the IFCLoaderPlugin can load model and metadata files. Defaults to an instance of {@link IFCDefaultDataSource}, which loads over HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
@@ -564,7 +564,7 @@ class IFCLoaderPlugin extends Plugin {
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a IFC file, as an alternative to the ````ifc```` parameter.
      * @param {ArrayBuffer} [params.ifc] The IFC file data, as an alternative to the ````src```` parameter.
-     * @param {ArrayBuffer} [params.loadMetadata=true] Whether to load IFC metadata (metaobjects and property sets).
+     * @param {Boolean} [params.loadMetadata=true] Whether to load IFC metadata (metaobjects and property sets).
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
@@ -684,13 +684,14 @@ class IFCLoaderPlugin extends Plugin {
         const ifcProjectId = lines.get(0);
 
         const loadMetadata = (params.loadMetadata !== false);
-        const metaData = loadMetadata ? {
-            id: "1601",
+
+        const metadata = loadMetadata ? {
+            id: "",
             projectId: "" + ifcProjectId,
             author: "",
-            createdAt: "2017-01-19T01:36:20",
-            schema: "IFC2X3",
-            creatingApplication: "20161117_1200(x64) - Exporter 17.2.0.0 - Interface alternative d'export 17.2.0.0",
+            createdAt: "",
+            schema: "",
+            creatingApplication: "",
             metaObjects: [],
             propertySets: []
         } : null;
@@ -699,7 +700,7 @@ class IFCLoaderPlugin extends Plugin {
             modelID,
             performanceModel,
             loadMetadata,
-            metaData,
+            metadata,
             metaObjects: {},
             options,
             log: function (msg) {
@@ -734,7 +735,7 @@ class IFCLoaderPlugin extends Plugin {
 
         if (loadMetadata) {
             const metaModelId = performanceModel.id;
-            this.viewer.metaScene.createMetaModel(metaModelId, ctx.metaData, options);
+            this.viewer.metaScene.createMetaModel(metaModelId, ctx.metadata, options);
         }
 
         performanceModel.scene.once("tick", () => {
@@ -777,7 +778,7 @@ class IFCLoaderPlugin extends Plugin {
             type: metaObjectName,
             parent: parentMetaObjectId
         };
-        ctx.metaData.metaObjects.push(metaObject);
+        ctx.metadata.metaObjects.push(metaObject);
         ctx.metaObjects[id] = metaObject;
         ctx.stats.numMetaObjects++;
     }
@@ -851,7 +852,7 @@ class IFCLoaderPlugin extends Plugin {
                         name: propertySetName,
                         properties: properties
                     };
-                    ctx.metaData.propertySets.push(propertySet);
+                    ctx.metadata.propertySets.push(propertySet);
                     ctx.stats.numPropertySets++;
                     const relatedObjects = rel.RelatedObjects;
                     if (!relatedObjects || relatedObjects.length === 0) {
