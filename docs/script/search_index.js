@@ -90,6 +90,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/cityjsonloaderplugin/cityjsondefaultdatasource.js~cityjsondefaultdatasource",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html",
+    "<span>CityJSONDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js~cityjsonloaderplugin",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html",
+    "<span>CityJSONLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/component.js~component",
     "class/src/viewer/scene/Component.js~Component.html",
     "<span>Component</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Component.js</span>",
@@ -1587,6 +1599,60 @@ window.esdocSearchIndex = [
     "src/plugins/bcfviewpointsplugin/index.js",
     "file/src/plugins/BCFViewpointsPlugin/index.js.html",
     "src/plugins/BCFViewpointsPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsondefaultdatasource.js",
+    "file/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js.html",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsondefaultdatasource.js~cityjsondefaultdatasource#constructor",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsondefaultdatasource.js~cityjsondefaultdatasource#getcityjson",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html#instance-method-getCityJSON",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource#getCityJSON",
+    "method"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js",
+    "file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js~cityjsonloaderplugin#constructor",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js~cityjsonloaderplugin#datasource",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html#instance-get-dataSource",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js~cityjsonloaderplugin#datasource",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/cityjsonloaderplugin.js~cityjsonloaderplugin#load",
+    "class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html#instance-method-load",
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/cityjsonloaderplugin/index.js",
+    "file/src/plugins/CityJSONLoaderPlugin/index.js.html",
+    "src/plugins/CityJSONLoaderPlugin/index.js",
     "file"
   ],
   [
@@ -3267,6 +3333,12 @@ window.esdocSearchIndex = [
     "src/plugins/lib/culling/objectcullstates.js",
     "file/src/plugins/lib/culling/ObjectCullStates.js.html",
     "src/plugins/lib/culling/ObjectCullStates.js",
+    "file"
+  ],
+  [
+    "src/plugins/lib/earcut.js",
+    "file/src/plugins/lib/earcut.js.html",
+    "src/plugins/lib/earcut.js",
     "file"
   ],
   [

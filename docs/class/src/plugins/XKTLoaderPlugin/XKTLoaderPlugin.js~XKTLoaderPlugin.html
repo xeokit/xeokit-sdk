@@ -37,6 +37,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -155,13 +157,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber383">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber386">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber383">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber386">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -195,7 +197,11 @@ and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
 <li>Set a custom data source for <em><code>.XKT</code></em> and IFC metadata files.</li>
 <li>Option to load multiple copies of the same model, without object ID clashes.</li>
 </ul>
-<h2 id="creating--em--code--xkt--code---em--files-and-metadata">Creating <em><code>.XKT</code></em> Files and Metadata</h2><p>See <a href="https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM">Creating Files for Offline BIM</a>.</p>
+<h2 id="creating--em--code--xkt--code---em--files-and-metadata">Creating <em><code>.XKT</code></em> Files and Metadata</h2><p>We have several sways to convert your files into XKT. See these tutorials for more info:</p>
+<ul>
+<li><a href="https://www.notion.so/xeokit/Converting-Models-to-XKT-with-convert2xkt-fa567843313f4db8a7d6535e76da9380">Converting Models to XKT with convert2xkt</a> - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.</li>
+<li><a href="https://www.notion.so/xeokit/Converting-IFC-Models-to-XKT-using-3rd-Party-Open-Source-Tools-c373e48bc4094ff5b6e5c5700ff580ee">Converting IFC Models to XKT using 3rd-Party Open Source Tools</a> - how to convert IFC files to XKT using 3rd-party open source CLI tools.</li>
+</ul>
 <h2 id="scene-representation">Scene representation</h2><p>When loading a model, XKTLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
 will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The XKTLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
@@ -1252,7 +1258,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber406">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber409">source</a></span></span>
     </span>
   </h3>
 
@@ -1390,7 +1396,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber438">source</a></span></span>
     </span>
   </h3>
 
@@ -1435,7 +1441,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber446">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber449">source</a></span></span>
     </span>
   </h3>
 
@@ -1480,7 +1486,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber513">source</a></span></span>
     </span>
   </h3>
 
@@ -1527,7 +1533,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber524">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber527">source</a></span></span>
     </span>
   </h3>
 
@@ -1574,7 +1580,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber538">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber541">source</a></span></span>
     </span>
   </h3>
 
@@ -1621,7 +1627,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber555">source</a></span></span>
     </span>
   </h3>
 
@@ -1668,7 +1674,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber563">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
@@ -1713,7 +1719,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber584">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber587">source</a></span></span>
     </span>
   </h3>
 
@@ -1764,7 +1770,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber485">source</a></span></span>
     </span>
   </h3>
 
@@ -1811,7 +1817,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber499">source</a></span></span>
     </span>
   </h3>
 
@@ -1858,7 +1864,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -1903,7 +1909,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber471">source</a></span></span>
     </span>
   </h3>
 
@@ -1948,7 +1954,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber595">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber598">source</a></span></span>
     </span>
   </h3>
 
@@ -1993,7 +1999,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber614">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber617">source</a></span></span>
     </span>
   </h3>
 
@@ -2043,7 +2049,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber427">source</a></span></span>
     </span>
   </h3>
 
@@ -2102,7 +2108,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber659">source</a></span></span>
     </span>
   </h3>
 

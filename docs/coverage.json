@@ -1,7 +1,7 @@
 {
-  "coverage": "37.03%",
-  "expectCount": 6226,
-  "actualCount": 2306,
+  "coverage": "36.81%",
+  "expectCount": 6285,
+  "actualCount": 2314,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -183,6 +183,36 @@
         678
       ]
     },
+    "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        8
+      ]
+    },
+    "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js": {
+      "expectCount": 22,
+      "actualCount": 5,
+      "undocumentLines": [
+        9,
+        10,
+        11,
+        12,
+        168,
+        216,
+        230,
+        293,
+        310,
+        321,
+        403,
+        447,
+        544,
+        613,
+        668,
+        695,
+        712
+      ]
+    },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
       "expectCount": 64,
       "actualCount": 19,
@@ -347,12 +377,12 @@
         557,
         645,
         659,
-        749,
-        756,
-        770,
-        785,
-        813,
-        875
+        750,
+        757,
+        771,
+        786,
+        814,
+        876
       ]
     },
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js": {
@@ -691,17 +721,17 @@
       "actualCount": 18,
       "undocumentLines": [
         17,
-        410,
-        447,
-        469,
-        497,
-        525,
-        553,
-        585,
-        615,
-        782,
-        799,
-        841
+        413,
+        450,
+        472,
+        500,
+        528,
+        556,
+        588,
+        618,
+        785,
+        802,
+        844
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -868,6 +898,45 @@
         87,
         179,
         189
+      ]
+    },
+    "src/plugins/lib/earcut.js": {
+      "expectCount": 34,
+      "actualCount": 1,
+      "undocumentLines": [
+        42,
+        60,
+        84,
+        137,
+        156,
+        209,
+        234,
+        260,
+        283,
+        288,
+        300,
+        360,
+        365,
+        382,
+        434,
+        453,
+        465,
+        472,
+        480,
+        485,
+        490,
+        507,
+        511,
+        516,
+        528,
+        535,
+        552,
+        574,
+        590,
+        598,
+        623,
+        650,
+        660
       ]
     },
     "src/plugins/lib/html/Dot.js": {
