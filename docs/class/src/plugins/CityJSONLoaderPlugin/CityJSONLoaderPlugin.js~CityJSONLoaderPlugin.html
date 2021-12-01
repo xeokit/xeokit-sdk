@@ -157,13 +157,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CityJSONLoaderPlugin} from &apos;<span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber131">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CityJSONLoaderPlugin} from &apos;<span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber109">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.13</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber131">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber109">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -198,11 +198,13 @@ in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-memb
 model. Those Entities will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered
 by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</p>
 <h2 id="metadata">Metadata</h2><p>When loading a model, CityJSONLoaderPlugin also creates a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> that represents the model, which contains
-a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each CityJSON element.</p>
+a tree of <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s that represent the CityJSON objects. .</p>
 <h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the LOD 3 Railway model from
 an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/assets/models/cityjson/LoD3_Railway.json">CityJSON file</a>. Within
 our <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, this will create a bunch of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with
 a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s that hold their metadata.</p>
+<p>We&apos;ll also scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+translate it 100 units along its X axis.</p>
 <ul>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway">Run example</a>]</li>
 </ul>
@@ -213,32 +215,23 @@ const viewer = new Viewer({
      transparent: true
 });
 
-viewer.camera.eye = [-2.56, 8.38, 8.27];
-viewer.camera.look = [13.44, 3.31, -14.83];
-viewer.camera.up = [0.10, 0.98, -0.14];
+viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
+viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
+viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
 
-const lasLoader = new CityJSONLoaderPlugin(viewer, {
-    colorDepth: 8, // Default
-    fp64: false,   // Default
-    skip: 1        // Default
-});
+const cityJSONLoader = new CityJSONLoaderPlugin(viewer);
 
-const model = lasLoader.load({ // Returns an Entity that represents the model
-    id: &quot;myModel&quot;,
-    src: &quot;../assets/models/las/Duplex.las&quot;
+const model = cityJSONLoader.load({ // Returns an Entity that represents the model
+    id: &quot;myModel1&quot;,
+    src: &quot;../assets/models/cityjson/LoD3_Railway.json&quot;,
+    saoEnabled: true,
+    edges: false,
+    rotation: [-90,0,0],
+    scale: [0.5, 0.5, 0.5],
+    origin: [100, 0, 0]
 });</code>
 </code></pre>
-<h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each CityJSON model as we load it.</p>
-<p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
-translate it 100 units along its X axis.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">lasLoader.load({
-     src: &quot;../assets/models/las/Duplex.las&quot;,
-     rotation: [90,0,0],
-     scale: [0.5, 0.5, 0.5],
-     origin: [100, 0, 0]
-});</code>
-</code></pre>
-<h2 id="configuring-a-custom-data-source">Configuring a custom data source</h2><p>By default, CityJSONLoaderPlugin will load CityJSON and LAZ files over HTTP.</p>
+<h2 id="configuring-a-custom-data-source">Configuring a custom data source</h2><p>By default, CityJSONLoaderPlugin will load CityJSON files over HTTP.</p>
 <p>In the example below, we&apos;ll customize the way CityJSONLoaderPlugin loads the files by configuring it with our own data source
 object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {utils} from &quot;xeokit-sdk.es.js&quot;;
@@ -248,27 +241,17 @@ class MyDataSource {
      constructor() {
      }
 
-     // Gets the contents of the given CityJSON file in an arraybuffer
      getCityJSON(src, ok, error) {
          console.log(&quot;MyDataSource#getCityJSON(&quot; + CityJSONSrc + &quot;, ... )&quot;);
-         utils.loadArraybuffer(src,
-             (arraybuffer) =&gt; {
-                 ok(arraybuffer);
+         utils.loadJSON(src,
+             (cityJSON) =&gt; {
+                 ok(cityJSON);
              },
              function (errMsg) {
                  error(errMsg);
              });
      }
-}
-
-const lasLoader2 = new CityJSONLoaderPlugin(viewer, {
-      dataSource: new MyDataSource()
-});
-
-const model5 = lasLoader2.load({
-     id: &quot;myModel5&quot;,
-     src: &quot;../assets/models/las/Duplex.las&quot;
-});</code>
+}</code>
 </code></pre>
 </div>
   
@@ -677,7 +660,7 @@ const model5 = lasLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber142">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -715,7 +698,7 @@ const model5 = lasLoader2.load({
       <td data-ice="name" class="code" data-depth="1">cfg.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;lasLoader&quot;</li></ul></td>
+<li>default: &quot;cityJSONLoader&quot;</li></ul></td>
       <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span>Viewer#plugins</span>.</p>
 </td>
     </tr>
@@ -764,7 +747,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber156">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 
@@ -809,7 +792,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber145">source</a></span></span>
     </span>
   </h3>
 
@@ -857,7 +840,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
