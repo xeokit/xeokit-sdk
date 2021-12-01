@@ -45,6 +45,9 @@ const tempVec3c = math.vec3();
  * our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with
  * a {@link MetaModel} and {@link MetaObject}s that hold their metadata.
  *
+ * We'll also scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+ * translate it 100 units along its X axis.
+ *
  * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway)]
  *
  * ````javascript
@@ -55,41 +58,26 @@ const tempVec3c = math.vec3();
  *      transparent: true
  * });
  *
- * viewer.camera.eye = [-2.56, 8.38, 8.27];
- * viewer.camera.look = [13.44, 3.31, -14.83];
- * viewer.camera.up = [0.10, 0.98, -0.14];
+ * viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
+ * viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
+ * viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
  *
- * const lasLoader = new CityJSONLoaderPlugin(viewer, {
- *     colorDepth: 8, // Default
- *     fp64: false,   // Default
- *     skip: 1        // Default
- * });
+ * const cityJSONLoader = new CityJSONLoaderPlugin(viewer);
  *
- * const model = lasLoader.load({ // Returns an Entity that represents the model
- *     id: "myModel",
- *     src: "../assets/models/las/Duplex.las"
- * });
- * ````
- *
- * ## Transforming
- *
- * We have the option to rotate, scale and translate each CityJSON model as we load it.
- *
- * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
- * translate it 100 units along its X axis.
- *
- * ````javascript
- * lasLoader.load({
- *      src: "../assets/models/las/Duplex.las",
- *      rotation: [90,0,0],
- *      scale: [0.5, 0.5, 0.5],
- *      origin: [100, 0, 0]
+ * const model = cityJSONLoader.load({ // Returns an Entity that represents the model
+ *     id: "myModel1",
+ *     src: "../assets/models/cityjson/LoD3_Railway.json",
+ *     saoEnabled: true,
+ *     edges: false,
+ *     rotation: [-90,0,0],
+ *     scale: [0.5, 0.5, 0.5],
+ *     origin: [100, 0, 0]
  * });
  * ````
  *
  * ## Configuring a custom data source
  *
- * By default, CityJSONLoaderPlugin will load CityJSON and LAZ files over HTTP.
+ * By default, CityJSONLoaderPlugin will load CityJSON files over HTTP.
  *
  * In the example below, we'll customize the way CityJSONLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
@@ -102,27 +90,17 @@ const tempVec3c = math.vec3();
  *      constructor() {
  *      }
  *
- *      // Gets the contents of the given CityJSON file in an arraybuffer
  *      getCityJSON(src, ok, error) {
  *          console.log("MyDataSource#getCityJSON(" + CityJSONSrc + ", ... )");
- *          utils.loadArraybuffer(src,
- *              (arraybuffer) => {
- *                  ok(arraybuffer);
+ *          utils.loadJSON(src,
+ *              (cityJSON) => {
+ *                  ok(cityJSON);
  *              },
  *              function (errMsg) {
  *                  error(errMsg);
  *              });
  *      }
  * }
- *
- * const lasLoader2 = new CityJSONLoaderPlugin(viewer, {
- *       dataSource: new MyDataSource()
- * });
- *
- * const model5 = lasLoader2.load({
- *      id: "myModel5",
- *      src: "../assets/models/las/Duplex.las"
- * });
  * ````
  *
  * @class CityJSONLoaderPlugin
@@ -135,13 +113,13 @@ class CityJSONLoaderPlugin extends Plugin {
      *
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="lasLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="cityJSONLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.dataSource] A custom data source through which the CityJSONLoaderPlugin can load model and
      * metadata files. Defaults to an instance of {@link CityJSONDefaultDataSource}, which loads over HTTP.
      */
     constructor(viewer, cfg = {}) {
 
-        super("lasLoader", viewer, cfg);
+        super("cityJSONLoader", viewer, cfg);
 
         this.dataSource = cfg.dataSource;
     }
@@ -236,8 +214,8 @@ class CityJSONLoaderPlugin extends Plugin {
         const vertices = data.transform ? this._transformVertices(data.vertices, data.transform, options.rotateX) : data.vertices;
 
         const stats = params.stats || {};
-        stats.sourceFormat = "CityJSON";
-        stats.schemaVersion = "";
+        stats.sourceFormat = data.type || "CityJSON";
+        stats.schemaVersion = data.version || "";
         stats.title = "";
         stats.author = "";
         stats.created = "";
@@ -250,17 +228,22 @@ class CityJSONLoaderPlugin extends Plugin {
 
         const loadMetadata = (params.loadMetadata !== false);
 
+        const rootMetaObject = loadMetadata ? {
+            id: math.createUUID(),
+            name: "Model",
+            type: "Model"
+        } : null;
+
         const metadata = loadMetadata ? {
             id: "",
             projectId: "",
             author: "",
             createdAt: "",
-            schema: "",
+            schema: data.version || "",
             creatingApplication: "",
-            metaObjects: [],
+            metaObjects: [rootMetaObject],
             propertySets: []
         } : null;
-
 
         const ctx = {
             data,
@@ -268,6 +251,7 @@ class CityJSONLoaderPlugin extends Plugin {
             performanceModel,
             loadMetadata,
             metadata,
+            rootMetaObject,
             nextId: 0,
             stats
         };
@@ -280,7 +264,7 @@ class CityJSONLoaderPlugin extends Plugin {
             const metaModelId = performanceModel.id;
             this.viewer.metaScene.createMetaModel(metaModelId, ctx.metadata, options);
         }
-        
+
         performanceModel.scene.once("tick", () => {
             if (performanceModel.destroyed) {
                 return;
@@ -328,7 +312,7 @@ class CityJSONLoaderPlugin extends Plugin {
             const metaObjectId = objectId;
             const metaObjectType = cityObject.type;
             const metaObjectName = metaObjectType + " : " + objectId;
-            const parentMetaObjectId = cityObject.parents ? cityObject.parents[0] : ctx.rootMetaObjectId;
+            const parentMetaObjectId = cityObject.parents ? cityObject.parents[0] : ctx.rootMetaObject.id;
 
             ctx.metadata.metaObjects.push({
                 id: metaObjectId,
@@ -337,7 +321,7 @@ class CityJSONLoaderPlugin extends Plugin {
                 parent: parentMetaObjectId
             });
         }
-        
+
         ctx.stats.numMetaObjects++;
 
         if (!(cityObject.geometry && cityObject.geometry.length > 0)) {
