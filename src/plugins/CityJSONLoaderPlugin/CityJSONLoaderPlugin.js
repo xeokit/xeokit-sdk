@@ -36,7 +36,7 @@ const tempVec3c = math.vec3();
  * ## Metadata
  *
  * When loading a model, CityJSONLoaderPlugin also creates a {@link MetaModel} that represents the model, which contains
- * a {@link MetaObject} for each CityJSON element.
+ * a tree of {@link MetaObject}s that represent the CityJSON objects. .
  *
  * ## Usage
  *
