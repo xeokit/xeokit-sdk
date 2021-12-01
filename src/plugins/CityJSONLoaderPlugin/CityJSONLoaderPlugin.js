@@ -530,8 +530,7 @@ class CityJSONLoaderPlugin extends Plugin {
                 positions: geometryCfg.positions,
                 indices: geometryCfg.indices,
                 color: (surfaceMaterial && surfaceMaterial.diffuseColor) ? surfaceMaterial.diffuseColor : [0.8, 0.8, 0.8],
-                opacity: 1.0
-                //opacity: (surfaceMaterial && surfaceMaterial.transparency !== undefined) ? (1.0 - surfaceMaterial.transparency) : 1.0
+                opacity: (surfaceMaterial && surfaceMaterial.transparency !== undefined) ? (1.0 - surfaceMaterial.transparency) : 1.0
             });
 
             meshIds.push(meshId);
