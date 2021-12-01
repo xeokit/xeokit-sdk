@@ -89,14 +89,14 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const fastNavPlugin = new FastNavPlugin(viewer, {
-        dynamicEdges: false,
-        dynamicSAO: false,
-        dynamicPBR: false,
-        dynamicTransparent: true,
-        dynamicCanvasResolution: true,
-        dynamicCanvasResolutionScale: 0.5,
-        delayBeforeStatic: true,
-        delayBeforeStaticDuration: 0.4
+        hideEdges: true,
+        hideSAO: true,
+        hidePBR: true,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: true,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
     });
 
     // Ground plane
@@ -170,14 +170,14 @@
     }();
 
     const fastNavParams = new function () {
-        this.dynamicPBR = fastNavPlugin.dynamicPBR;
-        this.dynamicSAO = fastNavPlugin.dynamicSAO;
-        this.dynamicEdges = fastNavPlugin.dynamicEdges;
-        this.dynamicTransparent = fastNavPlugin.dynamicTransparent;
-        this.dynamicCanvasResolution = fastNavPlugin.dynamicCanvasResolution;
-        this.dynamicCanvasResolutionScale = fastNavPlugin.dynamicCanvasResolutionScale;
-        this.delayBeforeStatic = fastNavPlugin.delayBeforeStatic;
-        this.delayBeforeStaticDuration = fastNavPlugin.delayBeforeStaticDuration;
+        this.hidePBR = fastNavPlugin.hidePBR;
+        this.hideSAO = fastNavPlugin.hideSAO;
+        this.hideEdges = fastNavPlugin.hideEdges;
+        this.hideTransparentObjects = fastNavPlugin.hideTransparentObjects;
+        this.scaleCanvasResolution = fastNavPlugin.scaleCanvasResolution;
+        this.scaleCanvasResolutionFactor = fastNavPlugin.scaleCanvasResolutionFactor;
+        this.delayBeforeRestore = fastNavPlugin.delayBeforeRestore;
+        this.delayBeforeRestoreSeconds = fastNavPlugin.delayBeforeRestoreSeconds;
     }();
 
     const update = function () {
@@ -203,14 +203,14 @@
         camera.ortho.far = saoParams.far;
         camera.perspective.fov = saoParams.fov;
 
-        fastNavPlugin.dynamicPBR = fastNavParams.dynamicPBR;
-        fastNavPlugin.dynamicSAO = fastNavParams.dynamicSAO;
-        fastNavPlugin.dynamicEdges = fastNavParams.dynamicEdges;
-        fastNavPlugin.dynamicTransparent = fastNavParams.dynamicTransparent;
-        fastNavPlugin.dynamicCanvasResolution = fastNavParams.dynamicCanvasResolution;
-        fastNavPlugin.dynamicCanvasResolutionScale = fastNavParams.dynamicCanvasResolutionScale;
-        fastNavPlugin.delayBeforeStatic = fastNavParams.delayBeforeStatic;
-        fastNavPlugin.delayBeforeStaticDuration = fastNavParams.delayBeforeStaticDuration;
+        fastNavPlugin.hidePBR = fastNavParams.hidePBR;
+        fastNavPlugin.hideSAO = fastNavParams.hideSAO;
+        fastNavPlugin.hideEdges = fastNavParams.hideEdges;
+        fastNavPlugin.hideTransparentObjects = fastNavParams.hideTransparentObjects;
+        fastNavPlugin.scaleCanvasResolution = fastNavParams.scaleCanvasResolution;
+        fastNavPlugin.scaleCanvasResolutionFactor = fastNavParams.scaleCanvasResolutionFactor;
+        fastNavPlugin.delayBeforeRestore = fastNavParams.delayBeforeRestore;
+        fastNavPlugin.delayBeforeRestoreSeconds = fastNavParams.delayBeforeRestoreSeconds;
         requestAnimationFrame(update);
     };
 
@@ -219,14 +219,14 @@
     const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const fastNavFolder = gui.addFolder('FastNavPlugin');
-    fastNavFolder.add(fastNavParams, 'dynamicPBR');
-    fastNavFolder.add(fastNavParams, 'dynamicSAO');
-    fastNavFolder.add(fastNavParams, 'dynamicEdges');
-    fastNavFolder.add(fastNavParams, 'dynamicTransparent');
-    fastNavFolder.add(fastNavParams, 'dynamicCanvasResolution');
-    fastNavFolder.add(fastNavParams, 'dynamicCanvasResolutionScale', 0.0, 1.0);
-    fastNavFolder.add(fastNavParams, 'delayBeforeStatic');
-    fastNavFolder.add(fastNavParams, 'delayBeforeStaticDuration', 0, 2.0);
+    fastNavFolder.add(fastNavParams, 'hidePBR');
+    fastNavFolder.add(fastNavParams, 'hideSAO');
+    fastNavFolder.add(fastNavParams, 'hideEdges');
+    fastNavFolder.add(fastNavParams, 'hideTransparentObjects');
+    fastNavFolder.add(fastNavParams, 'scaleCanvasResolution');
+    fastNavFolder.add(fastNavParams, 'scaleCanvasResolutionFactor', 0.0, 1.0);
+    fastNavFolder.add(fastNavParams, 'delayBeforeRestore');
+    fastNavFolder.add(fastNavParams, 'delayBeforeRestoreSeconds', 0, 2.0);
     fastNavFolder.open();
 
     const edgesFolder = gui.addFolder('Edges');

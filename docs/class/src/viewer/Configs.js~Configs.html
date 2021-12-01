@@ -155,13 +155,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Configs} from &apos;<span><a href="file/src/viewer/Configs.js.html#lineNumber51">@xeokit/xeokit-sdk/src/viewer/Configs.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Configs} from &apos;<span><a href="file/src/viewer/Configs.js.html#lineNumber42">@xeokit/xeokit-sdk/src/viewer/Configs.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/Configs.js.html#lineNumber51">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/Configs.js.html#lineNumber42">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -185,8 +185,6 @@
 <h2 id="example">Example</h2><p>In the example below, we&apos;ll disable xeokit&apos;s double-precision support, which gives a performance and memory boost
 on low-power devices, but also means that we can no longer render double-precision models without jittering.</p>
 <p>That&apos;s OK if we know that we&apos;re not going to view models that are geographically vast, or offset far from the World coordinate origin.</p>
-<p>We&apos;ll also switch xeokit from using <code>window.requestAnimationFrame</code> to <code>window.setInterval</code> for its render loop,
-which may give a smoother experience in some cases.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Configs, Viewer, XKTLoaderPlugin} from &quot;../dist/xeokit-sdk.min.es.js&quot;;
 
@@ -197,11 +195,6 @@ const configs = new Configs();
 // Disable 64-bit precision for extra speed.
 // Only set this config once, before you create any Viewers.
 configs.doublePrecisionEnabled = false;
-
-// Disable window.requestAnimationFrame (RAF) and use
-// window.setInterval for Viewer render loops.
-// This config can be switched dynamically, if needed.
-configs.rafEnabled = false;
 
 // Create a Viewer, to which our configs apply
 const viewer = new Viewer({
@@ -330,64 +323,6 @@ const model = xktLoader.load({
       
     </td>
   </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html#instance-set-rafEnabled">rafEnabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html#instance-get-rafEnabled">rafEnabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
 </tbody>
 </table>
 </div>
@@ -411,7 +346,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -458,7 +393,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -520,7 +455,7 @@ it, especially on low-power devices.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -528,123 +463,6 @@ it, especially on low-power devices.</p>
   
   
   <div data-ice="description"><p>Gets whether double precision mode is enabled for all Viewers.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-rafEnabled">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">rafEnabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber100">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
-<p>With RAF, the render loop is suspended whenever we switch away from the browser tab that
-contains our application. With setInterval, the render loop will continue running. Since a Viewer only
-renders frames when the view has actually updated, disabling RAF can actually give a performance boost.</p>
-<p>This is <code>true</code> by default, to use RAF.</p>
-<p>This can be dynamically set at any time.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-rafEnabled">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">rafEnabled</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/Configs.js.html#lineNumber109">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether Viewers currently use <code>window.requestAnimationFrame</code> (RAF) or <code>window.setInterval</code> for animations.</p>
 </div>
 
   

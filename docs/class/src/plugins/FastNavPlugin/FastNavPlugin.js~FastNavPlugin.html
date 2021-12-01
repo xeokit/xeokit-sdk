@@ -155,13 +155,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {FastNavPlugin} from &apos;<span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber81">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {FastNavPlugin} from &apos;<span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber92">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber81">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber92">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -181,31 +181,35 @@
 
   
   
-  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that improves interactivity by temporarily switching to fast and simple rendering while the
-<span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving or the <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span> is resizing.</p>
+  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that makes interaction smoother with large models, by temporarily switching
+the Viewer to faster, lower-quality rendering modes whenever we interact.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin"><img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif"></a></p>
-<p>FastNavPlugin works by disabling specified rendering features, and optionally down-scaling the canvas, whenever we
-move the Camera or resize the Canvas. Then, once the Camera or Canvas has been at rest after a certain time, FastNavPlugin
-restores those rendering features and original canvas scale again.</p>
-<p>The effect we experience is a low-quality view while moving, then a high-quality view
-after we stop, following an optional delay.</p>
-<p>Down-scaling the canvas resolution gives particularly good results. For example, scaling by <code>0.5</code>
-means that we&apos;re rendering a quarter of the pixels while moving, which makes the Viewer noticeably smoother
-with big models.</p>
+<p>FastNavPlugin works by hiding specified Viewer rendering features, and optionally scaling the Viewer&apos;s canvas
+resolution, whenever we interact with the Viewer. Then, once we&apos;ve finished interacting, FastNavPlugin restores those
+rendering features and the original canvas scale, after a configured delay.</p>
+<p>Depending on how we configure FastNavPlugin, we essentially switch to a smooth-rendering low-quality view while
+interacting, then return to the normal higher-quality view after we stop, following an optional delay.</p>
+<p>Down-scaling the canvas resolution gives particularly good results. For example, scaling by <code>0.5</code> means that
+we&apos;re rendering a quarter of the pixels while interacting, which can make the Viewer noticeably smoother with big models.</p>
+<p>The screen capture above shows FastNavPlugin in action. In this example, whenever we move the Camera or resize the Canvas,
+FastNavPlugin switches off enhanced edges and ambient shadows (SAO), and down-scales the canvas, making it slightly
+blurry. When <code>0.5</code> seconds passes with no interaction, the plugin shows edges and SAO again, and restores the
+original canvas scale.</p>
 <h1 id="usage">Usage</h1><p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, add a <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span>, then use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model.</p>
-<p>Whenever our Camera moves, the FastNavPlugin will:</p>
+<p>Whenever we interact with the Viewer, our FastNavPlugin will:</p>
 <ul>
-<li>disable edges,</li>
-<li>disable ambient shadows,</li>
-<li>disable physically-based materials (switching to non-PBR),</li>
+<li>hide edges,</li>
+<li>hide ambient shadows (SAO),</li>
+<li>hide physically-based materials (switching to non-PBR),</li>
 <li>hide transparent objects, and</li>
-<li><p>down-scale the canvas by 0.5, causing 75% less pixels to render.
-<br><br>
-We&apos;ll also configure a 0.5 second delay before we transition back to high-quality each time we stop moving, so that we&apos;re
-not continually flipping between low and high quality as we interact.</p>
-</li>
-<li><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin">Run this example</a>]</p>
-</li>
+<li>scale the canvas resolution by 0.5, causing the GPU to render 75% less pixels.
+<br></li>
+</ul>
+<p>We&apos;ll also configure a 0.5 second delay before we transition back to high-quality each time we stop ineracting, so that we&apos;re
+not continually flipping between low and high quality as we interact. Since we&apos;re only rendering ambient shadows when not interacting, we&apos;ll also treat ourselves
+to expensive, high-quality SAO settings, that we wouldn&apos;t normally configure for an interactive SAO effect.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, FastNavPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
@@ -222,17 +226,23 @@ viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
 viewer.scene.camera.look = [42.45, 49.62, -43.59];
 viewer.scene.camera.up = [0.05, 0.95, 0.15];
 
+// Higher-quality SAO settings
+
+viewer.scene.sao.enabled = true;
+viewer.scene.sao.numSamples = 60;
+viewer.scene.sao.kernelRadius = 170;
+
 // Install a FastNavPlugin
 
 new FastNavPlugin(viewer, {
-     dynamicEdges: false,                // Don&apos;t show edges while moving (default is false)
-     dynamicSAO: false,                  // Don&apos;t show ambient shadows while moving (default is false)
-     dynamicPBR: false,                  // Non-physically-based rendering while moving (default is false)
-     dynamicTransparent: false,          // Hide transparent objects while moving (default is false)
-     dynamicCanvasResolution: true,      // Reduce canvas resolution while moving (default is false)
-     dynamicCanvasResolutionScale: 0.5,  // Factor by which we reduce canvas resolution when moving (default is 0.6)
-     delayBeforeStatic: true,            // When we stop, delay before returning to quality static render (default is true)
-     delayBeforeStaticDuration: 0.5      // The delay duration, in seconds (default is 0.5)
+     hideEdges: true,                // Don&apos;t show edges while we interact (default is true)
+     hideSAO: true,                  // Don&apos;t show ambient shadows while we interact (default is true)
+     hidePBR: true,                  // No physically-based rendering while we interact (default is true)
+     hideTransparentObjects: true,   // Hide transparent objects while we interact (default is false)
+     scaleCanvasResolution: true,    // Scale canvas resolution while we interact (default is false)
+     scaleCanvasResolutionFactor: 0.5,  // Factor by which we scale canvas resolution when we interact (default is 0.6)
+     delayBeforeRestore: true,       // When we stop interacting, delay before restoring normal render (default is true)
+     delayBeforeRestoreSeconds: 0.5  // The delay duration, in seconds (default is 0.5)
 });
 
 // Load a BIM model from XKT
@@ -313,13 +323,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStatic">delayBeforeStatic</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestore">delayBeforeRestore</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.</p>
+        <div data-ice="description"><p>Gets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -342,13 +352,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStatic">delayBeforeStatic</a></span></span><span class="code" data-ice="signature">(delayBeforeStatic: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeRestore">delayBeforeRestore</a></span></span><span class="code" data-ice="signature">(delayBeforeRestore: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.</p>
+        <div data-ice="description"><p>Sets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -371,13 +381,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStaticDuration">delayBeforeStaticDuration</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestoreSeconds">delayBeforeRestoreSeconds</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the delay in seconds before transitioning back to normal static rendering when camera stops moving.</p>
+        <div data-ice="description"><p>Gets the delay before restoring normal rendering after we stop interacting with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -400,13 +410,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStaticDuration">delayBeforeStaticDuration</a></span></span><span class="code" data-ice="signature">(delayBeforeStaticDuration: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeRestoreSeconds">delayBeforeRestoreSeconds</a></span></span><span class="code" data-ice="signature">(delayBeforeRestoreSeconds: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the delay in seconds before transitioning back to normal static rendering when camera stops moving.</p>
+        <div data-ice="description"><p>Sets the delay before restoring normal rendering after we stop interacting with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -429,13 +439,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolution">dynamicCanvasResolution</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideEdges">hideEdges</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to down-scale the canvas resolution while the camera is moving.</p>
+        <div data-ice="description"><p>Gets whether to temporarily hide edges whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -458,13 +468,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolution">dynamicCanvasResolution</a></span></span><span class="code" data-ice="signature">(dynamicCanvasResolution: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideEdges">hideEdges</a></span></span><span class="code" data-ice="signature">(hideEdges: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to down-scale the canvas resolution while the camera is moving.</p>
+        <div data-ice="description"><p>Sets whether to temporarily hide edges whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -487,13 +497,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolutionScale">dynamicCanvasResolutionScale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hidePBR">hidePBR</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the factor by which we downscale the canvas resolution while the camera is moving.</p>
+        <div data-ice="description"><p>Gets whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -516,13 +526,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolutionScale">dynamicCanvasResolutionScale</a></span></span><span class="code" data-ice="signature">(dynamicCanvasResolutionScale: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hidePBR">hidePBR</a></span></span><span class="code" data-ice="signature">(hidePBR: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the factor by which we downscale the canvas resolution while the camera is moving.</p>
+        <div data-ice="description"><p>Sets whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -545,13 +555,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicEdges">dynamicEdges</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideSAO">hideSAO</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to enable enhanced edges while the camera is moving.</p>
+        <div data-ice="description"><p>Gets whether to temporarily hide scalable ambient shadows (SAO) whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -574,13 +584,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicEdges">dynamicEdges</a></span></span><span class="code" data-ice="signature">(dynamicEdges: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideSAO">hideSAO</a></span></span><span class="code" data-ice="signature">(hideSAO: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to enable enhanced edges while the camera is moving.</p>
+        <div data-ice="description"><p>Sets whether to temporarily hide scalable ambient shadows (SAO) whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -603,13 +613,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicPBR">dynamicPBR</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideTransparentObjects">hideTransparentObjects</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to enable physically-based rendering (PBR) while the camera is moving.</p>
+        <div data-ice="description"><p>Gets whether to temporarily hide transparent objects whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -632,13 +642,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicPBR">dynamicPBR</a></span></span><span class="code" data-ice="signature">(dynamicPBR: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideTransparentObjects">hideTransparentObjects</a></span></span><span class="code" data-ice="signature">(hideTransparentObjects: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to enable physically-based rendering (PBR) while the camera is moving.</p>
+        <div data-ice="description"><p>Sets whether to temporarily hide transparent objects whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -661,13 +671,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicSAO">dynamicSAO</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolution">scaleCanvasResolution</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.</p>
+        <div data-ice="description"><p>Gets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -690,13 +700,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicSAO">dynamicSAO</a></span></span><span class="code" data-ice="signature">(dynamicSAO: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-scaleCanvasResolution">scaleCanvasResolution</a></span></span><span class="code" data-ice="signature">(scaleCanvasResolution: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.</p>
+        <div data-ice="description"><p>Sets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.</p>
 </div>
       </div>
     </td>
@@ -719,13 +729,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicTransparent">dynamicTransparent</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolutionFactor">scaleCanvasResolutionFactor</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether to show transparent objects while the camera is moving.</p>
+        <div data-ice="description"><p>Gets the factor by which we temporarily scale the canvas resolution when we interact with the viewer.</p>
 </div>
       </div>
     </td>
@@ -748,13 +758,13 @@ const model = xktLoader.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicTransparent">dynamicTransparent</a></span></span><span class="code" data-ice="signature">(dynamicTransparent: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-scaleCanvasResolutionFactor">scaleCanvasResolutionFactor</a></span></span><span class="code" data-ice="signature">(scaleCanvasResolutionFactor: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets whether to show transparent objects while the camera is moving.</p>
+        <div data-ice="description"><p>Sets the factor by which we temporarily scale the canvas resolution when we interact with the viewer.</p>
 </div>
       </div>
     </td>
@@ -1059,7 +1069,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
@@ -1102,67 +1112,67 @@ const model = xktLoader.load({
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicPBR</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether to enable physically-based rendering (PBR) while the camera is moving.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicSAO</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether to enable scalable ambient occlusion (SAO) while the camera is moving.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicEdges</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether to enable enhanced edges while the camera is moving.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicTransparent</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.hidePBR</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether to show transparent objects when the camera is moving.</p>
+      <td data-ice="description"><p>Whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicCanvasResolution</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.hideSAO</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Whether to temporarily hide scalable ambient occlusion (SAO) whenever we interact with the Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.hideEdges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Whether to temporarily hide edges whenever we interact with the Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.hideTransparentObjects</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether to temporarily hide transparent objects whenever we interact with the Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.scaleCanvasResolution</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether to down-scale the canvas resolution while the camera is moving.</p>
+      <td data-ice="description"><p>Whether to temporarily down-scale the canvas resolution whenever we interact with the Viewer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.dynamicCanvasResolutionScale</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.scaleCanvasResolutionFactor</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0.6</li></ul></td>
-      <td data-ice="description"><p>The factor by which we downscale the canvas resolution while the camera is moving.</p>
+      <td data-ice="description"><p>The factor by which we downscale the canvas resolution whenever we interact with the Viewer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.delayBeforeStatic</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.delayBeforeRestore</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Once the camera stops moving, whether to have a delay before transitioning back to normal rendering.</p>
+      <td data-ice="description"><p>Whether to temporarily have a delay before restoring normal rendering after we stop interacting with the Viewer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.delayBeforeStaticDuration</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.delayBeforeRestoreSeconds</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0.5</li></ul></td>
-      <td data-ice="description"><p>Delay in seconds before transitioning back to normal rendering when camera stops moving. Only works when <code>delayBeforeStatic</code> is <code>true</code>.</p>
+      <td data-ice="description"><p>Delay in seconds before restoring normal rendering after we stop interacting with the Viewer.</p>
 </td>
     </tr>
 </tbody>
@@ -1191,26 +1201,26 @@ const model = xktLoader.load({
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-delayBeforeStatic">
+  <h3 data-ice="anchor" id="instance-get-delayBeforeRestore">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">delayBeforeStatic</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">delayBeforeRestore</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber335">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.</p>
-<p>The delay duration is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStaticDuration">FastNavPlugin#delayBeforeStaticDuration</a></span>.</p>
+  <div data-ice="description"><p>Gets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.</p>
+<p>The delay duration is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestoreSeconds">FastNavPlugin#delayBeforeRestoreSeconds</a></span>.</p>
 <p>Default is <code>true</code>.</p>
 </div>
 
@@ -1250,26 +1260,26 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-delayBeforeStatic">
+  <h3 data-ice="anchor" id="instance-set-delayBeforeRestore">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">delayBeforeStatic</span><span class="code" data-ice="signature">(delayBeforeStatic: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">delayBeforeRestore</span><span class="code" data-ice="signature">(delayBeforeRestore: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber343">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber348">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether to have a delay before transitioning back to normal static rendering after the camera stops moving.</p>
-<p>The delay duration is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStaticDuration">FastNavPlugin#delayBeforeStaticDuration</a></span>.</p>
+  <div data-ice="description"><p>Sets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.</p>
+<p>The delay duration is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestoreSeconds">FastNavPlugin#delayBeforeRestoreSeconds</a></span>.</p>
 <p>Default is <code>true</code>.</p>
 </div>
 
@@ -1296,26 +1306,26 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-delayBeforeStaticDuration">
+  <h3 data-ice="anchor" id="instance-get-delayBeforeRestoreSeconds">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">delayBeforeStaticDuration</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">delayBeforeRestoreSeconds</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber356">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the delay in seconds before transitioning back to normal static rendering when camera stops moving.</p>
-<p>The delay is enabled when <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStatic">FastNavPlugin#delayBeforeStatic</a></span> is <code>true</code>.</p>
+  <div data-ice="description"><p>Gets the delay before restoring normal rendering after we stop interacting with the Viewer.</p>
+<p>The delay is enabled when <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestore">FastNavPlugin#delayBeforeRestore</a></span> is <code>true</code>.</p>
 <p>Default is <code>0.5</code> seconds.</p>
 </div>
 
@@ -1330,7 +1340,7 @@ const model = xktLoader.load({
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Timeout duration in seconds.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>Delay in seconds.</p>
 </td>
         </tr>
       </tbody>
@@ -1355,26 +1365,26 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-delayBeforeStaticDuration">
+  <h3 data-ice="anchor" id="instance-set-delayBeforeRestoreSeconds">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">delayBeforeStaticDuration</span><span class="code" data-ice="signature">(delayBeforeStaticDuration: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">delayBeforeRestoreSeconds</span><span class="code" data-ice="signature">(delayBeforeRestoreSeconds: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the delay in seconds before transitioning back to normal static rendering when camera stops moving.</p>
-<p>The delay is enabled when <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStatic">FastNavPlugin#delayBeforeStatic</a></span> is <code>true</code>.</p>
+  <div data-ice="description"><p>Sets the delay before restoring normal rendering after we stop interacting with the Viewer.</p>
+<p>The delay is enabled when <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestore">FastNavPlugin#delayBeforeRestore</a></span> is <code>true</code>.</p>
 <p>Default is <code>0.5</code> seconds.</p>
 </div>
 
@@ -1401,27 +1411,26 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicCanvasResolution">
+  <h3 data-ice="anchor" id="instance-get-hideEdges">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">dynamicCanvasResolution</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">hideEdges</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether to down-scale the canvas resolution while the camera is moving.</p>
+  <div data-ice="description"><p>Gets whether to temporarily hide edges whenever we interact with the Viewer.</p>
 <p>Default is <code>true</code>.</p>
-<p>The down-scaling factor is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolutionScale">FastNavPlugin#dynamicCanvasResolutionScale</a></span>.</p>
 </div>
 
   
@@ -1435,7 +1444,7 @@ const model = xktLoader.load({
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether to down-scale the canvas resolution while the camera is moving.</p>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> if hiding edges.</p>
 </td>
         </tr>
       </tbody>
@@ -1460,27 +1469,26 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicCanvasResolution">
+  <h3 data-ice="anchor" id="instance-set-hideEdges">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">dynamicCanvasResolution</span><span class="code" data-ice="signature">(dynamicCanvasResolution: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">hideEdges</span><span class="code" data-ice="signature">(hideEdges: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether to down-scale the canvas resolution while the camera is moving.</p>
+  <div data-ice="description"><p>Sets whether to temporarily hide edges whenever we interact with the Viewer.</p>
 <p>Default is <code>true</code>.</p>
-<p>The down-scaling factor is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolutionScale">FastNavPlugin#dynamicCanvasResolutionScale</a></span>.</p>
 </div>
 
   
@@ -1506,28 +1514,443 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicCanvasResolutionScale">
+  <h3 data-ice="anchor" id="instance-get-hidePBR">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">dynamicCanvasResolutionScale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">hidePBR</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber302">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the factor by which we downscale the canvas resolution while the camera is moving.</p>
-<p>This allows us to render a low-resolution image to the canvas while we&apos;re moving the camera.</p>
-<p>Accepted range is <code>[0.0 .. 1.0]</code>.</p>
+  <div data-ice="description"><p>Gets whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.</p>
+<p>Default is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> if hiding PBR.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-hidePBR">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">hidePBR</span><span class="code" data-ice="signature">(hidePBR: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber198">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.</p>
+<p>Default is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-hideSAO">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">hideSAO</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber209">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether to temporarily hide scalable ambient shadows (SAO) whenever we interact with the Viewer.</p>
+<p>Default is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> if hiding SAO.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-hideSAO">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">hideSAO</span><span class="code" data-ice="signature">(hideSAO: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber220">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether to temporarily hide scalable ambient shadows (SAO) whenever we interact with the Viewer.</p>
+<p>Default is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-hideTransparentObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">hideTransparentObjects</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber255">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether to temporarily hide transparent objects whenever we interact with the Viewer.</p>
+<p>Does not hide X-rayed, selected, highlighted objects.</p>
+<p>Default is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> if hiding transparent objects.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-hideTransparentObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">hideTransparentObjects</span><span class="code" data-ice="signature">(hideTransparentObjects: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber268">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether to temporarily hide transparent objects whenever we interact with the Viewer.</p>
+<p>Does not hide X-rayed, selected, highlighted objects.</p>
+<p>Default is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-scaleCanvasResolution">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">scaleCanvasResolution</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber281">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.</p>
+<p>Default is <code>false</code>.</p>
+<p>The scaling factor is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolutionFactor">FastNavPlugin#scaleCanvasResolutionFactor</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p><code>true</code> if scaling the canvas resolution.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-scaleCanvasResolution">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">scaleCanvasResolution</span><span class="code" data-ice="signature">(scaleCanvasResolution: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber294">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.</p>
+<p>Default is <code>false</code>.</p>
+<p>The scaling factor is configured via <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolutionFactor">FastNavPlugin#scaleCanvasResolutionFactor</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-scaleCanvasResolutionFactor">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">scaleCanvasResolutionFactor</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber307">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the factor by which we temporarily scale the canvas resolution when we interact with the viewer.</p>
 <p>Default is <code>0.6</code>.</p>
+<p>Enable canvas resolution scaling by setting <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolution">FastNavPlugin#scaleCanvasResolution</a></span> <code>true</code>.</p>
 </div>
 
   
@@ -1541,7 +1964,7 @@ const model = xktLoader.load({
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Factor by which we downscale the canvas resolution while the camera is moving.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>Factor by which we scale the canvas resolution.</p>
 </td>
         </tr>
       </tbody>
@@ -1566,440 +1989,28 @@ const model = xktLoader.load({
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicCanvasResolutionScale">
+  <h3 data-ice="anchor" id="instance-set-scaleCanvasResolutionFactor">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">dynamicCanvasResolutionScale</span><span class="code" data-ice="signature">(dynamicCanvasResolutionScale: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">scaleCanvasResolutionFactor</span><span class="code" data-ice="signature">(scaleCanvasResolutionFactor: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber322">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the factor by which we downscale the canvas resolution while the camera is moving.</p>
-<p>This allows us to render a low-resolution image to the canvas while we&apos;re moving the camera.</p>
+  <div data-ice="description"><p>Sets the factor by which we temporarily scale the canvas resolution when we interact with the viewer.</p>
 <p>Accepted range is <code>[0.0 .. 1.0]</code>.</p>
 <p>Default is <code>0.6</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicEdges">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicEdges</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber228">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether to enable enhanced edges while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether edges will be enabled while the camera is moving.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicEdges">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicEdges</span><span class="code" data-ice="signature">(dynamicEdges: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber239">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether to enable enhanced edges while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicPBR">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicPBR</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber184">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether to enable physically-based rendering (PBR) while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether PBR will be enabled while the camera is moving.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicPBR">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicPBR</span><span class="code" data-ice="signature">(dynamicPBR: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber195">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether to enable physically-based rendering (PBR) while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicSAO">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicSAO</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber206">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether SAO will be enabled.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicSAO">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicSAO</span><span class="code" data-ice="signature">(dynamicSAO: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber217">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether to enable Scalable Ambient Obscurrance (SAO) while the camera is moving.</p>
-<p>Default is <code>false</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-dynamicTransparent">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicTransparent</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber250">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether to show transparent objects while the camera is moving.</p>
-<p>Default is <code>true</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Whether to show transparent objects while the camera is moving.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-dynamicTransparent">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">dynamicTransparent</span><span class="code" data-ice="signature">(dynamicTransparent: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber261">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether to show transparent objects while the camera is moving.</p>
-<p>Default is <code>true</code>.</p>
+<p>Enable canvas resolution scaling by setting <span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolution">FastNavPlugin#scaleCanvasResolution</a></span> <code>true</code>.</p>
 </div>
 
   
@@ -2039,7 +2050,7 @@ const model = xktLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber386">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/FastNavPlugin/FastNavPlugin.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 

@@ -1,7 +1,7 @@
 {
   "coverage": "37.03%",
-  "expectCount": 6232,
-  "actualCount": 2308,
+  "expectCount": 6226,
+  "actualCount": 2306,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -267,25 +267,23 @@
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
-      "expectCount": 36,
+      "expectCount": 34,
       "actualCount": 20,
       "undocumentLines": [
-        101,
-        102,
-        103,
-        104,
-        105,
-        106,
-        107,
-        108,
-        138,
-        139,
-        141,
-        151,
-        157,
-        161,
-        165,
-        173
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        149,
+        150,
+        152,
+        164,
+        168,
+        172
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -932,8 +930,8 @@
       ]
     },
     "src/viewer/Configs.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 4,
+      "actualCount": 4,
       "undocumentLines": []
     },
     "src/viewer/Plugin.js": {
@@ -3984,24 +3982,22 @@
       ]
     },
     "src/viewer/scene/core.js": {
-      "expectCount": 17,
+      "expectCount": 15,
       "actualCount": 2,
       "undocumentLines": [
         6,
         7,
+        8,
         9,
         10,
         11,
         12,
-        13,
         14,
-        15,
-        17,
-        19,
-        168,
-        189,
-        197,
-        221
+        16,
+        139,
+        158,
+        166,
+        190
       ]
     },
     "src/viewer/scene/geometry/Geometry.js": {
@@ -5007,7 +5003,7 @@
       "actualCount": 6,
       "undocumentLines": [
         26,
-        84
+        85
       ]
     },
     "src/viewer/scene/stats.js": {

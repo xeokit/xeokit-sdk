@@ -1866,27 +1866,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestatic",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStatic",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStatic",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforerestore",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestore",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeRestore",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestatic",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStatic",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStatic",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforerestore",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeRestore",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeRestore",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestaticduration",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeStaticDuration",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStaticDuration",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforerestoreseconds",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-delayBeforeRestoreSeconds",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeRestoreSeconds",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforestaticduration",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeStaticDuration",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeStaticDuration",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforerestoreseconds",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-delayBeforeRestoreSeconds",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#delayBeforeRestoreSeconds",
     "member"
   ],
   [
@@ -1896,75 +1896,75 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolution",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolution",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolution",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hideedges",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideEdges",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideEdges",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolution",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolution",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolution",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hideedges",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideEdges",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideEdges",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolutionscale",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicCanvasResolutionScale",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolutionScale",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidepbr",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hidePBR",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hidePBR",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamiccanvasresolutionscale",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicCanvasResolutionScale",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicCanvasResolutionScale",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidepbr",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hidePBR",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hidePBR",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicedges",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicEdges",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicEdges",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidesao",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideSAO",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideSAO",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicedges",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicEdges",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicEdges",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidesao",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideSAO",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideSAO",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicpbr",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicPBR",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicPBR",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidetransparentobjects",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-hideTransparentObjects",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideTransparentObjects",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicpbr",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicPBR",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicPBR",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#hidetransparentobjects",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-hideTransparentObjects",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#hideTransparentObjects",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicsao",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicSAO",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicSAO",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#scalecanvasresolution",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolution",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#scaleCanvasResolution",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamicsao",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicSAO",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicSAO",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#scalecanvasresolution",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-scaleCanvasResolution",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#scaleCanvasResolution",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamictransparent",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-dynamicTransparent",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicTransparent",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#scalecanvasresolutionfactor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-scaleCanvasResolutionFactor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#scaleCanvasResolutionFactor",
     "member"
   ],
   [
-    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#dynamictransparent",
-    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-dynamicTransparent",
-    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#dynamicTransparent",
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#scalecanvasresolutionfactor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-scaleCanvasResolutionFactor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#scaleCanvasResolutionFactor",
     "member"
   ],
   [
@@ -3309,18 +3309,6 @@ window.esdocSearchIndex = [
     "src/viewer/configs.js~configs#doubleprecisionenabled",
     "class/src/viewer/Configs.js~Configs.html#instance-get-doublePrecisionEnabled",
     "src/viewer/Configs.js~Configs#doublePrecisionEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/configs.js~configs#rafenabled",
-    "class/src/viewer/Configs.js~Configs.html#instance-set-rafEnabled",
-    "src/viewer/Configs.js~Configs#rafEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/configs.js~configs#rafenabled",
-    "class/src/viewer/Configs.js~Configs.html#instance-get-rafEnabled",
-    "src/viewer/Configs.js~Configs#rafEnabled",
     "member"
   ],
   [
