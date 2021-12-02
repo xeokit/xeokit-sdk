@@ -58,7 +58,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * ## Usage
  *
  * In the example below we'll load the Duplex BIM model from
- * an [IFC file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc). Within our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel}, {@link MetaObject}s and {@link PropertySet}s
+ * an [IFC file](https://github.com/xeokit/xeokit-sdk/tree/master/assets/models/ifc). Within our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel}, {@link MetaObject}s and {@link PropertySet}s
  * that hold their metadata.
  *
  * Since this model contains IFC types, the WebIFCLoaderPlugin will set the initial appearance of each object
