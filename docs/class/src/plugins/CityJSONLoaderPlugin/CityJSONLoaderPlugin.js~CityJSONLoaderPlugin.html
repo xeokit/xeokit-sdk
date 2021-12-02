@@ -157,13 +157,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CityJSONLoaderPlugin} from &apos;<span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber109">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CityJSONLoaderPlugin} from &apos;<span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber115">@xeokit/xeokit-sdk/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.13</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber109">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber115">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -192,6 +192,9 @@
 <li>Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.</li>
 <li>Allows to set the position, scale and rotation of each model as you load it.</li>
 </ul>
+<h2 id="limitations">Limitations</h2><p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
+largest CityJSON models, we recommend instead pre-converting those to xeokit&apos;s compressed native .XKT format, then
+loading them with <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> instead.</p><p></p>
 <h2 id="scene-representation">Scene representation</h2><p>When loading a model, CityJSONLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
 will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
 in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The CityJSONLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
@@ -660,7 +663,7 @@ class MyDataSource {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -747,7 +750,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
@@ -792,7 +795,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 
@@ -840,7 +843,7 @@ metadata files. Defaults to an instance of <span><a href="class/src/plugins/City
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber164">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 

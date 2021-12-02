@@ -28,7 +28,7 @@ const tempVec3c = math.vec3();
  * ## Limitations
  *
  * Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
- * largest CityJSON models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
+ * largest CityJSON models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
  * loading them with {@link XKTLoaderPlugin} instead.</p>
  *
  * ## Scene representation

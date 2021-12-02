@@ -33,7 +33,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * ## Limitations
  *
  * Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
- * largest IFC models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
+ * largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
  * loading them with {@link XKTLoaderPlugin} instead.</p>
  *
  * ## Scene representation
