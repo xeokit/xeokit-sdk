@@ -36,10 +36,12 @@
         coordinate support, we are able to render it without rounding jitter, without needing to center the model.</p>
     <p><a href="../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
           target="_other">WebIFCLoaderPlugin</a> is the easiest way to loads IFC models with xeokit.</p>
-    <p>WebIFCLoaderPlugin loads IFC STEP files and parses them within the browser, to create 3D objects within the
-        Viewer.</p>
 
     <h3>Limitations</h3>
+    <p>WebIFCLoaderPlugin loads IFC STEP files and parses them within the browser using <a
+            href="https://github.com/tomvandig/web-ifc"
+            target="_other">web-ifc</a>, to create 3D objects within the
+        Viewer.</p>
     <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
         largest IFC models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
         loading them with <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"

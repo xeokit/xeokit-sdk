@@ -138,10 +138,11 @@
         since it
         loads
         the CityJSON file directly off the file system, without needing it to be pre-converted.</p>
-    <p>Loading and parsing CityJSON in the browser comes with significant memory and performance overhead, however. For
-        a higher performance way to view your large CityJSON models with xeokit, see: <a
-                href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                target="_other">XKTLoaderPlugin</a>.</p>
+    <h2>Limitations</h2>
+    <p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
+        largest CityJSON models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
+        loading them with <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                             target="_other">XKTLoaderPlugin</a>.</p>
     <h3>Stats</h3>
     <ul>
         <li>
