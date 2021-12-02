@@ -873,7 +873,7 @@
 
     function load(file) {
 
-        pageTitle.innerText = fileDescriptions[file];
+        pageTitle.innerText = fileDescriptions[file] || "Example not found - perhaps renamed?";
 
         if (file.indexOf(".html", file.length - 5) !== -1) {
             window.location = "./" + file + ".html";
