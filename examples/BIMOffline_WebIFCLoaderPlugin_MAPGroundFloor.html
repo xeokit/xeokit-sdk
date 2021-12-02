@@ -30,12 +30,12 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
-    <h1>IFCLoaderPlugin (experimental)</h1>
+    <h1>WebIFCLoaderPlugin (experimental)</h1>
     <h2>Loading a Model Directly from an IFC File</h2>
     <p>This IFC model is placed at <code>[1842022,10,-5173301]</code>, but thanks to xeokit's double-precision
         coordinate support, we are able to render it without rounding jitter, without needing to center the model.</p>
-    <p><a href="../docs/class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html"
-          target="_other">IFCLoaderPlugin</a> is the most straightforward way to view IFC models with xeokit, since it
+    <p><a href="../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+          target="_other">WebIFCLoaderPlugin</a> is the most straightforward way to view IFC models with xeokit, since it
         loads
         the IFC file directly off the file system, without needing it to be pre-converted.</p>
     <p>Loading and parsing IFC in the browser comes with significant memory and performance overhead, however. For
@@ -55,8 +55,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html"
-               target="_other">IFCLoaderPlugin</a>
+            <a href="../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+               target="_other">WebIFCLoaderPlugin</a>
         </li>
         <li>
             <a href="../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
@@ -72,7 +72,7 @@
 
 <script type="module">
 
-    import {Viewer, IFCLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -101,7 +101,7 @@
 
     new FastNavPlugin(viewer, {});
 
-    const ifcLoader = new IFCLoaderPlugin(viewer, {
+    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
         wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
     });
 

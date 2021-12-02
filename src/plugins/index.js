@@ -15,6 +15,6 @@ export * from "./TreeViewPlugin/index.js";
 export * from "./ViewCullPlugin/index.js";
 export * from "./XKTLoaderPlugin/index.js";
 export * from "./XML3DLoaderPlugin/index.js";
-export * from "./IFCLoaderPlugin/index.js";
+export * from "./WebIFCLoaderPlugin/index.js";
 export * from "./LASLoaderPlugin/index.js";
 export * from "./CityJSONLoaderPlugin/index.js";

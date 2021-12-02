@@ -1,7 +1,7 @@
 /**
- * Default data access strategy for {@link IFCLoaderPlugin}.
+ * Default data access strategy for {@link WebIFCLoaderPlugin}.
  */
-class IFCDefaultDataSource {
+class WebIFCDefaultDataSource {
 
     constructor() {
     }
@@ -55,4 +55,4 @@ class IFCDefaultDataSource {
     }
 }
 
-export {IFCDefaultDataSource};
+export {WebIFCDefaultDataSource};

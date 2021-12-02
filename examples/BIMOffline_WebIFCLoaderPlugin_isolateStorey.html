@@ -14,12 +14,12 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
-    <h1>IFCLoaderPlugin (experimental)</h1>
+    <h1>WebIFCLoaderPlugin (experimental)</h1>
     <h2>Using model metadata to X-ray some objects.</h2>
     <p>Loads an IFC model from the file system, then uses the metadata to make an X-ray view of the bottom-most
         IfcBuildingStorey element.</p>
-    <p><a href="../docs/class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html"
-          target="_other">IFCLoaderPlugin</a> is the most straightforward way to view IFC models with xeokit, since it loads
+    <p><a href="../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+          target="_other">WebIFCLoaderPlugin</a> is the most straightforward way to view IFC models with xeokit, since it loads
         the IFC file directly off the file system, without needing it to be pre-converted.</p>
     <p>Loading and parsing IFC in the browser comes with significant memory and performance overhead, however. For
         a higher performance way to view your large IFC models with xeokit, see: <a
@@ -38,8 +38,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html"
-               target="_other">IFCLoaderPlugin</a>
+            <a href="../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+               target="_other">WebIFCLoaderPlugin</a>
         </li>
         <li>
             <a href="../docs/class/src/viewer/metadata/MetaScene.js~MetaScene.html"
@@ -61,7 +61,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, IFCLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, WebIFCLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // 1. Create a Viewer,
@@ -93,7 +93,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     // 1
-    const ifcLoader = new IFCLoaderPlugin(viewer, {
+    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
         wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
     });
 

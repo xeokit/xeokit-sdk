@@ -3,7 +3,7 @@ import * as WebIFC from "web-ifc/web-ifc-api.js";
 import {utils} from "../../viewer/scene/utils.js"
 import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {IFCDefaultDataSource} from "./IFCDefaultDataSource.js";
+import {WebIFCDefaultDataSource} from "./IFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {math} from "../../viewer";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
@@ -11,11 +11,11 @@ import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - smaller size for increasing distance
 
 /**
- * Experimental {@link Viewer} plugin that loads BIM models directly from IFC files.
+ * Experimental {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex"><img src="https://xeokit.io/img/docs/IFCLoaderPlugin/IFCLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_Duplex)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)]
  *
  * ## Overview
  *
@@ -32,26 +32,26 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  *
  * ## Limitations
  *
- * IFCLoaderPlugin has certain limitations:
+ * WebIFCLoaderPlugin has certain limitations:
  *
  * * Downloads IFC files over the network, which can be large.
  * * Parsing large IFC files can crash the browser (suspect overrunning browser memory limits).
  * * No IFC geometry reuse yet.
  * <br><br>
- * Despite these limitations, IFCLoaderPlugin may still be perfect for small-scale IFC model viewing
+ * Despite these limitations, WebIFCLoaderPlugin may still be perfect for small-scale IFC model viewing
  * applications, and for getting started with xeokit and IFC in general.
  *
  * ## Scene representation
  *
- * When loading a model, IFCLoaderPlugin creates an {@link Entity} that represents the model, which
+ * When loading a model, WebIFCLoaderPlugin creates an {@link Entity} that represents the model, which
  * will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id}
- * in {@link Scene#models}. The IFCLoaderPlugin also creates an {@link Entity} for each object within the
+ * in {@link Scene#models}. The WebIFCLoaderPlugin also creates an {@link Entity} for each object within the
  * model. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered
  * by {@link Entity#id} in {@link Scene#objects}.
  *
  * ## Metadata
  *
- * When loading a model, IFCLoaderPlugin also creates a {@link MetaModel} that represents the model, which contains
+ * When loading a model, WebIFCLoaderPlugin also creates a {@link MetaModel} that represents the model, which contains
  * a {@link MetaObject} for each IFC element, plus a {@link PropertySet} for each IFC property set. Loading metadata can be very slow, so we can also optionally disable it if we
  * don't need it.
  *
@@ -61,13 +61,13 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * an [IFC file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/ifc/Duplex.ifc). Within our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel}, {@link MetaObject}s and {@link PropertySet}s
  * that hold their metadata.
  *
- * Since this model contains IFC types, the IFCLoaderPlugin will set the initial appearance of each object
- * {@link Entity} according to its IFC type in {@link IFCLoaderPlugin#objectDefaults}.
+ * Since this model contains IFC types, the WebIFCLoaderPlugin will set the initial appearance of each object
+ * {@link Entity} according to its IFC type in {@link WebIFCLoaderPlugin#objectDefaults}.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_IFC_isolateStorey)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_isolateStorey)]
  *
  * ````javascript
- * import {Viewer, IFCLoaderPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, WebIFCLoaderPlugin} from "xeokit-sdk.es.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a Viewer,
@@ -86,12 +86,12 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * viewer.camera.up = [0.10, 0.98, -0.14];
  *
  * //------------------------------------------------------------------------------------------------------------------
- * // 1. Create a IFCLoaderPlugin, configured with a path to the bundled third-party web-ifc.wasm module
+ * // 1. Create a WebIFCLoaderPlugin, configured with a path to the bundled third-party web-ifc.wasm module
  * // 2. Load a BIM model fom an IFC file, excluding its IfcSpace elements, and highlighting edges
  * //------------------------------------------------------------------------------------------------------------------
  *
  * // 1
- * const ifcLoader = new IFCLoaderPlugin(viewer, {
+ * const ifcLoader = new WebIFCLoaderPlugin(viewer, {
  *     wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
  * });
  *
@@ -227,7 +227,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * It's often helpful to make IfcSpaces transparent and unpickable, like this:
  *
  * ````javascript
- * const ifcLoader = new IFCLoaderPlugin(viewer, {
+ * const ifcLoader = new WebIFCLoaderPlugin(viewer, {
  *    wasmPath: "../dist/",
  *    objectDefaults: {
  *        IfcSpace: {
@@ -241,7 +241,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * Alternatively, we could just make IfcSpaces invisible, which also makes them unpickable:
  *
  * ````javascript
- * const ifcLoader = new IFCLoaderPlugin(viewer, {
+ * const ifcLoader = new WebIFCLoaderPlugin(viewer, {
  *    wasmPath: "../dist/",
  *    objectDefaults: {
  *        IfcSpace: {
@@ -253,9 +253,9 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  *
  * ## Configuring a custom data source
  *
- * By default, IFCLoaderPlugin will load IFC files over HTTP.
+ * By default, WebIFCLoaderPlugin will load IFC files over HTTP.
  *
- * In the example below, we'll customize the way IFCLoaderPlugin loads the files by configuring it with our own data source
+ * In the example below, we'll customize the way WebIFCLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
  * ````javascript
@@ -279,7 +279,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  *      }
  * }
  *
- * const ifcLoader2 = new IFCLoaderPlugin(viewer, {
+ * const ifcLoader2 = new WebIFCLoaderPlugin(viewer, {
  *       dataSource: new MyDataSource()
  * });
  *
@@ -294,7 +294,7 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * Sometimes we need to load two or more instances of the same model, without having clashes
  * between the IDs of the equivalent objects in the model instances.
  *
- * As shown in the example below, we do this by setting {@link IFCLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
+ * As shown in the example below, we do this by setting {@link WebIFCLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
  *
  * ````javascript
  * ifcLoader.globalizeObjectIds = true;
@@ -341,10 +341,10 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
- * @class IFCLoaderPlugin
+ * @class WebIFCLoaderPlugin
  * @since 2.0.13
  */
-class IFCLoaderPlugin extends Plugin {
+class WebIFCLoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -352,9 +352,9 @@ class IFCLoaderPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="ifcLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} cfg.wasmPath Path to ````web-ifc.wasm````, required by IFCLoaderlugin.
+     * @param {String} cfg.wasmPath Path to ````web-ifc.wasm````, required by WebIFCLoaderPlugin.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
-     * @param {Object} [cfg.dataSource] A custom data source through which the IFCLoaderPlugin can load model and metadata files. Defaults to an instance of {@link IFCDefaultDataSource}, which loads over HTTP.
+     * @param {Object} [cfg.dataSource] A custom data source through which the WebIFCLoaderPlugin can load model and metadata files. Defaults to an instance of {@link WebIFCDefaultDataSource}, which loads over HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
@@ -390,7 +390,7 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets the ````IFC```` format versions supported by this IFCLoaderPlugin.
+     * Gets the ````IFC```` format versions supported by this WebIFCLoaderPlugin.
      * @returns {string[]}
      */
     get supportedVersions() {
@@ -398,9 +398,9 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets the custom data source through which the IFCLoaderPlugin can load IFC files.
+     * Gets the custom data source through which the WebIFCLoaderPlugin can load IFC files.
      *
-     * Default value is {@link IFCDefaultDataSource}, which loads via HTTP.
+     * Default value is {@link WebIFCDefaultDataSource}, which loads via HTTP.
      *
      * @type {Object}
      */
@@ -409,14 +409,14 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets a custom data source through which the IFCLoaderPlugin can load IFC files.
+     * Sets a custom data source through which the WebIFCLoaderPlugin can load IFC files.
      *
-     * Default value is {@link IFCDefaultDataSource}, which loads via HTTP.
+     * Default value is {@link WebIFCDefaultDataSource}, which loads via HTTP.
      *
      * @type {Object}
      */
     set dataSource(value) {
-        this._dataSource = value || new IFCDefaultDataSource();
+        this._dataSource = value || new WebIFCDefaultDataSource();
     }
 
     /**
@@ -442,9 +442,9 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets the whitelist of the IFC types loaded by this IFCLoaderPlugin.
+     * Gets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
      *
-     * When loading IFC models, causes this IFCLoaderPlugin to only load objects whose types are in this
+     * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
@@ -456,9 +456,9 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the whitelist of the IFC types loaded by this IFCLoaderPlugin.
+     * Sets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
      *
-     * When loading IFC models, causes this IFCLoaderPlugin to only load objects whose types are in this
+     * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
@@ -470,9 +470,9 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets the blacklist of IFC types that are never loaded by this IFCLoaderPlugin.
+     * Gets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
      *
-     * When loading IFC models, causes this IFCLoaderPlugin to **not** load objects whose types are in this
+     * When loading IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
@@ -484,9 +484,9 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the blacklist of IFC types that are never loaded by this IFCLoaderPlugin.
+     * Sets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
      *
-     * When IFC models, causes this IFCLoaderPlugin to **not** load objects whose types are in this
+     * When IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
@@ -500,7 +500,7 @@ class IFCLoaderPlugin extends Plugin {
     /**
      * Gets whether we load objects that don't have IFC types.
      *
-     * When loading IFC models and this is ````true````, IFCLoaderPlugin will not load objects
+     * When loading IFC models and this is ````true````, WebIFCLoaderPlugin will not load objects
      * that don't have IFC types.
      *
      * Default value is ````false````.
@@ -514,7 +514,7 @@ class IFCLoaderPlugin extends Plugin {
     /**
      * Sets whether we load objects that don't have IFC types.
      *
-     * When loading IFC models and this is ````true````, IFCLoaderPlugin will not load objects
+     * When loading IFC models and this is ````true````, WebIFCLoaderPlugin will not load objects
      * that don't have IFC types.
      *
      * Default value is ````false````.
@@ -526,7 +526,7 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether IFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     * Gets whether WebIFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
      *
      * Default value is ````false````.
      *
@@ -537,7 +537,7 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets whether IFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     * Sets whether WebIFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
      *
      * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
      * between the objects in the different instances.
@@ -549,7 +549,7 @@ class IFCLoaderPlugin extends Plugin {
      *
      * Default value is ````false````.
      *
-     * See the main {@link IFCLoaderPlugin} class documentation for usage info.
+     * See the main {@link WebIFCLoaderPlugin} class documentation for usage info.
      *
      * @type {Boolean}
      */
@@ -558,7 +558,7 @@ class IFCLoaderPlugin extends Plugin {
     }
 
     /**
-     * Loads an ````IFC```` model into this IFCLoaderPlugin's {@link Viewer}.
+     * Loads an ````IFC```` model into this WebIFCLoaderPlugin's {@link Viewer}.
      *
      * @param {*} params Loading parameters.
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
@@ -578,7 +578,7 @@ class IFCLoaderPlugin extends Plugin {
      * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.
      * @param {Number} [params.backfaces=false] When we set this ````true````, then we force rendering of backfaces for the model. When we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
-     * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link IFCLoaderPlugin#globalizeObjectIds} for more info.
+     * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link WebIFCLoaderPlugin#globalizeObjectIds} for more info.
      * @param {Object} [params.stats] Collects model statistics.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
@@ -899,21 +899,21 @@ class IFCLoaderPlugin extends Plugin {
                 const vertexData = this._ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
                 const indices = this._ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
                 // De-interleave vertex arrays
-                const positions = [];
-                const normals = [];
-                for (let k = 0, lenk = vertexData.length / 6; k < lenk; k++) {
-                    positions.push(vertexData[k * 6 + 0]);
-                    positions.push(vertexData[k * 6 + 1]);
-                    positions.push(vertexData[k * 6 + 2]);
+                const positions = new Float64Array(vertexData.length / 2);
+                const normals = new Float32Array(vertexData.length / 2);
+                for (let k = 0, l = 0, lenk = vertexData.length / 6; k < lenk; k++, l += 3) {
+                    positions[l + 0] = vertexData[k * 6 + 0];
+                    positions[l + 1] = vertexData[k * 6 + 1];
+                    positions[l + 2] = vertexData[k * 6 + 2];
                 }
                 matrix.set(placedGeometry.flatTransformation);
                 math.transformPositions3(matrix, positions);
                 const rtcNeeded = worldToRTCPositions(positions, positions, origin, RTC_TILE_SIZE);
                 if (!ctx.options.autoNormals) {
-                    for (let k = 0, lenk = vertexData.length / 6; k < lenk; k++) {
-                        normals.push(vertexData[k * 6 + 3]);
-                        normals.push(vertexData[k * 6 + 4]);
-                        normals.push(vertexData[k * 6 + 5]);
+                    for (let k = 0, l = 0, lenk = vertexData.length / 6; k < lenk; k++, l += 3) {
+                        normals[l + 0] = vertexData[k * 6 + 3];
+                        normals[l + 1] = vertexData[k * 6 + 4];
+                        normals[l + 2] = vertexData[k * 6 + 5];
                     }
                 }
                 ctx.stats.numGeometries++;
@@ -943,4 +943,4 @@ class IFCLoaderPlugin extends Plugin {
     }
 }
 
-export {IFCLoaderPlugin};
+export {WebIFCLoaderPlugin};
