@@ -424,6 +424,7 @@ class LASLoaderPlugin extends Plugin {
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer&apos;s {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a LAS file, as an alternative to the ````las```` parameter.
      * @param {ArrayBuffer} [params.las] The LAS file data, as an alternative to the ````src```` parameter.
+     * @param {Boolean} [params.loadMetadata=true] Whether to load metadata for the LAS model.
      * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
      * @param {Number[]} [params.scale=[1,1,1]] The model&apos;s World-space scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -613,15 +614,39 @@ class LASLoaderPlugin extends Plugin {
                         colorsCompressed: colorsCompressed
                     });
 
+                    const pointsObjectId = math.createUUID();
+
                     performanceModel.createEntity({
-                        id: math.createUUID(),
+                        id: pointsObjectId,
                         meshIds: [&quot;pointsMesh&quot;],
                         isObject: true
                     });
 
                     performanceModel.finalize();
 
-                    // TODO: Create metamodel
+                    if (params.loadMetadata !== false) {
+                        const rootMetaObjectId = math.createUUID();
+                        const metadata = {
+                            projectId: &quot;&quot;,
+                            author: &quot;&quot;,
+                            createdAt: &quot;&quot;,
+                            schema: &quot;&quot;,
+                            creatingApplication: &quot;&quot;,
+                            metaObjects: [{
+                                id: rootMetaObjectId,
+                                name: &quot;Model&quot;,
+                                type: &quot;Model&quot;
+                            }, {
+                                id: pointsObjectId,
+                                name: &quot;PointCloud (LAS)&quot;,
+                                type: &quot;PointCloud&quot;,
+                                parent: rootMetaObjectId
+                            }],
+                            propertySets: []
+                        };
+                        const metaModelId = performanceModel.id;
+                        this.viewer.metaScene.createMetaModel(metaModelId, metadata, options);
+                    }
 
                     performanceModel.scene.once(&quot;tick&quot;, () =&gt; {
                         if (performanceModel.destroyed) {
