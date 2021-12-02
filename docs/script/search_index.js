@@ -228,18 +228,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/ifcloaderplugin/ifcdefaultdatasource.js~ifcdefaultdatasource",
-    "class/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource.html",
-    "<span>IFCDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html",
-    "<span>IFCLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
     "variable/index.html#static-variable-IFCObjectDefaultColors",
     "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
@@ -633,6 +621,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/viewport/viewport.js~viewport",
     "class/src/viewer/scene/viewport/Viewport.js~Viewport.html",
     "<span>Viewport</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/viewport/Viewport.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/webifcloaderplugin/webifcdefaultdatasource.js~webifcdefaultdatasource",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html",
+    "<span>WebIFCDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html",
+    "<span>WebIFCLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</span>",
     "class"
   ],
   [
@@ -2136,126 +2136,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/ifcloaderplugin/ifcdefaultdatasource.js",
-    "file/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js.html",
-    "src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js",
-    "file"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcdefaultdatasource.js~ifcdefaultdatasource#constructor",
-    "class/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource.html#instance-constructor-constructor",
-    "src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcdefaultdatasource.js~ifcdefaultdatasource#getifc",
-    "class/src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource.html#instance-method-getIFC",
-    "src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js~IFCDefaultDataSource#getIFC",
-    "method"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js",
-    "file/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js.html",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#constructor",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-constructor-constructor",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#datasource",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-dataSource",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#dataSource",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#datasource",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-dataSource",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#dataSource",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#excludetypes",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-excludeTypes",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#excludeTypes",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#excludetypes",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-excludeTypes",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#excludeTypes",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#excludeunclassifiedobjects",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-excludeUnclassifiedObjects",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#excludeUnclassifiedObjects",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#excludeunclassifiedobjects",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-excludeUnclassifiedObjects",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#excludeUnclassifiedObjects",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#globalizeobjectids",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-globalizeObjectIds",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#globalizeObjectIds",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#globalizeobjectids",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-globalizeObjectIds",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#globalizeObjectIds",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#includetypes",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-includeTypes",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#includeTypes",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#includetypes",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-includeTypes",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#includeTypes",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#load",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-method-load",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#load",
-    "method"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#objectdefaults",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-objectDefaults",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#objectDefaults",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#objectdefaults",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-set-objectDefaults",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#objectDefaults",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/ifcloaderplugin.js~ifcloaderplugin#supportedversions",
-    "class/src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin.html#instance-get-supportedVersions",
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js~IFCLoaderPlugin#supportedVersions",
-    "member"
-  ],
-  [
-    "src/plugins/ifcloaderplugin/index.js",
-    "file/src/plugins/IFCLoaderPlugin/index.js.html",
-    "src/plugins/IFCLoaderPlugin/index.js",
-    "file"
-  ],
-  [
     "src/plugins/lasloaderplugin/lasdefaultdatasource.js",
     "file/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js.html",
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js",
@@ -3081,6 +2961,126 @@ window.esdocSearchIndex = [
     "src/plugins/viewcullplugin/index.js",
     "file/src/plugins/ViewCullPlugin/index.js.html",
     "src/plugins/ViewCullPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcdefaultdatasource.js",
+    "file/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js.html",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcdefaultdatasource.js~webifcdefaultdatasource#constructor",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcdefaultdatasource.js~webifcdefaultdatasource#getifc",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html#instance-method-getIFC",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource#getIFC",
+    "method"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js",
+    "file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#constructor",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#datasource",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-dataSource",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#datasource",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#excludetypes",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-excludeTypes",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#excludeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#excludetypes",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-excludeTypes",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#excludeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#excludeunclassifiedobjects",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-excludeUnclassifiedObjects",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#excludeUnclassifiedObjects",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#excludeunclassifiedobjects",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-excludeUnclassifiedObjects",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#excludeUnclassifiedObjects",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#globalizeobjectids",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-globalizeObjectIds",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#globalizeobjectids",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-globalizeObjectIds",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#globalizeObjectIds",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#includetypes",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-includeTypes",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#includeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#includetypes",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-includeTypes",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#includeTypes",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#load",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-method-load",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#objectdefaults",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-objectDefaults",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#objectdefaults",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-set-objectDefaults",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin#supportedversions",
+    "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html#instance-get-supportedVersions",
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin#supportedVersions",
+    "member"
+  ],
+  [
+    "src/plugins/webifcloaderplugin/index.js",
+    "file/src/plugins/WebIFCLoaderPlugin/index.js.html",
+    "src/plugins/WebIFCLoaderPlugin/index.js",
     "file"
   ],
   [

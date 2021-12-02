@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 911,
+  "end": 914,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 911,
+    "end": 914,
     "loc": {
       "start": {
         "line": 1,
@@ -626,7 +626,7 @@
       {
         "type": "ExportAllDeclaration",
         "start": 775,
-        "end": 818,
+        "end": 821,
         "loc": {
           "start": {
             "line": 18,
@@ -634,13 +634,13 @@
           },
           "end": {
             "line": 18,
-            "column": 43
+            "column": 46
           }
         },
         "source": {
           "type": "StringLiteral",
           "start": 789,
-          "end": 817,
+          "end": 820,
           "loc": {
             "start": {
               "line": 18,
@@ -648,20 +648,20 @@
             },
             "end": {
               "line": 18,
-              "column": 42
+              "column": 45
             }
           },
           "extra": {
-            "rawValue": "./IFCLoaderPlugin/index.js",
-            "raw": "\"./IFCLoaderPlugin/index.js\""
+            "rawValue": "./WebIFCLoaderPlugin/index.js",
+            "raw": "\"./WebIFCLoaderPlugin/index.js\""
           },
-          "value": "./IFCLoaderPlugin/index.js"
+          "value": "./WebIFCLoaderPlugin/index.js"
         }
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 819,
-        "end": 862,
+        "start": 822,
+        "end": 865,
         "loc": {
           "start": {
             "line": 19,
@@ -674,8 +674,8 @@
         },
         "source": {
           "type": "StringLiteral",
-          "start": 833,
-          "end": 861,
+          "start": 836,
+          "end": 864,
           "loc": {
             "start": {
               "line": 19,
@@ -695,8 +695,8 @@
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 863,
-        "end": 911,
+        "start": 866,
+        "end": 914,
         "loc": {
           "start": {
             "line": 20,
@@ -709,8 +709,8 @@
         },
         "source": {
           "type": "StringLiteral",
-          "start": 877,
-          "end": 910,
+          "start": 880,
+          "end": 913,
           "loc": {
             "start": {
               "line": 20,
@@ -3105,9 +3105,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./IFCLoaderPlugin/index.js",
+      "value": "./WebIFCLoaderPlugin/index.js",
       "start": 789,
-      "end": 817,
+      "end": 820,
       "loc": {
         "start": {
           "line": 18,
@@ -3115,7 +3115,7 @@
         },
         "end": {
           "line": 18,
-          "column": 42
+          "column": 45
         }
       }
     },
@@ -3132,16 +3132,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 817,
-      "end": 818,
+      "start": 820,
+      "end": 821,
       "loc": {
         "start": {
           "line": 18,
-          "column": 42
+          "column": 45
         },
         "end": {
           "line": 18,
-          "column": 43
+          "column": 46
         }
       }
     },
@@ -3160,8 +3160,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 819,
-      "end": 825,
+      "start": 822,
+      "end": 828,
       "loc": {
         "start": {
           "line": 19,
@@ -3187,8 +3187,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 826,
-      "end": 827,
+      "start": 829,
+      "end": 830,
       "loc": {
         "start": {
           "line": 19,
@@ -3213,8 +3213,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 828,
-      "end": 832,
+      "start": 831,
+      "end": 835,
       "loc": {
         "start": {
           "line": 19,
@@ -3240,8 +3240,8 @@
         "updateContext": null
       },
       "value": "./LASLoaderPlugin/index.js",
-      "start": 833,
-      "end": 861,
+      "start": 836,
+      "end": 864,
       "loc": {
         "start": {
           "line": 19,
@@ -3266,8 +3266,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 861,
-      "end": 862,
+      "start": 864,
+      "end": 865,
       "loc": {
         "start": {
           "line": 19,
@@ -3294,8 +3294,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 863,
-      "end": 869,
+      "start": 866,
+      "end": 872,
       "loc": {
         "start": {
           "line": 20,
@@ -3321,8 +3321,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 870,
-      "end": 871,
+      "start": 873,
+      "end": 874,
       "loc": {
         "start": {
           "line": 20,
@@ -3347,8 +3347,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 872,
-      "end": 876,
+      "start": 875,
+      "end": 879,
       "loc": {
         "start": {
           "line": 20,
@@ -3374,8 +3374,8 @@
         "updateContext": null
       },
       "value": "./CityJSONLoaderPlugin/index.js",
-      "start": 877,
-      "end": 910,
+      "start": 880,
+      "end": 913,
       "loc": {
         "start": {
           "line": 20,
@@ -3400,8 +3400,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 910,
-      "end": 911,
+      "start": 913,
+      "end": 914,
       "loc": {
         "start": {
           "line": 20,
@@ -3426,8 +3426,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 911,
-      "end": 911,
+      "start": 914,
+      "end": 914,
       "loc": {
         "start": {
           "line": 20,

@@ -355,36 +355,6 @@
         46
       ]
     },
-    "src/plugins/IFCLoaderPlugin/IFCDefaultDataSource.js": {
-      "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        6
-      ]
-    },
-    "src/plugins/IFCLoaderPlugin/IFCLoaderPlugin.js": {
-      "expectCount": 33,
-      "actualCount": 16,
-      "undocumentLines": [
-        11,
-        371,
-        379,
-        419,
-        441,
-        469,
-        497,
-        525,
-        557,
-        645,
-        659,
-        750,
-        757,
-        771,
-        786,
-        814,
-        876
-      ]
-    },
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js": {
       "expectCount": 3,
       "actualCount": 2,
@@ -707,6 +677,36 @@
         167,
         240,
         284
+      ]
+    },
+    "src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        6
+      ]
+    },
+    "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js": {
+      "expectCount": 33,
+      "actualCount": 16,
+      "undocumentLines": [
+        11,
+        371,
+        379,
+        419,
+        441,
+        469,
+        497,
+        525,
+        557,
+        645,
+        659,
+        750,
+        757,
+        771,
+        786,
+        814,
+        876
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
