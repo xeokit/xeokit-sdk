@@ -32,14 +32,9 @@ const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - sma
  *
  * ## Limitations
  *
- * WebIFCLoaderPlugin has certain limitations:
- *
- * * Downloads IFC files over the network, which can be large.
- * * Parsing large IFC files can crash the browser (suspect overrunning browser memory limits).
- * * No IFC geometry reuse yet.
- * <br><br>
- * Despite these limitations, WebIFCLoaderPlugin may still be perfect for small-scale IFC model viewing
- * applications, and for getting started with xeokit and IFC in general.
+ * Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
+ * largest IFC models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
+ * loading them with {@link XKTLoaderPlugin} instead.</p>
  *
  * ## Scene representation
  *

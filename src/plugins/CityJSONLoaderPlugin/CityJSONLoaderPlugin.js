@@ -25,6 +25,12 @@ const tempVec3c = math.vec3();
  * * Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.
  * * Allows to set the position, scale and rotation of each model as you load it.
  *
+ * ## Limitations
+ *
+ * Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
+ * largest CityJSON models, we recommend pre-converting those to xeokit's compressed native .XKT format, then
+ * loading them with {@link XKTLoaderPlugin} instead.</p>
+ *
  * ## Scene representation
  *
  * When loading a model, CityJSONLoaderPlugin creates an {@link Entity} that represents the model, which
