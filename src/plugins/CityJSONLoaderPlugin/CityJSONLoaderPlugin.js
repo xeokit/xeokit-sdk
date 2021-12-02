@@ -41,7 +41,7 @@ const tempVec3c = math.vec3();
  * ## Usage
  *
  * In the example below we'll load the LOD 3 Railway model from
- * an [CityJSON file](https://github.com/xeokit/xeokit-sdk/tree/master/assets/models/cityjson/LoD3_Railway.json). Within
+ * a [CityJSON file](https://github.com/xeokit/xeokit-sdk/tree/master/assets/models/cityjson/LoD3_Railway.json). Within
  * our {@link Viewer}, this will create a bunch of {@link Entity}s that represents the model and its objects, along with
  * a {@link MetaModel} and {@link MetaObject}s that hold their metadata.
  *
