@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/plugins/TreeViewPlugin/TreeViewPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html">ModelTreeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy">validateMetaModelForTreeViewContainmentHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy">validateMetaModelForTreeViewStoreysHierarchy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy">validateMetaModelForTreeViewTypesHierarchy</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webifcloaderplugin">plugins/WebIFCLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html">WebIFCDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html">LinesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-pick">viewer/scene/mesh/pick</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html">PickTriangleShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/TreeViewPlugin/TreeViewPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {ModelTreeView} from &quot;./ModelTreeView.js&quot;;
+import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
+
+/**
+ * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.
+ * &lt;br&gt;
+ *
+ * &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital&quot; style=&quot;border: 1px solid black;&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png&quot;&gt;&lt;/a&gt;
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital)]
+ *
+ * ## Overview
+ *
+ * * A fast HTML tree view, with zero external dependencies, that works with huge numbers of objects.
+ * * Each tree node has a checkbox to control the visibility of its object.
+ * * Has three hierarchy modes: &quot;containment&quot;, &quot;types&quot; and &quot;storeys&quot;.
+ * * Automatically contains all models (that have metadata) that are currently in the {@link Scene}.
+ * * Sorts tree nodes by default - spatially, from top-to-bottom for ````IfcBuildingStorey```` nodes, and alphanumerically for other nodes.
+ * * Allows custom CSS styling.
+ * * Use {@link ContextMenu} to create a context menu for the tree nodes.
+ *
+ * ## Credits
+ *
+ * TreeViewPlugin is based on techniques described in [*Super Fast Tree View in JavaScript*](https://chrissmith.xyz/super-fast-tree-view-in-javascript/) by [Chris Smith](https://twitter.com/chris22smith).
+ *
+ * ## Usage
+ *
+ * In the example below, we&apos;ll add a TreeViewPlugin which, by default, will automatically show the structural
+ * hierarchy of the IFC elements in each model we load.
+ *
+ * Then we&apos;ll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
+ * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from &quot;xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;,
+ *      transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;)
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xkt/Schependomlaan.xkt&quot;,
+ *     edges: true
+ * });
+ * ````
+ *
+ * ## Manually Adding Models
+ *
+ * Instead of adding models automatically, we can control which models appear in our TreeViewPlugin by adding them manually.
+ *
+ * In the next example, we&apos;ll configure the TreeViewPlugin to not add models automatically. Then, once the model
+ * has loaded, we&apos;ll add it manually using {@link TreeViewPlugin#addModel}.
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+ *      autoAddModels: false  // &lt;&lt;---------------- Don&apos;t auto-add models
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xkt/Schependomlaan.xkt&quot;,
+ *     edges: true
+ * });
+ *
+ * model.on(&quot;loaded&quot;, () =&gt; {
+ *      treeView.addModel(model.id);
+ * });
+ * ````
+ *
+ * Adding models manually also allows us to set some options for the model. For example, the ````rootName```` option allows us to provide a custom name for
+ * the root node, which is sometimes desirable when the model&apos;s &quot;IfcProject&quot; element&apos;s name is not suitable:
+ *
+ * ````javascript
+ * model.on(&quot;loaded&quot;, () =&gt; {
+ *      treeView.addModel(model.id, {
+ *          rootName: &quot;Schependomlaan Model&quot;
+ *      });
+ * });
+ * ````
+ *
+ * ## Initially Expanding the Hierarchy
+ *
+ * We can also configure TreeViewPlugin to initially expand each model&apos;s nodes to a given depth.
+ *
+ * Let&apos;s automatically expand the first three nodes from the root, for every model added:
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+ *      autoExpandDepth: 3
+ * });
+ * ````
+ *
+ * ## Showing a Node by ID
+ *
+ * We can show a given node using its ID. This causes the TreeViewPlugin to collapse, then expand and scroll the node into view, then highlight the node.
+ *
+ * See the documentation for the {@link TreeViewPlugin#showNode} method for more information, including how to define a custom highlighted appearance for the node using CSS.
+ *
+ * Let&apos;s make the TreeViewPlugin show the node corresponding to whatever object {@link Entity} that we pick:
+ *
+ * ````javascript
+ * viewer.cameraControl.on(&quot;picked&quot;, function (e) {
+ *     var objectId = e.entity.id;
+ *     treeView.showNode(objectId);
+ * });
+ * ````
+ *
+ * This will de-highlight any node that was previously shown by this method.
+ *
+ * Note that this method only works if the picked {@link Entity} is an object that belongs to a model that&apos;s represented in the TreeViewPlugin.
+ *
+ * ## Customizing Appearance
+ *
+ * We can customize the appearance of our TreeViewPlugin by defining custom CSS for its HTML
+ * elements. See our example&apos;s [source code](https://github.com/xeokit/xeokit-sdk/blob/master/examples/BIMOffline_XKT_Schependomlaan.html)
+ * for an example of custom CSS rules.
+ *
+ * ## Model Hierarchies
+ *
+ * TreeViewPlugin has three hierarchies for organizing its nodes:
+ *
+ * * &quot;containment&quot; - organizes the tree nodes to indicate the containment hierarchy of the {@link MetaObject}s.
+ * * &quot;types&quot; - groups nodes by their IFC types.
+ * * &quot;storeys&quot; - groups nodes within their ````IfcBuildingStoreys````, and sub-groups them by their IFC types.
+ *
+ * &lt;br&gt;
+ * The table below shows what the hierarchies look like:
+ * &lt;br&gt;
+ *
+ * | 1. Containment Hierarchy | 2. Types Hierarchy | 3. Storeys Hierarchy |
+ * |---|---|---|
+ * | &lt;img src=&quot;http://xeokit.io/img/docs/TreeViewPlugin/structureMode.png&quot;&gt; | &lt;img src=&quot;http://xeokit.io/img/docs/TreeViewPlugin/typesMode.png&quot;&gt; | &lt;img src=&quot;http://xeokit.io/img/docs/TreeViewPlugin/storeysMode.png&quot;&gt; |
+ * &lt;br&gt;
+ *
+ * Let&apos;s create a TreeViewPlugin that groups nodes by their building stories and IFC types:
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+ *      hierarchy: &quot;stories&quot;
+ * });
+ * ````
+ *
+ * ## Sorting Nodes
+ *
+ * TreeViewPlugin sorts its tree nodes by default. For a &quot;storeys&quot; hierarchy, it orders ````IfcBuildingStorey```` nodes
+ * spatially, with the node for the highest story at the top, down to the lowest at the bottom.
+ *
+ * For all the hierarchy types (&quot;containment&quot;, &quot;classes&quot; and &quot;storeys&quot;), TreeViewPlugin sorts the other node types
+ * alphanumerically on their titles.
+ *
+ * If for some reason you need to prevent sorting, create your TreeViewPlugin with the option disabled, like so:
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+ *      hierarchy: &quot;stories&quot;,
+ *      sortNodes: false // &lt;&lt;------ Disable node sorting
+ * });
+ * ````
+ *
+ * Note that, for all hierarchy modes, node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
+ * update dynamically if we later transform the {@link Entity}s corresponding to the nodes.
+ *
+ * ## Pruning empty nodes
+ *
+ * Sometimes a model contains subtrees of objects that don&apos;t have any geometry. These are models whose
+ * {@link MetaModel} contains trees of {@link MetaObject}s that don&apos;t have any {@link Entity}s in the {@link Scene}.
+ *
+ * For these models, the tree view would contain nodes that don&apos;t do anything in the Scene when we interact with them,
+ * which is undesirable.
+ *
+ * By default, TreeViewPlugin will not create nodes for those objects. However, we can override that behaviour if we want
+ * to have nodes for those objects (perhaps for debugging the model):
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+ *      hierarchy: &quot;stories&quot;,
+ *      pruneEmptyNodes: false // &lt;&lt;------ Create nodes for object subtrees without geometry
+ * });
+ * ````
+ *
+ * ## Context Menu
+ *
+ * TreeViewPlugin fires a &quot;contextmenu&quot; event whenever we right-click on a tree node.
+ *
+ * The event contains:
+ *
+ * * ````event```` - the original [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+ * * ````viewer```` - the {@link Viewer}
+ * * ````treeViewPlugin```` - the TreeViewPlugin
+ * * ````treeViewNode```` - the {@link TreeViewNode} representing the tree node
+ *&lt;br&gt;&lt;br&gt;
+ *
+ * Let&apos;s use {@link ContextMenu} to show a simple context menu for the node we clicked.
+ *
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ *
+ * ````javascript
+ * import {ContextMenu} from &quot;../src/extras/ContextMenu/ContextMenu.js&quot;;
+ *
+ * const treeViewContextMenu = new ContextMenu({
+ *     items: [
+ *         [
+ *             [
+ *                 {
+ *                     title: &quot;Hide&quot;,
+ *                     doAction: function (context) {
+ *                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) =&gt; {
+ *                             if (treeViewNode.objectId) {
+ *                                 const entity = context.viewer.scene.objects[treeViewNode.objectId];
+ *                                 if (entity) {
+ *                                     entity.visible = false;
+ *                                 }
+ *                             }
+ *                         });
+ *                     }
+ *                 },
+ *                 {
+ *                     title: &quot;Hide all&quot;,
+ *                     doAction: function (context) {
+ *                         context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+ *                     }
+ *                 }
+ *             ],
+ *             [
+ *                 {
+ *                     title: &quot;Show&quot;,
+ *                     doAction: function (context) {
+ *                         context.treeViewPlugin.withNodeTree(context.treeViewNode, (treeViewNode) =&gt; {
+ *                             if (treeViewNode.objectId) {
+ *                                 const entity = context.viewer.scene.objects[treeViewNode.objectId];
+ *                                 if (entity) {
+ *                                     entity.visible = true;
+ *                                     entity.xrayed = false;
+ *                                     entity.selected = false;
+ *                                 }
+ *                             }
+ *                         });
+ *                     }
+ *                 },
+ *                 {
+ *                     title: &quot;Show all&quot;,
+ *                     doAction: function (context) {
+ *                         const scene = context.viewer.scene;
+ *                         scene.setObjectsVisible(scene.objectIds, true);
+ *                         scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+ *                         scene.setObjectsSelected(scene.selectedObjectIds, false);
+ *                     }
+ *                 }
+ *             ]
+ *         ]
+ *     ]
+ * });
+ *
+ * treeView.on(&quot;contextmenu&quot;, (e) =&gt; {
+ *
+ *     const event = e.event;                           // MouseEvent
+ *     const viewer = e.viewer;                         // Viewer
+ *     const treeViewPlugin = e.treeViewPlugin;         // TreeViewPlugin
+ *     const treeViewNode = e.treeViewNode;             // TreeViewNode
+ *
+ *     treeViewContextMenu.show(e.event.pageX, e.event.pageY);
+ *
+ *     treeViewContextMenu.context = {
+ *         viewer: e.viewer,
+ *         treeViewPlugin: e.treeViewPlugin,
+ *         treeViewNode: e.treeViewNode
+ *     };
+ * });
+ * ````
+ *
+ * ## Clicking Node Titles
+ *
+ * TreeViewPlugin fires a &quot;nodeTitleClicked&quot; event whenever we left-click on a tree node.
+ *
+ * Like the &quot;contextmenu&quot; event, this event contains:
+ *
+ * * ````event```` - the original [click](https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event) [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+ * * ````viewer```` - the {@link Viewer}
+ * * ````treeViewPlugin```` - the TreeViewPlugin
+ * * ````treeViewNode```` - the {@link TreeViewNode} representing the tree node
+ *&lt;br&gt;&lt;br&gt;
+ *
+ * Let&apos;s register a callback to isolate and fit-to-view the {@link Entity}(s) represented by the node. This callback is
+ * going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.
+ *
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ *
+ * ````javascript
+ * treeView.on(&quot;nodeTitleClicked&quot;, (e) =&gt; {
+ *     const scene = viewer.scene;
+ *     const objectIds = [];
+ *     e.treeViewPlugin.withNodeTree(e.treeViewNode, (treeViewNode) =&gt; {
+ *         if (treeViewNode.objectId) {
+ *             objectIds.push(treeViewNode.objectId);
+ *         }
+ *     });
+ *     scene.setObjectsXRayed(scene.objectIds, true);
+ *     scene.setObjectsVisible(scene.objectIds, true);
+ *     scene.setObjectsXRayed(objectIds, false);
+ *     viewer.cameraFlight.flyTo({
+ *         aabb: scene.getAABB(objectIds),
+ *         duration: 0.5
+ *     }, () =&gt; {
+ *         setTimeout(function () {
+ *             scene.setObjectsVisible(scene.xrayedObjectIds, false);
+ *             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+ *         }, 500);
+ *     });
+ * });
+ * ````
+ *
+ * To make the cursor change to a pointer when we hover over the node titles, and also to make the titles change to blue, we&apos;ll also define this CSS for the ````&lt;span&gt;```` elements
+ * that represent the titles of our TreeViewPlugin nodes:
+ *
+ * ````css
+ * #treeViewContainer ul li span:hover {
+ *      color: blue;
+ *      cursor: pointer;
+ * }
+ * ````
+ *
+ * @class TreeViewPlugin
+ */
+class TreeViewPlugin extends Plugin {
+
+    /**
+     * @constructor
+     *
+     * @param {Viewer} viewer The Viewer.
+     * @param {*} cfg Plugin configuration.
+     * @param {HTMLElement} cfg.containerElement DOM element to contain the TreeViewPlugin.
+     * @param {Boolean} [cfg.autoAddModels=true] When ````true```` (default), will automatically add each model as it&apos;s created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin#addModel} instead.
+     * @param {Number} [cfg.autoExpandDepth] Optional depth to which to initially expand the tree.
+     * @param {String} [cfg.hierarchy=&quot;containment&quot;] How to organize the tree nodes: &quot;containment&quot;, &quot;storeys&quot; or &quot;types&quot;. See the class documentation for details.
+     * @param {Boolean} [cfg.sortNodes=true] When true, will sort the children of each node. For a &quot;storeys&quot; hierarchy, the
+     * ````IfcBuildingStorey```` nodes will be ordered spatially, from the highest storey down to the lowest, on the
+     * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
+     * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don&apos;t have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don&apos;t have {@link Entity}s.
+     */
+    constructor(viewer, cfg = {}) {
+
+        super(&quot;TreeViewPlugin&quot;, viewer);
+
+        if (!cfg.containerElement) {
+            this.error(&quot;Config expected: containerElement&quot;);
+            return;
+        }
+
+        this._containerElement = cfg.containerElement;
+        this._modelTreeViews = {};
+        this._autoAddModels = (cfg.autoAddModels !== false);
+        this._autoExpandDepth = (cfg.autoExpandDepth || 0);
+        this._sortNodes = (cfg.sortNodes !== false);
+        this._pruneEmptyNodes = (cfg.pruneEmptyNodes !== false);
+
+        if (this._autoAddModels) {
+            const modelIds = Object.keys(this.viewer.metaScene.metaModels);
+            for (let i = 0, len = modelIds.length; i &lt; len; i++) {
+                const modelId = modelIds[i];
+                this.addModel(modelId);
+            }
+            this.viewer.scene.on(&quot;modelLoaded&quot;, (modelId) =&gt; {
+                if (this.viewer.metaScene.metaModels[modelId]) {
+                    this.addModel(modelId);
+                }
+            });
+        }
+
+        this.hierarchy = cfg.hierarchy;
+    }
+
+    /**
+     * Returns the map of {@link ModelTreeView}s.
+     *
+     * Each ModelTreeView is mapped to the ID of its model.
+     *
+     * @return {*|{}}
+     */
+    get modelTreeViews() {
+        return this._modelTreeViews;
+    }
+
+    /**
+     * Sets how the nodes are organized within this tree view.
+     *
+     * Accepted values are:
+     *
+     * * &quot;containment&quot; - organizes the nodes to indicate the containment hierarchy of the IFC objects.
+     * * &quot;types&quot; - groups the nodes within their IFC types.
+     * * &quot;storeys&quot; - groups the nodes within ````IfcBuildingStoreys```` and sub-groups them by their IFC types.
+     *
+     * &lt;br&gt;
+     * This can be updated dynamically.
+     *
+     * Default value is &quot;containment&quot;.
+     *
+     * @type {String}
+     */
+    set hierarchy(hierarchy) {
+        hierarchy = hierarchy || &quot;containment&quot;;
+        if (hierarchy !== &quot;containment&quot; &amp;&amp; hierarchy !== &quot;storeys&quot; &amp;&amp; hierarchy !== &quot;types&quot;) {
+            this.error(&quot;Unsupported value for `hierarchy&apos; - defaulting to &apos;containment&apos;&quot;);
+            hierarchy = &quot;containment&quot;;
+        }
+        this._hierarchy = hierarchy;
+        for (let modelId in this._modelTreeViews) {
+            if (this._modelTreeViews.hasOwnProperty(modelId)) {
+                this._modelTreeViews[modelId].setHierarchy(this._hierarchy);
+            }
+        }
+    }
+
+    /**
+     * Gets how the nodes are organized within this tree view.
+     *
+     * @type {String}
+     */
+    get hierarchy() {
+        return this._hierarchy;
+    }
+
+    /**
+     * Adds a model to this tree view.
+     *
+     * The model will be automatically removed when destroyed.
+     *
+     * To automatically add each model as it&apos;s created, instead of manually calling this method each time,
+     * provide a ````autoAddModels: true```` to the TreeViewPlugin constructor.
+     *
+     * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
+     * @param {Object} [options] Options for model in the tree view.
+     * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for &quot;containment&quot;
+     * and &quot;storeys&quot; hierarchy types, the tree would derive the root node name from the model&apos;s &quot;IfcProject&quot; element
+     * name. This option allows to override that name when it is not suitable as a display name.
+     * @returns {ModelTreeView} ModelTreeView for the newly-added model. If this method succeeded in adding the model,
+     * then {@link ModelTreeView#valid} will equal ````true````. Otherwise, that property will be ````false````
+     * and {@link ModelTreeView#errors} will contain error messages.
+     */
+    addModel(modelId, options = {}) {
+        if (!this._containerElement) {
+            return;
+        }
+        const model = this.viewer.scene.models[modelId];
+        if (!model) {
+            throw &quot;Model not found: &quot; + modelId;
+        }
+        const metaModel = this.viewer.metaScene.metaModels[modelId];
+        if (!metaModel) {
+            this.error(&quot;MetaModel not found: &quot; + modelId);
+            return;
+        }
+        if (this._modelTreeViews[modelId]) {
+            this.warn(&quot;Model already added: &quot; + modelId);
+            return;
+        }
+        const modelTreeView = new ModelTreeView(this.viewer, this, model, metaModel, {
+            containerElement: this._containerElement,
+            autoExpandDepth: this._autoExpandDepth,
+            hierarchy: this._hierarchy,
+            sortNodes: this._sortNodes,
+            pruneEmptyNodes: this._pruneEmptyNodes,
+            rootName: options.rootName
+        });
+        this._modelTreeViews[modelId] = modelTreeView;
+        model.on(&quot;destroyed&quot;, () =&gt; {
+            this.removeModel(model.id);
+        });
+        return modelTreeView;
+    }
+
+    /**
+     * Removes a model from this tree view.
+     *
+     * Does nothing if model not currently in tree view.
+     *
+     * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
+     */
+    removeModel(modelId) {
+        if (!this._containerElement) {
+            return;
+        }
+        const modelTreeView = this._modelTreeViews[modelId];
+        if (!modelTreeView) {
+            return;
+        }
+        modelTreeView.destroy();
+        delete this._modelTreeViews[modelId];
+    }
+
+    /**
+     * Collapses all trees within this tree view.
+     */
+    collapse() {
+        for (let modelId in this._modelTreeViews) {
+            if (this._modelTreeViews.hasOwnProperty(modelId)) {
+                const modelTreeView = this._modelTreeViews[modelId];
+                modelTreeView.collapse();
+            }
+        }
+    }
+
+    /**
+     * Highlights the tree view node that represents the given object {@link Entity}.
+     *
+     * This causes the tree view to collapse, then expand to reveal the node, then highlight the node.
+     *
+     * If a node is previously highlighted, de-highlights that node and collapses the tree first.
+     *
+     * Note that if the TreeViewPlugin was configured with ````pruneEmptyNodes: true```` (default configuration), then the
+     * node won&apos;t exist in the tree if it has no Entitys in the {@link Scene}. in that case, nothing will happen.
+     *
+     * Within the DOM, the node is represented by an ````&lt;li&gt;```` element. This method will add a ````.highlighted-node```` class to
+     * the element to make it appear highlighted, removing that class when de-highlighting it again. See the CSS rules
+     * in the TreeViewPlugin examples for an example of that class.
+     *
+     * @param {String} objectId ID of the {@link Entity}.
+     */
+    showNode(objectId) {
+        this.unShowNode();
+        const metaObject = this.viewer.metaScene.metaObjects[objectId];
+        if (!metaObject) {
+            this.error(&quot;MetaObject not found: &quot; + objectId);
+            return;
+        }
+        const metaModel = metaObject.metaModel;
+        const modelId = metaModel.id;
+        const modelTreeView = this._modelTreeViews[modelId];
+        if (!modelTreeView) {
+            this.error(&quot;Object not in this TreeView: &quot; + objectId);
+            return;
+        }
+        modelTreeView.showNode(objectId);
+    }
+
+    /**
+     * De-highlights the node previously shown with {@link TreeViewPlugin#showNode}.
+     *
+     * Does nothing if no node is currently shown.
+     *
+     * If the node is currently scrolled into view, keeps the node in view.
+     */
+    unShowNode() {
+        for (let modelId in this._modelTreeViews) {
+            if (this._modelTreeViews.hasOwnProperty(modelId)) {
+                const modelTreeView = this._modelTreeViews[modelId];
+                modelTreeView.unShowNode();
+            }
+        }
+    }
+
+    /**
+     * Expands the tree to the given depth.
+     *
+     * Collapses the tree first.
+     *
+     * @param {Number} depth Depth to expand to.
+     */
+    expandToDepth(depth) {
+        for (let modelId in this._modelTreeViews) {
+            if (this._modelTreeViews.hasOwnProperty(modelId)) {
+                const modelTreeView = this._modelTreeViews[modelId];
+                modelTreeView.collapse();
+                modelTreeView.expandToDepth(depth);
+            }
+        }
+    }
+
+    /**
+     * Iterates over a subtree of the tree view&apos;s {@link TreeViewNode}s, calling the given callback for each
+     * node in depth-first pre-order.
+     *
+     * @param {TreeViewNode} node Root of the subtree.
+     * @param {Function} callback Callback called at each {@link TreeViewNode}, with the TreeViewNode given as the argument.
+     */
+    withNodeTree(node, callback) {
+        callback(node);
+        const children = node.children;
+        if (!children) {
+            return;
+        }
+        for (let i = 0, len = children.length; i &lt; len; i++) {
+            this.withNodeTree(children[i], callback);
+        }
+    }
+
+    /**
+     * Destroys this TreeViewPlugin.
+     */
+    destroy() {
+        if (!this._containerElement) {
+            return;
+        }
+        for (let modelId in this._modelTreeViews) {
+            if (this._modelTreeViews.hasOwnProperty(modelId)) {
+                this._modelTreeViews[modelId].destroy();
+            }
+        }
+        this._modelTreeViews = {};
+        super.destroy();
+    }
+}
+
+export {TreeViewPlugin};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
