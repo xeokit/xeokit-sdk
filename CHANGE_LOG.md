@@ -17,7 +17,7 @@ Unreleased
 * GLTFLoaderPlugin
   * Double precision support for GLTFLoaderPlugin performance mode. [#761](https://github.com/xeokit/xeokit-sdk/issues/761) ([**@xeolabs**](https://github.com/xeolabs))
 * IFCLoaderPlugin
-  * Create IFCLoaderPlugin. [#759](https://github.com/xeokit/xeokit-sdk/issues/759) ([**@xeolabs**](https://github.com/xeolabs))
+  * Create WebIFCLoaderPlugin. [#759](https://github.com/xeokit/xeokit-sdk/issues/759) ([**@xeolabs**](https://github.com/xeolabs))
 * LASLoaderPlugin
   * Create LASLoaderPlugin. [#776](https://github.com/xeokit/xeokit-sdk/issues/776) ([**@xeolabs**](https://github.com/xeolabs))
 * Configs
