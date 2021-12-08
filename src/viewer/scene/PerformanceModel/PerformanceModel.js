@@ -45,7 +45,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * For huge models, we have the ````PerformanceModel```` representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.
  *
- * ````PerformanceModel```` is the default model representation loaded by {@link GLTFLoaderPlugin} and {@link XKTLoaderPlugin}.
+ * ````PerformanceModel```` is the default model representation loaded by  (at least) {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and  {@link WebIFCLoaderPlugin}.
  *
  * In this tutorial you'll learn how to use ````PerformanceModel```` to create high-detail content programmatically. Ordinarily you'd be learning about ````PerformanceModel```` if you were writing your own model loader plugins.
  *
@@ -61,7 +61,7 @@ const defaultQuaternion = math.identityQuaternion();
  * - [Classifying with Metadata](#classifying-with-metadata)
  * - [Querying Metadata](#querying-metadata)
  * - [Metadata Structure](#metadata-structure)
- * - [RTC Coordinates](#rtc-coordinates)
+ * - [RTC Coordinates](#rtc-coordinates-for-double-precision)
  *   - [Example 3: RTC Coordinates with Geometry Instancing](#example-2--rtc-coordinates-with-geometry-instancing)
  *   - [Example 4: RTC Coordinates with Geometry Batching](#example-2--rtc-coordinates-with-geometry-batching)
  *
@@ -590,7 +590,7 @@ const defaultQuaternion = math.identityQuaternion();
  * Note also that a {@link MetaObject} does not need to have a corresponding
  * {@link Entity} and vice-versa.
  *
- * # RTC Coordinates for 64-Bit Precision
+ * # RTC Coordinates for Double Precision
  *
  * ````PerformanceModel```` can emulate 64-bit precision on GPUs using relative-to-center (RTC) coordinates.
  *
@@ -608,7 +608,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## RTC Coordinates with Geometry Instancing
  *
- * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````origin````.
+ * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry via its ````origin```` parameter. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````origin````.
  *
  * For simplicity, our example's meshes all instance the same geometry. Therefore, our example model has only one RTC center.
  *
@@ -805,7 +805,106 @@ const defaultQuaternion = math.identityQuaternion();
  *     meshIds: ["top"],
  *     isObject: true
  * });
- ````
+ * ````
+ *
+ * ## Positioning at World-space coordinates
+ *
+ * To position a PerformanceModel at given double-precision World coordinates, we can
+ * configure the ````origin```` of the PerformanceModel itself. The ````origin```` is a double-precision
+ * 3D World-space position at which the PerformanceModel will be located.
+ *
+ * Note that ````position```` is a single-precision offset relative to ````origin````.
+ *
+ * ````javascript
+ * const origin = [100000000, 0, 100000000];
+ *
+ * const performanceModel = new PerformanceModel(viewer.scene, {
+ *     id: "table",
+ *     isModel: true,
+ *     origin: origin, // Everything in this PerformanceModel is relative to this RTC center
+ *     position: [0, 0, 0],
+ *     scale: [1, 1, 1],
+ *     rotation: [0, 0, 0]
+ * });
+ *
+ * performanceModel.createGeometry({
+ *     id: "box",
+ *     primitive: "triangles",
+ *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+ *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+ *     indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg1",
+ *     geometryId: "box",
+ *     position: [-4, -6, -4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [1, 0.3, 0.3]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg1"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg2",
+ *     geometryId: "box",
+ *     position: [4, -6, -4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [0.3, 1.0, 0.3]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg2"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg3",
+ *     geometryId: "box",
+ *     position: [4, -6, 4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [0.3, 0.3, 1.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg3"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg4",
+ *     geometryId: "box",
+ *     position: [-4, -6, 4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [1.0, 1.0, 0.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg4"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "top",
+ *     geometryId: "box",
+ *     position: [0, -3, 0],
+ *     scale: [6, 0.5, 6],
+ *     rotation: [0, 0, 0],
+ *     color: [1.0, 0.3, 1.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["top"],
+ *     isObject: true
+ * });
+ * ````
  *
  * @implements {Drawable}
  * @implements {Entity}
@@ -818,8 +917,8 @@ class PerformanceModel extends Component {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this PerformanceModel represents a model, in which case the PerformanceModel will be registered by {@link PerformanceModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
-     * @param {Number[]} [cfg.origin=[0,0,0]] World-space 3D origin.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.origin=[0,0,0]] World-space double-precision 3D origin.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local, single-precision 3D position, relative to the origin parameter.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
@@ -960,14 +1059,14 @@ class PerformanceModel extends Component {
 
         // Build static matrix
 
-        this._origin = new Float64Array(cfg.origin || [0, 0, 0]);
-        this._position = new Float32Array(cfg.position || [0, 0, 0]);
-        this._rotation = new Float32Array(cfg.rotation || [0, 0, 0]);
-        this._quaternion = new Float32Array(cfg.quaternion || [0, 0, 0, 1]);
+        this._origin = math.vec3(cfg.origin || [0, 0, 0]);
+        this._position = math.vec3(cfg.position || [0, 0, 0]);
+        this._rotation = math.vec3(cfg.rotation || [0, 0, 0]);
+        this._quaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
         if (cfg.rotation) {
             math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         }
-        this._scale = new Float32Array(cfg.scale || [1, 1, 1]);
+        this._scale = math.vec3(cfg.scale || [1, 1, 1]);
         this._worldMatrix = math.mat4();
         math.composeMat4(this._position, this._quaternion, this._scale, this._worldMatrix);
         this._worldNormalMatrix = math.mat4();
@@ -1725,7 +1824,10 @@ class PerformanceModel extends Component {
             this.error("Config missing: primitive");
             return;
         }
-        const origin = (cfg.origin || cfg.rtcCenter) ? math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a) : null;
+
+        const cfgOrigin = cfg.origin || cfg.rtcCenter;
+        const origin = (cfgOrigin) ? math.addVec3(this._origin, cfgOrigin, tempVec3a) : this._origin;
+
         switch (primitive) {
             case "triangles":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
@@ -1931,20 +2033,27 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            const cellSize = 100000;
-
             let origin = null;
 
-            if (cfg.origin || cfg.rtcCenter) {
-                origin = math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a);
-            } else if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
+            if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
                 const rtcCenter = math.vec3();
                 const rtcPositions = [];
-                const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter, cellSize);
+                const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter);
                 if (rtcNeeded) {
                     positions = rtcPositions;
                     origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
                 }
+            }
+
+            const cfgOrigin = cfg.origin || cfg.rtcCenter;
+            if (cfgOrigin) {
+                if (!origin) {
+                    origin = cfgOrigin;
+                } else {
+                    origin = math.addVec3(this._origin, cfgOrigin, tempVec3a);
+                }
+            } else {
+                origin = this._origin;
             }
 
             if (origin) {

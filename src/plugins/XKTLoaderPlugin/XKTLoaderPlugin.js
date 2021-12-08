@@ -637,11 +637,11 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.origin=[0,0,0]] The World-space origin of the model's coordinates.
-     * @param {Number[]} [params.position=[0,0,0]] The model's position, relative to the model's origin.
+     * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
      * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
      * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.

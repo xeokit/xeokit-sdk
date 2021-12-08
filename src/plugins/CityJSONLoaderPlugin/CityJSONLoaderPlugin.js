@@ -160,10 +160,11 @@ class CityJSONLoaderPlugin extends Plugin {
      * @param {String} [params.src] Path to a CityJSON file, as an alternative to the ````cityJSON```` parameter.
      * @param {ArrayBuffer} [params.cityJSON] The CityJSON file data, as an alternative to the ````src```` parameter.
      * @param {Boolean} [params.loadMetadata=true] Whether to load metadata on CityJSON objects.
-     * @param {Number[]} [params.position=[0,0,0]] The model's World-space 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Object} [params.stats] Collects model statistics.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */

@@ -407,7 +407,7 @@ const parseGLTF = (function () {
                         loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
                         math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
                         const origin = math.vec3();
-                        const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin, 10000); // Small cellsize guarantees better accuracy
+                        const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
                         if (rtcNeeded) {
                             meshCfg.origin = origin;
                         }

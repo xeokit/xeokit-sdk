@@ -8,8 +8,6 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {math} from "../../viewer";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 
-const RTC_TILE_SIZE = 10000; // TODO: Autogenerate from placement distance - smaller size for increasing distance
-
 /**
  * Experimental {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
  *
@@ -353,17 +351,10 @@ class WebIFCLoaderPlugin extends Plugin {
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
-     * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
-     * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
-     * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
-     * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
-     * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
      */
     constructor(viewer, cfg = {}) {
 
         super("ifcLoader", viewer, cfg);
-
-        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -564,10 +555,11 @@ class WebIFCLoaderPlugin extends Plugin {
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
      * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.
@@ -585,8 +577,7 @@ class WebIFCLoaderPlugin extends Plugin {
         }
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
-            isModel: true,
-            maxGeometryBatchSize: this._maxGeometryBatchSize
+            isModel: true
         }));
 
         if (!params.src && !params.ifc) {
@@ -903,7 +894,7 @@ class WebIFCLoaderPlugin extends Plugin {
                 }
                 matrix.set(placedGeometry.flatTransformation);
                 math.transformPositions3(matrix, positions);
-                const rtcNeeded = worldToRTCPositions(positions, positions, origin, RTC_TILE_SIZE);
+                const rtcNeeded = worldToRTCPositions(positions, positions, origin);
                 if (!ctx.options.autoNormals) {
                     for (let k = 0, l = 0, lenk = vertexData.length / 6; k < lenk; k++, l += 3) {
                         normals[l + 0] = vertexData[k * 6 + 3];
