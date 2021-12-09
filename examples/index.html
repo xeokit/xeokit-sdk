@@ -194,7 +194,7 @@
             user-select: none;
             z-index: 5;
             transition: all 300ms ease-in-out;
-            max-width: calc(100% - 400px);
+            max-width: calc(100% - 450px);
             pointer-events: none;
         }
 
@@ -305,6 +305,7 @@
             ["loading_XKT_forceBackfaces", "Forcing front faces visible"],
 
             "#Loading IFC with WebIFCLoaderPlugin",
+
             ["BIMOffline_WebIFCLoaderPlugin_Duplex", "Loading IFC with WebIFCLoaderPlugin"],
             ["BIMOffline_WebIFCLoaderPlugin_ignoreMetadata", "Loading IFC with WebIFCLoaderPlugin"],
             ["BIMOffline_WebIFCLoaderPlugin_isolateStorey", "Load IFC with WebIFCLoaderPlugin, isolate storey"],
@@ -360,6 +361,12 @@
             ["loading_MultipleModels", "Loading models from multiple formats"]
         ],
 
+        "Positioning Models": [
+            "#Positioning models geographically",
+            ["positioningModels_WebIFCLoaderPlugin_cartesianCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning at Cartesian coordinates [18201100000000.79, 9.913817421536704, -51729900000000.84]"],
+            ["positioningModels_WebIFCLoaderPlugin_geodesicCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning at distant geodesic coordinates"]
+        ],
+
         "Camera Navigation": [
 
             "# Orbiting",
@@ -400,6 +407,8 @@
             ["localization_NavCubePlugin", "NavCubePlugin Localization"],
             ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"],
         ],
+
+
 
         "Annotating Models": [
             "#Pinning 3D labels on models",
