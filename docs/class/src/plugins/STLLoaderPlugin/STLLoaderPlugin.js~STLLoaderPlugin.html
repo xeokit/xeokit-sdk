@@ -131,6 +131,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-altitudeFromMercatorZ">altitudeFromMercatorZ</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-circumferenceAtLatitude">circumferenceAtLatitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-latFromMercatorY">latFromMercatorY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-lngFromMercatorX">lngFromMercatorX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-longLatToMercator">longLatToMercator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorXfromLng">mercatorXfromLng</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorYfromLat">mercatorYfromLat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorZfromAltitude">mercatorZfromAltitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-meterInMercatorCoordinateUnits">meterInMercatorCoordinateUnits</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_CIRCUMFERENCE">EARTH_CIRCUMFERENCE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_RADIUS">EARTH_RADIUS</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -917,7 +928,7 @@ var model = plugin.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -974,11 +985,19 @@ var model = plugin.load({
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.origin</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The model&apos;s World-space double-precision 3D origin. Use this to position the model within xeokit&apos;s World coordinate system, using double-precision coordinates.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.position</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model World-space 3D position.</p>
+      <td data-ice="description"><p>The model single-precision 3D position, relative to the <code>origin</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -986,7 +1005,7 @@ var model = plugin.load({
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,1,1]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space scale.</p>
+      <td data-ice="description"><p>The model&apos;s scale.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -994,7 +1013,7 @@ var model = plugin.load({
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+      <td data-ice="description"><p>The model&apos;s orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1002,7 +1021,7 @@ var model = plugin.load({
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.</p>
+      <td data-ice="description"><p>The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters. Relative to <code>origin</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

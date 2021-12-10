@@ -131,6 +131,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-altitudeFromMercatorZ">altitudeFromMercatorZ</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-circumferenceAtLatitude">circumferenceAtLatitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-latFromMercatorY">latFromMercatorY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-lngFromMercatorX">lngFromMercatorX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-longLatToMercator">longLatToMercator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorXfromLng">mercatorXfromLng</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorYfromLat">mercatorYfromLat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorZfromAltitude">mercatorZfromAltitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-meterInMercatorCoordinateUnits">meterInMercatorCoordinateUnits</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_CIRCUMFERENCE">EARTH_CIRCUMFERENCE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_RADIUS">EARTH_RADIUS</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -157,13 +168,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {WebIFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber342">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {WebIFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber340">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.13</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber342">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber340">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -1163,7 +1174,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber355">source</a></span></span>
     </span>
   </h3>
 
@@ -1248,18 +1259,6 @@ that don&apos;t have IFC types.</p>
       <td data-ice="description"><p>When loading metadata and this is <code>true</code>, will only load <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that have <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s (that are not excluded). This is useful when we don&apos;t want Entitys in the Scene that are not represented within IFC navigation components, such as <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.maxGeometryBatchSize</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 50000000</li></ul></td>
-      <td data-ice="description"><p>Maximum geometry batch size, as number of vertices. This is optionally supplied
-to limit the size of the batched geometry arrays that <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span> internally creates for batched geometries.
-A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
-slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
-and faster rendering speed. It&apos;s recommended to keep this somewhere roughly between <code>50000</code> and <code>`50000000</code>.</p>
-</td>
-    </tr>
 </tbody>
   </table>
 </div>
@@ -1297,7 +1296,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber402">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber393">source</a></span></span>
     </span>
   </h3>
 
@@ -1342,7 +1341,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -1387,7 +1386,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber468">source</a></span></span>
     </span>
   </h3>
 
@@ -1434,7 +1433,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber482">source</a></span></span>
     </span>
   </h3>
 
@@ -1481,7 +1480,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber505">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -1528,7 +1527,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber519">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber510">source</a></span></span>
     </span>
   </h3>
 
@@ -1575,7 +1574,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber530">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -1620,7 +1619,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber551">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber542">source</a></span></span>
     </span>
   </h3>
 
@@ -1671,7 +1670,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber440">source</a></span></span>
     </span>
   </h3>
 
@@ -1718,7 +1717,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber463">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber454">source</a></span></span>
     </span>
   </h3>
 
@@ -1765,7 +1764,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber415">source</a></span></span>
     </span>
   </h3>
 
@@ -1810,7 +1809,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -1855,7 +1854,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber391">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -1914,7 +1913,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber580">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber572">source</a></span></span>
     </span>
   </h3>
 
@@ -2000,11 +1999,19 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.origin</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The model&apos;s World-space double-precision 3D origin. Use this to position the model within xeokit&apos;s World coordinate system, using double-precision coordinates.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.position</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model World-space 3D position.</p>
+      <td data-ice="description"><p>The model single-precision 3D position, relative to the <code>origin</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2012,7 +2019,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,1,1]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space scale.</p>
+      <td data-ice="description"><p>The model&apos;s scale.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2020,7 +2027,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+      <td data-ice="description"><p>The model&apos;s orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2028,7 +2035,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
-      <td data-ice="description"><p>The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters.</p>
+      <td data-ice="description"><p>The model&apos;s world transform matrix. Overrides the position, scale and rotation parameters. Relative to <code>origin</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

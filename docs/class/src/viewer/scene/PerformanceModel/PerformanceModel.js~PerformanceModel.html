@@ -131,6 +131,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-altitudeFromMercatorZ">altitudeFromMercatorZ</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-circumferenceAtLatitude">circumferenceAtLatitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-latFromMercatorY">latFromMercatorY</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-lngFromMercatorX">lngFromMercatorX</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-longLatToMercator">longLatToMercator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorXfromLng">mercatorXfromLng</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorYfromLat">mercatorYfromLat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorZfromAltitude">mercatorZfromAltitude</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-meterInMercatorCoordinateUnits">meterInMercatorCoordinateUnits</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_CIRCUMFERENCE">EARTH_CIRCUMFERENCE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_RADIUS">EARTH_RADIUS</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -157,13 +168,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber813">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber912">@xeokit/xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber813">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber912">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -192,7 +203,7 @@
 </ul>
 <h1 id="overview">Overview</h1><p>While xeokit&apos;s standard <a href="https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs">scene graph</a> is great for gizmos and medium-sized models, it doesn&apos;t scale up to millions of objects in terms of memory and rendering efficiency.</p>
 <p>For huge models, we have the <code>PerformanceModel</code> representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.</p>
-<p><code>PerformanceModel</code> is the default model representation loaded by <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> and <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>.</p>
+<p><code>PerformanceModel</code> is the default model representation loaded by  (at least) <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>, <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> and  <span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a></span>.</p>
 <p>In this tutorial you&apos;ll learn how to use <code>PerformanceModel</code> to create high-detail content programmatically. Ordinarily you&apos;d be learning about <code>PerformanceModel</code> if you were writing your own model loader plugins.</p>
 <h1 id="contents">Contents</h1><ul>
 <li><a href="#performancemodel">PerformanceModel</a></li>
@@ -205,7 +216,7 @@
 <li><a href="#classifying-with-metadata">Classifying with Metadata</a></li>
 <li><a href="#querying-metadata">Querying Metadata</a></li>
 <li><a href="#metadata-structure">Metadata Structure</a></li>
-<li><a href="#rtc-coordinates">RTC Coordinates</a><ul>
+<li><a href="#rtc-coordinates-for-double-precision">RTC Coordinates</a><ul>
 <li><a href="#example-2--rtc-coordinates-with-geometry-instancing">Example 3: RTC Coordinates with Geometry Instancing</a></li>
 <li><a href="#example-2--rtc-coordinates-with-geometry-batching">Example 4: RTC Coordinates with Geometry Batching</a></li>
 </ul>
@@ -679,14 +690,14 @@ various ways in the 3D scene (such as with <code>PerformanceModel</code>, which
 has a non-hierarchical scene representation).</p>
 <p>Note also that a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> does not need to have a corresponding
 <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> and vice-versa.</p>
-<h1 id="rtc-coordinates-for-64-bit-precision">RTC Coordinates for 64-Bit Precision</h1><p><code>PerformanceModel</code> can emulate 64-bit precision on GPUs using relative-to-center (RTC) coordinates.</p>
+<h1 id="rtc-coordinates-for-double-precision">RTC Coordinates for Double Precision</h1><p><code>PerformanceModel</code> can emulate 64-bit precision on GPUs using relative-to-center (RTC) coordinates.</p>
 <p>Consider a model that contains many small objects, but with such large spatial extents that 32 bits of GPU precision (accurate to ~7 digits) will not be sufficient to render all of the the objects without jittering.</p>
 <p>To prevent jittering, we could spatially subdivide the objects into &quot;tiles&quot;. Each tile would have a center position, and the positions of the objects within the tile would be relative to that center (&quot;RTC coordinates&quot;).</p>
 <p>While the center positions of the tiles would be 64-bit values, the object positions only need to be 32-bit.</p>
 <p>Internally, when rendering an object with RTC coordinates, xeokit first temporarily translates the camera viewing matrix by the object&apos;s tile&apos;s RTC center, on the CPU, using 64-bit math.</p>
 <p>Then xeokit loads the viewing matrix into its WebGL shaders, where math happens at 32-bit precision. Within the shaders, the matrix is effectively down-cast to 32-bit precision, and the object&apos;s 32-bit vertex positions are transformed by the matrix.</p>
 <p>We see no jittering, because with RTC a detectable loss of GPU accuracy only starts happening to objects as they become very distant from the camera viewpoint, at which point they are too small to be discernible anyway.</p>
-<h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>origin</code>.</p>
+<h2 id="rtc-coordinates-with-geometry-instancing">RTC Coordinates with Geometry Instancing</h2><p>To use RTC with <code>PerformanceModel</code> geometry instancing, we specify an RTC center for the geometry via its <code>origin</code> parameter. Then <code>PerformanceModel</code> assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes <code>position</code> and <code>rotation</code> properties are assumed to be relative to the geometry&apos;s <code>origin</code>.</p>
 <p>For simplicity, our example&apos;s meshes all instance the same geometry. Therefore, our example model has only one RTC center.</p>
 <p>Note that the axis-aligned World-space boundary (AABB) of our model is <code>[ -6, -9, -6, 1000000006, -2.5, 1000000006]</code>.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching"><img src="http://xeokit.io/img/docs/sceneGraph.png" alt></a></p>
@@ -862,6 +873,99 @@ performanceModel.createMesh({
     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
     indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+    position: [0, -3, 0],
+    scale: [6, 0.5, 6],
+    rotation: [0, 0, 0],
+    color: [1.0, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;top&quot;],
+    isObject: true
+});</code>
+</code></pre>
+<h2 id="positioning-at-world-space-coordinates">Positioning at World-space coordinates</h2><p>To position a PerformanceModel at given double-precision World coordinates, we can
+configure the <code>origin</code> of the PerformanceModel itself. The <code>origin</code> is a double-precision
+3D World-space position at which the PerformanceModel will be located.</p>
+<p>Note that <code>position</code> is a single-precision offset relative to <code>origin</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const origin = [100000000, 0, 100000000];
+
+const performanceModel = new PerformanceModel(viewer.scene, {
+    id: &quot;table&quot;,
+    isModel: true,
+    origin: origin, // Everything in this PerformanceModel is relative to this RTC center
+    position: [0, 0, 0],
+    scale: [1, 1, 1],
+    rotation: [0, 0, 0]
+});
+
+performanceModel.createGeometry({
+    id: &quot;box&quot;,
+    primitive: &quot;triangles&quot;,
+    positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+    normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+    indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+});
+
+performanceModel.createMesh({
+    id: &quot;leg1&quot;,
+    geometryId: &quot;box&quot;,
+    position: [-4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1, 0.3, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg1&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg2&quot;,
+    geometryId: &quot;box&quot;,
+    position: [4, -6, -4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 1.0, 0.3]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg2&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg3&quot;,
+    geometryId: &quot;box&quot;,
+    position: [4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [0.3, 0.3, 1.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg3&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;leg4&quot;,
+    geometryId: &quot;box&quot;,
+    position: [-4, -6, 4],
+    scale: [1, 3, 1],
+    rotation: [0, 0, 0],
+    color: [1.0, 1.0, 0.0]
+});
+
+performanceModel.createEntity({
+    meshIds: [&quot;leg4&quot;],
+    isObject: true
+});
+
+performanceModel.createMesh({
+    id: &quot;top&quot;,
+    geometryId: &quot;box&quot;,
     position: [0, -3, 0],
     scale: [6, 0.5, 6],
     rotation: [0, 0, 0],
@@ -3144,7 +3248,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber849">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber948">source</a></span></span>
     </span>
   </h3>
 
@@ -3196,7 +3300,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>World-space 3D origin.</p>
+      <td data-ice="description"><p>World-space double-precision 3D origin.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -3204,7 +3308,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>Local 3D position.</p>
+      <td data-ice="description"><p>Local, single-precision 3D position, relative to the origin parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -3401,7 +3505,7 @@ and faster rendering speed. It&apos;s recommended to keep this somewhere roughly
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1230">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1329">source</a></span></span>
     </span>
   </h3>
 
@@ -3447,7 +3551,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1253">source</a></span></span>
     </span>
   </h3>
 
@@ -3492,7 +3596,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1273">source</a></span></span>
     </span>
   </h3>
 
@@ -3545,7 +3649,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1546">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1645">source</a></span></span>
     </span>
   </h3>
 
@@ -3589,7 +3693,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1555">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1654">source</a></span></span>
     </span>
   </h3>
 
@@ -3633,7 +3737,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1421">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1520">source</a></span></span>
     </span>
   </h3>
 
@@ -3678,7 +3782,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1432">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1531">source</a></span></span>
     </span>
   </h3>
 
@@ -3723,7 +3827,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1446">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1545">source</a></span></span>
     </span>
   </h3>
 
@@ -3767,7 +3871,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1455">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1554">source</a></span></span>
     </span>
   </h3>
 
@@ -3811,7 +3915,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1595">source</a></span></span>
     </span>
   </h3>
 
@@ -3856,7 +3960,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1509">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1608">source</a></span></span>
     </span>
   </h3>
 
@@ -3902,7 +4006,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1394">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1493">source</a></span></span>
     </span>
   </h3>
 
@@ -3947,7 +4051,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1405">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1504">source</a></span></span>
     </span>
   </h3>
 
@@ -3992,7 +4096,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1663">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1762">source</a></span></span>
     </span>
   </h3>
 
@@ -4037,7 +4141,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1468">source</a></span></span>
     </span>
   </h3>
 
@@ -4081,7 +4185,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1477">source</a></span></span>
     </span>
   </h3>
 
@@ -4125,7 +4229,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1185">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1284">source</a></span></span>
     </span>
   </h3>
 
@@ -4181,7 +4285,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1641">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1740">source</a></span></span>
     </span>
   </h3>
 
@@ -4226,7 +4330,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1422">source</a></span></span>
     </span>
   </h3>
 
@@ -4270,7 +4374,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1431">source</a></span></span>
     </span>
   </h3>
 
@@ -4314,7 +4418,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1614">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1713">source</a></span></span>
     </span>
   </h3>
 
@@ -4358,7 +4462,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1292">source</a></span></span>
     </span>
   </h3>
 
@@ -4402,7 +4506,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1304">source</a></span></span>
     </span>
   </h3>
 
@@ -4448,7 +4552,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1317">source</a></span></span>
     </span>
   </h3>
 
@@ -4492,7 +4596,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1009">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1108">source</a></span></span>
     </span>
   </h3>
 
@@ -4536,7 +4640,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1086">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1185">source</a></span></span>
     </span>
   </h3>
 
@@ -4581,7 +4685,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1354">source</a></span></span>
     </span>
   </h3>
 
@@ -4625,7 +4729,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1363">source</a></span></span>
     </span>
   </h3>
 
@@ -4669,7 +4773,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1341">source</a></span></span>
     </span>
   </h3>
 
@@ -4713,7 +4817,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1017">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1116">source</a></span></span>
     </span>
   </h3>
 
@@ -4769,7 +4873,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1523">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1622">source</a></span></span>
     </span>
   </h3>
 
@@ -4814,7 +4918,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1534">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1633">source</a></span></span>
     </span>
   </h3>
 
@@ -4859,7 +4963,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1031">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1130">source</a></span></span>
     </span>
   </h3>
 
@@ -4905,7 +5009,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1605">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1704">source</a></span></span>
     </span>
   </h3>
 
@@ -4950,7 +5054,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1470">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1569">source</a></span></span>
     </span>
   </h3>
 
@@ -4995,7 +5099,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1481">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1580">source</a></span></span>
     </span>
   </h3>
 
@@ -5040,7 +5144,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1042">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1141">source</a></span></span>
     </span>
   </h3>
 
@@ -5085,7 +5189,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1064">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1163">source</a></span></span>
     </span>
   </h3>
 
@@ -5130,7 +5234,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1568">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1667">source</a></span></span>
     </span>
   </h3>
 
@@ -5174,7 +5278,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1577">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1676">source</a></span></span>
     </span>
   </h3>
 
@@ -5218,7 +5322,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1053">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1152">source</a></span></span>
     </span>
   </h3>
 
@@ -5263,7 +5367,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1693">source</a></span></span>
     </span>
   </h3>
 
@@ -5309,7 +5413,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1075">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1174">source</a></span></span>
     </span>
   </h3>
 
@@ -5354,7 +5458,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1346">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1445">source</a></span></span>
     </span>
   </h3>
 
@@ -5398,7 +5502,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1355">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1454">source</a></span></span>
     </span>
   </h3>
 
@@ -5442,7 +5546,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1652">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1751">source</a></span></span>
     </span>
   </h3>
 
@@ -5487,7 +5591,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1275">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1374">source</a></span></span>
     </span>
   </h3>
 
@@ -5532,7 +5636,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1286">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1385">source</a></span></span>
     </span>
   </h3>
 
@@ -5578,7 +5682,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1096">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1195">source</a></span></span>
     </span>
   </h3>
 
@@ -5638,7 +5742,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1204">source</a></span></span>
     </span>
   </h3>
 
@@ -5682,7 +5786,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1630">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1729">source</a></span></span>
     </span>
   </h3>
 
@@ -5727,7 +5831,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1300">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1399">source</a></span></span>
     </span>
   </h3>
 
@@ -5771,7 +5875,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1408">source</a></span></span>
     </span>
   </h3>
 
@@ -5818,7 +5922,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2295">source</a></span></span>
     </span>
   </h3>
 
@@ -6001,7 +6105,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1708">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1807">source</a></span></span>
     </span>
   </h3>
 
@@ -6138,7 +6242,7 @@ be transformed relative to this origin.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1823">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1925">source</a></span></span>
     </span>
   </h3>
 
@@ -6356,7 +6460,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2659">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2768">source</a></span></span>
     </span>
   </h3>
 
@@ -6400,7 +6504,7 @@ constructor. This parameter is ignored when <code>geometryId</code> is given.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2270">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber2379">source</a></span></span>
     </span>
   </h3>
 

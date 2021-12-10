@@ -174,6 +174,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~earth_circumference",
+    "variable/index.html#static-variable-EARTH_CIRCUMFERENCE",
+    "<span>EARTH_CIRCUMFERENCE</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~earth_radius",
+    "variable/index.html#static-variable-EARTH_RADIUS",
+    "<span>EARTH_RADIUS</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/edgematerial.js~edgematerial",
     "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
     "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/EdgeMaterial.js</span>",
@@ -654,6 +666,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~altitudefrommercatorz",
+    "function/index.html#static-function-altitudeFromMercatorZ",
+    "<span>altitudeFromMercatorZ</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxgeometry.js~buildboxgeometry",
     "function/index.html#static-function-buildBoxGeometry",
     "<span>buildBoxGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxGeometry.js</span>",
@@ -702,6 +720,24 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~circumferenceatlatitude",
+    "function/index.html#static-function-circumferenceAtLatitude",
+    "<span>circumferenceAtLatitude</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~latfrommercatory",
+    "function/index.html#static-function-latFromMercatorY",
+    "<span>latFromMercatorY</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~lngfrommercatorx",
+    "function/index.html#static-function-lngFromMercatorX",
+    "<span>lngFromMercatorX</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
     "function/index.html#static-function-load3DSGeometry",
     "<span>load3DSGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</span>",
@@ -711,6 +747,36 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~longlattomercator",
+    "function/index.html#static-function-longLatToMercator",
+    "<span>longLatToMercator</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~mercatorxfromlng",
+    "function/index.html#static-function-mercatorXfromLng",
+    "<span>mercatorXfromLng</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~mercatoryfromlat",
+    "function/index.html#static-function-mercatorYfromLat",
+    "<span>mercatorYfromLat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~mercatorzfromaltitude",
+    "function/index.html#static-function-mercatorZfromAltitude",
+    "<span>mercatorZfromAltitude</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js~meterinmercatorcoordinateunits",
+    "function/index.html#static-function-meterInMercatorCoordinateUnits",
+    "<span>meterInMercatorCoordinateUnits</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/geo.js</span>",
     "function"
   ],
   [
@@ -9603,6 +9669,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/math/buildedgeindices.js",
     "file/src/viewer/scene/math/buildEdgeIndices.js.html",
     "src/viewer/scene/math/buildEdgeIndices.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/geo.js",
+    "file/src/viewer/scene/math/geo.js.html",
+    "src/viewer/scene/math/geo.js",
     "file"
   ],
   [
