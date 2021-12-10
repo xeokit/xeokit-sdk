@@ -15,7 +15,11 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/geolocation_icon.png"/>
     <h1>WebIFCLoaderPlugin</h1>
-    <h2>Loading an IFC model and positioning it at Cartesian coordinates [18201100000000.79, 9.91, -51729900000000.84]</h2>
+    <p>Loading an IFC model and positioning it at Cartesian coordinates [18201100000000.79, 9.91, -51729900000000.84]
+        within the Viewer's World-space coordinate system.</p>
+    <p>Note that the technique demonstrated here also works with all the other xeokit loader plugins, including <a
+            href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+            target="_other">XKTLoaderPlugin</a>.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -54,7 +58,7 @@
     const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
         wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
     });
-    
+
     const model = webIFCLoader.load({
         id: "myModel",
         src: "../assets/models/ifc/Duplex.ifc",
