@@ -282,12 +282,7 @@ class LASLoaderPlugin extends Plugin {
         }
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
-            isModel: true,
-            origin: params.origin,
-            position: params.position,
-            scale: params.scale,
-            rotation: params.rotation,
-            matrix: params.matrix
+            isModel: true
         }));
 
         if (!params.src && !params.las) {
