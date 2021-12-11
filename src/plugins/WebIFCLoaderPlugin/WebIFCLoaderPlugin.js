@@ -9,7 +9,7 @@ import {math} from "../../viewer";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 
 /**
- * Experimental {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
+ * {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
  *
