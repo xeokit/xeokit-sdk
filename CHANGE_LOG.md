@@ -14,22 +14,27 @@ Unreleased
   * Events + More flexible API for Distance & Angle Measurement Plugins. [#751](https://github.com/xeokit/xeokit-sdk/pull/751) ([**@Kurtil**](https://github.com/Kurtil)
 * CityJSONLoaderPlugin
   * Create CityJSONLoaderPlugin. [#781](https://github.com/xeokit/xeokit-sdk/issues/781) ([**@xeolabs**](https://github.com/xeolabs))
-* SkyBox
-  * Set SkyBox unclippable. [#746](https://github.com/xeokit/xeokit-sdk/pull/746) ([**@dengzer1001**](https://github.com/dengzer1001)
 * GLTFLoaderPlugin
   * Double precision support for GLTFLoaderPlugin performance mode. [#761](https://github.com/xeokit/xeokit-sdk/issues/761) ([**@xeolabs**](https://github.com/xeolabs))
 * WebIFCLoaderPlugin
   * Create WebIFCLoaderPlugin. [#759](https://github.com/xeokit/xeokit-sdk/issues/759) ([**@xeolabs**](https://github.com/xeolabs))
 * LASLoaderPlugin
   * Create LASLoaderPlugin. [#776](https://github.com/xeokit/xeokit-sdk/issues/776) ([**@xeolabs**](https://github.com/xeolabs))
-* Node
-  * Fix: trigger redraw on update to Node#origin. [#787](https://github.com/xeokit/xeokit-sdk/issues/787) ([**@xeolabs**](https://github.com/xeolabs))
-* PerformanceModel
-  * Fix PerformanceModel#origin. [#785](https://github.com/xeokit/xeokit-sdk/issues/785) ([**@xeolabs**](https://github.com/xeolabs)) 
 * Configs
   * Create singleton Configs class for managing global configurations. [#758](https://github.com/xeokit/xeokit-sdk/issues/758) ([**@xeolabs**](https://github.com/xeolabs))
 * stats
   * Expose rendering stats via API. [#779](https://github.com/xeokit/xeokit-sdk/issues/779) ([**@xeolabs**](https://github.com/xeolabs))
+  
+### Fixes
+
+* Node
+  * Fix: trigger redraw on update to Node#origin. [#787](https://github.com/xeokit/xeokit-sdk/issues/787) ([**@xeolabs**](https://github.com/xeolabs))
+* PerformanceModel
+  * Fix PerformanceModel#origin. [#785](https://github.com/xeokit/xeokit-sdk/issues/785) ([**@xeolabs**](https://github.com/xeolabs))
+* SkyBox
+  * Set SkyBox unclippable. [#746](https://github.com/xeokit/xeokit-sdk/pull/746) ([**@dengzer1001**](https://github.com/dengzer1001)
+* Mesh
+  * Fix occlusion behaviour for billboarded Meshes. [#788](https://github.com/xeokit/xeokit-sdk/issues/788) ([**@xeolabs**](https://github.com/xeolabs))
   
 ### Optimizations
 
