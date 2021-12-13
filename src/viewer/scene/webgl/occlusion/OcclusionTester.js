@@ -1,8 +1,7 @@
 import {math} from '../../math/math.js';
 import {Program} from "./../Program.js";
-import {RenderBuffer} from "./../RenderBuffer.js";
 import {OcclusionLayer} from "./OcclusionLayer.js";
-import {createRTCViewMat, getPlaneRTCPos, worldToRTCPos} from "../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
 const TEST_MODE = false;

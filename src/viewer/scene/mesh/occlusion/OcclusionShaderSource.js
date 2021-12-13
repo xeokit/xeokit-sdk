@@ -63,6 +63,7 @@ function buildVertex(mesh) {
     }
     src.push("void main(void) {");
     src.push("vec4 localPosition = vec4(position, 1.0); ");
+    src.push("vec4 worldPosition;");
     if (quantizedGeometry) {
         src.push("localPosition = positionsDecodeMatrix * localPosition;");
     }
@@ -75,10 +76,15 @@ function buildVertex(mesh) {
         src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
         src.push("billboard(modelMatrix2);");
         src.push("billboard(viewMatrix2);");
+        src.push("billboard(modelViewMatrix);");
+        src.push("worldPosition = modelMatrix2 * localPosition;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        src.push("vec4 viewPosition = modelViewMatrix * localPosition;");
+    } else {
+        src.push("worldPosition = modelMatrix2 * localPosition;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
     }
-    src.push("   vec4 worldPosition = modelMatrix2 * localPosition;");
-    src.push("   worldPosition.xyz = worldPosition.xyz + offset;");
-    src.push("   vec4 viewPosition = viewMatrix2 * worldPosition;");
     if (clipping) {
         src.push("   vWorldPosition = worldPosition;");
     }
