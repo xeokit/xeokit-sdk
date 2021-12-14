@@ -335,6 +335,7 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].rtcCenter = rtcCenter;
         }
+        this.glRedraw();
     }
 
     /**
