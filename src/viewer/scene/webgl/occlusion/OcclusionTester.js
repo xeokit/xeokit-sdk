@@ -7,7 +7,7 @@ import {WEBGL_INFO} from "../../webglInfo.js";
 const TEST_MODE = false;
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
-const MARKER_SPRITE_CLIPZ_OFFSET = -0.01; // Amount that we offset sprite clip Z coords to raise them from surfaces
+const MARKER_SPRITE_CLIPZ_OFFSET = -0.001; // Amount that we offset sprite clip Z coords to raise them from surfaces
 
 const tempVec3a = math.vec3();
 
@@ -226,7 +226,7 @@ class OcclusionTester {
                 src.push("clipPos.z *= clipPos.w;");
             }
         } else {
-            src.push("clipPos.z -= " + MARKER_SPRITE_CLIPZ_OFFSET + ";");
+            src.push("clipPos.z += " + MARKER_SPRITE_CLIPZ_OFFSET + ";");
         }
         src.push("   gl_Position = clipPos;");
         src.push("}");
