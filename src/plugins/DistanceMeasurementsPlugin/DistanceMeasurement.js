@@ -293,10 +293,8 @@ class DistanceMeasurement extends Component {
             this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
             this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
 
-            const tilde = this._approximate ? " ~ " : " = ";
-
             this._length = Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)))
-            this._lengthLabel.setText(tilde + (this._length * scale).toFixed(2) + unitAbbrev);
+            this._lengthLabel.setText((this._length * scale).toFixed(2) + unitAbbrev);
 
             const xAxisCanvasLength = Math.abs(lengthWire(cp[0], cp[1], cp[2], cp[3]));
             const yAxisCanvasLength = Math.abs(lengthWire(cp[2], cp[3], cp[4], cp[5]));
@@ -309,21 +307,21 @@ class DistanceMeasurement extends Component {
             this._zAxisLabelCulled = (zAxisCanvasLength < labelMinAxisLength);
 
             if (!this._xAxisLabelCulled) {
-                this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
+                this._xAxisLabel.setText(Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
                 this._xAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
-                this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
+                this._yAxisLabel.setText(Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
                 this._yAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
-                this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
+                this._zAxisLabel.setText(Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
                 this._zAxisLabel.setVisible(this.axisVisible);
             } else {
                 this._zAxisLabel.setVisible(false);
