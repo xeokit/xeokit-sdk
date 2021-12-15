@@ -303,6 +303,8 @@ var parseGLTF = (function () {
         var emissiveFactor = materialInfo.emissiveFactor;
         if (emissiveFactor) {
             cfg.emissive = emissiveFactor;
+            cfg.specular = [0, 0, 0]; // This is a hack to avoid wrong colors
+            cfg.diffuse = [0, 0, 0]; // This is a hack to avoid wrong colors
         }
 
         cfg.backfaces = !!materialInfo.doubleSided;
