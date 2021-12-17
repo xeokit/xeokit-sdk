@@ -233,6 +233,7 @@ function buildVertex(mesh) {
     }
     src.push(&quot;void main(void) {&quot;);
     src.push(&quot;vec4 localPosition = vec4(position, 1.0); &quot;);
+    src.push(&quot;vec4 worldPosition;&quot;);
     if (quantizedGeometry) {
         src.push(&quot;localPosition = positionsDecodeMatrix * localPosition;&quot;);
     }
@@ -245,10 +246,15 @@ function buildVertex(mesh) {
         src.push(&quot;mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;&quot;);
         src.push(&quot;billboard(modelMatrix2);&quot;);
         src.push(&quot;billboard(viewMatrix2);&quot;);
+        src.push(&quot;billboard(modelViewMatrix);&quot;);
+        src.push(&quot;worldPosition = modelMatrix2 * localPosition;&quot;);
+        src.push(&quot;worldPosition.xyz = worldPosition.xyz + offset;&quot;);
+        src.push(&quot;vec4 viewPosition = modelViewMatrix * localPosition;&quot;);
+    } else {
+        src.push(&quot;worldPosition = modelMatrix2 * localPosition;&quot;);
+        src.push(&quot;worldPosition.xyz = worldPosition.xyz + offset;&quot;);
+        src.push(&quot;vec4 viewPosition  = viewMatrix2 * worldPosition; &quot;);
     }
-    src.push(&quot;   vec4 worldPosition = modelMatrix2 * localPosition;&quot;);
-    src.push(&quot;   worldPosition.xyz = worldPosition.xyz + offset;&quot;);
-    src.push(&quot;   vec4 viewPosition = viewMatrix2 * worldPosition;&quot;);
     if (clipping) {
         src.push(&quot;   vWorldPosition = worldPosition;&quot;);
     }

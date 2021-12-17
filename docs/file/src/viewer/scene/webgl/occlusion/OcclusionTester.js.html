@@ -170,14 +170,14 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/webgl/occlusion/OcclusionTester.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &apos;../../math/math.js&apos;;
 import {Program} from &quot;./../Program.js&quot;;
-import {RenderBuffer} from &quot;./../RenderBuffer.js&quot;;
 import {OcclusionLayer} from &quot;./OcclusionLayer.js&quot;;
-import {createRTCViewMat, getPlaneRTCPos, worldToRTCPos} from &quot;../../math/rtcCoords.js&quot;;
+import {createRTCViewMat, getPlaneRTCPos} from &quot;../../math/rtcCoords.js&quot;;
 import {WEBGL_INFO} from &quot;../../webglInfo.js&quot;;
 
 const TEST_MODE = false;
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
+const MARKER_SPRITE_CLIPZ_OFFSET = -0.001; // Amount that we offset sprite clip Z coords to raise them from surfaces
 
 const tempVec3a = math.vec3();
 
@@ -387,7 +387,6 @@ class OcclusionTester {
             src.push(&quot;   vWorldPosition = worldPosition;&quot;);
         }
         src.push(&quot;   vec4 clipPos = projMatrix * viewPosition;&quot;);
-        src.push(&quot;   gl_Position = clipPos;&quot;);
         src.push(&quot;   gl_PointSize = &quot; + POINT_SIZE + &quot;.0;&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;EXT_frag_depth&quot;]) {
@@ -396,7 +395,10 @@ class OcclusionTester {
                 src.push(&quot;clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;&quot;);
                 src.push(&quot;clipPos.z *= clipPos.w;&quot;);
             }
+        } else {
+            src.push(&quot;clipPos.z += &quot; + MARKER_SPRITE_CLIPZ_OFFSET + &quot;;&quot;);
         }
+        src.push(&quot;   gl_Position = clipPos;&quot;);
         src.push(&quot;}&quot;);
         return src;
     }

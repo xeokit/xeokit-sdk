@@ -1,6 +1,6 @@
 {
   "coverage": "36.8%",
-  "expectCount": 6295,
+  "expectCount": 6296,
   "actualCount": 2317,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -4787,7 +4787,7 @@
       "actualCount": 1,
       "undocumentLines": [
         17,
-        100,
+        106,
         11,
         12,
         13
@@ -5399,9 +5399,10 @@
       ]
     },
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js": {
-      "expectCount": 43,
+      "expectCount": 44,
       "actualCount": 10,
       "undocumentLines": [
+        7,
         8,
         9,
         10,
@@ -5426,15 +5427,15 @@
         175,
         185,
         192,
-        234,
-        280,
-        289,
-        293,
-        294,
+        236,
+        282,
+        291,
         295,
-        304,
+        296,
+        297,
         306,
-        432
+        308,
+        434
       ]
     },
     "src/viewer/scene/webgl/sao/SAODepthLimitedBlurRenderer.js": {

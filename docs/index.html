@@ -170,11 +170,73 @@
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="xeokit-sdk">xeokit-sdk</h1><p><a href="https://percy.io/73524691/xeokit-sdk"><img src="https://percy.io/static/images/percy-badge.svg" alt="This project is using Percy.io for visual regression testing."></a>
 <a href="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk"><img src="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg" alt="npm version"></a>
 <a href="https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk"><img src="https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge" alt></a></p>
-<p><a href="http://xeokit.io">xeokit</a> is a JavaScript software development kit from <a href="http://xeolabs.com">xeolabs</a> for viewing 
+<p><a href="http://xeokit.io">xeokit</a> is a JavaScript software development kit from <a href="http://xeolabs.com">xeolabs</a> for viewing
 high-detail, full-precision 3D engineering and BIM models in the browser.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="https://user-images.githubusercontent.com/83100/67271586-14690780-f4bb-11e9-9e76-203fe425ee08.gif" alt="Peek-2019-10-22-10-57"></a></p>
-<h2 id="usage">Usage</h2><p>To install:</p>
-<pre><code class="lang-bash"><code class="source-code prettyprint">npm i @xeokit/xeokit-sdk</code>
+<h2 id="installing">Installing</h2><pre><code class="lang-bash"><code class="source-code prettyprint">npm i @xeokit/xeokit-sdk</code>
+</code></pre>
+<h2 id="usage">Usage</h2><p>The xeokit SDK lets us develop our own browser-based BIM viewer, which we can fully customize and extend with
+plugins.</p>
+<p>Let&apos;s create a <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a> with
+a <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a>
+to view a IFC model in the browser, then view a sample IFC model from
+the <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Open IFC Model Database</a>.</p>
+<blockquote>
+<p>&gt; <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex">Run this example</a></p>
+<p>&gt; <a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251">Read the full tutorial</a></p>
+</blockquote>
+<p><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPluginBig.png" alt></p>
+<pre><code class="lang-html"><code class="source-code prettyprint">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+    &lt;title&gt;xeokit Example&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+        }
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: lightblue;
+            background-image: linear-gradient(lightblue, white);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;canvas id=&quot;myCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;/body&gt;
+&lt;script id=&quot;source&quot; type=&quot;module&quot;&gt;
+
+    import {Viewer, WebIFCLoaderPlugin} from
+                &quot;https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js&quot;;
+
+    const viewer = new Viewer({
+        canvasId: &quot;myCanvas&quot;,
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+        wasmPath: &quot;https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/&quot;
+    });
+
+    const model = webIFCLoader.load({
+        src: &quot;Duplex.ifc&quot;,
+        edges: true
+    });
+
+&lt;/script&gt;
+&lt;/html&gt;</code>
 </code></pre>
 <h2 id="resources">Resources</h2><ul>
 <li><a href="https://xeokit.io/">xeokit.io</a></li>
@@ -183,7 +245,7 @@ high-detail, full-precision 3D engineering and BIM models in the browser.</p>
 <li><a href="https://xeokit.github.io/xeokit-sdk/docs/">API Docs</a></li>
 <li><a href="https://xeokit.github.io/xeokit-sdk/CHANGE_LOG">Changelog</a></li>
 <li><a href="https://xeokit.io/index.html?foo=1#features">Features</a></li>
-<li><a href="https://xeokit.io/index.html?foo=1#faq">FAQ</a>  </li>
+<li><a href="https://xeokit.io/index.html?foo=1#faq">FAQ</a></li>
 <li><a href="https://xeokit.io/blog.html">Blog</a></li>
 <li><a href="https://xeokit.io/index.html#pricing">License</a></li>
 </ul>

@@ -4,30 +4,97 @@
 [![npm version](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg)](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk)
 [![](https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge)](https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk)
 
-[xeokit](http://xeokit.io) is a JavaScript software development kit from [xeolabs](http://xeolabs.com) for viewing 
+[xeokit](http://xeokit.io) is a JavaScript software development kit from [xeolabs](http://xeolabs.com) for viewing
 high-detail, full-precision 3D engineering and BIM models in the browser.
 
-[![Peek-2019-10-22-10-57](https://user-images.githubusercontent.com/83100/67271586-14690780-f4bb-11e9-9e76-203fe425ee08.gif)](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)
-
-## Usage
-
-To install:
+## Installing
 
 ````bash
 npm i @xeokit/xeokit-sdk
 ````
 
-## Resources 
+## Usage
 
- * [xeokit.io](https://xeokit.io/)
- * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
- * [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
- * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
- * [Changelog](https://xeokit.github.io/xeokit-sdk/CHANGE_LOG)
- * [Features](https://xeokit.io/index.html?foo=1#features)
- * [FAQ](https://xeokit.io/index.html?foo=1#faq)  
- * [Blog](https://xeokit.io/blog.html)
- * [License](https://xeokit.io/index.html#pricing)
+The xeokit SDK lets us develop our own browser-based BIM viewer, which we can fully customize and extend with
+plugins.
+
+Let's create a [Viewer](https://xeokit.github.io/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html) with
+a [WebIFCLoaderPlugin](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html)
+to view a IFC model in the browser, then view a sample IFC model from
+the [Open IFC Model Database](http://openifcmodel.cs.auckland.ac.nz/Model/Details/274).
+
+> &gt; [Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)
+>
+> &gt; [Read the full tutorial](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251)
+
+![](https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPluginBig.png)
+
+````html
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+        }
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: lightblue;
+            background-image: linear-gradient(lightblue, white);
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script id="source" type="module">
+
+    import {Viewer, WebIFCLoaderPlugin} from
+                "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
+    });
+
+    const model = webIFCLoader.load({
+        src: "Duplex.ifc",
+        edges: true
+    });
+
+</script>
+</html>
+````
+
+## Resources
+
+* [xeokit.io](https://xeokit.io/)
+* [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
+* [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
+* [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
+* [Changelog](https://xeokit.github.io/xeokit-sdk/CHANGE_LOG)
+* [Features](https://xeokit.io/index.html?foo=1#features)
+* [FAQ](https://xeokit.io/index.html?foo=1#faq)
+* [Blog](https://xeokit.io/blog.html)
+* [License](https://xeokit.io/index.html#pricing)
 
 
 
