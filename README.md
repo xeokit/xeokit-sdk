@@ -16,16 +16,13 @@ npm i @xeokit/xeokit-sdk
 ## Usage
 
 The xeokit SDK lets us develop our own browser-based BIM viewer, which we can fully customize and extend with
-plugins.
-
-Let's create a [Viewer](https://xeokit.github.io/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html) with
+plugins. Let's create a [Viewer](https://xeokit.github.io/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html) with
 a [WebIFCLoaderPlugin](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html)
 to view a IFC model in the browser, then view a sample IFC model from
 the [Open IFC Model Database](http://openifcmodel.cs.auckland.ac.nz/Model/Details/274).
 
-> &gt; [Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)
->
-> &gt; [Read the full tutorial](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251)
+ * [Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)
+ * [Read the full tutorial](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251)
 
 ![](https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPluginBig.png)
 
