@@ -1246,6 +1246,10 @@ class Scene extends Component {
             this._needRecompile = false;
         }
 
+        if (!forceRender && !this._renderer.needsRender()) {
+            return;
+        }
+
         renderEvent.sceneId = this.id;
 
         const passes = this._passes;

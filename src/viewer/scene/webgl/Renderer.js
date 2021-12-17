@@ -186,6 +186,14 @@ const Renderer = function (scene, options) {
     };
 
     /**
+     * Returns true if the next call to render() will draw something
+     * @returns {boolean}
+     */
+    this.needsRender = function () {
+        return (imageDirty || drawableListDirty || stateSortDirty);
+    }
+
+    /**
      * Renders inserted drawables.
      *  @private
      */
