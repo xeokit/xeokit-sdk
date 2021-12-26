@@ -70,6 +70,8 @@ class PerformanceNode {
         this._offsetAABB = math.AABB3(aabb);
 
         this._offset = math.vec3();
+        this._colorizeUpdated = false;
+        this._opacityUpdated = false;
 
         if (this._isObject) {
             model.scene._registerObject(this);
@@ -482,6 +484,7 @@ class PerformanceNode {
         if (this._isObject) {
             const colorized = (!!color);
             this.scene._objectColorizeUpdated(this, colorized);
+            this._colorizeUpdated = colorized;
         }
         this.model.glRedraw();
     }
@@ -536,6 +539,7 @@ class PerformanceNode {
         }
         if (this._isObject) {
             this.scene._objectOpacityUpdated(this, opacityUpdated);
+            this._opacityUpdated = opacityUpdated;
         }
         this.model.glRedraw();
     }
@@ -682,8 +686,12 @@ class PerformanceNode {
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
             }
-            this.scene._objectColorizeUpdated(this, false);
-            this.scene._objectOpacityUpdated(this, false);
+            if (this._opacityUpdated) {
+                this.scene._objectColorizeUpdated(this, false);
+            }
+            if (this._opacityUpdated) {
+                this.scene._objectOpacityUpdated(this, false);
+            }
             this.scene._objectOffsetUpdated(this, false);
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
