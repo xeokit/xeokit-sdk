@@ -2201,7 +2201,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} visible Whether or not to cull.
+     * @param {Boolean} visible Whether or not to set visible.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsVisible(ids, visible) {
@@ -2218,7 +2218,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} collidable Whether or not to cull.
+     * @param {Boolean} collidable Whether or not to set collidable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCollidable(ids, collidable) {
@@ -2255,7 +2255,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} selected Whether or not to highlight.
+     * @param {Boolean} selected Whether or not to select.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsSelected(ids, selected) {
@@ -2361,7 +2361,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} pickable Whether or not to enable picking.
+     * @param {Boolean} pickable Whether or not to set pickable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsPickable(ids, pickable) {
