@@ -2387,11 +2387,11 @@ class Scene extends Component {
     }
 
     /**
-     * Iterates with a callback over {@link Entity#visible} on {@link Entity}s that represent objects.
+     * Iterates with a callback over {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#visible} are ````true```` is
+     * Each {@link Entity} on which {@link Entity#visible} is ````true```` is
      * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
