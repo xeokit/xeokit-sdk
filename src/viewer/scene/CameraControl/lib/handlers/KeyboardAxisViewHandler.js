@@ -17,13 +17,13 @@ const tempCameraTarget = {
  */
 class KeyboardAxisViewHandler {
 
-    constructor(scene, controllers, configs, states, updates) {
+    constructor(scene, controllers, configs, states) {
 
         this._scene = scene;
         const cameraControl = controllers.cameraControl;
         const camera = scene.camera;
 
-        scene.input.on("keydown", this._documentKeyDownHandler = (e) => {
+        this._onSceneKeyDown = scene.input.on("keydown", () => {
 
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
@@ -115,7 +115,7 @@ class KeyboardAxisViewHandler {
     }
 
     destroy() {
-        document.removeEventListener("keydown", this._documentKeyDownHandler);
+        this._scene.input.off(this._onSceneKeyDown);
     }
 }
 

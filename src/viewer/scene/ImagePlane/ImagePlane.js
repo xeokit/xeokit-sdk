@@ -159,7 +159,7 @@ class ImagePlane extends Component {
         this._src = null;
         this._image = null;
         this._pos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;
@@ -355,8 +355,8 @@ class ImagePlane extends Component {
      */
     set position(value) {
         this._pos.set(value || [0, 0, 0]);
-        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
-        this._node.rtcCenter = this._rtcCenter;
+        worldToRTCPos(this._pos, this._origin, this._rtcPos);
+        this._node.origin = this._origin;
         this._node.position = this._rtcPos;
     }
 
@@ -550,7 +550,6 @@ class ImagePlane extends Component {
      * @destroy
      */
     destroy() {
-        this._state.destroy();
         super.destroy();
     }
 

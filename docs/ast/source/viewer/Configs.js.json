@@ -1,0 +1,2672 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 2502,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 79,
+      "column": 17
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 2502,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 79,
+        "column": 17
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 42,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 42
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 8,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 8,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                },
+                "identifierName": "math"
+              },
+              "name": "math"
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 8,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                },
+                "identifierName": "math"
+              },
+              "name": "math"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 19,
+          "end": 41,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 41
+            }
+          },
+          "extra": {
+            "rawValue": "./scene/math/math.js",
+            "raw": "\"./scene/math/math.js\""
+          },
+          "value": "./scene/math/math.js"
+        },
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+            "start": 44,
+            "end": 1439,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 41,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Identifier",
+        "start": 1440,
+        "end": 2483,
+        "loc": {
+          "start": {
+            "line": 42,
+            "column": 0
+          },
+          "end": {
+            "line": 77,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 1446,
+          "end": 1453,
+          "loc": {
+            "start": {
+              "line": 42,
+              "column": 6
+            },
+            "end": {
+              "line": 42,
+              "column": 13
+            },
+            "identifierName": "Configs"
+          },
+          "name": "Configs",
+          "leadingComments": null
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 1454,
+          "end": 2483,
+          "loc": {
+            "start": {
+              "line": 42,
+              "column": 14
+            },
+            "end": {
+              "line": 77,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 1503,
+              "end": 1525,
+              "loc": {
+                "start": {
+                  "line": 47,
+                  "column": 4
+                },
+                "end": {
+                  "line": 49,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 1503,
+                "end": 1514,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 47,
+                    "column": 15
+                  },
+                  "identifierName": "constructor"
+                },
+                "name": "constructor",
+                "leadingComments": null
+              },
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 1517,
+                "end": 1525,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 49,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Creates a Configs.\n     ",
+                  "start": 1461,
+                  "end": 1498,
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 46,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 1531,
+                  "end": 2158,
+                  "loc": {
+                    "start": {
+                      "line": 51,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 2163,
+              "end": 2271,
+              "loc": {
+                "start": {
+                  "line": 65,
+                  "column": 4
+                },
+                "end": {
+                  "line": 67,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 2167,
+                "end": 2189,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 65,
+                    "column": 30
+                  },
+                  "identifierName": "doublePrecisionEnabled"
+                },
+                "name": "doublePrecisionEnabled"
+              },
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 2190,
+                  "end": 2205,
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 46
+                    },
+                    "identifierName": "doublePrecision"
+                  },
+                  "name": "doublePrecision"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 2207,
+                "end": 2271,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 48
+                  },
+                  "end": {
+                    "line": 67,
+                    "column": 5
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 2217,
+                    "end": 2265,
+                    "loc": {
+                      "start": {
+                        "line": 66,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 66,
+                        "column": 56
+                      }
+                    },
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 2217,
+                      "end": 2264,
+                      "loc": {
+                        "start": {
+                          "line": 66,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 66,
+                          "column": 55
+                        }
+                      },
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start": 2217,
+                        "end": 2247,
+                        "loc": {
+                          "start": {
+                            "line": 66,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 66,
+                            "column": 38
+                          }
+                        },
+                        "object": {
+                          "type": "Identifier",
+                          "start": 2217,
+                          "end": 2221,
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 12
+                            },
+                            "identifierName": "math"
+                          },
+                          "name": "math"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 2222,
+                          "end": 2247,
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 38
+                            },
+                            "identifierName": "setDoublePrecisionEnabled"
+                          },
+                          "name": "setDoublePrecisionEnabled"
+                        },
+                        "computed": false
+                      },
+                      "arguments": [
+                        {
+                          "type": "Identifier",
+                          "start": 2248,
+                          "end": 2263,
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 39
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 54
+                            },
+                            "identifierName": "doublePrecision"
+                          },
+                          "name": "doublePrecision"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "directives": [],
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 1531,
+                  "end": 2158,
+                  "loc": {
+                    "start": {
+                      "line": 51,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2277,
+                  "end": 2391,
+                  "loc": {
+                    "start": {
+                      "line": 69,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 73,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 2396,
+              "end": 2481,
+              "loc": {
+                "start": {
+                  "line": 74,
+                  "column": 4
+                },
+                "end": {
+                  "line": 76,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 2400,
+                "end": 2422,
+                "loc": {
+                  "start": {
+                    "line": 74,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 74,
+                    "column": 30
+                  },
+                  "identifierName": "doublePrecisionEnabled"
+                },
+                "name": "doublePrecisionEnabled"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 2425,
+                "end": 2481,
+                "loc": {
+                  "start": {
+                    "line": 74,
+                    "column": 33
+                  },
+                  "end": {
+                    "line": 76,
+                    "column": 5
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start": 2435,
+                    "end": 2475,
+                    "loc": {
+                      "start": {
+                        "line": 75,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 75,
+                        "column": 48
+                      }
+                    },
+                    "argument": {
+                      "type": "CallExpression",
+                      "start": 2442,
+                      "end": 2474,
+                      "loc": {
+                        "start": {
+                          "line": 75,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 75,
+                          "column": 47
+                        }
+                      },
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start": 2442,
+                        "end": 2472,
+                        "loc": {
+                          "start": {
+                            "line": 75,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 75,
+                            "column": 45
+                          }
+                        },
+                        "object": {
+                          "type": "Identifier",
+                          "start": 2442,
+                          "end": 2446,
+                          "loc": {
+                            "start": {
+                              "line": 75,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 75,
+                              "column": 19
+                            },
+                            "identifierName": "math"
+                          },
+                          "name": "math"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 2447,
+                          "end": 2472,
+                          "loc": {
+                            "start": {
+                              "line": 75,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 75,
+                              "column": 45
+                            },
+                            "identifierName": "getDoublePrecisionEnabled"
+                          },
+                          "name": "getDoublePrecisionEnabled"
+                        },
+                        "computed": false
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "start": 2277,
+                  "end": 2391,
+                  "loc": {
+                    "start": {
+                      "line": 69,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 73,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "leadingComments": [],
+        "name": "_",
+        "trailingComments": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 2485,
+        "end": 2502,
+        "loc": {
+          "start": {
+            "line": 79,
+            "column": 0
+          },
+          "end": {
+            "line": 79,
+            "column": 17
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 2493,
+            "end": 2500,
+            "loc": {
+              "start": {
+                "line": 79,
+                "column": 8
+              },
+              "end": {
+                "line": 79,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 2493,
+              "end": 2500,
+              "loc": {
+                "start": {
+                  "line": 79,
+                  "column": 8
+                },
+                "end": {
+                  "line": 79,
+                  "column": 15
+                },
+                "identifierName": "Configs"
+              },
+              "name": "Configs"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 2493,
+              "end": 2500,
+              "loc": {
+                "start": {
+                  "line": 79,
+                  "column": 8
+                },
+                "end": {
+                  "line": 79,
+                  "column": 15
+                },
+                "identifierName": "Configs"
+              },
+              "name": "Configs"
+            }
+          }
+        ],
+        "source": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 2485,
+        "end": 2502,
+        "loc": {
+          "start": {
+            "line": 79,
+            "column": 0
+          },
+          "end": {
+            "line": 79,
+            "column": 17
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 1440,
+          "end": 2483,
+          "loc": {
+            "start": {
+              "line": 42,
+              "column": 0
+            },
+            "end": {
+              "line": 77,
+              "column": 1
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 1446,
+            "end": 1453,
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 6
+              },
+              "end": {
+                "line": 42,
+                "column": 13
+              },
+              "identifierName": "Configs"
+            },
+            "name": "Configs",
+            "leadingComments": null
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 1454,
+            "end": 2483,
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 14
+              },
+              "end": {
+                "line": 77,
+                "column": 1
+              }
+            },
+            "body": [
+              {
+                "type": "ClassMethod",
+                "start": 1503,
+                "end": 1525,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 49,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 1503,
+                  "end": 1514,
+                  "loc": {
+                    "start": {
+                      "line": 47,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 47,
+                      "column": 15
+                    },
+                    "identifierName": "constructor"
+                  },
+                  "name": "constructor",
+                  "leadingComments": null
+                },
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 1517,
+                  "end": 1525,
+                  "loc": {
+                    "start": {
+                      "line": 47,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 49,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Creates a Configs.\n     ",
+                    "start": 1461,
+                    "end": 1498,
+                    "loc": {
+                      "start": {
+                        "line": 44,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 46,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 1531,
+                    "end": 2158,
+                    "loc": {
+                      "start": {
+                        "line": 51,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 64,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 2163,
+                "end": 2271,
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 67,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 2167,
+                  "end": 2189,
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 30
+                    },
+                    "identifierName": "doublePrecisionEnabled"
+                  },
+                  "name": "doublePrecisionEnabled"
+                },
+                "kind": "set",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 2190,
+                    "end": 2205,
+                    "loc": {
+                      "start": {
+                        "line": 65,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 65,
+                        "column": 46
+                      },
+                      "identifierName": "doublePrecision"
+                    },
+                    "name": "doublePrecision"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 2207,
+                  "end": 2271,
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 48
+                    },
+                    "end": {
+                      "line": 67,
+                      "column": 5
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 2217,
+                      "end": 2265,
+                      "loc": {
+                        "start": {
+                          "line": 66,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 66,
+                          "column": 56
+                        }
+                      },
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 2217,
+                        "end": 2264,
+                        "loc": {
+                          "start": {
+                            "line": 66,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 66,
+                            "column": 55
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 2217,
+                          "end": 2247,
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 38
+                            }
+                          },
+                          "object": {
+                            "type": "Identifier",
+                            "start": 2217,
+                            "end": 2221,
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 12
+                              },
+                              "identifierName": "math"
+                            },
+                            "name": "math"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 2222,
+                            "end": 2247,
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 38
+                              },
+                              "identifierName": "setDoublePrecisionEnabled"
+                            },
+                            "name": "setDoublePrecisionEnabled"
+                          },
+                          "computed": false
+                        },
+                        "arguments": [
+                          {
+                            "type": "Identifier",
+                            "start": 2248,
+                            "end": 2263,
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 39
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 54
+                              },
+                              "identifierName": "doublePrecision"
+                            },
+                            "name": "doublePrecision"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "directives": [],
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 1531,
+                    "end": 2158,
+                    "loc": {
+                      "start": {
+                        "line": 51,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 64,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2277,
+                    "end": 2391,
+                    "loc": {
+                      "start": {
+                        "line": 69,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 2396,
+                "end": 2481,
+                "loc": {
+                  "start": {
+                    "line": 74,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 76,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 2400,
+                  "end": 2422,
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 74,
+                      "column": 30
+                    },
+                    "identifierName": "doublePrecisionEnabled"
+                  },
+                  "name": "doublePrecisionEnabled"
+                },
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 2425,
+                  "end": 2481,
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 76,
+                      "column": 5
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start": 2435,
+                      "end": 2475,
+                      "loc": {
+                        "start": {
+                          "line": 75,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 75,
+                          "column": 48
+                        }
+                      },
+                      "argument": {
+                        "type": "CallExpression",
+                        "start": 2442,
+                        "end": 2474,
+                        "loc": {
+                          "start": {
+                            "line": 75,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 75,
+                            "column": 47
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 2442,
+                          "end": 2472,
+                          "loc": {
+                            "start": {
+                              "line": 75,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 75,
+                              "column": 45
+                            }
+                          },
+                          "object": {
+                            "type": "Identifier",
+                            "start": 2442,
+                            "end": 2446,
+                            "loc": {
+                              "start": {
+                                "line": 75,
+                                "column": 15
+                              },
+                              "end": {
+                                "line": 75,
+                                "column": 19
+                              },
+                              "identifierName": "math"
+                            },
+                            "name": "math"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 2447,
+                            "end": 2472,
+                            "loc": {
+                              "start": {
+                                "line": 75,
+                                "column": 20
+                              },
+                              "end": {
+                                "line": 75,
+                                "column": 45
+                              },
+                              "identifierName": "getDoublePrecisionEnabled"
+                            },
+                            "name": "getDoublePrecisionEnabled"
+                          },
+                          "computed": false
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "start": 2277,
+                    "end": 2391,
+                    "loc": {
+                      "start": {
+                        "line": 69,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+              "start": 44,
+              "end": 1439,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 0
+                },
+                "end": {
+                  "line": 41,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "__PseudoExport__": false,
+          "trailingComments": []
+        },
+        "specifiers": null,
+        "source": null,
+        "leadingComments": null
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "start": 44,
+      "end": 1439,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Creates a Configs.\n     ",
+      "start": 1461,
+      "end": 1498,
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 4
+        },
+        "end": {
+          "line": 46,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 1531,
+      "end": 2158,
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 4
+        },
+        "end": {
+          "line": 64,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2277,
+      "end": 2391,
+      "loc": {
+        "start": {
+          "line": 69,
+          "column": 4
+        },
+        "end": {
+          "line": 73,
+          "column": 7
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": {
+        "label": "import",
+        "keyword": "import",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "import",
+      "start": 0,
+      "end": 6,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7,
+      "end": 8,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 7
+        },
+        "end": {
+          "line": 1,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "math",
+      "start": 8,
+      "end": 12,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 8
+        },
+        "end": {
+          "line": 1,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 12,
+      "end": 13,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 12
+        },
+        "end": {
+          "line": 1,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 14,
+      "end": 18,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 14
+        },
+        "end": {
+          "line": 1,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./scene/math/math.js",
+      "start": 19,
+      "end": 41,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 19
+        },
+        "end": {
+          "line": 1,
+          "column": 41
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 41,
+      "end": 42,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 41
+        },
+        "end": {
+          "line": 1,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"../dist/xeokit-sdk.min.es.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "start": 44,
+      "end": 1439,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "class",
+        "keyword": "class",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "class",
+      "start": 1440,
+      "end": 1445,
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 0
+        },
+        "end": {
+          "line": 42,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Configs",
+      "start": 1446,
+      "end": 1453,
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 6
+        },
+        "end": {
+          "line": 42,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1454,
+      "end": 1455,
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 14
+        },
+        "end": {
+          "line": 42,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Creates a Configs.\n     ",
+      "start": 1461,
+      "end": 1498,
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 4
+        },
+        "end": {
+          "line": 46,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "constructor",
+      "start": 1503,
+      "end": 1514,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 4
+        },
+        "end": {
+          "line": 47,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1514,
+      "end": 1515,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 15
+        },
+        "end": {
+          "line": 47,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1515,
+      "end": 1516,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 16
+        },
+        "end": {
+          "line": 47,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1517,
+      "end": 1518,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 18
+        },
+        "end": {
+          "line": 47,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1524,
+      "end": 1525,
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 4
+        },
+        "end": {
+          "line": 49,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 1531,
+      "end": 2158,
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 4
+        },
+        "end": {
+          "line": 64,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "set",
+      "start": 2163,
+      "end": 2166,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 4
+        },
+        "end": {
+          "line": 65,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "doublePrecisionEnabled",
+      "start": 2167,
+      "end": 2189,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 8
+        },
+        "end": {
+          "line": 65,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2189,
+      "end": 2190,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 30
+        },
+        "end": {
+          "line": 65,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "doublePrecision",
+      "start": 2190,
+      "end": 2205,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 31
+        },
+        "end": {
+          "line": 65,
+          "column": 46
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2205,
+      "end": 2206,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 46
+        },
+        "end": {
+          "line": 65,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2207,
+      "end": 2208,
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 48
+        },
+        "end": {
+          "line": 65,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "math",
+      "start": 2217,
+      "end": 2221,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 8
+        },
+        "end": {
+          "line": 66,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2221,
+      "end": 2222,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 12
+        },
+        "end": {
+          "line": 66,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "setDoublePrecisionEnabled",
+      "start": 2222,
+      "end": 2247,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 13
+        },
+        "end": {
+          "line": 66,
+          "column": 38
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2247,
+      "end": 2248,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 38
+        },
+        "end": {
+          "line": 66,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "doublePrecision",
+      "start": 2248,
+      "end": 2263,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 39
+        },
+        "end": {
+          "line": 66,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2263,
+      "end": 2264,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 54
+        },
+        "end": {
+          "line": 66,
+          "column": 55
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2264,
+      "end": 2265,
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 55
+        },
+        "end": {
+          "line": 66,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2270,
+      "end": 2271,
+      "loc": {
+        "start": {
+          "line": 67,
+          "column": 4
+        },
+        "end": {
+          "line": 67,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "start": 2277,
+      "end": 2391,
+      "loc": {
+        "start": {
+          "line": 69,
+          "column": 4
+        },
+        "end": {
+          "line": 73,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 2396,
+      "end": 2399,
+      "loc": {
+        "start": {
+          "line": 74,
+          "column": 4
+        },
+        "end": {
+          "line": 74,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "doublePrecisionEnabled",
+      "start": 2400,
+      "end": 2422,
+      "loc": {
+        "start": {
+          "line": 74,
+          "column": 8
+        },
+        "end": {
+          "line": 74,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2422,
+      "end": 2423,
+      "loc": {
+        "start": {
+          "line": 74,
+          "column": 30
+        },
+        "end": {
+          "line": 74,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2423,
+      "end": 2424,
+      "loc": {
+        "start": {
+          "line": 74,
+          "column": 31
+        },
+        "end": {
+          "line": 74,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2425,
+      "end": 2426,
+      "loc": {
+        "start": {
+          "line": 74,
+          "column": 33
+        },
+        "end": {
+          "line": 74,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "return",
+        "keyword": "return",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "return",
+      "start": 2435,
+      "end": 2441,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 8
+        },
+        "end": {
+          "line": 75,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "math",
+      "start": 2442,
+      "end": 2446,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 15
+        },
+        "end": {
+          "line": 75,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2446,
+      "end": 2447,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 19
+        },
+        "end": {
+          "line": 75,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "getDoublePrecisionEnabled",
+      "start": 2447,
+      "end": 2472,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 20
+        },
+        "end": {
+          "line": 75,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2472,
+      "end": 2473,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 45
+        },
+        "end": {
+          "line": 75,
+          "column": 46
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2473,
+      "end": 2474,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 46
+        },
+        "end": {
+          "line": 75,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2474,
+      "end": 2475,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 47
+        },
+        "end": {
+          "line": 75,
+          "column": 48
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2480,
+      "end": 2481,
+      "loc": {
+        "start": {
+          "line": 76,
+          "column": 4
+        },
+        "end": {
+          "line": 76,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2482,
+      "end": 2483,
+      "loc": {
+        "start": {
+          "line": 77,
+          "column": 0
+        },
+        "end": {
+          "line": 77,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 2485,
+      "end": 2491,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 0
+        },
+        "end": {
+          "line": 79,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2492,
+      "end": 2493,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 7
+        },
+        "end": {
+          "line": 79,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Configs",
+      "start": 2493,
+      "end": 2500,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 8
+        },
+        "end": {
+          "line": 79,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2500,
+      "end": 2501,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 15
+        },
+        "end": {
+          "line": 79,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2501,
+      "end": 2502,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 16
+        },
+        "end": {
+          "line": 79,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2502,
+      "end": 2502,
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 17
+        },
+        "end": {
+          "line": 79,
+          "column": 17
+        }
+      }
+    }
+  ]
+}

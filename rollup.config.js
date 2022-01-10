@@ -1,5 +1,4 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import { terser } from "rollup-plugin-terser";
+import resolve from 'rollup-plugin-node-resolve';
 
 export default {
     input: './src/index.js',
@@ -8,10 +7,17 @@ export default {
             file: './dist/xeokit-sdk.es.js',
             format: 'es',
             name: 'bundle'
+        },
+        {
+            file: './dist/xeokit-sdk.cjs.js',
+            format: 'cjs',
+            name: 'bundle'
         }
     ],
     plugins: [
-        nodeResolve(),
-        terser()
+        resolve({
+            browser: true,
+            preferBuiltins: false
+        })
     ]
 }

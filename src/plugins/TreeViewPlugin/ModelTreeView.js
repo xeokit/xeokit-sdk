@@ -216,7 +216,7 @@ class ModelTreeView {
         this._rootNodes = [];
         this._objectNodes = {};
         this._validate();
-        if (this.valid) {
+        if (this.valid || (this._hierarchy !== "storeys")) {
             this._createEnabledNodes();
         } else {
             this._createDisabledNodes();

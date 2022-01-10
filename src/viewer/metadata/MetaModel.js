@@ -18,7 +18,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, propertySets, rootMetaObject) {
 
         /**
          * Globally-unique ID.
@@ -98,6 +98,14 @@ class MetaModel {
         this.metaScene = metaScene;
 
         /**
+         * The {@link PropertySet}s in this MetaModel.
+         *
+         * @property propertySets
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = propertySets;
+
+        /**
          * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
          *
          * @property rootMetaObject
@@ -108,10 +116,10 @@ class MetaModel {
 
     getJSON() {
 
-        var metaObjects = [];
+        const metaObjects = [];
 
         function visit(metaObject) {
-            var metaObjectCfg = {
+            const metaObjectCfg = {
                 id: metaObject.id,
                 extId: metaObject.extId,
                 type: metaObject.type,
@@ -121,9 +129,9 @@ class MetaModel {
                 metaObjectCfg.parent = metaObject.parent.id;
             }
             metaObjects.push(metaObjectCfg);
-            var children = metaObject.children;
+            const children = metaObject.children;
             if (children) {
-                for (var i = 0, len = children.length; i < len; i++) {
+                for (let i = 0, len = children.length; i < len; i++) {
                     visit(children[i]);
                 }
             }
@@ -131,7 +139,7 @@ class MetaModel {
 
         visit(this.rootMetaObject);
 
-        var json = {
+        const json = {
             id: this.id,
             projectId: this.projectId,
             revisionId: this.revisionId,

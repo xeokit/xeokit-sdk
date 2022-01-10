@@ -70,6 +70,8 @@ class PerformanceNode {
         this._offsetAABB = math.AABB3(aabb);
 
         this._offset = math.vec3();
+        this._colorizeUpdated = false;
+        this._opacityUpdated = false;
 
         if (this._isObject) {
             model.scene._registerObject(this);
@@ -131,6 +133,20 @@ class PerformanceNode {
     }
 
     /**
+     * Gets if this PerformanceNode is visible.
+     *
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+     *
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return this._getFlag(ENTITY_FLAGS.VISIBLE);
+    }
+
+    /**
      * Sets if this PerformanceNode is visible.
      *
      * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
@@ -159,21 +175,15 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is visible.
+     * Gets if this PerformanceNode is highlighted.
      *
-     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
-     *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
-    get visible() {
-        return this._getFlag(ENTITY_FLAGS.VISIBLE);
-    }
-
-    _getFlag(flag) {
-        return !!(this._flags & flag);
+    get highlighted() {
+        return this._getFlag(ENTITY_FLAGS.HIGHLIGHTED);
     }
 
     /**
@@ -203,15 +213,15 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is highlighted.
+     * Gets if this PerformanceNode is xrayed.
      *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
-    get highlighted() {
-        return this._getFlag(ENTITY_FLAGS.HIGHLIGHTED);
+    get xrayed() {
+        return this._getFlag(ENTITY_FLAGS.XRAYED);
     }
 
     /**
@@ -241,15 +251,15 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is xrayed.
+     * Sets if this PerformanceNode is selected.
      *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
-    get xrayed() {
-        return this._getFlag(ENTITY_FLAGS.XRAYED);
+    get selected() {
+        return this._getFlag(ENTITY_FLAGS.SELECTED);
     }
 
     /**
@@ -279,15 +289,12 @@ class PerformanceNode {
     }
 
     /**
-     * Sets if this PerformanceNode is selected.
-     *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
+     * Gets if this PerformanceNode's edges are enhanced.
      *
      * @type {Boolean}
      */
-    get selected() {
-        return this._getFlag(ENTITY_FLAGS.SELECTED);
+    get edges() {
+        return this._getFlag(ENTITY_FLAGS.EDGES);
     }
 
     /**
@@ -311,12 +318,14 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode's edges are enhanced.
+     * Gets if this PerformanceNode is culled.
+     *
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
-    get edges() {
-        return this._getFlag(ENTITY_FLAGS.EDGES);
+    get culled() {
+        return this._getFlag(ENTITY_FLAGS.CULLED);
     }
 
     /**
@@ -342,14 +351,14 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is culled.
+     * Gets if this PerformanceNode is clippable.
      *
-     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      */
-    get culled() {
-        return this._getFlag(ENTITY_FLAGS.CULLED);
+    get clippable() {
+        return this._getFlag(ENTITY_FLAGS.CLIPPABLE);
     }
 
     /**
@@ -375,14 +384,12 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     * Gets if this PerformanceNode is included in boundary calculations.
      *
      * @type {Boolean}
      */
-    get clippable() {
-        return this._getFlag(ENTITY_FLAGS.CLIPPABLE);
+    get collidable() {
+        return this._getFlag(ENTITY_FLAGS.COLLIDABLE);
     }
 
     /**
@@ -405,12 +412,14 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is included in boundary calculations.
+     * Gets if this PerformanceNode is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
      *
      * @type {Boolean}
      */
-    get collidable() {
-        return this._getFlag(ENTITY_FLAGS.COLLIDABLE);
+    get pickable() {
+        return this._getFlag(ENTITY_FLAGS.PICKABLE);
     }
 
     /**
@@ -435,14 +444,21 @@ class PerformanceNode {
     }
 
     /**
-     * Gets if this PerformanceNode is pickable.
+     * Gets the PerformanceNode's RGB colorize color.
      *
-     * Picking is done via calls to {@link Scene#pick}.
+     * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Boolean}
+     * @type {Number[]}
      */
-    get pickable() {
-        return this._getFlag(ENTITY_FLAGS.PICKABLE);
+    get colorize() { // [0..1, 0..1, 0..1]
+        if (this.meshes.length === 0) {
+            return null;
+        }
+        const colorize = this.meshes[0]._colorize;
+        tempFloatRGB[0] = colorize[0] / 255.0; // Unquantize
+        tempFloatRGB[1] = colorize[1] / 255.0;
+        tempFloatRGB[2] = colorize[2] / 255.0;
+        return tempFloatRGB;
     }
 
     /**
@@ -468,26 +484,24 @@ class PerformanceNode {
         if (this._isObject) {
             const colorized = (!!color);
             this.scene._objectColorizeUpdated(this, colorized);
+            this._colorizeUpdated = colorized;
         }
         this.model.glRedraw();
     }
 
     /**
-     * Gets the PerformanceNode's RGB colorize color.
+     * Gets the PerformanceNode's opacity factor.
      *
-     * Each element of the color is in range ````[0..1]````.
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
-     * @type {Number[]}
+     * @type {Number}
      */
-    get colorize() { // [0..1, 0..1, 0..1]
-        if (this.meshes.length === 0) {
-            return null;
+    get opacity() {
+        if (this.meshes.length > 0) {
+            return (this.meshes[0]._colorize[3] / 255.0);
+        } else {
+            return 1.0;
         }
-        const colorize = this.meshes[0]._colorize;
-        tempFloatRGB[0] = colorize[0] / 255.0; // Unquantize
-        tempFloatRGB[1] = colorize[1] / 255.0;
-        tempFloatRGB[2] = colorize[2] / 255.0;
-        return tempFloatRGB;
     }
 
     /**
@@ -525,23 +539,20 @@ class PerformanceNode {
         }
         if (this._isObject) {
             this.scene._objectOpacityUpdated(this, opacityUpdated);
+            this._opacityUpdated = opacityUpdated;
         }
         this.model.glRedraw();
     }
 
     /**
-     * Gets the PerformanceNode's opacity factor.
+     * Gets the PerformanceNode's 3D World-space offset.
      *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     * Default value is ````[0,0,0]````.
      *
-     * @type {Number}
+     * @type {Number[]}
      */
-    get opacity() {
-        if (this.meshes.length > 0) {
-            return (this.meshes[0]._colorize[3] / 255.0);
-        } else {
-            return 1.0;
-        }
+    get offset() {
+        return this._offset;
     }
 
     /**
@@ -581,26 +592,6 @@ class PerformanceNode {
     }
 
     /**
-     * Gets the PerformanceNode's 3D World-space offset.
-     *
-     * Default value is ````[0,0,0]````.
-     *
-     * @type {Number[]}
-     */
-    get offset() {
-        return this._offset;
-    }
-
-    /**
-     * Sets if to this PerformanceNode casts shadows.
-     *
-     * @type {Boolean}
-     */
-    set castsShadow(pickable) { // TODO
-
-    }
-
-    /**
      * Gets if this PerformanceNode casts shadows.
      *
      * @type {Boolean}
@@ -610,11 +601,11 @@ class PerformanceNode {
     }
 
     /**
-     * Whether or not this PerformanceNode can have shadows cast upon it
+     * Sets if to this PerformanceNode casts shadows.
      *
      * @type {Boolean}
      */
-    set receivesShadow(pickable) { // TODO
+    set castsShadow(pickable) { // TODO
 
     }
 
@@ -628,6 +619,15 @@ class PerformanceNode {
     }
 
     /**
+     * Whether or not this PerformanceNode can have shadows cast upon it
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(pickable) { // TODO
+
+    }
+
+    /**
      * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceNode.
      *
      * SAO is configured by the Scene's {@link SAO} component.
@@ -637,6 +637,10 @@ class PerformanceNode {
      */
     get saoEnabled() {
         return this.model.saoEnabled;
+    }
+
+    _getFlag(flag) {
+        return !!(this._flags & flag);
     }
 
     _finalize() {
@@ -660,6 +664,12 @@ class PerformanceNode {
         }
     }
 
+    _finalize2() {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._finalize2();
+        }
+    }
+
     _destroy() { // Called by PerformanceModel
         const scene = this.model.scene;
         if (this._isObject) {
@@ -676,8 +686,12 @@ class PerformanceNode {
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
             }
-            this.scene._objectColorizeUpdated(this, false);
-            this.scene._objectOpacityUpdated(this, false);
+            if (this._opacityUpdated) {
+                this.scene._objectColorizeUpdated(this, false);
+            }
+            if (this._opacityUpdated) {
+                this.scene._objectOpacityUpdated(this, false);
+            }
             this.scene._objectOffsetUpdated(this, false);
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {

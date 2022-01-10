@@ -2,6 +2,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
 import {buildEdgeIndices} from '../../viewer/scene/math/buildEdgeIndices.js';
+import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 
 /**
  * @private
@@ -50,8 +51,6 @@ class GLTFPerformanceModelLoader {
             });
     }
 }
-
-const INSTANCE_THRESHOLD = 1;
 
 const loadGLTF = (function () {
 
@@ -375,12 +374,11 @@ const parseGLTF = (function () {
 
                     for (let i = 0; i < numPrimitives; i++) {
                         const primitiveInfo = meshInfo.primitives[i];
-                        if (primitiveInfo.mode < 4 ) {
+                        if (primitiveInfo.mode < 4) {
                             continue;
                         }
                         const meshCfg = {
-                            id: performanceModel.id + "." + ctx.numObjects++,
-                            matrix: worldMatrix
+                            id: performanceModel.id + "." + ctx.numObjects++
                         };
 
                         const materialIndex = primitiveInfo.material;
@@ -406,34 +404,16 @@ const parseGLTF = (function () {
                             }
                         }
 
-                        if (meshInfo.instances > INSTANCE_THRESHOLD) {
-
-                            // Instancing
-
-                            const geometryId = performanceModel.id + "." + glTFNode.mesh + "." + i;
-                            if (!ctx.geometryCreated[geometryId]) {
-                                const geometryCfg = {
-                                    id: geometryId
-                                };
-                                loadPrimitiveGeometry(ctx, primitiveInfo, geometryCfg);
-                                performanceModel.createGeometry(geometryCfg);
-                                ctx.geometryCreated[geometryId] = true;
-                            }
-
-                            meshCfg.geometryId = geometryId;
-
-                            performanceModel.createMesh(meshCfg);
-                            meshIds.push(meshCfg.id);
-
-                        } else {
-
-                            // Batching
-
-                            loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
-
-                            performanceModel.createMesh(meshCfg);
-                            meshIds.push(meshCfg.id);
+                        loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
+                        math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
+                        const origin = math.vec3();
+                        const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
+                        if (rtcNeeded) {
+                            meshCfg.origin = origin;
                         }
+
+                        performanceModel.createMesh(meshCfg);
+                        meshIds.push(meshCfg.id);
                     }
 
                     if (createEntity) {
@@ -477,8 +457,8 @@ const parseGLTF = (function () {
         const positionsIndex = attributes.POSITION;
         if (positionsIndex !== null && positionsIndex !== undefined) {
             const accessorInfo = ctx.json.accessors[positionsIndex];
-            geometryCfg.positions = loadAccessorTypedArray(ctx, accessorInfo);
-            //  scalePositionsArray(geometryCfg.positions);
+            geometryCfg.localPositions = loadAccessorTypedArray(ctx, accessorInfo);
+            geometryCfg.positions = new Float64Array(geometryCfg.localPositions.length);
         }
         const normalsIndex = attributes.NORMAL;
         if (normalsIndex !== null && normalsIndex !== undefined) {
@@ -486,7 +466,7 @@ const parseGLTF = (function () {
             geometryCfg.normals = loadAccessorTypedArray(ctx, accessorInfo);
         }
         if (geometryCfg.indices) {
-            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.positions, geometryCfg.indices, null, 10); // Save PerformanceModel from building edges
+            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.localPositions, geometryCfg.indices, null, 10); // Save PerformanceModel from building edges
         }
     }
 

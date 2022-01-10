@@ -18,7 +18,7 @@ class PointsInstancingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
@@ -32,7 +32,7 @@ class PointsInstancingColorRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -44,16 +44,20 @@ class PointsInstancingColorRenderer {
 
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
+            this._bindProgram();
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (rtcCenter) ? createRTCViewMat(camera.viewMatrix, rtcCenter) : camera.viewMatrix);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aColor.bindArrayBuffer(state.colorsBuf);
+
+        if (pointsMaterial.filterIntensity) {
+            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+        }
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -62,17 +66,19 @@ class PointsInstancingColorRenderer {
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                if (active) {
-                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                    } else {
-                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                if (sectionPlaneUniforms) {
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }
@@ -104,7 +110,9 @@ class PointsInstancingColorRenderer {
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
-        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems/3, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+
+        frameCtx.drawArrays++;
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
@@ -124,6 +132,7 @@ class PointsInstancingColorRenderer {
     _allocate() {
 
         const scene = this._scene;
+        const pointsMaterial = scene.pointsMaterial._state;
         const gl = scene.canvas.gl;
 
         this._program = new Program(gl, this._buildShader());
@@ -170,12 +179,16 @@ class PointsInstancingColorRenderer {
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
 
-        if ( scene.logarithmicDepthBufferEnabled) {
+        if (pointsMaterial.filterIntensity) {
+            this._uIntensityRange = program.getLocation("intensityRange");
+        }
+
+        if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
 
-    _bindProgram(frameCtx) {
+    _bindProgram() {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
@@ -185,7 +198,7 @@ class PointsInstancingColorRenderer {
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
-        if ( scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -234,6 +247,10 @@ class PointsInstancingColorRenderer {
             src.push("uniform float nearPlaneHeight;");
         }
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("uniform vec2 intensityRange;");
+        }
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -257,6 +274,13 @@ class PointsInstancingColorRenderer {
 
         src.push("} else {");
 
+        if (pointsMaterial.filterIntensity) {
+            src.push("float intensity = float(color.a) / 255.0;")
+            src.push("if (intensity < intensityRange[0] || intensity > intensityRange[1]) {");
+            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+            src.push("} else {");
+        }
+
         src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
@@ -265,7 +289,7 @@ class PointsInstancingColorRenderer {
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, 1.0);");
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
@@ -292,6 +316,9 @@ class PointsInstancingColorRenderer {
             src.push("gl_PointSize = pointSize;");
         }
         src.push("}");
+        if (pointsMaterial.filterIntensity) {
+            src.push("}");
+        }
         src.push("}");
         return src;
     }

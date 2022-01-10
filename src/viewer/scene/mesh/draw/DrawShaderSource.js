@@ -1,6 +1,8 @@
 /**
  * @private
  */
+import {WEBGL_INFO} from "../../webglInfo.js";
+
 const DrawShaderSource = function (mesh) {
     if (mesh._material._state.type === "LambertMaterial") {
         this.vertex = buildVertexLambert(mesh);
@@ -89,7 +91,13 @@ function buildVertexLambert(mesh) {
     }
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
-        src.push("varying float vFragDepth;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float vFragDepth;");
+        }
+        src.push("bool isPerspectiveMatrix(mat4 m) {");
+        src.push("    return (m[2][3] == - 1.0);");
+        src.push("}");
+        src.push("varying float isPerspective;");
     }
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -223,7 +231,6 @@ function buildVertexLambert(mesh) {
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
     }
-    //src.push("vColor = vec4((reflectedColor * materialColor) + (lightAmbient.rgb * lightAmbient.a), 1.0) * colorize;");
     src.push("vColor = vec4((lightAmbient.rgb * lightAmbient.a * materialColor.rgb) + materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
@@ -233,7 +240,13 @@ function buildVertexLambert(mesh) {
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
     if (scene.logarithmicDepthBufferEnabled) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
+            src.push("clipPos.z *= clipPos.w;");
+        }
+        src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
     src.push("gl_Position = clipPos;");
     src.push("}");
@@ -260,7 +273,8 @@ function buildFragmentLambert(mesh) {
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     src.push("#endif");
-    if (scene.logarithmicDepthBufferEnabled) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        src.push("varying float isPerspective;");
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -306,8 +320,8 @@ function buildFragmentLambert(mesh) {
         src.push("}");
 
     }
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     if (gammaOutput) {
         src.push("gl_FragColor = linearToGamma(vColor, gammaFactor);");
@@ -329,6 +343,7 @@ function buildVertexDraw(mesh) {
     let len;
     let light;
     const billboard = meshState.billboard;
+    const background = meshState.background;
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
@@ -357,7 +372,13 @@ function buildVertexDraw(mesh) {
     }
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
-        src.push("varying float vFragDepth;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float vFragDepth;");
+        }
+        src.push("bool isPerspectiveMatrix(mat4 m) {");
+        src.push("    return (m[2][3] == - 1.0);");
+        src.push("}");
+        src.push("varying float isPerspective;");
     }
     if (lightsState.lightMaps.length > 0) {
         src.push("varying    vec3 vWorldNormal;");
@@ -454,6 +475,8 @@ function buildVertexDraw(mesh) {
     src.push("mat4 modelMatrix2          = modelMatrix;");
     if (stationary) {
         src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;")
+    } else if (background) {
+        src.push("viewMatrix2[3] = vec4(0.0, 0.0, 0.0 ,1.0);");
     }
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
@@ -524,7 +547,16 @@ function buildVertexDraw(mesh) {
     src.push("   vViewPosition = viewPosition.xyz;");
     src.push("vec4 clipPos = projMatrix * viewPosition;");
     if (scene.logarithmicDepthBufferEnabled) {
-        src.push("vFragDepth = 1.0 + clipPos.w;");
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
+            src.push("clipPos.z *= clipPos.w;");
+        }
+        src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+    }
+    if (background) {
+        src.push("clipPos.z = clipPos.w;");
     }
     src.push("gl_Position = clipPos;");
     if (receivesShadow) {
@@ -581,7 +613,8 @@ function buildFragmentDraw(mesh) {
     src.push("precision mediump int;");
     src.push("#endif");
 
-    if (scene.logarithmicDepthBufferEnabled) {
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        src.push("varying float isPerspective;");
         src.push("uniform float logDepthBufFC;");
         src.push("varying float vFragDepth;");
     }
@@ -1554,8 +1587,8 @@ function buildFragmentDraw(mesh) {
         src.push("gl_FragColor = linearToGamma(gl_FragColor, gammaFactor);");
     }
 
-    if (scene.logarithmicDepthBufferEnabled) {
-        src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
 
     src.push("}");

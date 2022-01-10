@@ -34,6 +34,15 @@ class PickResult {
          */
         this.primIndex = -1;
 
+        /**
+         * True when the picked surface position is full precision.
+         * When false, the picked surface position should be regarded as approximate.
+         * Full-precision surface picking is performed with the {@link Scene#pick} method's ````pickSurfacePrecision```` option.
+         * @property pickSurfacePrecision
+         * @type {Boolean}
+         */
+        this.pickSurfacePrecision = false;
+
         this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float64Array([0, 0, 0]);
         this._direction = new Float64Array([0, 0, 0]);
@@ -295,12 +304,12 @@ class PickResult {
 
     /**
      * @private
-     * @param value
      */
     reset() {
         this.entity = null;
         this.primIndex = -1;
         this.primitive = null;
+        this.pickSurfacePrecision = false;
         this._gotCanvasPos = false;
         this._gotOrigin = false;
         this._gotDirection = false;

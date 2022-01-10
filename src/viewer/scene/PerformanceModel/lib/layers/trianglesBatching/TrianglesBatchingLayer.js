@@ -17,6 +17,14 @@ const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempOBB3 = math.OBB3();
 
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
+
 /**
  * @private
  */
@@ -25,10 +33,11 @@ class TrianglesBatchingLayer {
     /**
      * @param model
      * @param cfg
+     * @param cfg.autoNormals
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      * @param cfg.solid
      */
@@ -38,7 +47,7 @@ class TrianglesBatchingLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesBatchingLayer" + cfg.solid ? "-solid" : "-surface";
+        this.sortId = "TrianglesBatchingLayer" + (cfg.solid ? "-solid" : "-surface") + (cfg.autoNormals ? "-autonormals" : "-normals");
 
         /**
          * Index of this TrianglesBatchingLayer in {@link PerformanceModel#_layerList}.
@@ -61,8 +70,7 @@ class TrianglesBatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: math.mat4(),
-            rtcCenter: null
+            positionsDecodeMatrix: math.mat4()
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -80,12 +88,19 @@ class TrianglesBatchingLayer {
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
 
-        this._finalized = false;
-        this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
-        this._preCompressed = (!!this._positionsDecodeMatrix);
+        this._numVerts = 0;
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        this._finalized = false;
+
+        if (cfg.positionsDecodeMatrix) {
+            this._state.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
+            this._preCompressed = true;
+        } else {
+            this._preCompressed = false;
+        }
+
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -155,6 +170,7 @@ class TrianglesBatchingLayer {
         const worldAABB = cfg.worldAABB;
         const pickColor = cfg.pickColor;
 
+        const scene = this.model.scene;
         const buffer = this._buffer;
         const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
@@ -169,8 +185,8 @@ class TrianglesBatchingLayer {
 
             const bounds = geometryCompressionUtils.getPositionsBounds(positions);
 
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, []);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, []);
+            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._state.positionsDecodeMatrix, []);
+            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._state.positionsDecodeMatrix, []);
 
             worldAABB[0] = min[0];
             worldAABB[1] = min[1];
@@ -237,19 +253,19 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
 
-        if (normals) {
+        if (normals && normals.length > 0) {
 
             if (this._preCompressed) {
 
@@ -326,7 +342,7 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (this.model.scene.entityOffsetsEnabled) {
+        if (scene.entityOffsetsEnabled) {
             for (let i = 0; i < numVerts; i++) {
                 buffer.offsets.push(0);
                 buffer.offsets.push(0);
@@ -334,13 +350,29 @@ class TrianglesBatchingLayer {
             }
         }
 
-        const portionId = this._portions.length / 2;
+        const portionId = this._portions.length;
 
-        this._portions.push(vertsIndex);
-        this._portions.push(numVerts);
+        const portion = {
+            vertsBase: vertsIndex,
+            numVerts: numVerts
+        };
+
+        if (scene.pickSurfacePrecisionEnabled) {
+            // Quantized in-memory positions are initialized in finalize()
+            if (indices) {
+                portion.indices = indices;
+            }
+            if (scene.entityOffsetsEnabled) {
+                portion.offset = new Float32Array(3);
+            }
+        }
+
+        this._portions.push(portion);
 
         this._numPortions++;
         this.model.numPortions++;
+
+        this._numVerts += portion.numVerts;
 
         return portionId;
     }
@@ -361,20 +393,26 @@ class TrianglesBatchingLayer {
         const buffer = this._buffer;
 
         if (buffer.positions.length > 0) {
-            if (this._preCompressed) {
-                state.positionsDecodeMatrix = this._positionsDecodeMatrix;
-                const positions = new Uint16Array(buffer.positions);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            } else {
-                const quantizedPositions = quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix); // BOTTLENECK
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
+
+            const quantizedPositions = (this._preCompressed)
+                ? new Uint16Array(buffer.positions)
+                : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix); // BOTTLENECK
+
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
+
+            if (this.model.scene.pickSurfacePrecisionEnabled) {
+                for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
+                    const portion = this._portions[i];
+                    const start = portion.vertsBase * 3;
+                    const end = start + (portion.numVerts * 3);
+                    portion.quantizedPositions = quantizedPositions.slice(start, end);
+                }
             }
         }
 
         if (buffer.normals.length > 0) {
             const normals = new Int8Array(buffer.normals);
             let normalized = true; // For oct encoded UInts
-            //let normalized = false; // For scaled
             state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
         }
 
@@ -390,8 +428,8 @@ class TrianglesBatchingLayer {
             state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
         }
 
-        if (buffer.colors.length > 0) { // Because we build flags arrays here, get their length from the colors array
-            const flagsLength = buffer.colors.length;
+        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
+            const flagsLength = (buffer.positions.length / 3) * 4;
             const flags = new Uint8Array(flagsLength);
             const flags2 = new Uint8Array(flagsLength);
             let notNormalized = false;
@@ -423,9 +461,12 @@ class TrianglesBatchingLayer {
             const edgeIndices = bigIndicesSupported ? new Uint32Array(buffer.edgeIndices) : new Uint16Array(buffer.edgeIndices);
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
         }
-
         this._buffer = null;
         this._finalized = true;
+    }
+
+    isEmpty() {
+        return (!this._state.indicesBuf);
     }
 
     initFlags(portionId, flags, meshTransparent) {
@@ -465,8 +506,14 @@ class TrianglesBatchingLayer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        this._setFlags(portionId, flags, meshTransparent);
-        this._setFlags2(portionId, flags);
+        const deferred = true;
+        this._setFlags(portionId, flags, meshTransparent, deferred);
+        this._setFlags2(portionId, flags, deferred);
+    }
+
+    flushInitFlags() {
+        this._setDeferredFlags();
+        this._setDeferredFlags2();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -591,9 +638,10 @@ class TrianglesBatchingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertexBase = portion.vertsBase;
+        const numVerts = portion.numVerts;
         const firstColor = vertexBase * 4;
         const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
@@ -607,7 +655,9 @@ class TrianglesBatchingLayer {
             tempArray[i + 2] = b;
             tempArray[i + 3] = a;
         }
-        this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        if (this._state.colorsBuf) {
+            this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -621,18 +671,18 @@ class TrianglesBatchingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    _setFlags(portionId, flags, transparent) {
+    _setFlags(portionId, flags, transparent, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
         }
 
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertexBase = portion.vertsBase;
+        const numVerts = portion.numVerts;
         const firstFlag = vertexBase * 4;
         const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -695,36 +745,71 @@ class TrianglesBatchingLayer {
 
         let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = f0; // x - normal fill
-            tempArray[i + 1] = f1; // y - emphasis fill
-            tempArray[i + 2] = f2; // z - edges
-            tempArray[i + 3] = f3; // w - pick
+        if (deferred) {
+            // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
+            if (!this._deferredFlagValues) {
+                this._deferredFlagValues = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._deferredFlagValues[i + 0] = f0;
+                this._deferredFlagValues[i + 1] = f1;
+                this._deferredFlagValues[i + 2] = f2;
+                this._deferredFlagValues[i + 3] = f3;
+            }
+        } else if (this._state.flagsBuf) {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = f0; // x - normal fill
+                tempArray[i + 1] = f1; // y - emphasis fill
+                tempArray[i + 2] = f2; // z - edges
+                tempArray[i + 3] = f3; // w - pick
+            }
+            this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
         }
-
-        this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
     }
 
-    _setFlags2(portionId, flags) {
+    _setDeferredFlags() {
+        if (this._deferredFlagValues) {
+            this._state.flagsBuf.setData(this._deferredFlagValues);
+            this._deferredFlagValues = null;
+        }
+    }
+
+    _setFlags2(portionId, flags, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
         }
 
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertexBase = portion.vertsBase;
+        const numVerts = portion.numVerts;
         const firstFlag = vertexBase * 4;
         const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
-
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
 
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = clippable;
+        if (deferred) {
+            if (!this._setDeferredFlag2Values) {
+                this._setDeferredFlag2Values = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._setDeferredFlag2Values[i] = clippable;
+            }
+        } else if (this._state.flags2Buf) {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = clippable;
+            }
+            this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
         }
+    }
 
-        this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+    _setDeferredFlags2() {
+        if (this._setDeferredFlag2Values) {
+            this._state.flags2Buf.setData(this._setDeferredFlag2Values);
+            this._setDeferredFlag2Values = null;
+        }
     }
 
     setOffset(portionId, offset) {
@@ -735,9 +820,10 @@ class TrianglesBatchingLayer {
             this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
             return;
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertexBase = portion.vertsBase;
+        const numVerts = portion.numVerts;
         const firstOffset = vertexBase * 3;
         const lenOffsets = numVerts * 3;
         const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
@@ -749,7 +835,14 @@ class TrianglesBatchingLayer {
             tempArray[i + 1] = y;
             tempArray[i + 2] = z;
         }
-        this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        if (this._state.offsetsBuf) {
+            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        }
+        if (this.model.scene.pickSurfacePrecisionEnabled) {
+            portion.offset[0] = offset[0];
+            portion.offset[1] = offset[1];
+            portion.offset[2] = offset[2];
+        }
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
@@ -760,23 +853,35 @@ class TrianglesBatchingLayer {
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._batchingRenderers.colorQualityRendererWithSAO) {
                     this._batchingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._batchingRenderers.colorRendererWithSAO) {
-                    this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._batchingRenderers.colorRendererWithSAO) {
+                        this._batchingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._batchingRenderers.flatColorRendererWithSAO) {
+                        this._batchingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         } else {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
                 if (this._batchingRenderers.colorQualityRenderer) {
                     this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else {
-                if (this._batchingRenderers.colorRenderer) {
-                    this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._state.normalsBuf) {
+                    if (this._batchingRenderers.colorRenderer) {
+                        this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._batchingRenderers.flatColorRenderer) {
+                        this._batchingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             }
         }
@@ -800,13 +905,19 @@ class TrianglesBatchingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
+        if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.normalsBuf) {
             if (this._batchingRenderers.colorQualityRenderer) {
                 this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else {
-            if (this._batchingRenderers.colorRenderer) {
-                this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            if (this._state.normalsBuf) {
+                if (this._batchingRenderers.colorRenderer) {
+                    this._batchingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
+            } else {
+                if (this._batchingRenderers.flatColorRenderer) {
+                    this._batchingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
             }
         }
     }
@@ -963,10 +1074,114 @@ class TrianglesBatchingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._batchingRenderers.pickNormalsRenderer) {
-            this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._state.normalsBuf) {
+            if (this._batchingRenderers.pickNormalsRenderer) {
+                this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
+        } else {
+            if (this._batchingRenderers.pickNormalsFlatRenderer) {
+                this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
         }
     }
+
+    //------------------------------------------------------------------------------------------------
+
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
+
+        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+            return false;
+        }
+
+        const state = this._state;
+        const portion = this._portions[portionId];
+
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return false;
+        }
+
+        const positions = portion.quantizedPositions;
+        const indices = portion.indices;
+        const origin = state.origin;
+        const offset = portion.offset;
+
+        const rtcRayOrigin = tempVec3a;
+        const rtcRayDir = tempVec3b;
+
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
+        rtcRayDir.set(worldRayDir);
+
+        if (offset) {
+            math.subVec3(rtcRayOrigin, offset);
+        }
+
+        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
+
+        const a = tempVec3d;
+        const b = tempVec3e;
+        const c = tempVec3f;
+
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
+        for (let i = 0, len = indices.length; i < len; i += 3) {
+
+            const ia = indices[i] * 3;
+            const ib = indices[i + 1] * 3;
+            const ic = indices[i + 2] * 3;
+
+            a[0] = positions[ia];
+            a[1] = positions[ia + 1];
+            a[2] = positions[ia + 2];
+
+            b[0] = positions[ib];
+            b[1] = positions[ib + 1];
+            b[2] = positions[ib + 2];
+
+            c[0] = positions[ic];
+            c[1] = positions[ic + 1];
+            c[2] = positions[ic + 2];
+
+            math.decompressPosition(a, state.positionsDecodeMatrix);
+            math.decompressPosition(b, state.positionsDecodeMatrix);
+            math.decompressPosition(c, state.positionsDecodeMatrix);
+
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
+
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
+
+                if (offset) {
+                    math.addVec3(closestIntersectPos, offset);
+                }
+
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
+                }
+
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
+                    gotIntersect = true;
+                }
+            }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
+        }
+
+        return gotIntersect;
+    }
+
+    // ---------
 
     destroy() {
         const state = this._state;

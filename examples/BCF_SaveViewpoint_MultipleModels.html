@@ -72,7 +72,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -110,7 +110,7 @@
 
     const model = xktLoader.load({
         id: "model1",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
@@ -119,7 +119,7 @@
 
         const model2 = xktLoader.load({
             id: "model2",
-            src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+            src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
             edges: true,
             excludeUnclassifiedObjects: false,
             position: [30, 0, 0]

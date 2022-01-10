@@ -17,9 +17,11 @@ import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstanc
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
+import {worldToRTCPositions} from "../math/rtcCoords";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
+const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
 
 const defaultScale = math.vec3([1, 1, 1]);
@@ -33,9 +35,9 @@ const defaultQuaternion = math.identityQuaternion();
  * # Examples
  *
  * * [PerformanceModel using geometry batching](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
- * * [PerformanceModel using geometry batching and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter)
+ * * [PerformanceModel using geometry batching and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin)
  * * [PerformanceModel using geometry instancing](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)
- * * [PerformanceModel using geometry instancing and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter)
+ * * [PerformanceModel using geometry instancing and RTC coordinates](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin)
  *
  * # Overview
  *
@@ -43,7 +45,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * For huge models, we have the ````PerformanceModel```` representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.
  *
- * ````PerformanceModel```` is the default model representation loaded by {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and {@link BIMServerLoaderPlugin}.
+ * ````PerformanceModel```` is the default model representation loaded by  (at least) {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and  {@link WebIFCLoaderPlugin}.
  *
  * In this tutorial you'll learn how to use ````PerformanceModel```` to create high-detail content programmatically. Ordinarily you'd be learning about ````PerformanceModel```` if you were writing your own model loader plugins.
  *
@@ -59,7 +61,7 @@ const defaultQuaternion = math.identityQuaternion();
  * - [Classifying with Metadata](#classifying-with-metadata)
  * - [Querying Metadata](#querying-metadata)
  * - [Metadata Structure](#metadata-structure)
- * - [RTC Coordinates](#rtc-coordinates)
+ * - [RTC Coordinates](#rtc-coordinates-for-double-precision)
  *   - [Example 3: RTC Coordinates with Geometry Instancing](#example-2--rtc-coordinates-with-geometry-instancing)
  *   - [Example 4: RTC Coordinates with Geometry Batching](#example-2--rtc-coordinates-with-geometry-batching)
  *
@@ -588,7 +590,7 @@ const defaultQuaternion = math.identityQuaternion();
  * Note also that a {@link MetaObject} does not need to have a corresponding
  * {@link Entity} and vice-versa.
  *
- * # RTC Coordinates for 64-Bit Precision
+ * # RTC Coordinates for Double Precision
  *
  * ````PerformanceModel```` can emulate 64-bit precision on GPUs using relative-to-center (RTC) coordinates.
  *
@@ -606,7 +608,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## RTC Coordinates with Geometry Instancing
  *
- * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````rtcCenter````.
+ * To use RTC with ````PerformanceModel```` geometry instancing, we specify an RTC center for the geometry via its ````origin```` parameter. Then ````PerformanceModel```` assumes that all meshes that instance that geometry are within the same RTC coordinate system, ie. the meshes ````position```` and ````rotation```` properties are assumed to be relative to the geometry's ````origin````.
  *
  * For simplicity, our example's meshes all instance the same geometry. Therefore, our example model has only one RTC center.
  *
@@ -614,14 +616,14 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_rtcCenter)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing_origin)]
  *
  * ````javascript
- * const rtcCenter = [100000000, 0, 100000000];
+ * const origin = [100000000, 0, 100000000];
  *
  * performanceModel.createGeometry({
  *     id: "box",
- *     rtcCenter: rtcCenter, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
+ *     origin: origin, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -701,7 +703,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## RTC Coordinates with Geometry Batching
  *
- * To use RTC with ````PerformanceModel```` geometry batching, we specify an RTC center (````rtcCenter````) for each mesh. For performance, we try to have as many meshes share the same value for ````rtcCenter```` as possible. Each mesh's ````positions````, ````position```` and ````rotation```` properties are assumed to be relative to ````rtcCenter````.
+ * To use RTC with ````PerformanceModel```` geometry batching, we specify an RTC center (````origin````) for each mesh. For performance, we try to have as many meshes share the same value for ````origin```` as possible. Each mesh's ````positions````, ````position```` and ````rotation```` properties are assumed to be relative to ````origin````.
  *
  * For simplicity, the meshes in our example all share the same RTC center.
  *
@@ -709,14 +711,14 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_rtcCenter)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching_origin)]
  *
  * ````javascript
- * const rtcCenter = [100000000, 0, 100000000];
+ * const origin = [100000000, 0, 100000000];
  *
  * performanceModel.createMesh({
  *     id: "leg1",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -734,7 +736,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg2",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -752,7 +754,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg3",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -770,7 +772,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "leg4",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -788,7 +790,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * performanceModel.createMesh({
  *     id: "top",
- *     rtcCenter: rtcCenter, // This mesh's positions and transforms are relative to the RTC center
+ *     origin: origin, // This mesh's positions and transforms are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -803,7 +805,106 @@ const defaultQuaternion = math.identityQuaternion();
  *     meshIds: ["top"],
  *     isObject: true
  * });
- ````
+ * ````
+ *
+ * ## Positioning at World-space coordinates
+ *
+ * To position a PerformanceModel at given double-precision World coordinates, we can
+ * configure the ````origin```` of the PerformanceModel itself. The ````origin```` is a double-precision
+ * 3D World-space position at which the PerformanceModel will be located.
+ *
+ * Note that ````position```` is a single-precision offset relative to ````origin````.
+ *
+ * ````javascript
+ * const origin = [100000000, 0, 100000000];
+ *
+ * const performanceModel = new PerformanceModel(viewer.scene, {
+ *     id: "table",
+ *     isModel: true,
+ *     origin: origin, // Everything in this PerformanceModel is relative to this RTC center
+ *     position: [0, 0, 0],
+ *     scale: [1, 1, 1],
+ *     rotation: [0, 0, 0]
+ * });
+ *
+ * performanceModel.createGeometry({
+ *     id: "box",
+ *     primitive: "triangles",
+ *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
+ *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
+ *     indices: [ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, ... ],
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg1",
+ *     geometryId: "box",
+ *     position: [-4, -6, -4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [1, 0.3, 0.3]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg1"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg2",
+ *     geometryId: "box",
+ *     position: [4, -6, -4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [0.3, 1.0, 0.3]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg2"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg3",
+ *     geometryId: "box",
+ *     position: [4, -6, 4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [0.3, 0.3, 1.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg3"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "leg4",
+ *     geometryId: "box",
+ *     position: [-4, -6, 4],
+ *     scale: [1, 3, 1],
+ *     rotation: [0, 0, 0],
+ *     color: [1.0, 1.0, 0.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["leg4"],
+ *     isObject: true
+ * });
+ *
+ * performanceModel.createMesh({
+ *     id: "top",
+ *     geometryId: "box",
+ *     position: [0, -3, 0],
+ *     scale: [6, 0.5, 6],
+ *     rotation: [0, 0, 0],
+ *     color: [1.0, 0.3, 1.0]
+ * });
+ *
+ * performanceModel.createEntity({
+ *     meshIds: ["top"],
+ *     isObject: true
+ * });
+ * ````
  *
  * @implements {Drawable}
  * @implements {Entity}
@@ -816,7 +917,8 @@ class PerformanceModel extends Component {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
      * @param {Boolean} [cfg.isModel] Specify ````true```` if this PerformanceModel represents a model, in which case the PerformanceModel will be registered by {@link PerformanceModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.origin=[0,0,0]] World-space double-precision 3D origin.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local, single-precision 3D position, relative to the origin parameter.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
@@ -854,8 +956,9 @@ class PerformanceModel extends Component {
         this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._nodeList = [];
 
-        this._lastRTCCenter = null;
+        this._lastOrigin = null;
         this._lastDecodeMatrix = null;
+        this._lastNormals = null;
 
         this._instancingLayers = {};
         this._currentBatchingLayers = {};
@@ -956,13 +1059,14 @@ class PerformanceModel extends Component {
 
         // Build static matrix
 
-        this._position = new Float32Array(cfg.position || [0, 0, 0]);
-        this._rotation = new Float32Array(cfg.rotation || [0, 0, 0]);
-        this._quaternion = new Float32Array(cfg.quaternion || [0, 0, 0, 1]);
+        this._origin = math.vec3(cfg.origin || [0, 0, 0]);
+        this._position = math.vec3(cfg.position || [0, 0, 0]);
+        this._rotation = math.vec3(cfg.rotation || [0, 0, 0]);
+        this._quaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
         if (cfg.rotation) {
             math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         }
-        this._scale = new Float32Array(cfg.scale || [1, 1, 1]);
+        this._scale = math.vec3(cfg.scale || [1, 1, 1]);
         this._worldMatrix = math.mat4();
         math.composeMat4(this._position, this._quaternion, this._scale, this._worldMatrix);
         this._worldNormalMatrix = math.mat4();
@@ -1003,6 +1107,28 @@ class PerformanceModel extends Component {
      */
     get isPerformanceModel() {
         return true;
+    }
+
+    /**
+     * Returns the {@link Entity}s in this PerformanceModel.
+     * @returns {*|{}}
+     */
+    get objects() {
+        return this._nodes;
+    }
+
+    /**
+     * Gets the 3D World-space origin for this PerformanceModel.
+     *
+     * Each geometry or mesh origin, if supplied, is relative to this origin.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Float64Array}
+     * @abstract
+     */
+    get origin() {
+        return this._origin;
     }
 
     /**
@@ -1100,19 +1226,6 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * Called by private renderers in ./lib, returns the picking view matrix with which to
-     * ray-pick on this PerformanceModel.
-     *
-     * @private
-     */
-    getPickViewMatrix(pickViewMatrix) {
-        if (!this._viewMatrix) {
-            return pickViewMatrix;
-        }
-        return this._viewMatrix;
-    }
-
-    /**
      * Called by private renderers in ./lib, returns the view normal matrix with which to render this PerformanceModel.
      *
      * @private
@@ -1131,6 +1244,543 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get backfaces() {
+        return this._backfaces;
+    }
+
+    /**
+     * Sets if backfaces are rendered for this PerformanceModel.
+     *
+     * Default is ````false````.
+     *
+     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
+     *
+     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
+     * the Viewer will:
+     *
+     *  * hide backfaces on watertight meshes,
+     *  * show backfaces on open meshes, and
+     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
+     *
+     * @type {Boolean}
+     */
+    set backfaces(backfaces) {
+        backfaces = !!backfaces;
+        this._backfaces = backfaces;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the list of {@link Entity}s within this PerformanceModel.
+     *
+     * @returns {Entity[]}
+     */
+    get entityList() {
+        return this._nodeList;
+    }
+
+    /**
+     * Returns true to indicate that PerformanceModel is an {@link Entity}.
+     * @type {Boolean}
+     */
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Returns ````true```` if this PerformanceModel represents a model.
+     *
+     * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
+     * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
+     *
+     * @type {Boolean}
+     */
+    get isModel() {
+        return this._isModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // PerformanceModel members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns ````false```` to indicate that PerformanceModel never represents an object.
+     *
+     * @type {Boolean}
+     */
+    get isObject() {
+        return false;
+    }
+
+    /**
+     * Gets the PerformanceModel's World-space 3D axis-aligned bounding box.
+     *
+     * Represented by a six-element Float64Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Number[]}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            this._rebuildAABB();
+        }
+        return this._aabb;
+    }
+
+    /**
+     * The approximate number of triangle primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numTriangles() {
+        return this._numTriangles;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The approximate number of line primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numLines() {
+        return this._numLines;
+    }
+
+    /**
+     * The approximate number of point primitives in this PerformanceModel.
+     *
+     * @type {Number}
+     */
+    get numPoints() {
+        return this._numPoints;
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are visible.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return (this.numVisibleLayerPortions > 0);
+    }
+
+    /**
+     * Sets if this PerformanceModel is visible.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+     **
+     * @type {Boolean}
+     */
+    set visible(visible) {
+        visible = visible !== false;
+        this._visible = visible;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].visible = visible;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are xrayed.
+     *
+     * @type {Boolean}
+     */
+    get xrayed() {
+        return (this.numXRayedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are xrayed.
+     *
+     * @type {Boolean}
+     */
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        this._xrayed = xrayed;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].xrayed = xrayed;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    get highlighted() {
+        return (this.numHighlightedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    set highlighted(highlighted) {
+        highlighted = !!highlighted;
+        this._highlighted = highlighted;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].highlighted = highlighted;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel are selected.
+     *
+     * @type {Boolean}
+     */
+    get selected() {
+        return (this.numSelectedLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel are selected.
+     *
+     * @type {Boolean}
+     */
+    set selected(selected) {
+        selected = !!selected;
+        this._selected = selected;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].selected = selected;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any {@link Entity}s in this PerformanceModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return (this.numEdgesLayerPortions > 0);
+    }
+
+    /**
+     * Sets if all {@link Entity}s in this PerformanceModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    set edges(edges) {
+        edges = !!edges;
+        this._edges = edges;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].edges = edges;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this PerformanceModel is culled from view.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    get culled() {
+        return this._culled;
+    }
+
+    /**
+     * Sets if this PerformanceModel is culled from view.
+     *
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    set culled(culled) {
+        culled = !!culled;
+        this._culled = culled;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].culled = culled;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if {@link Entity}s in this PerformanceModel are clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._clippable;
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
+    set clippable(clippable) {
+        clippable = clippable !== false;
+        this._clippable = clippable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].clippable = clippable;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this PerformanceModel is collidable.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._collidable;
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are collidable.
+     *
+     * @type {Boolean}
+     */
+    set collidable(collidable) {
+        collidable = collidable !== false;
+        this._collidable = collidable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].collidable = collidable;
+        }
+    }
+
+    /**
+     * Gets if this PerformanceModel is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return (this.numPickableLayerPortions > 0);
+    }
+
+    /**
+     * Sets if {@link Entity}s in this PerformanceModel are pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    set pickable(pickable) {
+        pickable = pickable !== false;
+        this._pickable = pickable;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].pickable = pickable;
+        }
+    }
+
+    /**
+     * Gets the RGB colorize color for this PerformanceModel.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    get colorize() {
+        return this._colorize;
+    }
+
+    /**
+     * Sets the RGB colorize color for this PerformanceModel.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
+    set colorize(colorize) {
+        this._colorize = colorize;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].colorize = colorize;
+        }
+    }
+
+    /**
+     * Gets this PerformanceModel's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() {
+        return this._opacity;
+    }
+
+    /**
+     * Sets the opacity factor for this PerformanceModel.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) {
+        this._opacity = opacity;
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            this._nodeList[i].opacity = opacity;
+        }
+    }
+
+    /**
+     * Gets if this PerformanceModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() {
+        return this._castsShadow;
+    }
+
+    /**
+     * Sets if this PerformanceModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(castsShadow) {
+        castsShadow = (castsShadow !== false);
+        if (castsShadow !== this._castsShadow) {
+            this._castsShadow = castsShadow;
+            this.glRedraw();
+        }
+    }
+
+    /**
+     * Sets if this PerformanceModel can have shadow cast upon it.
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() {
+        return this._receivesShadow;
+    }
+
+    /**
+     * Sets if this PerformanceModel can have shadow cast upon it.
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(receivesShadow) {
+        receivesShadow = (receivesShadow !== false);
+        if (receivesShadow !== this._receivesShadow) {
+            this._receivesShadow = receivesShadow;
+            this.glRedraw();
+        }
+    }
+
+    /**
+     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel.
+     *
+     * SAO is configured by the Scene's {@link SAO} component.
+     *
+     *  Only works when {@link SAO#enabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get saoEnabled() {
+        return this._saoEnabled;
+    }
+
+    /**
+     * Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.
+     *
+     * Only works when {@link Scene#pbrEnabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get pbrEnabled() {
+        return this._pbrEnabled;
+    }
+
+    /**
+     * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
+     *
+     * @type {Boolean}
+     */
+    get isDrawable() {
+        return true;
+    }
+
+    /** @private */
+    get isStateSortable() {
+        return false
+    }
+
+    /**
+     * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#xrayMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get xrayMaterial() {
+        return this.scene.xrayMaterial;
+    }
+
+    /**
+     * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#highlightMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get highlightMaterial() {
+        return this.scene.highlightMaterial;
+    }
+
+    /**
+     * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#selectedMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get selectedMaterial() {
+        return this.scene.selectedMaterial;
+    }
+
+    /**
+     * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
+     *
+     * This is the {@link Scene#edgeMaterial}.
+     *
+     * @type {EdgeMaterial}
+     */
+    get edgeMaterial() {
+        return this.scene.edgeMaterial;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Drawable members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Called by private renderers in ./lib, returns the picking view matrix with which to
+     * ray-pick on this PerformanceModel.
+     *
+     * @private
+     */
+    getPickViewMatrix(pickViewMatrix) {
+        if (!this._viewMatrix) {
+            return pickViewMatrix;
+        }
+        return this._viewMatrix;
+    }
+
+    /**
      * Creates a reusable geometry within this PerformanceModel.
      *
      * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
@@ -1145,11 +1795,14 @@ class PerformanceModel extends Component {
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} cfg.positions Flat array of positions.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Required for 'triangles' primitives.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
+     * @param {Number[]} [cfg.colors] Flat array of RGBA vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overidden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then every mesh created with {@link PerformanceModel#createMesh} that uses this geometry will
+     * be transformed relative to this origin.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -1171,9 +1824,14 @@ class PerformanceModel extends Component {
             this.error("Config missing: primitive");
             return;
         }
+
+        const cfgOrigin = cfg.origin || cfg.rtcCenter;
+        const origin = (cfgOrigin) ? math.addVec3(this._origin, cfgOrigin, tempVec3a) : this._origin;
+
         switch (primitive) {
             case "triangles":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: true
                 }, cfg));
@@ -1181,6 +1839,7 @@ class PerformanceModel extends Component {
                 break;
             case "solid":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: true
                 }, cfg));
@@ -1188,6 +1847,7 @@ class PerformanceModel extends Component {
                 break;
             case "surface":
                 instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0,
                     solid: false
                 }, cfg));
@@ -1195,12 +1855,14 @@ class PerformanceModel extends Component {
                 break;
             case "lines":
                 instancingLayer = new LinesInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0
                 }, cfg));
                 this._numLines += (cfg.indices ? Math.round(cfg.indices.length / 2) : 0);
                 break;
             case "points":
                 instancingLayer = new PointsInstancingLayer(this, utils.apply({
+                    origin,
                     layerIndex: 0
                 }, cfg));
                 this._numPoints += (cfg.positions ? Math.round(cfg.positions.length / 3) : 0);
@@ -1228,14 +1890,14 @@ class PerformanceModel extends Component {
      * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
      * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
      *
-     * If you accompany the arrays with an  ````rtcCenter````, then ````createMesh()```` will assume
-     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````rtcCenter```` being the origin of their
+     * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
+     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the origin of their
      * RTC coordinate system.
      *
-     * When providing either ````positionsDecodeMatrix```` or ````rtcCenter````, ````createMesh()```` will start a new
+     * When providing either ````positionsDecodeMatrix```` or ````origin````, ````createMesh()```` will start a new
      * batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
      * minimum number of batches, it's best for performance to create your shared meshes in runs that have the same value
-     * for ````positionsDecodeMatrix```` and ````rtcCenter````.
+     * for ````positionsDecodeMatrix```` and ````origin````.
      *
      * Note that ````positions````, ````normals```` and ````indices```` are all required together.
      *
@@ -1244,10 +1906,11 @@ class PerformanceModel extends Component {
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
      * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.colors] Flat array of vertex colors. Ignored when ````geometryId```` is given, overriden by ````color````.
-     * @param {Number[]} [cfg.normals] Flat array of vertex normals. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {Number[]} [cfg.rtcCenter] Relative-to-center (RTC) coordinate system center. When this is given, then ````positions```` are assumed to be relative to this center.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
      * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
@@ -1256,7 +1919,7 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
-     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors````.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors```` and ````colorsCompressed````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
@@ -1342,7 +2005,7 @@ class PerformanceModel extends Component {
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
 
-            mesh.rtcCenter = instancingLayer.rtcCenter;
+            mesh.origin = instancingLayer.origin;
 
         } else { // Batching
 
@@ -1370,14 +2033,37 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            if (cfg.rtcCenter) {
-                if (!this._lastRTCCenter) {
-                    needNewBatchingLayers = true;
-                    this._lastRTCCenter = math.vec3(cfg.rtcCenter);
+            let origin = null;
+
+            if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
+                const rtcCenter = math.vec3();
+                const rtcPositions = [];
+                const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter);
+                if (rtcNeeded) {
+                    positions = rtcPositions;
+                    origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
+                }
+            }
+
+            const cfgOrigin = cfg.origin || cfg.rtcCenter;
+            if (cfgOrigin) {
+                if (!origin) {
+                    origin = cfgOrigin;
                 } else {
-                    if (!math.compareVec3(this._lastRTCCenter, cfg.rtcCenter)) {
+                    origin = math.addVec3(this._origin, cfgOrigin, tempVec3a);
+                }
+            } else {
+                origin = this._origin;
+            }
+
+            if (origin) {
+                if (!this._lastOrigin) {
+                    needNewBatchingLayers = true;
+                    this._lastOrigin = math.vec3(origin);
+                } else {
+                    if (!math.compareVec3(this._lastOrigin, origin)) {
                         needNewBatchingLayers = true;
-                        this._lastRTCCenter.set(cfg.rtcCenter)
+                        this._lastOrigin.set(origin);
                     }
                 }
             }
@@ -1402,6 +2088,20 @@ class PerformanceModel extends Component {
                     }
                 }
                 this._currentBatchingLayers = {};
+            }
+
+            const normalsProvided = (!!cfg.normals && cfg.normals.length > 0);
+
+            if (primitive === "triangles" || primitive === "solid" || primitive === "surface") {
+                if (this._lastNormals !== null && normalsProvided !== this._lastNormals) {
+                    ["triangles", "solid", "surface"].map(primitiveId => {
+                        if (this._currentBatchingLayers[primitiveId]) {
+                            this._currentBatchingLayers[primitiveId].finalize();
+                            delete this._currentBatchingLayers[primitiveId];
+                        }
+                    });
+                }
+                this._lastNormals = normalsProvided;
             }
 
             const worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
@@ -1440,9 +2140,10 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize,
-                            solid: (primitive === "solid")
+                            solid: (primitive === "solid"),
+                            autoNormals: (!normalsProvided)
                         });
                         this._layerList.push(layer);
                         this._currentBatchingLayers[primitive] = layer;
@@ -1461,6 +2162,7 @@ class PerformanceModel extends Component {
                         metallic: metallic,
                         roughness: roughness,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -1489,7 +2191,7 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
@@ -1501,6 +2203,7 @@ class PerformanceModel extends Component {
                         indices: indices,
                         color: color,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -1527,7 +2230,7 @@ class PerformanceModel extends Component {
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                            rtcCenter: cfg.rtcCenter, // Can be undefined
+                            origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
@@ -1538,6 +2241,7 @@ class PerformanceModel extends Component {
                         positions: positions,
                         color: color,
                         colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -1554,7 +2258,7 @@ class PerformanceModel extends Component {
 
             this.numGeometries++;
 
-            mesh.rtcCenter = cfg.rtcCenter;
+            mesh.origin = origin;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
@@ -1696,6 +2400,12 @@ class PerformanceModel extends Component {
             node._finalize();
         }
 
+        for (let i = 0, len = this._nodeList.length; i < len; i++) {
+            const node = this._nodeList[i];
+            node._finalize2();
+        }
+
+
         // Sort layers to reduce WebGL shader switching when rendering them
 
         this._layerList.sort((a, b) => {
@@ -1718,100 +2428,6 @@ class PerformanceModel extends Component {
         this.scene._aabbDirty = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // PerformanceModel members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Sets if backfaces are rendered for this PerformanceModel.
-     *
-     * Default is ````false````.
-     *
-     * When we set this ````true````, then backfaces are always rendered for this PerformanceModel.
-     *
-     * When we set this ````false````, then we allow the Viewer to decide whether to render backfaces. In this case,
-     * the Viewer will:
-     *
-     *  * hide backfaces on watertight meshes,
-     *  * show backfaces on open meshes, and
-     *  * always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
-     *
-     * @type {Boolean}
-     */
-    set backfaces(backfaces) {
-        backfaces = !!backfaces;
-        this._backfaces = backfaces;
-        this.glRedraw();
-    }
-
-    /**
-     * Sets if backfaces are rendered for this PerformanceModel.
-     *
-     * Default is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get backfaces() {
-        return this._backfaces;
-    }
-
-    /**
-     * Gets the list of {@link Entity}s within this PerformanceModel.
-     *
-     * @returns {Entity[]}
-     */
-    get entityList() {
-        return this._nodeList;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Entity members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that PerformanceModel is an {@link Entity}.
-     * @type {Boolean}
-     */
-    get isEntity() {
-        return true;
-    }
-
-    /**
-     * Returns ````true```` if this PerformanceModel represents a model.
-     *
-     * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
-     * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
-     *
-     * @type {Boolean}
-     */
-    get isModel() {
-        return this._isModel;
-    }
-
-    /**
-     * Returns ````false```` to indicate that PerformanceModel never represents an object.
-     *
-     * @type {Boolean}
-     */
-    get isObject() {
-        return false;
-    }
-
-    /**
-     * Gets the PerformanceModel's World-space 3D axis-aligned bounding box.
-     *
-     * Represented by a six-element Float64Array containing the min/max extents of the
-     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-     *
-     * @type {Number[]}
-     */
-    get aabb() {
-        if (this._aabbDirty) {
-            this._rebuildAABB();
-        }
-        return this._aabb;
-    }
-
     _rebuildAABB() {
         math.collapseAABB3(this._aabb);
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
@@ -1819,392 +2435,6 @@ class PerformanceModel extends Component {
             math.expandAABB3(this._aabb, node.aabb);
         }
         this._aabbDirty = false;
-    }
-
-    /**
-     * The approximate number of triangle primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numTriangles() {
-        return this._numTriangles;
-    }
-
-    /**
-     * The approximate number of line primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numLines() {
-        return this._numLines;
-    }
-
-    /**
-     * The approximate number of point primitives in this PerformanceModel.
-     *
-     * @type {Number}
-     */
-    get numPoints() {
-        return this._numPoints;
-    }
-
-    /**
-     * Sets if this PerformanceModel is visible.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
-     **
-     * @type {Boolean}
-     */
-    set visible(visible) {
-        visible = visible !== false;
-        this._visible = visible;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].visible = visible;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are visible.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
-     *
-     * @type {Boolean}
-     */
-    get visible() {
-        return (this.numVisibleLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are xrayed.
-     *
-     * @type {Boolean}
-     */
-    set xrayed(xrayed) {
-        xrayed = !!xrayed;
-        this._xrayed = xrayed;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].xrayed = xrayed;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are xrayed.
-     *
-     * @type {Boolean}
-     */
-    get xrayed() {
-        return (this.numXRayedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are highlighted.
-     *
-     * @type {Boolean}
-     */
-    set highlighted(highlighted) {
-        highlighted = !!highlighted;
-        this._highlighted = highlighted;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].highlighted = highlighted;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are highlighted.
-     *
-     * @type {Boolean}
-     */
-    get highlighted() {
-        return (this.numHighlightedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel are selected.
-     *
-     * @type {Boolean}
-     */
-    set selected(selected) {
-        selected = !!selected;
-        this._selected = selected;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].selected = selected;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel are selected.
-     *
-     * @type {Boolean}
-     */
-    get selected() {
-        return (this.numSelectedLayerPortions > 0);
-    }
-
-    /**
-     * Sets if all {@link Entity}s in this PerformanceModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    set edges(edges) {
-        edges = !!edges;
-        this._edges = edges;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].edges = edges;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if any {@link Entity}s in this PerformanceModel have edges emphasised.
-     *
-     * @type {Boolean}
-     */
-    get edges() {
-        return (this.numEdgesLayerPortions > 0);
-    }
-
-    /**
-     * Sets if this PerformanceModel is culled from view.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
-     *
-     * @type {Boolean}
-     */
-    set culled(culled) {
-        culled = !!culled;
-        this._culled = culled;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].culled = culled;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if this PerformanceModel is culled from view.
-     *
-     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
-     *
-     * @type {Boolean}
-     */
-    get culled() {
-        return this._culled;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    set clippable(clippable) {
-        clippable = clippable !== false;
-        this._clippable = clippable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].clippable = clippable;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets if {@link Entity}s in this PerformanceModel are clippable.
-     *
-     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
-     *
-     * @type {Boolean}
-     */
-    get clippable() {
-        return this._clippable;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are collidable.
-     *
-     * @type {Boolean}
-     */
-    set collidable(collidable) {
-        collidable = collidable !== false;
-        this._collidable = collidable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].collidable = collidable;
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel is collidable.
-     *
-     * @type {Boolean}
-     */
-    get collidable() {
-        return this._collidable;
-    }
-
-    /**
-     * Sets if {@link Entity}s in this PerformanceModel are pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    set pickable(pickable) {
-        pickable = pickable !== false;
-        this._pickable = pickable;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].pickable = pickable;
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel is pickable.
-     *
-     * Picking is done via calls to {@link Scene#pick}.
-     *
-     * @type {Boolean}
-     */
-    get pickable() {
-        return (this.numPickableLayerPortions > 0);
-    }
-
-    /**
-     * Sets the RGB colorize color for this PerformanceModel.
-     *
-     * Multiplies by rendered fragment colors.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    set colorize(colorize) {
-        this._colorize = colorize;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].colorize = colorize;
-        }
-    }
-
-    /**
-     * Gets the RGB colorize color for this PerformanceModel.
-     *
-     * Each element of the color is in range ````[0..1]````.
-     *
-     * @type {Number[]}
-     */
-    get colorize() {
-        return this._colorize;
-    }
-
-    /**
-     * Sets the opacity factor for this PerformanceModel.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    set opacity(opacity) {
-        this._opacity = opacity;
-        for (let i = 0, len = this._nodeList.length; i < len; i++) {
-            this._nodeList[i].opacity = opacity;
-        }
-    }
-
-    /**
-     * Gets this PerformanceModel's opacity factor.
-     *
-     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
-     *
-     * @type {Number}
-     */
-    get opacity() {
-        return this._opacity;
-    }
-
-    /**
-     * Sets if this PerformanceModel casts a shadow.
-     *
-     * @type {Boolean}
-     */
-    set castsShadow(castsShadow) {
-        castsShadow = (castsShadow !== false);
-        if (castsShadow !== this._castsShadow) {
-            this._castsShadow = castsShadow;
-            this.glRedraw();
-        }
-    }
-
-    /**
-     * Gets if this PerformanceModel casts a shadow.
-     *
-     * @type {Boolean}
-     */
-    get castsShadow() {
-        return this._castsShadow;
-    }
-
-    /**
-     * Sets if this PerformanceModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    set receivesShadow(receivesShadow) {
-        receivesShadow = (receivesShadow !== false);
-        if (receivesShadow !== this._receivesShadow) {
-            this._receivesShadow = receivesShadow;
-            this.glRedraw();
-        }
-    }
-
-    /**
-     * Sets if this PerformanceModel can have shadow cast upon it.
-     *
-     * @type {Boolean}
-     */
-    get receivesShadow() {
-        return this._receivesShadow;
-    }
-
-    /**
-     * Gets if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel.
-     *
-     * SAO is configured by the Scene's {@link SAO} component.
-     *
-     *  Only works when {@link SAO#enabled} is also true.
-     *
-     * @type {Boolean}
-     */
-    get saoEnabled() {
-        return this._saoEnabled;
-    }
-
-    /**
-     * Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.
-     *
-     * Only works when {@link Scene#pbrEnabled} is also true.
-     *
-     * @type {Boolean}
-     */
-    get pbrEnabled() {
-        return this._pbrEnabled;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Drawable members
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
-     *
-     * @type {Boolean}
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    /** @private */
-    get isStateSortable() {
-        return false
     }
 
     /** @private */
@@ -2346,50 +2576,6 @@ class PerformanceModel extends Component {
                 }
             }
         }
-    }
-
-    /**
-     * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#xrayMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get xrayMaterial() {
-        return this.scene.xrayMaterial;
-    }
-
-    /**
-     * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#highlightMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get highlightMaterial() {
-        return this.scene.highlightMaterial;
-    }
-
-    /**
-     * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#selectedMaterial}.
-     *
-     * @type {EmphasisMaterial}
-     */
-    get selectedMaterial() {
-        return this.scene.selectedMaterial;
-    }
-
-    /**
-     * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
-     *
-     * This is the {@link Scene#edgeMaterial}.
-     *
-     * @type {EdgeMaterial}
-     */
-    get edgeMaterial() {
-        return this.scene.edgeMaterial;
     }
 
     // -------------- RENDERING ---------------------------------------------------------------------------------------

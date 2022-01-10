@@ -26,7 +26,7 @@ class LinesBatchingLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
-     * @param cfg.rtcCenter
+     * @param cfg.origin
      * @param cfg.scratchMemory
      */
     constructor(model, cfg) {
@@ -50,7 +50,7 @@ class LinesBatchingLayer {
             flags2Buf: null,
             indicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
-            rtcCenter: null
+            origin: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -68,12 +68,14 @@ class LinesBatchingLayer {
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
 
+        this._numVerts = 0;
+
         this._finalized = false;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
         this._preCompressed = (!!this._positionsDecodeMatrix);
 
-        if (cfg.rtcCenter) {
-            this._state.rtcCenter = math.vec3(cfg.rtcCenter);
+        if (cfg.origin) {
+            this._state.origin = math.vec3(cfg.origin);
         }
 
         /**
@@ -209,14 +211,14 @@ class LinesBatchingLayer {
             }
         }
 
-        if (this._state.rtcCenter) {
-            const rtcCenter = this._state.rtcCenter;
-            worldAABB[0] += rtcCenter[0];
-            worldAABB[1] += rtcCenter[1];
-            worldAABB[2] += rtcCenter[2];
-            worldAABB[3] += rtcCenter[0];
-            worldAABB[4] += rtcCenter[1];
-            worldAABB[5] += rtcCenter[2];
+        if (this._state.origin) {
+            const origin = this._state.origin;
+            worldAABB[0] += origin[0];
+            worldAABB[1] += origin[1];
+            worldAABB[2] += origin[2];
+            worldAABB[3] += origin[0];
+            worldAABB[4] += origin[1];
+            worldAABB[5] += origin[2];
         }
 
         math.expandAABB3(this.aabb, worldAABB);
@@ -258,6 +260,8 @@ class LinesBatchingLayer {
         this._numPortions++;
         this.model.numPortions++;
 
+        this._numVerts += numVerts;
+
         return portionId;
     }
 
@@ -283,7 +287,7 @@ class LinesBatchingLayer {
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
             } else {
                 const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB,  state.positionsDecodeMatrix);
+                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix);
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }
@@ -359,8 +363,14 @@ class LinesBatchingLayer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        this._setFlags(portionId, flags, meshTransparent);
-        this._setFlags2(portionId, flags);
+        const deferred = true;
+        this._setFlags(portionId, flags, meshTransparent, deferred);
+        this._setFlags2(portionId, flags, deferred);
+    }
+
+    flushInitFlags() {
+        this._setDeferredFlags();
+        this._setDeferredFlags2();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -515,7 +525,7 @@ class LinesBatchingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    _setFlags(portionId, flags, transparent) {
+    _setFlags(portionId, flags, transparent, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
@@ -567,18 +577,36 @@ class LinesBatchingLayer {
         // Pick
 
         let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = f0; // x - color
-            tempArray[i + 1] = f1; // y - silhouette - select/highlight/xray
-            tempArray[i + 2] = 0; // z - edges
-            tempArray[i + 3] = f3; // w - pickable
+        if (deferred) {
+            if (!this._deferredFlagValues) {
+                this._deferredFlagValues = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._deferredFlagValues[i + 0] = f0;
+                this._deferredFlagValues[i + 1] = f1;
+                this._deferredFlagValues[i + 2] = 0;
+                this._deferredFlagValues[i + 3] = f3;
+            }
+        } else if (this._state.flagsBuf) {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = f0; // x - color
+                tempArray[i + 1] = f1; // y - silhouette - select/highlight/xray
+                tempArray[i + 2] = 0; // z - edges
+                tempArray[i + 3] = f3; // w - pickable
+            }
+            this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
         }
-
-        this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
     }
 
-    _setFlags2(portionId, flags) {
+    _setDeferredFlags() {
+        if (this._deferredFlagValues) {
+            this._state.flagsBuf.setData(this._deferredFlagValues);
+            this._deferredFlagValues = null;
+        }
+    }
+
+    _setFlags2(portionId, flags, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -587,12 +615,28 @@ class LinesBatchingLayer {
         const numVerts = this._portions[portionsIdx + 1];
         const firstFlag = vertexBase * 4;
         const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = clippable;
+        if (deferred) {
+            if (!this._setDeferredFlag2Values) {
+                this._setDeferredFlag2Values = new Uint8Array(this._numVerts * 4);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
+                this._setDeferredFlag2Values[i] = clippable;
+            }
+        } else {
+            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+            for (let i = 0; i < lenFlags; i += 4) {
+                tempArray[i + 0] = clippable;
+            }
+            this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
         }
-        this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+    }
+
+    _setDeferredFlags2() {
+        if (this._setDeferredFlag2Values) {
+            this._state.flags2Buf.setData(this._setDeferredFlag2Values);
+            this._setDeferredFlag2Values = null;
+        }
     }
 
     setOffset(portionId, offset) {

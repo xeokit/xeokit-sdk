@@ -232,7 +232,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, ContextMenu} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, ContextMenu} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak some emphasis materials
@@ -300,7 +300,7 @@
 
     const model = xktLoader.load({
         id: "model1",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
     });
 
@@ -311,7 +311,7 @@
 
         const model2 = xktLoader.load({
             id: "model2",
-            src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+            src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
             edges: true,
             position: [30, 0, 0]
         });

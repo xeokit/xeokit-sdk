@@ -49,7 +49,7 @@
         .xeokit-context-menu ul li:hover {
             background: black;
             color: white;
-            font-weight: bold;
+            font-weight: normal;
         }
 
         .xeokit-context-menu ul li span {
@@ -266,8 +266,8 @@
                 entity: hit.entity
             };
 
-            objectContextMenu.show(e.event.pageX, e.event.pageY);
-        }
+             objectContextMenu.show(e.pagePos[0], e.pagePos[1]);
+         }
 
         e.event.preventDefault();
     });
@@ -280,7 +280,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });

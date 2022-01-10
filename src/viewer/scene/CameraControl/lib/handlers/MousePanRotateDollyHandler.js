@@ -265,6 +265,7 @@ class MousePanRotateDollyHandler {
                     const y = canvasPos[1];
                     if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
                         controllers.cameraControl.fire("rightClick", { // For context menus
+                            pagePos: [Math.round(e.pageX), Math.round(e.pageY)],
                             canvasPos: canvasPos,
                             event: e
                         }, true);
@@ -314,8 +315,7 @@ class MousePanRotateDollyHandler {
                 mouseMovedOnCanvasSinceLastWheel = false;
             }
 
-            e.preventDefault();
-        });
+        }, {passive: true});
     }
 
     reset() {

@@ -339,6 +339,7 @@ class Scene extends Component {
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
@@ -771,7 +772,8 @@ class Scene extends Component {
          */
         this.input = new Input(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
-            element: this.canvas.canvas
+            element: this.canvas.canvas,
+            keyboardEventsElement: cfg.keyboardEventsElement
         });
 
         /**
@@ -804,6 +806,7 @@ class Scene extends Component {
         this.gammaFactor = cfg.gammaFactor;
 
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
+        this._pickSurfacePrecisionEnabled = !!cfg.pickSurfacePrecisionEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
         this._pbrEnabled = !!cfg.pbrEnabled;
@@ -984,8 +987,10 @@ class Scene extends Component {
     }
 
     _deregisterModel(entity) {
-        delete this.models[entity.id];
+        const modelId = entity.id;
+        delete this.models[modelId];
         this._modelIds = null; // Lazy regenerate
+        this.fire("modelUnloaded", modelId);
     }
 
     _registerObject(entity) {
@@ -1153,6 +1158,21 @@ class Scene extends Component {
     }
 
     /**
+     * Whether precision surface picking is enabled.
+     *
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
+     *
+     * The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+     *
+     * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
+     *
+     * @returns {Boolean} True if precision picking is enabled.
+     */
+    get pickSurfacePrecisionEnabled() {
+        return this._pickSurfacePrecisionEnabled;
+    }
+
+    /**
      * Whether logarithmic depth buffer is enabled.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.
@@ -1224,6 +1244,10 @@ class Scene extends Component {
             this._recompile();
             this._renderer.imageDirty();
             this._needRecompile = false;
+        }
+
+        if (!forceRender && !this._renderer.needsRender()) {
+            return;
         }
 
         renderEvent.sceneId = this.id;
@@ -2009,6 +2033,7 @@ class Scene extends Component {
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
+     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
      * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
@@ -2176,7 +2201,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} visible Whether or not to cull.
+     * @param {Boolean} visible Whether or not to set visible.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsVisible(ids, visible) {
@@ -2193,7 +2218,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} collidable Whether or not to cull.
+     * @param {Boolean} collidable Whether or not to set collidable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCollidable(ids, collidable) {
@@ -2230,7 +2255,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} selected Whether or not to highlight.
+     * @param {Boolean} selected Whether or not to select.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsSelected(ids, selected) {
@@ -2265,9 +2290,6 @@ class Scene extends Component {
      * Batch-updates {@link Entity#xrayed} on {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
-     *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#xrayed} are ````true```` is
-     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @param {Boolean} xrayed Whether or not to xray.
@@ -2336,7 +2358,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} pickable Whether or not to enable picking.
+     * @param {Boolean} pickable Whether or not to set pickable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsPickable(ids, pickable) {
@@ -2362,12 +2384,9 @@ class Scene extends Component {
     }
 
     /**
-     * Iterates with a callback over {@link Entity#visible} on {@link Entity}s that represent objects.
+     * Iterates with a callback over {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
-     *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#visible} are ````true```` is
-     * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @param {Function} callback Callback to execute on eacn {@link Entity}.

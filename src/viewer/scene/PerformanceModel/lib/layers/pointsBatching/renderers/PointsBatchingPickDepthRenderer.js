@@ -31,7 +31,7 @@ class PointsBatchingPickDepthRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const rtcCenter = pointsBatchingLayer._state.rtcCenter;
+        const origin = pointsBatchingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
 
         if (!this._program) {
@@ -48,7 +48,7 @@ class PointsBatchingPickDepthRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = rtcCenter ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
@@ -69,17 +69,19 @@ class PointsBatchingPickDepthRenderer {
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                if (active) {
-                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                    } else {
-                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                if (sectionPlaneUniforms) {
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }

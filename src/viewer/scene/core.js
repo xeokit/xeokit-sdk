@@ -11,7 +11,6 @@ const taskBudget = 10; // Millisecs we're allowed to spend on tasks in each fram
 const fpsSamples = [];
 const numFPSSamples = 30;
 
-let defaultScene = null;// Default singleton Scene, lazy-initialized in getter
 let lastTime = 0;
 let elapsedTime;
 let totalFPS = 0;
@@ -153,7 +152,7 @@ const frame = function () {
     fireTickEvents(time);
     renderScenes();
     lastTime = time;
-    window.requestAnimationFrame(frame);
+    (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 };
 
 function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
@@ -229,6 +228,6 @@ function renderScenes() {
     }
 }
 
-window.requestAnimationFrame(frame);
+(window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 
 export {core};

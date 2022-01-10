@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #viewerContainer {
+            touch-action: none;
+        }
+
+        .sk-fading-circle .sk-circle:before {
+            background-color: #0a5bff !important;
+        }
+
+        #sectionRange {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            width: 90%;
+            bottom: 235px;
+            margin: auto;
+            z-index: 200010;
+            display: none;
+        }
+
+        .clearSectionRange {
+            position: absolute;
+            right: 20px;
+            bottom: 235px;
+            margin-bottom: 25px;
+            z-index: 200011;
+        }
+
+        #storeyMap {
+            position: absolute;
+            top: 85px;
+            left: 10px;
+            overflow-y: hidden;
+            height: auto;
+            pointer-events: all;
+            width: auto;
+            border-radius: 5px;
+            z-index: 200001;
+            background-color: rgb(10, 91, 255, 0.1);
+        }
+
+        #panStickArea {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            height: 200px;
+            width: 200px;
+            max-width: 40%;
+            max-height: 20%;
+            z-index: 200002;
+        }
+
+        #rotateStickArea {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            height: 200px;
+            max-width: 40%;
+            max-height: 20%;
+            width: 200px;
+            z-index: 200002;
+        }
+
+        .controlButton {
+            z-index: 200003;
+            background: none;
+            background-color: "beige";
+            border-radius: 10px;
+            border: 1px solid #0a5bff;
+            color: #0a5bff;
+            font-size: 30px;
+            padding: 0px 10px;
+        }
+
+        .confirmMeasurementButton {
+            margin: 20px 0px 0px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        .controlButton:focus {
+            outline: none;
+        }
+
+        #planPointer {
+            color: #000000;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woWBwIQSQi3DQAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAIbSURBVGje7ZlNSsRAEIVf/w+CWxVBEFy7nJO4ygW8gNfwRG48gNfJVnTTgbKo6kRxJp1QD8IkmYHkS72qrtQApn3LrXA9X/c/9wbsAQQCST8BYFwDOJ7gAcYKGsgxhd0F8ASWKmgkEfZKhLFF4Al0go0EmMJSe28WOFTIxICppTm0Wxv6r8AJQGbAS6K8SUtnsiW2RQE4bDXCjsFS4KzYOio53D0why0EOCu5rNl6E8CJgZZ6rgi2plHW8virZ+DELFwUa+dGLtM1ueuiFVieFsHWWj5rudy1pZMQ4fyLfJaAfa/AUl5q0JK9oxBp1yuwVyCTAF2E3E4znVd3wLxzop+JFbAk5DZ3RyBvTaG3ouWUbomvtXmmoGlLVHdFKzDYKPTLqVHQ5qzdnaUpaFSOJXipevMCRgcDXQDTvjco0dagpaWqCKngyVyrC+CgQM/Bt6JNv+sO2AuTCs9axJbtk7BsZVaxVwP2DUvzKDsGTR9EVJYyWsgOAG4BPAI41iHeO4DhnMCh8QqoWTQphUnqsw/k3AOAu7o/XesewBOASwBv544wfzmXphRO6In5/JnnegJwA+C6cR8v54o0BwZ+/jsABVja5+McCn214F6e18hh1wB17KFomxeccLHgXo7YkcY65Wht4xoRPpU+/uk3m9GwIMIDdqbXBuwrdqqhNhvjWo2HyWQymUwmk8lkMplMJpPJZDKZTKYT6htYyDHSA6f7DQAAAABJRU5ErkJggg==");
+            background-repeat: no-repeat;
+            background-size: 30px 30px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #0a5bff;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: 0.2s;
+            transition: opacity 0.2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #ffffff;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.37);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #ffffff;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.37);
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"
+><i class="far fa-3x fa-question-circle"></i
+></label>
+<input
+        type="range"
+        min="-100"
+        max="100"
+        value="-20"
+        step="0.1"
+        class="slider"
+        id="sectionRange"
+/>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/measure_distance_icon.png"/>
+    <h1>DistanceMeasurementPlugin Precision Mode</h1>
+    <h2>Click on the model to create full-precision distance measurements</h2>
+</div>
+</body>
+<script type="module">
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        DistanceMeasurementsPlugin,
+        math,
+        PerformanceModel
+    } from "../dist/xeokit-sdk.es.js";
+    import {PickResult} from "../src/viewer/scene/webgl/PickResult.js";
+    import {PickHitHelper} from "./libs/PickHitHelper.js";
+    import {PickRayHelper} from "./libs/PickRayHelper.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        pickSurfacePrecisionEnabled: true,
+    });
+
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    viewer.cameraControl.followPointer = true;
+    viewer.cameraControl.smartPivot = true;
+
+    const performanceModel = new PerformanceModel(viewer.scene, {
+        id: "table",
+        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    performanceModel.createMesh({
+        id: "redLegMesh",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+            16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+        ],
+        position: [-4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1, 0.3, 0.3]
+    });
+
+    performanceModel.createEntity({
+        id: "redLeg",
+        meshIds: ["redLegMesh"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModel.createMesh({
+        id: "greenLegMesh",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+            16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+        ],
+        position: [4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 1.0, 0.3]
+    });
+
+    performanceModel.createEntity({
+        id: "greenLeg",
+        meshIds: ["greenLegMesh"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModel.createMesh({
+        id: "blueLegMesh",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0,
+            -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 0.3, 1.0]
+    });
+
+    performanceModel.createEntity({
+        id: "blueLeg",
+        meshIds: ["blueLegMesh"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModel.createMesh({
+        id: "yellowLegMesh",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [-4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1.0, 1.0, 0.0]
+    });
+
+    performanceModel.createEntity({
+        id: "yellowLeg",
+        meshIds: ["yellowLegMesh"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModel.createMesh({
+        id: "purpleTableTopMesh",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [0, -3, 0],
+        scale: [6, 0.5, 6],
+        rotation: [0, 0, 0],
+        color: [1.0, 0.3, 1.0]
+    });
+
+    performanceModel.createEntity({
+        id: "purpleTableTop",
+        meshIds: ["purpleTableTopMesh"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModel.finalize();
+
+
+    const MEASUREMENT_OFFSET = 0.1;
+    viewer.camera.worldAxis = [-1, 0, 0, 0, 1, 0, 0, 0, -1]; // this setting is used in our app
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an DistanceMeasurementsPlugin, activate its DistanceMeasurementsControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+    const startHelper = new PickHitHelper(viewer.scene);
+    const endHelper = new PickHitHelper(viewer.scene);
+
+    function createPickRayHelper(origin, dir) {
+        const pickRayHelper = new PickRayHelper(viewer.scene);
+        pickRayHelper.setRay(origin, dir);
+    }
+
+    viewer.scene.input.on("click", function (coords) {
+
+        distanceMeasurements.clear();
+
+        const pickResult1 = viewer.scene.pick({
+            canvasPos: coords,
+            pickSurface: true,
+            pickSurfacePrecision: true,
+        });
+
+        if (pickResult1 && pickResult1.entity) {
+            doMeasurement(pickResult1);
+        }
+    });
+
+    function doMeasurement(pickResult) {
+
+        const normal = pickResult.worldNormal;
+        const worldPos = pickResult.worldPos.map((v, i) => v + normal[i] * MEASUREMENT_OFFSET); // 1cm off the object
+
+        distanceToDirection(worldPos, normal);
+
+        distanceToPerpendicularDirections(
+            math.rotateVec3Y(normal, [0, 0, 0], Math.PI * 0.5, math.vec3()),
+            math.rotateVec3Y(normal, [0, 0, 0], Math.PI * -0.5, math.vec3()),
+            worldPos
+        );
+    }
+
+    function distanceToDirection(startPos, normal) {
+
+        createPickRayHelper(startPos, normal);
+
+        const startPickResult = viewer.scene.pick({
+            pickSurface: true,
+            origin: startPos,
+            direction: normal,
+            pickSurfacePrecision: true
+        });
+
+        if (startPickResult.entity && startPickResult.worldPos) {
+
+            const end = new PickResult();
+            const startNormal = startPickResult.worldNormal;
+
+            viewer.scene.pick({
+                pickSurface: true,
+                origin: startPickResult.worldPos.map(
+                    (v, i) => v + startNormal[i] * MEASUREMENT_OFFSET
+                ),
+                direction: startNormal,
+                pickSurfacePrecision: true,
+            }, end);
+
+            if (end.entity && end.worldPos) {
+
+                const distance = Math.sqrt(
+                    Math.pow(startPickResult.worldPos[0] - end.worldPos[0], 2) +
+                    Math.pow(startPickResult.worldPos[1] - end.worldPos[1], 2) +
+                    Math.pow(startPickResult.worldPos[2] - end.worldPos[2], 2)
+                );
+
+                distanceMeasurements.createMeasurement({
+                    id: math.createUUID(),
+                    axisVisible: false,
+                    origin: {
+                        worldPos: startPickResult.worldPos,
+                    },
+                    target: {
+                        worldPos: end.worldPos,
+                    },
+                });
+
+                return distance;
+            }
+        }
+    }
+
+    function distanceToPerpendicularDirections(bNormal, cNormal, startPos) {
+
+        const first = new PickResult();
+
+        viewer.scene.pick({
+            pickSurface: true,
+            origin: startPos,
+            direction: bNormal,
+            pickSurfacePrecision: true,
+        }, first);
+
+        if (first.entity && first.worldPos) {
+
+            const second = new PickResult();
+
+            viewer.scene.pick({
+                pickSurface: true,
+                origin: startPos,
+                direction: cNormal,
+                pickSurfacePrecision: true,
+            }, second);
+
+            if (second.entity && second.worldPos) {
+
+                const distance = Math.sqrt(
+                    Math.pow(first.worldPos[0] - second.worldPos[0], 2) +
+                    Math.pow(first.worldPos[1] - second.worldPos[1], 2) +
+                    Math.pow(first.worldPos[2] - second.worldPos[2], 2)
+                );
+
+                distanceMeasurements.createMeasurement({
+                    id: math.createUUID(),
+                    axisVisible: false,
+                    origin: {
+                        worldPos: first.worldPos,
+                    },
+                    target: {
+                        worldPos: second.worldPos,
+                    },
+                });
+
+                return distance;
+            }
+        }
+    }
+
+</script>
+</html>

@@ -50,7 +50,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -79,7 +79,7 @@
 
     var i = 0;
     xktLoader.load({
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         scale: [0.5, 0.5, 0.5],
         position: [i++ * 15, 0, 0]
@@ -87,7 +87,7 @@
 
         .on("loaded", () => {
             xktLoader.load({
-                src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+                src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                 edges: true,
                 scale: [0.5, 0.5, 0.5],
                 position: [i++ * 15, 0, 0]
@@ -95,7 +95,7 @@
 
                 .on("loaded", () => {
                     xktLoader.load({
-                        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+                        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                         edges: true,
                         scale: [0.5, 0.5, 0.5],
                         position: [i++ * 15, 0, 0]
@@ -103,7 +103,7 @@
 
                         .on("loaded", () => {
                             xktLoader.load({
-                                src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+                                src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                                 edges: true,
                                 scale: [0.5, 0.5, 0.5],
                                 position: [i++ * 15, 0, 0]
@@ -112,7 +112,7 @@
                                 .on("loaded", () => {
 
                                     xktLoader.load({
-                                        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+                                        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                                         edges: true,
                                         scale: [0.5, 0.5, 0.5],
                                         position: [i++ * 15, 0, 0]

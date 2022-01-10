@@ -171,7 +171,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, AmbientLight, NavCubePlugin, TreeViewPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, AmbientLight, NavCubePlugin, TreeViewPlugin} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -232,7 +232,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/HolterTower.xkt",
+        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         excludeUnclassifiedObjects: true,
         edges: true
     });

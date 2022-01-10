@@ -29,8 +29,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * hierarchy of the IFC elements in each model we load.
  *
  * Then we'll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
- * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
- * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
+ * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
  *
@@ -493,6 +492,8 @@ class TreeViewPlugin extends Plugin {
     /**
      * Removes a model from this tree view.
      *
+     * Does nothing if model not currently in tree view.
+     *
      * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
      */
     removeModel(modelId) {
@@ -501,7 +502,6 @@ class TreeViewPlugin extends Plugin {
         }
         const modelTreeView = this._modelTreeViews[modelId];
         if (!modelTreeView) {
-            this.warn("Model not added: " + modelId);
             return;
         }
         modelTreeView.destroy();

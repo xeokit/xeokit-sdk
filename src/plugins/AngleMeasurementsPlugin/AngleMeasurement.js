@@ -115,6 +115,7 @@ class AngleMeasurement extends Component {
             this._needUpdate(0); // No lag
         });
 
+        this.approximate = cfg.approximate;
         this.visible = cfg.visible;
 
         this.originVisible = cfg.originVisible;
@@ -204,12 +205,6 @@ class AngleMeasurement extends Component {
             var canvasHeight = aabb[3];
             var j = 0;
 
-            const metrics = this.plugin.viewer.scene.metrics;
-            const scale = metrics.scale;
-            const units = metrics.units;
-            const unitInfo = metrics.unitsInfo[units];
-            const unitAbbrev = unitInfo.abbrev;
-
             for (var i = 0, len = pp.length; i < len; i += 4) {
                 cp[j] = left + Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
                 cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
@@ -225,7 +220,6 @@ class AngleMeasurement extends Component {
 
             this._angleLabel.setPosBetweenWires(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5]);
 
-
             math.subVec3(this._originWorld, this._cornerWorld, originVec);
             math.subVec3(this._targetWorld, this._cornerWorld, targetVec);
 
@@ -234,11 +228,14 @@ class AngleMeasurement extends Component {
                 (targetVec[0] !== 0 || targetVec[1] !== 0 || targetVec[2] !== 0);
 
             if (validVecs) {
+
+                const tilde = this._approximate ? " ~ " : " = ";
+
                 math.normalizeVec3(originVec);
                 math.normalizeVec3(targetVec);
-                var angle = Math.abs(math.angleVec3(originVec, targetVec));
+                const angle = Math.abs(math.angleVec3(originVec, targetVec));
                 this._angle = angle / math.DEGTORAD;
-                this._angleLabel.setText("" + this._angle.toFixed(2) + "°");
+                this._angleLabel.setText(tilde + this._angle.toFixed(2) + "°");
             } else {
                 this._angleLabel.setText("");
             }
@@ -256,6 +253,34 @@ class AngleMeasurement extends Component {
 
             this._cpDirty = false;
         }
+    }
+
+    /**
+     * Sets whether this AngleMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    set approximate(approximate) {
+        approximate = approximate !== false;
+        if (this._approximate === approximate) {
+            return;
+        }
+        this._approximate = approximate;
+        this._cpDirty = true;
+        this._needUpdate(0);
+    }
+
+    /**
+     * Gets whether this AngleMeasurement indicates that its measurement is approximate.
+     *
+     * This is ````true```` by default.
+     *
+     * @type {Boolean}
+     */
+    get approximate() {
+        return this._approximate;
     }
 
     /**

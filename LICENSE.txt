@@ -18,6 +18,10 @@ MIT License [http://www.opensource.org/licenses/mit-license.php]
 Pako
 Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
 MIT License [http://www.opensource.org/licenses/mit-license.php]
+
+web-ifc
+Copyright (c) 2020-2021 web-ifc contributors
+Mozilla Public License Version 2.0 [https://www.mozilla.org/en-US/MPL/2.0/]
 -------------------------------------------------------------------------
 
                     GNU AFFERO GENERAL PUBLIC LICENSE

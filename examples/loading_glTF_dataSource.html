@@ -148,7 +148,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, GLTFLoaderPlugin, utils, TreeViewPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, utils, TreeViewPlugin} from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -227,8 +227,8 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/duplex/scene.gltf",
-        metaModelSrc: "../assets/metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/gltf/Duplex/scene.gltf",
+        metaModelSrc: "../assets/models/gltf/Duplex/Duplex.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 

@@ -1,4 +1,5 @@
 import {TrianglesBatchingColorRenderer} from "./renderers/TrianglesBatchingColorRenderer.js";
+import {TrianglesBatchingFlatColorRenderer} from "./renderers/TrianglesBatchingFlatColorRenderer.js";
 import {TrianglesBatchingSilhouetteRenderer} from "./renderers/TrianglesBatchingSilhouetteRenderer.js";
 import {TrianglesBatchingEdgesRenderer} from "./renderers/TrianglesBatchingEdgesRenderer.js";
 import {TrianglesBatchingEdgesColorRenderer} from "./renderers/TrianglesBatchingEdgesColorRenderer.js";
@@ -10,6 +11,7 @@ import {TrianglesBatchingDepthRenderer} from "./renderers/TrianglesBatchingDepth
 import {TrianglesBatchingNormalsRenderer} from "./renderers/TrianglesBatchingNormalsRenderer.js";
 import {TrianglesBatchingShadowRenderer} from "./renderers/TrianglesBatchingShadowRenderer.js";
 import {TrianglesBatchingColorQualityRenderer} from "./renderers/TrianglesBatchingColorQualityRenderer.js";
+import {TrianglesBatchingPickNormalsFlatRenderer} from "./renderers/TrianglesBatchingPickNormalsFlatRenderer.js";
 
 /**
  * @private
@@ -28,6 +30,14 @@ class TrianglesBatchingRenderers {
         if (this._colorRendererWithSAO && (!this._colorRendererWithSAO.getValid())) {
             this._colorRendererWithSAO.destroy();
             this._colorRendererWithSAO = null;
+        }
+        if (this._flatColorRenderer && (!this._flatColorRenderer.getValid())) {
+            this._flatColorRenderer.destroy();
+            this._flatColorRenderer = null;
+        }
+        if (this._flatColorRendererWithSAO && (!this._flatColorRendererWithSAO.getValid())) {
+            this._flatColorRendererWithSAO.destroy();
+            this._flatColorRendererWithSAO = null;
         }
         if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
             this._colorQualityRenderer.destroy();
@@ -69,6 +79,10 @@ class TrianglesBatchingRenderers {
             this._pickNormalsRenderer.destroy();
             this._pickNormalsRenderer = null;
         }
+        if (this._pickNormalsFlatRenderer && this._pickNormalsFlatRenderer.getValid() === false) {
+            this._pickNormalsFlatRenderer.destroy();
+            this._pickNormalsFlatRenderer = null;
+        }
         if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
             this._occlusionRenderer.destroy();
             this._occlusionRenderer = null;
@@ -91,6 +105,20 @@ class TrianglesBatchingRenderers {
             this._colorRendererWithSAO = new TrianglesBatchingColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
+    }
+
+    get flatColorRenderer() {
+        if (!this._flatColorRenderer) {
+            this._flatColorRenderer = new TrianglesBatchingFlatColorRenderer(this._scene, false);
+        }
+        return this._flatColorRenderer;
+    }
+
+    get flatColorRendererWithSAO() {
+        if (!this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO = new TrianglesBatchingFlatColorRenderer(this._scene, true);
+        }
+        return this._flatColorRendererWithSAO;
     }
 
     get colorQualityRenderer() {
@@ -156,6 +184,13 @@ class TrianglesBatchingRenderers {
         return this._pickNormalsRenderer;
     }
 
+    get pickNormalsFlatRenderer() {
+        if (!this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer = new TrianglesBatchingPickNormalsFlatRenderer(this._scene);
+        }
+        return this._pickNormalsFlatRenderer;
+    }
+
     get pickDepthRenderer() {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new TrianglesBatchingPickDepthRenderer(this._scene);
@@ -183,6 +218,12 @@ class TrianglesBatchingRenderers {
         }
         if (this._colorRendererWithSAO) {
             this._colorRendererWithSAO.destroy();
+        }
+        if (this._flatColorRenderer) {
+            this._flatColorRenderer.destroy();
+        }
+        if (this._flatColorRendererWithSAO) {
+            this._flatColorRendererWithSAO.destroy();
         }
         if (this._colorQualityRenderer) {
             this._colorQualityRenderer.destroy();
@@ -214,6 +255,9 @@ class TrianglesBatchingRenderers {
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();
         }
+        if (this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer.destroy();
+        }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.destroy();
         }
@@ -225,6 +269,9 @@ class TrianglesBatchingRenderers {
 
 const cachdRenderers = {};
 
+/**
+ * @private
+ */
 function getBatchingRenderers(scene) {
     const sceneId = scene.id;
     let batchingRenderers = cachdRenderers[sceneId];

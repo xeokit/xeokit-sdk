@@ -47,6 +47,9 @@ class LinesBatchingRenderers {
 
 const cachedRenderers = {};
 
+/**
+ * @private
+ */
 function getBatchingRenderers(scene) {
     const sceneId = scene.id;
     let batchingRenderers = cachedRenderers[sceneId];

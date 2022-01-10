@@ -28,7 +28,7 @@ class XKTDefaultDataSource {
     /**
      * Gets the contents of the given ````.xkt```` file in an arraybuffer.
      *
-     * @param {String|Number} src Path to ````.xkt```` file.
+     * @param {String|Number} src Path or ID of an ````.xkt```` file.
      * @param {Function} ok Callback fired on success, argument is the ````.xkt```` file in an arraybuffer.
      * @param {Function} error Callback fired on error.
      */

@@ -87,7 +87,7 @@
         ReadableGeometry,
         buildBoxGeometry,
         math
-    } from "../dist/xeokit-sdk.es.js";
+    } from "../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -189,10 +189,10 @@
     viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Creates a simple table-shaped model from Nodes and Meshes, and centered at the given RTC center
+    // Creates a simple table-shaped model from Nodes and Meshes, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
-    function buildTable(rtcCenter, size = 1) {
+    function buildTable(origin, size = 1) {
 
         let modelId = math.createUUID();
 
@@ -214,7 +214,7 @@
 
                 new Mesh(viewer.scene, { // Red table leg
                     isObject: true, // <---------- Node represents an object
-                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
                     position: [-4, -6, -4],
                     scale: [1, 3, 1],
                     rotation: [0, 0, 0],
@@ -226,7 +226,7 @@
 
                 new Mesh(viewer.scene, { // Green table leg
                     isObject: true, // <---------- Node represents an object
-                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
                     position: [4, -6, -4],
                     scale: [1, 3, 1],
                     rotation: [0, 0, 0],
@@ -238,7 +238,7 @@
 
                 new Mesh(viewer.scene, {// Blue table leg
                     isObject: true, // <---------- Node represents an object
-                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
                     position: [4, -6, 4],
                     scale: [1, 3, 1],
                     rotation: [0, 0, 0],
@@ -250,7 +250,7 @@
 
                 new Mesh(viewer.scene, {  // Yellow table leg
                     isObject: true, // <---------- Node represents an object
-                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
                     position: [-4, -6, 4],
                     scale: [1, 3, 1],
                     rotation: [0, 0, 0],
@@ -262,7 +262,7 @@
 
                 new Mesh(viewer.scene, { // Purple table top
                     isObject: true, // <---------- Node represents an object
-                    rtcCenter: rtcCenter, // <---- This mesh's positions and transforms are relative to the RTC center
+                    origin: origin, // <---- This mesh's positions and transforms are relative to the origin
                     position: [0, -3, 0],
                     scale: [6, 0.5, 6],
                     rotation: [0, 0, 0],

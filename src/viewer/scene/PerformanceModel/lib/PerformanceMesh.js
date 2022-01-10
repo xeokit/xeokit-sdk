@@ -85,10 +85,10 @@ class PerformanceMesh {
          *
          * When this is defined, then the positions are RTC, which means that they are relative to this position.
          *
-         * @property rtcCenter
+         * @property origin
          * @type {Float64Array}
          */
-        this.rtcCenter = null;
+        this.origin = null;
     }
 
     /**
@@ -96,6 +96,15 @@ class PerformanceMesh {
      */
     _finalize(entityFlags) {
         this._layer.initFlags(this._portionId, entityFlags, this._transparent);
+    }
+
+    /**
+     * @private
+     */
+    _finalize2() {
+        if (this._layer.flushInitFlags) {
+            this._layer.flushInitFlags();
+        }
     }
 
     /**
@@ -226,6 +235,11 @@ class PerformanceMesh {
     /** @private */
     pickTriangleSurface(pickResult) {
         // NOP
+    }
+
+    /** @private */
+    precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
+        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
     }
 
     /** @private */

@@ -68,12 +68,16 @@ class AngleMeasurementsControl extends Component {
         let over = false;
         let entity = null;
         let worldPos = math.vec3();
+        const hoverCanvasPos = math.vec2();
+
+        const pickSurfacePrecisionEnabled = this.plugin.viewer.scene.pickSurfacePrecisionEnabled;
 
         this._onhoverSurface = cameraControl.on("hoverSurface", e => {
 
             over = true;
             entity = e.entity;
             worldPos.set(e.worldPos);
+            hoverCanvasPos.set(e.canvasPos);
 
             if (this._state === HOVERING) {
                 if (this.startDot) {
@@ -107,14 +111,11 @@ class AngleMeasurementsControl extends Component {
             }
         });
 
-        var lastX;
-        var lastY;
-        const tolerance = 2;
+        let lastX;
+        let lastY;
+        const tolerance = 5;
 
         this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", (coords) => {
-            if (!over) {
-                return;
-            }
             lastX = coords[0];
             lastY = coords[1];
         });
@@ -134,6 +135,16 @@ class AngleMeasurementsControl extends Component {
 
                 case HOVERING:
                     if (over) {
+                        if (pickSurfacePrecisionEnabled) {
+                            const pickResult = this.plugin.viewer.scene.pick({
+                                canvasPos: hoverCanvasPos,
+                                pickSurface: true,
+                                pickSurfacePrecision: true
+                            });
+                            if (pickResult && pickResult.worldPos) {
+                                worldPos.set(pickResult.worldPos);
+                            }
+                        }
                         this._currentAngleMeasurement = this.plugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
@@ -147,7 +158,8 @@ class AngleMeasurementsControl extends Component {
                             target: {
                                 entity: entity,
                                 worldPos: worldPos
-                            }
+                            },
+                            approximate: true
                         });
                         this._currentAngleMeasurement.originVisible = true;
                         this._currentAngleMeasurement.originWireVisible = true;
@@ -163,6 +175,16 @@ class AngleMeasurementsControl extends Component {
 
                 case FINDING_CORNER:
                     if (over) {
+                        if (pickSurfacePrecisionEnabled) {
+                            const pickResult = this.plugin.viewer.scene.pick({
+                                canvasPos: hoverCanvasPos,
+                                pickSurface: true,
+                                pickSurfacePrecision: true
+                            });
+                            if (pickResult && pickResult.worldPos) {
+                                this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
+                            }
+                        }
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
@@ -180,6 +202,17 @@ class AngleMeasurementsControl extends Component {
 
                 case FINDING_TARGET:
                     if (over) {
+                        if (pickSurfacePrecisionEnabled) {
+                            const pickResult = this.plugin.viewer.scene.pick({
+                                canvasPos: hoverCanvasPos,
+                                pickSurface: true,
+                                pickSurfacePrecision: true
+                            });
+                            if (pickResult && pickResult.worldPos) {
+                                this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
+                                this._currentAngleMeasurement.approximate = false;
+                            }
+                        }
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this.fire("measurementEnd", this._currentAngleMeasurement);

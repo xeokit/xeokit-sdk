@@ -54,7 +54,6 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
-            event.stopPropagation();
             event.preventDefault();
 
             const touches = event.touches;
@@ -156,7 +155,12 @@ class TouchPanRotateAndDollyHandler {
 
                 const xPanDelta = touch0Vec[0];
                 const yPanDelta = touch0Vec[1];
-                
+
+                if (states.longTouchTimeout !== null && (Math.abs(xPanDelta) > configs.longTapRadius || Math.abs(yPanDelta) > configs.longTapRadius)) {
+                    clearTimeout(states.longTouchTimeout);
+                    states.longTouchTimeout = null;
+                }
+
                 if (configs.planView) { // No rotating in plan-view mode
 
                     const camera = scene.camera;

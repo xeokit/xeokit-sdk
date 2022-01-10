@@ -34,7 +34,7 @@ class TrianglesInstancingPickMeshRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
-        const rtcCenter = instancingLayer._state.rtcCenter;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -51,7 +51,7 @@ class TrianglesInstancingPickMeshRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (rtcCenter) ? createRTCViewMat(pickViewMatrix, rtcCenter) : pickViewMatrix;
+        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
@@ -100,17 +100,19 @@ class TrianglesInstancingPickMeshRenderer {
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                if (active) {
-                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (rtcCenter) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a);
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                    } else {
-                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                if (sectionPlaneUniforms) {
+                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                    if (active) {
+                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                        if (origin) {
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                        } else {
+                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                        }
+                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                     }
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                 }
             }
         }
@@ -235,6 +237,10 @@ class TrianglesInstancingPickMeshRenderer {
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
                 src.push("varying float vFragDepth;");
             }
+            src.push("bool isPerspectiveMatrix(mat4 m) {");
+            src.push("    return (m[2][3] == - 1.0);");
+            src.push("}");
+            src.push("varying float isPerspective;");
         }
 
         if (clipping) {
@@ -274,6 +280,7 @@ class TrianglesInstancingPickMeshRenderer {
                 src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
                 src.push("clipPos.z *= clipPos.w;");
             }
+            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
         src.push("}");
@@ -298,6 +305,7 @@ class TrianglesInstancingPickMeshRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("varying float vFragDepth;");
         }
@@ -325,7 +333,7 @@ class TrianglesInstancingPickMeshRenderer {
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("gl_FragColor = vPickColor; ");
         src.push("}");

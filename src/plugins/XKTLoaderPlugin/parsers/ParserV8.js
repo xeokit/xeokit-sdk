@@ -14,6 +14,9 @@ if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
     pako = pako.default;
 }
 
+const tempVec4a = math.vec4();
+const tempVec4b = math.vec4();
+
 function extract(elements) {
 
     return {
@@ -114,6 +117,17 @@ const decompressColor = (function () {
     };
 })();
 
+function convertColorsRGBToRGBA(colorsRGB) {
+    const colorsRGBA = [];
+    for (let i = 0, len = colorsRGB.length; i < len; i += 3) {
+        colorsRGBA.push(colorsRGB[i]);
+        colorsRGBA.push(colorsRGB[i + 1]);
+        colorsRGBA.push(colorsRGB[i + 2]);
+        colorsRGBA.push(1.0);
+    }
+    return colorsRGBA;
+}
+
 function load(viewer, options, inflatedData, performanceModel) {
 
     const types = JSON.parse(inflatedData.types);
@@ -212,6 +226,8 @@ function load(viewer, options, inflatedData, performanceModel) {
     const tileCenter = math.vec3();
     const rtcAABB = math.AABB3();
 
+    const geometryArraysCache = {};
+
     for (let tileIndex = 0; tileIndex < numTiles; tileIndex++) {
 
         const lastTileIndex = (numTiles - 1);
@@ -235,7 +251,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
         const tileDecodeMatrix = geometryCompressionUtils.createPositionsDecodeMatrix(rtcAABB);
 
-        const geometryCreated = {};
+        const geometryCreatedInTile = {};
 
         // Iterate over each tile's entities
 
@@ -327,72 +343,145 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
 
-                    if (!geometryCreated[geometryId]) {
+                    let geometryArrays = geometryArraysCache[geometryId];
+
+                    if (!geometryArrays) {
+
+                        geometryArrays = {
+                            batchThisMesh: (!options.reuseGeometries)
+                        };
 
                         const primitiveType = eachGeometryPrimitiveType[geometryIndex];
 
-                        let primitiveName;
-                        let geometryPositions;
-                        let geometryNormals;
-                        let geometryColors;
-                        let geometryIndices;
-                        let geometryEdgeIndices;
+                        let geometryValid = false;
 
                         switch (primitiveType) {
                             case 0:
-                                primitiveName = "solid";
-                                geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
-                                geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
-                                geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                                geometryArrays.primitiveName = "solid";
+                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
+                                geometryArrays.geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             case 1:
-                                primitiveName = "surface";
-                                geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
-                                geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
-                                geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                                geometryArrays.primitiveName = "surface";
+                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
+                                geometryArrays.geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             case 2:
-                                primitiveName = "points";
-                                geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryColors = colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]);
+                                geometryArrays.primitiveName = "points";
+                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryColors = convertColorsRGBToRGBA(colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]));
+                                geometryValid = (geometryArrays.geometryPositions.length > 0);
                                 break;
                             case 3:
-                                primitiveName = "lines";
-                                geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
+                                geometryArrays.primitiveName = "lines";
+                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
+                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             default:
                                 continue;
                         }
 
-                        performanceModel.createGeometry({
-                            id: geometryId,
-                            rtcCenter: tileCenter,
-                            primitive: primitiveName,
-                            positions: geometryPositions,
-                            normals: geometryNormals,
-                            colors: geometryColors,
-                            indices: geometryIndices,
-                            edgeIndices: geometryEdgeIndices,
-                            positionsDecodeMatrix: reusedGeometriesDecodeMatrix
-                        });
+                        if (!geometryValid) {
+                            geometryArrays = null;
+                        }
 
-                        geometryCreated[geometryId] = true;
+                        if (geometryArrays) {
+                            if (geometryReuseCount > 1000) { // TODO: Heuristic to force batching of instanced geometry beyond a certain reuse count (or budget)?
+                                // geometryArrays.batchThisMesh = true;
+                            }
+                            if (geometryArrays.geometryPositions.length > 1000) { // TODO: Heuristic to force batching on instanced geometry above certain vertex size?
+                                // geometryArrays.batchThisMesh = true;
+                            }
+                            if (geometryArrays.batchThisMesh) {
+                                geometryArrays.decompressedPositions = new Float32Array(geometryArrays.geometryPositions.length);
+                                const geometryPositions = geometryArrays.geometryPositions;
+                                const decompressedPositions = geometryArrays.decompressedPositions;
+                                for (let i = 0, len = geometryPositions.length; i < len; i += 3) {
+                                    decompressedPositions[i + 0] = geometryPositions[i + 0] * reusedGeometriesDecodeMatrix[0] + reusedGeometriesDecodeMatrix[12];
+                                    decompressedPositions[i + 1] = geometryPositions[i + 1] * reusedGeometriesDecodeMatrix[5] + reusedGeometriesDecodeMatrix[13];
+                                    decompressedPositions[i + 2] = geometryPositions[i + 2] * reusedGeometriesDecodeMatrix[10] + reusedGeometriesDecodeMatrix[14];
+                                }
+                                geometryArrays.geometryPositions = null;
+                                geometryArraysCache[geometryId] = geometryArrays;
+                            }
+                        }
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
-                        id: meshId,
-                        geometryId: geometryId,
-                        matrix: meshMatrix,
-                        color: meshColor,
-                        metallic: meshMetallic,
-                        roughness: meshRoughness,
-                        opacity: meshOpacity
-                    }));
+                    if (geometryArrays) {
 
-                    meshIds.push(meshId);
+                        if (geometryArrays.batchThisMesh) {
+
+                            const decompressedPositions = geometryArrays.decompressedPositions;
+                            const positions = new Uint16Array(decompressedPositions.length);
+                            for (let i = 0, len = decompressedPositions.length; i < len; i += 3) {
+                                tempVec4a[0] = decompressedPositions[i + 0];
+                                tempVec4a[1] = decompressedPositions[i + 1];
+                                tempVec4a[2] = decompressedPositions[i + 2];
+                                tempVec4a[3] = 1;
+                                math.transformVec4(meshMatrix, tempVec4a, tempVec4b);
+                                geometryCompressionUtils.compressPosition(tempVec4b, rtcAABB, tempVec4a)
+                                positions[i + 0] = tempVec4a[0];
+                                positions[i + 1] = tempVec4a[1];
+                                positions[i + 2] = tempVec4a[2];
+                            }
+
+                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                                id: meshId,
+                                origin: tileCenter,
+                                primitive: geometryArrays.primitiveName,
+                                positions: positions,
+                                normals: geometryArrays.geometryNormals,
+                                colorsCompressed: geometryArrays.geometryColors,
+                                indices: geometryArrays.geometryIndices,
+                                edgeIndices: geometryArrays.geometryEdgeIndices,
+                                positionsDecodeMatrix: tileDecodeMatrix,
+                                color: meshColor,
+                                metallic: meshMetallic,
+                                roughness: meshRoughness,
+                                opacity: meshOpacity
+                            }));
+
+                            meshIds.push(meshId);
+
+                        } else {
+
+                            if (!geometryCreatedInTile[geometryId]) {
+
+                                performanceModel.createGeometry({
+                                    id: geometryId,
+                                    origin: tileCenter,
+                                    primitive: geometryArrays.primitiveName,
+                                    positions: geometryArrays.geometryPositions,
+                                    normals: geometryArrays.geometryNormals,
+                                    colorsCompressed: geometryArrays.geometryColors,
+                                    indices: geometryArrays.geometryIndices,
+                                    edgeIndices: geometryArrays.geometryEdgeIndices,
+                                    positionsDecodeMatrix: reusedGeometriesDecodeMatrix
+                                });
+
+                                geometryCreatedInTile[geometryId] = true;
+                            }
+
+                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                                id: meshId,
+                                geometryId: geometryId,
+                                matrix: meshMatrix,
+                                color: meshColor,
+                                metallic: meshMetallic,
+                                roughness: meshRoughness,
+                                opacity: meshOpacity
+                            }));
+
+                            meshIds.push(meshId);
+                        }
+                    }
 
                 } else {
 
@@ -404,6 +493,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     let geometryColors;
                     let geometryIndices;
                     let geometryEdgeIndices;
+                    let geometryValid = false;
 
                     switch (primitiveType) {
                         case 0:
@@ -412,6 +502,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                             geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                             geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                            geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
                             break;
                         case 1:
                             primitiveName = "surface";
@@ -419,38 +510,44 @@ function load(viewer, options, inflatedData, performanceModel) {
                             geometryNormals = normals.subarray(eachGeometryNormalsPortion [geometryIndex], atLastGeometry ? normals.length : eachGeometryNormalsPortion [geometryIndex + 1]);
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                             geometryEdgeIndices = edgeIndices.subarray(eachGeometryEdgeIndicesPortion [geometryIndex], atLastGeometry ? edgeIndices.length : eachGeometryEdgeIndicesPortion [geometryIndex + 1]);
+                            geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
                             break;
                         case 2:
                             primitiveName = "points";
                             geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                            geometryColors = colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]);
+                            geometryColors = convertColorsRGBToRGBA(colors.subarray(eachGeometryColorsPortion [geometryIndex], atLastGeometry ? colors.length : eachGeometryColorsPortion [geometryIndex + 1]));
+                            geometryValid = (geometryPositions.length > 0);
                             break;
                         case 3:
                             primitiveName = "lines";
                             geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
+                            geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
                             break;
                         default:
                             continue;
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
-                        id: meshId,
-                        rtcCenter: tileCenter,
-                        primitive: primitiveName,
-                        positions: geometryPositions,
-                        normals: geometryNormals,
-                        colors: geometryColors,
-                        indices: geometryIndices,
-                        edgeIndices: geometryEdgeIndices,
-                        positionsDecodeMatrix: tileDecodeMatrix,
-                        color: meshColor,
-                        metallic: meshMetallic,
-                        roughness: meshRoughness,
-                        opacity: meshOpacity
-                    }));
+                    if (geometryValid) {
 
-                    meshIds.push(meshId);
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
+                            id: meshId,
+                            origin: tileCenter,
+                            primitive: primitiveName,
+                            positions: geometryPositions,
+                            normals: geometryNormals,
+                            colorsCompressed: geometryColors,
+                            indices: geometryIndices,
+                            edgeIndices: geometryEdgeIndices,
+                            positionsDecodeMatrix: tileDecodeMatrix,
+                            color: meshColor,
+                            metallic: meshMetallic,
+                            roughness: meshRoughness,
+                            opacity: meshOpacity
+                        }));
+
+                        meshIds.push(meshId);
+                    }
                 }
             }
 

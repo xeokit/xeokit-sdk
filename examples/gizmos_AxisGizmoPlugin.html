@@ -51,7 +51,7 @@
 </div>
 </body>
 <script type="module">
-    import {Viewer, XKTLoaderPlugin, AxisGizmoPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, AxisGizmoPlugin} from "../dist/xeokit-sdk.min.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -69,7 +69,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
     });
 

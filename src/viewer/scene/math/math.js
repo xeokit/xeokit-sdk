@@ -1,7 +1,7 @@
 // Some temporary vars to help avoid garbage collection
 
-const doublePrecision = true;
-const FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+let doublePrecision = true;
+let FloatArrayType = doublePrecision ? Float64Array : Float32Array;
 
 const tempMat1 = new FloatArrayType(16);
 const tempMat2 = new FloatArrayType(16);
@@ -12,6 +12,15 @@ const tempVec4 = new FloatArrayType(4);
  * @private
  */
 const math = {
+
+    setDoublePrecisionEnabled(enable) {
+        doublePrecision = enable;
+        FloatArrayType = doublePrecision ? Float64Array : Float32Array;
+    },
+
+    getDoublePrecisionEnabled() {
+        return doublePrecision;
+    },
 
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
     MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
@@ -141,7 +150,7 @@ const math = {
      * @param floatValsLow
      */
     doublesToFloats(doubleVals, floatValsHigh, floatValsLow) {
-        const floatPair = new Float32Array(2);
+        const floatPair = new FloatArrayType(2);
         for (let i = 0, len = doubleVals.length; i < len; i++) {
             math.splitDouble(doubleVals[i], floatPair);
             floatValsHigh[i] = floatPair[0];
@@ -155,7 +164,7 @@ const math = {
      * @param floatPair
      */
     splitDouble(value, floatPair) {
-        const hi = Float32Array.from([value])[0];
+        const hi = FloatArrayType.from([value])[0];
         const low = value - hi;
         floatPair[0] = hi;
         floatPair[1] = low;
@@ -168,7 +177,6 @@ const math = {
      * @return string The new UUID
      */
     createUUID: ((() => {
-        const self = {};
         const lut = [];
         for (let i = 0; i < 256; i++) {
             lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
@@ -913,7 +921,7 @@ const math = {
      * @returns {*[]}
      */
     xyzObjectToArray(xyz, arry) {
-        arry = arry || new FloatArrayType(3);
+        arry = arry || math.vec3();
         arry[0] = xyz.x;
         arry[1] = xyz.y;
         arry[2] = xyz.z;
@@ -1657,30 +1665,6 @@ const math = {
      * @param z
      * @param m
      */
-    OLDtranslateMat4c(x, y, z, m) {
-
-        const m12 = m[12];
-        m[0] += m12 * x;
-        m[4] += m12 * y;
-        m[8] += m12 * z;
-
-        const m13 = m[13];
-        m[1] += m13 * x;
-        m[5] += m13 * y;
-        m[9] += m13 * z;
-
-        const m14 = m[14];
-        m[2] += m14 * x;
-        m[6] += m14 * y;
-        m[10] += m14 * z;
-
-        const m15 = m[15];
-        m[3] += m15 * x;
-        m[7] += m15 * y;
-        m[11] += m15 * z;
-
-        return m;
-    },
 
     translateMat4c(x, y, z, m) {
 
@@ -2545,7 +2529,6 @@ const math = {
             p2[i + 0] = (m0 * x) + (m4 * y) + (m8 * z) + m12;
             p2[i + 1] = (m1 * x) + (m5 * y) + (m9 * z) + m13;
             p2[i + 2] = (m2 * x) + (m6 * y) + (m10 * z) + m14;
-            p2[i + 3] = (m3 * x) + (m7 * y) + (m11 * z) + m15;
         }
 
         return p2;
@@ -4530,7 +4513,7 @@ const math = {
                 math.subVec3(b, a, ab);
                 math.subVec3(c, a, ac);
 
-                const normVec = new FloatArrayType(3);
+                const normVec = math.vec3();
 
                 math.normalizeVec3(math.cross3Vec3(ab, ac, crossVec), normVec);
 
@@ -4842,6 +4825,48 @@ const math = {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
+     Transforms a ray by a matrix.
+     @method transformRay
+     @static
+     @param {Number[]} matrix 4x4 matrix
+     @param {Number[]} rayOrigin The ray origin
+     @param {Number[]} rayDir The ray direction
+     @param {Number[]} rayOriginDest The transformed ray origin
+     @param {Number[]} rayDirDest The transformed ray direction
+     */
+    transformRay: ((() => {
+
+        const tempVec4a = new FloatArrayType(4);
+        const tempVec4b = new FloatArrayType(4);
+
+        return (matrix, rayOrigin, rayDir, rayOriginDest, rayDirDest) => {
+
+            tempVec4a[0] = rayOrigin[0];
+            tempVec4a[1] = rayOrigin[1];
+            tempVec4a[2] = rayOrigin[2];
+            tempVec4a[3] = 1;
+
+            math.transformVec4(matrix, tempVec4a, tempVec4b);
+
+            rayOriginDest[0] = tempVec4b[0];
+            rayOriginDest[1] = tempVec4b[1];
+            rayOriginDest[2] = tempVec4b[2];
+
+            tempVec4a[0] = rayDir[0];
+            tempVec4a[1] = rayDir[1];
+            tempVec4a[2] = rayDir[2];
+
+            math.transformVec3(matrix, tempVec4a, tempVec4b);
+
+            math.normalizeVec3(tempVec4b);
+
+            rayDirDest[0] = tempVec4b[0];
+            rayDirDest[1] = tempVec4b[1];
+            rayDirDest[2] = tempVec4b[2];
+        };
+    }))(),
+
+    /**
      Transforms a Canvas-space position into a World-space ray, in the context of a Camera.
      @method canvasPosToWorldRay
      @static
@@ -5077,6 +5102,7 @@ const math = {
 
 
     decompressPosition(position, decodeMatrix, dest) {
+        dest = dest || position;
         dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
         dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
         dest[2] = position[2] * decodeMatrix[10] + decodeMatrix[14];

@@ -1,6 +1,7 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
 import {math} from "../scene/math/math.js";
+import {PropertySet} from "./PropertySet.js";
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -37,6 +38,13 @@ class MetaScene {
          * @type {{String:MetaModel}}
          */
         this.metaModels = {};
+
+        /**
+         * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet#id}.
+         *
+         * @type {{String:PropertySet}}
+         */
+        this.propertySets = {};
 
         /**
          * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
@@ -106,6 +114,15 @@ class MetaScene {
     /**
      * Creates a {@link MetaModel} in this MetaScene.
      *
+     * The MetaModel will contain a hierarchy of {@link MetaObject}s, created from the
+     * meta objects in ````metaModelData````.
+     *
+     * The meta object hierarchy in ````metaModelData```` is expected to be non-cyclic, with a single root. If the meta
+     * objects are cyclic, then this method will log an error and attempt to recover by creating a dummy root MetaObject
+     * of type "Model" and connecting all other MetaObjects as its direct children. If the meta objects contain multiple
+     * roots, then this method similarly attempts to recover by creating a dummy root MetaObject of type "Model" and
+     * connecting all the root MetaObjects as its children.
+     *
      * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel}.
      * @param {Object} [options] Options for creating the {@link MetaModel}.
@@ -118,7 +135,8 @@ class MetaScene {
 
         const projectId = metaModelData.projectId || "none";
         const revisionId = metaModelData.revisionId || "none";
-        const newObjects = metaModelData.metaObjects;
+        const newPropertySets = metaModelData.propertySets || [];
+        const newObjects = metaModelData.metaObjects || [];
         const author = metaModelData.author;
         const createdAt = metaModelData.createdAt;
         const creatingApplication = metaModelData.creatingApplication;
@@ -140,9 +158,54 @@ class MetaScene {
         //     }
         // }
 
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, null);
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, [], null);
 
         this.metaModels[modelId] = metaModel;
+
+        for (let i = 0, len = newPropertySets.length; i < len; i++) {
+            const propertySetCfg = newPropertySets[i];
+            const propertySetId = propertySetCfg.id;
+            const propertySet = new PropertySet(propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
+            metaModel.propertySets[propertySetId] = propertySet;
+            this.propertySets[propertySetId] = propertySet;
+        }
+
+        const rootMetaObjects = [];
+
+        for (let i = 0, len = newObjects.length; i < len; i++) {
+            const newObject = newObjects[i];
+            if (newObject.parent === undefined || newObject.parent === null) {
+                rootMetaObjects.push(newObject);
+            }
+        }
+
+        if (rootMetaObjects.length === 0) {
+            this.scene.error("Cyclic containment hierarchy found in metamodel - will flatten the hierarchy and insert fake 'Model' root");
+            const fakeRoot = {
+                "id": modelId + ".fakeRoot",
+                "name": modelId,
+                "type": "Model",
+                "parent": null
+            };
+            for (let i = 0, len = newObjects.length; i < len; i++) {
+                newObjects[i].parent = fakeRoot.id;
+            }
+            newObjects.push(fakeRoot);
+        }
+
+        if (rootMetaObjects.length > 1) {
+            this.scene.error("Multiple containment hierarchy root found in metamodel - will insert fake 'Model' root");
+            const fakeRoot = {
+                "id": modelId + ".fakeRoot",
+                "name": modelId,
+                "type": "Model",
+                "parent": null
+            };
+            newObjects.push(fakeRoot);
+            for (let i = 0, len = rootMetaObjects.length; i < len; i++) {
+                rootMetaObjects[i].parent = fakeRoot.id;
+            }
+        }
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
@@ -156,11 +219,20 @@ class MetaScene {
             const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
             const originalSystemId = newObject.id;
             const name = newObject.name;
-            const properties = newObject.properties;
+            const propertySets = [];
+            if (newObject.propertySetIds && newObject.propertySetIds.length > 0) {
+                for (let j = 0, lenj = newObject.propertySetIds.length; j < lenj; j++) {
+                    const propertySetId = newObject.propertySetIds[j];
+                    const propertySet = metaModel.propertySets[propertySetId];
+                    if (propertySet) {
+                        propertySets.push(propertySet)
+                    }
+                }
+            }
             const parent = null;
             const children = null;
             const external = newObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, properties, parent, children, external);
+            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -232,6 +304,11 @@ class MetaScene {
             }
         };
         visit(metaModel.rootMetaObject);
+        for (let propertySetId in metaModel.propertySets) {
+            if (metaModel.propertySets.hasOwnProperty(propertySetId)) {
+                delete this.propertySets[propertySetId];
+            }
+        }
         delete this.metaModels[metaModel.id];
     }
 

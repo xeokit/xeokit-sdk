@@ -12,6 +12,7 @@ import {ParserV5} from "./parsers/ParserV5.js";
 import {ParserV6} from "./parsers/ParserV6.js";
 import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
+import {ParserV9} from "./parsers/ParserV9.js";
 
 const parsers = {};
 
@@ -23,6 +24,7 @@ parsers[ParserV5.version] = ParserV5;
 parsers[ParserV6.version] = ParserV6;
 parsers[ParserV7.version] = ParserV7;
 parsers[ParserV8.version] = ParserV8;
+parsers[ParserV9.version] = ParserV9;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -36,22 +38,19 @@ parsers[ParserV8.version] = ParserV8;
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.XKT````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
- * * Supports double-precision coordinates, via ````.XKT```` format version 6.
+ * * Supports double-precision coordinates.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.XKT````* and IFC metadata files.
  * * Option to load multiple copies of the same model, without object ID clashes.
- * * Does not (yet) support textures or physically-based materials.
- *
- * ## Credits
- *
- * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
- * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
  *
  * ## Creating *````.XKT````* Files and Metadata
  *
- * See [Creating Files for Offline BIM](https://github.com/xeokit/xeokit-sdk/wiki/Creating-Files-for-Offline-BIM).
+ * We have several sways to convert your files into XKT. See these tutorials for more info:
+ *
+ * * [Converting Models to XKT with convert2xkt](https://www.notion.so/xeokit/Converting-Models-to-XKT-with-convert2xkt-fa567843313f4db8a7d6535e76da9380) - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.
+ * * [Converting IFC Models to XKT using 3rd-Party Open Source Tools](https://www.notion.so/xeokit/Converting-IFC-Models-to-XKT-using-3rd-Party-Open-Source-Tools-c373e48bc4094ff5b6e5c5700ff580ee) - how to convert IFC files to XKT using 3rd-party open source CLI tools.
  *
  * ## Scene representation
  *
@@ -171,7 +170,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * ````javascript
  * xktLoader.load({
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      rotation: [90,0,0],
  *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
@@ -243,7 +242,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model4 = xktLoader.load({
  *      id: "myModel4",
- *      src: "./models/xkt/Duplex.xkt",
+ *      src: "./models/xkt/Duplex.ifc.xkt",
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
@@ -324,7 +323,7 @@ parsers[ParserV8.version] = ParserV8;
  *
  * const model5 = xktLoader2.load({
  *      id: "myModel5",
- *      src: "./models/xkt/Duplex.xkt"
+ *      src: "./models/xkt/Duplex.ifc.xkt"
  * });
  * ````
  *
@@ -397,6 +396,10 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
+     * @param {Boolean} [cfg.reuseGeometries=true] Indicates whether to enable geometry reuse (````true```` by default) or whether to internally expand
+     * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
+     * improve Viewer performance for models that have a lot of geometry reuse, but may also increase the amount of
+     * browser and GPU memory they require. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
      * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
@@ -414,6 +417,7 @@ class XKTLoaderPlugin extends Plugin {
         this.includeTypes = cfg.includeTypes;
         this.excludeTypes = cfg.excludeTypes;
         this.excludeUnclassifiedObjects = cfg.excludeUnclassifiedObjects;
+        this.reuseGeometries = cfg.reuseGeometries;
     }
 
     /**
@@ -422,17 +426,6 @@ class XKTLoaderPlugin extends Plugin {
      */
     get supportedVersions() {
         return Object.keys(parsers);
-    }
-
-    /**
-     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
-     *
-     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
-     *
-     * @type {Object}
-     */
-    set dataSource(value) {
-        this._dataSource = value || new XKTDefaultDataSource();
     }
 
     /**
@@ -447,14 +440,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
+     * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
-     * Default value is {@link IFCObjectDefaults}.
+     * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
      *
-     * @type {{String: Object}}
+     * @type {Object}
      */
-    set objectDefaults(value) {
-        this._objectDefaults = value || IFCObjectDefaults;
+    set dataSource(value) {
+        this._dataSource = value || new XKTDefaultDataSource();
     }
 
     /**
@@ -469,17 +462,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
+     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     * Default value is {@link IFCObjectDefaults}.
      *
-     * Default value is ````undefined````.
-     *
-     * @type {String[]}
+     * @type {{String: Object}}
      */
-    set includeTypes(value) {
-        this._includeTypes = value;
+    set objectDefaults(value) {
+        this._objectDefaults = value || IFCObjectDefaults;
     }
 
     /**
@@ -497,17 +487,17 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
      *
-     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
      * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
      *
      * Default value is ````undefined````.
      *
      * @type {String[]}
      */
-    set excludeTypes(value) {
-        this._excludeTypes = value;
+    set includeTypes(value) {
+        this._includeTypes = value;
     }
 
     /**
@@ -524,6 +514,33 @@ class XKTLoaderPlugin extends Plugin {
         return this._excludeTypes;
     }
 
+    /**
+     * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
+     *
+     * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
+     * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+     *
+     * Default value is ````undefined````.
+     *
+     * @type {String[]}
+     */
+    set excludeTypes(value) {
+        this._excludeTypes = value;
+    }
+
+    /**
+     * Gets whether we load objects that don't have IFC types.
+     *
+     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
+     * that don't have IFC types.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get excludeUnclassifiedObjects() {
+        return this._excludeUnclassifiedObjects;
+    }
 
     /**
      * Sets whether we load objects that don't have IFC types.
@@ -540,17 +557,14 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether we load objects that don't have IFC types.
-     *
-     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
-     * that don't have IFC types.
+     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
      *
      * Default value is ````false````.
      *
      * @type {Boolean}
      */
-    get excludeUnclassifiedObjects() {
-        return this._excludeUnclassifiedObjects;
+    get globalizeObjectIds() {
+        return this._globalizeObjectIds;
     }
 
     /**
@@ -575,14 +589,33 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
-     * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+     * Gets whether XKTLoaderPlugin enables geometry reuse when loading models.
      *
-     * Default value is ````false````.
+     * Default value is ````true````.
      *
      * @type {Boolean}
      */
-    get globalizeObjectIds() {
-        return this._globalizeObjectIds;
+    get reuseGeometries() {
+        return this._reuseGeometries;
+    }
+
+    /**
+     * Sets whether XKTLoaderPlugin enables geometry reuse when loading models.
+     *
+     * Default value is ````true````.
+     *
+     * Geometry reuse saves memory, but can impact Viewer performance when there are many reused geometries. For
+     * this reason, we can set this ````false```` to disable geometry reuse for models loaded by this XKTLoaderPlugin
+     * (which will then "expand" the geometry instances into batches instead).
+     *
+     * The result will be be less WebGL draw calls (which are expensive), at the cost of increased memory footprint.
+     *
+     * See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
+     *
+     * @type {Boolean}
+     */
+    set reuseGeometries(value) {
+        this._reuseGeometries = value !== false;
     }
 
     /**
@@ -604,10 +637,11 @@ class XKTLoaderPlugin extends Plugin {
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
+     * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
      * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.
@@ -616,6 +650,10 @@ class XKTLoaderPlugin extends Plugin {
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link XKTLoaderPlugin#globalizeObjectIds} for more info.
+     * @param {Boolean} [params.reuseGeometries=true] Indicates whether to enable geometry reuse (````true```` by default) or whether to expand
+     * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
+     * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
+     * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -627,7 +665,8 @@ class XKTLoaderPlugin extends Plugin {
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
-            maxGeometryBatchSize: this._maxGeometryBatchSize
+            maxGeometryBatchSize: this._maxGeometryBatchSize,
+            origin: params.origin
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated
@@ -641,6 +680,8 @@ class XKTLoaderPlugin extends Plugin {
         const includeTypes = params.includeTypes || this._includeTypes;
         const excludeTypes = params.excludeTypes || this._excludeTypes;
         const objectDefaults = params.objectDefaults || this._objectDefaults;
+
+        options.reuseGeometries = (params.reuseGeometries !== null && params.reuseGeometries !== undefined ) ? params.reuseGeometries : (this._reuseGeometries !== false);
 
         if (includeTypes) {
             options.includeTypesMap = {};
@@ -724,7 +765,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 if (!processMetaModelData(params.metaModelData)) {
 
-                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
 
                     performanceModel.fire("error", "Metadata not valid");
                 }
@@ -789,7 +830,7 @@ class XKTLoaderPlugin extends Plugin {
 
         performanceModel.finalize();
 
-        this._createDefaultMetaModelIfNeeded(performanceModel, options);
+        this._createDefaultMetaModelIfNeeded(performanceModel, params, options);
 
         performanceModel.scene.once("tick", () => {
             if (performanceModel.destroyed) {
@@ -800,7 +841,7 @@ class XKTLoaderPlugin extends Plugin {
         });
     }
 
-    _createDefaultMetaModelIfNeeded(performanceModel, options) {
+    _createDefaultMetaModelIfNeeded(performanceModel, params, options) {
 
         const metaModelId = performanceModel.id;
 
@@ -831,10 +872,17 @@ class XKTLoaderPlugin extends Plugin {
                 }
             }
 
+            const src = params.src;
+
             this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
+
                 includeTypes: options.includeTypes,
                 excludeTypes: options.excludeTypes,
-                globalizeObjectIds: options.globalizeObjectIds
+                globalizeObjectIds: options.globalizeObjectIds,
+
+                getProperties: async (propertiesId) => {
+                    return await this._dataSource.getProperties(src, propertiesId);
+                }
             });
 
             performanceModel.once("destroyed", () => {
