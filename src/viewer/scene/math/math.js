@@ -1665,30 +1665,6 @@ const math = {
      * @param z
      * @param m
      */
-    OLDtranslateMat4c(x, y, z, m) {
-
-        const m12 = m[12];
-        m[0] += m12 * x;
-        m[4] += m12 * y;
-        m[8] += m12 * z;
-
-        const m13 = m[13];
-        m[1] += m13 * x;
-        m[5] += m13 * y;
-        m[9] += m13 * z;
-
-        const m14 = m[14];
-        m[2] += m14 * x;
-        m[6] += m14 * y;
-        m[10] += m14 * z;
-
-        const m15 = m[15];
-        m[3] += m15 * x;
-        m[7] += m15 * y;
-        m[11] += m15 * z;
-
-        return m;
-    },
 
     translateMat4c(x, y, z, m) {
 
