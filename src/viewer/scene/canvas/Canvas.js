@@ -217,7 +217,7 @@ class Canvas extends Component {
                      * @event boundary
                      * @param value The property's new value
                      */
-                    if (!newResolutionScale) {
+                    if (!newResolutionScale || newCanvasSize) {
                         this.fire("boundary", boundary);
                     }
 
