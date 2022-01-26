@@ -44,6 +44,10 @@ class KeyboardPanRotateDollyHandler {
             if (keyCode === input.KEY_SHIFT) {
                 canvas.style.cursor = null;
             }
+
+            if (controllers.pivotController.getPivoting()) {
+                controllers.pivotController.endPivot()
+            }
         });
 
         this._onTick = scene.on("tick", (e) => {

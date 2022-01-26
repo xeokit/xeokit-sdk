@@ -4,7 +4,6 @@ import { Mesh } from "../../../mesh/Mesh.js";
 import { VBOGeometry } from "../../../geometry/VBOGeometry.js";
 import { buildSphereGeometry } from "../../../geometry/builders/buildSphereGeometry.js";
 import { worldToRTCPos } from "../../../math/rtcCoords.js";
-import { Node } from "../../../nodes/Node.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -68,7 +67,11 @@ class PivotController {
         const cameraPos = math.vec3();
         math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
         const length = math.distVec3(cameraPos, currentPos);
-        const radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+        let radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+
+        if (this._scene.camera.projection == "ortho") {
+            radius /= (this._scene.camera.ortho.scale / 2);
+        }
 
         worldToRTCPos(currentPos, this._rtcCenter, this._rtcPos);
         this._pivotSphereGeometry = new VBOGeometry(
@@ -323,17 +326,7 @@ class PivotController {
      */
     showPivot() {
         if (this._shown) {
-            if (this._hideTimeout) {
-                window.clearTimeout(this._hideTimeout);
-                this._hideTimeout = window.setTimeout(() => {
-                    this.hidePivot();
-                }, 1000);
-            }
             return;
-        }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
         }
         if (this._pivotElement) {
             this.updatePivotElement();
@@ -344,9 +337,6 @@ class PivotController {
             this.createPivotSphere();
         }
         this._shown = true;
-        this._hideTimeout = window.setTimeout(() => {
-            this.hidePivot();
-        }, 1000);
     }
 
     /**
@@ -358,10 +348,6 @@ class PivotController {
         if (!this._shown) {
             return;
         }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
-        }
         if (this._pivotElement) {
             this._pivotElement.style.visibility = "hidden";
         }
@@ -369,7 +355,6 @@ class PivotController {
             this.destroyPivotSphere();
         }
         this._shown = false;
-        this.endPivot();
     }
 
     /**

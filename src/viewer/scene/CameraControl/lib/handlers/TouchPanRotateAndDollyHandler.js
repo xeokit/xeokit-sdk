@@ -113,6 +113,12 @@ class TouchPanRotateAndDollyHandler {
             numTouches = touches.length;
         });
 
+        canvas.addEventListener("touchend", this._canvasTouchEndHandler = () => {
+            if (pivotController.getPivoting()) {
+                pivotController.endPivot()
+            }
+        })
+
         canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
@@ -254,6 +260,7 @@ class TouchPanRotateAndDollyHandler {
     destroy() {
         const canvas = this._scene.canvas.canvas;
         canvas.removeEventListener("touchstart", this._canvasTouchStartHandler);
+        canvas.removeEventListener("touchend", this._canvasTouchEndHandler);
         canvas.removeEventListener("touchmove", this._canvasTouchMoveHandler);
         this._scene.off(this._onTick);
     }
