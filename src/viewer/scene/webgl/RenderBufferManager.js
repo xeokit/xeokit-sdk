@@ -1,4 +1,4 @@
-import {RenderBuffer} from "./RenderBuffer";
+import {RenderBuffer} from "./RenderBuffer.js";
 
 /**
  * @private
