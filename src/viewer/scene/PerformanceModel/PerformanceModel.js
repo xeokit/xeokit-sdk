@@ -17,7 +17,7 @@ import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstanc
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
-import {worldToRTCPositions} from "../math/rtcCoords";
+import {worldToRTCPositions} from "../math/rtcCoords.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
