@@ -1,7 +1,7 @@
 {
-  "coverage": "36.8%",
-  "expectCount": 6296,
-  "actualCount": 2317,
+  "coverage": "36.83%",
+  "expectCount": 6288,
+  "actualCount": 2316,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -1388,7 +1388,7 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/PerformanceNode.js": {
-      "expectCount": 53,
+      "expectCount": 55,
       "actualCount": 41,
       "undocumentLines": [
         4,
@@ -1399,10 +1399,12 @@
         69,
         70,
         72,
-        638,
+        73,
+        74,
         642,
-        663,
-        669
+        646,
+        667,
+        673
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/RENDER_PASSES.js": {
@@ -4402,12 +4404,12 @@
       ]
     },
     "src/viewer/scene/materials/EmphasisMaterial.js": {
-      "expectCount": 26,
-      "actualCount": 23,
+      "expectCount": 28,
+      "actualCount": 25,
       "undocumentLines": [
         4,
-        234,
-        246
+        235,
+        248
       ]
     },
     "src/viewer/scene/materials/Fresnel.js": {
@@ -4557,21 +4559,6 @@
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
-    },
-    "src/viewer/scene/math/geo.js": {
-      "expectCount": 12,
-      "actualCount": 3,
-      "undocumentLines": [
-        10,
-        18,
-        35,
-        39,
-        43,
-        47,
-        51,
-        55,
-        60
-      ]
     },
     "src/viewer/scene/math/geometryCompressionUtils.js": {
       "expectCount": 18,
@@ -5061,16 +5048,16 @@
         1109,
         1120,
         1134,
-        1286,
-        1296,
-        1307,
-        1496,
-        1528,
-        1560,
-        1587,
-        1849,
-        1871,
-        1930
+        1290,
+        1300,
+        1311,
+        1500,
+        1532,
+        1564,
+        1591,
+        1853,
+        1875,
+        1934
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {

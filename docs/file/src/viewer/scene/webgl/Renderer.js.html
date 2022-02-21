@@ -131,17 +131,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-math">viewer/scene/math</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-altitudeFromMercatorZ">altitudeFromMercatorZ</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-circumferenceAtLatitude">circumferenceAtLatitude</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-latFromMercatorY">latFromMercatorY</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-lngFromMercatorX">lngFromMercatorX</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-longLatToMercator">longLatToMercator</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorXfromLng">mercatorXfromLng</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorYfromLat">mercatorYfromLat</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-mercatorZfromAltitude">mercatorZfromAltitude</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-meterInMercatorCoordinateUnits">meterInMercatorCoordinateUnits</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_CIRCUMFERENCE">EARTH_CIRCUMFERENCE</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EARTH_RADIUS">EARTH_RADIUS</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
@@ -178,7 +167,7 @@ import {OcclusionTester} from &quot;./occlusion/OcclusionTester.js&quot;;
 import {SAOOcclusionRenderer} from &quot;./sao/SAOOcclusionRenderer.js&quot;;
 import {createRTCViewMat} from &quot;../math/rtcCoords.js&quot;;
 import {SAODepthLimitedBlurRenderer} from &quot;./sao/SAODepthLimitedBlurRenderer.js&quot;;
-import {RenderBufferManager} from &quot;./RenderBufferManager&quot;;
+import {RenderBufferManager} from &quot;./RenderBufferManager.js&quot;;
 
 /**
  * @private
@@ -354,6 +343,14 @@ const Renderer = function (scene, options) {
             unbindOutputFrameBuffer(params.pass);
         }
     };
+
+    /**
+     * Returns true if the next call to render() will draw something
+     * @returns {boolean}
+     */
+    this.needsRender = function () {
+        return (imageDirty || drawableListDirty || stateSortDirty);
+    }
 
     /**
      * Renders inserted drawables.
@@ -889,7 +886,9 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillOpaqueBinLen &gt; 0 || highlightedEdgesOpaqueBinLen &gt; 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if ( scene.highlightMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (highlightedEdgesOpaqueBinLen &gt; 0) {
                     for (i = 0; i &lt; highlightedEdgesOpaqueBinLen; i++) {
                         highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
@@ -904,17 +903,17 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillTransparentBinLen &gt; 0 || highlightedEdgesTransparentBinLen &gt; 0 || highlightedFillOpaqueBinLen &gt; 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
-                gl.enable(gl.CULL_FACE);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 } else {
                     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
                 }
-
+                gl.enable(gl.CULL_FACE);
                 if (highlightedEdgesTransparentBinLen &gt; 0) {
                     for (i = 0; i &lt; highlightedEdgesTransparentBinLen; i++) {
                         highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
@@ -930,7 +929,9 @@ const Renderer = function (scene, options) {
 
             if (selectedFillOpaqueBinLen &gt; 0 || selectedEdgesOpaqueBinLen &gt; 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (selectedEdgesOpaqueBinLen &gt; 0) {
                     for (i = 0; i &lt; selectedEdgesOpaqueBinLen; i++) {
                         selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
@@ -945,10 +946,11 @@ const Renderer = function (scene, options) {
 
             if (selectedFillTransparentBinLen &gt; 0 || selectedEdgesTransparentBinLen &gt; 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
