@@ -226,6 +226,7 @@ class EmphasisMaterial extends Material {
      * @param {Number} [cfg.edgeWidth=1] Width of xray edges, in pixels.
      * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
      * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces when emphasising.
+     * @param {Boolean} [cfg.glowThrough=true] Whether to make the emphasized object appear to float on top of other objects, as if it were "glowing through" them.
      */
     constructor(owner, cfg = {}) {
 
@@ -240,7 +241,8 @@ class EmphasisMaterial extends Material {
             edgeColor: null,
             edgeAlpha: null,
             edgeWidth: null,
-            backfaces: true
+            backfaces: true,
+            glowThrough: true
         });
 
         this._preset = "default";
@@ -271,6 +273,9 @@ class EmphasisMaterial extends Material {
             if (cfg.backfaces !== undefined) {
                 this.backfaces = cfg.backfaces;
             }
+            if (cfg.glowThrough !== undefined) {
+                this.glowThrough = cfg.glowThrough;
+            }
         } else {
             this.fill = cfg.fill;
             this.fillColor = cfg.fillColor;
@@ -280,6 +285,7 @@ class EmphasisMaterial extends Material {
             this.edgeAlpha = cfg.edgeAlpha;
             this.edgeWidth = cfg.edgeWidth;
             this.backfaces = cfg.backfaces;
+            this.glowThrough = cfg.glowThrough;
         }
     }
 
@@ -501,7 +507,7 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
      *
      * Default is ````false````.
      *
@@ -517,14 +523,43 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * @type {Boolean}
      */
     get backfaces() {
         return this._state.backfaces;
+    }
+
+    /**
+     * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
+     *
+     * Default is ````true````.
+     *
+     * Note: updating this property will not affect the appearance of objects that are already emphasized.
+     *
+     * @type {Boolean}
+     */
+    set glowThrough(value) {
+        value = (value !== false);
+        if (this._state.glowThrough === value) {
+            return;
+        }
+        this._state.glowThrough = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get glowThrough() {
+        return this._state.glowThrough;
     }
 
     /**
@@ -551,6 +586,7 @@ class EmphasisMaterial extends Material {
         this.edgeColor = preset.edgeColor;
         this.edgeAlpha = preset.edgeAlpha;
         this.edgeWidth = preset.edgeWidth;
+        this.glowThrough = preset.glowThrough;
         this._preset = value;
     }
 
