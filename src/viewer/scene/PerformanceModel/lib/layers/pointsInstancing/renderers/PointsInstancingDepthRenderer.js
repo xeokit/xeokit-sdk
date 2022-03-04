@@ -84,7 +84,7 @@ class PointsInstancingDepthRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 

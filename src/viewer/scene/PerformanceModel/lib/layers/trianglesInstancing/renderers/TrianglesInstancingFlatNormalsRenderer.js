@@ -31,6 +31,7 @@ class TrianglesInstancingFlatNormalsRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
+        const geometry = state.geometry;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
 
@@ -73,7 +74,7 @@ class TrianglesInstancingFlatNormalsRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -83,7 +84,7 @@ class TrianglesInstancingFlatNormalsRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
@@ -101,9 +102,9 @@ class TrianglesInstancingFlatNormalsRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
 
-        state.indicesBuf.bind();
+        geometry.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);

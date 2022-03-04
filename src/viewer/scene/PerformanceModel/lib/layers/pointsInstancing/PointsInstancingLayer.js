@@ -4,9 +4,7 @@ import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getPointsInstancingRenderers} from "./PointsInstancingRenderers.js";
-import {quantizePositions} from "../../compression.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempVec4a = math.vec4([0, 0, 0, 1]);
@@ -20,13 +18,32 @@ const tempVec3fa = new Float32Array(3);
 class PointsInstancingLayer {
 
     /**
-     * @param model
      * @param cfg
      * @param cfg.layerIndex
-     * @param cfg.positions Flat float Local-space positions array.
+     * @param cfg.model
+     * @param cfg.geometry
+     * @param cfg.material
      * @param cfg.origin
      */
-    constructor(model, cfg) {
+    constructor(cfg) {
+
+        /**
+         * Owner model
+         * @type {PerformanceModel}
+         */
+        this.model = cfg.model;
+
+        /**
+         * Shared geometry
+         * @type {PerformanceGeometry}
+         */
+        this.geometry = cfg.geometry;
+
+        /**
+         * Shared material
+         * @type {PerformanceGeometry}
+         */
+        this.material = cfg.material;
 
         /**
          * State sorting key.
@@ -40,73 +57,14 @@ class PointsInstancingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._pointsInstancingRenderers = getPointsInstancingRenderers(model.scene);
-        this.model = model;
+        this._pointsInstancingRenderers = getPointsInstancingRenderers(cfg.model.scene);
         this._aabb = math.collapseAABB3();
 
-        const gl = model.scene.canvas.gl;
-
-        const stateCfg = {
-            positionsDecodeMatrix: math.mat4(),
-            numInstances: 0,
+        this._state = new RenderState({
             obb: math.OBB3(),
-            origin: null
-        };
-
-        const preCompressedPositions = (!!cfg.positionsDecodeMatrix);
-
-        if (!cfg.positions) {
-            throw "positions expected";
-        }
-
-        const numVerts = cfg.positions.length / 3;
-
-        if (preCompressedPositions) {
-
-            let normalized = false;
-            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
-            stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-
-            let localAABB = math.collapseAABB3();
-            math.expandAABB3Points3(localAABB, cfg.positions);
-            geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
-            math.AABB3ToOBB3(localAABB, stateCfg.obb);
-
-        } else {
-
-            let lenPositions = cfg.positions.length;
-            let localAABB = math.collapseAABB3();
-            math.expandAABB3Points3(localAABB, cfg.positions);
-            math.AABB3ToOBB3(localAABB, stateCfg.obb);
-            const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
-            let normalized = false;
-            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
-        }
-
-        if (cfg.colorsCompressed) {
-            const colorsCompressed = new Uint8Array(cfg.colorsCompressed);
-            let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
-
-        } else if (cfg.colors) {
-            const colors = cfg.colors;
-            const colorsCompressed = new Uint8Array(colors.length);
-            for (let i = 0, len = colors.length; i < len; i++) {
-                colorsCompressed[i] = colors[i] * 255;
-            }
-            let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
-
-        } else {
-            const colorsCompressed = new Uint8Array(numVerts * 4);
-            for (let i = 0, len = numVerts * 4; i < len; i++) {
-                colorsCompressed[i] = 255;
-            }
-            let notNormalized = false;
-            stateCfg.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
-        }
-
-        this._state = new RenderState(stateCfg);
+            numInstances: 0,
+            origin: cfg.origin ? math.vec3(cfg.origin) : null
+        });
 
         // These counts are used to avoid unnecessary render passes
         this._numPortions = 0;
@@ -120,7 +78,10 @@ class PointsInstancingLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        // Vertex arrays
+        /** @private */
+        this.numIndices = cfg.geometry.numIndices;
+
+        // Per-instance arrays
         this._pickColors = [];
         this._offsets = [];
 
@@ -130,10 +91,6 @@ class PointsInstancingLayer {
         this._modelMatrixCol2 = [];
 
         this._portions = [];
-
-        if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
-        }
 
         this._finalized = false;
 
@@ -190,7 +147,7 @@ class PointsInstancingLayer {
         this._modelMatrixCol2.push(meshMatrix[10]);
         this._modelMatrixCol2.push(meshMatrix[14]);
 
-        // Per-vertex pick colors
+        // Per-instance pick colors
 
         this._pickColors.push(pickColor[0]);
         this._pickColors.push(pickColor[1]);
@@ -506,7 +463,7 @@ class PointsInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -706,10 +663,6 @@ class PointsInstancingLayer {
 
     destroy() {
         const state = this._state;
-        if (state.positionsBuf) {
-            state.positionsBuf.destroy();
-            state.positionsBuf = null;
-        }
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;

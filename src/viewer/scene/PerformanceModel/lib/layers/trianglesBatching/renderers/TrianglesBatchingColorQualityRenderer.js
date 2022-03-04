@@ -1,5 +1,5 @@
 import {Program} from "../../../../../webgl/Program.js";
-import {math} from "../../../../../math/math.js";
+import {math} from "../../../../../math/";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
@@ -35,12 +35,15 @@ class TrianglesBatchingColorQualityRenderer {
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+
         const scene = this._scene;
         const camera = scene.camera;
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
+        const textureSet = state.textureSet;
 
         if (!this._program) {
             this._allocate();
@@ -86,12 +89,20 @@ class TrianglesBatchingColorQualityRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
+
+        if (this._uUVDecodeMatrix) {
+            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
+        }
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
         if (this._aNormal) {
             this._aNormal.bindArrayBuffer(state.normalsBuf);
+        }
+
+        if (this._aUV) {
+            this._aUV.bindArrayBuffer(state.uvBuf);
         }
 
         if (this._aColor) {
@@ -112,6 +123,17 @@ class TrianglesBatchingColorQualityRenderer {
 
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
+        }
+
+        if (textureSet) {
+            if (textureSet.colorTexture) {
+                this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            }
+            if (textureSet.metallicRoughnessTexture) {
+                this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            }
         }
 
         state.indicesBuf.bind();
@@ -138,6 +160,7 @@ class TrianglesBatchingColorQualityRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -199,10 +222,14 @@ class TrianglesBatchingColorQualityRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
+        this._aUV = program.getAttribute("uv");
         this._aColor = program.getAttribute("color");
         this._aMetallicRoughness = program.getAttribute("metallicRoughness");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+
+        this._uBaseColorMap = "uBaseColorMap";
+        this._uMetallicRoughMap = "uMetallicRoughMap";
 
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
@@ -317,6 +344,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("attribute vec3 position;");
         src.push("attribute vec3 normal;");
         src.push("attribute vec4 color;");
+        src.push("attribute vec2 uv;");
         src.push("attribute vec2 metallicRoughness;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
@@ -332,6 +360,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform mat3 uvDecodeMatrix;")
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -355,6 +384,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
         src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -409,6 +439,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("vViewPosition = viewPosition;");
         src.push("vViewNormal = viewNormal;");
         src.push("vColor = color;");
+        src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
         src.push("vMetallicRoughness = metallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -452,9 +483,13 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("varying float vFragDepth;");
         }
 
+        src.push("uniform sampler2D uBaseColorMap;");
+        src.push("uniform sampler2D uMetallicRoughMap;");
+
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
         src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -515,6 +550,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("vec4 gammaToLinear( in vec4 value) {");
         src.push("  return vec4( pow( value.xyz, vec3( gammaFactor ) ), value.w );");
         src.push("}");
+
         if (gammaOutput) {
             src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
             src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
@@ -569,10 +605,10 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("};");
 
         src.push("struct Material {");
-        src.push("   vec3    diffuseColor;");
-        src.push("   float   specularRoughness;");
-        src.push("   vec3    specularColor;");
-        src.push("   float   shine;"); // Only used for Phong
+        src.push("   vec3  diffuseColor;");
+        src.push("   float specularRoughness;");
+        src.push("   vec3  specularColor;");
+        src.push("   float shine;"); // Only used for Phong
         src.push("};");
 
         // IRRADIANCE EVALUATION
@@ -647,16 +683,13 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("}");
 
         if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-
             if (lightsState.lightMaps.length > 0) {
                 src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(textureCube(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse +=  irradiance * diffuseBRDFContrib;");
             }
-
             if (lightsState.reflectionMaps.length > 0) {
                 src.push("   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);");
                 src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
@@ -665,7 +698,6 @@ class TrianglesBatchingColorQualityRenderer {
                 src.push("   vec3 specularBRDFContrib    = BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness);");
                 src.push("   reflectedLight.specular     += radiance * specularBRDFContrib;");
             }
-
             src.push("}");
         }
 
@@ -714,17 +746,26 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("ReflectedLight reflectedLight = ReflectedLight(vec3(0.0,0.0,0.0), vec3(0.0,0.0,0.0));");
 
         src.push("vec3 rgb = (vec3(float(vColor.r) / 255.0, float(vColor.g) / 255.0, float(vColor.b) / 255.0));");
-        src.push("float alpha = float(vColor.a) / 255.0;");
+        src.push("float opacity = float(vColor.a) / 255.0;");
 
-        src.push("vec3  diffuseColor = rgb;");
+        src.push("vec3  baseColor = rgb;");
         src.push("float specularF0 = 1.0;");
         src.push("float metallic = float(vMetallicRoughness.r) / 255.0;");
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-        src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
+        src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
+        src.push("baseColor = baseColorTexel.rgb;");
+       // src.push("opacity = baseColorTexel.a;");
+        src.push("opacity = 1.0;");
+
+        src.push("vec3 metalRoughTexel = texture2D(uMetallicRoughMap, vUV).rgb;");
+        src.push("metallic = metalRoughTexel.r;");
+        src.push("roughness = metalRoughTexel.g;");
+
+        src.push("material.diffuseColor      = baseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
         src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
-        src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
+        src.push("material.specularColor     = mix(vec3(dielectricSpecular), baseColor, metallic);");
 
         src.push("geometry.position      = vViewPosition.xyz;");
         src.push("geometry.viewNormal    = -normalize(vViewNormal);");
@@ -770,8 +811,7 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
-
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
         src.push("vec4 fragColor;");
 
         if (this._withSAO) {
@@ -783,9 +823,9 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient, alpha);");
+            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient, opacity);");
         } else {
-            src.push("   fragColor            = vec4(outgoingLight.rgb, alpha);");
+            src.push("   fragColor            = vec4(outgoingLight.rgb, opacity);");
         }
 
         if (gammaOutput) {

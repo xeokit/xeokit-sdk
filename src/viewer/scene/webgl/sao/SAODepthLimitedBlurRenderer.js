@@ -42,12 +42,6 @@ class SAODepthLimitedBlurRenderer {
         this._uCameraProjectionMatrix = null;
         this._uCameraInverseProjectionMatrix = null;
 
-        this._uScale = null;
-        this._uIntensity = null;
-        this._uBias = null;
-        this._uKernelRadius = null;
-        this._uMinResolution = null;
-
         // VBOs
 
         this._uvBuf = null;

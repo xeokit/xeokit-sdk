@@ -31,6 +31,7 @@ class TrianglesInstancingPickNormalsRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
+        const geometry = state.geometry;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
 
@@ -91,7 +92,7 @@ class TrianglesInstancingPickNormalsRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -109,8 +110,9 @@ class TrianglesInstancingPickNormalsRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aNormal.bindArrayBuffer(state.normalsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
+        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
+
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
 
@@ -124,9 +126,9 @@ class TrianglesInstancingPickNormalsRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.indicesBuf.bind();
+        geometry.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);

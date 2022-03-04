@@ -39,6 +39,7 @@ const Renderer = function (scene, options) {
     let edgesEnabled = true;
     let saoEnabled = true;
     let pbrEnabled = true;
+    let colorTextureEnabled = true;
 
     const renderBufferManager = new RenderBufferManager(scene);
 
@@ -69,6 +70,11 @@ const Renderer = function (scene, options) {
 
     this.setPBREnabled = function (enabled) {
         pbrEnabled = enabled;
+        imageDirty = true;
+    };
+
+    this.setColorTextureEnabled = function (enabled) {
+        colorTextureEnabled = enabled;
         imageDirty = true;
     };
 
@@ -493,6 +499,7 @@ const Renderer = function (scene, options) {
             frameCtx.pass = params.pass;
             frameCtx.withSAO = false;
             frameCtx.pbrEnabled = pbrEnabled && !!scene.pbrEnabled;
+            frameCtx.colorTextureEnabled = colorTextureEnabled && !!scene.colorTextureEnabled;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -748,6 +755,7 @@ const Renderer = function (scene, options) {
                     gl.clear(gl.DEPTH_BUFFER_BIT);
                 }
                 gl.enable(gl.BLEND);
+
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -792,6 +800,7 @@ const Renderer = function (scene, options) {
                 }
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
+
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);

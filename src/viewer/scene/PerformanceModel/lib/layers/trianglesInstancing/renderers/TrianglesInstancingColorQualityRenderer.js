@@ -35,13 +35,18 @@ class TrianglesInstancingColorQualityRenderer {
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
 
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+
         const model = instancingLayer.model;
         const scene = this._scene;
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
+        const origin = state.origin;
+        const textureSet = state.textureSet;
+        const geometry = state.geometry;
+
         const instanceExt = this._instanceExt;
-        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();
@@ -87,7 +92,11 @@ class TrianglesInstancingColorQualityRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
+
+        if (this._uUVDecodeMatrix) {
+            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometry.uvDecodeMatrix);
+        }
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -105,10 +114,13 @@ class TrianglesInstancingColorQualityRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aNormal.bindArrayBuffer(state.normalsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
+        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
 
-        this._aColor.bindArrayBuffer(state.colorsBuf);
+        if (this._aUV) {
+            this._aUV.bindArrayBuffer(geometry.uvBuf);
+        }
+        this._aColor.bindArrayBuffer(geometry.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
         this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
@@ -127,9 +139,20 @@ class TrianglesInstancingColorQualityRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.indicesBuf.bind();
+        if (textureSet) {
+            if (textureSet.colorTexture) {
+                this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            }
+            if (textureSet.metallicRoughnessTexture) {
+                this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            }
+        }
 
-        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        geometry.indicesBuf.bind();
+
+        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         frameCtx.drawElements++;
 
@@ -172,7 +195,7 @@ class TrianglesInstancingColorQualityRenderer {
         this._uRenderPass = program.getLocation("renderPass");
 
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-
+        this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
 
@@ -234,11 +257,15 @@ class TrianglesInstancingColorQualityRenderer {
 
         this._aPosition = program.getAttribute("position");
         this._aNormal = program.getAttribute("normal");
+        this._aUV = program.getAttribute("uv");
         this._aColor = program.getAttribute("color");
         this._aMetallicRoughness = program.getAttribute("metallicRoughness");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
         this._aOffset = program.getAttribute("offset");
+
+        this._uBaseColorMap = "uBaseColorMap";
+        this._uMetallicRoughMap = "uMetallicRoughMap";
 
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
@@ -354,6 +381,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("attribute vec3 position;");
         src.push("attribute vec2 normal;");
         src.push("attribute vec4 color;");
+        src.push("attribute vec2 uv;");
         src.push("attribute vec2 metallicRoughness;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
@@ -376,6 +404,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform mat3 uvDecodeMatrix;")
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -399,6 +428,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
         src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -457,6 +487,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("vViewPosition = viewPosition;");
         src.push("vViewNormal = viewNormal;");
         src.push("vColor = color;");
+        src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
         src.push("vMetallicRoughness = metallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -500,6 +531,9 @@ class TrianglesInstancingColorQualityRenderer {
                 src.push("varying float vFragDepth;");
             }
         }
+
+        src.push("uniform sampler2D uBaseColorMap;");
+        src.push("uniform sampler2D uMetallicRoughMap;");
 
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -575,6 +609,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
         src.push("varying vec2 vMetallicRoughness;");
 
         if (lightsState.lightMaps.length > 0) {
@@ -771,6 +806,16 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
+        // src.push("vec2 textureCoord = vUV.st;");
+        //
+        // src.push("vec4 diffuseAlphaTexel = " + TEXTURE_DECODE_FUNCS[/*material._baseColorMap._state.encoding*/ "linear"] + "(texture2D(uBaseColorMap, textureCoord));");
+        // src.push("diffuseColor = diffuseAlphaTexel.rgb;");
+        // src.push("alpha = diffuseAlphaTexel.a;");
+        //
+        // src.push("vec3 metalRoughRGB = texture2D(uMetallicRoughMap, textureCoord).rgb;");
+        // src.push("metallic *= metalRoughRGB.b;");
+        // src.push("roughness *= metalRoughRGB.g;");
+
         src.push("material.diffuseColor      = diffuseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
         src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
         src.push("material.specularColor     = mix(vec3(dielectricSpecular), diffuseColor, metallic);");
@@ -820,8 +865,7 @@ class TrianglesInstancingColorQualityRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
-
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * diffuseColor * alpha * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
         src.push("vec4 fragColor;");
 
         if (this._withSAO) {

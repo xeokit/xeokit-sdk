@@ -29,7 +29,7 @@ class LinesBatchingLayer {
      * @param cfg.origin
      * @param cfg.scratchMemory
      */
-    constructor(model, cfg) {
+    constructor(cfg) {
 
         /**
          * Index of this LinesBatchingLayer in {@link PerformanceModel#_layerList}.
@@ -37,8 +37,8 @@ class LinesBatchingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._batchingRenderers = getBatchingRenderers(model.scene);
-        this.model = model;
+        this._batchingRenderers = getBatchingRenderers(cfg.model.scene);
+        this.model = cfg.model;
         this._buffer = new LinesBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
 
@@ -549,7 +549,7 @@ class LinesBatchingLayer {
         // Color
 
         let f0;
-        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {

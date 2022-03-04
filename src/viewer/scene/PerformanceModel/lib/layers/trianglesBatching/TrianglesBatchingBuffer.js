@@ -23,6 +23,7 @@ class TrianglesBatchingBuffer {
         this.maxIndices = maxGeometryBatchSize * 3; // Rough rule-of-thumb
         this.positions = [];
         this.colors = [];
+        this.uv = [];
         this.metallicRoughness = [];
         this.normals = [];
         this.pickColors = [];

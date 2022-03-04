@@ -59,6 +59,7 @@ const loadGLTF = (function () {
         spinner.processes++;
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 spinner.processes--;
+                options.basePath = getBasePath(src);
                 parseGLTF(plugin, json, src, options, performanceModel, ok, error);
             },
             error);
@@ -95,6 +96,7 @@ const parseGLTF = (function () {
         const ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
+            basePath: options.basePath,
             handleGLTFNode: options.handleGLTFNode,
             json: json,
             scene: performanceModel.scene,
@@ -102,13 +104,15 @@ const parseGLTF = (function () {
             performanceModel: performanceModel,
             geometryCreated: {},
             numObjects: 0,
-            nodes: []
+            nodes: [],
+            nextId: 0
         };
         const spinner = plugin.viewer.scene.canvas.spinner;
         spinner.processes++;
         loadBuffers(ctx, function () {
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
+            loadTextures(ctx);
             loadMaterials(ctx);
             spinner.processes--;
             loadDefaultScene(ctx);
@@ -177,26 +181,102 @@ const parseGLTF = (function () {
         }
     }
 
+
+    function loadTextures(ctx) {
+        const texturesInfo = ctx.json.textures;
+        if (texturesInfo) {
+            for (let i = 0, len = texturesInfo.length; i < len; i++) {
+                loadTexture(ctx, texturesInfo[i]);
+            }
+        }
+    }
+
+    function loadTexture(ctx, textureInfo) {
+        const textureId = `geometry-${ctx.nextId++}`;
+        ctx.performanceModel.createTexture({
+            id: textureId,
+            src: ctx.json.images[textureInfo.source].uri ? ctx.basePath + ctx.json.images[textureInfo.source].uri : undefined,
+            flipY: !!textureInfo.flipY,
+            encoding: "sRGB"
+        });
+        textureInfo._textureId = textureId;
+    }
+
     function loadMaterials(ctx) {
         const materialsInfo = ctx.json.materials;
         if (materialsInfo) {
             for (let i = 0, len = materialsInfo.length; i < len; i++) {
                 const materialInfo = materialsInfo[i];
-                const material = loadMaterialColorize(ctx, materialInfo);
-                materialInfo._rgbaColor = material;
+                materialInfo._materialId = loadMaterial(ctx, materialInfo);
+                materialInfo._attributes = loadMaterialColorize(ctx, materialInfo);
             }
         }
     }
 
+    function loadMaterial(ctx, materialInfo) {
+        const json = ctx.json;
+        const materialCfg = {
+            id: `material-${ctx.nextId++}`
+        };
+        const normalTexture = materialInfo.normalTexture;
+        if (normalTexture) {
+            const textureInfo = json.textures[normalTexture.index];
+            if (textureInfo) {
+                materialCfg.normalTextureId = textureInfo._textureId;
+            }
+        }
+        const alphaMode = materialInfo.alphaMode;
+        switch (alphaMode) {
+            case "NORMAL_OPAQUE":
+                materialCfg.alphaMode = "opaque";
+                break;
+            case "MASK":
+                materialCfg.alphaMode = "mask";
+                break;
+            case "BLEND":
+                materialCfg.alphaMode = "blend";
+                break;
+            default:
+        }
+        const alphaCutoff = materialInfo.alphaCutoff;
+        if (alphaCutoff !== undefined) {
+            materialCfg.alphaCutoff = alphaCutoff;
+        }
+        const metallicPBR = materialInfo.pbrMetallicRoughness;
+        if (metallicPBR) {
+            const colorTexture = metallicPBR.colorTexture;
+            if (colorTexture) {
+                const textureInfo = json.textures[colorTexture.index];
+                if (textureInfo) {
+                    materialCfg.colorTextureId = textureInfo._textureId;
+                }
+            }
+            const metallicRoughnessTexture = metallicPBR.metallicRoughnessTexture;
+            if (metallicRoughnessTexture) {
+                const textureInfo = json.textures[metallicRoughnessTexture.index];
+                if (textureInfo) {
+                    materialCfg.metallicRoughnessTextureId = textureInfo._textureId;
+                }
+            }
+        }
+        ctx.performanceModel.createTextureSet(materialCfg);
+        return materialCfg.materialId;
+    }
+
     function loadMaterialColorize(ctx, materialInfo) { // Substitute RGBA for material, to use fast flat shading instead
-        const colorize = new Float32Array([1, 1, 1, 1]);
         const extensions = materialInfo.extensions;
+        const result = {
+            color: new Float32Array([1, 1, 1, 1]),
+            opacity: 1,
+            metallic: 0,
+            roughness: 1
+        };
         if (extensions) {
             const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
             if (specularPBR) {
                 const diffuseFactor = specularPBR.diffuseFactor;
                 if (diffuseFactor !== null && diffuseFactor !== undefined) {
-                    colorize.set(diffuseFactor);
+                    result.color.set(diffuseFactor);
                 }
             }
             const common = extensions["KHR_materials_common"];
@@ -209,16 +289,16 @@ const parseGLTF = (function () {
                 const diffuse = values.diffuse;
                 if (diffuse && (blinn || phong || lambert)) {
                     if (!utils.isString(diffuse)) {
-                        colorize.set(diffuse);
+                        result.color.set(diffuse);
                     }
                 }
                 const transparency = values.transparency;
                 if (transparency !== null && transparency !== undefined) {
-                    colorize[3] = transparency;
+                    result.opacity = transparency;
                 }
                 const transparent = values.transparent;
                 if (transparent !== null && transparent !== undefined) {
-                    colorize[3] = transparent;
+                    result.opacity = transparent;
                 }
             }
         }
@@ -226,10 +306,21 @@ const parseGLTF = (function () {
         if (metallicPBR) {
             const baseColorFactor = metallicPBR.baseColorFactor;
             if (baseColorFactor) {
-                colorize.set(baseColorFactor);
+                result.color[0] = baseColorFactor[0];
+                result.color[1] = baseColorFactor[1];
+                result.color[2] = baseColorFactor[2];
+                result.opacity = baseColorFactor[3];
+            }
+            const metallicFactor = metallicPBR.metallicFactor;
+            if (metallicFactor !== null && metallicFactor !== undefined) {
+                result.metallic = metallicFactor;
+            }
+            const roughnessFactor = metallicPBR.roughnessFactor;
+            if (roughnessFactor !== null && roughnessFactor !== undefined) {
+                result.roughness = roughnessFactor;
             }
         }
-        return colorize;
+        return result;
     }
 
     function loadDefaultScene(ctx) {
@@ -306,10 +397,8 @@ const parseGLTF = (function () {
     }
 
     function loadNode(ctx, glTFNode, matrix) {
-
         const json = ctx.json;
         let localMatrix;
-
         if (glTFNode.matrix) {
             localMatrix = glTFNode.matrix;
             if (matrix) {
@@ -318,7 +407,6 @@ const parseGLTF = (function () {
                 matrix = localMatrix;
             }
         }
-
         if (glTFNode.translation) {
             localMatrix = math.translationMat4v(glTFNode.translation);
             if (matrix) {
@@ -327,7 +415,6 @@ const parseGLTF = (function () {
                 matrix = localMatrix;
             }
         }
-
         if (glTFNode.rotation) {
             localMatrix = math.quaternionToMat4(glTFNode.rotation);
             if (matrix) {
@@ -336,7 +423,6 @@ const parseGLTF = (function () {
                 matrix = localMatrix;
             }
         }
-
         if (glTFNode.scale) {
             localMatrix = math.scalingMat4v(glTFNode.scale);
             if (matrix) {
@@ -345,15 +431,10 @@ const parseGLTF = (function () {
                 matrix = localMatrix;
             }
         }
-
         if (glTFNode.mesh !== undefined) {
-
             const meshInfo = json.meshes[glTFNode.mesh];
-
             if (meshInfo) {
-
                 let createEntity;
-
                 if (ctx.handleGLTFNode) {
                     const actions = {};
                     if (!ctx.handleGLTFNode(ctx.performanceModel.id, glTFNode, actions)) {
@@ -387,14 +468,15 @@ const parseGLTF = (function () {
                             materialInfo = json.materials[materialIndex];
                         }
                         if (materialInfo) {
-                            meshCfg.color = materialInfo._rgbaColor;
-                            meshCfg.opacity = materialInfo._rgbaColor[3];
-
+                            meshCfg.materialId = materialInfo._materialId;
+                            meshCfg.color = materialInfo._attributes.color;
+                            meshCfg.opacity = materialInfo._attributes.opacity;
+                            meshCfg.metallic = materialInfo._attributes.metallic;
+                            meshCfg.roughness = materialInfo._attributes.roughness;
                         } else {
                             meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
                             meshCfg.opacity = 1.0;
                         }
-
                         if (createEntity) {
                             if (createEntity.colorize) {
                                 meshCfg.color = createEntity.colorize;
@@ -403,7 +485,6 @@ const parseGLTF = (function () {
                                 meshCfg.opacity = createEntity.opacity;
                             }
                         }
-
                         loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
                         math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
                         const origin = math.vec3();
@@ -411,11 +492,9 @@ const parseGLTF = (function () {
                         if (rtcNeeded) {
                             meshCfg.origin = origin;
                         }
-
                         performanceModel.createMesh(meshCfg);
                         meshIds.push(meshCfg.id);
                     }
-
                     if (createEntity) {
                         performanceModel.createEntity(utils.apply(createEntity, {
                             meshIds: meshIds
@@ -464,6 +543,11 @@ const parseGLTF = (function () {
         if (normalsIndex !== null && normalsIndex !== undefined) {
             const accessorInfo = ctx.json.accessors[normalsIndex];
             geometryCfg.normals = loadAccessorTypedArray(ctx, accessorInfo);
+        }
+        const uv0Index = attributes.TEXCOORD_0;
+        if (uv0Index !== null && uv0Index !== undefined) {
+            const accessorInfo = ctx.json.accessors[uv0Index];
+            geometryCfg.uv = loadAccessorTypedArray(ctx, accessorInfo);
         }
         if (geometryCfg.indices) {
             geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.localPositions, geometryCfg.indices, null, 10); // Save PerformanceModel from building edges

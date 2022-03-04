@@ -72,7 +72,6 @@ class Texture2D {
     }
 
     setPreloadColor(value) {
-
         if (!value) {
             color[0] = 0;
             color[1] = 0;
@@ -84,15 +83,11 @@ class Texture2D {
             color[2] = Math.floor(value[2] * 255);
             color[3] = Math.floor((value[3] !== undefined ? value[3] : 1) * 255);
         }
-
         const gl = this.gl;
-
         gl.bindTexture(this.target, this.texture);
         gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
         if (this.target === gl.TEXTURE_CUBE_MAP) {
-
             const faces = [
                 gl.TEXTURE_CUBE_MAP_POSITIVE_X,
                 gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
@@ -101,15 +96,12 @@ class Texture2D {
                 gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
                 gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
             ];
-
             for (let i = 0, len = faces.length; i < len; i++) {
                 gl.texImage2D(faces[i], 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
             }
-
         } else {
             gl.texImage2D(this.target, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
         }
-
         gl.bindTexture(this.target, null);
     }
 

@@ -30,6 +30,7 @@ class TrianglesInstancingPickDepthRenderer {
         const scene = model.scene;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
+        const geometry = state.geometry;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
 
@@ -91,7 +92,7 @@ class TrianglesInstancingPickDepthRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -101,7 +102,7 @@ class TrianglesInstancingPickDepthRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
@@ -116,9 +117,9 @@ class TrianglesInstancingPickDepthRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.indicesBuf.bind();
+        geometry.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         // Cleanup
 

@@ -30,7 +30,13 @@ class PointsBatchingLayer {
      * @param cfg.origin
      * @param cfg.scratchMemory
      */
-    constructor(model, cfg) {
+    constructor(cfg) {
+
+        /**
+         * Owner model
+         * @type {PerformanceModel}
+         */
+        this.model = cfg.model;
 
         /**
          * State sorting key.
@@ -44,8 +50,8 @@ class PointsBatchingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._pointsBatchingRenderers = getPointsBatchingRenderers(model.scene);
-        this.model = model;
+        this._pointsBatchingRenderers = getPointsBatchingRenderers(cfg.model.scene);
+
         this._buffer = new PointsBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
 
@@ -544,7 +550,7 @@ class PointsBatchingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {

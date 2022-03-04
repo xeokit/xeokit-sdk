@@ -1,15 +1,11 @@
-import {WEBGL_INFO} from "../../../../webglInfo.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 
 import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getInstancingRenderers} from "./LinesInstancingRenderers.js";
-import {quantizePositions} from "../../compression.js";
 
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 
 const tempUint8Vec4 = new Uint8Array(4);
 
@@ -25,14 +21,32 @@ const tempVec3fa = new Float32Array(3);
 class LinesInstancingLayer {
 
     /**
-     * @param model
      * @param cfg
      * @param cfg.layerIndex
-     * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.indices Flat int indices array.
+     * @param cfg.model
+     * @param cfg.geometry
+     * @param cfg.material
      * @param cfg.origin
      */
-    constructor(model, cfg) {
+    constructor(cfg) {
+
+        /**
+         * Owner model
+         * @type {PerformanceModel}
+         */
+        this.model = cfg.model;
+
+        /**
+         * Shared geometry
+         * @type {PerformanceGeometry}
+         */
+        this.geometry = cfg.geometry;
+
+        /**
+         * Shared material
+         * @type {PerformanceGeometry}
+         */
+        this.material = cfg.material;
 
         /**
          * State sorting key.
@@ -46,51 +60,15 @@ class LinesInstancingLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._linesInstancingRenderers = getInstancingRenderers(model.scene);
-        this.model = model;
+        this._linesInstancingRenderers = getInstancingRenderers(cfg.model.scene);
+
         this._aabb = math.collapseAABB3();
 
-        const gl = model.scene.canvas.gl;
-
-        const stateCfg = {
-            positionsDecodeMatrix: math.mat4(),
-            numInstances: 0,
+        this._state = new RenderState({
             obb: math.OBB3(),
+            numInstances: 0,
             origin: null
-        };
-
-        const preCompressed = (!!cfg.positionsDecodeMatrix);
-
-        if (cfg.positions) {
-
-            if (preCompressed) {
-
-                let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
-                stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-
-                let localAABB = math.collapseAABB3();
-                math.expandAABB3Points3(localAABB, cfg.positions);
-                geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
-                math.AABB3ToOBB3(localAABB, stateCfg.obb);
-
-            } else {
-
-                let lenPositions = cfg.positions.length;
-                let localAABB = math.collapseAABB3();
-                math.expandAABB3Points3(localAABB, cfg.positions);
-                math.AABB3ToOBB3(localAABB, stateCfg.obb);
-                const quantizedPositions = quantizePositions(cfg.positions, localAABB, stateCfg.positionsDecodeMatrix);
-                let normalized = false;
-                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
-            }
-        }
-
-        if (cfg.indices) {
-            stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
-        }
-
-        this._state = new RenderState(stateCfg);
+        });
 
         // These counts are used to avoid unnecessary render passes
         this._numPortions = 0;
@@ -105,7 +83,7 @@ class LinesInstancingLayer {
         this._numCulledLayerPortions = 0;
 
         /** @private */
-        this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
+        this.numIndices = cfg.geometry.numIndices;
 
         // Vertex arrays
         this._colors = [];
@@ -472,7 +450,7 @@ class LinesInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -686,10 +664,6 @@ class LinesInstancingLayer {
         if (state.modelMatrixCol2Buf) {
             state.modelMatrixCol2Buf.destroy();
             state.modelMatrixCol2Buf = null;
-        }
-        if (state.indicesBuf) {
-            state.indicesBuf.destroy();
-            state.indicessBuf = null;
         }
         state.destroy();
     }

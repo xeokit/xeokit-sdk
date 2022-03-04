@@ -18,6 +18,9 @@ import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
+import {PerformanceTextureSet} from "./lib/PerformanceTextureSet";
+import {PerformanceGeometry} from "./lib/PerformanceGeometry";
+import {PerformanceTexture} from "./lib/PerformanceTexture";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -937,7 +940,8 @@ class PerformanceModel extends Component {
      * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this PerformanceModel. SAO is configured by the Scene's {@link SAO} component.
-     * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the PerformanceModel. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the PerformanceModel when {@link Scene#pbrEnabled} is ````true````. Color textures are implicitly rendered in PBR mode.
+     * @param {Boolean} [cfg.colorTextureEnabled=false] Indicates if base color textures will be rendered for the PerformanceModel when {@link Scene#colorTextureEnabled} is ````true````.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
      * to limit the size of the batched geometry arrays that PerformanceModel internally creates for batched geometries.
@@ -957,14 +961,18 @@ class PerformanceModel extends Component {
         this._nodeList = [];
 
         this._lastOrigin = null;
-        this._lastDecodeMatrix = null;
+        this._lastPositionsDecodeMatrix = null;
         this._lastNormals = null;
+
 
         this._instancingLayers = {};
         this._currentBatchingLayers = {};
 
         this._scratchMemory = getScratchMemory();
 
+        this._geometries = {};
+        this._textures = {};
+        this._textureSets = {};
         this._meshes = {};
         this._nodes = {};
 
@@ -1042,21 +1050,6 @@ class PerformanceModel extends Component {
 
         this._edgeThreshold = cfg.edgeThreshold || 10;
 
-        this.visible = cfg.visible;
-        this.culled = cfg.culled;
-        this.pickable = cfg.pickable;
-        this.clippable = cfg.clippable;
-        this.collidable = cfg.collidable;
-        this.castsShadow = cfg.castsShadow;
-        this.receivesShadow = cfg.receivesShadow;
-        this.xrayed = cfg.xrayed;
-        this.highlighted = cfg.highlighted;
-        this.selected = cfg.selected;
-        this.edges = cfg.edges;
-        this.colorize = cfg.colorize;
-        this.opacity = cfg.opacity;
-        this.backfaces = cfg.backfaces;
-
         // Build static matrix
 
         this._origin = math.vec3(cfg.origin || [0, 0, 0]);
@@ -1084,8 +1077,8 @@ class PerformanceModel extends Component {
         this._colorize = [1, 1, 1];
 
         this._saoEnabled = (cfg.saoEnabled !== false);
-
         this._pbrEnabled = (!!cfg.pbrEnabled);
+        this._colorTextureEnabled = (!!cfg.colorTextureEnabled);
 
         this._isModel = cfg.isModel;
         if (this._isModel) {
@@ -1094,6 +1087,51 @@ class PerformanceModel extends Component {
 
         this._onCameraViewMatrix = this.scene.camera.on("matrix", () => {
             this._viewMatrixDirty = true;
+        });
+
+        this._createDefaultTextureSet();
+
+        this.visible = cfg.visible;
+        this.culled = cfg.culled;
+        this.pickable = cfg.pickable;
+        this.clippable = cfg.clippable;
+        this.collidable = cfg.collidable;
+        this.castsShadow = cfg.castsShadow;
+        this.receivesShadow = cfg.receivesShadow;
+        this.xrayed = cfg.xrayed;
+        this.highlighted = cfg.highlighted;
+        this.selected = cfg.selected;
+        this.edges = cfg.edges;
+        this.colorize = cfg.colorize;
+        this.opacity = cfg.opacity;
+        this.backfaces = cfg.backfaces;
+    }
+
+    _createDefaultTextureSet() {
+        const defaultcolorTexture = new PerformanceTexture({
+            id: "defaultcolorTexture",
+            model: this,
+            preloadColor: [1, 0, 0, 1]
+        });
+        const defaultMetalRoughTexture = new PerformanceTexture({
+            id: "defaultMetalRoughTexture",
+            model: this,
+            preloadColor: [1, 0, 1, 1]
+        });
+        const defaultNormalsTexture = new PerformanceTexture({
+            id: "defaultNormalsTexture",
+            model: this,
+            preloadColor: [1, 1, 1, 1]
+        });
+        this._textures["defaultcolorTexture"] = defaultcolorTexture;
+        this._textures["defaultMetallicRoughnessTexture"] = defaultMetalRoughTexture;
+        this._textures["defaultNormalsTexture"] = defaultNormalsTexture;
+        this._textureSets["defaultTextureSet"] = new PerformanceTextureSet({
+            id: "defaultTextureSet",
+            model: this,
+            colorTexture: defaultcolorTexture,
+            metallicRoughnessTexture: defaultMetalRoughTexture,
+            normalsTexture: defaultNormalsTexture
         });
     }
 
@@ -1706,6 +1744,17 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Gets if color textures are enabled for this PerformanceModel.
+     *
+     * Only works when {@link Scene#colorTextureEnabled} is also true.
+     *
+     * @type {Boolean}
+     */
+    get colorTextureEnabled() {
+        return this._colorTextureEnabled;
+    }
+
+    /**
      * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
      *
      * @type {Boolean}
@@ -1794,13 +1843,18 @@ class PerformanceModel extends Component {
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
-     * @param {Number[]} cfg.positions Flat array of positions.
+     * @param {Number[]} [cfg.positions] Flat array of positions.
+     * @param {Number[]} [cfg.positionsCompressed] Flat array of quantized positions. Overrides ````positions````, and must be accompanied by ````positionsDecodeMatrix````.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompressed````.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
+     * @param {Number[]} [cfg.normalsCompressed] Flat array of oct-encoded normal vectors. Overrides ````normals````. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.colors] Flat array of RGBA vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overidden by ````color```` and ````colorsCompressed````.
-     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overidden by ````color````.
+     * @param {Number[]} [cfg.uv] Flat array of vertex UV coordinates. Only used with "triangles", "solid" and "surface" primitives.
+     * @param {Number[]} [cfg.uvCompressed] Flat array of compressed vertex UV coordinates. Overrides ````uv````. Must be accompanied by ````uvDecodeMatrix````. Only used with "triangles", "solid" and "surface" primitives.
+     * @param {Number[]} [cfg.uvDecodeMatrix] A 4x4 matrix for decompressing ````uvCompressed````.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then every mesh created with {@link PerformanceModel#createMesh} that uses this geometry will
      * be transformed relative to this origin.
      */
@@ -1814,11 +1868,11 @@ class PerformanceModel extends Component {
             this.error("Config missing: id");
             return;
         }
-        if (this._instancingLayers[geometryId]) {
+        if (this._geometries[geometryId]) {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        let instancingLayer;
+
         const primitive = cfg.primitive;
         if (primitive === undefined || primitive === null) {
             this.error("Config missing: primitive");
@@ -1828,49 +1882,106 @@ class PerformanceModel extends Component {
         const cfgOrigin = cfg.origin || cfg.rtcCenter;
         const origin = (cfgOrigin) ? math.addVec3(this._origin, cfgOrigin, tempVec3a) : this._origin;
 
-        switch (primitive) {
-            case "triangles":
-                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
-                    origin,
-                    layerIndex: 0,
-                    solid: true
-                }, cfg));
-                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
-                break;
-            case "solid":
-                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
-                    origin,
-                    layerIndex: 0,
-                    solid: true
-                }, cfg));
-                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
-                break;
-            case "surface":
-                instancingLayer = new TrianglesInstancingLayer(this, utils.apply({
-                    origin,
-                    layerIndex: 0,
-                    solid: false
-                }, cfg));
-                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
-                break;
-            case "lines":
-                instancingLayer = new LinesInstancingLayer(this, utils.apply({
-                    origin,
-                    layerIndex: 0
-                }, cfg));
-                this._numLines += (cfg.indices ? Math.round(cfg.indices.length / 2) : 0);
-                break;
-            case "points":
-                instancingLayer = new PointsInstancingLayer(this, utils.apply({
-                    origin,
-                    layerIndex: 0
-                }, cfg));
-                this._numPoints += (cfg.positions ? Math.round(cfg.positions.length / 3) : 0);
-                break;
-        }
-        this._instancingLayers[geometryId] = instancingLayer;
-        this._layerList.push(instancingLayer);
+        const geometry = new PerformanceGeometry(geometryId, this, utils.apply({origin}, cfg));
+        this._geometries[geometryId] = geometry;
+
+        this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
         this.numGeometries++;
+    }
+
+    /**
+     * Creates a reusable texture within this PerformanceModel.
+     *
+     * We can then supply the texture ID to {@link PerformanceModel#createTextureSet} when we want to create textureSets that use the texture.
+     *
+     * A texture is a set of textures. Each mesh's geometry can have UVs that index different parts of the
+     * textures, so these are intended to be used as texture atlases.
+     *
+     * @param {*} cfg Texture properties.
+     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link PerformanceModel#createTextureSet}.
+     * @param {*} [cfg.imageData] Image data for the texture.
+     * @param {String} [cfg.src] Image source for the texture.
+     */
+    createTexture(cfg) {
+        console.log("createTexture: " + cfg);
+        const textureId = cfg.id;
+        if (textureId === undefined || textureId === null) {
+            this.error("Config missing: id");
+            return;
+        }
+        if (this._textures[textureId]) {
+            this.error("Texture already created: " + textureId);
+            return;
+        }
+        const texture = new PerformanceTexture({
+            id: textureId,
+            model: this,
+            imageData: cfg.imageData,
+            src: cfg.src
+        });
+        this._textures[textureId] = texture;
+    }
+
+    /**
+     * Creates a reusable textureSet within this PerformanceModel.
+     *
+     * We can then supply the textureSet ID to {@link PerformanceModel#createMesh} when we want to create meshes that use the textureSet.
+     *
+     * @param {*} cfg TextureSet properties.
+     * @param {String|Number} cfg.id Mandatory ID for the textureSet, to refer to with {@link PerformanceModel#createMesh}.
+     * @param {*} [cfg.colorTextureId] ID of *RGBA* texture, with diffuse color in *RGB* and alpha in *A*.
+     * @param {*} [cfg.metallicRoughnessTextureId] ID of *RGBA* texture, with PBR metallic factor in *R*, and roughness in *G*.
+     * @param {*} [cfg.normalsTextureId] ID of *RGBA* normal map texture, with normal map vectors in *RGB*.
+     */
+    createTextureSet(cfg) {
+        console.log("createTextureSet: " + cfg);
+        const textureSetId = cfg.id;
+        if (textureSetId === undefined || textureSetId === null) {
+            this.error("Config missing: id");
+            return;
+        }
+        if (this._textureSets[textureSetId]) {
+            this.error(`TextureSet already created: ${textureSetId}`);
+            return;
+        }
+        let colorTexture;
+        if (cfg.colorTextureId !== undefined) {
+            colorTexture = this._textures[cfg.colorTextureId];
+            if (!colorTexture) {
+                this.error(`Texture not found: ${cfg.colorTextureId}`);
+                return;
+            }
+        } else {
+            colorTexture = this._textures["defaultcolorTexture"];
+        }
+        let metallicRoughnessTexture;
+        if (cfg.metallicRoughnessTextureId !== undefined) {
+            metallicRoughnessTexture = this._textures[cfg.metallicRoughnessTextureId];
+            if (!metallicRoughnessTexture) {
+                this.error(`Texture not found: ${cfg.metallicRoughnessTextureId}`);
+                return;
+            }
+        } else {
+            metallicRoughnessTexture = this._textures["defaultMetallicRoughnessTexture"];
+        }
+        let normalsTexture;
+        if (cfg.normalsTextureId !== undefined) {
+            normalsTexture = this._textures[cfg.normalsTextureId];
+            if (!normalsTexture) {
+                this.error(`Texture not found: ${cfg.normalsTextureId}`);
+                return;
+            }
+        } else {
+            normalsTexture = this._textures["defaultNormalsTexture"];
+        }
+        const textureSet = new PerformanceTextureSet({
+            id: textureSetId,
+            model: this,
+            colorTexture,
+            metallicRoughnessTexture,
+            normalsTexture
+        });
+        this._textureSets[textureSetId] = textureSet;
     }
 
     /**
@@ -1903,24 +2014,32 @@ class PerformanceModel extends Component {
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+     * @param {String|Number} [cfg.textureSetId] ID of a textureSet previously created with {@link PerformanceModel#createTextureSet"}.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry"}. Overrides all other geometry parameters given to this method.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
-     * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.positions] Flat array of uncompressed vertex positions. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.positionsCompressed] Flat array of compressed vertex positions. Requires ````positionsDecodeMatrix````. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompressed````.
      * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
      * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
+     * @param {Number[]} [cfg.normalsCompressed] Flat array of oct-encoded normal vectors.
+     * @param {Number[]} [cfg.uv] Flat array of uncompressed vertex UV coordinates. Only used with 'triangles' primitives, to apply textureSet textures.
+     * @param {Number[]} [cfg.uvCompressed] Flat array of compressed vertex UV coordinates. Requires ````uvDecodeMatrix````. Only used with 'triangles' primitives, to apply textureSet textures.
+     * @param {Number[]} [cfg.uvDecodeMatrix] A 4x4 matrix for decompressing ````uvCompressed````.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
      * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
      * constructor. This parameter is ignored when ````geometryId```` is given.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh.
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
-     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors```` and ````colorsCompressed````.
-     * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overridden by textureSet ````colorTexture````. Overrides ````colors```` and ````colorsCompressed````.
+     * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by textureSet ````colorTexture````.
+     * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by textureSet ````metallicRoughnessTexture````.
+     * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by textureSet ````metallicRoughnessTexture````.
      */
     createMesh(cfg) {
 
@@ -1935,20 +2054,23 @@ class PerformanceModel extends Component {
         }
 
         const geometryId = cfg.geometryId;
-        const instancing = (geometryId !== undefined);
+        const textureSetId = cfg.textureSetId || "defaultTextureSet";
+        const reuseGeometry = (geometryId !== undefined);
 
-        if (instancing) {
-            if (!instancedArraysSupported) {
-                this.error("WebGL instanced arrays not supported"); // TODO: Gracefully use batching?
-                return;
-            }
-            if (!this._instancingLayers[geometryId]) {
-                this.error("Geometry not found: " + geometryId + " - ensure that you create it first with createGeometry()");
+        if (reuseGeometry) {
+            if (!this._geometries[geometryId]) {
+                this.error(`Geometry not found: ${geometryId} - ensure that you create it first with createGeometry()`);
                 return;
             }
         }
 
-        let layer;
+        if (cfg.textureSetId) {
+            if (!this._textureSets[cfg.textureSetId]) {
+                this.error(`TextureSet not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
+                return;
+            }
+        }
+
         let portionId;
 
         const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
@@ -1969,7 +2091,9 @@ class PerformanceModel extends Component {
 
         const aabb = math.collapseAABB3();
 
-        if (instancing) {
+        let layer;
+
+        if (reuseGeometry) {
 
             let meshMatrix;
             let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
@@ -1984,7 +2108,7 @@ class PerformanceModel extends Component {
                 meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
             }
 
-            const instancingLayer = this._instancingLayers[geometryId];
+            const instancingLayer = this._getInstancingLayer(textureSetId, geometryId);
 
             layer = instancingLayer;
 
@@ -2004,6 +2128,10 @@ class PerformanceModel extends Component {
             const numTriangles = Math.round(instancingLayer.numIndices / 3);
             this._numTriangles += numTriangles;
             mesh.numTriangles = numTriangles;
+
+            ///////////////////////////////////////////////////////////////////////////////
+            // FIXME: instancinglayer.origin can only be null
+            ///////////////////////////////////////////////////////////////////////////////
 
             mesh.origin = instancingLayer.origin;
 
@@ -2026,8 +2154,8 @@ class PerformanceModel extends Component {
             let indices = cfg.indices;
             let edgeIndices = cfg.edgeIndices;
 
-            if (!cfg.indices && primitive === "triangles") {
-                this.error("Config missing for triangles primitive: indices (no meshIds provided, so expecting geometry arrays instead)");
+            if (!cfg.indices && primitive !== "points") {
+                this.error("Config expected: indices (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
@@ -2069,14 +2197,27 @@ class PerformanceModel extends Component {
             }
 
             if (cfg.positionsDecodeMatrix) {
-                if (!this._lastDecodeMatrix) {
+                if (!this._lastPositionsDecodeMatrix) {
                     needNewBatchingLayers = true;
-                    this._lastDecodeMatrix = math.mat4(cfg.positionsDecodeMatrix);
+                    this._lastPositionsDecodeMatrix = math.mat4(cfg.positionsDecodeMatrix);
 
                 } else {
-                    if (!math.compareMat4(this._lastDecodeMatrix, cfg.positionsDecodeMatrix)) {
+                    if (!math.compareMat4(this._lastPositionsDecodeMatrix, cfg.positionsDecodeMatrix)) {
                         needNewBatchingLayers = true;
-                        this._lastDecodeMatrix.set(cfg.positionsDecodeMatrix)
+                        this._lastPositionsDecodeMatrix.set(cfg.positionsDecodeMatrix)
+                    }
+                }
+            }
+
+            if (cfg.uvDecodeMatrix) {
+                if (!this._lastUVDecodeMatrix) {
+                    needNewBatchingLayers = true;
+                    this._lastUVDecodeMatrix = math.mat4(cfg.uvDecodeMatrix);
+
+                } else {
+                    if (!math.compareMat4(this._lastUVDecodeMatrix, cfg.uvDecodeMatrix)) {
+                        needNewBatchingLayers = true;
+                        this._lastUVDecodeMatrix.set(cfg.uvDecodeMatrix)
                     }
                 }
             }
@@ -2119,6 +2260,8 @@ class PerformanceModel extends Component {
                 }
             }
 
+            const textureSet = textureSetId ? this._textureSets[textureSetId] : null;
+
             layer = this._currentBatchingLayers[primitive];
 
             switch (primitive) {
@@ -2128,6 +2271,9 @@ class PerformanceModel extends Component {
                 case "surface":
 
                     if (layer) {
+
+                        // TODO invalidate after textureSet switch
+
                         if (!layer.canCreatePortion(positions.length, indices.length)) {
                             layer.finalize();
                             delete this._currentBatchingLayers[primitive];
@@ -2136,10 +2282,13 @@ class PerformanceModel extends Component {
                     }
 
                     if (!layer) {
-                        layer = new TrianglesBatchingLayer(this, {
+                        layer = new TrianglesBatchingLayer({
+                            model: this,
+                            textureSet: textureSet,
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                            uvDecodeMatrix: cfg.uvDecodeMatrix,
                             origin,
                             maxGeometryBatchSize: this._maxGeometryBatchSize,
                             solid: (primitive === "solid"),
@@ -2155,15 +2304,19 @@ class PerformanceModel extends Component {
 
                     portionId = layer.createPortion({
                         positions: positions,
+                        positionsCompressed: cfg.positionsCompressed,
                         normals: cfg.normals,
+                        normalsCompressed: cfg.normalsCompressed,
+                        colors: cfg.colors,
+                        colorsCompressed: cfg.colorsCompressed,
+                        uv: cfg.uv,
+                        uvCompressed: cfg.uvCompressed,
                         indices: indices,
                         edgeIndices: edgeIndices,
                         color: color,
+                        opacity: opacity,
                         metallic: metallic,
                         roughness: roughness,
-                        colors: cfg.colors,
-                        colorsCompressed: cfg.colorsCompressed,
-                        opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
                         worldAABB: aabb,
@@ -2187,7 +2340,8 @@ class PerformanceModel extends Component {
                     }
 
                     if (!layer) {
-                        layer = new LinesBatchingLayer(this, {
+                        layer = new LinesBatchingLayer({
+                            model: this,
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
@@ -2201,9 +2355,9 @@ class PerformanceModel extends Component {
                     portionId = layer.createPortion({
                         positions: positions,
                         indices: indices,
-                        color: color,
                         colors: cfg.colors,
                         colorsCompressed: cfg.colorsCompressed,
+                        color: color,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -2226,7 +2380,8 @@ class PerformanceModel extends Component {
                     }
 
                     if (!layer) {
-                        layer = new PointsBatchingLayer(this, {
+                        layer = new PointsBatchingLayer({
+                            model: this,
                             layerIndex: 0, // This is set in #finalize()
                             scratchMemory: this._scratchMemory,
                             positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
@@ -2239,9 +2394,9 @@ class PerformanceModel extends Component {
 
                     portionId = layer.createPortion({
                         positions: positions,
-                        color: color,
                         colors: cfg.colors,
                         colorsCompressed: cfg.colorsCompressed,
+                        color: color,
                         opacity: opacity,
                         meshMatrix: meshMatrix,
                         worldMatrix: worldMatrix,
@@ -2267,6 +2422,80 @@ class PerformanceModel extends Component {
         mesh.aabb = aabb;
 
         this._meshes[id] = mesh;
+    }
+
+    _getInstancingLayer(textureSetId, geometryId) {
+        const layerId = `${textureSetId}.${geometryId}`;
+        let instancingLayer = this._instancingLayers[layerId];
+        if (instancingLayer) {
+            return instancingLayer;
+        }
+        let textureSet;
+        if (textureSetId !== undefined) {
+            textureSet = this._textureSets[textureSetId];
+            if (!textureSet) {
+                this.error("TextureSet not found: " + textureSetId + " - ensure that you create it first with createTextureSet()");
+                return;
+            }
+        }
+        const geometry = this._geometries[geometryId];
+        if (!this._geometries[geometryId]) {
+            this.error("Geometry not found: " + geometryId + " - ensure that you create it first with createGeometry()");
+            return;
+        }
+        switch (geometry.primitive) {
+            case "triangles":
+                instancingLayer = new TrianglesInstancingLayer({
+                    model: this,
+                    textureSet,
+                    geometry,
+                    origin,
+                    layerIndex: 0,
+                    solid: true
+                });
+                break;
+            case "solid":
+                instancingLayer = new TrianglesInstancingLayer({
+                    model: this,
+                    textureSet,
+                    geometry,
+                    origin,
+                    layerIndex: 0,
+                    solid: true
+                });
+                break;
+            case "surface":
+                instancingLayer = new TrianglesInstancingLayer({
+                    model: this,
+                    textureSet,
+                    geometry,
+                    origin,
+                    layerIndex: 0,
+                    solid: false
+                });
+                break;
+            case "lines":
+                instancingLayer = new LinesInstancingLayer({
+                    model: this,
+                    textureSet,
+                    geometry,
+                    origin,
+                    layerIndex: 0
+                });
+                break;
+            case "points":
+                instancingLayer = new PointsInstancingLayer({
+                    model: this,
+                    textureSet,
+                    geometry,
+                    origin,
+                    layerIndex: 0
+                });
+                break;
+        }
+        this._instancingLayers[layerId] = instancingLayer;
+        this._layerList.push(instancingLayer);
+        return instancingLayer;
     }
 
     /**
@@ -2382,15 +2611,15 @@ class PerformanceModel extends Component {
             return;
         }
 
-        for (const geometryId in this._instancingLayers) {
-            if (this._instancingLayers.hasOwnProperty(geometryId)) {
-                this._instancingLayers[geometryId].finalize();
+        for (const layerId in this._instancingLayers) {
+            if (this._instancingLayers.hasOwnProperty(layerId)) {
+                this._instancingLayers[layerId].finalize();
             }
         }
 
-        for (let primitive in this._currentBatchingLayers) {
-            if (this._currentBatchingLayers.hasOwnProperty(primitive)) {
-                this._currentBatchingLayers[primitive].finalize();
+        for (let layerId in this._currentBatchingLayers) {
+            if (this._currentBatchingLayers.hasOwnProperty(layerId)) {
+                this._currentBatchingLayers[layerId].finalize();
             }
         }
         this._currentBatchingLayers = {};
@@ -2404,7 +2633,6 @@ class PerformanceModel extends Component {
             const node = this._nodeList[i];
             node._finalize2();
         }
-
 
         // Sort layers to reduce WebGL shader switching when rendering them
 
@@ -2766,9 +2994,9 @@ class PerformanceModel extends Component {
      * Destroys this PerformanceModel.
      */
     destroy() {
-        for (let primitive in this._currentBatchingLayers) {
-            if (this._currentBatchingLayers.hasOwnProperty(primitive)) {
-                this._currentBatchingLayers[primitive].destroy();
+        for (let layerId in this._currentBatchingLayers) {
+            if (this._currentBatchingLayers.hasOwnProperty(layerId)) {
+                this._currentBatchingLayers[layerId].destroy();
             }
         }
         this._currentBatchingLayers = {};

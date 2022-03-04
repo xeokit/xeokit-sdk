@@ -1,5 +1,5 @@
 import {Program} from "../../../../../webgl/Program.js";
-import {math} from "../../../../../math/math.js";
+import {math} from "../../../../../math/";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
@@ -9,7 +9,7 @@ const tempVec3a = math.vec3();
 /**
  * @private
  */
-class TrianglesInstancingColorRenderer {
+class TrianglesBatchingColorTextureRenderer {
 
     constructor(scene, withSAO) {
         this._scene = scene;
@@ -27,16 +27,17 @@ class TrianglesInstancingColorRenderer {
         return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
     }
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
+    drawLayer(frameCtx, batchingLayer, renderPass) {
 
-        const model = instancingLayer.model;
-        const scene = model.scene;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+
+        const scene = this._scene;
         const camera = scene.camera;
+        const model = batchingLayer.model;
         const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const geometry = state.geometry;
-        const instanceExt = this._instanceExt;
-        const origin = instancingLayer._state.origin;
+        const state = batchingLayer._state;
+        const origin = batchingLayer._state.origin;
+        const textureSet = state.textureSet;
 
         if (!this._program) {
             this._allocate();
@@ -61,7 +62,7 @@ class TrianglesInstancingColorRenderer {
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
+            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
@@ -82,65 +83,50 @@ class TrianglesInstancingColorRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
 
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
+        if (this._uUVDecodeMatrix) {
+            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
+        }
 
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 1);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
+        this._aPosition.bindArrayBuffer(state.positionsBuf);
 
-        this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-        this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-        this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
+        if (this._aNormal) {
+            this._aNormal.bindArrayBuffer(state.normalsBuf);
+        }
 
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol0.location, 1);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 1);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 1);
+        if (this._aUV) {
+            this._aUV.bindArrayBuffer(state.uvBuf);
+        }
 
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
+        if (this._aColor) {
+            this._aColor.bindArrayBuffer(state.colorsBuf);
+        }
 
-        this._aColor.bindArrayBuffer(state.colorsBuf);
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
+        if (this._aFlags) {
+            this._aFlags.bindArrayBuffer(state.flagsBuf);
+        }
 
         if (this._aFlags2) {
             this._aFlags2.bindArrayBuffer(state.flags2Buf);
-            instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         }
 
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        geometry.indicesBuf.bind();
+        if (textureSet) {
+            if (textureSet.colorTexture) {
+                this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            }
+        }
 
-        instanceExt.drawElementsInstancedANGLE(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
+        state.indicesBuf.bind();
+
+        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
 
         frameCtx.drawElements++;
-
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol0.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
-        instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
-
-        if (this._aFlags2) { // Won't be in shader when not clipping
-            instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
-        }
-
-        if (this._aOffset) {
-            instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 0);
-        }
     }
 
     _allocate() {
@@ -156,17 +142,13 @@ class TrianglesInstancingColorRenderer {
             return;
         }
 
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
-
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
-
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-
+        this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
-
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
@@ -214,22 +196,19 @@ class TrianglesInstancingColorRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
+        this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
+        this._aUV = program.getAttribute("uv");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
-        this._aOffset = program.getAttribute("offset");
 
-        this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
-        this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
-        this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
+        this._uBaseColorMap = "uBaseColorMap";
 
-        this._aModelNormalMatrixCol0 = program.getAttribute("modelNormalMatrixCol0");
-        this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
-        this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
-
-        this._uOcclusionTexture = "uOcclusionTexture";
-        this._uSAOParams = program.getLocation("uSAOParams");
+        if (this._withSAO) {
+            this._uOcclusionTexture = "uOcclusionTexture";
+            this._uSAOParams = program.getLocation("uSAOParams");
+        }
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -238,15 +217,17 @@ class TrianglesInstancingColorRenderer {
 
     _bindProgram(frameCtx) {
 
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
+        const program = this._program;
         const lightsState = scene._lightsState;
         const lights = lightsState.lights;
         const project = scene.camera.project;
 
-        this._program.bind();
+        program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
 
         if (this._uLightAmbient) {
             gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
@@ -279,7 +260,9 @@ class TrianglesInstancingColorRenderer {
                 tempVec4[2] = sao.blendCutoff;
                 tempVec4[3] = sao.blendFactor;
                 gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                frameCtx.bindTexture++;
             }
         }
 
@@ -297,24 +280,26 @@ class TrianglesInstancingColorRenderer {
     }
 
     _buildVertexShader() {
+
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        let i;
-        let len;
         let light;
         const src = [];
 
-        src.push("// Instancing geometry drawing vertex shader");
+        src.push("// Triangles batching color texture vertex shader");
+
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
+
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec2 normal;");
+        src.push("attribute vec3 normal;");
         src.push("attribute vec4 color;");
+        src.push("attribute vec2 uv;");
         src.push("attribute vec4 flags;");
         src.push("attribute vec4 flags2;");
 
@@ -322,20 +307,14 @@ class TrianglesInstancingColorRenderer {
             src.push("attribute vec3 offset;");
         }
 
-        src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
-        src.push("attribute vec4 modelMatrixCol1;");
-        src.push("attribute vec4 modelMatrixCol2;");
-
-        src.push("attribute vec4 modelNormalMatrixCol0;");
-        src.push("attribute vec4 modelNormalMatrixCol1;");
-        src.push("attribute vec4 modelNormalMatrixCol2;");
-
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 worldNormalMatrix;");
+
         src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 projMatrix;");
+        src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform mat3 uvDecodeMatrix;")
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -350,7 +329,7 @@ class TrianglesInstancingColorRenderer {
 
         src.push("uniform vec4 lightAmbient;");
 
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -381,34 +360,31 @@ class TrianglesInstancingColorRenderer {
             src.push("varying vec4 vFlags2;");
         }
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
 
         src.push("void main(void) {");
 
         // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-        // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
+        // renderPass = COLOR_OPAQUE
 
         src.push(`if (int(flags.x) != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
 
-        src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
-
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-
-        src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-        src.push("vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);");
+        src.push("vec4 worldNormal =  worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
+        src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 
         src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
         src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
 
         src.push("float lambertian = 1.0;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -439,7 +415,9 @@ class TrianglesInstancingColorRenderer {
         }
 
         src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
+
         src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
+        src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -451,12 +429,10 @@ class TrianglesInstancingColorRenderer {
             }
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2;");
         }
-
         src.push("gl_Position = clipPos;");
         src.push("}");
         src.push("}");
@@ -466,14 +442,15 @@ class TrianglesInstancingColorRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        let i;
-        let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Instancing geometry drawing fragment shader");
+
+        src.push("// Triangles batching draw fragment shader");
+
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
+
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -481,13 +458,15 @@ class TrianglesInstancingColorRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("varying float isPerspective;");
-                src.push("uniform float logDepthBufFC;");
-                src.push("varying float vFragDepth;");
-            }
+
+        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            src.push("varying float isPerspective;");
+            src.push("uniform float logDepthBufFC;");
+            src.push("varying float vFragDepth;");
         }
+
+        src.push("uniform sampler2D uBaseColorMap;");
+
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
             src.push("uniform vec4      uSAOParams;");
@@ -511,7 +490,10 @@ class TrianglesInstancingColorRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+
         src.push("varying vec4 vColor;");
+        src.push("varying vec2 vUV;");
+
         src.push("void main(void) {");
 
         if (clipping) {
@@ -530,23 +512,26 @@ class TrianglesInstancingColorRenderer {
         }
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-        // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+        src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
 
         if (this._withSAO) {
+            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
             src.push("   float viewportWidth     = uSAOParams[0];");
             src.push("   float viewportHeight    = uSAOParams[1];");
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   gl_FragColor            = vec4(vColor.rgb * ambient, 1.0);");
+
+            src.push("   gl_FragColor            = vec4(vColor.rgb * baseColorTexel.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
         } else {
-            src.push("    gl_FragColor           = vColor;");
+            src.push("   gl_FragColor            = vec4(vColor.rgb * baseColorTexel.rgb, vColor.a);"); // TODO: ignores texture opacity
         }
+
         src.push("}");
         return src;
     }
@@ -563,4 +548,4 @@ class TrianglesInstancingColorRenderer {
     }
 }
 
-export {TrianglesInstancingColorRenderer};
+export {TrianglesBatchingColorTextureRenderer};

@@ -1,7 +1,7 @@
 import {Program} from "../../../../../webgl/Program.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
-import {math} from "../../../../../math/math.js";
+import {math} from "../../../../../math";
 import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
@@ -32,6 +32,7 @@ class TrianglesInstancingEdgesColorRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
+        const geometry = state.geometry;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
 
@@ -76,7 +77,7 @@ class TrianglesInstancingEdgesColorRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, instancingLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -86,7 +87,7 @@ class TrianglesInstancingEdgesColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
@@ -106,9 +107,9 @@ class TrianglesInstancingEdgesColorRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.edgeIndicesBuf.bind();
+        geometry.edgeIndicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.LINES, geometry.edgeIndicesBuf.numItems, geometry.edgeIndicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
