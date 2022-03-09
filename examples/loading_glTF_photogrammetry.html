@@ -38,7 +38,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, FastNavPlugin, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -48,6 +48,18 @@
     viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
     viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
     viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
+
+    // new FastNavPlugin(viewer, {
+    //     hideEdges: true,
+    //     hideSAO: true,
+    //     hideColorTexture: false,
+    //     hidePBR: true,
+    //     hideTransparentObjects: false,
+    //     scaleCanvasResolution: true,
+    //     scaleCanvasResolutionFactor: 0.5,
+    //     delayBeforeRestore: true,
+    //     delayBeforeRestoreSeconds: 0.4
+    // });
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 

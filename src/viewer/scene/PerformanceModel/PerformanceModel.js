@@ -1120,7 +1120,7 @@ class PerformanceModel extends Component {
         const defaultColorTexture = new PerformanceTexture({
             id: defaultColorTextureId,
             model: this,
-            preloadColor: [1, 1, 1, 1] // [r, g, b, a]
+            preloadColor: [.7, .7, .7, 1] // [r, g, b, a]
         });
         const defaultMetalRoughTexture = new PerformanceTexture({
             id: defaultMetalRoughTextureId,
