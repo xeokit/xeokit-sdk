@@ -126,14 +126,14 @@ class TrianglesBatchingColorQualityRenderer {
         }
 
         if (textureSet) {
-            if (textureSet.colorTexture) {
-                this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-            if (textureSet.metallicRoughnessTexture) {
-                this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
+            this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            this._program.bindTexture(this._uEmissiveMap, textureSet.emissiveTexture.texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
         }
 
         state.indicesBuf.bind();
@@ -230,6 +230,8 @@ class TrianglesBatchingColorQualityRenderer {
 
         this._uBaseColorMap = "uBaseColorMap";
         this._uMetallicRoughMap = "uMetallicRoughMap";
+        this._uEmissiveMap = "uEmissiveMap";
+        this._uNormalMap = "uNormalMap";
 
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
@@ -338,6 +340,7 @@ class TrianglesBatchingColorQualityRenderer {
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
+        src.push("#extension GL_OES_standard_derivatives : enable");
 
         src.push("uniform int renderPass;");
 
@@ -468,6 +471,7 @@ class TrianglesBatchingColorQualityRenderer {
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
+        src.push("#extension GL_OES_standard_derivatives : enable");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -485,6 +489,8 @@ class TrianglesBatchingColorQualityRenderer {
 
         src.push("uniform sampler2D uBaseColorMap;");
         src.push("uniform sampler2D uMetallicRoughMap;");
+        src.push("uniform sampler2D uEmissiveMap;");
+        src.push("uniform sampler2D uNormalMap;");
 
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
@@ -580,6 +586,20 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("#define saturate(a) clamp( a, 0.0, 1.0 )");
 
         // UTILITY DEFINITIONS
+
+        src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
+        src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
+        src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
+        src.push("      vec2 st0 = dFdx( uv.st );");
+        src.push("      vec2 st1 = dFdy( uv.st );");
+        src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
+        src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
+        src.push("      vec3 N = normalize( surf_norm );");
+        src.push("      vec3 mapN = texture2D( uNormalMap, uv ).xyz * 2.0 - 1.0;");
+        src.push("      mat3 tsn = mat3( S, T, N );");
+        //     src.push("      mapN *= 3.0;");
+        src.push("      return normalize( tsn * mapN );");
+        src.push("}");
 
         src.push("vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {");
         src.push("   return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );");
@@ -756,19 +776,21 @@ class TrianglesBatchingColorQualityRenderer {
 
         src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
         src.push("baseColor = baseColorTexel.rgb;");
-       // src.push("opacity = baseColorTexel.a;");
+        // src.push("opacity = baseColorTexel.a;");
         src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture2D(uMetallicRoughMap, vUV).rgb;");
         src.push("metallic = metalRoughTexel.r;");
         src.push("roughness = metalRoughTexel.g;");
 
+        src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition.xyz, normalize(vViewNormal), vUV );");
+
         src.push("material.diffuseColor      = baseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
         src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
         src.push("material.specularColor     = mix(vec3(dielectricSpecular), baseColor, metallic);");
 
         src.push("geometry.position      = vViewPosition.xyz;");
-        src.push("geometry.viewNormal    = -normalize(vViewNormal);");
+        src.push("geometry.viewNormal    = -normalize(viewNormal);");
         src.push("geometry.viewEyeDir    = normalize(vViewPosition.xyz);");
 
         if (lightsState.lightMaps.length > 0) {
@@ -811,7 +833,9 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular);");
+        src.push("vec3 emissiveColor = linearToLinear(texture2D(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
         src.push("vec4 fragColor;");
 
         if (this._withSAO) {

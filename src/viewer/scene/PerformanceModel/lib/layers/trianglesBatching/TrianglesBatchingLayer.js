@@ -58,6 +58,9 @@ class TrianglesBatchingLayer {
         this.sortId = "TrianglesBatchingLayer"
             + (cfg.solid ? "-solid" : "-surface")
             + (cfg.autoNormals ? "-autonormals" : "-normals")
+
+            // TODO: These two parts need to be IDs (ie. unique):
+
             + (cfg.textureSet && cfg.textureSet.colorTexture ? "-colorTexture" : "")
             + (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : "");
 
@@ -72,6 +75,7 @@ class TrianglesBatchingLayer {
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
+            origin: math.vec3(),
             positionsBuf: null,
             offsetsBuf: null,
             normalsBuf: null,
@@ -109,17 +113,20 @@ class TrianglesBatchingLayer {
 
         if (cfg.positionsDecodeMatrix) {
             this._state.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-            this._preCompressed = true;
+            this._preCompressedPositionsExpected = true;
         } else {
-            this._preCompressed = false;
+            this._preCompressedPositionsExpected = false;
         }
 
         if (cfg.uvDecodeMatrix) {
             this._state.uvDecodeMatrix = math.mat3(cfg.uvDecodeMatrix);
+            this._preCompressedNormalsExpected = true;
+        } else {
+            this._preCompressedNormalsExpected = false;
         }
 
         if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
+            this._state.origin.set(cfg.origin);
         }
 
         /**
@@ -155,9 +162,12 @@ class TrianglesBatchingLayer {
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param cfg.positions Flat float Local-space positions array.
+     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix
      * @param [cfg.normals] Flat float normals array.
      * @param [cfg.uv] Flat UVs array.
+     * @param [cfg.uvCompressed]
      * @param [cfg.colors] Flat float colors array.
+     * @param [cfg.colorsCompressed]
      * @param cfg.indices  Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
      * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
@@ -177,14 +187,18 @@ class TrianglesBatchingLayer {
         }
 
         const positions = cfg.positions;
+        const positionsCompressed = cfg.positionsCompressed;
         const normals = cfg.normals;
+        const normalsCompressed = cfg.normalsCompressed;
         const uv = cfg.uv;
+        const uvCompressed = cfg.uvCompressed;
+        const colors = cfg.colors;
+        const colorsCompressed = cfg.colorsCompressed;
         const indices = cfg.indices;
         const edgeIndices = cfg.edgeIndices;
         const color = cfg.color;
         const metallic = cfg.metallic;
         const roughness = cfg.roughness;
-        const colors = cfg.colors;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
         const worldMatrix = cfg.worldMatrix;
@@ -195,16 +209,23 @@ class TrianglesBatchingLayer {
         const buffer = this._buffer;
         const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
-        const numVerts = positions.length / 3;
-        const lenPositions = positions.length;
 
-        if (this._preCompressed) {
+        let numVerts;
 
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
+
+        if (this._preCompressedPositionsExpected) {
+
+            if (!positionsCompressed) {
+                throw "positionsCompressed expected";
             }
 
-            const bounds = geometryCompressionUtils.getPositionsBounds(positions);
+            numVerts = positionsCompressed.length / 3;
+
+            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
+                buffer.positions.push(positionsCompressed[i]);
+            }
+
+            const bounds = geometryCompressionUtils.getPositionsBounds(positionsCompressed);
 
             const min = geometryCompressionUtils.decompressPosition(bounds.min, this._state.positionsDecodeMatrix, []);
             const max = geometryCompressionUtils.decompressPosition(bounds.max, this._state.positionsDecodeMatrix, []);
@@ -223,6 +244,14 @@ class TrianglesBatchingLayer {
             }
 
         } else {
+
+            if (!positions) {
+                throw "positions expected";
+            }
+
+            numVerts = positions.length / 3;
+
+            const lenPositions = positions.length;
 
             const positionsBase = buffer.positions.length;
 
@@ -286,55 +315,46 @@ class TrianglesBatchingLayer {
 
         math.expandAABB3(this.aabb, worldAABB);
 
-        if (normals && normals.length > 0) {
-
-            if (this._preCompressed) {
-
-                for (let i = 0, len = normals.length; i < len; i++) {
-                    buffer.normals.push(normals[i]);
-                }
-
-            } else {
-
-                const worldNormalMatrix = tempMat4;
-
-                if (meshMatrix) {
-                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
-
-                } else {
-                    math.identityMat4(worldNormalMatrix, worldNormalMatrix);
-                }
-
-                transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
+        if (normalsCompressed && normalsCompressed.length > 0) {
+            for (let i = 0, len = normalsCompressed.length; i < len; i++) {
+                buffer.normals.push(normalsCompressed[i]);
             }
+        } else if (normals && normals.length > 0) {
+            const worldNormalMatrix = tempMat4;
+            if (meshMatrix) {
+                math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
+            } else {
+                math.identityMat4(worldNormalMatrix, worldNormalMatrix);
+            }
+            transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
         }
 
         if (colors) {
-
             for (let i = 0, len = colors.length; i < len; i += 3) {
                 buffer.colors.push(colors[i] * 255);
                 buffer.colors.push(colors[i + 1] * 255);
                 buffer.colors.push(colors[i + 2] * 255);
                 buffer.colors.push(255);
             }
-
+        } else if (colorsCompressed) {
+            for (let i = 0, len = colors.length; i < len; i += 3) {
+                buffer.colors.push(colors[i]);
+                buffer.colors.push(colors[i + 1]);
+                buffer.colors.push(colors[i + 2]);
+                buffer.colors.push(255);
+            }
         } else if (color) {
-
             const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
             const b = color[2];
             const a = opacity;
-
             const metallicValue = (metallic !== null && metallic !== undefined) ? metallic : 0;
             const roughnessValue = (roughness !== null && roughness !== undefined) ? roughness : 255;
-
             for (let i = 0; i < numVerts; i++) {
-
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
-
                 buffer.metallicRoughness.push(metallicValue);
                 buffer.metallicRoughness.push(roughnessValue);
             }
@@ -343,6 +363,10 @@ class TrianglesBatchingLayer {
         if (uv && uv.length > 0) {
             for (let i = 0, len = uv.length; i < len; i++) {
                 buffer.uv.push(uv[i]);
+            }
+        } else if (uvCompressed && uvCompressed.length > 0) {
+            for (let i = 0, len = uvCompressed.length; i < len; i++) {
+                buffer.uv.push(uvCompressed[i]);
             }
         }
 
@@ -393,14 +417,15 @@ class TrianglesBatchingLayer {
                 portion.offset = new Float32Array(3);
             }
         }
-
+        
         this._portions.push(portion);
-
+        
         this._numPortions++;
+        
         this.model.numPortions++;
-
+        
         this._numVerts += portion.numVerts;
-
+        
         return portionId;
     }
 
@@ -421,7 +446,7 @@ class TrianglesBatchingLayer {
 
         if (buffer.positions.length > 0) {
 
-            const quantizedPositions = (this._preCompressed)
+            const quantizedPositions = (this._preCompressedPositionsExpected)
                 ? new Uint16Array(buffer.positions)
                 : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix); // BOTTLENECK
 
@@ -437,7 +462,7 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (buffer.normals.length > 0) {
+        if (buffer.normals.length > 0) { 
             const normals = new Int8Array(buffer.normals);
             let normalized = true; // For oct encoded UInts
             state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
@@ -1136,15 +1161,19 @@ class TrianglesBatchingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._state.normalsBuf) {
-            if (this._batchingRenderers.pickNormalsRenderer) {
-                this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-            }
-        } else {
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TODO
+        // if (this._state.normalsBuf) {
+        //     if (this._batchingRenderers.pickNormalsRenderer) {
+        //         this._batchingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        //     }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // } else {
             if (this._batchingRenderers.pickNormalsFlatRenderer) {
                 this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
             }
-        }
+       // }
     }
 
     //------------------------------------------------------------------------------------------------

@@ -134,8 +134,8 @@ function load(viewer, options, inflatedData, performanceModel) {
             performanceModel.createMesh(utils.apply(meshDefaults, {
                 id: meshId,
                 primitive: "triangles",
-                positions: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
-                normals: normals.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                positionsCompressed: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                normalsCompressed: normals.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
                 indices: indices.subarray(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
                 edgeIndices: edgeIndices.subarray(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
                 positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,

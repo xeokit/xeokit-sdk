@@ -7,8 +7,6 @@ import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
 
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-
 const tempUint8Vec4 = new Uint8Array(4);
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
@@ -63,7 +61,7 @@ class TrianglesInstancingLayer {
         const stateCfg = {
             numInstances: 0,
             obb: math.OBB3(),
-            origin: null,
+            origin: math.vec3(),
             geometry: cfg.geometry,
             textureSet: cfg.textureSet,
             pbrSupported: false // Set in #finalize if we have enough to support quality rendering
@@ -105,7 +103,7 @@ class TrianglesInstancingLayer {
         this._portions = [];
 
         if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
+            this._state.origin.set(cfg.origin);
         }
 
         this._finalized = false;
@@ -332,6 +330,7 @@ class TrianglesInstancingLayer {
             this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
             this._pickColors = []; // Release memory
         }
+
         this._state.pbrSupported
             = !!state.metallicRoughnessBuf
             && !!geometry.uvBuf
@@ -339,6 +338,13 @@ class TrianglesInstancingLayer {
             && !!textureSet
             && !!textureSet.colorTexture
             && !!textureSet.metallicRoughnessTexture;
+
+        this._state.colorTextureSupported
+            = !!geometry.uvBuf
+            && !!geometry.normalsBuf
+            && !!textureSet
+            && !!textureSet.colorTexture;
+
         this._finalized = true;
     }
 
@@ -672,37 +678,40 @@ class TrianglesInstancingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const geometry = this._state.geometry;
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.geometry.normalsBuf) {
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && geometry.normalsBuf) {
                 if (this._instancingRenderers.colorQualityRendererWithSAO) {
                     this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
+            } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
+                if (this._instancingRenderers.colorTextureRendererWithSAO) {
+                    this._instancingRenderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else if (geometry.normalsBuf) {
+                if (this._instancingRenderers.colorRendererWithSAO) {
+                    this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             } else {
-                if (this._state.geometry.normalsBuf) {
-                    if (this._instancingRenderers.colorRendererWithSAO) {
-                        this._instancingRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                } else {
-                    if (this._instancingRenderers.flatColorRendererWithSAO) {
-                        this._instancingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
+                if (this._instancingRenderers.flatColorRendererWithSAO) {
+                    this._instancingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             }
+        } else if (frameCtx.pbrEnabled && this.model.pbrEnabled && geometry.normalsBuf) {
+            if (this._instancingRenderers.colorQualityRenderer) {
+                this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            }
+        } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
+            if (this._instancingRenderers.colorTextureRenderer) {
+                this._instancingRenderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            }
+        } else if (geometry.normalsBuf) {
+            if (this._instancingRenderers.colorRenderer) {
+                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            }
         } else {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.geometry.normalsBuf) {
-                if (this._instancingRenderers.colorQualityRenderer) {
-                    this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
-            } else {
-                if (this._state.geometry.normalsBuf) {
-                    if (this._instancingRenderers.colorRenderer) {
-                        this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                } else {
-                    if (this._instancingRenderers.flatColorRenderer) {
-                        this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                }
+            if (this._instancingRenderers.flatColorRenderer) {
+                this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         }
     }

@@ -11,7 +11,7 @@ export class PerformanceTexture {
      * @param {*} cfg Texture properties.
      * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link PerformanceModel#createMaterial}.
      * @param {String} [cfg.model] PerformanceModel that owns this texture.
-     * @param {*} [cfg.imageData] Texture image data.
+     * @param {*} [cfg.image] Texture image data.
      * @param {String} [cfg.src] Texture image source.
      * @param {number[]} [cfg.preloadColor] Texture preload color.
      */
@@ -33,40 +33,41 @@ export class PerformanceTexture {
          */
         this.texture = new Texture2D(cfg.model.scene.canvas.gl);
 
+        const scene = cfg.model.scene;
+
         if (cfg.preloadColor) {
-          //  this.texture.setPreloadColor(cfg.preloadColor);
+            this.texture.setPreloadColor(cfg.preloadColor);
+            scene.glRedraw();
         }
 
-        if (cfg.imageData) {
-            const image = ensureImageSizePowerOfTwo(cfg.imageData);
-           // image.crossOrigin = "Anonymous";
-            this.texture.setImage(image, { flipY: false});
+        if (cfg.image) {
+            const image = ensureImageSizePowerOfTwo(cfg.image);
+            image.crossOrigin = "Anonymous";
+            this.texture.setImage(image, {});
             this.texture.setProps({
-                minFilter: "linearMipmapLinear",
-                magFilter: "linear",
-                wrapS: "repeat",
-                wrapT: "repeat",
-                flipY: false,
-                encoding: "linear"
-            }); // Generate mipmaps
-
+                minFilter: cfg.minFilter || "linearMipmapLinear",
+                magFilter: cfg.magFilter || "linear",
+                wrapS: cfg.wrapS || "repeat",
+                wrapT: cfg.wrapT || "repeat",
+                flipY: cfg.flipY || false,
+                encoding: cfg.encoding || "linear"
+            });
+            scene.glRedraw();
         } else if (cfg.src) {
-            const scene = cfg.model.scene;
             scene.loading++;
             scene.canvas.spinner.processes++;
             const image = new Image();
-            const self = this;
-            image.onload = function() {
-            //    image.crossOrigin = "Anonymous";
-                self.texture.setImage(ensureImageSizePowerOfTwo(image), {flipY: false});
-                self.texture.setProps({
-                    minFilter: "linearMipmapLinear",
-                    magFilter: "linear",
-                     wrapS: "repeat",
-                    wrapT: "repeat",
-                    flipY: false,
-                    encoding: "linear"
-                }); // Generate mipmaps
+            image.onload = () => {
+                image.crossOrigin = "Anonymous";
+                this.texture.setImage(ensureImageSizePowerOfTwo(image), {});
+                this.texture.setProps({
+                    minFilter: cfg.minFilter || "linearMipmapLinear",
+                    magFilter: cfg.magFilter || "linear",
+                    wrapS: cfg.wrapS || "repeat",
+                    wrapT: cfg.wrapT || "repeat",
+                    flipY: cfg.flipY || false,
+                    encoding: cfg.encoding || "linear"
+                });
                 scene.glRedraw();
                 scene.loading--;
                 scene.canvas.spinner.processes--;

@@ -33,6 +33,8 @@ export class PerformanceGeometry {
      */
     constructor(id, model, cfg) {
 
+        ///////////////////////////////////////////////////////
+        // TODO: optional origin param, or create from positions automatically if required - then offset from mesh origin in createMesh
         /**
          * ID of this PerformanceGeometry, unique within the PerformanceModel.
          *
@@ -102,7 +104,7 @@ export class PerformanceGeometry {
 
         if (cfg.normalsCompressed && cfg.normalsCompressed.length > 0) {
             const normalized = true; // For oct-encoded UInt8
-            this.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
+            this.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normalsCompressed, cfg.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
 
         } else if (cfg.normals && cfg.normals.length > 0) {
             const compressedNormals = octEncodeNormals(cfg.normals);
@@ -128,14 +130,14 @@ export class PerformanceGeometry {
         if (cfg.uvCompressed && cfg.uvCompressed.length > 0) {
             const uvCompressed = new Uint16Array(cfg.uvCompressed);
             this.uvDecodeMatrix = math.mat4(cfg.uvDecodeMatrix);
-            this.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.uvCompressed, uvCompressed.length, 2, gl.STATIC_DRAW);
+            this.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.uvCompressed, uvCompressed.length, 2, gl.STATIC_DRAW, false);
 
         } else if (cfg.uv && cfg.uv.length > 0) {
             const bounds = geometryCompressionUtils.getUVBounds(cfg.uv);
             const result = geometryCompressionUtils.compressUVs(cfg.uv, bounds.min, bounds.max);
             const uvCompressed = result.quantized;
             this.uvDecodeMatrix = result.decodeMatrix;
-            this.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvCompressed, uvCompressed.length, 2, gl.STATIC_DRAW);
+            this.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvCompressed, uvCompressed.length, 2, gl.STATIC_DRAW, false);
         }
 
         if (cfg.indices && cfg.indices.length > 0) {

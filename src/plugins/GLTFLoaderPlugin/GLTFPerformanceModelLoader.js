@@ -192,12 +192,16 @@ const parseGLTF = (function () {
     }
 
     function loadTexture(ctx, textureInfo) {
-        const textureId = `geometry-${ctx.nextId++}`;
+        const textureId = `texture-${ctx.nextId++}`;
+        let uri = ctx.json.images[textureInfo.source].uri;
+        if (uri && !uri.match(/^data:(.*?)(;base64)?,(.*)$/)) {
+            uri = ctx.basePath + uri;
+        }
         ctx.performanceModel.createTexture({
             id: textureId,
-            src: ctx.json.images[textureInfo.source].uri ? ctx.basePath + ctx.json.images[textureInfo.source].uri : undefined,
+            src: uri,
             flipY: !!textureInfo.flipY,
-            encoding: "sRGB"
+       //     encoding: "sRGB"
         });
         textureInfo._textureId = textureId;
     }
@@ -207,7 +211,7 @@ const parseGLTF = (function () {
         if (materialsInfo) {
             for (let i = 0, len = materialsInfo.length; i < len; i++) {
                 const materialInfo = materialsInfo[i];
-                materialInfo._materialId = loadMaterial(ctx, materialInfo);
+                materialInfo._textureSetId = loadMaterial(ctx, materialInfo);
                 materialInfo._attributes = loadMaterialColorize(ctx, materialInfo);
             }
         }
@@ -215,52 +219,52 @@ const parseGLTF = (function () {
 
     function loadMaterial(ctx, materialInfo) {
         const json = ctx.json;
-        const materialCfg = {
-            id: `material-${ctx.nextId++}`
+        const textureSetCfg = {
+            id: `textureSet-${ctx.nextId++}`
         };
         const normalTexture = materialInfo.normalTexture;
         if (normalTexture) {
             const textureInfo = json.textures[normalTexture.index];
             if (textureInfo) {
-                materialCfg.normalTextureId = textureInfo._textureId;
+                textureSetCfg.normalTextureId = textureInfo._textureId;
             }
         }
-        const alphaMode = materialInfo.alphaMode;
-        switch (alphaMode) {
-            case "NORMAL_OPAQUE":
-                materialCfg.alphaMode = "opaque";
-                break;
-            case "MASK":
-                materialCfg.alphaMode = "mask";
-                break;
-            case "BLEND":
-                materialCfg.alphaMode = "blend";
-                break;
-            default:
-        }
-        const alphaCutoff = materialInfo.alphaCutoff;
-        if (alphaCutoff !== undefined) {
-            materialCfg.alphaCutoff = alphaCutoff;
-        }
+        // const alphaMode = materialInfo.alphaMode;
+        // switch (alphaMode) {
+        //     case "NORMAL_OPAQUE":
+        //         materialCfg.alphaMode = "opaque";
+        //         break;
+        //     case "MASK":
+        //         materialCfg.alphaMode = "mask";
+        //         break;
+        //     case "BLEND":
+        //         materialCfg.alphaMode = "blend";
+        //         break;
+        //     default:
+        // }
+        // const alphaCutoff = materialInfo.alphaCutoff;
+        // if (alphaCutoff !== undefined) {
+        //     materialCfg.alphaCutoff = alphaCutoff;
+        // }
         const metallicPBR = materialInfo.pbrMetallicRoughness;
         if (metallicPBR) {
-            const colorTexture = metallicPBR.colorTexture;
-            if (colorTexture) {
-                const textureInfo = json.textures[colorTexture.index];
+            const baseColorTexture = metallicPBR.baseColorTexture || metallicPBR.colorTexture;
+            if (baseColorTexture) {
+                const textureInfo = json.textures[baseColorTexture.index];
                 if (textureInfo) {
-                    materialCfg.colorTextureId = textureInfo._textureId;
+                    textureSetCfg.colorTextureId = textureInfo._textureId;
                 }
             }
             const metallicRoughnessTexture = metallicPBR.metallicRoughnessTexture;
             if (metallicRoughnessTexture) {
                 const textureInfo = json.textures[metallicRoughnessTexture.index];
                 if (textureInfo) {
-                    materialCfg.metallicRoughnessTextureId = textureInfo._textureId;
+                    textureSetCfg.metallicRoughnessTextureId = textureInfo._textureId;
                 }
             }
         }
-        ctx.performanceModel.createTextureSet(materialCfg);
-        return materialCfg.materialId;
+        ctx.performanceModel.createTextureSet(textureSetCfg);
+        return textureSetCfg.id;
     }
 
     function loadMaterialColorize(ctx, materialInfo) { // Substitute RGBA for material, to use fast flat shading instead
@@ -468,7 +472,7 @@ const parseGLTF = (function () {
                             materialInfo = json.materials[materialIndex];
                         }
                         if (materialInfo) {
-                            meshCfg.materialId = materialInfo._materialId;
+                            meshCfg.textureSetId = materialInfo._textureSetId;
                             meshCfg.color = materialInfo._attributes.color;
                             meshCfg.opacity = materialInfo._attributes.opacity;
                             meshCfg.metallic = materialInfo._attributes.metallic;

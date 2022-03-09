@@ -12,6 +12,7 @@ import {TrianglesInstancingNormalsRenderer} from "./renderers/TrianglesInstancin
 import {TrianglesInstancingShadowRenderer} from "./renderers/TrianglesInstancingShadowRenderer.js";
 import {TrianglesInstancingColorQualityRenderer} from "./renderers/TrianglesInstancingColorQualityRenderer.js";
 import {TrianglesInstancingPickNormalsFlatRenderer} from "./renderers/TrianglesInstancingPickNormalsFlatRenderer.js";
+import {TrianglesInstancingColorTextureRenderer} from "./renderers/TrianglesInstancingColorTextureRenderer";
 
 /**
  * @private
@@ -46,6 +47,14 @@ class TrianglesInstancingRenderers {
         if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
             this._colorQualityRendererWithSAO.destroy();
             this._colorQualityRendererWithSAO = null;
+        }
+        if (this._colorTextureRenderer && (!this._colorTextureRenderer.getValid())) {
+            this._colorTextureRenderer.destroy();
+            this._colorTextureRenderer = null;
+        }
+        if (this._colorTextureRendererWithSAO && (!this._colorTextureRendererWithSAO.getValid())) {
+            this._colorTextureRendererWithSAO.destroy();
+            this._colorTextureRendererWithSAO = null;
         }
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
@@ -133,6 +142,20 @@ class TrianglesInstancingRenderers {
             this._colorQualityRendererWithSAO = new TrianglesInstancingColorQualityRenderer(this._scene, true);
         }
         return this._colorQualityRendererWithSAO;
+    }
+
+    get colorTextureRenderer() {
+        if (!this._colorTextureRenderer) {
+            this._colorTextureRenderer = new TrianglesInstancingColorTextureRenderer(this._scene, false);
+        }
+        return this._colorTextureRenderer;
+    }
+
+    get colorTextureRendererWithSAO() {
+        if (!this._colorTextureRendererWithSAO) {
+            this._colorTextureRendererWithSAO = new TrianglesInstancingColorTextureRenderer(this._scene, true);
+        }
+        return this._colorTextureRendererWithSAO;
     }
 
     get silhouetteRenderer() {
@@ -230,6 +253,12 @@ class TrianglesInstancingRenderers {
         }
         if (this._colorQualityRendererWithSAO) {
             this._colorQualityRendererWithSAO.destroy();
+        }
+        if (this._colorTextureRenderer) {
+            this._colorTextureRenderer.destroy();
+        }
+        if (this._colorTextureRendererWithSAO) {
+            this._colorTextureRendererWithSAO.destroy();
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();

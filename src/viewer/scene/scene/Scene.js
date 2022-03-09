@@ -810,7 +810,7 @@ class Scene extends Component {
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
         this._pbrEnabled = !!cfg.pbrEnabled;
-        this._colorTextureEnabled = !!cfg.colorTextureEnabled;
+        this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -1210,7 +1210,7 @@ class Scene extends Component {
     /**
      * Sets whether basic color texture rendering is enabled.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * @returns {Boolean} True if basic color texture rendering is enabled.
      */
@@ -1222,7 +1222,7 @@ class Scene extends Component {
     /**
      * Gets whether basic color texture rendering is enabled.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * @returns {Boolean} True if basic color texture rendering is enabled.
      */

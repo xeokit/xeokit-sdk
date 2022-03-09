@@ -246,10 +246,15 @@ var parseGLTF = (function () {
     }
 
     function loadTexture(ctx, textureInfo) {
+        let uri = ctx.json.images[textureInfo.source].uri;
+        if (uri && !uri.match(/^data:(.*?)(;base64)?,(.*)$/)) {
+            uri = ctx.basePath + uri;
+        }
         textureInfo._texture = new Texture(ctx.modelNode, {
-            src: ctx.json.images[textureInfo.source].uri ? ctx.basePath + ctx.json.images[textureInfo.source].uri : undefined,
+            src: uri,
             flipY: !!textureInfo.flipY,
-            encoding: "sRGB"
+            //encoding: "sRGB"
+            encoding: "linear"
         });
     }
 

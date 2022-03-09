@@ -117,7 +117,7 @@ class TrianglesBatchingColorTextureRenderer {
 
         if (textureSet) {
             if (textureSet.colorTexture) {
-                this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+                this._program.bindTexture(this._uColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
         }
@@ -203,7 +203,7 @@ class TrianglesBatchingColorTextureRenderer {
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
 
-        this._uBaseColorMap = "uBaseColorMap";
+        this._uColorMap = "uColorMap";
 
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
@@ -415,7 +415,6 @@ class TrianglesBatchingColorTextureRenderer {
         }
 
         src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
-
         src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
         src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
 
@@ -445,7 +444,7 @@ class TrianglesBatchingColorTextureRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
 
-        src.push("// Triangles batching draw fragment shader");
+        src.push("// Triangles batching color texture fragment shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
@@ -465,7 +464,7 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("varying float vFragDepth;");
         }
 
-        src.push("uniform sampler2D uBaseColorMap;");
+        src.push("uniform sampler2D uColorMap;");
 
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -515,7 +514,7 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
+        src.push("vec4 colorTexel = texture2D(uColorMap, vUV);");
 
         if (this._withSAO) {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
@@ -527,9 +526,9 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture2D(uOcclusionTexture, uv))) * blendFactor;");
 
-            src.push("   gl_FragColor            = vec4(vColor.rgb * baseColorTexel.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
+            src.push("   gl_FragColor            = vec4(vColor.rgb * colorTexel.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
         } else {
-            src.push("   gl_FragColor            = vec4(vColor.rgb * baseColorTexel.rgb, vColor.a);"); // TODO: ignores texture opacity
+            src.push("   gl_FragColor            = vec4(colorTexel.rgb, 1.0);"); // TODO: ignores texture opacity
         }
 
         src.push("}");
