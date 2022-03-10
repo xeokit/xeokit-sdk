@@ -327,7 +327,6 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createGeometry({
                             id: geometryId,
-                            origin: tileCenter,
                             primitive: primitiveName,
                             positionsCompressed: geometryPositions,
                             normalsCompressed: geometryNormals,
@@ -343,6 +342,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     performanceModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         geometryId: geometryId,
+                        origin: tileCenter,
                         matrix: meshMatrix,
                         color: meshColor,
                         metallic: meshMetallic,
