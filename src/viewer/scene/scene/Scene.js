@@ -2239,7 +2239,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCulled(ids, culled) {
-        return this.withObjects(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.culled !== culled);
             entity.culled = culled;
             return changed;
