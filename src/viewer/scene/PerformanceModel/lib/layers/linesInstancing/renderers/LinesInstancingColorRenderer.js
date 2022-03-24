@@ -33,6 +33,7 @@ class LinesInstancingColorRenderer {
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate();
@@ -87,7 +88,7 @@ class LinesInstancingColorRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
@@ -105,9 +106,9 @@ class LinesInstancingColorRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.indicesBuf.bind();
+        geometry.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.LINES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         frameCtx.drawElements++;
 

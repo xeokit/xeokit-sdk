@@ -36,7 +36,7 @@ const defaultColorTextureId = "defaultColorTexture";
 const defaultMetalRoughTextureId = "defaultMetalRoughTexture";
 const defaultNormalsTextureId = "defaultNormalsTexture";
 const defaultEmissiveTextureId = "defaultEmissiveTexture";
-const defaultAOTextureId = "defaultAOTexture";
+const defaultOcclusionTextureId = "defaultOcclusionTexture";
 const defaultTextureSetId = "defaultTextureSet";
 
 /**
@@ -1130,15 +1130,15 @@ class PerformanceModel extends Component {
         const defaultNormalsTexture = new PerformanceTexture({
             id: defaultNormalsTextureId,
             model: this,
-            preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
+            preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
         });
         const defaultEmissiveTexture = new PerformanceTexture({
             id: defaultEmissiveTextureId,
             model: this,
             preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
         });
-        const defaultAOTexture = new PerformanceTexture({
-            id: defaultAOTextureId,
+        const defaultOcclusionTexture = new PerformanceTexture({
+            id: defaultOcclusionTextureId,
             model: this,
             preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
         });
@@ -1146,6 +1146,7 @@ class PerformanceModel extends Component {
         this._textures[defaultMetalRoughTextureId] = defaultMetalRoughTexture;
         this._textures[defaultNormalsTextureId] = defaultNormalsTexture;
         this._textures[defaultEmissiveTextureId] = defaultEmissiveTexture;
+        this._textures[defaultOcclusionTextureId] = defaultOcclusionTexture;
         this._textureSets[defaultTextureSetId] = new PerformanceTextureSet({
             id: defaultTextureSetId,
             model: this,
@@ -1153,7 +1154,7 @@ class PerformanceModel extends Component {
             metallicRoughnessTexture: defaultMetalRoughTexture,
             normalsTexture: defaultNormalsTexture,
             emissiveTexture: defaultEmissiveTexture,
-            aoTexture: defaultAOTexture
+            occlusionTexture: defaultOcclusionTexture
         });
     }
 
@@ -1988,7 +1989,8 @@ class PerformanceModel extends Component {
             minFilter,
             wrapS,
             wrapT,
-            encoding
+            encoding,
+            flipY: cfg.flipY
         });
         this._textures[textureId] = texture;
     }
@@ -2009,7 +2011,8 @@ class PerformanceModel extends Component {
      * @param {*} [cfg.colorTextureId] ID of *RGBA* base color texture, with color in *RGB* and alpha in *A*.
      * @param {*} [cfg.metallicRoughnessTextureId] ID of *RGBA* metal-roughness texture, with the metallic factor in *R*, and roughness factor in *G*.
      * @param {*} [cfg.normalsTextureId] ID of *RGBA* normal map texture, with normal map vectors in *RGB*.
-     * @param {*} [cfg.emissiveTextureId] ID of *RGBA* normal map texture, with normal map vectors in *RGB*.
+     * @param {*} [cfg.emissiveTextureId] ID of *RGBA* emissive map texture, with emissive color in *RGB*. 
+     * @param {*} [cfg.occlusionTextureId] ID of *RGBA* occlusion map texture, with occlusion factor in *R*.
      */
     createTextureSet(cfg) {
         const textureSetId = cfg.id;
@@ -2061,15 +2064,15 @@ class PerformanceModel extends Component {
         } else {
             emissiveTexture = this._textures[defaultEmissiveTextureId];
         }
-        let aoTexture;
-        if (cfg.aoTextureId !== undefined) {
-            aoTexture = this._textures[cfg.aoTextureId];
-            if (!aoTexture) {
-                this.error(`Texture not found: ${cfg.aoTextureId} - ensure that you create it first with createTexture()`);
+        let occlusionTexture;
+        if (cfg.occlusionTextureId !== undefined) {
+            occlusionTexture = this._textures[cfg.occlusionTextureId];
+            if (!occlusionTexture) {
+                this.error(`Texture not found: ${cfg.occlusionTextureId} - ensure that you create it first with createTexture()`);
                 return;
             }
         } else {
-            aoTexture = this._textures[defaultAOTextureId];
+            occlusionTexture = this._textures[defaultOcclusionTextureId];
         }
         const textureSet = new PerformanceTextureSet({
             id: textureSetId,
@@ -2078,7 +2081,7 @@ class PerformanceModel extends Component {
             metallicRoughnessTexture,
             normalsTexture,
             emissiveTexture,
-            aoTexture
+            occlusionTexture
         });
         this._textureSets[textureSetId] = textureSet;
     }
@@ -2145,9 +2148,9 @@ class PerformanceModel extends Component {
         }
 
         const textureSetId = cfg.textureSetId || defaultTextureSetId;
-        if (cfg.textureSetId) {
-            if (!this._textureSets[cfg.textureSetId]) {
-                this.error(`Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
+        if (textureSetId) {
+            if (!this._textureSets[textureSetId]) {
+                this.error(`Texture set not found: ${textureSetId} - ensure that you create it first with createTextureSet()`);
                 return;
             }
         }
@@ -2472,7 +2475,7 @@ class PerformanceModel extends Component {
                         worldAABB: aabb,
                         pickColor: pickColor
                     });
-                    this._numPoints += Math.round(lenPositions/ 3);
+                    this._numPoints += Math.round(lenPositions / 3);
                     break;
             }
 

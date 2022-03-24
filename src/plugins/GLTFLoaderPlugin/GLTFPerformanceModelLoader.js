@@ -181,7 +181,6 @@ const parseGLTF = (function () {
         }
     }
 
-
     function loadTextures(ctx) {
         const texturesInfo = ctx.json.textures;
         if (texturesInfo) {
@@ -227,6 +226,21 @@ const parseGLTF = (function () {
             const textureInfo = json.textures[normalTexture.index];
             if (textureInfo) {
                 textureSetCfg.normalTextureId = textureInfo._textureId;
+            }
+        }
+        const occlusionTexture = materialInfo.occlusionTexture;
+        if (occlusionTexture) {
+           const textureInfo = json.textures[occlusionTexture.index];
+            if (textureInfo) {
+                textureSetCfg.occlusionTextureId = textureInfo._textureId;
+            }
+        }
+        const emissiveTexture = materialInfo.emissiveTexture;
+        if (emissiveTexture) {
+           const textureInfo = json.textures[emissiveTexture.index];
+            if (textureInfo) {
+                textureSetCfg.emissiveTextureId = textureInfo._textureId;
+                //textureSetCfg.emissiveMap.encoding = "sRGB";
             }
         }
         // const alphaMode = materialInfo.alphaMode;

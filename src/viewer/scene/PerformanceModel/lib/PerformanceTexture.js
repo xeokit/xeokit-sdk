@@ -13,6 +13,7 @@ export class PerformanceTexture {
      * @param {String} [cfg.model] PerformanceModel that owns this texture.
      * @param {*} [cfg.image] Texture image data.
      * @param {String} [cfg.src] Texture image source.
+     * @param {Boolean} [cfg.flipY] Whether to flip on Y-axis.
      * @param {number[]} [cfg.preloadColor] Texture preload color.
      */
     constructor(cfg) {

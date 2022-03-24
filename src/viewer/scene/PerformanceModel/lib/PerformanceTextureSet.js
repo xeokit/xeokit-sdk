@@ -13,7 +13,7 @@ export class PerformanceTextureSet {
      * @param {PerformanceTexture} [cfg.metallicRoughnessTexture] RGBA texture with metallic in R and roughness in G.
      * @param {PerformanceTexture} [cfg.normalsTexture] RGBA texture with surface normals in RGB.
      * @param {PerformanceTexture} [cfg.emissiveTexture] RGBA texture with emissive color in RGB.
-     * @param {PerformanceTexture} [cfg.aoTexture] RGBA texture with ambient occlusion factors in RGB.
+     * @param {PerformanceTexture} [cfg.occlusionTexture] RGBA texture with ambient occlusion factors in RGB.
      */
     constructor(cfg) {
 
@@ -65,11 +65,11 @@ export class PerformanceTextureSet {
         /**
          * RGBA texture with ambient occlusion factors in RGB.
          *
-         * @property aoTexture
+         * @property occlusionTexture
          * @type {PerformanceTexture}
          * @final
          */
-        this.aoTexture = cfg.aoTexture;
+        this.occlusionTexture = cfg.occlusionTexture;
     }
 
     /**

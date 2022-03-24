@@ -120,7 +120,7 @@ class TrianglesInstancingColorQualityRenderer {
         if (this._aUV) {
             this._aUV.bindArrayBuffer(geometry.uvBuf);
         }
-        this._aColor.bindArrayBuffer(geometry.colorsBuf);
+        this._aColor.bindArrayBuffer(state.colorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
 
         this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
@@ -637,6 +637,10 @@ class TrianglesInstancingColorQualityRenderer {
         // UTILITY DEFINITIONS
 
         src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
+        src.push("       vec3 texel = texture2D( uNormalMap, uv ).xyz;");
+        src.push("       if (texel[0] == 0.0 && texel[1] == 0.0 && texel[2] == 0.0) {");
+        src.push("              return normalize(surf_norm );");
+        src.push("       }");
         src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
         src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
         src.push("      vec2 st0 = dFdx( uv.st );");
@@ -644,7 +648,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
         src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
         src.push("      vec3 N = normalize( surf_norm );");
-        src.push("      vec3 mapN = texture2D( uNormalMap, uv ).xyz * 2.0 - 1.0;");
+        src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
         src.push("      mat3 tsn = mat3( S, T, N );");
         //     src.push("      mapN *= 3.0;");
         src.push("      return normalize( tsn * mapN );");
@@ -819,7 +823,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("ReflectedLight reflectedLight = ReflectedLight(vec3(0.0,0.0,0.0), vec3(0.0,0.0,0.0));");
 
         src.push("vec3 rgb = (vec3(float(vColor.r) / 255.0, float(vColor.g) / 255.0, float(vColor.b) / 255.0));");
-        src.push("float alpha = float(vColor.a) / 255.0;");
+        src.push("float opacity = float(vColor.a) / 255.0;");
 
         src.push("vec3  baseColor = rgb;");
         src.push("float specularF0 = 1.0;");
@@ -828,22 +832,22 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
         src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
-        src.push("baseColor = baseColorTexel.rgb;");
+        src.push("baseColor *= baseColorTexel.rgb;");
         // src.push("opacity = baseColorTexel.a;");
-        src.push("opacity = 1.0;");
+       src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture2D(uMetallicRoughMap, vUV).rgb;");
-        src.push("metallic = metalRoughTexel.r;");
-        src.push("roughness = metalRoughTexel.g;");
+        src.push("metallic *= metalRoughTexel.r;");
+        src.push("roughness *= metalRoughTexel.g;");
 
         src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition.xyz, normalize(vViewNormal), vUV );");
 
-        src.push("material.baseColor      = baseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
+        src.push("material.diffuseColor      = baseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
         src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");
         src.push("material.specularColor     = mix(vec3(dielectricSpecular), baseColor, metallic);");
 
         src.push("geometry.position      = vViewPosition.xyz;");
-        src.push("geometry.viewNormal    = -normalize(vViewNormal);");
+        src.push("geometry.viewNormal    = -normalize(viewNormal);");
         src.push("geometry.viewEyeDir    = normalize(vViewPosition.xyz);");
 
         if (lightsState.lightMaps.length > 0) {
@@ -890,7 +894,7 @@ class TrianglesInstancingColorQualityRenderer {
 
         src.push("vec3 emissiveColor = linearToLinear(texture2D(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
 
-        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * alpha * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
+        src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
         src.push("vec4 fragColor;");
 
         if (this._withSAO) {
@@ -902,9 +906,9 @@ class TrianglesInstancingColorQualityRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   fragColor            = vec4(outgoingLight.rgb * ambient, alpha);");
+            src.push("   fragColor            = vec4(outgoingLight.rgb * ambient, opacity);");
         } else {
-            src.push("   fragColor            = vec4(outgoingLight.rgb, alpha);");
+            src.push("   fragColor            = vec4(outgoingLight.rgb, opacity);");
         }
 
         if (gammaOutput) {

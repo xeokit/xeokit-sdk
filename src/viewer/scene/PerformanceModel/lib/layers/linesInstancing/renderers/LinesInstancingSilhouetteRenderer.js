@@ -34,6 +34,7 @@ class LinesInstancingSilhouetteRenderer {
         const state = instancingLayer._state;
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate(instancingLayer.model.scene);
@@ -125,9 +126,9 @@ class LinesInstancingSilhouetteRenderer {
             instanceExt.vertexAttribDivisorANGLE(this._aOffset.location, 1);
         }
 
-        state.indicesBuf.bind();
+        geometry.indicesBuf.bind();
 
-        instanceExt.drawElementsInstancedANGLE(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        instanceExt.drawElementsInstancedANGLE(gl.LINES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);

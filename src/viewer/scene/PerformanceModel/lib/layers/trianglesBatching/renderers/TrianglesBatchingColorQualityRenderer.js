@@ -134,6 +134,8 @@ class TrianglesBatchingColorQualityRenderer {
             frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
             frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            this._program.bindTexture(this._uAOMap, textureSet.occlusionTexture.texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
         }
 
         state.indicesBuf.bind();
@@ -232,6 +234,7 @@ class TrianglesBatchingColorQualityRenderer {
         this._uMetallicRoughMap = "uMetallicRoughMap";
         this._uEmissiveMap = "uEmissiveMap";
         this._uNormalMap = "uNormalMap";
+        this._uAOMap = "uAOMap";
 
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
@@ -491,6 +494,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("uniform sampler2D uMetallicRoughMap;");
         src.push("uniform sampler2D uEmissiveMap;");
         src.push("uniform sampler2D uNormalMap;");
+        src.push("uniform sampler2D uAOMap;");
 
         src.push("varying vec4 vViewPosition;");
         src.push("varying vec3 vViewNormal;");
@@ -588,6 +592,10 @@ class TrianglesBatchingColorQualityRenderer {
         // UTILITY DEFINITIONS
 
         src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
+        src.push("       vec3 texel = texture2D( uNormalMap, uv ).xyz;");
+        src.push("       if (texel[0] == 0.0 && texel[1] == 0.0 && texel[2] == 0.0) {");
+        src.push("              return normalize(surf_norm );");
+        src.push("       }");
         src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
         src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
         src.push("      vec2 st0 = dFdx( uv.st );");
@@ -595,7 +603,7 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("      vec3 S = normalize( q0 * st1.t - q1 * st0.t );");
         src.push("      vec3 T = normalize( -q0 * st1.s + q1 * st0.s );");
         src.push("      vec3 N = normalize( surf_norm );");
-        src.push("      vec3 mapN = texture2D( uNormalMap, uv ).xyz * 2.0 - 1.0;");
+        src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
         src.push("      mat3 tsn = mat3( S, T, N );");
         //     src.push("      mapN *= 3.0;");
         src.push("      return normalize( tsn * mapN );");
@@ -775,13 +783,13 @@ class TrianglesBatchingColorQualityRenderer {
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
         src.push("vec4 baseColorTexel = texture2D(uBaseColorMap, vUV);");
-        src.push("baseColor = baseColorTexel.rgb;");
+        src.push("baseColor *= baseColorTexel.rgb;");
         // src.push("opacity = baseColorTexel.a;");
         src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture2D(uMetallicRoughMap, vUV).rgb;");
-        src.push("metallic = metalRoughTexel.r;");
-        src.push("roughness = metalRoughTexel.g;");
+        src.push("metallic *= metalRoughTexel.r;");
+        src.push("roughness *= metalRoughTexel.g;");
 
         src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition.xyz, normalize(vViewNormal), vUV );");
 
@@ -834,6 +842,7 @@ class TrianglesBatchingColorQualityRenderer {
         }
 
         src.push("vec3 emissiveColor = linearToLinear(texture2D(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+        src.push("float aoFactor = texture2D(uAOMap, vUV).r;");
 
         src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
         src.push("vec4 fragColor;");
@@ -847,9 +856,9 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient, opacity);");
+            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient * aoFactor, opacity);");
         } else {
-            src.push("   fragColor            = vec4(outgoingLight.rgb, opacity);");
+            src.push("   fragColor            = vec4(outgoingLight.rgb * aoFactor, opacity);");
         }
 
         if (gammaOutput) {

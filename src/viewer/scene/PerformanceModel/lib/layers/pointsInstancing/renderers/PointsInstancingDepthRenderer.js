@@ -34,6 +34,7 @@ class PointsInstancingDepthRenderer {
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate();
@@ -86,7 +87,7 @@ class PointsInstancingDepthRenderer {
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
@@ -105,7 +106,7 @@ class PointsInstancingDepthRenderer {
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
-        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, geometry.positionsBuf.numItems, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);

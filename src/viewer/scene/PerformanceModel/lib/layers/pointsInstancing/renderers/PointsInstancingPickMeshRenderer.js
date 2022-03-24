@@ -36,6 +36,7 @@ class PointsInstancingPickMeshRenderer {
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate();
@@ -77,7 +78,7 @@ class PointsInstancingPickMeshRenderer {
         this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
@@ -120,7 +121,7 @@ class PointsInstancingPickMeshRenderer {
             }
         }
 
-        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, geometry.positionsBuf.numItems, state.numInstances);
 
         // Cleanup
 

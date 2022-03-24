@@ -34,6 +34,7 @@ class PointsInstancingColorRenderer {
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate();
@@ -52,8 +53,8 @@ class PointsInstancingColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        this._aColor.bindArrayBuffer(state.colorsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
+        this._aColor.bindArrayBuffer(geometry.colorsBuf);
 
         if (pointsMaterial.filterIntensity) {
             gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
@@ -110,7 +111,7 @@ class PointsInstancingColorRenderer {
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
-        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, geometry.positionsBuf.numItems, state.numInstances);
 
         frameCtx.drawArrays++;
 

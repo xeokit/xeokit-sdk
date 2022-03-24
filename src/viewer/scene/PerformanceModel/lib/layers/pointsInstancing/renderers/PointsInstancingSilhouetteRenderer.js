@@ -35,6 +35,7 @@ class PointsInstancingSilhouetteRenderer {
         const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
+        const geometry = instancingLayer.geometry;
 
         if (!this._program) {
             this._allocate(instancingLayer.model.scene);
@@ -109,7 +110,7 @@ class PointsInstancingSilhouetteRenderer {
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
+        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
@@ -128,7 +129,7 @@ class PointsInstancingSilhouetteRenderer {
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
 
-        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+        instanceExt.drawArraysInstancedANGLE(gl.POINTS, 0, geometry.positionsBuf.numItems, state.numInstances);
 
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
         instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
