@@ -72,7 +72,7 @@ class Canvas extends Component {
          */
         this.transparent = !!cfg.transparent;
 
-        // chipmunk
+        // data-textures: avoid to continuos DOM layout calculations
         this.optimizeResizeDetection = true;
 
         /**
