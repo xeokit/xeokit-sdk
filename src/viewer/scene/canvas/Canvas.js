@@ -502,6 +502,10 @@ class Canvas extends Component {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
+
+                    // data-textures: not using standard-derivatives
+                    if (!(this.gl instanceof WebGL2RenderingContext)) {
+                    }
             }
         }
     }

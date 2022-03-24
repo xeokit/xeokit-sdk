@@ -1,5 +1,6 @@
 import {utils} from "../../viewer/scene/utils.js"
 import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
+import {DataTexturePeformanceModel} from "../../viewer/scene/PerformanceModel/DataTexturePeformanceModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -724,6 +725,7 @@ class XKTLoaderPlugin extends Plugin {
      * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
      * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
      * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
+     * @param {Boolean} [params.useDataTextures=false] When we set this ````true````, an alternative memory representation of object geometry will be used that relies on data textures. At the expense of some rendering performance overhead, this will reduce the used RAM to around 25% respect to setting the option to ````false````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -733,12 +735,21 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true,
-            textureTranscoder: this._textureTranscoder,
-            maxGeometryBatchSize: this._maxGeometryBatchSize,
-            origin: params.origin
-        }));
+        let sceneModel;
+
+        if (!!params.useDataTextures) {
+            sceneModel = new DataTexturePeformanceModel(this.viewer.scene, utils.apply(params, {
+                isModel: true,
+                origin: params.origin
+            }));
+        } else {
+            sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
+                isModel: true,
+                textureTranscoder: this._textureTranscoder,
+                maxGeometryBatchSize: this._maxGeometryBatchSize,
+                origin: params.origin
+            }));
+        }
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
 
