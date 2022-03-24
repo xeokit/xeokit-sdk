@@ -465,8 +465,9 @@ const Renderer = function (scene, options) {
         shadowRenderBuf.unbind();
     }
 
-    const drawColor = (function () { // Draws the drawables in drawableListSorted
-
+    function drawColor (params)
+    {
+    // const drawColor = (function () { // Draws the drawables in drawableListSorted
         const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
         const normalFillTransparentBin = [];
@@ -487,7 +488,8 @@ const Renderer = function (scene, options) {
         const selectedFillTransparentBin = [];
         const selectedEdgesTransparentBin = [];
 
-        return function (params) {
+        // return function (params) {
+        {
 
             const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
 
@@ -892,8 +894,10 @@ const Renderer = function (scene, options) {
             if (unbindOutputFrameBuffer) {
                 unbindOutputFrameBuffer(params.pass);
             }
-        };
-    })();
+        // };
+        }
+    }
+    // })();
 
     /**
      * Picks an Entity.
