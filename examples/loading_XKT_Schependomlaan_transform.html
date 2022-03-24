@@ -50,7 +50,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -82,7 +82,7 @@
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         scale: [0.5, 0.5, 0.5],
-        position: [i++ * 15, 0, 0]
+        origin: [i++ * 15, 0, 0]
     })
 
         .on("loaded", () => {
@@ -90,7 +90,7 @@
                 src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                 edges: true,
                 scale: [0.5, 0.5, 0.5],
-                position: [i++ * 15, 0, 0]
+                origin: [i++ * 15, 0, 0]
             })
 
                 .on("loaded", () => {
@@ -98,7 +98,7 @@
                         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                         edges: true,
                         scale: [0.5, 0.5, 0.5],
-                        position: [i++ * 15, 0, 0]
+                        origin: [i++ * 15, 0, 0]
                     })
 
                         .on("loaded", () => {
@@ -106,7 +106,7 @@
                                 src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                                 edges: true,
                                 scale: [0.5, 0.5, 0.5],
-                                position: [i++ * 15, 0, 0]
+                                origin: [i++ * 15, 0, 0]
                             })
 
                                 .on("loaded", () => {
@@ -115,7 +115,7 @@
                                         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
                                         edges: true,
                                         scale: [0.5, 0.5, 0.5],
-                                        position: [i++ * 15, 0, 0]
+                                        origin: [i++ * 15, 0, 0]
                                     })
                                         .on("loaded", () => {
                                             var t1 = performance.now();

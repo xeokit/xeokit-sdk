@@ -2033,41 +2033,37 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            let origin = null;
+            const origin = math.vec3(this._origin);
 
+            const cfgOrigin = cfg.origin || cfg.rtcCenter;
+            if (cfgOrigin) {
+                math.addVec3(origin, cfgOrigin, origin);
+            }
+
+            let rtcOrigin = null;
             if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
                 const rtcCenter = math.vec3();
                 const rtcPositions = [];
                 const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter);
                 if (rtcNeeded) {
                     positions = rtcPositions;
-                    origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
+                    rtcOrigin = rtcCenter;
                 }
             }
+            if (rtcOrigin) {
+                math.addVec3(origin, rtcOrigin, origin);
+            }
 
-            const cfgOrigin = cfg.origin || cfg.rtcCenter;
-            if (cfgOrigin) {
-                if (!origin) {
-                    origin = cfgOrigin;
-                } else {
-                    origin = math.addVec3(this._origin, cfgOrigin, tempVec3a);
-                }
+            if (!this._lastOrigin) {
+                needNewBatchingLayers = true;
+                this._lastOrigin = math.vec3(origin);
             } else {
-                origin = this._origin;
-            }
-
-            if (origin) {
-                if (!this._lastOrigin) {
+                if (!math.compareVec3(this._lastOrigin, origin)) {
                     needNewBatchingLayers = true;
-                    this._lastOrigin = math.vec3(origin);
-                } else {
-                    if (!math.compareVec3(this._lastOrigin, origin)) {
-                        needNewBatchingLayers = true;
-                        this._lastOrigin.set(origin);
-                    }
+                    this._lastOrigin.set(origin);
                 }
             }
-
+            
             if (cfg.positionsDecodeMatrix) {
                 if (!this._lastDecodeMatrix) {
                     needNewBatchingLayers = true;
