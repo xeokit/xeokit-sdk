@@ -35,7 +35,7 @@ class TrianglesInstancingColorQualityRenderer {
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 
         const model = instancingLayer.model;
         const scene = this._scene;
@@ -287,7 +287,7 @@ class TrianglesInstancingColorQualityRenderer {
 
     _bindProgram(frameCtx) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
@@ -383,7 +383,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec2 normal;");
+        src.push("attribute vec3 normal;");
         src.push("attribute vec4 color;");
         src.push("attribute vec2 uv;");
         src.push("attribute vec2 metallicRoughness;");
@@ -466,7 +466,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 1.0);");
         src.push("vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -638,7 +638,7 @@ class TrianglesInstancingColorQualityRenderer {
 
         src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
         src.push("       vec3 texel = texture2D( uNormalMap, uv ).xyz;");
-        src.push("       if (texel[0] == 0.0 && texel[1] == 0.0 && texel[2] == 0.0) {");
+        src.push("       if (texel.r == 0.0 && texel.g == 0.0 && texel.b == 0.0) {");
         src.push("              return normalize(surf_norm );");
         src.push("       }");
         src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");

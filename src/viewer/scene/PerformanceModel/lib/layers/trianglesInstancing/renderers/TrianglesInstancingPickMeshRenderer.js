@@ -35,7 +35,7 @@ class TrianglesInstancingPickMeshRenderer {
         const state = instancingLayer._state;
         const geometry = state.geometry;
         const instanceExt = this._instanceExt;
-        const origin = geometry.origin;
+        const origin = instancingLayer._state.origin;
 
         if (!this._program) {
             this._allocate();

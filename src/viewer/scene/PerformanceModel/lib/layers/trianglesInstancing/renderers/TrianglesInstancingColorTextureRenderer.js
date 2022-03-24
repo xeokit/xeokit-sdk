@@ -29,7 +29,7 @@ class TrianglesInstancingColorTextureRenderer {
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const model = instancingLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
@@ -331,7 +331,7 @@ class TrianglesInstancingColorTextureRenderer {
         src.push("uniform int renderPass;");
 
         src.push("attribute vec3 position;");
-        src.push("attribute vec2 normal;");
+        src.push("attribute vec3 normal;");
         src.push("attribute vec4 color;");
         src.push("attribute vec2 uv;");
         src.push("attribute vec4 flags;");
@@ -572,7 +572,7 @@ class TrianglesInstancingColorTextureRenderer {
             src.push("   gl_FragColor            = vec4(vColor.rgb * colorTexel.rgb * ambient, 1.0);");
         } else {
           //  src.push("    gl_FragColor           = vColor;");
-            src.push("   gl_FragColor            = vec4(colorTexel.rgb, 1.0);"); // TODO: ignores texture opacity
+            src.push("   gl_FragColor            = vec4(vColor.rgb * colorTexel.rgb, 1.0);"); // TODO: ignores texture opacity
         }
         src.push("}");
         return src;

@@ -120,7 +120,7 @@ function octEncodeNormals(normals) { // http://jcgt.org/published/0003/02/01/
         compressedNormals[i + 1] = best[1];
         compressedNormals[i + 2] = 0.0; // Unused
     }
-    return new Int8Array(compressedNormals)
+    return compressedNormals;
 }
 
 /**

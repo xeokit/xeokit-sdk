@@ -35,7 +35,7 @@ class TrianglesBatchingColorQualityRenderer {
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 
         const scene = this._scene;
         const camera = scene.camera;
@@ -248,7 +248,7 @@ class TrianglesBatchingColorQualityRenderer {
 
     _bindProgram(frameCtx) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;

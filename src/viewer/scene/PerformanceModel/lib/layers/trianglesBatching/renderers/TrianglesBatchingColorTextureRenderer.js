@@ -29,7 +29,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 
         const scene = this._scene;
         const camera = scene.camera;
@@ -217,7 +217,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     _bindProgram(frameCtx) {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
@@ -514,7 +514,7 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("vec4 colorTexel = texture2D(uColorMap, vUV);");
+        src.push("vec4 color = vColor * texture2D(uColorMap, vUV);");
 
         if (this._withSAO) {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
@@ -526,9 +526,9 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture2D(uOcclusionTexture, uv))) * blendFactor;");
 
-            src.push("   gl_FragColor            = vec4(vColor.rgb * colorTexel.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
+            src.push("   gl_FragColor            = vec4(color.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
         } else {
-            src.push("   gl_FragColor            = vec4(colorTexel.rgb, 1.0);"); // TODO: ignores texture opacity
+            src.push("   gl_FragColor            = vec4(color.rgb, 1.0);"); // TODO: ignores texture opacity
         }
 
         src.push("}");

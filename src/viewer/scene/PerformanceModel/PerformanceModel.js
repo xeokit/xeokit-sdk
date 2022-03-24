@@ -1120,7 +1120,7 @@ class PerformanceModel extends Component {
         const defaultColorTexture = new PerformanceTexture({
             id: defaultColorTextureId,
             model: this,
-            preloadColor: [.7, .7, .7, 1] // [r, g, b, a]
+            preloadColor: [1, 1, 1, 1] // [r, g, b, a]
         });
         const defaultMetalRoughTexture = new PerformanceTexture({
             id: defaultMetalRoughTextureId,
@@ -2025,7 +2025,7 @@ class PerformanceModel extends Component {
             return;
         }
         let colorTexture;
-        if (cfg.colorTextureId !== undefined) {
+        if (cfg.colorTextureId !== undefined && cfg.colorTextureId !== null) {
             colorTexture = this._textures[cfg.colorTextureId];
             if (!colorTexture) {
                 this.error(`Texture not found: ${cfg.colorTextureId} - ensure that you create it first with createTexture()`);
@@ -2035,7 +2035,7 @@ class PerformanceModel extends Component {
             colorTexture = this._textures[defaultColorTextureId];
         }
         let metallicRoughnessTexture;
-        if (cfg.metallicRoughnessTextureId !== undefined) {
+        if (cfg.metallicRoughnessTextureId !== undefined && cfg.metallicRoughnessTextureId !== null) {
             metallicRoughnessTexture = this._textures[cfg.metallicRoughnessTextureId];
             if (!metallicRoughnessTexture) {
                 this.error(`Texture not found: ${cfg.metallicRoughnessTextureId} - ensure that you create it first with createTexture()`);
@@ -2045,7 +2045,7 @@ class PerformanceModel extends Component {
             metallicRoughnessTexture = this._textures[defaultMetalRoughTextureId];
         }
         let normalsTexture;
-        if (cfg.normalsTextureId !== undefined) {
+        if (cfg.normalsTextureId !== undefined && cfg.normalsTextureId !== null) {
             normalsTexture = this._textures[cfg.normalsTextureId];
             if (!normalsTexture) {
                 this.error(`Texture not found: ${cfg.normalsTextureId} - ensure that you create it first with createTexture()`);
@@ -2055,7 +2055,7 @@ class PerformanceModel extends Component {
             normalsTexture = this._textures[defaultNormalsTextureId];
         }
         let emissiveTexture;
-        if (cfg.emissiveTextureId !== undefined) {
+        if (cfg.emissiveTextureId !== undefined && cfg.emissiveTextureId !== null) {
             emissiveTexture = this._textures[cfg.emissiveTextureId];
             if (!emissiveTexture) {
                 this.error(`Texture not found: ${cfg.emissiveTextureId} - ensure that you create it first with createTexture()`);
@@ -2065,7 +2065,7 @@ class PerformanceModel extends Component {
             emissiveTexture = this._textures[defaultEmissiveTextureId];
         }
         let occlusionTexture;
-        if (cfg.occlusionTextureId !== undefined) {
+        if (cfg.occlusionTextureId !== undefined && cfg.occlusionTextureId !== null) {
             occlusionTexture = this._textures[cfg.occlusionTextureId];
             if (!occlusionTexture) {
                 this.error(`Texture not found: ${cfg.occlusionTextureId} - ensure that you create it first with createTexture()`);
@@ -2494,7 +2494,6 @@ class PerformanceModel extends Component {
 
     _getInstancingLayer(origin, textureSetId, geometryId) {
         const layerId = `${origin[0]}.${origin[1]}.${origin[2]}.${textureSetId}.${geometryId}`;
-        console.log("instancingLayer ID: " + layerId);
         let instancingLayer = this._instancingLayers[layerId];
         if (instancingLayer) {
             return instancingLayer;
