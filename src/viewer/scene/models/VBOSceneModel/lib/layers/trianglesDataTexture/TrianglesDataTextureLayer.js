@@ -1033,6 +1033,20 @@ class TrianglesDataTextureLayer {
             gl.UNSIGNED_BYTE,
             textureState.texturePerObjectIdColorsAndFlags._textureData
         );
+
+        gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdOffsets._texture);
+
+        gl.texSubImage2D(
+            gl.TEXTURE_2D,
+            0, // level
+            0, // xoffset
+            0, // yoffset
+            textureState.texturePerObjectIdOffsets._textureWidth, // width
+            textureState.texturePerObjectIdOffsets._textureHeight, // width
+            gl.RGB,
+            gl.FLOAT,
+            textureState.texturePerObjectIdOffsets._textureData
+        );
     }
 
     setCulled(portionId, flags, transparent) {
@@ -1071,32 +1085,59 @@ class TrianglesDataTextureLayer {
     }
 
     setColor(portionId, color) {
+        const subPortionMapping = this._subPortionIdMapping[portionId];
+
+        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
+            this._subPortionSetColor (subPortionMapping[i], color);
+        }
+    }
+
+    /**
+     * @private
+     */
+    _subPortionSetColor(portionId, color) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const portionsIdx = portionId;
-        const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
-        const numVerts = portion.numVerts;
-        const firstColor = vertexBase * 4;
-        const lenColor = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenColor);
-        const r = color[0];
-        const g = color[1];
-        const b = color[2];
-        const a = color[3];
-        for (let i = 0; i < lenColor; i += 4) {
-            tempArray[i + 0] = r;
-            tempArray[i + 1] = g;
-            tempArray[i + 2] = b;
-            tempArray[i + 3] = a;
-        }
-        // TODO: migrate to texture updates
-        // if (this._state.colorsBuf) {
-        //     this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
-        // }
-    }
 
+        // Color
+        const textureState = this._dataTextureState;
+        const gl = this.model.scene.canvas.gl;
+
+        tempUint8Array4 [0] = color[0];
+        tempUint8Array4 [1] = color[1];
+        tempUint8Array4 [2] = color[2];
+        tempUint8Array4 [3] = color[3];
+
+        // object colors
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set (
+            tempUint8Array4,
+            portionId * 28
+        );
+
+        if (this._deferredSetFlagsActive)
+        {
+            this._deferredSetFlagsDirty = true;
+            return;
+        }
+
+        gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
+
+        gl.texSubImage2D(
+            gl.TEXTURE_2D,
+            0, // level
+            0, // xoffset
+            portionId, // yoffset
+            1, // width
+            1, //height
+            gl.RGBA_INTEGER,
+            gl.UNSIGNED_BYTE,
+            tempUint8Array4
+        );
+
+        // gl.bindTexture (gl.TEXTURE_2D, null);
+    }
+    
     setTransparent(portionId, flags, transparent) {
         if (transparent) {
             this._numTransparentLayerPortions++;
@@ -1109,12 +1150,17 @@ class TrianglesDataTextureLayer {
     }
 
     _setFlags(portionId, flags, deferred = false) {
-        (this._subPortionIdMapping[portionId] || []).forEach (fanOut => {
-            this._fan_out_setFlags (fanOut, flags, deferred);
-        });
+        const subPortionMapping = this._subPortionIdMapping[portionId];
+
+        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
+            this._subPortionSetFlags (subPortionMapping[i], flags);
+        }
     }
 
-    _fan_out_setFlags(portionId, flags, transparent, deferred = false) {
+    /**
+     * @private
+     */
+    _subPortionSetFlags(portionId, flags, transparent, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -1191,7 +1237,7 @@ class TrianglesDataTextureLayer {
         // object flags
         textureState.texturePerObjectIdColorsAndFlags._textureData.set (
             tempUint8Array4,
-            portionId * 24 + 8
+            portionId * 28 + 8
         );
 
         if (this._deferredSetFlagsActive)
@@ -1221,12 +1267,14 @@ class TrianglesDataTextureLayer {
     }
 
     _setFlags2(portionId, flags, deferred = false) {
-        (this._subPortionIdMapping[portionId] || []).forEach (fanOut => {
-            this._fan_out_setFlags2 (fanOut, flags, deferred);
-        });
+        const subPortionMapping = this._subPortionIdMapping[portionId];
+
+        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
+            this._subPortionSetFlags2 (subPortionMapping[i], flags);
+        }
     }
 
-    _fan_out_setFlags2(portionId, flags, deferred = false) {
+    _subPortionSetFlags2(portionId, flags, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -1244,7 +1292,7 @@ class TrianglesDataTextureLayer {
         // object flags2
         textureState.texturePerObjectIdColorsAndFlags._textureData.set (
             tempUint8Array4,
-            portionId * 24 + 12
+            portionId * 28 + 12
         );
         
         if (this._deferredSetFlagsActive)
@@ -1275,12 +1323,14 @@ class TrianglesDataTextureLayer {
     }
 
     setOffset(portionId, offset) {
-        (this._subPortionIdMapping[portionId] || []).forEach (fanOut => {
-            this._fan_out_setOffset (fanOut, offset);
-        });
+        const subPortionMapping = this._subPortionIdMapping[portionId];
+
+        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
+            this._subPortionSetOffset (subPortionMapping[i], offset);
+        }
     }
 
-    _fan_out_setOffset(portionId, offset) {
+    _subPortionSetOffset(portionId, offset) {
         if (!this._finalized) {
             throw "Not finalized";
         }
