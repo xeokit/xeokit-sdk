@@ -51,7 +51,8 @@ class TrianglesDataTextureEdgesColorRenderer {
             this._uTexturePerVertexIdCoordinates, 
             this._uTexturePerObjectIdColorsAndFlags, 
             this._uTextureCameraMatrices, 
-            this._uTextureModelMatrices, 
+            this._uTextureModelMatrices,
+            this._uTexturePerObjectIdOffsets
         );
 
         gl.uniform1i(this._uRenderPass, renderPass);
@@ -158,6 +159,7 @@ class TrianglesDataTextureEdgesColorRenderer {
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds"; // chipmunk
         this._uTextureCameraMatrices = "uTextureCameraMatrices"; // chipmunk
         this._uTextureModelMatrices = "uTextureModelMatrices"; // chipmunk
+        this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; // chipmunk
     }
 
     _bindProgram() {
@@ -212,11 +214,13 @@ class TrianglesDataTextureEdgesColorRenderer {
 
         src.push("uniform mediump sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
+        src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;"); // chipmunk
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;"); // chipmunk
         src.push("uniform highp sampler2D uTextureCameraMatrices;"); // chipmunk
         src.push("uniform highp sampler2D uTextureModelMatrices;"); // chipmunk
+
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -295,9 +299,12 @@ class TrianglesDataTextureEdgesColorRenderer {
         src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(0, objectIndex), 0);"); // chipmunk
 
         src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
-        if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
-        }
+
+        // get XYZ offset
+        src.push("vec3 offset = texelFetch (uTexturePerObjectIdOffsets, ivec2(0, objectIndex), 0).rgb;");
+
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         if (clipping) {

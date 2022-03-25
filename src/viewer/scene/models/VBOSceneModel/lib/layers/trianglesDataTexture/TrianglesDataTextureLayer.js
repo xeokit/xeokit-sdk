@@ -50,6 +50,8 @@ const tempOBB3 = math.OBB3();
 
 const tempUint8Array4 = new Uint8Array (4);
 
+const tempFloat32Array3 = new Float32Array (3);
+
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
@@ -105,7 +107,6 @@ class TrianglesDataTextureLayer {
         this.dataTextureGenerator = new DataTextureGenerator();
 
         this._state = new RenderState({
-            offsetsBuf: null,
             metallicRoughnessBuf: null,
             positionsDecodeMatrix: math.mat4(),
             textureState: this._dataTextureState,
@@ -667,13 +668,7 @@ class TrianglesDataTextureLayer {
             }
         }
 
-        // if (scene.entityOffsetsEnabled) {
-        //     for (let i = 0; i < numVerts; i++) {
-        //         buffer.offsets.push(0);
-        //         buffer.offsets.push(0);
-        //         buffer.offsets.push(0);
-        //     }
-        // }
+        buffer.perObjectOffsets.push([ 0, 0, 0 ]);
 
         // if (scene.pickSurfacePrecisionEnabled) {
         //     // Quantized in-memory positions are initialized in finalize()
@@ -717,7 +712,7 @@ class TrianglesDataTextureLayer {
 
         // Generate all the needed textures in the layer
 
-        // a) colors and flags texture
+        // per-object colors and flags texture
         textureState.texturePerObjectIdColorsAndFlags = this.dataTextureGenerator.generateTextureForColorsAndFlags (
             gl,
             buffer.perObjectColors,
@@ -727,7 +722,13 @@ class TrianglesDataTextureLayer {
             buffer.perObjectEdgeIndexBaseOffsets
         );
 
-        // b) positions decode matrices texture
+        // per-object XYZ offsets
+        textureState.texturePerObjectIdOffsets = this.dataTextureGenerator.generateTextureForObjectOffsets (
+            gl,
+            buffer.perObjectOffsets,
+        );
+
+        // per-object positions decode matrices texture
         textureState.texturePerObjectIdPositionsDecodeMatrix = this.dataTextureGenerator.generateTextureForPositionsDecodeMatrices (
             gl,
             buffer.perObjectPositionsDecodeMatrices,
@@ -735,13 +736,13 @@ class TrianglesDataTextureLayer {
             buffer.perObjectInstanceNormalsMatrices
         ); 
 
-        // c) position coordinates texture
+        // position coordinates texture
         textureState.texturePerVertexIdCoordinates = this.dataTextureGenerator.generateTextureForPositions (
             gl,
             buffer.positions
         );
 
-        // d) portion Id triangles texture
+        // portion Id triangles texture
         textureState.texturePerPolygonIdPortionIds8Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
             gl,
             buffer.perTriangleNumberPortionId8Bits
@@ -757,7 +758,7 @@ class TrianglesDataTextureLayer {
             buffer.perTriangleNumberPortionId32Bits
         );
 
-        // e) portion Id texture for edges
+        // portion Id texture for edges
         textureState.texturePerEdgeIdPortionIds8Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
             gl,
             buffer.perEdgeNumberPortionId8Bits
@@ -773,7 +774,7 @@ class TrianglesDataTextureLayer {
             buffer.perEdgeNumberPortionId32Bits
         );
 
-        // f) indices texture
+        // indices texture
         textureState.texturePerPolygonIdIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitIndices (
             gl,
             buffer.indices8Bits
@@ -789,7 +790,7 @@ class TrianglesDataTextureLayer {
             buffer.indices32Bits
         );
         
-        // g) edge indices texture
+        // edge indices texture
         textureState.texturePerPolygonIdEdgeIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitsEdgeIndices (
             gl,
             buffer.edgeIndices8Bits
@@ -809,13 +810,6 @@ class TrianglesDataTextureLayer {
         //     const metallicRoughness = new Uint8Array(buffer.metallicRoughness);
         //     let normalized = false;
         //     state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
-        // }
-
-        // if (this.model.scene.entityOffsetsEnabled) {
-        //     if (buffer.offsets.length > 0) {
-        //         const offsets = new Float32Array(buffer.offsets);
-        //         state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
-        //     }
         // }
 
         // Model matrices texture
@@ -1281,36 +1275,54 @@ class TrianglesDataTextureLayer {
     }
 
     setOffset(portionId, offset) {
+        (this._subPortionIdMapping[portionId] || []).forEach (fanOut => {
+            this._fan_out_setOffset (fanOut, offset);
+        });
+    }
+
+    _fan_out_setOffset(portionId, offset) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (!this.model.scene.entityOffsetsEnabled) {
-            this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
+        // if (!this.model.scene.entityOffsetsEnabled) {
+        //     this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
+        //     return;
+        // }
+
+        const textureState = this._dataTextureState;
+        const gl = this.model.scene.canvas.gl;
+
+        tempFloat32Array3 [0] = offset[0];
+        tempFloat32Array3 [1] = offset[1];
+        tempFloat32Array3 [2] = offset[2];
+
+        // object offset
+        textureState.texturePerObjectIdOffsets._textureData.set (
+            tempFloat32Array3,
+            portionId * 3
+        );
+        
+        if (this._deferredSetFlagsActive)
+        {
+            this._deferredSetFlagsDirty = true;
             return;
         }
-        const portionsIdx = portionId;
-        const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
-        const numVerts = portion.numVerts;
-        const firstOffset = vertexBase * 3;
-        const lenOffsets = numVerts * 3;
-        const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
-        const x = offset[0];
-        const y = offset[1];
-        const z = offset[2];
-        for (let i = 0; i < lenOffsets; i += 3) {
-            tempArray[i + 0] = x;
-            tempArray[i + 1] = y;
-            tempArray[i + 2] = z;
-        }
-        if (this._state.offsetsBuf) {
-            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
-        }
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
-            portion.offset[0] = offset[0];
-            portion.offset[1] = offset[1];
-            portion.offset[2] = offset[2];
-        }
+        
+        gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdOffsets._texture);
+
+        gl.texSubImage2D(
+            gl.TEXTURE_2D,
+            0, // level
+            0, // x offset
+            portionId, // yoffset
+            1, // width
+            1, // height
+            gl.RGB,
+            gl.FLOAT,
+            tempFloat32Array3
+        );
+
+        // gl.bindTexture (gl.TEXTURE_2D, null);
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
@@ -1629,10 +1641,6 @@ class TrianglesDataTextureLayer {
 
     destroy() {
         const state = this._state;
-        if (state.offsetsBuf) {
-            state.offsetsBuf.destroy();
-            state.offsetsBuf = null;
-        }
         if (state.metallicRoughnessBuf) {
             state.metallicRoughnessBuf.destroy();
             state.metallicRoughnessBuf = null;

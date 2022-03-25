@@ -54,7 +54,8 @@ class TrianglesDataTextureColorRenderer {
             this._uTexturePerVertexIdCoordinates, 
             this._uTexturePerObjectIdColorsAndFlags, 
             this._uTextureCameraMatrices, 
-            this._uTextureModelMatrices, 
+            this._uTextureModelMatrices,
+            this._uTexturePerObjectIdOffsets
         );
 
         gl.uniform1i(this._uRenderPass, renderPass);
@@ -198,6 +199,7 @@ class TrianglesDataTextureColorRenderer {
         this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds"; // chipmunk
         this._uTextureCameraMatrices = "uTextureCameraMatrices"; // chipmunk
         this._uTextureModelMatrices = "uTextureModelMatrices"; // chipmunk
+        this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; // chipmunk
     }
 
     _bindProgram(frameCtx) {
@@ -293,6 +295,7 @@ class TrianglesDataTextureColorRenderer {
 
         src.push("uniform mediump sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
+        src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;"); // chipmunk
         src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;"); // chipmunk
@@ -405,9 +408,10 @@ class TrianglesDataTextureColorRenderer {
         
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
-        if (scene.entityOffsetsEnabled) {
-            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
-        }
+        // get XYZ offset
+        src.push("vec3 offset = texelFetch (uTexturePerObjectIdOffsets, ivec2(0, objectIndex), 0).rgb;");
+
+        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
 
         src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
 

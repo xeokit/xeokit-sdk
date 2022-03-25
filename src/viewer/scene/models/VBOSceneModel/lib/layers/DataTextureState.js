@@ -11,6 +11,7 @@ const identityMatrix = [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 ];
 const dataTextureRamStats = {
     sizeDataColorsAndFlags: 0,
     sizeDataPositionDecodeMatrices: 0,
+    sizeDataTextureOffsets: 0,
     sizeDataTexturePositions: 0,
     sizeDataTextureIndices: 0,
     sizeDataTextureEdgeIndices: 0,
@@ -199,6 +200,15 @@ class DataTextureState
         this.texturePerObjectIdColorsAndFlags = null;
 
         /**
+         * Texture that holds the XYZ offsets per-object:
+         * - columns: just 1 column with the XYZ-offset
+         * - row: the object Id
+         * 
+         * @type BindableDataTexture
+         */
+        this.texturePerObjectIdOffsets = null;
+
+        /**
          * Texture that holds the positionsDecodeMatrix per-object:
          * - columns: each column is one column of the matrix
          * - row: the object Id
@@ -371,7 +381,8 @@ class DataTextureState
         vertexTextureShaderName,
         objectAttributesTextureShaderName,
         cameraMatricesShaderName,
-        modelMatricesShaderName
+        modelMatricesShaderName,
+        objectOffsetsShaderName
     ) {
         this.texturePerObjectIdPositionsDecodeMatrix.bindTexture (
             glProgram,
@@ -402,6 +413,12 @@ class DataTextureState
             modelMatricesShaderName, 
             5 // webgl texture unit
         );
+
+        this.texturePerObjectIdOffsets.bindTexture (
+            glProgram,
+            objectOffsetsShaderName, 
+            6 // webgl texture unit
+        );
     }
 
     /**
@@ -420,13 +437,13 @@ class DataTextureState
         this.indicesPortionIdsPerBitnessTextures[textureBitness].bindTexture (
             glProgram,
             portionIdsShaderName, 
-            6 // webgl texture unit
+            7 // webgl texture unit
         );    
 
         this.indicesPerBitnessTextures[textureBitness].bindTexture (
             glProgram,
             polygonIndicesShaderName, 
-            7 // webgl texture unit
+            8 // webgl texture unit
         );
     }
 
@@ -446,13 +463,13 @@ class DataTextureState
         this.edgeIndicesPortionIdsPerBitnessTextures[textureBitness].bindTexture (
             glProgram,
             edgePortionIdsShaderName, 
-            6 // webgl texture unit
+            7 // webgl texture unit
         );    
 
         this.edgeIndicesPerBitnessTextures[textureBitness].bindTexture (
             glProgram,
             edgeIndicesShaderName, 
-            7 // webgl texture unit
+            8 // webgl texture unit
         );
     }
 }
@@ -753,6 +770,72 @@ class DataTextureGenerator
             textureHeight,
             gl.RGBA_INTEGER,
             gl.UNSIGNED_BYTE,
+            texArray,
+            0
+        );
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+
+        gl.bindTexture(gl.TEXTURE_2D, null);
+
+        return new BindableDataTexture(
+            gl,
+            texture,
+            textureWidth,
+            textureHeight,
+            texArray
+        );
+    }
+
+    /**
+     * This will generate a texture for all object offsets.
+     * 
+     * @param {WebGL2RenderingContext} gl
+     * @param {int[]} offsets Array of int[3], one XYZ offset array for each object
+     * 
+     * @returns {BindableDataTexture}
+     */
+    generateTextureForObjectOffsets (gl, offsets) {
+        const textureHeight =  offsets.length;
+
+        if (textureHeight == 0)
+        {
+            throw "texture height == 0";
+        }
+
+        const textureWidth = 1;
+
+        var texArray = new Float32Array(3 * textureWidth * textureHeight);
+
+        dataTextureRamStats.sizeDataTextureOffsets += texArray.byteLength;
+
+        for (var i = 0; i < offsets.length; i++)
+        {
+            // object offset
+            texArray.set (
+                offsets [i],
+                i * 3
+            );
+        }
+
+        const texture = gl.createTexture();
+
+        gl.bindTexture (gl.TEXTURE_2D, texture);
+        
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32F, textureWidth, textureHeight);
+
+        gl.texSubImage2D(
+            gl.TEXTURE_2D,
+            0,
+            0,
+            0,
+            textureWidth,
+            textureHeight,
+            gl.RGB,
+            gl.FLOAT,
             texArray,
             0
         );

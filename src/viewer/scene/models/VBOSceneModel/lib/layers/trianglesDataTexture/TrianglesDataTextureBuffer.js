@@ -12,7 +12,6 @@ class TrianglesDataTextureBuffer {
         this.positions = [];
         this.metallicRoughness = [];
 
-        this.offsets = [];
         this.indices8Bits = [];
         this.indices16Bits = [];
         this.indices32Bits = [];
@@ -22,6 +21,8 @@ class TrianglesDataTextureBuffer {
 
         this.perObjectColors = [];
         this.perObjectPickColors = [];
+
+        this.perObjectOffsets = [];
 
         this.perObjectPositionsDecodeMatrices = []; // chipmunk
         this.perObjectInstancePositioningMatrices = [];
