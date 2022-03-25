@@ -2354,10 +2354,7 @@ class DataTexturePeformanceModel extends Component {
         {
             const layer = this._layerList[i];
 
-            if (layer.beginDeferredFlags)
-            {
-                layer.beginDeferredFlags ();
-            }
+            layer.beginDeferredFlags ();
         }
     }
     
@@ -2373,10 +2370,7 @@ class DataTexturePeformanceModel extends Component {
         {
             const layer = this._layerList[i];
 
-            if (layer.flushDeferredFlags)
-            {
-                layer.flushDeferredFlags ();
-            }
+            layer.commitDeferredFlags ();
         }
     }
 
