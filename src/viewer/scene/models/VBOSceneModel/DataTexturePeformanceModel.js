@@ -13,6 +13,8 @@ import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
 
+import { LodCullingManager } from "./lib/layers/trianglesDataTexture/LodCullingManager.js"
+
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
 const tempVec3a = math.vec3();
@@ -941,6 +943,7 @@ class DataTexturePeformanceModel extends Component {
             throw "Using a DataTexturePerformanceModel requires the usage of webgl2";
         }
 
+        this._targetLodFps = cfg.targetLodFps;
         this._aabb = math.collapseAABB3();
         this._aabbDirty = false;
 
@@ -2301,6 +2304,14 @@ class DataTexturePeformanceModel extends Component {
 
         this._instancingGeometries = {};
         this._preparedInstancingGeometries = {};
+
+        if (this._targetLodFps) {
+            this.lodCullingManager = new LodCullingManager (
+                this,
+                [ 2000, 600, 150, 80, 20 ],
+                this._targetLodFps
+            );
+        }
     }
 
     _rebuildAABB() {
@@ -2345,8 +2356,6 @@ class DataTexturePeformanceModel extends Component {
 
     /**
      * This will start a "set-flags transaction" in all Layers of this Model.
-     * 
-     * @private
      */
     beginDeferredFlagsInAllLayers ()
     {
@@ -2361,8 +2370,6 @@ class DataTexturePeformanceModel extends Component {
     /**
      * This will commit any previously started "set-flags transaction" in all
      * Layers of this Model.
-     * 
-     * @private
      */
     commitDeferredFlagsInAllLayers ()
     {
