@@ -4,10 +4,12 @@ export * from "./GLTFLoaderPlugin";
 export * from "./LASLoaderPlugin";
 export * from "./NavCubePlugin";
 export * from "./OBJLoaderPlugin";
+export * from "./STLLoaderPlugin";
 export * from "./StoreyViewsPlugin";
 export * from "./TreeViewPlugin";
 export * from "./XKTLoaderPlugin";
 export * from "./WebIFCLoaderPlugin";
+export * from "./XML3DLoaderPlugin";
 
 export declare type ModelStats = {
   sourceFormat: string;
