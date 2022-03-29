@@ -1,6 +1,7 @@
 export * from "./CityJSONLoaderPlugin";
 export * from "./FastNavPlugin";
 export * from "./GLTFLoaderPlugin";
+export * from "./LASLoaderPlugin";
 export * from "./NavCubePlugin";
 export * from "./StoreyViewsPlugin";
 export * from "./TreeViewPlugin";

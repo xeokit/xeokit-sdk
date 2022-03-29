@@ -18,18 +18,7 @@ export declare type CityJSONLoaderPluginConfiguration = {
   /** A custom data source through which the CityJSONLoaderPlugin can load model and metadata files. Defaults to an instance of {@link CityJSONDefaultDataSource}, which loads over HTTP.*/
   dataSource?: ICityJSONDefaultDataSource;
 };
-/**
- * * @param {String} [params.id]
-     * @param {String} [params.src]
-     * @param {ArrayBuffer} [params.cityJSON]
-     * @param {Boolean} [params.loadMetadata=true]
-     * @param {Number[]} [params.origin=[0,0,0]]
-     * @param {Number[]} [params.position=[0,0,0]]
-     * @param {Number[]} [params.scale=[1,1,1]]
-     * @param {Number[]} [params.rotation=[0,0,0]]
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]]
-     * @param {ModelStats} [params.stats]
- */
+
 export declare type LoadCityJSONModel = {
   /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
