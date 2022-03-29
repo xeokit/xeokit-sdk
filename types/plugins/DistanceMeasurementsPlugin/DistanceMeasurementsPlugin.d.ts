@@ -1,0 +1,120 @@
+import { Entity, Plugin, Viewer } from "../../viewer";
+import { DistanceMeasurementsControl } from "./DistanceMeasurementsControl";
+import { DistanceMeasurement } from "./DistanceMeasurement";
+
+export declare type DistanceMeasurementsPluginConfiguration = {
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  id?: string;
+  /** The minimum length, in pixels, of an axis wire beyond which its label is shown. */
+  labelMinAxisLength?: number;
+  /** Container DOM element for markers and labels. Defaults to ````document.body````. */
+  container?: HTMLElement;
+  /** The default value of the DistanceMeasurements `visible` property. */
+  defaultVisible?: boolean;
+  /** The default value of the DistanceMeasurements `originVisible` property. */
+  defaultOriginVisible?: boolean;
+  /** The default value of the DistanceMeasurements `targetVisible` property. */
+  defaultTargetVisible?: boolean;
+  /** The default value of the DistanceMeasurements `wireVisible` property. */
+  defaultWireVisible?: boolean;
+  /** The default value of the DistanceMeasurements `axisVisible` property. */
+  defaultAxisVisible?: boolean;
+  /** The default color of the length dots, wire and label. */
+  defaultColor?: string;
+  /** If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels). */
+  zIndex?: number;
+};
+
+/**
+ * {@link Viewer} plugin for measuring point-to-point distances.
+ */
+export class DistanceMeasurementsPlugin extends Plugin {
+  /**
+   * @constructor
+   * @param {Viewer} viewer The Viewer.
+   * @param {DistanceMeasurementsPluginConfiguration} [cfg]  Plugin configuration.
+   */
+  constructor(viewer: Viewer, cfg?: DistanceMeasurementsPluginConfiguration);
+  
+  /**
+   * Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+   *
+   * The axis wire's label is not shown when its length is less than this value.
+   *
+   * This is ````25```` pixels by default.
+   *
+   * Must not be less than ````1````.
+   *
+   * @type {number}
+   */
+  set labelMinAxisLength(arg: number);
+
+  /**
+   * Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+   * @returns {number}
+   */
+  get labelMinAxisLength(): number;
+  
+  /**
+   * Gets the {@link DistanceMeasurementsControl}, which creates {@link DistanceMeasurement}s from user input.
+   *
+   * @type {DistanceMeasurementsControl}
+   */
+  get control(): DistanceMeasurementsControl;
+
+  /**
+   * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
+   *
+   * @type {{String:DistanceMeasurement}}
+   */
+  get measurements(): { [key:string]: DistanceMeasurement };
+
+  /**
+   * Creates a {@link DistanceMeasurement}.
+   *
+   * The DistanceMeasurement is then registered by {@link DistanceMeasurement#id} in {@link DistanceMeasurementsPlugin#measurements}.
+   *
+   * @param {Object} params {@link DistanceMeasurement} configuration.
+   * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement#id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+   * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
+   * @param {Entity} params.origin.entity Origin Entity.
+   * @param {Number[]} params.target.worldPos Target World-space 3D position.
+   * @param {Entity} params.target.entity Target Entity.
+   * @param {Boolean} [params.visible=true] Whether to initially show the {@link DistanceMeasurement}.
+   * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link DistanceMeasurement} origin.
+   * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
+   * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {string} [params.color] The color of the length dot, wire and label.
+   * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
+   */
+  createMeasurement(params?: {
+      id: string;
+      origin: {
+        entity: Entity;
+        worldPos: number[];
+      };
+      target: {
+        entity: Entity;
+        worldPos: number[];
+      };
+      visible?: boolean;
+      originVisible?: boolean;
+      targetVisible?: boolean;
+      wireVisible?: boolean;
+      axisVisible?: boolean;
+      color?: string;
+  }): DistanceMeasurement;
+  
+  /**
+   * Destroys a {@link DistanceMeasurement}.
+   *
+   * @param {String} id ID of DistanceMeasurement to destroy.
+   */
+  destroyMeasurement(id: string): void;
+
+  /**
+   * Destroys all {@link DistanceMeasurement}s.
+   */
+  clear(): void;
+}
