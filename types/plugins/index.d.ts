@@ -3,6 +3,7 @@ export * from "./FastNavPlugin";
 export * from "./GLTFLoaderPlugin";
 export * from "./LASLoaderPlugin";
 export * from "./NavCubePlugin";
+export * from "./OBJLoaderPlugin";
 export * from "./StoreyViewsPlugin";
 export * from "./TreeViewPlugin";
 export * from "./XKTLoaderPlugin";
