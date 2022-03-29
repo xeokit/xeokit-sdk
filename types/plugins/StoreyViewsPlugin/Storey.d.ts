@@ -1,4 +1,4 @@
-import { StoreyViewsPlugin } from './StoreyViewsPlugin';
+import { StoreyViewsPlugin } from "./StoreyViewsPlugin";
 
 /**
  * Information about an ````IfcBuildingStorey````.

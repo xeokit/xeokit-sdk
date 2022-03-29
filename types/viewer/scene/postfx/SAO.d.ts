@@ -1,4 +1,4 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 /**
  * Configures Scalable Ambient Obscurance (SAO) for a {@link Scene}.

@@ -1,8 +1,8 @@
-import { Viewer } from '../Viewer';
-import { Scene } from '../scene/Scene';
-import { MetaModel } from './MetaModel';
-import { PropertySet } from './PropertySet';
-import { MetaObject } from './MetaObject';
+import { Viewer } from "../Viewer";
+import { Scene } from "../scene/scene/Scene";
+import { MetaModel } from "./MetaModel";
+import { PropertySet } from "./PropertySet";
+import { MetaObject } from "./MetaObject";
 
 /**
  * Metadata corresponding to a {@link Scene}.

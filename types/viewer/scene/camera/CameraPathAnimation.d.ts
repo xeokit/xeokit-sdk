@@ -1,5 +1,5 @@
-import { Component } from '../Component';
-import { CameraPath } from './CameraPath';
+import { Component } from "../Component";
+import { CameraPath } from "./CameraPath";
 
 export declare type CameraPathAnimationConfiguration = {
   playingRate: number;

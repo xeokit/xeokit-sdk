@@ -1,6 +1,6 @@
-import { MetaScene } from './MetaScene';
-import { PropertySet } from './PropertySet';
-import { MetaObject } from './MetaObject';
+import { MetaScene } from "./MetaScene";
+import { PropertySet } from "./PropertySet";
+import { MetaObject } from "./MetaObject";
 
 /**
  * Metadata corresponding to an {@link Entity} that represents a model.

@@ -1,1 +1,1 @@
-export * from './StoreyViewsPlugin';
+export * from "./StoreyViewsPlugin";

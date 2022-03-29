@@ -1,11 +1,11 @@
-import { Component } from '../Component';
-import { Camera } from '../camera/Camera';
-import { PickResult } from '../webgl/PickResult';
-import { SAO } from '../postfx/SAO';
-import { Entity } from '../Entity';
-import { ReadableGeometry } from '../geometry';
-import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from '../materials';
-import { Viewport } from '../viewport/Viewport';
+import { Component } from "../Component";
+import { Camera } from "../camera/Camera";
+import { PickResult } from "../webgl/PickResult";
+import { SAO } from "../postfx/SAO";
+import { Entity } from "../Entity";
+import { ReadableGeometry } from "../geometry";
+import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
+import { Viewport } from "../viewport/Viewport";
 
 export declare class Scene extends Component {
   /**

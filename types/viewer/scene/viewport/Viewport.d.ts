@@ -1,4 +1,4 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 export declare class Viewport extends Component {
   /**

@@ -1,2 +1,2 @@
-export * from './plugins';
-export * from './viewer';
+export * from "./plugins";
+export * from "./viewer";

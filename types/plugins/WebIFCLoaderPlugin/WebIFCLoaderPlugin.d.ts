@@ -1,5 +1,5 @@
 import { Plugin, Viewer, PerformanceModel, IFCObjectDefaults } from "../../viewer";
-import { ModelStats } from '../index';
+import { ModelStats } from "../index";
 
 /**
  * Default data access strategy for {@link WebIFCLoaderPlugin}.

@@ -1,4 +1,4 @@
-import { Entity } from '../Entity';
+import { Entity } from "../Entity";
 
 /**
  * Pick result returned by {@link Scene#pick}.

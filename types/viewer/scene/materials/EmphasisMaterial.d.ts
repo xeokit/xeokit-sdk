@@ -1,5 +1,5 @@
-import { Material } from './Material';
-import { Component } from '../Component';
+import { Material } from "./Material";
+import { Component } from "../Component";
 
 export declare type EmphasisMaterialConfiguration = {
   /** Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted. */

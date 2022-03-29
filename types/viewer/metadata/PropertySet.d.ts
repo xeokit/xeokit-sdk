@@ -1,4 +1,4 @@
-import { Property } from './Property';
+import { Property } from "./Property";
 
 /**
  * A set of properties associated with one or more {@link MetaObject}s.

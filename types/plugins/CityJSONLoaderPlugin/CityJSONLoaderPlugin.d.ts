@@ -1,5 +1,5 @@
 import { Plugin, Viewer, PerformanceModel } from "../../viewer";
-import { ModelStats } from '../index';
+import { ModelStats } from "../index";
 
 export declare interface ICityJSONDefaultDataSource {
   /**

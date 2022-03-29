@@ -1,4 +1,4 @@
-import { MetaModel } from '../../viewer/metadata';
+import { MetaModel } from "../../viewer/metadata";
 
 /**
  * Represents a model tree view within a {@link TreeViewPlugin}.

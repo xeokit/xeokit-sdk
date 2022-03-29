@@ -1,1 +1,1 @@
-export * from './NavCubePlugin';
+export * from "./NavCubePlugin";

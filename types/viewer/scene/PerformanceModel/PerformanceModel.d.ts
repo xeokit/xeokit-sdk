@@ -1,7 +1,7 @@
-import { Entity } from '../Entity';
-import { Component } from '../Component';
-import { EdgeMaterial, EmphasisMaterial } from '../materials';
-import { PerformanceNode } from './PerformanceNode';
+import { Entity } from "../Entity";
+import { Component } from "../Component";
+import { EdgeMaterial, EmphasisMaterial } from "../materials";
+import { PerformanceNode } from "./PerformanceNode";
 
 /**
  * A high-performance model representation for efficient rendering and low memory usage.
@@ -474,7 +474,7 @@ export declare class PerformanceModel extends Component {
    */
   createGeometry(cfg: {
     id: string | number;
-    primitive: 'lines' | 'triangles' | 'solid' | 'surface';
+    primitive: "lines" | "triangles" | "solid" | "surface";
     positions: number[];
     normals: number[];
     colors: number[];
@@ -537,7 +537,7 @@ export declare class PerformanceModel extends Component {
   createMesh(cfg: {
     id: string;
     geometryId?: string | number;
-    primitive: 'lines' | 'triangles' | 'points';
+    primitive: "lines" | "triangles" | "points";
     positions: number[];
     normals: number[];
     colors: number[];

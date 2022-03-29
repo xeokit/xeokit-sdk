@@ -1,5 +1,5 @@
-import { MetaModel } from './MetaModel';
-import { PropertySet } from './PropertySet';
+import { MetaModel } from "./MetaModel";
+import { PropertySet } from "./PropertySet";
 
 /**
  * Metadata corresponding to an {@link Entity} that represents an object.

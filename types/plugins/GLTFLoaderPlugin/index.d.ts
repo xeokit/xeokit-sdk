@@ -1,1 +1,1 @@
-export * from './GLTFLoaderPlugin';
+export * from "./GLTFLoaderPlugin";

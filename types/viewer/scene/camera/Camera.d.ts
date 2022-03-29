@@ -1,8 +1,8 @@
-import { Component } from '../Component';
-import { Perspective } from './Perspective';
-import { Ortho } from './Ortho';
-import { Frustum } from './Frustum';
-import { CustomProjection } from './CustomProjection';
+import { Component } from "../Component";
+import { Perspective } from "./Perspective";
+import { Ortho } from "./Ortho";
+import { Frustum } from "./Frustum";
+import { CustomProjection } from "./CustomProjection";
 
 /**
  * Manages viewing and projection transforms for its {@link Scene}.
@@ -126,7 +126,7 @@ export declare class Camera extends Component {
    *
    * @param {String} value Identifies the active projection type.
    */
-  set projection(arg: 'perspective' | 'ortho' | 'frustum' | 'customProjection');
+  set projection(arg: "perspective" | "ortho" | "frustum" | "customProjection");
 
   /**
    * Gets the active projection type.
@@ -137,7 +137,7 @@ export declare class Camera extends Component {
    *
    * @returns {String} Identifies the active projection type.
    */
-  get projection(): 'perspective' | 'ortho' | 'frustum' | 'customProjection';
+  get projection(): "perspective" | "ortho" | "frustum" | "customProjection";
 
   /**
    * Rotates {@link Camera#eye} about {@link Camera#look}, around the {@link Camera#up} vector

@@ -1,7 +1,7 @@
 import { LocaleService } from "./localization/LocaleService";
 import { Scene } from "./scene/scene/Scene";
 import { MetaScene } from "./metadata/MetaScene";
-import { Camera } from './scene/Camera';
+import { Camera } from "./scene/Camera";
 import { CameraFlightAnimation } from "./scene/Camera/CameraFlightAnimation";
 import { CameraControl } from "./scene/CameraControl/CameraControl";
 import { Plugin } from "./Plugin";

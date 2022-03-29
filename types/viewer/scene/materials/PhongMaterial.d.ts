@@ -1,7 +1,7 @@
-import { Material } from './Material';
-import { Component } from '../Component';
-import { Texture } from './Texture';
-import { Fresnel } from './Fresnel';
+import { Material } from "./Material";
+import { Component } from "../Component";
+import { Texture } from "./Texture";
+import { Fresnel } from "./Fresnel";
 
 export declare type PhongMaterialConfiguration = {
   /** Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted. */
@@ -57,7 +57,7 @@ export declare type PhongMaterialConfiguration = {
   /** Whether to render geometry backfaces. */
   backfaces?: boolean;
   /** The winding order for geometry front faces - "cw" for clockwise, or "ccw" for counter-clockwise. */
-  frontface?: 'cw' | 'ccw';
+  frontface?: "cw" | "ccw";
 };
 
 /**
@@ -343,7 +343,7 @@ export declare class PhongMaterial extends Material {
    * Default is ````"ccw"````.
    * @type {String}
    */
-  set frontface(arg: 'cw' | 'ccw');
+  set frontface(arg: "cw" | "ccw");
 
   /**
    * Gets the winding direction of front faces on attached {@link Mesh}es.
@@ -351,7 +351,7 @@ export declare class PhongMaterial extends Material {
    * Default is ````"ccw"````.
    * @type {String}
    */
-  get frontface(): 'cw' | 'ccw';
+  get frontface(): "cw" | "ccw";
 
   /**
    * Gets the PhongMaterials's normal map {@link Texture}.

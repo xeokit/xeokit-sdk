@@ -1,4 +1,4 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 /**
  * Defines a shape for one or more {@link Mesh}es.

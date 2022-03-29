@@ -1,5 +1,5 @@
-import {Geometry} from './Geometry';
-import {Component} from '../Component';
+import {Geometry} from "./Geometry";
+import {Component} from "../Component";
 
 export declare type ReadableGeometryConfiguration = {
   /** Optional ID, unique among all components in the parent {@link Scene}, */
@@ -7,7 +7,7 @@ export declare type ReadableGeometryConfiguration = {
   /** Optional map of user-defined metadata to attach to this Geometry. */
   meta?: {[key: string]: any};
   /** The primitive type. */
-  primitive?: 'points' | 'lines'| 'line-loop'| 'line-strip'| 'triangles'| 'triangle-strip' | 'triangle-fan';
+  primitive?: "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
   /** Positions array. */
   positions?: number[];
   /** Vertex normal vectors array. */
@@ -40,9 +40,9 @@ export declare type ReadableGeometryConfiguration = {
   constructor(owner: Component, cfg?: ReadableGeometryConfiguration);
 
   /**
-   * Gets the Geometry's primitive type.
+   * Gets the Geometry"s primitive type.
    */
-  get primitive(): 'points' | 'lines'| 'line-loop'| 'line-strip'| 'triangles'| 'triangle-strip' | 'triangle-fan';
+  get primitive(): "points" | "lines"| "line-loop"| "line-strip"| "triangles"| "triangle-strip" | "triangle-fan";
 
   /**
    * Indicates if this Geometry is quantized.

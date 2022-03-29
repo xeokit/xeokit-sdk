@@ -1,5 +1,4 @@
 import { Plugin, Viewer, PerformanceModel, IFCObjectDefaults } from "../../viewer";
-import { ModelStats } from '../index';
 
 export declare interface IGLTFDefaultDataSource {
   /**

@@ -1,6 +1,6 @@
 import { Plugin, Viewer } from "../../viewer";
 import { ModelTreeView } from "./ModelTreeView";
-import { TreeViewNode } from './TreeViewNode';
+import { TreeViewNode } from "./TreeViewNode";
 
 export declare type TreeViewPluginConfiguration = {
   /** DOM element to contain the TreeViewPlugin. */

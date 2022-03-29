@@ -1,13 +1,4 @@
-import { Component } from '../Component';
-// import { PickController } from './lib/controllers/PickController.js';
-// import { PanController } from './lib/controllers/PanController.js';
-// import { MousePanRotateDollyHandler } from './lib/handlers/MousePanRotateDollyHandler.js';
-// import { KeyboardAxisViewHandler } from './lib/handlers/KeyboardAxisViewHandler.js';
-// import { MousePickHandler } from './lib/handlers/MousePickHandler.js';
-// import { KeyboardPanRotateDollyHandler } from './lib/handlers/KeyboardPanRotateDollyHandler.js';
-// import { MouseMiscHandler } from './lib/handlers/MouseMiscHandler.js';
-// import { TouchPanRotateAndDollyHandler } from './lib/handlers/TouchPanRotateAndDollyHandler.js';
-// import { TouchPickHandler } from './lib/handlers/TouchPickHandler.js';
+import { Component } from "../Component";
 
 /**
  * Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -45,14 +36,14 @@ export declare class CameraControl extends Component {
    *
    * @param {String} navMode The navigation mode.
    */
-  set navMode(arg: 'orbit' | 'firstPerson' | 'planView');
+  set navMode(arg: "orbit" | "firstPerson" | "planView");
 
   /**
    * Gets the current navigation mode.
    *
    * @returns {String} The navigation mode
    */
-  get navMode(): 'orbit' | 'firstPerson' | 'planView';
+  get navMode(): "orbit" | "firstPerson" | "planView";
 
   /**
    * Sets whether to vertically constrain the {@link Camera} position for first-person navigation.

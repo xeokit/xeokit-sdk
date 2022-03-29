@@ -1,1 +1,1 @@
-export * from './TreeViewPlugin';
+export * from "./TreeViewPlugin";

@@ -1,4 +1,4 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 /**
  * Jumps or flies the {@link Scene}'s {@link Camera} to a given target.
@@ -150,7 +150,7 @@ export declare class CameraFlightAnimation extends Component {
     eye?: number[];
     look?: number[];
     up?: number[];
-    projection?: 'perspective' | 'ortho' | 'frustum' | 'customProjection',
+    projection?: "perspective" | "ortho" | "frustum" | "customProjection",
     fitFOV?: number;
     fit?: boolean;
   } | Component): void;

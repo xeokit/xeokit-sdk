@@ -1,1 +1,1 @@
-export * from './XKTLoaderPlugin';
+export * from "./XKTLoaderPlugin";
