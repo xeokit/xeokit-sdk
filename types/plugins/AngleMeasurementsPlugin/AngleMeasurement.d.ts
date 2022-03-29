@@ -1,5 +1,6 @@
 import { Component } from "../../viewer/scene/Component";
 import { AngleMeasurementsPlugin } from "./AngleMeasurementsPlugin";
+import { Marker } from "../../viewer/scene/marker";
 
 /**
  * @desc Measures the angle indicated by three 3D points.
@@ -117,21 +118,21 @@ export class AngleMeasurement extends Component {
    *
    * @type {Marker}
    */
-  get origin(): any; //Marker;
+  get origin(): Marker;
 
   /**
    * Gets the corner {@link Marker}.
    *
    * @type {Marker}
    */
-  get corner(): any; //Marker;
+  get corner(): Marker;
 
   /**
    * Gets the target {@link Marker}.
    *
    * @type {Marker}
    */
-  get target(): any; //Marker;
+  get target(): Marker;
 
   /**
    * Gets the angle between two connected 3D line segments, given

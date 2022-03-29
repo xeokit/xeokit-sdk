@@ -1,4 +1,5 @@
 import { Plugin, Viewer } from "../../viewer";
+import { SectionPlane } from "../../viewer/scene/sectionPlane";
 
 export declare type SectionPlanesPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
@@ -39,7 +40,7 @@ export declare class SectionPlanesPlugin extends Plugin {
    *
    * @returns {{String:SectionPlane}} A map containing the {@link SectionPlane}s, each mapped to its {@link SectionPlane#id}.
    */
-  get sectionPlanes(): { [key:string]: any }; //SectionPlane
+  get sectionPlanes(): { [key:string]: SectionPlane };
 
   /**
    * Creates a {@link SectionPlane}.
@@ -58,7 +59,7 @@ export declare class SectionPlanesPlugin extends Plugin {
       pos?: number[];
       dir?: number[];
       active?: boolean;
-  }): any; //SectionPlane;
+  }): SectionPlane;
   
   /**
    * Inverts the direction of {@link SectionPlane#dir} on every existing SectionPlane.

@@ -1,5 +1,6 @@
 import { Component } from "../../viewer/scene/Component";
 import { DistanceMeasurementsPlugin } from "./DistanceMeasurementsPlugin";
+import { Marker } from "../../viewer/scene/marker";
 
 /**
  * @desc Measures the distance between two 3D points.
@@ -104,14 +105,14 @@ export class DistanceMeasurement extends Component {
    *
    * @type {Marker}
    */
-  get origin(): any; // Marker;
+  get origin(): Marker;
   
   /**
    * Gets the target {@link Marker}.
    *
    * @type {Marker}
    */
-  get target(): any; // Marker;
+  get target(): Marker;
   
   /**
    * Gets the World-space direct point-to-point distance between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
