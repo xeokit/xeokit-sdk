@@ -1,4 +1,4 @@
-export * from "./Camera";
+export * from "./camera";
 export * from "./CameraControl/CameraControl";
 export * from "./Component";
 export * from "./Entity";

@@ -522,7 +522,7 @@ export declare class Scene extends Component {
    * @param {Boolean} [forceRender=false] Forces a render when true, otherwise only renders if something has changed in this Scene
    * since the last render.
    */
-  render(forceRender?: boolean);
+  render(forceRender?: boolean): void;
 
   /**
    * Attempts to pick an {@link Entity} in this Scene.
@@ -718,10 +718,10 @@ export declare class Scene extends Component {
    * @param {Function} callback Callback to execute on eacn {@link Entity}.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
-  withObjects(ids: string[], callback): boolean;
+  withObjects(ids: string[], callback: Function): boolean;
 
   /**
      * Destroys this Scene.
      */
-  destroy(); void;
+  destroy():void;
 }

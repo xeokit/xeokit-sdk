@@ -1,5 +1,5 @@
 import { Component } from "../Component";
-import { Camera } from "../Camera";
+import { Camera } from "./Camera";
 
 /**
  * Defines its {@link Camera}'s perspective projection as a frustum-shaped view volume.

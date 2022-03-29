@@ -1,8 +1,8 @@
 import { LocaleService } from "./localization/LocaleService";
 import { Scene } from "./scene/scene/Scene";
 import { MetaScene } from "./metadata/MetaScene";
-import { Camera } from "./scene/Camera";
-import { CameraFlightAnimation } from "./scene/Camera/CameraFlightAnimation";
+import { Camera } from "./scene/camera/Camera";
+import { CameraFlightAnimation } from "./scene/camera/CameraFlightAnimation";
 import { CameraControl } from "./scene/CameraControl/CameraControl";
 import { Plugin } from "./Plugin";
 
@@ -166,7 +166,7 @@ export declare class Viewer {
    *
    * @private
    */
-  addPlugin(plugin: Plugin);
+  addPlugin(plugin: Plugin): void;
 
   /**
    * Enter snapshot mode.

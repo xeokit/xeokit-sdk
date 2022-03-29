@@ -1,4 +1,4 @@
-import { PickResult } from "viewer/scene/webgl/PickResult";
+import { PickResult } from "../../viewer/scene/webgl/PickResult";
 import { Entity, Plugin, Viewer } from "../../viewer";
 import { Annotation } from "./Annotation";
 

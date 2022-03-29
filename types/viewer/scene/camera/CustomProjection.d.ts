@@ -1,5 +1,5 @@
 import { Component } from "../Component";
-import { Camera } from "../Camera";
+import { Camera } from "./Camera";
 
 /**
  * Defines a custom projection for a {@link Camera} as a custom 4x4 matrix..

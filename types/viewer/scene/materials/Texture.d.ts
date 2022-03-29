@@ -65,7 +65,7 @@ export declare class Texture extends Component {
      * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture#encoding} property for more info.
      */
     constructor(owner: Component, cfg?: any);
-    _state: RenderState;
+    _state: any;
     _src: string;
     _image: any;
     _translate: any;
@@ -258,4 +258,3 @@ export declare class Texture extends Component {
     get encoding(): string;
 }
 import { Component } from "../Component.js";
-import { RenderState } from "../webgl/RenderState.js";

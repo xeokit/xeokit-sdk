@@ -63,7 +63,7 @@ export declare class Fresnel extends Component {
      * @param {Number} [cfg.power=0]  The power.
      */
     constructor(owner: Component, cfg?: any);
-    _state: RenderState;
+    _state: any;
     /**
      * Sets the Fresnel's edge color.
      *
@@ -145,5 +145,4 @@ export declare class Fresnel extends Component {
      */
     get power(): number;
 }
-import { Component } from "../Component.js";
-import { RenderState } from "../webgl/RenderState.js";
+import { Component } from "../Component";
