@@ -28,16 +28,16 @@ export declare abstract class Plugin {
     viewer: Viewer;
 
     /**
-     Subscribes to an event fired at this Plugin.
-     @param {String} event The event
-     @param {Function} callback Callback fired on the event
+     * Subscribes to an event fired at this Plugin.
+     * @param {String} event The event
+     * @param {Function} callback Callback fired on the event
      */
     on(event: string, callback: ()=> void): void;
 
     /**
-     Fires an event at this Plugin.
-     @param {String} event The event type name
-     @param {Object} value The event parameters
+     * Fires an event at this Plugin.
+     * @param {String} event The event type name
+     * @param {Object} value The event parameters
      */
     fire(event: string, value: any): void;
 
