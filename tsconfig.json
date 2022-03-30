@@ -5,7 +5,9 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["./types/index.d.ts"],
   "exclude": ["node_modules/"]
