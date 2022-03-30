@@ -1,4 +1,5 @@
 import { Component } from "../../viewer/scene/Component";
+import { AngleMeasurement } from "./AngleMeasurement";
 import { AngleMeasurementsPlugin } from "./AngleMeasurementsPlugin";
 
 /**
@@ -39,4 +40,28 @@ export class AngleMeasurementsControl extends Component {
    * Does nothing if the AngleMeasurementsControl is not active.
    */
   reset(): void;
+
+  /**
+   * Fires when the measurement is ended.
+   * @param event The measurementEnd event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+   on(event: "measurementEnd", callback: (measurement: AngleMeasurement) => void, scope?: any): string
+
+   /**
+   * Fires when the measurement is cancelled.
+   * @param event The measurementCancel event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "measurementCancel", callback: (measurement: AngleMeasurement) => void, scope?: any): string
+
+  /**
+   * Fires when the measurement is started.
+   * @param event The measurementStart event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "measurementStart", callback: (measurement: AngleMeasurement) => void, scope?: any): string
 }

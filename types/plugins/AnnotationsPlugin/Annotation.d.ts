@@ -1,9 +1,10 @@
+import { Marker } from "../../viewer/scene/marker";
 import { AnnotationsPlugin } from "./AnnotationsPlugin";
+
 /**
  * A {@link Marker} with an HTML label attached to it, managed by an {@link AnnotationsPlugin}.
  */
-export class Annotation {
-
+export declare class Annotation extends Marker {
   /**
    * The {@link AnnotationsPlugin} this Annotation was created by.
    * @type {AnnotationsPlugin}

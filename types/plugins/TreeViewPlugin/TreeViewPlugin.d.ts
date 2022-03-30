@@ -133,4 +133,18 @@ export declare class TreeViewPlugin extends Plugin {
    * @param {Function} callback Callback called at each {@link TreeViewNode}, with the TreeViewNode given as the argument.
    */
   withNodeTree(node: TreeViewNode, callback: (node: TreeViewNode) => void): void;
+
+  /**
+   * Fires on right click to show contextmenu.
+   * @param {String} event The contextmenu event
+   * @param {Function} callback Callback fired on the event
+  */
+  on(event: "contextmenu", callback: (data: {event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode })=> void): void;
+
+  /**
+   * Fires when an title is clicked.
+   * @param {String} event The nodeTitleClicked event
+   * @param {Function} callback Callback fired on the event
+  */
+   on(event: "nodeTitleClicked", callback: (data: {event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode })=> void): void;
 }
