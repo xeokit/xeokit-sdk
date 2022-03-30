@@ -37,9 +37,9 @@ export abstract class Component {
      * Components are mapped by this ID in {@link Scene.components}.
      *
      * @property id
-     * @type {String|Number}
+     * @type {String}
      */
-    id: string | number;
+    id: string;
 
     /**
      * The {@link Component} that owns the lifecycle of this Component, if any.

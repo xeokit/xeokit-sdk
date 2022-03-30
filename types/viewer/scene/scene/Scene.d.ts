@@ -18,7 +18,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "modelLoaded", callback: (modelId: string | number) => void, scope?: any): string;
+  on(event: "modelLoaded", callback: (modelId: number) => void, scope?: any): string;
 
   /**
    * Fires when a model is unloaded
@@ -26,7 +26,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "modelUnloaded", callback: (modelId: string | number) => void, scope?: any): string;
+  on(event: "modelUnloaded", callback: (modelId: number) => void, scope?: any): string;
 
   /**
    * Fired when about to render a frame for a Scene.
@@ -34,7 +34,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "rendering", callback: (renderEvent: { sceneId: string|number; pass: number; }) => void, scope?: any): string;
+  on(event: "rendering", callback: (renderEvent: { sceneId: number; pass: number; }) => void, scope?: any): string;
 
   /**
    * Fired when we have just rendered a frame for a Scene.
@@ -42,7 +42,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "rendered", callback: (renderEvent: { sceneId: string|number; pass: number; }) => void, scope?: any): string;
+  on(event: "rendered", callback: (renderEvent: { sceneId: number; pass: number; }) => void, scope?: any): string;
 
   /**
    * Fires when the entity visibility is updated.
