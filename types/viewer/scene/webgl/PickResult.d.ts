@@ -1,7 +1,7 @@
 import { Entity } from "../Entity";
 
 /**
- * Pick result returned by {@link Scene#pick}.
+ * Pick result returned by {@link Scene.pick}.
  */
 export declare class PickResult {
   /**
@@ -28,7 +28,7 @@ export declare class PickResult {
   /**
    * True when the picked surface position is full precision.
    * When false, the picked surface position should be regarded as approximate.
-   * Full-precision surface picking is performed with the {@link Scene#pick} method's ````pickSurfacePrecision```` option.
+   * Full-precision surface picking is performed with the {@link Scene.pick} method's ````pickSurfacePrecision```` option.
    * @type {Boolean}
    */
   pickSurfacePrecision: boolean;

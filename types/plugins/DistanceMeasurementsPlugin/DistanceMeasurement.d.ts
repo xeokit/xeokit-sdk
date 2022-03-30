@@ -73,28 +73,28 @@ export class DistanceMeasurement extends Component {
   get targetVisible(): boolean;
 
   /**
-   * Sets if the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} is visible.
+   * Sets if the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} is visible.
    *
    * @type {Boolean}
    */
   set wireVisible(arg: boolean);
 
   /**
-   * Gets if the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} is visible.
+   * Gets if the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} is visible.
    *
    * @type {Boolean}
    */
   get wireVisible(): boolean;
 
   /**
-   * Sets if the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+   * Sets if the axis-aligned wires between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} are visible.
    *
    * @type {Boolean}
    */
   set axisVisible(arg: boolean);
 
   /**
-   * Gets if the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+   * Gets if the axis-aligned wires between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} are visible.
    *
    * @type {Boolean}
    */
@@ -115,7 +115,7 @@ export class DistanceMeasurement extends Component {
   get target(): Marker;
   
   /**
-   * Gets the World-space direct point-to-point distance between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * Gets the World-space direct point-to-point distance between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target}.
    *
    * @type {Number}
    */

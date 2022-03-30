@@ -18,7 +18,7 @@ export declare type EmphasisMaterialConfiguration = {
   edgeAlpha?: number;
   /** Width of xray edges, in pixels. */
   edgeWidth?: number;
-  /** Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}. */
+  /** Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial.presets}. */
   preset?: string;
   /** Whether to render geometry backfaces when emphasising. */
   backfaces?: boolean;
@@ -202,7 +202,7 @@ export declare class EmphasisMaterial extends Material {
   get edgeWidth(): number;
 
   /**
-   * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
+   * Sets whether to render backfaces when {@link EmphasisMaterial.fill} is ````true````.
    *
    * Default is ````false````.
    *
@@ -211,7 +211,7 @@ export declare class EmphasisMaterial extends Material {
   set backfaces(arg: boolean);
 
   /**
-   * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
+   * Gets whether to render backfaces when {@link EmphasisMaterial.fill} is ````true````.
    *
    * Default is ````true````.
    *

@@ -23,28 +23,28 @@ export declare class MetaScene {
   scene: Scene;
 
   /**
-     * The {@link MetaModel}s belonging to this MetaScene, each mapped to its {@link MetaModel#modelId}.
+     * The {@link MetaModel}s belonging to this MetaScene, each mapped to its {@link MetaModel.modelId}.
      *
      * @type {{String:MetaModel}}
      */
   metaModels: {[key: string]: MetaModel};
 
   /**
-     * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet#id}.
+     * The {@link PropertySet}s belonging to this MetaScene, each mapped to its {@link PropertySet.id}.
      *
      * @type {{String:PropertySet}}
      */
   propertySets: {[key: string]: PropertySet};
 
   /**
-     * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
+     * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject.id}.
      *
      * @type {{String:MetaObject}}
      */
   metaObjects: {[key: string]: MetaObject};
 
   /**
-     * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#type}.
+     * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject.type}.
      *
      * @type {{String:MetaObject}}
      */
@@ -84,12 +84,12 @@ export declare class MetaScene {
      * roots, then this method similarly attempts to recover by creating a dummy root MetaObject of type "Model" and
      * connecting all the root MetaObjects as its children.
      *
-     * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
+     * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel.id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel}.
      * @param {Object} [options] Options for creating the {@link MetaModel}.
      * @param {String[]} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
      * @param {String[]} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
-     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
+     * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject.id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
      * @returns {MetaModel} The new MetaModel.
      */
   createMetaModel(modelId: string, metaModelData: any, options?: {
@@ -101,27 +101,27 @@ export declare class MetaScene {
   /**
      * Removes a {@link MetaModel} from this MetaScene.
      *
-     * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#id}.
+     * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel.id}.
      *
      * @param {String} id ID of the target {@link MetaModel}.
      */
   destroyMetaModel(id: string): void;
 
   /**
-     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s that have the given {@link MetaObject#type}.
+     * Gets the {@link MetaObject.id}s of the {@link MetaObject}s that have the given {@link MetaObject.type}.
      *
      * @param {String} type The type.
-     * @returns {String[]} Array of {@link MetaObject#id}s.
+     * @returns {String[]} Array of {@link MetaObject.id}s.
      */
   getObjectIDsByType(type: string): string[];
 
   /**
-     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the given subtree.
+     * Gets the {@link MetaObject.id}s of the {@link MetaObject}s within the given subtree.
      *
      * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
      * @param {String[]} [includeTypes] Optional list of types to include.
      * @param {String[]} [excludeTypes] Optional list of types to exclude.
-     * @returns {String[]} Array of {@link MetaObject#id}s.
+     * @returns {String[]} Array of {@link MetaObject.id}s.
      */
   getObjectIDsInSubtree(id: string, includeTypes?: string[], excludeTypes?: string[]): string[];
 

@@ -12,12 +12,12 @@ export declare class Viewport extends Component {
   get boundary(): number[];
 
   /**
-   * Sets if {@link Viewport#boundary} automatically synchronizes with {@link Canvas#boundary}.
+   * Sets if {@link Viewport.boundary} automatically synchronizes with {@link Canvas.boundary}.
    */
   set autoBoundary(arg: boolean);
 
   /**
-   * Gets if {@link Viewport#boundary} automatically synchronizes with {@link Canvas#boundary}.
+   * Gets if {@link Viewport.boundary} automatically synchronizes with {@link Canvas.boundary}.
    */
   get autoBoundary(): boolean;
 }

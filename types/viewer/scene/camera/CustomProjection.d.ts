@@ -31,16 +31,16 @@ export declare class CustomProjection extends Component {
   get matrix(): number[];
 
   /**
-   * Gets the inverse of {@link CustomProjection#matrix}.
+   * Gets the inverse of {@link CustomProjection.matrix}.
    *
-   * @returns {Number[]} The inverse of {@link CustomProjection#matrix}.
+   * @returns {Number[]} The inverse of {@link CustomProjection.matrix}.
    */
   get inverseMatrix(): number[];
 
   /**
-   * Gets the transpose of {@link CustomProjection#matrix}.
+   * Gets the transpose of {@link CustomProjection.matrix}.
    *
-   * @returns {Number[]} The transpose of {@link CustomProjection#matrix}.
+   * @returns {Number[]} The transpose of {@link CustomProjection.matrix}.
    */
   get transposedMatrix(): number[];
 

@@ -149,8 +149,8 @@ export declare class PerformanceModel extends Component {
   /**
    * Returns ````true```` if this PerformanceModel represents a model.
    *
-   * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
-   * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
+   * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel.id} in
+   * {@link Scene.models} and may also have a {@link MetaObject} with matching {@link MetaObject.id}.
    *
    * @type {Boolean}
    */
@@ -197,7 +197,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Gets if any {@link Entity}s in this PerformanceModel are visible.
    *
-   * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+   * The PerformanceModel is only rendered when {@link PerformanceModel.visible} is ````true```` and {@link PerformanceModel.culled} is ````false````.
    *
    * @type {Boolean}
    */
@@ -206,7 +206,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Sets if this PerformanceModel is visible.
    *
-   * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
+   * The PerformanceModel is only rendered when {@link PerformanceModel.visible} is ````true```` and {@link PerformanceModel.culled} is ````false````.
    **
    * @type {Boolean}
    */
@@ -271,7 +271,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Gets if this PerformanceModel is culled from view.
    *
-   * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+   * The PerformanceModel is only rendered when {@link PerformanceModel.visible} is true and {@link PerformanceModel.culled} is false.
    *
    * @type {Boolean}
    */
@@ -280,7 +280,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Sets if this PerformanceModel is culled from view.
    *
-   * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
+   * The PerformanceModel is only rendered when {@link PerformanceModel.visible} is true and {@link PerformanceModel.culled} is false.
    *
    * @type {Boolean}
    */
@@ -289,7 +289,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Gets if {@link Entity}s in this PerformanceModel are clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -298,7 +298,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Sets if {@link Entity}s in this PerformanceModel are clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -321,7 +321,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Gets if this PerformanceModel is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -330,7 +330,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Sets if {@link Entity}s in this PerformanceModel are pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -407,7 +407,7 @@ export declare class PerformanceModel extends Component {
    *
    * SAO is configured by the Scene's {@link SAO} component.
    *
-   *  Only works when {@link SAO#enabled} is also true.
+   *  Only works when {@link SAO.enabled} is also true.
    *
    * @type {Boolean}
    */
@@ -416,7 +416,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Gets if physically-based rendering (PBR) is enabled for this PerformanceModel.
    *
-   * Only works when {@link Scene#pbrEnabled} is also true.
+   * Only works when {@link Scene.pbrEnabled} is also true.
    *
    * @type {Boolean}
    */
@@ -432,7 +432,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
    *
-   * This is the {@link Scene#xrayMaterial}.
+   * This is the {@link Scene.xrayMaterial}.
    *
    * @type {EmphasisMaterial}
    */
@@ -441,7 +441,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
    *
-   * This is the {@link Scene#highlightMaterial}.
+   * This is the {@link Scene.highlightMaterial}.
    *
    * @type {EmphasisMaterial}
    */
@@ -450,7 +450,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
    *
-   * This is the {@link Scene#selectedMaterial}.
+   * This is the {@link Scene.selectedMaterial}.
    *
    * @type {EmphasisMaterial}
    */
@@ -459,7 +459,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
    *
-   * This is the {@link Scene#edgeMaterial}.
+   * This is the {@link Scene.edgeMaterial}.
    *
    * @type {EdgeMaterial}
    */
@@ -468,7 +468,7 @@ export declare class PerformanceModel extends Component {
   /**
    * Creates a reusable geometry within this PerformanceModel.
    *
-   * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
+   * We can then supply the geometry ID to {@link PerformanceModel.createMesh} when we want to create meshes that instance the geometry.
    *
    * If provide a  ````positionsDecodeMatrix```` , then ````createGeometry()```` will assume
    * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
@@ -477,7 +477,7 @@ export declare class PerformanceModel extends Component {
    * Note that ````positions````, ````normals```` and ````indices```` are all required together.
    *
    * @param {*} cfg Geometry properties.
-   * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
+   * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel.createMesh}.
    * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
    * @param {Number[]} cfg.positions Flat array of positions.
    * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
@@ -486,7 +486,7 @@ export declare class PerformanceModel extends Component {
    * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
    * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
    * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-   * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then every mesh created with {@link PerformanceModel#createMesh} that uses this geometry will
+   * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel.origin}. When this is given, then every mesh created with {@link PerformanceModel.createMesh} that uses this geometry will
    * be transformed relative to this origin.
    */
   createGeometry(cfg: {
@@ -508,7 +508,7 @@ export declare class PerformanceModel extends Component {
    * A mesh can either share geometry with other meshes, or have its own unique geometry.
    *
    * To share a geometry with other meshes, provide the ID of a geometry created earlier
-   * with {@link PerformanceModel#createGeometry}.
+   * with {@link PerformanceModel.createGeometry}.
    *
    * To create unique geometry for the mesh, provide geometry data arrays.
    *
@@ -532,14 +532,14 @@ export declare class PerformanceModel extends Component {
    *
    * @param {object} cfg Object properties.
    * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-   * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+   * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel.createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
    * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
    * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
    * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
    * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
    * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
    * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-   * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
+   * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel.origin}. When this is given, then ````positions```` are assumed to be relative to this.
    * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
    * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
    * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````PerformanceModel````
@@ -572,7 +572,7 @@ export declare class PerformanceModel extends Component {
   }): void;
 
   /**
-   * Creates an {@link Entity} within this PerformanceModel, giving it one or more meshes previously created with {@link PerformanceModel#createMesh}.
+   * Creates an {@link Entity} within this PerformanceModel, giving it one or more meshes previously created with {@link PerformanceModel.createMesh}.
    *
    * A mesh can only belong to one {@link Entity}, so you'll get an error if you try to reuse a mesh among multiple {@link Entity}s.
    *
@@ -580,7 +580,7 @@ export declare class PerformanceModel extends Component {
    * @param {String} cfg.id Optional ID for the new Entity. Must not clash with any existing components within the {@link Scene}.
    * @param {String[]} cfg.meshIds IDs of one or more meshes created previously with {@link PerformanceModel@createMesh}.
 
-   * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
+   * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity.id} in {@link Scene.objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject.id}, registered by that ID in {@link MetaScene.metaObjects}.
    * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
    * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
    * @param {Boolean} [cfg.pickable=true] Indicates if the Entity is initially pickable.
@@ -588,10 +588,10 @@ export declare class PerformanceModel extends Component {
    * @param {Boolean} [cfg.collidable=true] Indicates if the Entity is initially included in boundary calculations.
    * @param {Boolean} [cfg.castsShadow=true] Indicates if the Entity initially casts shadows.
    * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Entity initially receives shadows.
-   * @param {Boolean} [cfg.xrayed=false] Indicates if the Entity is initially xrayed. XRayed appearance is configured by {@link PerformanceModel#xrayMaterial}.
-   * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link PerformanceModel#highlightMaterial}.
-   * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link PerformanceModel#selectedMaterial}.
-   * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link PerformanceModel#edgeMaterial}.
+   * @param {Boolean} [cfg.xrayed=false] Indicates if the Entity is initially xrayed. XRayed appearance is configured by {@link PerformanceModel.xrayMaterial}.
+   * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link PerformanceModel.highlightMaterial}.
+   * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link PerformanceModel.selectedMaterial}.
+   * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link PerformanceModel.edgeMaterial}.
    * @returns {PerformanceNode}
    */
   createEntity(cfg: {

@@ -12,7 +12,7 @@ export declare interface ISTLDefaultDataSource {
 }
 
 export declare type STLLoaderPluginCOnfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** A custom data source through which the STLLoaderPlugin can load STL files. Defaults to an instance of {@link STLDefaultDataSource}, which loads over HTTP. */
   dataSource?: ISTLDefaultDataSource;
@@ -82,7 +82,7 @@ export declare class STLLoaderPlugin extends Plugin {
    * Loads an STL model from a file into this STLLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadSTLModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
   load(params: LoadSTLModel): PerformanceModel;
 }

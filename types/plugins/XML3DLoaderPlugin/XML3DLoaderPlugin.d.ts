@@ -1,13 +1,13 @@
 import { Plugin, Viewer, PerformanceModel } from "../../viewer";
 
 export declare type XML3DLoaderPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Path to the directory that contains the bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive */
   workerScriptsPath: string;
   /** What type of materials to create while loading */
   materialType?: "MetallicMaterial" | "SpecularMaterial" | "PhongMaterial";
-  /** When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}. */
+  /** When true, will create a {@link MetaModel} for the model in {@link MetaScene.metaModels}. */
   createMetaModel?: boolean;
 }
 
@@ -32,7 +32,7 @@ export declare type LoadXML3DModel = {
   edgeThreshold?: number;
   /** What type of materials to create while loading: "MetallicMaterial" to create {@link MetallicMaterial}s, "SpecularMaterial" to create {@link SpecularMaterial}s or "PhongMaterial" to create {@link PhongMaterial}s. As it loads XML3D's Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow. */
   materialType?: "MetallicMaterial" | "SpecularMaterial" | "PhongMaterial";
-  /** When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}. */
+  /** When true, will create a {@link MetaModel} for the model in {@link MetaScene.metaModels}. */
   createMetaModel?: boolean;
 };
 
@@ -59,7 +59,7 @@ export declare class XML3DLoaderPlugin extends Plugin {
    * Creates a tree of {@link Entity}s within the Viewer's {@link Scene} that represents the model.
    *
    * @param {LoadXML3DModel} params  Loading parameters.
-   * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
   load(params: LoadXML3DModel): PerformanceModel;
 }

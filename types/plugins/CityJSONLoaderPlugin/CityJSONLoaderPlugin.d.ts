@@ -13,14 +13,14 @@ export declare interface ICityJSONDefaultDataSource {
 }
 
 export declare type CityJSONLoaderPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** A custom data source through which the CityJSONLoaderPlugin can load model and metadata files. Defaults to an instance of {@link CityJSONDefaultDataSource}, which loads over HTTP.*/
   dataSource?: ICityJSONDefaultDataSource;
 };
 
 export declare type LoadCityJSONModel = {
-  /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
+  /** ID to assign to the root {@link Entity.id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
   /** Path to a CityJSON file, as an alternative to the ````cityJSON```` parameter. */
   src?: string;

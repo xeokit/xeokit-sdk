@@ -58,10 +58,10 @@ export declare class LocaleService {
    * Sets the current locale.
    *
    * * Fires an "updated" event when done.
-   * * The given locale does not need to be in the list of available locales returned by {@link LocaleService#locales}, since
+   * * The given locale does not need to be in the list of available locales returned by {@link LocaleService.locales}, since
    * this method assumes that you may want to load the locales at a later point.
    * * Automatically refreshes any plugins that depend on the translations.
-   * * We can then get translations for the locale, if translations have been loaded for it, via {@link LocaleService#translate} and {@link LocaleService#translatePlurals}.
+   * * We can then get translations for the locale, if translations have been loaded for it, via {@link LocaleService.translate} and {@link LocaleService.translatePlurals}.
    *
    * @param {String} locale The new current locale.
    */
@@ -163,12 +163,12 @@ export declare class LocaleService {
    *
    * @param {String} event The event
    * @param {Function} callback Callback fired on the event
-   * @return {String} Handle to the subscription, which may be used to unsubscribe with {@link #off}.
+   * @return {String} Handle to the subscription, which may be used to unsubscribe with {@link .off}.
    */
   on(event: string, callback: Function): string;
 
   /**
-   * Cancels an event subscription that was previously made with {@link LocaleService#on}.
+   * Cancels an event subscription that was previously made with {@link LocaleService.on}.
    *
    * @param {String} subId Subscription ID
    */

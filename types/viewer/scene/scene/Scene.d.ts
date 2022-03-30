@@ -60,7 +60,7 @@ export declare class Scene extends Component {
   /**
    * Map of {@link Entity}s that represent models.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id} when {@link Entity#isModel} is ````true````.
+   * Each {@link Entity} is mapped here by {@link Entity.id} when {@link Entity.isModel} is ````true````.
    * @type {{String:Entity}}
    */
   get models(): {[key: string]: Entity};
@@ -68,7 +68,7 @@ export declare class Scene extends Component {
   /**
    * Map of {@link Entity}s that represents objects.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id} when {@link Entity#isObject} is ````true````.
+   * Each {@link Entity} is mapped here by {@link Entity.id} when {@link Entity.isObject} is ````true````.
    * @final
    * @type {{String:Entity}}
    */
@@ -77,7 +77,7 @@ export declare class Scene extends Component {
   /**
    * Map of currently visible {@link Entity}s that represent objects.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true````, and is visible when {@link Entity#visible} is true.
+   * An Entity represents an object if {@link Entity.isObject} is ````true````, and is visible when {@link Entity.visible} is true.
    * @type {{String:Object}}
    */
   get visibleObjects(): {[key: string]: Entity};
@@ -85,9 +85,9 @@ export declare class Scene extends Component {
   /**
    * Map of currently xrayed {@link Entity}s that represent objects.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true````, and is xrayed when {@link Entity#xrayed} is true.
+   * An Entity represents an object if {@link Entity.isObject} is ````true````, and is xrayed when {@link Entity.xrayed} is true.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @type {{String:Object}}
    */
@@ -96,9 +96,9 @@ export declare class Scene extends Component {
   /**
    * Map of currently highlighted {@link Entity}s that represent objects.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true```` is true, and is highlighted when {@link Entity#highlighted} is true.
+   * An Entity represents an object if {@link Entity.isObject} is ````true```` is true, and is highlighted when {@link Entity.highlighted} is true.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @type {{String:Object}}
    */
@@ -107,9 +107,9 @@ export declare class Scene extends Component {
   /**
    * Map of currently selected {@link Entity}s that represent objects.
    *
-   * An Entity represents an object if {@link Entity#isObject} is true, and is selected while {@link Entity#selected} is true.
+   * An Entity represents an object if {@link Entity.isObject} is true, and is selected while {@link Entity.selected} is true.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @type {{String:Object}}
    */
@@ -118,9 +118,9 @@ export declare class Scene extends Component {
   /**
    * Map of currently colorized {@link Entity}s that represent objects.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true````.
+   * An Entity represents an object if {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @type {{String:Object}}
    */
@@ -129,20 +129,20 @@ export declare class Scene extends Component {
   /**
    * Map of {@link Entity}s that represent objects whose opacity was updated.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true````.
+   * An Entity represents an object if {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @type {{String:Object}}
    */
   get opacityObjects(): {[key: string]: Entity};
 
   /**
-   * Map of {@link Entity}s that represent objects whose {@link Entity#offset}s were updated.
+   * Map of {@link Entity}s that represent objects whose {@link Entity.offset}s were updated.
    *
-   * An Entity represents an object if {@link Entity#isObject} is ````true````.
+   * An Entity represents an object if {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} is mapped here by {@link Entity#id}.
+   * Each {@link Entity} is mapped here by {@link Entity.id}.
    *
    * @property offsetObjects
    * @final
@@ -151,11 +151,11 @@ export declare class Scene extends Component {
   get offsetObjects(): {[key: string]: Entity};
 
   /**
-   * Whether {@link Entity#offset} is enabled.
+   * Whether {@link Entity.offset} is enabled.
    *
    * This is set via the {@link Viewer} constructor and is ````false```` by default.
    *
-   * @returns {Boolean} True if {@link Entity#offset} is enabled.
+   * @returns {Boolean} True if {@link Entity.offset} is enabled.
    */
   get entityOffsetsEnabled(): boolean;
 
@@ -164,7 +164,7 @@ export declare class Scene extends Component {
    *
    * This is set via the {@link Viewer} constructor and is ````false```` by default.
    *
-   * The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+   * The ````pickSurfacePrecision```` option for ````Scene.pick```` only works if this is set ````true````.
    *
    * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
    *
@@ -197,105 +197,105 @@ export declare class Scene extends Component {
   get pbrEnabled(): boolean
 
   /**
-   * Gets the IDs of the {@link Entity}s in {@link Scene#models}.
+   * Gets the IDs of the {@link Entity}s in {@link Scene.models}.
    *
    * @type {String[]}
    */
   get modelIds(): string[];
 
   /**
-   * Gets the number of {@link Entity}s in {@link Scene#objects}.
+   * Gets the number of {@link Entity}s in {@link Scene.objects}.
    *
    * @type {Number}
    */
   get numObjects(): number;
 
   /**
-   * Gets the IDs of the {@link Entity}s in {@link Scene#objects}.
+   * Gets the IDs of the {@link Entity}s in {@link Scene.objects}.
    *
    * @type {String[]}
    */
   get objectIds(): string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene#visibleObjects}.
+  * Gets the number of {@link Entity}s in {@link Scene.visibleObjects}.
   *
   * @type {Number}
   */
   get numVisibleObjects(): number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#visibleObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.visibleObjects}.
   *
   * @type {String[]}
   */
   get visibleObjectIds(): string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene#xrayedObjects}.
+  * Gets the number of {@link Entity}s in {@link Scene.xrayedObjects}.
   *
   * @type {Number}
   */
   get numXRayedObjects(): number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#xrayedObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.xrayedObjects}.
   *
   * @type {String[]}
   */
   get xrayedObjectIds(): string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene#highlightedObjects}.
+  * Gets the number of {@link Entity}s in {@link Scene.highlightedObjects}.
   *
   * @type {Number}
   */
   get numHighlightedObjects(): number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#highlightedObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.highlightedObjects}.
   *
   * @type {String[]}
   */
   get highlightedObjectIds(): string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene#selectedObjects}.
+  * Gets the number of {@link Entity}s in {@link Scene.selectedObjects}.
   *
   * @type {Number}
   */
   get numSelectedObjects(): number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#selectedObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.selectedObjects}.
   *
   * @type {String[]}
   */
   get selectedObjectIds(): string[];
 
   /**
-  * Gets the number of {@link Entity}s in {@link Scene#colorizedObjects}.
+  * Gets the number of {@link Entity}s in {@link Scene.colorizedObjects}.
   *
   * @type {Number}
   */
   get numColorizedObjects(): number;
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#colorizedObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.colorizedObjects}.
   *
   * @type {String[]}
   */
   get colorizedObjectIds(): string[];
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#opacityObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.opacityObjects}.
   *
   * @type {String[]}
   */
   get opacityObjectIds(): string[];
 
   /**
-  * Gets the IDs of the {@link Entity}s in {@link Scene#offsetObjects}.
+  * Gets the IDs of the {@link Entity}s in {@link Scene.offsetObjects}.
   *
   * @type {String[]}
   */
@@ -356,7 +356,7 @@ export declare class Scene extends Component {
   get passes(): number;
 
   /**
-  * When {@link Scene#passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
+  * When {@link Scene.passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
   *
   * Default value is ````false````.
   *
@@ -365,7 +365,7 @@ export declare class Scene extends Component {
   set clearEachPass(value: boolean);
 
   /**
-  * When {@link Scene#passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
+  * When {@link Scene.passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
   *
   * Default value is ````false````.
   *
@@ -410,7 +410,7 @@ export declare class Scene extends Component {
   get gammaOutput(): boolean;
 
   /**
-  * Sets the gamma factor to use when {@link Scene#gammaOutput} is set true.
+  * Sets the gamma factor to use when {@link Scene.gammaOutput} is set true.
   *
   * Default value is ````2.2````.
   *
@@ -419,7 +419,7 @@ export declare class Scene extends Component {
   set gammaFactor(value: number);
 
   /**
-  * Gets the gamma factor to use when {@link Scene#gammaOutput} is set true.
+  * Gets the gamma factor to use when {@link Scene.gammaOutput} is set true.
   *
   * Default value is ````2.2````.
   *
@@ -430,9 +430,9 @@ export declare class Scene extends Component {
   /**
   * Gets the default {@link Geometry} for this Scene, which is a {@link ReadableGeometry} with a unit-sized box shape.
   *
-  * Has {@link ReadableGeometry#id} set to "default.geometry".
+  * Has {@link ReadableGeometry.id} set to "default.geometry".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#geometry} set to this {@link ReadableGeometry} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.geometry} set to this {@link ReadableGeometry} by default.
   *
   * @type {ReadableGeometry}
   */
@@ -441,9 +441,9 @@ export declare class Scene extends Component {
   /**
   * Gets the default {@link Material} for this Scene, which is a {@link PhongMaterial}.
   *
-  * Has {@link PhongMaterial#id} set to "default.material".
+  * Has {@link PhongMaterial.id} set to "default.material".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#material} set to this {@link PhongMaterial} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.material} set to this {@link PhongMaterial} by default.
   *
   * @type {PhongMaterial}
   */
@@ -452,11 +452,11 @@ export declare class Scene extends Component {
   /**
   * Gets the default xraying {@link EmphasisMaterial} for this Scene.
   *
-  * Has {@link EmphasisMaterial#id} set to "default.xrayMaterial".
+  * Has {@link EmphasisMaterial.id} set to "default.xrayMaterial".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#xrayMaterial} set to this {@link EmphasisMaterial} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.xrayMaterial} set to this {@link EmphasisMaterial} by default.
   *
-  * {@link Mesh}s are xrayed while {@link Mesh#xrayed} is ````true````.
+  * {@link Mesh}s are xrayed while {@link Mesh.xrayed} is ````true````.
   *
   * @type {EmphasisMaterial}
   */
@@ -465,11 +465,11 @@ export declare class Scene extends Component {
   /**
   * Gets the default highlight {@link EmphasisMaterial} for this Scene.
   *
-  * Has {@link EmphasisMaterial#id} set to "default.highlightMaterial".
+  * Has {@link EmphasisMaterial.id} set to "default.highlightMaterial".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#highlightMaterial} set to this {@link EmphasisMaterial} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.highlightMaterial} set to this {@link EmphasisMaterial} by default.
   *
-  * {@link Mesh}s are highlighted while {@link Mesh#highlighted} is ````true````.
+  * {@link Mesh}s are highlighted while {@link Mesh.highlighted} is ````true````.
   *
   * @type {EmphasisMaterial}
   */
@@ -478,11 +478,11 @@ export declare class Scene extends Component {
   /**
   * Gets the default selection {@link EmphasisMaterial} for this Scene.
   *
-  * Has {@link EmphasisMaterial#id} set to "default.selectedMaterial".
+  * Has {@link EmphasisMaterial.id} set to "default.selectedMaterial".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#highlightMaterial} set to this {@link EmphasisMaterial} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.highlightMaterial} set to this {@link EmphasisMaterial} by default.
   *
-  * {@link Mesh}s are highlighted while {@link Mesh#highlighted} is ````true````.
+  * {@link Mesh}s are highlighted while {@link Mesh.highlighted} is ````true````.
   *
   * @type {EmphasisMaterial}
   */
@@ -491,11 +491,11 @@ export declare class Scene extends Component {
   /**
   * Gets the default {@link EdgeMaterial} for this Scene.
   *
-  * Has {@link EdgeMaterial#id} set to "default.edgeMaterial".
+  * Has {@link EdgeMaterial.id} set to "default.edgeMaterial".
   *
-  * {@link Mesh}s in this Scene have {@link Mesh#edgeMaterial} set to this {@link EdgeMaterial} by default.
+  * {@link Mesh}s in this Scene have {@link Mesh.edgeMaterial} set to this {@link EdgeMaterial} by default.
   *
-  * {@link Mesh}s have their edges emphasized while {@link Mesh#edges} is ````true````.
+  * {@link Mesh}s have their edges emphasized while {@link Mesh.edges} is ````true````.
   *
   * @type {EdgeMaterial}
   */
@@ -552,7 +552,7 @@ export declare class Scene extends Component {
   /**
    * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
    *
-   * Sets each {@link Marker#visible} ````true```` if the Marker is currently not occluded by any opaque {@link Entity}s
+   * Sets each {@link Marker.visible} ````true```` if the Marker is currently not occluded by any opaque {@link Entity}s
    * in the Scene, or ````false```` if an Entity is occluding it.
    */
   doOcclusionTest(): void;
@@ -572,7 +572,7 @@ export declare class Scene extends Component {
    * Attempts to pick an {@link Entity} in this Scene.
    * @param {*} params Picking parameters.
    * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-   * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
+   * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult.worldPos}. Only works when {@link Scene.pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult.precision} set ````true````, to indicate that it contains full-precision surface pick results.
    * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
    * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
    * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
@@ -613,142 +613,142 @@ export declare class Scene extends Component {
   /**
    * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} on which {@link Entity#isObject} is registered by {@link Entity#id} in {@link Scene#visibleObjects}.
+   * Each {@link Entity} on which {@link Entity.isObject} is registered by {@link Entity.id} in {@link Scene.visibleObjects}.
    *
-   * Each {@link Entity} is only included in the AABB when {@link Entity#collidable} is ````true````.
+   * Each {@link Entity} is only included in the AABB when {@link Entity.collidable} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
    */
   getAABB(ids: string[]): number[];
 
   /**
-   * Batch-updates {@link Entity#visible} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.visible} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#visible} are ````true```` is
-   * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
+   * Each {@link Entity} on which both {@link Entity.isObject} and {@link Entity.visible} are ````true```` is
+   * registered by {@link Entity.id} in {@link Scene.visibleObjects}.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} visible Whether or not to set visible.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsVisible(ids: string[], visible: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#collidable} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.collidable} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} collidable Whether or not to set collidable.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsCollidable(ids: string[], collidable: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#culled} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.culled} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} culled Whether or not to cull.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsCulled(ids: string[], culled: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#selected} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.selected} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#selected} are ````true```` is
-   * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
+   * Each {@link Entity} on which both {@link Entity.isObject} and {@link Entity.selected} are ````true```` is
+   * registered by {@link Entity.id} in {@link Scene.selectedObjects}.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} selected Whether or not to select.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsSelected(ids: string[], selected: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#highlighted} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.highlighted} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#highlighted} are ````true```` is
-   * registered by {@link Entity#id} in {@link Scene#highlightedObjects}.
+   * Each {@link Entity} on which both {@link Entity.isObject} and {@link Entity.highlighted} are ````true```` is
+   * registered by {@link Entity.id} in {@link Scene.highlightedObjects}.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} highlighted Whether or not to highlight.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsHighlighted(ids: string[], highlighted: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#xrayed} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.xrayed} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} xrayed Whether or not to xray.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsXRayed(ids: string[], xrayed: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#edges} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.edges} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Boolean} edges Whether or not to show edges.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */
   setObjectsEdges(ids: string[], edges: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#colorize} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.colorize} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Number[]} [colorize=(1,1,1)] RGB colorize factors, multiplied by the rendered pixel colors.
    * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
    */
   setObjectsColorized(ids: string[], colorize: number[]): boolean;
 
   /**
-   * Batch-updates {@link Entity#opacity} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.opacity} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Number} [opacity=1.0] Opacity factor, multiplied by the rendered pixel alphas.
    * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
    */
   setObjectsOpacity(ids: string[], opacity: number): boolean
 
   /**
-     * Batch-updates {@link Entity#pickable} on {@link Entity}s that represent objects.
+     * Batch-updates {@link Entity.pickable} on {@link Entity}s that represent objects.
      *
-     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
      *
-     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {String[]} ids Array of {@link Entity.id} values.
      * @param {Boolean} pickable Whether or not to set pickable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
   setObjectsPickable(ids: string[], pickable: boolean): boolean;
 
   /**
-   * Batch-updates {@link Entity#offset} on {@link Entity}s that represent objects.
+   * Batch-updates {@link Entity.offset} on {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Number[]} [offset] 3D offset vector.
    */
   setObjectsOffset(ids: string[], offset: number[]): void;
@@ -756,9 +756,9 @@ export declare class Scene extends Component {
   /**
    * Iterates with a callback over {@link Entity}s that represent objects.
    *
-   * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
    *
-   * @param {String[]} ids Array of {@link Entity#id} values.
+   * @param {String[]} ids Array of {@link Entity.id} values.
    * @param {Function} callback Callback to execute on eacn {@link Entity}.
    * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
    */

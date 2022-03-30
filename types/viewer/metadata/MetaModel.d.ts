@@ -9,9 +9,9 @@ export declare class MetaModel {
   /**
    * Globally-unique ID.
    *
-   * MetaModels are registered by ID in {@link MetaScene#metaModels}.
+   * MetaModels are registered by ID in {@link MetaScene.metaModels}.
    *
-   * When this MetaModel corresponds to an {@link Entity} then this ID will match the {@link Entity#id}.
+   * When this MetaModel corresponds to an {@link Entity} then this ID will match the {@link Entity.id}.
    *
    */
   id: string | number;

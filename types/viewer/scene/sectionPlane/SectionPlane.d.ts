@@ -79,7 +79,7 @@ export class SectionPlane extends Component {
   /**
    * Gets this SectionPlane's distance to the origin of the World-space coordinate system.
    *
-   * This is the dot product of {@link SectionPlane#pos} and {@link SectionPlane#dir} and is automatically re-calculated
+   * This is the dot product of {@link SectionPlane.pos} and {@link SectionPlane.dir} and is automatically re-calculated
    * each time either of two properties are updated.
    *
    * @returns {Number}
@@ -87,7 +87,7 @@ export class SectionPlane extends Component {
   get dist(): number;
 
   /**
-   * Inverts the direction of {@link SectionPlane#dir}.
+   * Inverts the direction of {@link SectionPlane.dir}.
    */
   flipDir(): void;
 }

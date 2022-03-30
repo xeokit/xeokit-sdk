@@ -1,9 +1,9 @@
 export declare type ContextMenuConfiguration = {
-  /** The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example. */
+  /** The context menu items. These can also be dynamically set on {@link ContextMenu.items}. See the class documentation for an example. */
   items?: any;
-  /** The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}. */
+  /** The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu.context}. This must be set before calling {@link ContextMenu.show}. */
   context?: any;
-  /** Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````. */
+  /** Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu.show} does nothing while this is ````false````. */
   enabled?: boolean;
   /** Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page. */
   hideOnMouseDown?: boolean;
@@ -41,9 +41,9 @@ export declare class ContextMenu {
   /**
    * Sets the ````ContextMenu```` context.
    *
-   * The context can be any object that you need to be provides to the callbacks configured on {@link ContextMenu#items}.
+   * The context can be any object that you need to be provides to the callbacks configured on {@link ContextMenu.items}.
    *
-   * This must be set before calling {@link ContextMenu#show}.
+   * This must be set before calling {@link ContextMenu.show}.
    *
    * @type {Object}
    */
@@ -68,7 +68,7 @@ export declare class ContextMenu {
   /**
    * Gets whether this ````ContextMenu```` is enabled.
    *
-   * {@link ContextMenu#show} does nothing while this is ````false````.
+   * {@link ContextMenu.show} does nothing while this is ````false````.
    *
    * @type {Boolean}
    */
@@ -93,9 +93,9 @@ export declare class ContextMenu {
   /**
    * Shows this ````ContextMenu```` at the given page coordinates.
    *
-   * Does nothing when {@link ContextMenu#enabled} is ````false````.
+   * Does nothing when {@link ContextMenu.enabled} is ````false````.
    *
-   * Logs error to console and does nothing if {@link ContextMenu#context} has not been set.
+   * Logs error to console and does nothing if {@link ContextMenu.context} has not been set.
    *
    * Fires a "shown" event when shown.
    *

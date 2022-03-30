@@ -26,7 +26,7 @@ export declare type WebIFCLoaderPluginConfiguration = {
 };
 
 export declare type LoadWebIFCModel = {
-  /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
+  /** ID to assign to the root {@link Entity.id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
   /** Path to a IFC file, as an alternative to the ````ifc```` parameter. */
   src?: string;
@@ -36,9 +36,9 @@ export declare type LoadWebIFCModel = {
   loadMetadata?: boolean;
   /** Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}. */
   objectDefaults?: IFCObjectDefaults;
-  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   includeTypes?: string[];
-  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   excludeTypes?: string[];
   /** Whether or not xeokit renders the model with edges emphasized. */
   edges?: boolean;
@@ -52,15 +52,15 @@ export declare type LoadWebIFCModel = {
   rotation?: number[];
   /** The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````. */
   matrix?: number[];
-  /**  Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true```` */
+  /**  Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO.enabled} is also ````true```` */
   saoEnabled?: boolean;
-  /** Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````. */
+  /** Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene.pbrEnabled} is also ````true````. */
   pbrEnabled?: boolean;
   /** When we set this ````true````, then we force rendering of backfaces for the model. When we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s. */
   backfaces?: boolean;
   /** When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}. */
   excludeUnclassifiedObjects?: boolean;
-  /** Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. */
+  /** Indicates whether to globalize each {@link Entity.id} and {@link MetaObject.id}, in case you need to prevent ID clashes with other models. */
   globalizeObjectIds?: boolean;
   /** Collects model statistics. */
   stats?: ModelStats;
@@ -118,7 +118,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Sets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
    *
    * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -130,7 +130,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Gets the whitelist of the IFC types loaded by this WebIFCLoaderPlugin.
    *
    * When loading IFC models, causes this WebIFCLoaderPlugin to only load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -142,7 +142,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Sets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
    *
    * When IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -154,7 +154,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Gets the blacklist of IFC types that are never loaded by this WebIFCLoaderPlugin.
    *
    * When loading IFC models, causes this WebIFCLoaderPlugin to **not** load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -193,15 +193,15 @@ export declare class WebIFCLoaderPlugin extends Plugin {
   get supportedVersions(): string[];
 
   /**
-   * Sets whether WebIFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+   * Sets whether WebIFCLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
    *
    * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
    * between the objects in the different instances.
    *
-   * When we load a model with this set ````true````, then each {@link Entity#id} and {@link MetaObject#id} will be
-   * prefixed by the ID of the model, ie. ````<modelId>#<objectId>````.
+   * When we load a model with this set ````true````, then each {@link Entity.id} and {@link MetaObject.id} will be
+   * prefixed by the ID of the model, ie. ````<modelId>.<objectId>````.
    *
-   * {@link Entity#originalSystemId} and {@link MetaObject#originalSystemId} will always hold the original, un-prefixed, ID values.
+   * {@link Entity.originalSystemId} and {@link MetaObject.originalSystemId} will always hold the original, un-prefixed, ID values.
    *
    * Default value is ````false````.
    *
@@ -212,7 +212,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
   set globalizeObjectIds(arg: boolean);
 
   /**
-   * Gets whether WebIFCLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+   * Gets whether WebIFCLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
    *
    * Default value is ````false````.
    *
@@ -224,7 +224,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Loads an ````IFC```` model into this WebIFCLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadWebIFCModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
   load(params?: LoadWebIFCModel): PerformanceModel;
 }

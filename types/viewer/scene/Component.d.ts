@@ -34,7 +34,7 @@ export abstract class Component {
     /**
      * ID of this Component, unique within the {@link Scene}.
      *
-     * Components are mapped by this ID in {@link Scene#components}.
+     * Components are mapped by this ID in {@link Scene.components}.
      *
      * @property id
      * @type {String|Number}
@@ -79,12 +79,12 @@ export abstract class Component {
      * @param {String} event The event
      * @param {Function} callback Called fired on the event
      * @param {Object} [scope=this] Scope for the callback
-     * @return {String} Handle to the subscription, which may be used to unsubscribe with {@link #off}.
+     * @return {String} Handle to the subscription, which may be used to unsubscribe with {@link .off}.
      */
     on(event: string, callback: Function, scope?: any): string;
 
     /**
-     * Cancels an event subscription that was previously made with {@link Component#on} or {@link Component#once}.
+     * Cancels an event subscription that was previously made with {@link Component.on} or {@link Component.once}.
      *
      * @param {String} subId Subscription ID
      */
@@ -93,7 +93,7 @@ export abstract class Component {
     /**
      * Subscribes to the next occurrence of the given event, then un-subscribes as soon as the event is subIdd.
      *
-     * This is equivalent to calling {@link Component#on}, and then calling {@link Component#off} inside the callback function.
+     * This is equivalent to calling {@link Component.on}, and then calling {@link Component.off} inside the callback function.
      *
      * @param {String} event Data event to listen to
      * @param {Function} callback Called when fresh data is available at the event

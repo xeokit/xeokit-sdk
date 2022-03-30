@@ -1,7 +1,7 @@
 import { Plugin, Viewer } from "../../viewer";
 
 export declare type AxisGizmoPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** ID of an existing HTML canvas to display the AxisGizmo - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID. */
   canvasId?: string;

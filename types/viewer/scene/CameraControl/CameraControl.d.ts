@@ -56,9 +56,9 @@ export declare class CameraControl extends Component {
   /**
    * Sets whether to vertically constrain the {@link Camera} position for first-person navigation.
    *
-   * When set ````true````, this constrains {@link Camera#eye} to its current vertical position.
+   * When set ````true````, this constrains {@link Camera.eye} to its current vertical position.
    *
-   * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
+   * Only applies when {@link CameraControl.navMode} is ````"firstPerson"````.
    *
    * Default is ````false````.
    *
@@ -69,9 +69,9 @@ export declare class CameraControl extends Component {
   /**
    * Gets whether to vertically constrain the {@link Camera} position for first-person navigation.
    *
-   * When set ````true````, this constrains {@link Camera#eye} to its current vertical position.
+   * When set ````true````, this constrains {@link Camera.eye} to its current vertical position.
    *
-   * Only applies when {@link CameraControl#navMode} is ````"firstPerson"````.
+   * Only applies when {@link CameraControl.navMode} is ````"firstPerson"````.
    *
    * Default is ````false````.
    *
@@ -204,7 +204,7 @@ export declare class CameraControl extends Component {
    *
    * Default is ````0.0````.
    *
-   * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
+   * Does not apply when {@link CameraControl.navMode} is ````"planView"````, which disallows rotation.
    *
    * @param {Number} rotationInertia New inertial factor.
    */
@@ -215,7 +215,7 @@ export declare class CameraControl extends Component {
    *
    * Default is ````0.0````.
    *
-   * Does not apply when {@link CameraControl#navMode} is ````"planView"````, which disallows rotation.
+   * Does not apply when {@link CameraControl.navMode} is ````"planView"````, which disallows rotation.
    *
    * @returns {Number} The inertia factor.
    */
@@ -491,7 +491,7 @@ export declare class CameraControl extends Component {
   private _isKeyDownForAction;
 
   /**
-   * Sets the HTMl element to represent the pivot point when {@link CameraControl#followPointer} is true.
+   * Sets the HTMl element to represent the pivot point when {@link CameraControl.followPointer} is true.
    *
    * See class comments for an example.
    *
@@ -502,7 +502,7 @@ export declare class CameraControl extends Component {
   /**
    * Sets the current World-space 3D target position.
    *
-   * Only applies when {@link CameraControl#followPointer} is ````true````.
+   * Only applies when {@link CameraControl.followPointer} is ````true````.
    *
    * @param {Number[]} worldPos The new World-space 3D target position.
    */
@@ -511,7 +511,7 @@ export declare class CameraControl extends Component {
   /**
    * Gets the current World-space 3D pivot position.
    *
-   * Only applies when {@link CameraControl#followPointer} is ````true````.
+   * Only applies when {@link CameraControl.followPointer} is ````true````.
    *
    * @return {Number[]} worldPos The current World-space 3D pivot position.
    */
@@ -544,11 +544,11 @@ export declare class CameraControl extends Component {
   /**
    * Sets whether this ````CameraControl```` is in first-person mode.
    *
-   * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
+   * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera.eye} rotates about {@link Camera.look}.
    *
    * Default is ````false````.
    *
-   * Deprecated - use {@link CameraControl#navMode} instead.
+   * Deprecated - use {@link CameraControl.navMode} instead.
    *
    * @param {Boolean} value Set ````true```` to enable first-person mode.
    * @deprecated
@@ -558,11 +558,11 @@ export declare class CameraControl extends Component {
   /**
    * Gets whether this ````CameraControl```` is in first-person mode.
    *
-   * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
+   * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera.eye} rotates about {@link Camera.look}.
    *
    * Default is ````false````.
    *
-   * Deprecated - use {@link CameraControl#navMode} instead.
+   * Deprecated - use {@link CameraControl.navMode} instead.
    *
    * @returns {Boolean} Returns ````true```` if first-person mode is enabled.
    * @deprecated
@@ -573,13 +573,13 @@ export declare class CameraControl extends Component {
    * Sets whether smart default pivoting is enabled.
    *
    * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
-   * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
+   * imaginary sphere that's centered at {@link Camera.eye} and sized to the {@link Scene} boundary.
    *
-   * When ````false````, we'll pivot by default about {@link Camera#look}.
+   * When ````false````, we'll pivot by default about {@link Camera.look}.
    *
    * Default is ````false````.
    *
-   * @param {Boolean} enabled Set ````true```` to pivot by default about the selected point on the virtual sphere, or ````false```` to pivot by default about {@link Camera#look}.
+   * @param {Boolean} enabled Set ````true```` to pivot by default about the selected point on the virtual sphere, or ````false```` to pivot by default about {@link Camera.look}.
    */
   set smartPivot(arg: boolean);
 
@@ -587,13 +587,13 @@ export declare class CameraControl extends Component {
    * Gets whether smart default pivoting is enabled.
    *
    * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an
-   * imaginary sphere that's centered at {@link Camera#eye} and sized to the {@link Scene} boundary.
+   * imaginary sphere that's centered at {@link Camera.eye} and sized to the {@link Scene} boundary.
    *
-   * When ````false````, we'll pivot by default about {@link Camera#look}.
+   * When ````false````, we'll pivot by default about {@link Camera.look}.
    *
    * Default is ````false````.
    *
-   * @returns {Boolean} Returns ````true```` when pivoting by default about the selected point on the virtual sphere, or ````false```` when pivoting by default about {@link Camera#look}.
+   * @returns {Boolean} Returns ````true```` when pivoting by default about the selected point on the virtual sphere, or ````false```` when pivoting by default about {@link Camera.look}.
    */
   get smartPivot(): boolean;
 }
