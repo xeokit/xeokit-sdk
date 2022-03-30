@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["./types/index.d.ts"],
+  "out": "./typedocs",
+  "excludePrivate": true,
+  "exclude": ["node_modules"]
+}
