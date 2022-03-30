@@ -67,6 +67,13 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   constructor(owner: Component, cfg?: NodeConfiguration);
 
   /**
+   * ID of the corresponding object within the originating system, if any.
+   *
+   * @type {String}
+   */
+  get originalSystemId(): string;
+
+  /**
    * Sets the Node's local modeling transform matrix.
    *
    * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
