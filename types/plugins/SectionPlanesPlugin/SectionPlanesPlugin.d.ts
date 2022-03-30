@@ -2,7 +2,7 @@ import { Plugin, Viewer } from "../../viewer";
 import { SectionPlane } from "../../viewer/scene/sectionPlane";
 
 export declare type SectionPlanesPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** ID of a canvas element to display the overview. */
   overviewCanvasId?: string;
@@ -38,14 +38,14 @@ export declare class SectionPlanesPlugin extends Plugin {
   /**
    * Returns a map of the {@link SectionPlane}s created by this SectionPlanesPlugin.
    *
-   * @returns {{String:SectionPlane}} A map containing the {@link SectionPlane}s, each mapped to its {@link SectionPlane#id}.
+   * @returns {{String:SectionPlane}} A map containing the {@link SectionPlane}s, each mapped to its {@link SectionPlane.id}.
    */
   get sectionPlanes(): { [key:string]: SectionPlane };
 
   /**
    * Creates a {@link SectionPlane}.
    *
-   * The {@link SectionPlane} will be registered by {@link SectionPlane#id} in {@link SectionPlanesPlugin#sectionPlanes}.
+   * The {@link SectionPlane} will be registered by {@link SectionPlane.id} in {@link SectionPlanesPlugin.sectionPlanes}.
    *
    * @param {Object} params {@link SectionPlane} configuration.
    * @param {String} [params.id] Unique ID to assign to the {@link SectionPlane}. Must be unique among all components in the {@link Viewer}'s {@link Scene}. Auto-generated when omitted.
@@ -62,7 +62,7 @@ export declare class SectionPlanesPlugin extends Plugin {
   }): SectionPlane;
   
   /**
-   * Inverts the direction of {@link SectionPlane#dir} on every existing SectionPlane.
+   * Inverts the direction of {@link SectionPlane.dir} on every existing SectionPlane.
    *
    * Inverts all SectionPlanes, including those that were not created with SectionPlanesPlugin.
    */

@@ -15,8 +15,8 @@ export declare class PerformanceNode {
   /**
    * Returns ````true```` if this PerformanceNode represents an object.
    *
-   * When ````true```` the PerformanceNode will be registered by {@link PerformanceNode#id} in
-   * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
+   * When ````true```` the PerformanceNode will be registered by {@link PerformanceNode.id} in
+   * {@link Scene.objects} and may also have a {@link MetaObject} with matching {@link MetaObject.id}.
    *
    * @type {Boolean}
    */
@@ -42,10 +42,10 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is visible.
    *
-   * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+   * Only rendered when {@link PerformanceNode.visible} is ````true```` and {@link PerformanceNode.culled} is ````false````.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.visible} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -54,10 +54,10 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is visible.
    *
-   * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+   * Only rendered when {@link PerformanceNode.visible} is ````true```` and {@link PerformanceNode.culled} is ````false````.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.visible} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -66,8 +66,8 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is highlighted.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.highlighted} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.highlightedObjects}.
    *
    * @type {Boolean}
    */
@@ -76,8 +76,8 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is highlighted.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.highlighted} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.highlightedObjects}.
    *
    * @type {Boolean}
    */
@@ -86,8 +86,8 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is xrayed.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.xrayed} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.xrayedObjects}.
    *
    * @type {Boolean}
    */
@@ -96,8 +96,8 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is xrayed.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.xrayed} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.xrayedObjects}.
    *
    * @type {Boolean}
    */
@@ -106,8 +106,8 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is selected.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.selected} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.selectedObjects}.
    *
    * @type {Boolean}
    */
@@ -116,8 +116,8 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is selected.
    *
-   * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceNode will be
-   * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
+   * When both {@link PerformanceNode.isObject} and {@link PerformanceNode.selected} are ````true```` the PerformanceNode will be
+   * registered by {@link PerformanceNode.id} in {@link Scene.selectedObjects}.
    *
    * @type {Boolean}
    */
@@ -140,7 +140,7 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is culled.
    *
-   * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+   * Only rendered when {@link PerformanceNode.visible} is ````true```` and {@link PerformanceNode.culled} is ````false````.
    *
    * @type {Boolean}
    */
@@ -149,7 +149,7 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is culled.
    *
-   * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
+   * Only rendered when {@link PerformanceNode.visible} is ````true```` and {@link PerformanceNode.culled} is ````false````.
    *
    * @type {Boolean}
    */
@@ -158,7 +158,7 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -167,7 +167,7 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -190,7 +190,7 @@ export declare class PerformanceNode {
   /**
    * Gets if this PerformanceNode is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -199,7 +199,7 @@ export declare class PerformanceNode {
   /**
    * Sets if this PerformanceNode is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */

@@ -1,7 +1,7 @@
 import { Plugin, Viewer } from "../../viewer";
 
 export declare type BCFViewpointsPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Identifies the originating system for BCF records. */
   originatingSystem?: string;
@@ -35,8 +35,8 @@ export class BCFViewpointsPlugin extends Plugin {
   /**
    * Saves viewer state to a BCF viewpoint.
    *
-   * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
-   * direction vector. Therefore, we save ````camera_direction```` as the vector from {@link Camera#eye} to {@link Camera#look}.
+   * Note that xeokit's {@link Camera.look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
+   * direction vector. Therefore, we save ````camera_direction```` as the vector from {@link Camera.eye} to {@link Camera.look}.
    *
    * @param {*} [options] Options for getting the viewpoint.
    * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
@@ -122,22 +122,22 @@ export class BCFViewpointsPlugin extends Plugin {
   /**
    * Sets viewer state to the given BCF viewpoint.
    *
-   * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
-   * direction vector. Therefore, when loading a BCF viewpoint, we set {@link Camera#look} to the absolute position
+   * Note that xeokit's {@link Camera.look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
+   * direction vector. Therefore, when loading a BCF viewpoint, we set {@link Camera.look} to the absolute position
    * obtained by offsetting the BCF ````camera_view_point````  along ````camera_direction````.
    *
-   * When loading a viewpoint, we also have the option to find {@link Camera#look} as the closest point of intersection
+   * When loading a viewpoint, we also have the option to find {@link Camera.look} as the closest point of intersection
    * (on the surface of any visible and pickable {@link Entity}) with a 3D ray fired from ````camera_view_point```` in
    * the direction of ````camera_direction````.
    *
    * @param {*} bcfViewpoint  BCF JSON viewpoint object,
    * shows default visible entities and restores camera to initial default position.
    * @param {*} [options] Options for setting the viewpoint.
-   * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
+   * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera.look} to the closest
    * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
    * @param {Boolean} [options.immediate=true] When ````true```` (default), immediately set camera position.
-   * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}. Only applies when ````immediate```` is ````false````.
-   * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity#xrayed} and {@link Entity#highlighted} ````false```` on all scene objects.
+   * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation.duration}. Only applies when ````immediate```` is ````false````.
+   * @param {Boolean} [options.reset=true] When ````true```` (default), set {@link Entity.xrayed} and {@link Entity.highlighted} ````false```` on all scene objects.
    * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
    * @param {Boolean} [options.updateCompositeObjects=false] When ````true````, then when visibility and selection updates refer to composite objects (eg. an IfcBuildingStorey),
    * then this method will apply the updates to objects within those composites.

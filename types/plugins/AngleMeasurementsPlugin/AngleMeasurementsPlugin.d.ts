@@ -3,7 +3,7 @@ import { AngleMeasurement } from "./AngleMeasurement";
 import { AngleMeasurementsControl } from "./AngleMeasurementsControl";
 
 export declare type AngleMeasurementsPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Container DOM element for markers and labels. Defaults to ````document.body````. */
   container?: HTMLElement;
@@ -32,7 +32,7 @@ export declare class AngleMeasurementsPlugin extends Plugin {
   get control(): AngleMeasurementsControl;
 
   /**
-   * Gets the existing {@link AngleMeasurement}s, each mapped to its {@link AngleMeasurement#id}.
+   * Gets the existing {@link AngleMeasurement}s, each mapped to its {@link AngleMeasurement.id}.
    *
    * @type {{String:AngleMeasurement}}
    */
@@ -41,10 +41,10 @@ export declare class AngleMeasurementsPlugin extends Plugin {
   /**
    * Creates an {@link AngleMeasurement}.
    *
-   * The AngleMeasurement is then registered by {@link AngleMeasurement#id} in {@link AngleMeasurementsPlugin#measurements}.
+   * The AngleMeasurement is then registered by {@link AngleMeasurement.id} in {@link AngleMeasurementsPlugin.measurements}.
    *
    * @param {Object} params {@link AngleMeasurement} configuration.
-   * @param {String} params.id Unique ID to assign to {@link AngleMeasurement#id}. The AngleMeasurement will be registered by this in {@link AngleMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+   * @param {String} params.id Unique ID to assign to {@link AngleMeasurement.id}. The AngleMeasurement will be registered by this in {@link AngleMeasurementsPlugin.measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
    * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
    * @param {Entity} params.origin.entity Origin Entity.
    * @param {Number[]} params.corner.worldPos Corner World-space 3D position.

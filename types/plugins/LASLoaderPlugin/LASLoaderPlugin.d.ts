@@ -13,7 +13,7 @@ export declare interface ILASDefaultDataSource {
 }
 
 export declare type LASLoaderPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** A custom data source through which the LASLoaderPlugin can load model and metadata files. Defaults to an instance of {@link LASDefaultDataSource}, which loads over HTTP. */
   dataSource?: ILASDefaultDataSource;
@@ -26,7 +26,7 @@ export declare type LASLoaderPluginConfiguration = {
 };
 
 export declare type LoadLASModel = {
-  /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
+  /** ID to assign to the root {@link Entity.id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
   /** Path to a LAS file, as an alternative to the ````las```` parameter. */
   src?: string;
@@ -140,7 +140,7 @@ export class LASLoaderPlugin extends Plugin {
    * Loads an ````LAS```` model into this LASLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadLASModel} params Loading parameters.
-   * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
   load(params?: LoadLASModel): PerformanceModel;
 }

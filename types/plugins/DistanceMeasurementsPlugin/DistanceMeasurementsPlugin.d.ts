@@ -3,7 +3,7 @@ import { DistanceMeasurementsControl } from "./DistanceMeasurementsControl";
 import { DistanceMeasurement } from "./DistanceMeasurement";
 
 export declare type DistanceMeasurementsPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** The minimum length, in pixels, of an axis wire beyond which its label is shown. */
   labelMinAxisLength?: number;
@@ -63,7 +63,7 @@ export class DistanceMeasurementsPlugin extends Plugin {
   get control(): DistanceMeasurementsControl;
 
   /**
-   * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
+   * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement.id}.
    *
    * @type {{String:DistanceMeasurement}}
    */
@@ -72,10 +72,10 @@ export class DistanceMeasurementsPlugin extends Plugin {
   /**
    * Creates a {@link DistanceMeasurement}.
    *
-   * The DistanceMeasurement is then registered by {@link DistanceMeasurement#id} in {@link DistanceMeasurementsPlugin#measurements}.
+   * The DistanceMeasurement is then registered by {@link DistanceMeasurement.id} in {@link DistanceMeasurementsPlugin.measurements}.
    *
    * @param {Object} params {@link DistanceMeasurement} configuration.
-   * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement#id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+   * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement.id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin.measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
    * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
    * @param {Entity} params.origin.entity Origin Entity.
    * @param {Number[]} params.target.worldPos Target World-space 3D position.
@@ -83,8 +83,8 @@ export class DistanceMeasurementsPlugin extends Plugin {
    * @param {Boolean} [params.visible=true] Whether to initially show the {@link DistanceMeasurement}.
    * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link DistanceMeasurement} origin.
    * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
-   * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-   * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target}.
+   * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target}.
    * @param {string} [params.color] The color of the length dot, wire and label.
    * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
    */

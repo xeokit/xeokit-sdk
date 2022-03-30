@@ -6,7 +6,7 @@ export declare type LinesMaterialConfiguration = {
   id?: string;
   /** Line width in pixels. */
   lineWidth?: number;
-  /** Selects a preset LinesMaterial configuration - see {@link LinesMaterial#presets}. */
+  /** Selects a preset LinesMaterial configuration - see {@link LinesMaterial.presets}. */
   preset?: string;
 };
 

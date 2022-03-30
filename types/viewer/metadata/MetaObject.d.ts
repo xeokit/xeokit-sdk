@@ -51,9 +51,9 @@ export declare class MetaObject {
   external?: any;
 
   /**
-   * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree.
+   * Gets the {@link MetaObject.id}s of the {@link MetaObject}s within the subtree.
    *
-   * @returns {String[]} Array of {@link MetaObject#id}s.
+   * @returns {String[]} Array of {@link MetaObject.id}s.
    */
   getObjectIDsInSubtree(): string[];
 
@@ -65,10 +65,10 @@ export declare class MetaObject {
   withMetaObjectsInSubtree(callback: (metaobect: MetaObject)=> void): void;
 
   /**
-   * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree that have the given {@link MetaObject#type}s.
+   * Gets the {@link MetaObject.id}s of the {@link MetaObject}s within the subtree that have the given {@link MetaObject.type}s.
    *
-   * @param {String[]} types {@link MetaObject#type} values.
-   * @returns {String[]} Array of {@link MetaObject#id}s.
+   * @param {String[]} types {@link MetaObject.type} values.
+   * @returns {String[]} Array of {@link MetaObject.id}s.
    */
   getObjectIDsInSubtreeByType(types: string[]): string[];
 }

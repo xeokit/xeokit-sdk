@@ -12,7 +12,7 @@ export declare class Annotation extends Marker {
   plugin: AnnotationsPlugin;
 
   /**
-   * Optional World-space position for {@link Camera#eye}, used when this Annotation is associated with a {@link Camera} position.
+   * Optional World-space position for {@link Camera.eye}, used when this Annotation is associated with a {@link Camera} position.
    *
    * Undefined by default.
    *
@@ -21,7 +21,7 @@ export declare class Annotation extends Marker {
   eye: number[];
   
   /**
-   * Optional World-space position for {@link Camera#look}, used when this Annotation is associated with a {@link Camera} position.
+   * Optional World-space position for {@link Camera.look}, used when this Annotation is associated with a {@link Camera} position.
    *
    * Undefined by default.
    *
@@ -30,7 +30,7 @@ export declare class Annotation extends Marker {
   look: number[];
 
   /**
-   * Optional World-space position for {@link Camera#up}, used when this Annotation is associated with a {@link Camera} position.
+   * Optional World-space position for {@link Camera.up}, used when this Annotation is associated with a {@link Camera} position.
    *
    * Undefined by default.
    *
@@ -39,7 +39,7 @@ export declare class Annotation extends Marker {
   up: number[];
 
   /**
-   * Optional projection type for {@link Camera#projection}, used when this Annotation is associated with a {@link Camera} position.
+   * Optional projection type for {@link Camera.projection}, used when this Annotation is associated with a {@link Camera} position.
    *
    * Undefined by default.
    *
@@ -52,7 +52,7 @@ export declare class Annotation extends Marker {
    *
    * The marker shows the Annotation's position.
    *
-   * The marker is only visible when both this property and {@link Annotation#visible} are ````true````.
+   * The marker is only visible when both this property and {@link Annotation.visible} are ````true````.
    *
    * See {@link AnnotationsPlugin} for more info.
    *
@@ -65,7 +65,7 @@ export declare class Annotation extends Marker {
    *
    * The marker shows the Annotation's position.
    *
-   * The marker is only visible when both this property and {@link Annotation#visible} are ````true````.
+   * The marker is only visible when both this property and {@link Annotation.visible} are ````true````.
    *
    * See {@link AnnotationsPlugin} for more info.
    *
@@ -76,7 +76,7 @@ export declare class Annotation extends Marker {
   /**
    * Sets whether or not to show this Annotation's label.
    *
-   * The label is only visible when both this property and {@link Annotation#visible} are ````true````.
+   * The label is only visible when both this property and {@link Annotation.visible} are ````true````.
    *
    * See {@link AnnotationsPlugin} for more info.
    *
@@ -87,7 +87,7 @@ export declare class Annotation extends Marker {
   /**
    * Gets whether or not to show this Annotation's label.
    *
-   * The label is only visible when both this property and {@link Annotation#visible} are ````true````.
+   * The label is only visible when both this property and {@link Annotation.visible} are ````true````.
    *
    * See {@link AnnotationsPlugin} for more info.
    *

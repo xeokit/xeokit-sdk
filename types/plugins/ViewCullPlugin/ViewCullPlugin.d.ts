@@ -1,7 +1,7 @@
 import { Plugin, Viewer } from "../../viewer";
 
 export declare type ViewCullPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Maximum depth of the kd-tree. */
   maxTreeDepth?: number;

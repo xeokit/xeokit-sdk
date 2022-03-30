@@ -89,16 +89,16 @@ export declare class Ortho extends Component {
   get matrix(): number[];
 
   /**
-   * Gets the inverse of {@link Ortho#matrix}.
+   * Gets the inverse of {@link Ortho.matrix}.
    *
-   * @returns {Number[]} The inverse of {@link Ortho#matrix}.
+   * @returns {Number[]} The inverse of {@link Ortho.matrix}.
    */
   get inverseMatrix(): number[];
 
   /**
-   * Gets the transpose of {@link Ortho#matrix}.
+   * Gets the transpose of {@link Ortho.matrix}.
    *
-   * @returns {Number[]} The transpose of {@link Ortho#matrix}.
+   * @returns {Number[]} The transpose of {@link Ortho.matrix}.
    */
   get transposedMatrix(): number[];
 

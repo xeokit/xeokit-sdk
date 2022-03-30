@@ -28,7 +28,7 @@ export declare class OBJLoaderPlugin extends Plugin {
    *
    * @param {Viewer} viewer The Viewer.
    * @param {Object} cfg Plugin configuration.
-   * @param {String} [cfg.id="OBJLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+   * @param {String} [cfg.id="OBJLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}.
    */
   constructor(viewer: Viewer, cfg: {
       id?: string;
@@ -38,7 +38,7 @@ export declare class OBJLoaderPlugin extends Plugin {
    * Loads an OBJ model from a file into this OBJLoader's {@link Viewer}.
    *
    * @param {LoadOBJModel} params  Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
   load(params: LoadOBJModel): PerformanceModel;
 }

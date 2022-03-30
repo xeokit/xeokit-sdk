@@ -2,7 +2,7 @@ import { Plugin } from "../../viewer/Plugin";
 import { Viewer } from "../../viewer/Viewer";
 
 export declare type NavCubePluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID. */
   canvasId?: string;
@@ -34,7 +34,7 @@ export declare type NavCubePluginConfiguration = {
   bottomColor?: string;
   /** Custom color for highlighting regions on the NavCube as we hover the pointer over them. */
   hoverColor?: string;
-  /** Sets whether the axis, corner and edge-aligned views will fit the view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````. */
+  /** Sets whether the axis, corner and edge-aligned views will fit the view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity.isObject} and {@link Entity.visible} are both ````true````. */
   fitVisible?: boolean;
   /** Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection. */
   synchProjection?: boolean;
@@ -70,7 +70,7 @@ export declare class NavCubePlugin extends Plugin {
      * Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s.
      *
-     * Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
+     * Entitys are visible objects when {@link Entity.isObject} and {@link Entity.visible} are both ````true````.
      *
      * @param {Boolean} value Set ````true```` to fit only visible object-Entitys.
      */
@@ -80,7 +80,7 @@ export declare class NavCubePlugin extends Plugin {
      * Gets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s.
      *
-     * Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
+     * Entitys are visible objects when {@link Entity.isObject} and {@link Entity.visible} are both ````true````.
      *
      * @return {Boolean} True when fitting only visible object-Entitys.
      */
@@ -146,7 +146,7 @@ export declare class NavCubePlugin extends Plugin {
      * Sets whether the NavCube switches between perspective and orthographic projections in synchrony with
      * the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
      *
-     * @param {Boolean} value Set ````true```` to keep NavCube projection synchronized with {@link Camera#projection}.
+     * @param {Boolean} value Set ````true```` to keep NavCube projection synchronized with {@link Camera.projection}.
      */
     setSynchProjection(value: boolean): void;
 
@@ -154,7 +154,7 @@ export declare class NavCubePlugin extends Plugin {
      * Gets whether the NavCube switches between perspective and orthographic projections in synchrony with
      * the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
      *
-     * @return {Boolean} True when NavCube projection is synchronized with {@link Camera#projection}.
+     * @return {Boolean} True when NavCube projection is synchronized with {@link Camera.projection}.
      */
     getSynchProjection(): boolean;
 }

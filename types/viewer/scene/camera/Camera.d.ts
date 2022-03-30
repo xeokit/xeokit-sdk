@@ -9,7 +9,7 @@ import { CustomProjection } from "./CustomProjection";
  */
 export declare class Camera extends Component {
   /**
-   * Sets an optional matrix to premultiply into {@link Camera#matrix} matrix.
+   * Sets an optional matrix to premultiply into {@link Camera.matrix} matrix.
    *
    * This is intended to be used for stereo rendering with WebVR etc.
    *
@@ -18,7 +18,7 @@ export declare class Camera extends Component {
   set deviceMatrix(arg: number[]);
 
   /**
-   * Gets an optional matrix to premultiply into {@link Camera#matrix} matrix.
+   * Gets an optional matrix to premultiply into {@link Camera.matrix} matrix.
    *
    * @returns {Number[]} The matrix.
    */
@@ -64,7 +64,7 @@ export declare class Camera extends Component {
   get look(): number[];
 
   /**
-   * Sets the direction of this Camera's {@link Camera#up} vector.
+   * Sets the direction of this Camera's {@link Camera.up} vector.
    *
    * @emits "up" event on change, with the value of this property.
    *
@@ -73,7 +73,7 @@ export declare class Camera extends Component {
   set up(arg: number[]);
 
   /**
-   * Gets the direction of this Camera's {@link Camera#up} vector.
+   * Gets the direction of this Camera's {@link Camera.up} vector.
    *
    * @returns {Number[]} Direction of "up".
    */
@@ -104,7 +104,7 @@ export declare class Camera extends Component {
   /**
    * Sets whether to lock yaw rotation to pivot about the World-space "up" axis.
    *
-   * Fires a {@link Camera#gimbalLock:event} event on change.
+   * Fires a {@link Camera.gimbalLock:event} event on change.
    *
    * @params {Boolean} gimbalLock Set true to lock gimbal.
    */
@@ -140,28 +140,28 @@ export declare class Camera extends Component {
   get projection(): "perspective" | "ortho" | "frustum" | "customProjection";
 
   /**
-   * Rotates {@link Camera#eye} about {@link Camera#look}, around the {@link Camera#up} vector
+   * Rotates {@link Camera.eye} about {@link Camera.look}, around the {@link Camera.up} vector
    *
    * @param {Number} angleInc Angle of rotation in degrees
    */
   orbitYaw(angleInc: number): void;
 
   /**
-   * Rotates {@link Camera#eye} about {@link Camera#look} around the right axis (orthogonal to {@link Camera#up} and "look").
+   * Rotates {@link Camera.eye} about {@link Camera.look} around the right axis (orthogonal to {@link Camera.up} and "look").
    *
    * @param {Number} angleInc Angle of rotation in degrees
    */
   orbitPitch(angleInc: number): void;
 
   /**
-   * Rotates {@link Camera#look} about {@link Camera#eye}, around the {@link Camera#up} vector.
+   * Rotates {@link Camera.look} about {@link Camera.eye}, around the {@link Camera.up} vector.
    *
    * @param {Number} angleInc Angle of rotation in degrees
    */
   yaw(angleInc: number): void;
 
   /**
-   * Rotates {@link Camera#look} about {@link Camera#eye}, around the right axis (orthogonal to {@link Camera#up} and "look").
+   * Rotates {@link Camera.look} about {@link Camera.eye}, around the right axis (orthogonal to {@link Camera.up} and "look").
    *
    * @param {Number} angleInc Angle of rotation in degrees
    */
@@ -175,7 +175,7 @@ export declare class Camera extends Component {
   pan(pan: number[]): void;
 
   /**
-   * Increments/decrements the Camera's zoom factor, which is the distance between {@link Camera#eye} and {@link Camera#look}.
+   * Increments/decrements the Camera's zoom factor, which is the distance between {@link Camera.eye} and {@link Camera.look}.
    *
    * @param {Number} delta Zoom factor increment.
    */
@@ -184,7 +184,7 @@ export declare class Camera extends Component {
   /**
    * Gets the direction of World-space "up".
    *
-   * This is set by {@link Camera#worldAxis}.
+   * This is set by {@link Camera.worldAxis}.
    *
    * Default value is ````[0,1,0]````.
    *
@@ -213,7 +213,7 @@ export declare class Camera extends Component {
   /**
    * Gets the direction of World-space "right".
    *
-   * This is set by {@link Camera#worldAxis}.
+   * This is set by {@link Camera.worldAxis}.
    *
    * Default value is ````[1,0,0]````.
    *
@@ -224,7 +224,7 @@ export declare class Camera extends Component {
   /**
    * Gets the direction of World-space "forwards".
    *
-   * This is set by {@link Camera#worldAxis}.
+   * This is set by {@link Camera.worldAxis}.
    *
    * Default value is ````[0,0,1]````.
    *
@@ -235,7 +235,7 @@ export declare class Camera extends Component {
   /**
    * Gets whether to prevent camera from being pitched upside down.
    *
-   * The camera is upside down when the angle between {@link Camera#up} and {@link Camera#worldUp} is less than one degree.
+   * The camera is upside down when the angle between {@link Camera.up} and {@link Camera.worldUp} is less than one degree.
    *
    * Default value is ````false````.
    *
@@ -246,9 +246,9 @@ export declare class Camera extends Component {
   /**
    * Sets whether to prevent camera from being pitched upside down.
    *
-   * The camera is upside down when the angle between {@link Camera#up} and {@link Camera#worldUp} is less than one degree.
+   * The camera is upside down when the angle between {@link Camera.up} and {@link Camera.worldUp} is less than one degree.
    *
-   * Fires a {@link Camera#constrainPitch:event} event on change.
+   * Fires a {@link Camera.constrainPitch:event} event on change.
    *
    * Default value is ````false````.
    *
@@ -257,7 +257,7 @@ export declare class Camera extends Component {
   set constrainPitch(arg: boolean);
 
   /**
-   * Gets distance from {@link Camera#look} to {@link Camera#eye}.
+   * Gets distance from {@link Camera.look} to {@link Camera.eye}.
    *
    * @returns {Number} The distance.
    */
@@ -266,7 +266,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's viewing transformation matrix.
    *
-   * Fires a {@link Camera#matrix:event} event on change.
+   * Fires a {@link Camera.matrix:event} event on change.
    *
    * @returns {Number[]} The viewing transform matrix.
    */
@@ -275,7 +275,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's viewing transformation matrix.
    *
-   * Fires a {@link Camera#matrix:event} event on change.
+   * Fires a {@link Camera.matrix:event} event on change.
    *
    * @returns {Number[]} The viewing transform matrix.
    */
@@ -284,7 +284,7 @@ export declare class Camera extends Component {
   /**
    * The Camera's viewing normal transformation matrix.
    *
-   * Fires a {@link Camera#matrix:event} event on change.
+   * Fires a {@link Camera.matrix:event} event on change.
    *
    * @returns {Number[]} The viewing normal transform matrix.
    */
@@ -293,7 +293,7 @@ export declare class Camera extends Component {
   /**
    * The Camera's viewing normal transformation matrix.
    *
-   * Fires a {@link Camera#matrix:event} event on change.
+   * Fires a {@link Camera.matrix:event} event on change.
    *
    * @returns {Number[]} The viewing normal transform matrix.
    */
@@ -302,7 +302,7 @@ export declare class Camera extends Component {
   /**
    * Gets the inverse of the Camera's viewing transform matrix.
    *
-   * This has the same value as {@link Camera#normalMatrix}.
+   * This has the same value as {@link Camera.normalMatrix}.
    *
    * @returns {Number[]} The inverse viewing transform matrix.
    */
@@ -311,7 +311,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's projection transformation projMatrix.
    *
-   * Fires a {@link Camera#projMatrix:event} event on change.
+   * Fires a {@link Camera.projMatrix:event} event on change.
    *
    * @returns {Number[]} The projection matrix.
    */
@@ -320,7 +320,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's perspective projection.
    *
-   * The Camera uses this while {@link Camera#projection} equals ````perspective````.
+   * The Camera uses this while {@link Camera.projection} equals ````perspective````.
    *
    * @returns {Perspective} The Perspective component.
    */
@@ -329,7 +329,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's orthographic projection.
    *
-   * The Camera uses this while {@link Camera#projection} equals ````ortho````.
+   * The Camera uses this while {@link Camera.projection} equals ````ortho````.
    *
    * @returns {Ortho} The Ortho component.
    */
@@ -338,7 +338,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's frustum projection.
    *
-   * The Camera uses this while {@link Camera#projection} equals ````frustum````.
+   * The Camera uses this while {@link Camera.projection} equals ````frustum````.
    *
    * @returns {Frustum} The Ortho component.
    */
@@ -347,7 +347,7 @@ export declare class Camera extends Component {
   /**
    * Gets the Camera's custom projection.
    *
-   * This is used while {@link Camera#projection} equals "customProjection".
+   * This is used while {@link Camera.projection} equals "customProjection".
    *
    * @returns {CustomProjection} The custom projection.
    */
@@ -356,7 +356,7 @@ export declare class Camera extends Component {
   /**
    * Gets the currently active projection for this Camera.
    *
-   * The currently active project is selected with {@link Camera#projection}.
+   * The currently active project is selected with {@link Camera.projection}.
    *
    * @returns {Perspective|Ortho|Frustum|CustomProjection} The currently active projection is active.
    */

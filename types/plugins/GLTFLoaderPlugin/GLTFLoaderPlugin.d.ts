@@ -35,7 +35,7 @@ export declare interface IGLTFDefaultDataSource {
 }
 
 export declare type GLTFLoaderPluginConfiguration =  {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}. */
   objectDefaults?: IFCObjectDefaults;
@@ -44,7 +44,7 @@ export declare type GLTFLoaderPluginConfiguration =  {
 };
 
 export declare type LoadGLTFModel = {
-  /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
+  /** ID to assign to the root {@link Entity.id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
   /** Path to a glTF file, as an alternative to the ````gltf```` parameter. */
   src?: string;
@@ -56,9 +56,9 @@ export declare type LoadGLTFModel = {
   metaModelData?: any;
   /** Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}. */
   objectDefaults?: object;
-  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   includeTypes?: string[]
-  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   excludeTypes?: string[]
   /** Whether or not xeokit renders the model with edges emphasized. */
   edges?: boolean;
@@ -135,7 +135,7 @@ export declare class GLTFLoaderPlugin extends Plugin {
    * Loads a glTF model from a file into this GLTFLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadGLTFModel} params Loading parameters.
-   * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
   load(params: LoadGLTFModel): PerformanceModel;
 }

@@ -17,7 +17,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's left plane on the View-space X-axis.
    *
-   * Fires a {@link Frustum#left:emits} emits on change.
+   * Fires a {@link Frustum.left:emits} emits on change.
    *
    * @param {Number} value New left frustum plane position.
    */
@@ -33,7 +33,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's right plane on the View-space X-axis.
    *
-   * Fires a {@link Frustum#right:emits} emits on change.
+   * Fires a {@link Frustum.right:emits} emits on change.
    *
    * @param {Number} value New right frustum plane position.
    */
@@ -42,7 +42,7 @@ export declare class Frustum extends Component {
   /**
    * Gets the position of the Frustum's right plane on the View-space X-axis.
    *
-   * Fires a {@link Frustum#right:emits} emits on change.
+   * Fires a {@link Frustum.right:emits} emits on change.
    *
    * @return {Number} Right frustum plane position.
    */
@@ -51,7 +51,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's bottom plane on the View-space Y-axis.
    *
-   * Fires a {@link Frustum#bottom:emits} emits on change.
+   * Fires a {@link Frustum.bottom:emits} emits on change.
    *
    * @emits {"bottom"} event with the value of this property whenever it changes.
    *
@@ -62,7 +62,7 @@ export declare class Frustum extends Component {
   /**
    * Gets the position of the Frustum's bottom plane on the View-space Y-axis.
    *
-   * Fires a {@link Frustum#bottom:emits} emits on change.
+   * Fires a {@link Frustum.bottom:emits} emits on change.
    *
    * @return {Number} Bottom frustum plane position.
    */
@@ -71,7 +71,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's top plane on the View-space Y-axis.
    *
-   * Fires a {@link Frustum#top:emits} emits on change.
+   * Fires a {@link Frustum.top:emits} emits on change.
    *
    * @param {Number} value New top frustum plane position.
    */
@@ -80,7 +80,7 @@ export declare class Frustum extends Component {
   /**
    * Gets the position of the Frustum's top plane on the View-space Y-axis.
    *
-   * Fires a {@link Frustum#top:emits} emits on change.
+   * Fires a {@link Frustum.top:emits} emits on change.
    *
    * @return {Number} Top frustum plane position.
    */
@@ -89,7 +89,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's near plane on the positive View-space Z-axis.
    *
-   * Fires a {@link Frustum#near:emits} emits on change.
+   * Fires a {@link Frustum.near:emits} emits on change.
    *
    * Default value is ````0.1````.
    *
@@ -100,7 +100,7 @@ export declare class Frustum extends Component {
   /**
    * Gets the position of the Frustum's near plane on the positive View-space Z-axis.
    *
-   * Fires a {@link Frustum#near:emits} emits on change.
+   * Fires a {@link Frustum.near:emits} emits on change.
    *
    * Default value is ````0.1````.
    *
@@ -111,7 +111,7 @@ export declare class Frustum extends Component {
   /**
    * Sets the position of the Frustum's far plane on the positive View-space Z-axis.
    *
-   * Fires a {@link Frustum#far:emits} emits on change.
+   * Fires a {@link Frustum.far:emits} emits on change.
    *
    * Default value is ````10000.0````.
    *
@@ -131,7 +131,7 @@ export declare class Frustum extends Component {
   /**
    * Gets the Frustum's projection transform matrix.
    *
-   * Fires a {@link Frustum#matrix:emits} emits on change.
+   * Fires a {@link Frustum.matrix:emits} emits on change.
    *
    * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
    *
@@ -140,16 +140,16 @@ export declare class Frustum extends Component {
   get matrix(): number[];
 
   /**
-   * Gets the inverse of {@link Frustum#matrix}.
+   * Gets the inverse of {@link Frustum.matrix}.
    *
    * @returns {Number[]} The inverse orthographic projection matrix.
    */
   get inverseMatrix(): number[];
 
   /**
-   * Gets the transpose of {@link Frustum#matrix}.
+   * Gets the transpose of {@link Frustum.matrix}.
    *
-   * @returns {Number[]} The transpose of {@link Frustum#matrix}.
+   * @returns {Number[]} The transpose of {@link Frustum.matrix}.
    */
   get transposedMatrix(): number[];
 

@@ -1,15 +1,15 @@
 import { Plugin, Viewer, PerformanceModel, IFCObjectDefaults } from "../../viewer";
 
 export declare type XKTLoaderPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.*/
   objectDefaults?: IFCObjectDefaults;
   /** A custom data source through which the XKTLoaderPlugin can load model and metadata files. Defaults to an instance of {@link XKTDefaultDataSource}, which loads uover HTTP. */
   dataSource?: IXKTDefaultDataSource;
-  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   includeTypes?: string[];
-  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   excludeTypes?: string[];
   /** When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}. */
   excludeUnclassifiedObjects?: boolean;
@@ -20,7 +20,7 @@ export declare type XKTLoaderPluginConfiguration = {
 };
 
 export declare type LoadXKTModel = {
-  /** ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
+  /** ID to assign to the root {@link Entity.id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default. */
   id?: string;
   /** Path to a *````.xkt````* file, as an alternative to the ````xkt```` parameter. */
   src?: string;
@@ -32,9 +32,9 @@ export declare type LoadXKTModel = {
   metaModelData?: any;
   /** Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}. */
   objectDefaults?: object;
-  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   includeTypes?: string[]
-  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list. */
+  /** When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject.type} values in this list. */
   excludeTypes?: string[];
   /** Whether or not xeokit renders the model with edges emphasized. */
   edges?: boolean;
@@ -48,15 +48,15 @@ export declare type LoadXKTModel = {
   rotation?: number[];
   /** The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.*/
   matrix?: number[];
-  /** Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true```` */
+  /** Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO.enabled} is also ````true```` */
   saoEnabled?: boolean;
-  /** Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````. */
+  /** Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene.pbrEnabled} is also ````true````. */
   pbrEnabled?: boolean;
   /** When we set this ````true````, then we force rendering of backfaces for the model. */
   backfaces?: boolean;
   /** When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). */
   excludeUnclassifiedObjects?: boolean;
-  /** Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. */
+  /** Indicates whether to globalize each {@link Entity.id} and {@link MetaObject.id}, in case you need to prevent ID clashes with other models. */
   globalizeObjectIds?: boolean;
   /** Indicates whether to enable geometry reuse */
   reuseGeometries?: boolean;
@@ -131,7 +131,7 @@ export declare interface IXKTDefaultDataSource {
    * Sets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
    *
    * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -143,7 +143,7 @@ export declare interface IXKTDefaultDataSource {
    * Gets the whitelist of the IFC types loaded by this XKTLoaderPlugin.
    *
    * When loading models with metadata, causes this XKTLoaderPlugin to only load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -156,7 +156,7 @@ export declare interface IXKTDefaultDataSource {
    * Sets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
    *
    * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -168,7 +168,7 @@ export declare interface IXKTDefaultDataSource {
    * Gets the blacklist of IFC types that are never loaded by this XKTLoaderPlugin.
    *
    * When loading models with metadata, causes this XKTLoaderPlugin to **not** load objects whose types are in this
-   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject#type}.
+   * list. An object's type is indicated by its {@link MetaObject}'s {@link MetaObject.type}.
    *
    * Default value is ````undefined````.
    *
@@ -211,7 +211,7 @@ export declare interface IXKTDefaultDataSource {
    *
    * The result will be be less WebGL draw calls (which are expensive), at the cost of increased memory footprint.
    *
-   * See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
+   * See [.769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
    *
    * @type {Boolean}
    */
@@ -233,15 +233,15 @@ export declare interface IXKTDefaultDataSource {
   get supportedVersions(): string[];
 
   /**
-   * Sets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+   * Sets whether XKTLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
    *
    * Set  this ````true```` when you need to load multiple instances of the same model, to avoid ID clashes
    * between the objects in the different instances.
    *
-   * When we load a model with this set ````true````, then each {@link Entity#id} and {@link MetaObject#id} will be
-   * prefixed by the ID of the model, ie. ````<modelId>#<objectId>````.
+   * When we load a model with this set ````true````, then each {@link Entity.id} and {@link MetaObject.id} will be
+   * prefixed by the ID of the model, ie. ````<modelId>.<objectId>````.
    *
-   * {@link Entity#originalSystemId} and {@link MetaObject#originalSystemId} will always hold the original, un-prefixed, ID values.
+   * {@link Entity.originalSystemId} and {@link MetaObject.originalSystemId} will always hold the original, un-prefixed, ID values.
    *
    * Default value is ````false````.
    *
@@ -252,7 +252,7 @@ export declare interface IXKTDefaultDataSource {
   set globalizeObjectIds(arg: boolean);
 
   /**
-   * Gets whether XKTLoaderPlugin globalizes each {@link Entity#id} and {@link MetaObject#id} as it loads a model.
+   * Gets whether XKTLoaderPlugin globalizes each {@link Entity.id} and {@link MetaObject.id} as it loads a model.
    *
    * Default value is ````false````.
    *
@@ -271,7 +271,7 @@ export declare interface IXKTDefaultDataSource {
    * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
    *
    * @param {LoadXKTModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
   load(params: LoadXKTModel): PerformanceModel;
 }

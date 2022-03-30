@@ -2,15 +2,15 @@
  * @desc A 2D texture map.
  *
  * * Textures are attached to {@link Material}s, which are attached to {@link Mesh}es.
- * * To create a Texture from an image file, set {@link Texture#src} to the image file path.
- * * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture#image} to the HTMLImageElement.
+ * * To create a Texture from an image file, set {@link Texture.src} to the image file path.
+ * * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture.image} to the HTMLImageElement.
  *
  * ## Usage
  *
  * In this example we have a Mesh with a {@link PhongMaterial} which applies diffuse {@link Texture}, and a {@link buildTorusGeometry} which builds a {@link ReadableGeometry}.
  *
- * Note that xeokit will ignore {@link PhongMaterial#diffuse} and {@link PhongMaterial#specular}, since we override those
- * with {@link PhongMaterial#diffuseMap} and {@link PhongMaterial#specularMap}. The {@link Texture} pixel colors directly
+ * Note that xeokit will ignore {@link PhongMaterial.diffuse} and {@link PhongMaterial.specular}, since we override those
+ * with {@link PhongMaterial.diffuseMap} and {@link PhongMaterial.specularMap}. The {@link Texture} pixel colors directly
  * provide the diffuse and specular components for each fragment across the {@link ReadableGeometry} surface.
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_Texture)]
@@ -52,17 +52,17 @@ export declare class Texture extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this Texture as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
-     * @param {String} [cfg.src=null] Path to image file to load into this Texture. See the {@link Texture#src} property for more info.
-     * @param {HTMLImageElement} [cfg.image=null] HTML Image object to load into this Texture. See the {@link Texture#image} property for more info.
-     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. See the {@link Texture#minFilter} property for more info.
-     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. See the {@link Texture#magFilter} property for more info.
-     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapS} property for more info.
-     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapT} property for more info.
+     * @param {String} [cfg.src=null] Path to image file to load into this Texture. See the {@link Texture.src} property for more info.
+     * @param {HTMLImageElement} [cfg.image=null] HTML Image object to load into this Texture. See the {@link Texture.image} property for more info.
+     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. See the {@link Texture.minFilter} property for more info.
+     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. See the {@link Texture.magFilter} property for more info.
+     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture.wrapS} property for more info.
+     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture.wrapT} property for more info.
      * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when true.
      * @param {Number[]} [cfg.translate=[0,0]] 2D translation vector that will be added to texture's *S* and *T* coordinates.
      * @param {Number[]} [cfg.scale=[1,1]] 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
      * @param {Number} [cfg.rotate=0] Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
-     * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture#encoding} property for more info.
+     * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture.encoding} property for more info.
      */
     constructor(owner: Component, cfg?: any);
     _state: any;
@@ -123,7 +123,7 @@ export declare class Texture extends Component {
     /**
      * Sets path to an image file to source this Texture from.
      *
-     * Sets {@link Texture#image} null.
+     * Sets {@link Texture.image} null.
      *
      * @type {String}
      */
@@ -139,7 +139,7 @@ export declare class Texture extends Component {
     /**
      * Sets an HTML DOM Image object to source this Texture from.
      *
-     * Sets {@link Texture#src} null.
+     * Sets {@link Texture.src} null.
      *
      * @type {HTMLImageElement}
      */

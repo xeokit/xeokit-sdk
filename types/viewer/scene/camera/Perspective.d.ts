@@ -110,16 +110,16 @@ export declare class Perspective extends Component {
   get matrix(): number[];
 
   /**
-   * Gets the inverse of {@link Perspective#matrix}.
+   * Gets the inverse of {@link Perspective.matrix}.
    *
-   * @returns {Number[]} The inverse of {@link Perspective#matrix}.
+   * @returns {Number[]} The inverse of {@link Perspective.matrix}.
    */
   get inverseMatrix(): number[];
 
   /**
-   * Gets the transpose of {@link Perspective#matrix}.
+   * Gets the transpose of {@link Perspective.matrix}.
    *
-   * @returns {Number[]} The transpose of {@link Perspective#matrix}.
+   * @returns {Number[]} The transpose of {@link Perspective.matrix}.
    */
   get transposedMatrix(): number[];
 

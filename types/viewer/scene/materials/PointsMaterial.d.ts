@@ -8,7 +8,7 @@ export declare type PointsMaterialConfiguration = {
   pointSize?: number;
   /** Whether points are round (````true````) or square (````false````). */
   roundPoints?: boolean;
-  /** Whether apparent point size reduces with distance when {@link Camera#projection} is set to "perspective". */
+  /** Whether apparent point size reduces with distance when {@link Camera.projection} is set to "perspective". */
   perspectivePoints?: boolean;
   /** When ````perspectivePoints```` is ````true````, this is the minimum rendered size of each point in pixels. */
   minPerspectivePointSize?: number;
@@ -20,7 +20,7 @@ export declare type PointsMaterialConfiguration = {
   minIntensity?: number;
   /** When ````filterIntensity```` is ````true````, points with intensity above this value will not be rendered. */
   maxIntensity?: number;
-  /** Selects a preset PointsMaterial configuration - see {@link PointsMaterial#presets}. */
+  /** Selects a preset PointsMaterial configuration - see {@link PointsMaterial.presets}. */
   preset?: string;
 };
 
@@ -97,7 +97,7 @@ export declare class PointsMaterial extends Material {
   get roundPoints(): boolean;
 
   /**
-   * Sets if rendered point size reduces with distance when {@link Camera#projection} is set to ````"perspective"````.
+   * Sets if rendered point size reduces with distance when {@link Camera.projection} is set to ````"perspective"````.
    *
    * Default is ````true````.
    *
@@ -106,7 +106,7 @@ export declare class PointsMaterial extends Material {
   set perspectivePoints(arg: boolean);
 
   /**
-   * Gets if rendered point size reduces with distance when {@link Camera#projection} is set to "perspective".
+   * Gets if rendered point size reduces with distance when {@link Camera.projection} is set to "perspective".
    *
    * Default is ````false````.
    *
@@ -115,7 +115,7 @@ export declare class PointsMaterial extends Material {
   get perspectivePoints(): boolean;
 
   /**
-   * Sets the minimum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+   * Sets the minimum rendered size of points when {@link PointsMaterial.perspectivePoints} is ````true````.
    *
    * Default value is ````1.0```` pixels.
    *
@@ -124,7 +124,7 @@ export declare class PointsMaterial extends Material {
   set minPerspectivePointSize(arg: number);
 
   /**
-   * Gets the minimum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+   * Gets the minimum rendered size of points when {@link PointsMaterial.perspectivePoints} is ````true````.
    *
    * Default value is ````1.0```` pixels.
    *
@@ -133,7 +133,7 @@ export declare class PointsMaterial extends Material {
   get minPerspectivePointSize(): number;
 
   /**
-   * Sets the maximum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+   * Sets the maximum rendered size of points when {@link PointsMaterial.perspectivePoints} is ````true````.
    *
    * Default value is ````6```` pixels.
    *
@@ -142,7 +142,7 @@ export declare class PointsMaterial extends Material {
   set maxPerspectivePointSize(arg: number);
 
   /**
-   * Gets the maximum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+   * Gets the maximum rendered size of points when {@link PointsMaterial.perspectivePoints} is ````true````.
    *
    * Default value is ````6```` pixels.
    *
@@ -151,7 +151,7 @@ export declare class PointsMaterial extends Material {
   get maxPerspectivePointSize(): number;
 
   /**
-   * Sets if rendered point size reduces with distance when {@link Camera#projection} is set to ````"perspective"````.
+   * Sets if rendered point size reduces with distance when {@link Camera.projection} is set to ````"perspective"````.
    *
    * Default is ````false````.
    *
@@ -160,7 +160,7 @@ export declare class PointsMaterial extends Material {
   set filterIntensity(arg: boolean);
 
   /**
-   * Gets if rendered point size reduces with distance when {@link Camera#projection} is set to "perspective".
+   * Gets if rendered point size reduces with distance when {@link Camera.projection} is set to "perspective".
    *
    * Default is ````false````.
    *
@@ -169,7 +169,7 @@ export declare class PointsMaterial extends Material {
   get filterIntensity(): boolean;
 
   /**
-   * Sets the minimum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+   * Sets the minimum rendered size of points when {@link PointsMaterial.perspectivePoints} is ````true````.
    *
    * Default value is ````0````.
    *
@@ -178,7 +178,7 @@ export declare class PointsMaterial extends Material {
   set minIntensity(arg: number);
 
   /**
-   * Gets the minimum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+   * Gets the minimum rendered size of points when {@link PointsMaterial.filterIntensity} is ````true````.
    *
    * Default value is ````0````.
    *
@@ -187,7 +187,7 @@ export declare class PointsMaterial extends Material {
   get minIntensity(): number;
 
   /**
-   * Sets the maximum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+   * Sets the maximum rendered size of points when {@link PointsMaterial.filterIntensity} is ````true````.
    *
    * Default value is ````1````.
    *
@@ -196,7 +196,7 @@ export declare class PointsMaterial extends Material {
   set maxIntensity(arg: number);
 
   /**
-   * Gets the maximum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+   * Gets the maximum rendered size of points when {@link PointsMaterial.filterIntensity} is ````true````.
    *
    * Default value is ````1````.
    *

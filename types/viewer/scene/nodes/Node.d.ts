@@ -5,9 +5,9 @@ import { Mesh } from "../mesh";
 export declare type NodeConfiguration = {
   /** Optional ID, unique among all components in the parent scene, generated automatically when omitted. */
   id?: string;
-  /** Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}. */
+  /** Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh.id} in {@link Scene.models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel.id}, registered by that ID in {@link MetaScene.metaModels}. */
   isModel?: boolean;
-  /** Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}. */
+  /** Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh.id} in {@link Scene.objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject.id}, registered by that ID in {@link MetaScene.metaObjects}. */
   isObject?: boolean;
   /** The parent Node. */
   parent?: Node;
@@ -162,10 +162,10 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are visible.
    *
-   * Only rendered both {@link Node#visible} is ````true```` and {@link Node#culled} is ````false````.
+   * Only rendered both {@link Node.visible} is ````true```` and {@link Node.culled} is ````false````.
    *
-   * When {@link Node#isObject} and {@link Node#visible} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#visibleObjects}.
+   * When {@link Node.isObject} and {@link Node.visible} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -176,8 +176,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
-   * When {@link Node#isObject} and {@link Node#visible} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#visibleObjects}.
+   * When {@link Node.isObject} and {@link Node.visible} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -200,7 +200,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -209,7 +209,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets if to this Node is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
@@ -220,7 +220,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#clips}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.clips}.
    *
    * @type {Boolean}
    */
@@ -229,7 +229,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets if this Node is clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#clips}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.clips}.
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
@@ -288,8 +288,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are xrayed.
    *
-   * When {@link Node#isObject} and {@link Node#xrayed} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#xrayedObjects}.
+   * When {@link Node.isObject} and {@link Node.xrayed} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.xrayedObjects}.
    *
    * @type {Boolean}
    */
@@ -298,8 +298,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets if this Node is xrayed.
    *
-   * When {@link Node#isObject} and {@link Node#xrayed} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#xrayedObjects}.
+   * When {@link Node.isObject} and {@link Node.xrayed} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.xrayedObjects}.
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
@@ -310,8 +310,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are highlighted.
    *
-   * When {@link Node#isObject} and {@link Node#highlighted} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#highlightedObjects}.
+   * When {@link Node.isObject} and {@link Node.highlighted} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.highlightedObjects}.
    *
    * @type {Boolean}
    */
@@ -320,8 +320,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets if this Node is highlighted.
    *
-   * When {@link Node#isObject} and {@link Node#highlighted} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#highlightedObjects}.
+   * When {@link Node.isObject} and {@link Node.highlighted} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.highlightedObjects}.
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
@@ -332,8 +332,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets if this Node and all child Nodes and {@link Mesh}es are selected.
    *
-   * When {@link Node#isObject} and {@link Node#selected} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#selectedObjects}.
+   * When {@link Node.isObject} and {@link Node.selected} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.selectedObjects}.
    *
    * @type {Boolean}
    */
@@ -342,8 +342,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets if this Node is selected.
    *
-   * When {@link Node#isObject} and {@link Node#selected} are both ````true```` the Node will be
-   * registered by {@link Node#id} in {@link Scene#selectedObjects}.
+   * When {@link Node.isObject} and {@link Node.selected} are both ````true```` the Node will be
+   * registered by {@link Node.id} in {@link Scene.selectedObjects}.
    *
    * Child Nodes and {@link Mesh}es may have different values for this property.
    *
@@ -442,7 +442,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Returns ````true```` if this Mesh represents a model.
    *
-   * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+   * When this returns ````true````, the Mesh will be registered by {@link Mesh.id} in {@link Scene.models} and
    * may also have a corresponding {@link MetaModel}.
    *
    * @type {Boolean}
@@ -452,8 +452,8 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Returns ````true```` if this Node represents an object.
    *
-   * When ````true```` the Node will be registered by {@link Node#id} in
-   * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
+   * When ````true```` the Node will be registered by {@link Node.id} in
+   * {@link Scene.objects} and may also have a {@link MetaObject} with matching {@link MetaObject.id}.
    *
    * @type {Boolean}
    * @abstract
@@ -473,7 +473,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Sets the World-space origin for this Node.
    *
-   * Deprecated and replaced by {@link Node#origin}.
+   * Deprecated and replaced by {@link Node.origin}.
    *
    * @deprecated
    * @type {Float64Array}
@@ -483,7 +483,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * Gets the World-space origin for this Node.
    *
-   * Deprecated and replaced by {@link Node#origin}.
+   * Deprecated and replaced by {@link Node.origin}.
    *
    * @deprecated
    * @type {Float64Array}
@@ -523,7 +523,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
    * Does nothing if already a child.
    *
    * @param {Node|Mesh|String} child Instance or ID of the child to add.
-   * @param [inheritStates=false] Indicates if the child should inherit rendering states from this parent as it is added. Rendering state includes {@link Node#visible}, {@link Node#culled}, {@link Node#pickable}, {@link Node#clippable}, {@link Node#castsShadow}, {@link Node#receivesShadow}, {@link Node#selected}, {@link Node#highlighted}, {@link Node#colorize} and {@link Node#opacity}.
+   * @param [inheritStates=false] Indicates if the child should inherit rendering states from this parent as it is added. Rendering state includes {@link Node.visible}, {@link Node.culled}, {@link Node.pickable}, {@link Node.clippable}, {@link Node.castsShadow}, {@link Node.receivesShadow}, {@link Node.selected}, {@link Node.highlighted}, {@link Node.colorize} and {@link Node.opacity}.
    * @returns {Node|Mesh} The child.
    */
   addChild(child: Node | Mesh | string, inheritStates?: any): Node | Mesh;
@@ -557,7 +557,7 @@ export declare class Node extends Component implements Omit<Entity, "parent"> {
   /**
    * The parent Node.
    *
-   * The parent Node may also be set by passing the Node to the parent's {@link Node#addChild} method.
+   * The parent Node may also be set by passing the Node to the parent's {@link Node.addChild} method.
    *
    * @type {Node}
    */

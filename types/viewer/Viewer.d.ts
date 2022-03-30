@@ -7,21 +7,21 @@ import { CameraControl } from "./scene/CameraControl/CameraControl";
 import { Plugin } from "./Plugin";
 
 export declare type ViewerConfiguration = {
-  /** Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates. */
+  /** Optional ID for this Viewer, defaults to the ID of {@link Viewer.scene}, which xeokit automatically generates. */
   id?: string;
-  /** ID of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID. */
+  /** ID of an existing HTML canvas for the {@link Viewer.scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID. */
   canvasId?: string;
-  /** Reference of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID. */
+  /** Reference of an existing HTML canvas for the {@link Viewer.scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID. */
   canvasElement?: HTMLCanvasElement;
   /** Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document. */
   keyboardEventsElement?: HTMLElement;
   /** ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted. */
   spinnerElementId?: string;
-  /** The number of times the {@link Viewer#scene} renders per frame. */
+  /** The number of times the {@link Viewer.scene} renders per frame. */
   passes?: number;
   /** When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false). */
   clearEachPass?: boolean;
-  /** Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.*/
+  /** Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer.getSnapshot} to work.*/
   preserveDrawingBuffer?: boolean;
   /** Whether or not the canvas is transparent. */
   transparent?: boolean;
@@ -35,7 +35,7 @@ export declare type ViewerConfiguration = {
   gammaFactor?: number;
   /** Sets the canvas background color to use when ````transparent```` is false. */
   backgroundColor?: number[];
-  /**When ````transparent```` is false, set this ````true```` to derive the canvas background color from {@link AmbientLight#color}, or ````false```` to set the canvas background to ````backgroundColor````. */
+  /**When ````transparent```` is false, set this ````true```` to derive the canvas background color from {@link AmbientLight.color}, or ````false```` to set the canvas background to ````backgroundColor````. */
   backgroundColorFromAmbientLight?: boolean;
   /** The measurement unit type. */
   units?: "meters" | "centimeters" | "millimeters" | "yards" | "feet" | "inches" ;
@@ -49,9 +49,9 @@ export declare type ViewerConfiguration = {
   antialias?: boolean;
   /** Whether writing into the depth buffer is enabled or disabled when rendering transparent objects. */
   alphaDepthMask?: boolean;
-  /** Whether to enable {@link Entity#offset}. For best performance, only set this ````true```` when you need to use {@link Entity#offset}. */
+  /** Whether to enable {@link Entity.offset}. For best performance, only set this ````true```` when you need to use {@link Entity.offset}. */
   entityOffsetsEnabled?: boolean;
-  /** Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. */
+  /** Whether to enable full-precision accuracy when surface picking with {@link Scene.pick}. */
   pickSurfacePrecisionEnabled?: boolean;
   /** Whether to enable logarithmic depth buffer. */
   logarithmicDepthBufferEnabled?: boolean;
@@ -109,7 +109,7 @@ export declare class Viewer {
   id: string | number;
 
   /**
-   * The Viewer's {@link Camera}. This is also found on {@link Scene#camera}.
+   * The Viewer's {@link Camera}. This is also found on {@link Scene.camera}.
    * @property camera
    * @type {Camera}
    */
@@ -173,7 +173,7 @@ export declare class Viewer {
    *
    * Switches rendering to a hidden snapshot canvas.
    *
-   * Exit snapshot mode using {@link Viewer#endSnapshot}.
+   * Exit snapshot mode using {@link Viewer.endSnapshot}.
    */
   beginSnapshot(): void;
 

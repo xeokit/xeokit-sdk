@@ -5,7 +5,7 @@ import { TreeViewNode } from "./TreeViewNode";
 export declare type TreeViewPluginConfiguration = {
   /** DOM element to contain the TreeViewPlugin. */
   containerElement: HTMLElement;
-  /** When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin#addModel} instead. */
+  /** When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin.addModel} instead. */
   autoAddModels?: boolean;
   /** Optional depth to which to initially expand the tree. */
   autoExpandDepth?: number;
@@ -62,14 +62,14 @@ export declare class TreeViewPlugin extends Plugin {
    * To automatically add each model as it's created, instead of manually calling this method each time,
    * provide a ````autoAddModels: true```` to the TreeViewPlugin constructor.
    *
-   * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
+   * @param {String} modelId ID of a model {@link Entity} in {@link Scene.models}.
    * @param {Object} [options] Options for model in the tree view.
    * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for "containment"
    * and "storeys" hierarchy types, the tree would derive the root node name from the model's "IfcProject" element
    * name. This option allows to override that name when it is not suitable as a display name.
    * @returns {ModelTreeView} ModelTreeView for the newly-added model. If this method succeeded in adding the model,
-   * then {@link ModelTreeView#valid} will equal ````true````. Otherwise, that property will be ````false````
-   * and {@link ModelTreeView#errors} will contain error messages.
+   * then {@link ModelTreeView.valid} will equal ````true````. Otherwise, that property will be ````false````
+   * and {@link ModelTreeView.errors} will contain error messages.
    */
   addModel(modelId: string, options?: {
       rootName?: string;
@@ -80,7 +80,7 @@ export declare class TreeViewPlugin extends Plugin {
    *
    * Does nothing if model not currently in tree view.
    *
-   * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
+   * @param {String} modelId ID of a model {@link Entity} in {@link Scene.models}.
    */
   removeModel(modelId: string): void;
 
@@ -108,7 +108,7 @@ export declare class TreeViewPlugin extends Plugin {
   showNode(objectId: string): void;
 
   /**
-   * De-highlights the node previously shown with {@link TreeViewPlugin#showNode}.
+   * De-highlights the node previously shown with {@link TreeViewPlugin.showNode}.
    *
    * Does nothing if no node is currently shown.
    *

@@ -2,7 +2,7 @@ import { Plugin } from "../../viewer/Plugin";
 import { Viewer } from "../../viewer/Viewer";
 
 export declare type FastNavPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer. */
   hidePBR?: boolean;
@@ -116,7 +116,7 @@ export declare class FastNavPlugin extends Plugin {
      *
      * Default is ````false````.
      *
-     * The scaling factor is configured via {@link FastNavPlugin#scaleCanvasResolutionFactor}.
+     * The scaling factor is configured via {@link FastNavPlugin.scaleCanvasResolutionFactor}.
      *
      * @param {Boolean} scaleCanvasResolution ````true```` to scale the canvas resolution.
      */
@@ -127,7 +127,7 @@ export declare class FastNavPlugin extends Plugin {
      *
      * Default is ````false````.
      *
-     * The scaling factor is configured via {@link FastNavPlugin#scaleCanvasResolutionFactor}.
+     * The scaling factor is configured via {@link FastNavPlugin.scaleCanvasResolutionFactor}.
      *
      * @return {Boolean} ````true```` if scaling the canvas resolution.
      */
@@ -140,7 +140,7 @@ export declare class FastNavPlugin extends Plugin {
      *
      * Default is ````0.6````.
      *
-     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin.scaleCanvasResolution} ````true````.
      *
      * @param {Number} scaleCanvasResolutionFactor Factor by which we scale the canvas resolution.
      */
@@ -151,7 +151,7 @@ export declare class FastNavPlugin extends Plugin {
      *
      * Default is ````0.6````.
      *
-     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin.scaleCanvasResolution} ````true````.
      *
      * @return {Number} Factor by which we scale the canvas resolution.
      */
@@ -160,7 +160,7 @@ export declare class FastNavPlugin extends Plugin {
     /**
      * Sets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.
      *
-     * The delay duration is configured via {@link FastNavPlugin#delayBeforeRestoreSeconds}.
+     * The delay duration is configured via {@link FastNavPlugin.delayBeforeRestoreSeconds}.
      *
      * Default is ````true````.
      *
@@ -171,7 +171,7 @@ export declare class FastNavPlugin extends Plugin {
     /**
      * Gets whether to have a delay before restoring normal rendering after we stop interacting with the Viewer.
      *
-     * The delay duration is configured via {@link FastNavPlugin#delayBeforeRestoreSeconds}.
+     * The delay duration is configured via {@link FastNavPlugin.delayBeforeRestoreSeconds}.
      *
      * Default is ````true````.
      *
@@ -182,7 +182,7 @@ export declare class FastNavPlugin extends Plugin {
     /**
      * Sets the delay before restoring normal rendering after we stop interacting with the Viewer.
      *
-     * The delay is enabled when {@link FastNavPlugin#delayBeforeRestore} is ````true````.
+     * The delay is enabled when {@link FastNavPlugin.delayBeforeRestore} is ````true````.
      *
      * Default is ````0.5```` seconds.
      *
@@ -193,7 +193,7 @@ export declare class FastNavPlugin extends Plugin {
     /**
      * Gets the delay before restoring normal rendering after we stop interacting with the Viewer.
      *
-     * The delay is enabled when {@link FastNavPlugin#delayBeforeRestore} is ````true````.
+     * The delay is enabled when {@link FastNavPlugin.delayBeforeRestore} is ````true````.
      *
      * Default is ````0.5```` seconds.
      *

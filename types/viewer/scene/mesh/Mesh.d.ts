@@ -8,9 +8,9 @@ export declare type MeshConfiguration = {
   id?: string;
   /** ID of the corresponding object within the originating system, if any. */
   originalSystemId?: string;
-  /** Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}. */
+  /** Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh.id} in {@link Scene.models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel.id}, registered by that ID in {@link MetaScene.metaModels}. */
   isModel?: boolean;
-  /** Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.*/
+  /** Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh.id} in {@link Scene.objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject.id}, registered by that ID in {@link MetaScene.metaObjects}.*/
   isObject?: boolean;
   /** The parent Node. */
   parent?: Node;
@@ -58,17 +58,17 @@ export declare type MeshConfiguration = {
   opacity?: number;
   /** Mesh's billboarding behaviour. */
   billboard?: "none" | "spherical" | "cylindrical";
-  /** {@link Geometry} to define the shape of this Mesh. Inherits {@link Scene#geometry} by default. */
+  /** {@link Geometry} to define the shape of this Mesh. Inherits {@link Scene.geometry} by default. */
   geometry?: Geometry;
-  /** {@link Material} to define the normal rendered appearance for this Mesh. Inherits {@link Scene#material} by default. */
+  /** {@link Material} to define the normal rendered appearance for this Mesh. Inherits {@link Scene.material} by default. */
   material?: Material;
-  /** {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene#xrayMaterial} by default.*/
+  /** {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene.xrayMaterial} by default.*/
   xrayMaterial?: EmphasisMaterial;
-  /** {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene#highlightMaterial} by default. */
+  /** {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene.highlightMaterial} by default. */
   highlightMaterial?: EmphasisMaterial;
-  /** {@link EmphasisMaterial} to define the selected appearance for this Mesh. Inherits {@link Scene#selectedMaterial} by default. */
+  /** {@link EmphasisMaterial} to define the selected appearance for this Mesh. Inherits {@link Scene.selectedMaterial} by default. */
   selectedMaterial?: EmphasisMaterial;
-  /** {@link EdgeMaterial} to define the appearance of enhanced edges for this Mesh. Inherits {@link Scene#edgeMaterial} by default. */
+  /** {@link EdgeMaterial} to define the appearance of enhanced edges for this Mesh. Inherits {@link Scene.edgeMaterial} by default. */
   edgeMaterial?: EmphasisMaterial;
 };
 
@@ -167,10 +167,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is visible.
    *
-   * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+   * Only rendered when {@link Mesh.visible} is ````true```` and {@link Mesh.culled} is ````false````.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.visible} are both ````true```` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -179,10 +179,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is visible.
    *
-   * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+   * Only rendered when {@link Mesh.visible} is ````true```` and {@link Mesh.culled} is ````false````.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.visible} are both ````true```` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.visibleObjects}.
    *
    * @type {Boolean}
    */
@@ -191,7 +191,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is culled.
    *
-   * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+   * Only rendered when {@link Mesh.visible} is ````true```` and {@link Mesh.culled} is ````false````.
    *
    * @type {Boolean}
    */
@@ -200,7 +200,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is culled.
    *
-   * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
+   * Only rendered when {@link Mesh.visible} is ````true```` and {@link Mesh.culled} is ````false````.
    *
    * @type {Boolean}
    */
@@ -209,7 +209,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -218,7 +218,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is pickable.
    *
-   * Picking is done via calls to {@link Scene#pick}.
+   * Picking is done via calls to {@link Scene.pick}.
    *
    * @type {Boolean}
    */
@@ -227,7 +227,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -236,7 +236,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is clippable.
    *
-   * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+   * Clipping is done by the {@link SectionPlane}s in {@link Scene.sectionPlanes}.
    *
    * @type {Boolean}
    */
@@ -287,10 +287,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is xrayed.
    *
-   * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+   * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.xrayMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.xrayed} are both ````true``` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.xrayedObjects}.
    *
    * @type {Boolean}
    */
@@ -299,10 +299,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is xrayed.
    *
-   * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
+   * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.xrayMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.xrayed} are both ````true``` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.xrayedObjects}.
    *
    * @type {Boolean}
    */
@@ -311,10 +311,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is highlighted.
    *
-   * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+   * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.highlightMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.highlighted} are both ````true```` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.highlightedObjects}.
    *
    * @type {Boolean}
    */
@@ -323,10 +323,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is highlighted.
    *
-   * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
+   * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.highlightMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.highlighted} are both ````true```` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.highlightedObjects}.
    *
    * @type {Boolean}
    */
@@ -335,10 +335,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is selected.
    *
-   * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+   * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.selectedMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.selected} are both ````true``` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.selectedObjects}.
    *
    * @type {Boolean}
    */
@@ -347,10 +347,10 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is selected.
    *
-   * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
+   * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh.selectedMaterial}.
    *
-   * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
-   * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
+   * When {@link Mesh.isObject} and {@link Mesh.selected} are both ````true``` the Mesh will be
+   * registered by {@link Mesh.id} in {@link Scene.selectedObjects}.
    *
    * @type {Boolean}
    */
@@ -359,7 +359,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets if this Mesh is edge-enhanced.
    *
-   * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+   * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh.edgeMaterial}.
    *
    * @type {Boolean}
    */
@@ -368,7 +368,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets if this Mesh is edge-enhanced.
    *
-   * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh#edgeMaterial}.
+   * Edge appearance is configured by the {@link EdgeMaterial} referenced by {@link Mesh.edgeMaterial}.
    *
    * @type {Boolean}
    */
@@ -468,7 +468,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * The parent Node.
    *
-   * The parent Node may also be set by passing the Mesh to the parent's {@link Node#addChild} method.
+   * The parent Node may also be set by passing the Mesh to the parent's {@link Node.addChild} method.
    *
    * @type {Node}
    */
@@ -477,7 +477,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the shape of this Mesh.
    *
-   * Set to {@link Scene#geometry} by default.
+   * Set to {@link Scene.geometry} by default.
    *
    * @type {Geometry}
    */
@@ -486,7 +486,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
    *
-   * Set to {@link Scene#material} by default.
+   * Set to {@link Scene.material} by default.
    *
    * @type {Material}
    */
@@ -535,7 +535,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Returns ````true```` if this Mesh represents a model.
    *
-   * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+   * When this returns ````true````, the Mesh will be registered by {@link Mesh.id} in {@link Scene.models} and
    * may also have a corresponding {@link MetaModel}.
    *
    * @type {Boolean}
@@ -545,7 +545,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Returns ````true```` if this Mesh represents an object.
    *
-   * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
+   * When this returns ````true````, the Mesh will be registered by {@link Mesh.id} in {@link Scene.objects} and
    * may also have a corresponding {@link MetaObject}.
    *
    * @type {Boolean}
@@ -565,7 +565,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
    *
-   * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+   * When this is given, then {@link Mesh.matrix}, {@link Mesh.position} and {@link Mesh.geometry} are all assumed to be relative to this center position.
    *
    * @type {Float64Array}
    */
@@ -574,7 +574,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets the 3D origin of the Mesh's {@link Geometry}'s vertex positions.
    *
-   * When this is given, then {@link Mesh#matrix}, {@link Mesh#position} and {@link Mesh#geometry} are all assumed to be relative to this center position.
+   * When this is given, then {@link Mesh.matrix}, {@link Mesh.position} and {@link Mesh.geometry} are all assumed to be relative to this center position.
    *
    * @type {Float64Array}
    */
@@ -583,7 +583,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Sets the World-space origin for this Mesh.
    *
-   * Deprecated and replaced by {@link Mesh#origin}.
+   * Deprecated and replaced by {@link Mesh.origin}.
    *
    * @deprecated
    * @type {Float64Array}
@@ -593,7 +593,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Gets the World-space origin for this Mesh.
    *
-   * Deprecated and replaced by {@link Mesh#origin}.
+   * Deprecated and replaced by {@link Mesh.origin}.
    *
    * @deprecated
    * @type {Float64Array}
@@ -653,7 +653,7 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Property with final value ````true```` to indicate that xeokit should render this Mesh in sorted order, relative to other Meshes.
    *
-   * The sort order is determined by {@link Mesh#stateSortCompare}.
+   * The sort order is determined by {@link Mesh.stateSortCompare}.
    *
    * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
    *
@@ -664,9 +664,9 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the appearance of this Mesh when xrayed.
    *
-   * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
+   * Mesh is xrayed when {@link Mesh.xrayed} is ````true````.
    *
-   * Set to {@link Scene#xrayMaterial} by default.
+   * Set to {@link Scene.xrayMaterial} by default.
    *
    * @type {EmphasisMaterial}
    */
@@ -675,9 +675,9 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the appearance of this Mesh when highlighted.
    *
-   * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
+   * Mesh is xrayed when {@link Mesh.highlighted} is ````true````.
    *
-   * Set to {@link Scene#highlightMaterial} by default.
+   * Set to {@link Scene.highlightMaterial} by default.
    *
    * @type {EmphasisMaterial}
    */
@@ -686,9 +686,9 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the appearance of this Mesh when selected.
    *
-   * Mesh is xrayed when {@link Mesh#selected} is ````true````.
+   * Mesh is xrayed when {@link Mesh.selected} is ````true````.
    *
-   * Set to {@link Scene#selectedMaterial} by default.
+   * Set to {@link Scene.selectedMaterial} by default.
    *
    * @type {EmphasisMaterial}
    */
@@ -697,9 +697,9 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
   /**
    * Defines the appearance of this Mesh when edges are enhanced.
    *
-   * Mesh is xrayed when {@link Mesh#edges} is ````true````.
+   * Mesh is xrayed when {@link Mesh.edges} is ````true````.
    *
-   * Set to {@link Scene#edgeMaterial} by default.
+   * Set to {@link Scene.edgeMaterial} by default.
    *
    * @type {EdgeMaterial}
    */

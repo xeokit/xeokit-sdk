@@ -12,7 +12,7 @@ export declare type IFCStoreyPlanObjectStates = {
 };
 
 export declare type StoreyViewsPluginConfiguration = {
-  /** Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}. */
+  /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
   /** Map of visual states for the {@link Entity}s as rendered within each {@link Storey}.  Default value is {@link IFCStoreyPlanObjectStates}. */
   objectStates?: IFCStoreyPlanObjectStates;
@@ -33,7 +33,7 @@ export declare class StoreyViewsPlugin extends Plugin {
   /**
    * A {@link Storey} for each ````IfcBuildingStorey```.
    *
-   * There will be a {@link Storey} for every existing {@link MetaObject} whose {@link MetaObject#type} equals "IfcBuildingStorey".
+   * There will be a {@link Storey} for every existing {@link MetaObject} whose {@link MetaObject.type} equals "IfcBuildingStorey".
    *
    * These are created and destroyed automatically as models are loaded and destroyed.
    *
@@ -89,7 +89,7 @@ export declare class StoreyViewsPlugin extends Plugin {
    * Optionally hides all other Entitys.
    *
    * Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
-   * IFC types in plan views is configured by {@link StoreyViewsPlugin#objectStates}.
+   * IFC types in plan views is configured by {@link StoreyViewsPlugin.objectStates}.
    *
    * See also: {@link ObjectsMemento}, which saves and restores a memento of the visual state
    * of the {@link Entity}'s that represent objects within a {@link Scene}.
@@ -97,7 +97,7 @@ export declare class StoreyViewsPlugin extends Plugin {
    * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
    * @param {*} [options] Options for showing the Entitys within the storey.
    * @param {Boolean} [options.hideOthers=false] When ````true````, hide all other {@link Entity}s.
-   * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyViewsPlugin#objectStates}.
+   * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyViewsPlugin.objectStates}.
    */
   showStoreyObjects(storeyId: string, options?: {
     hideOthers?: boolean;
@@ -133,7 +133,7 @@ export declare class StoreyViewsPlugin extends Plugin {
    * Attempts to pick an {@link Entity} at the given pixel coordinates within a StoreyMap image.
    *
    * @param {StoreyMap} storeyMap The StoreyMap.
-   * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link StoreyMap#imageData}.
+   * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link StoreyMap.imageData}.
    * @param {*} [options] Picking options.
    * @param {Boolean} [options.pickSurface=false] Whether to return the picked position on the surface of the Entity.
    * @returns {PickResult} The pick result, if an Entity was successfully picked, else null.
@@ -153,12 +153,12 @@ export declare class StoreyViewsPlugin extends Plugin {
   /**
    * Converts a 3D World-space position to a 2D position within a StoreyMap image.
    *
-   * Use {@link StoreyViewsPlugin#pickStoreyMap} to convert 2D image positions to 3D world-space.
+   * Use {@link StoreyViewsPlugin.pickStoreyMap} to convert 2D image positions to 3D world-space.
    *
    * @param {StoreyMap} storeyMap The StoreyMap.
    * @param {Number[]} worldPos 3D World-space position within the storey.
-   * @param {Number[]} imagePos 2D pixel position within the {@link StoreyMap#imageData}.
-   * @returns {Boolean} True if ````imagePos```` is within the bounds of the {@link StoreyMap#imageData}, else ````false```` if it falls outside.
+   * @param {Number[]} imagePos 2D pixel position within the {@link StoreyMap.imageData}.
+   * @returns {Boolean} True if ````imagePos```` is within the bounds of the {@link StoreyMap.imageData}, else ````false```` if it falls outside.
    */
   worldPosToStoreyMap(storeyMap: StoreyMap, worldPos: number[], imagePos: number[]): boolean;
 
