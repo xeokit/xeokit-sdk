@@ -24,6 +24,14 @@ export declare class CameraControl extends Component {
   AXIS_VIEW_BOTTOM: number;
 
   /**
+   * Fires when the model is loaded
+   * @param event The loaded event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "rightClick", callback: (e: {event: MouseEvent; pagePos: number[]; canvasPos: number[]; }) => void, scope?: any): string
+
+  /**
    * Sets the current navigation mode.
    *
    * Accepted values are:
