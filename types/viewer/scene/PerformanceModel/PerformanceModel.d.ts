@@ -7,6 +7,23 @@ import { PerformanceNode } from "./PerformanceNode";
  * A high-performance model representation for efficient rendering and low memory usage.
  */
 export declare class PerformanceModel extends Component {
+
+  /**
+   * Fires when the model is loaded
+   * @param event The loaded event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "loaded", callback: (loaded: true) => void, scope?: any): string;
+
+  /**
+   * Fires when the loading the model has an error
+   * @param event The error event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+   on(event: "error", callback: (msg: string) => void, scope?: any): string;
+
   /**
    * Returns true to indicate that this Component is a PerformanceModel.
    * @type {Boolean}

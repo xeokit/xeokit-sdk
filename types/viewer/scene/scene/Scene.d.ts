@@ -6,8 +6,52 @@ import { Entity } from "../Entity";
 import { ReadableGeometry } from "../geometry";
 import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
 import { Viewport } from "../viewport/Viewport";
+import { PerformanceModel } from "../PerformanceModel/PerformanceModel";
+import { Mesh } from "../mesh";
+import { Node } from "../nodes";
 
 export declare class Scene extends Component {
+
+  /**
+   * Fires when a model is loaded
+   * @param event The loaded event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "modelLoaded", callback: (modelId: string | number) => void, scope?: any): string;
+
+  /**
+   * Fires when a model is unloaded
+   * @param event The loaded event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "modelUnloaded", callback: (modelId: string | number) => void, scope?: any): string;
+
+  /**
+   * Fired when about to render a frame for a Scene.
+   * @param event The rendering event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "rendering", callback: (renderEvent: { sceneId: string|number; pass: number; }) => void, scope?: any): string;
+
+  /**
+   * Fired when we have just rendered a frame for a Scene.
+   * @param event The rendered event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "rendered", callback: (renderEvent: { sceneId: string|number; pass: number; }) => void, scope?: any): string;
+
+  /**
+   * Fires when the entity visibility is updated.
+   * @param event The rendered event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+   on(event: "objectVisibility", callback: (entity: PerformanceModel | Mesh | Node) => void, scope?: any): string;
+
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
    */
