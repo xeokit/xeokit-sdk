@@ -114,4 +114,18 @@ export class AnnotationsPlugin extends Plugin {
    * Destroys all {@link Annotation}s.
    */
   clear(): void;
+
+  /**
+   * Fires when a annotation is created.
+   * @param {String} event The annotationCreated event
+   * @param {Function} callback Callback fired on the event
+   */
+   on(event: "annotationCreated", callback: (annotationId: string)=> void): void;
+
+   /**
+    * Fires when a annotation is destroyed.
+    * @param {String} event The annotationDestroyed event
+    * @param {Function} callback Callback fired on the event
+    */
+   on(event: "annotationDestroyed", callback: (annotationId: string)=> void): void;
 }

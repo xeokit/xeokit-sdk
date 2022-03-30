@@ -117,4 +117,19 @@ export class DistanceMeasurementsPlugin extends Plugin {
    * Destroys all {@link DistanceMeasurement}s.
    */
   clear(): void;
+
+  /**
+   * Fires when a measurement is created.
+   * @param {String} event The measurementCreated event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "measurementCreated", callback: (measurement: DistanceMeasurement)=> void): void;
+
+  /**
+   * Fires when a measurement is destroyed.
+   * @param {String} event The measurementDestroyed event
+   * @param {Function} callback Callback fired on the event
+   */
+   on(event: "measurementDestroyed", callback: (measurement: DistanceMeasurement)=> void): void;
+  
 }
