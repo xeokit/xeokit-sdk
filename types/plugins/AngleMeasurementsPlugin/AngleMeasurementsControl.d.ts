@@ -7,7 +7,7 @@ import { AngleMeasurementsPlugin } from "./AngleMeasurementsPlugin";
  *
  * Once the AngleMeasurementControl is activated, the first click on any {@link Entity} begins constructing a {@link AngleMeasurement}, fixing its origin to that Entity. The next click on any Entity will complete the AngleMeasurement, fixing its target to that second Entity. The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing another AngleMeasurement, and so on, until deactivated.
  */
-export class AngleMeasurementsControl extends Component {
+export declare class AngleMeasurementsControl extends Component {
   /**
    * The {@link AngleMeasurementsPlugin} that owns this AngleMeasurementsControl.
    * @type {AngleMeasurementsPlugin}

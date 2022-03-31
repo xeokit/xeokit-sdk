@@ -5,7 +5,7 @@ import { DistanceMeasurementsPlugin } from "./DistanceMeasurementsPlugin";
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
  */
-export class DistanceMeasurementsControl extends Component {
+export declare class DistanceMeasurementsControl extends Component {
   /**
    * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurementsControl.
    * @type {DistanceMeasurementsPlugin}

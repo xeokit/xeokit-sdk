@@ -15,7 +15,7 @@ export declare type MarkerConfiguration = {
 /**
  * @desc Tracks the World, View and Canvas coordinates, and visibility, of a position within a {@link Scene}.
  */
-export class Marker extends Component {
+export declare class Marker extends Component {
   /**
    * @constructor
    * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Marker as well.

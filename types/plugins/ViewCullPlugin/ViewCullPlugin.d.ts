@@ -10,7 +10,7 @@ export declare type ViewCullPluginConfiguration = {
 /**
  * {@link Viewer} plugin that performs view frustum culling to accelerate rendering performance.
  */
-export class ViewCullPlugin extends Plugin {
+export declare class ViewCullPlugin extends Plugin {
   /**
    * @constructor
    * @param {Viewer} viewer The Viewer.

@@ -5,7 +5,7 @@ import { Marker } from "../../viewer/scene/marker";
 /**
  * @desc Measures the angle indicated by three 3D points.
  */
-export class AngleMeasurement extends Component {
+export declare class AngleMeasurement extends Component {
   /**
    * The {@link AngleMeasurementsPlugin} that owns this AngleMeasurement.
    * @type {AngleMeasurementsPlugin}

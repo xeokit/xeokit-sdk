@@ -14,7 +14,7 @@ export declare type SectionPlaneConfiguration = {
 /**
  *  An arbitrarily-aligned World-space clipping plane.
  */
-export class SectionPlane extends Component {
+export declare class SectionPlane extends Component {
   /**
    * @constructor
    * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.

@@ -733,14 +733,14 @@ export declare class Scene extends Component {
   setObjectsOpacity(ids: string[], opacity: number): boolean
 
   /**
-     * Batch-updates {@link Entity.pickable} on {@link Entity}s that represent objects.
-     *
-     * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
-     *
-     * @param {String[]} ids Array of {@link Entity.id} values.
-     * @param {Boolean} pickable Whether or not to set pickable.
-     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
-     */
+   * Batch-updates {@link Entity.pickable} on {@link Entity}s that represent objects.
+   *
+   * An {@link Entity} represents an object when {@link Entity.isObject} is ````true````.
+   *
+   * @param {String[]} ids Array of {@link Entity.id} values.
+   * @param {Boolean} pickable Whether or not to set pickable.
+   * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
+   */
   setObjectsPickable(ids: string[], pickable: boolean): boolean;
 
   /**
@@ -765,7 +765,7 @@ export declare class Scene extends Component {
   withObjects(ids: string[], callback: Function): boolean;
 
   /**
-     * Destroys this Scene.
-     */
-  destroy():void;
+   * Destroys this Scene.
+   */
+  destroy(): void;
 }
