@@ -1149,11 +1149,11 @@ class TrianglesDataTextureLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    _setFlags(portionId, flags, deferred = false) {
+    _setFlags(portionId, flags, transparent, deferred = false) {
         const subPortionMapping = this._subPortionIdMapping[portionId];
 
         for (let i = 0, len = subPortionMapping.length; i < len; i++) {
-            this._subPortionSetFlags (subPortionMapping[i], flags);
+            this._subPortionSetFlags (subPortionMapping[i], flags, transparent);
         }
     }
 
