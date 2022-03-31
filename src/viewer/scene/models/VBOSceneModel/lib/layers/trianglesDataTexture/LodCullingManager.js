@@ -256,6 +256,8 @@ class LodCullingManager {
 
     /** 
      * Un-cull any objects belonging to the current `LOD` level, and decrease the `LOD` level.
+     * 
+     * @private
      */
     _decreaseLODLevelIndex ()
     {

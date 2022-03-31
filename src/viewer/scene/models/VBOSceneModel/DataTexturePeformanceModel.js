@@ -13,7 +13,8 @@ import {utils} from "../utils.js";
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
 
-import { LodCullingManager } from "./lib/layers/trianglesDataTexture/LodCullingManager.js"
+import { LodCullingManager } from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
+import { ViewFrustumCullingManager } from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -944,6 +945,14 @@ class DataTexturePeformanceModel extends Component {
         }
 
         this._targetLodFps = cfg.targetLodFps;
+
+        if (cfg.enableViewFrustumCulling) {
+            /**
+             * @type {ViewFrustumCullingManager}
+             */
+            this._vfcManager = new ViewFrustumCullingManager (this);
+        }
+
         this._aabb = math.collapseAABB3();
         this._aabbDirty = false;
 
@@ -1909,6 +1918,19 @@ class DataTexturePeformanceModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
+        if (this._vfcManager && !this._vfcManager.finalized) {
+            if (cfg.color) {
+                cfg.color = cfg.color.slice ();
+            }
+
+            if (cfg.positionsDecodeMatrix) {
+                cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice ();
+            }
+
+            this._vfcManager.addMesh (cfg);
+
+            return;
+        }
 
         let id = cfg.id;
         if (id === undefined || id === null) {
@@ -1980,7 +2002,7 @@ class DataTexturePeformanceModel extends Component {
         if (null !== layer && !layer.canCreatePortion(preparedGeometryCfg, instancing ? geometryId : null))
         {
             layer.finalize();
-            delete this._currentDataTextureLayer;;
+            delete this._currentDataTextureLayer;
             layer = null;
         }
 
@@ -2177,6 +2199,12 @@ class DataTexturePeformanceModel extends Component {
      * @returns {Entity}
      */
     createEntity(cfg) {
+
+        if (this._vfcManager && !this._vfcManager.finalized) {
+            this._vfcManager.addEntity (cfg);
+            return;
+        }
+
         // Validate or generate Entity ID
         let id = cfg.id;
         if (id === undefined) {
@@ -2266,6 +2294,20 @@ class DataTexturePeformanceModel extends Component {
             return;
         }
 
+        if (this._vfcManager) {
+            this._vfcManager.finalize (
+                function () {
+                    if (!this._currentDataTextureLayer) {
+                        return;
+                    }
+
+                    this._currentDataTextureLayer.finalize();
+                    delete this._currentDataTextureLayer;
+                    this._currentDataTextureLayer = null;
+                }
+            );
+        }
+        
         if (this._currentDataTextureLayer) {
             this._currentDataTextureLayer.finalize ();
         }

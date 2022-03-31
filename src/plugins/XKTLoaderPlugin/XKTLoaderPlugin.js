@@ -742,6 +742,7 @@ class XKTLoaderPlugin extends Plugin {
                 isModel: true,
                 origin: params.origin,
                 targetLodFps: params.useDataTextures.targetLodFps || false,
+                enableViewFrustumCulling: params.useDataTextures.enableViewFrustumCulling || false,
             }));
         } else {
             sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
