@@ -253,6 +253,10 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
             throw "Not finalized";
         }
 
+        if (!this._aabbTree) {
+            return;
+        }
+        
         if (!this._canvasElement) {
             /**
              * @type {HTMLCanvasElement}
@@ -297,6 +301,11 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         {
             return;
         }
+
+        if (!this._aabbTree) {
+            return;
+        }
+
         const allAabbNodes = this._aabbTree.all();
 
         let maxEntityId = 0;
