@@ -306,7 +306,7 @@ class TrianglesDataTexturePickNormalsRenderer {
 
         src.push("mat4 entityNormalMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(8, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(9, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(10, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(11, objectIndex), 0));")
 
-        src.push("vec4 worldNormal =  worldNormalMatrix * (vec4(normal, 1) * entityNormalMatrix); ");
+        src.push("vec4 worldNormal = entityNormalMatrix * worldNormalMatrix * vec4(normal, 1); ");
 
         src.push("vWorldNormal = worldNormal.xyz;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
