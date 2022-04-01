@@ -12135,7 +12135,7 @@ class Canvas extends Component {
                      * @event boundary
                      * @param value The property's new value
                      */
-                    if (!newResolutionScale) {
+                    if (!newResolutionScale || newCanvasSize) {
                         this.fire("boundary", boundary);
                     }
 
@@ -15963,7 +15963,9 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if ( scene.highlightMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (highlightedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
                         highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
@@ -15978,17 +15980,17 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillTransparentBinLen > 0 || highlightedEdgesTransparentBinLen > 0 || highlightedFillOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
-                gl.enable(gl.CULL_FACE);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 } else {
                     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
                 }
-
+                gl.enable(gl.CULL_FACE);
                 if (highlightedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
                         highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
@@ -16004,7 +16006,9 @@ const Renderer = function (scene, options) {
 
             if (selectedFillOpaqueBinLen > 0 || selectedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (selectedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
                         selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
@@ -16019,10 +16023,11 @@ const Renderer = function (scene, options) {
 
             if (selectedFillTransparentBinLen > 0 || selectedEdgesTransparentBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -23167,6 +23172,7 @@ class EmphasisMaterial extends Material {
      * @param {Number} [cfg.edgeWidth=1] Width of xray edges, in pixels.
      * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
      * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces when emphasising.
+     * @param {Boolean} [cfg.glowThrough=true] Whether to make the emphasized object appear to float on top of other objects, as if it were "glowing through" them.
      */
     constructor(owner, cfg = {}) {
 
@@ -23181,7 +23187,8 @@ class EmphasisMaterial extends Material {
             edgeColor: null,
             edgeAlpha: null,
             edgeWidth: null,
-            backfaces: true
+            backfaces: true,
+            glowThrough: true
         });
 
         this._preset = "default";
@@ -23212,6 +23219,9 @@ class EmphasisMaterial extends Material {
             if (cfg.backfaces !== undefined) {
                 this.backfaces = cfg.backfaces;
             }
+            if (cfg.glowThrough !== undefined) {
+                this.glowThrough = cfg.glowThrough;
+            }
         } else {
             this.fill = cfg.fill;
             this.fillColor = cfg.fillColor;
@@ -23221,6 +23231,7 @@ class EmphasisMaterial extends Material {
             this.edgeAlpha = cfg.edgeAlpha;
             this.edgeWidth = cfg.edgeWidth;
             this.backfaces = cfg.backfaces;
+            this.glowThrough = cfg.glowThrough;
         }
     }
 
@@ -23442,7 +23453,7 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
      *
      * Default is ````false````.
      *
@@ -23458,14 +23469,43 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````.
      *
-     * Default is ````false````.
+     * Default is ````true````.
      *
      * @type {Boolean}
      */
     get backfaces() {
         return this._state.backfaces;
+    }
+
+    /**
+     * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
+     *
+     * Default is ````true````.
+     *
+     * Note: updating this property will not affect the appearance of objects that are already emphasized.
+     *
+     * @type {Boolean}
+     */
+    set glowThrough(value) {
+        value = (value !== false);
+        if (this._state.glowThrough === value) {
+            return;
+        }
+        this._state.glowThrough = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Sets whether to render emphasized objects over the top of other objects, as if they were "glowing through".
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get glowThrough() {
+        return this._state.glowThrough;
     }
 
     /**
@@ -23492,6 +23532,7 @@ class EmphasisMaterial extends Material {
         this.edgeColor = preset.edgeColor;
         this.edgeAlpha = preset.edgeAlpha;
         this.edgeWidth = preset.edgeWidth;
+        this.glowThrough = preset.glowThrough;
         this._preset = value;
     }
 
@@ -25838,7 +25879,6 @@ class Scene extends Component {
 
                 const hashParts = [];
                 for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-                    sectionPlanes[i];
                     hashParts.push("cp");
                 }
                 hashParts.push(";");
@@ -26070,13 +26110,6 @@ class Scene extends Component {
     }
 
     _initDefaults() {
-
-        this.geometry;
-        this.material;
-        this.xrayMaterial;
-        this.edgeMaterial;
-        this.selectedMaterial;
-        this.highlightMaterial;
     }
 
     _addComponent(component) {
@@ -27413,7 +27446,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCulled(ids, culled) {
-        return this.withObjects(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.culled !== culled);
             entity.culled = culled;
             return changed;
@@ -46141,7 +46174,7 @@ class TrianglesBatchingLayer {
         // Color
 
         let f0;
-        if (!visible || culled || xrayed) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
@@ -53258,7 +53291,7 @@ class TrianglesInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -55008,7 +55041,7 @@ class LinesBatchingLayer {
         // Color
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
@@ -56475,7 +56508,7 @@ class LinesInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -59041,7 +59074,7 @@ class PointsBatchingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
@@ -62434,7 +62467,7 @@ class PointsInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) {
+        if (!visible || culled || xrayed || (highlighted && !this.model.scene.highlightMaterial.glowThrough) || (selected && !this.model.scene.selectedMaterial.glowThrough)) { // Highlight & select are layered on top of color - not mutually exclusive
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -64688,41 +64721,37 @@ class PerformanceModel extends Component {
 
             let needNewBatchingLayers = false;
 
-            let origin = null;
+            const origin = math.vec3(this._origin);
 
+            const cfgOrigin = cfg.origin || cfg.rtcCenter;
+            if (cfgOrigin) {
+                math.addVec3(origin, cfgOrigin, origin);
+            }
+
+            let rtcOrigin = null;
             if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
                 const rtcCenter = math.vec3();
                 const rtcPositions = [];
                 const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter);
                 if (rtcNeeded) {
                     positions = rtcPositions;
-                    origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
+                    rtcOrigin = rtcCenter;
                 }
             }
+            if (rtcOrigin) {
+                math.addVec3(origin, rtcOrigin, origin);
+            }
 
-            const cfgOrigin = cfg.origin || cfg.rtcCenter;
-            if (cfgOrigin) {
-                if (!origin) {
-                    origin = cfgOrigin;
-                } else {
-                    origin = math.addVec3(this._origin, cfgOrigin, tempVec3a$4);
-                }
+            if (!this._lastOrigin) {
+                needNewBatchingLayers = true;
+                this._lastOrigin = math.vec3(origin);
             } else {
-                origin = this._origin;
-            }
-
-            if (origin) {
-                if (!this._lastOrigin) {
+                if (!math.compareVec3(this._lastOrigin, origin)) {
                     needNewBatchingLayers = true;
-                    this._lastOrigin = math.vec3(origin);
-                } else {
-                    if (!math.compareVec3(this._lastOrigin, origin)) {
-                        needNewBatchingLayers = true;
-                        this._lastOrigin.set(origin);
-                    }
+                    this._lastOrigin.set(origin);
                 }
             }
-
+            
             if (cfg.positionsDecodeMatrix) {
                 if (!this._lastDecodeMatrix) {
                     needNewBatchingLayers = true;
@@ -92511,7 +92540,11 @@ class PivotController {
         const cameraPos = math.vec3();
         math.decomposeMat4(math.inverseMat4(this._scene.viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
         const length = math.distVec3(cameraPos, currentPos);
-        const radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+        let radius = (Math.tan(Math.PI / 500) * length) * this._pivotSphereSize;
+
+        if (this._scene.camera.projection == "ortho") {
+            radius /= (this._scene.camera.ortho.scale / 2);
+        }
 
         worldToRTCPos(currentPos, this._rtcCenter, this._rtcPos);
         this._pivotSphereGeometry = new VBOGeometry(
@@ -92766,17 +92799,7 @@ class PivotController {
      */
     showPivot() {
         if (this._shown) {
-            if (this._hideTimeout) {
-                window.clearTimeout(this._hideTimeout);
-                this._hideTimeout = window.setTimeout(() => {
-                    this.hidePivot();
-                }, 1000);
-            }
             return;
-        }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
         }
         if (this._pivotElement) {
             this.updatePivotElement();
@@ -92787,9 +92810,6 @@ class PivotController {
             this.createPivotSphere();
         }
         this._shown = true;
-        this._hideTimeout = window.setTimeout(() => {
-            this.hidePivot();
-        }, 1000);
     }
 
     /**
@@ -92801,10 +92821,6 @@ class PivotController {
         if (!this._shown) {
             return;
         }
-        if (this._hideTimeout !== null) {
-            window.clearTimeout(this._hideTimeout);
-            this._hideTimeout = null;
-        }
         if (this._pivotElement) {
             this._pivotElement.style.visibility = "hidden";
         }
@@ -92812,7 +92828,6 @@ class PivotController {
             this.destroyPivotSphere();
         }
         this._shown = false;
-        this.endPivot();
     }
 
     /**
@@ -93631,6 +93646,10 @@ class MousePickHandler {
             if (e.which === 3) {
                 rightDown = false;
             }
+
+            if (pivotController.getPivoting()) {
+                pivotController.endPivot();
+            }
         });
 
         canvas.addEventListener('mouseup', this._canvasMouseUpHandler = (e) => {
@@ -93862,6 +93881,10 @@ class KeyboardPanRotateDollyHandler {
 
             if (keyCode === input.KEY_SHIFT) {
                 canvas.style.cursor = null;
+            }
+
+            if (controllers.pivotController.getPivoting()) {
+                controllers.pivotController.endPivot();
             }
         });
 
@@ -94436,8 +94459,6 @@ class TouchPanRotateAndDollyHandler {
 
             if (touches.length === 1 && changedTouches.length === 1) {
 
-                states.touchStartTime;
-
                 getCanvasPosFromEvent$1(touches[0], tapStartCanvasPos);
 
                 if (configs.followPointer) {
@@ -94482,6 +94503,12 @@ class TouchPanRotateAndDollyHandler {
             }
 
             numTouches = touches.length;
+        });
+
+        canvas.addEventListener("touchend", this._canvasTouchEndHandler = () => {
+            if (pivotController.getPivoting()) {
+                pivotController.endPivot();
+            }
         });
 
         canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
@@ -94622,6 +94649,7 @@ class TouchPanRotateAndDollyHandler {
     destroy() {
         const canvas = this._scene.canvas.canvas;
         canvas.removeEventListener("touchstart", this._canvasTouchStartHandler);
+        canvas.removeEventListener("touchend", this._canvasTouchEndHandler);
         canvas.removeEventListener("touchmove", this._canvasTouchMoveHandler);
         this._scene.off(this._onTick);
     }

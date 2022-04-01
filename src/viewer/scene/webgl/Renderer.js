@@ -8,7 +8,7 @@ import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
-import {RenderBufferManager} from "./RenderBufferManager";
+import {RenderBufferManager} from "./RenderBufferManager.js";
 
 /**
  * @private
@@ -727,7 +727,9 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if ( scene.highlightMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (highlightedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
                         highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
@@ -742,17 +744,17 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillTransparentBinLen > 0 || highlightedEdgesTransparentBinLen > 0 || highlightedFillOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
-                gl.enable(gl.CULL_FACE);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
                 } else {
                     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
                 }
-
+                gl.enable(gl.CULL_FACE);
                 if (highlightedEdgesTransparentBinLen > 0) {
                     for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
                         highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
@@ -768,7 +770,9 @@ const Renderer = function (scene, options) {
 
             if (selectedFillOpaqueBinLen > 0 || selectedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 if (selectedEdgesOpaqueBinLen > 0) {
                     for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
                         selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
@@ -783,10 +787,11 @@ const Renderer = function (scene, options) {
 
             if (selectedFillTransparentBinLen > 0 || selectedEdgesTransparentBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (scene.selectedMaterial.glowThrough) {
+                    gl.clear(gl.DEPTH_BUFFER_BIT);
+                }
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
-
                 if (canvasTransparent) {
                     gl.blendEquation(gl.FUNC_ADD);
                     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
