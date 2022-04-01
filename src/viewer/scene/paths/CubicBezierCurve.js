@@ -156,7 +156,7 @@ class CubicBezierCurve extends Curve {
      *
      * @param {Number} t Position to get point at.
      *
-     * @returns {{Number[]}} The point at the given position.
+     * @returns {Number[]} The point at the given position.
      */
     get point() {
         return this.getPoint(this._t);
@@ -167,7 +167,7 @@ class CubicBezierCurve extends Curve {
      *
      * @param {Number} t Position to get point at.
      *
-     * @returns {{Number[]}} The point at the given position.
+     * @returns {Number[]} The point at the given position.
      */
     getPoint(t) {
 

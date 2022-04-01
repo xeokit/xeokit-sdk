@@ -33,7 +33,7 @@ function Core() {
      Existing {@link Scene}s , mapped to their IDs
      @property scenes
      @namespace xeokit
-     @type {{Scene}}
+     @type {Scene}
      */
     this.scenes = {};
 
