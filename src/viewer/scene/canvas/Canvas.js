@@ -108,7 +108,7 @@ class Canvas extends Component {
          * ````
          *
          * @property boundary
-         * @type {{Number[]}}
+         * @type {Number[]}
          * @final
          */
         this.boundary = [

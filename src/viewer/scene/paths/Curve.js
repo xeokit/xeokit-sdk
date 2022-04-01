@@ -45,7 +45,7 @@ class Curve extends Component {
     /**
      * Gets the tangent on this Curve at position {@link Curve#t}.
      *
-     * @returns {{Number[]}} The tangent.
+     * @returns {Number[]} The tangent.
      */
     get tangent() {
         return this.getTangent(this._t);
@@ -65,7 +65,7 @@ class Curve extends Component {
      * Returns a normalized tangent vector on this Curve at the given position.
      *
      * @param {Number} t Position to get tangent at.
-     * @returns {{Number[]}} Normalized tangent vector
+     * @returns {Number[]} Normalized tangent vector
      */
     getTangent(t) {
         var delta = 0.0001;

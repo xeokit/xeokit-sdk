@@ -128,7 +128,7 @@ class QuadraticBezierCurve extends Curve {
      Point on this QuadraticBezierCurve at position {@link QuadraticBezierCurve/t}.
 
      @property point
-     @type {{Number[]}}
+     @type {Number[]}
      */
     get point() {
         return this.getPoint(this._t);
