@@ -3,7 +3,7 @@ import { Plugin, Viewer } from "../../viewer";
 /**
  * {@link Viewer} plugin that manages skyboxes
  */
-export class SkyboxesPlugin extends Plugin {
+export declare class SkyboxesPlugin extends Plugin {
   /**
    * @constructor
    * @param {Viewer} viewer The Viewer.

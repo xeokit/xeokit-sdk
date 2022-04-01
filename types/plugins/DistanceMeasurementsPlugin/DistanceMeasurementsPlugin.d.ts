@@ -28,7 +28,7 @@ export declare type DistanceMeasurementsPluginConfiguration = {
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
  */
-export class DistanceMeasurementsPlugin extends Plugin {
+export declare class DistanceMeasurementsPlugin extends Plugin {
   /**
    * @constructor
    * @param {Viewer} viewer The Viewer.

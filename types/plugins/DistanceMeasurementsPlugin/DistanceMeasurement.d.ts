@@ -5,7 +5,7 @@ import { Marker } from "../../viewer/scene/marker";
 /**
  * @desc Measures the distance between two 3D points.
  */
-export class DistanceMeasurement extends Component {
+export declare class DistanceMeasurement extends Component {
   /**
    * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurement.
    * @type {DistanceMeasurementsPlugin}

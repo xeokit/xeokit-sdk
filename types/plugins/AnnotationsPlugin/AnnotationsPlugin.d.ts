@@ -20,7 +20,7 @@ export declare type AnnotationsPluginConfiguration = {
 /**
  * {@link Viewer} plugin that creates {@link Annotation}s.
  */
-export class AnnotationsPlugin extends Plugin {
+export declare class AnnotationsPlugin extends Plugin {
   /**
    * @constructor
    * @param {Viewer} viewer The Viewer.

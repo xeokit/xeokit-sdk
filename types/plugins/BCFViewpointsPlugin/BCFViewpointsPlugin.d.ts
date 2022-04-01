@@ -12,7 +12,7 @@ export declare type BCFViewpointsPluginConfiguration = {
 /**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  */
-export class BCFViewpointsPlugin extends Plugin {
+export declare class BCFViewpointsPlugin extends Plugin {
   /**
    * @constructor
    * @param {Viewer} viewer The Viewer.

@@ -5,11 +5,10 @@ export declare interface IGLTFDefaultDataSource {
    * Gets metamodel JSON.
    *
    * @param {String|Number} metaModelSrc Identifies the metamodel JSON asset.
-   * @param {{Function(*)}} ok Fired on successful loading of the metamodel JSON asset.
-   * @param {{Function(*)}} error Fired on error while loading the metamodel JSON asset.
+   * @param {Function(*)} ok Fired on successful loading of the metamodel JSON asset.
+   * @param {Function(*)} error Fired on error while loading the metamodel JSON asset.
    */
-  getMetaModel(metaModelSrc: string | number, ok: { // @ts-ignore
-    Function(); }, error: { Function();}): void;
+  getMetaModel(metaModelSrc: string | number, ok: Function, error: Function): void;
 
   /**
    * Gets glTF JSON.

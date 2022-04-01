@@ -51,7 +51,7 @@ export declare type LoadLASModel = {
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  */
-export class LASLoaderPlugin extends Plugin {
+export declare class LASLoaderPlugin extends Plugin {
   /**
    * @constructor
    *
