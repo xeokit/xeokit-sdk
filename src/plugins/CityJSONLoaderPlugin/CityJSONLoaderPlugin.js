@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {CityJSONDefaultDataSource} from "./CityJSONDefaultDataSource.js";
 import {math} from "../../viewer";

@@ -41,7 +41,6 @@ if (canvas) {
         gl.getSupportedExtensions().forEach(function (ext) {
             WEBGL_INFO.SUPPORTED_EXTENSIONS[ext] = true;
         });
-        WEBGL_INFO.depthTexturesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"];
     }
 }
 

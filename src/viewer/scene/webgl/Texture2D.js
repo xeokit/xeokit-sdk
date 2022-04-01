@@ -67,7 +67,7 @@ class Texture2D {
         this.gl = gl;
         this.target = target || gl.TEXTURE_2D;
         this.texture = gl.createTexture();
-        this.setPreloadColor([0, 0, 0, 0]); // Prevents "there is no texture bound to the unit 0" error
+        this.setPreloadColor([0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
         this.allocated = true;
     }
 
@@ -85,8 +85,8 @@ class Texture2D {
         }
         const gl = this.gl;
         gl.bindTexture(this.target, this.texture);
-        gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        // gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        // gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         if (this.target === gl.TEXTURE_CUBE_MAP) {
             const faces = [
                 gl.TEXTURE_CUBE_MAP_POSITIVE_X,

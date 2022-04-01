@@ -1,7 +1,7 @@
 import * as WebIFC from "web-ifc/web-ifc-api.js";
 
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {WebIFCDefaultDataSource} from "./WebIFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";

@@ -285,12 +285,8 @@ const Renderer = function (scene, options) {
             extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
         }
 
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        if (scene.logarithmicDepthBufferEnabled) {
             extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
-        }
-
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-            extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
         }
 
         const sao = scene.sao;
@@ -311,7 +307,7 @@ const Renderer = function (scene, options) {
         // Render depth buffer
 
         const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", {
-            depthTexture: WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
+            depthTexture: true
         });
 
         saoDepthRenderBuffer.bind();
@@ -882,12 +878,8 @@ const Renderer = function (scene, options) {
                 extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
             }
 
-            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+            if (scene.logarithmicDepthBufferEnabled) {
                 extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
-            }
-
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-                extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
             }
 
             let look;

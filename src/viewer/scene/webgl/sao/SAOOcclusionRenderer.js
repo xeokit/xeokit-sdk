@@ -116,9 +116,7 @@ class SAOOcclusionRenderer {
         gl.uniform2fv(this._uViewport, tempVec2);
         gl.uniform1f(this._uRandomSeed, randomSeed);
 
-        const depthTexture = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
-            ? depthRenderBuffer.getDepthTexture()
-            : depthRenderBuffer.getTexture();
+        const depthTexture = depthRenderBuffer.getDepthTexture();
 
         program.bindTexture(this._uDepthTexture, depthTexture, 0);
 
@@ -153,13 +151,14 @@ class SAOOcclusionRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`precision highp float;
+            vertex: [`#version 300 es
+                    precision highp float;
                     precision highp int;
                     
-                    attribute vec3 aPosition;
-                    attribute vec2 aUV;            
+                    in vec3 aPosition;
+                    in vec2 aUV;            
                     
-                    varying vec2 vUV;
+                    out vec2 vUV;
                     
                     void main () {
                         gl_Position = vec4(aPosition, 1.0);
@@ -167,7 +166,7 @@ class SAOOcclusionRenderer {
                     }`],
 
             fragment: [
-                `#extension GL_OES_standard_derivatives : require              
+                `#version 300 es      
                 precision highp float;
                 precision highp int;           
                 
@@ -178,7 +177,7 @@ class SAOOcclusionRenderer {
                 #define NUM_SAMPLES ${this._numSamples}
                 #define NUM_RINGS 4              
             
-                varying vec2        vUV;
+                in vec2        vUV;
             
                 uniform sampler2D   uDepthTexture;
                
@@ -239,9 +238,9 @@ class SAOOcclusionRenderer {
                     return linearClipZ * ( near - far ) - near;
                 }
                 
-                float getDepth( const in vec2 screenPosition ) {`
-                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
-                `}
+                float getDepth( const in vec2 screenPosition ) {
+                    return vec4(texture(uDepthTexture, screenPosition)).r;
+                }
 
                 float getViewZ( const in float depth ) {
                      if (uPerspective) {
@@ -309,6 +308,8 @@ class SAOOcclusionRenderer {
                 	return occlusionSum * ( uIntensity / weightSum );
                 }
 
+                out vec4 outColor;
+   
                 void main() {
                 
                 	float centerDepth = getDepth( vUV );
@@ -322,7 +323,7 @@ class SAOOcclusionRenderer {
 
                 	float ambientOcclusion = getAmbientOcclusion( viewPosition );
                 
-                	gl_FragColor = packFloatToRGBA(  1.0- ambientOcclusion );
+                	outColor = packFloatToRGBA(  1.0- ambientOcclusion );
                 }`]
         });
 

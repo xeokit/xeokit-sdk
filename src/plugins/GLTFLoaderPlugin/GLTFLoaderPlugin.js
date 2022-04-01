@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {GLTFSceneGraphLoader} from "./GLTFSceneGraphLoader.js";

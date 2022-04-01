@@ -20,12 +20,9 @@ function buildVertex(mesh) {
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
     const src = [];
-
+    src.push("#version 300 es");
     src.push("// EmphasisFillShaderSource vertex shader");
-    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-        src.push("#extension GL_EXT_frag_depth : enable");
-    }
-    src.push("attribute vec3 position;");
+    src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
@@ -36,21 +33,19 @@ function buildVertex(mesh) {
     }
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("uniform float logDepthBufFC;");
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("varying float vFragDepth;");
-        }
+        src.push("out float vFragDepth;");
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
         src.push("}");
-        src.push("varying float isPerspective;");
+        src.push("out float isPerspective;");
     }
     if (clipping) {
-        src.push("varying vec4 vWorldPosition;");
+        src.push("out vec4 vWorldPosition;");
     }
     src.push("uniform vec4   lightAmbient;");
     src.push("uniform vec4   fillColor;");
     if (normals) {
-        src.push("attribute vec3 normal;");
+        src.push("in vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -79,7 +74,7 @@ function buildVertex(mesh) {
             src.push("}");
         }
     }
-    src.push("varying vec4 vColor;");
+    src.push("out vec4 vColor;");
     if (billboard === "spherical" || billboard === "cylindrical") {
         src.push("void billboard(inout mat4 mat) {");
         src.push("   mat[0][0] = 1.0;");
@@ -176,12 +171,7 @@ function buildVertex(mesh) {
     }
     src.push("vec4 clipPos = projMatrix * viewPosition;");
     if (scene.logarithmicDepthBufferEnabled) {
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("vFragDepth = 1.0 + clipPos.w;");
-        } else {
-            src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
-            src.push("clipPos.z *= clipPos.w;");
-        }
+        src.push("vFragDepth = 1.0 + clipPos.w;");
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
     src.push("gl_Position = clipPos;");
@@ -204,13 +194,8 @@ function buildFragment(mesh) {
     const gammaOutput = mesh.scene.gammaOutput;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-
+    src.push("#version 300 es");
     src.push("// Lambertian drawing fragment shader");
-
-    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-        src.push("#extension GL_EXT_frag_depth : enable");
-    }
-
     src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
     src.push("precision highp float;");
     src.push("precision highp int;");
@@ -219,10 +204,10 @@ function buildFragment(mesh) {
     src.push("precision mediump int;");
     src.push("#endif");
 
-    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-        src.push("varying float isPerspective;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("in float isPerspective;");
         src.push("uniform float logDepthBufFC;");
-        src.push("varying float vFragDepth;");
+        src.push("in float vFragDepth;");
     }
 
     if (gammaOutput) {
@@ -232,7 +217,7 @@ function buildFragment(mesh) {
         src.push("}");
     }
     if (clipping) {
-        src.push("varying vec4 vWorldPosition;");
+        src.push("in vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
         for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -240,7 +225,8 @@ function buildFragment(mesh) {
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
-    src.push("varying vec4 vColor;");
+    src.push("in vec4 vColor;");
+    src.push("out vec4 outColor;");
     src.push("void main(void) {");
     if (clipping) {
         src.push("if (clippable) {");
@@ -260,13 +246,13 @@ function buildFragment(mesh) {
         src.push("   discard;");
         src.push("}");
     }
-    if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-        src.push("gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+    if (scene.logarithmicDepthBufferEnabled) {
+        src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
     if (gammaOutput) {
-        src.push("gl_FragColor = linearToGamma(vColor, gammaFactor);");
+        src.push("outColor = linearToGamma(vColor, gammaFactor);");
     } else {
-        src.push("gl_FragColor = vColor;");
+        src.push("outColor = vColor;");
     }
     src.push("}");
     return src;
