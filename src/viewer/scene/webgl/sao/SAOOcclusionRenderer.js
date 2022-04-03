@@ -203,32 +203,6 @@ class SAOOcclusionRenderer {
                     highp float dt = dot( uv.xy, vec2( a,b ) ), sn = mod( dt, PI );
                     return fract(sin(sn) * c);
                 }
-
-                vec3 packNormalToRGB( const in vec3 normal ) {
-                    return normalize( normal ) * 0.5 + 0.5;
-                }
-
-                vec3 unpackRGBToNormal( const in vec3 rgb ) {
-                    return 2.0 * rgb.xyz - 1.0;
-                }
-
-                const float packUpscale = 256. / 255.;
-                const float unpackDownScale = 255. / 256.; 
-
-                const vec3 packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
-                const vec4 unPackFactors = unpackDownScale / vec4( packFactors, 1. );   
-
-                const float shiftRights = 1. / 256.;
-
-                vec4 packFloatToRGBA( const in float v ) {
-                    vec4 r = vec4( fract( v * packFactors ), v );
-                    r.yzw -= r.xyz * shiftRights; 
-                    return r * packUpscale;
-                }
-
-                float unpackRGBAToFloat( const in vec4 v ) {                   
-                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unPackFactors );
-                }
                 
                 float perspectiveDepthToViewZ( const in float invClipZ, const in float near, const in float far ) {
                     return ( near * far ) / ( ( far - near ) * invClipZ - far );
@@ -323,7 +297,7 @@ class SAOOcclusionRenderer {
 
                 	float ambientOcclusion = getAmbientOcclusion( viewPosition );
                 
-                	outColor = packFloatToRGBA(  1.0- ambientOcclusion );
+                	outColor.r = (  1.0- ambientOcclusion );
                 }`]
         });
 

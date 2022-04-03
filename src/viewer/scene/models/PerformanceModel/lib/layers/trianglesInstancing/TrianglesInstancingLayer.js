@@ -680,9 +680,9 @@ class TrianglesInstancingLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         const geometry = this._state.geometry;
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled && geometry.normalsBuf) {
-                if (this._instancingRenderers.colorQualityRendererWithSAO) {
-                    this._instancingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
+                if (this._instancingRenderers.pbrRendererWithSAO) {
+                    this._instancingRenderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
                 if (this._instancingRenderers.colorTextureRendererWithSAO) {
@@ -697,9 +697,9 @@ class TrianglesInstancingLayer {
                     this._instancingRenderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             }
-        } else if (frameCtx.pbrEnabled && this.model.pbrEnabled && geometry.normalsBuf) {
-            if (this._instancingRenderers.colorQualityRenderer) {
-                this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        } else if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
+            if (this._instancingRenderers.pbrRenderer) {
+                this._instancingRenderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
             if (this._instancingRenderers.colorTextureRenderer) {
@@ -734,19 +734,21 @@ class TrianglesInstancingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.geometry.normalsBuf) {
-            if (this._instancingRenderers.colorQualityRenderer) {
-                this._instancingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+        if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
+            if (this._instancingRenderers.pbrRenderer) {
+                this._instancingRenderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
+            if (this._instancingRenderers.colorTextureRenderer) {
+                this._instancingRenderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            }
+        } else if (this._state.normalsBuf) {
+            if (this._instancingRenderers.colorRenderer) {
+                this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else {
-            if (this._state.geometry.normalsBuf) {
-                if (this._instancingRenderers.colorRenderer) {
-                    this._instancingRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                }
-            } else {
-                if (this._instancingRenderers.flatColorRenderer) {
-                    this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                }
+            if (this._instancingRenderers.flatColorRenderer) {
+                this._instancingRenderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         }
     }

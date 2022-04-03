@@ -40,13 +40,13 @@ class TrianglesInstancingRenderers {
             this._flatColorRendererWithSAO.destroy();
             this._flatColorRendererWithSAO = null;
         }
-        if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
-            this._colorQualityRenderer.destroy();
-            this._colorQualityRenderer = null;
+        if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
+            this._pbrRenderer.destroy();
+            this._pbrRenderer = null;
         }
-        if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
-            this._colorQualityRendererWithSAO.destroy();
-            this._colorQualityRendererWithSAO = null;
+        if (this._pbrRendererWithSAO && (!this._pbrRendererWithSAO.getValid())) {
+            this._pbrRendererWithSAO.destroy();
+            this._pbrRendererWithSAO = null;
         }
         if (this._colorTextureRenderer && (!this._colorTextureRenderer.getValid())) {
             this._colorTextureRenderer.destroy();
@@ -130,18 +130,18 @@ class TrianglesInstancingRenderers {
         return this._flatColorRendererWithSAO;
     }
 
-    get colorQualityRenderer() {
-        if (!this._colorQualityRenderer) {
-            this._colorQualityRenderer = new TrianglesInstancingColorQualityRenderer(this._scene, false);
+    get pbrRenderer() {
+        if (!this._pbrRenderer) {
+            this._pbrRenderer = new TrianglesInstancingColorQualityRenderer(this._scene, false);
         }
-        return this._colorQualityRenderer;
+        return this._pbrRenderer;
     }
 
-    get colorQualityRendererWithSAO() {
-        if (!this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO = new TrianglesInstancingColorQualityRenderer(this._scene, true);
+    get pbrRendererWithSAO() {
+        if (!this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO = new TrianglesInstancingColorQualityRenderer(this._scene, true);
         }
-        return this._colorQualityRendererWithSAO;
+        return this._pbrRendererWithSAO;
     }
 
     get colorTextureRenderer() {
@@ -248,11 +248,11 @@ class TrianglesInstancingRenderers {
         if (this._flatColorRendererWithSAO) {
             this._flatColorRendererWithSAO.destroy();
         }
-        if (this._colorQualityRenderer) {
-            this._colorQualityRenderer.destroy();
+        if (this._pbrRenderer) {
+            this._pbrRenderer.destroy();
         }
-        if (this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO.destroy();
+        if (this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO.destroy();
         }
         if (this._colorTextureRenderer) {
             this._colorTextureRenderer.destroy();

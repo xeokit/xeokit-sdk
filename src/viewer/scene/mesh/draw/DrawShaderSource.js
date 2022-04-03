@@ -700,14 +700,14 @@ function buildFragmentDraw(mesh) {
                 src.push("void computePhongLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
 
                 if (lightsState.lightMaps.length > 0) {
-                    src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(textureCube(lightMap, geometry.worldNormal)).rgb;");
+                    src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
                     src.push("   irradiance *= PI;");
                     src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                     src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
                 }
                 if (lightsState.reflectionMaps.length > 0) {
                     src.push("   vec3 reflectVec             = reflect(-geometry.viewEyeDir, geometry.viewNormal);");
-                    src.push("   vec3 radiance               = textureCube(reflectionMap, reflectVec).rgb * 0.2;");
+                    src.push("   vec3 radiance               = texture(reflectionMap, reflectVec).rgb * 0.2;");
                     src.push("   radiance *= PI;");
                     src.push("   reflectedLight.specular     += radiance;");
                 }
@@ -740,7 +740,7 @@ function buildFragmentDraw(mesh) {
             if (lightsState.reflectionMaps.length > 0) {
                 src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
                 src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-                src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(textureCube(reflectionMap, reflectVec, mipLevel)).rgb;");
+                src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
                 src.push("  return envMapColor;");
                 src.push("}");
             }
@@ -799,7 +799,7 @@ function buildFragmentDraw(mesh) {
 
                 src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
                 if (lightsState.lightMaps.length > 0) {
-                    src.push("   vec3 irradiance = sRGBToLinear(textureCube(lightMap, geometry.worldNormal)).rgb;");
+                    src.push("   vec3 irradiance = sRGBToLinear(texture(lightMap, geometry.worldNormal)).rgb;");
                     src.push("   irradiance *= PI;");
                     src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                     src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
@@ -1549,11 +1549,13 @@ function buildFragmentDraw(mesh) {
         src.push("vec3 outgoingLight = emissiveColor + ambientColor;");
     }
 
-    src.push("outColor = vec4(outgoingLight, alpha) * colorize;");
+    src.push("vec4 fragColor = vec4(outgoingLight, alpha) * colorize;");
 
     if (gammaOutput) {
-        src.push("outColor = linearToGamma(outColor, gammaFactor);");
+        src.push("fragColor = linearToGamma(fragColor, gammaFactor);");
     }
+
+    src.push("outColor = fragColor;");
 
     if (scene.logarithmicDepthBufferEnabled) {
         src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");

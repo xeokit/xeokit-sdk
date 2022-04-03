@@ -10,7 +10,7 @@ import {TrianglesBatchingOcclusionRenderer} from "./renderers/TrianglesBatchingO
 import {TrianglesBatchingDepthRenderer} from "./renderers/TrianglesBatchingDepthRenderer.js";
 import {TrianglesBatchingNormalsRenderer} from "./renderers/TrianglesBatchingNormalsRenderer.js";
 import {TrianglesBatchingShadowRenderer} from "./renderers/TrianglesBatchingShadowRenderer.js";
-import {TrianglesBatchingColorQualityRenderer} from "./renderers/TrianglesBatchingColorQualityRenderer.js";
+import {TrianglesBatchingPBRRenderer} from "./renderers/TrianglesBatchingPBRRenderer.js";
 import {TrianglesBatchingPickNormalsFlatRenderer} from "./renderers/TrianglesBatchingPickNormalsFlatRenderer.js";
 import {TrianglesBatchingColorTextureRenderer} from "./renderers/TrianglesBatchingColorTextureRenderer";
 
@@ -48,13 +48,13 @@ class TrianglesBatchingRenderers {
             this._colorTextureRendererWithSAO.destroy();
             this._colorTextureRendererWithSAO = null;
         }
-        if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
-            this._colorQualityRenderer.destroy();
-            this._colorQualityRenderer = null;
+        if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
+            this._pbrRenderer.destroy();
+            this._pbrRenderer = null;
         }
-        if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
-            this._colorQualityRendererWithSAO.destroy();
-            this._colorQualityRendererWithSAO = null;
+        if (this._pbrRendererWithSAO && (!this._pbrRendererWithSAO.getValid())) {
+            this._pbrRendererWithSAO.destroy();
+            this._pbrRendererWithSAO = null;
         }
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
@@ -144,18 +144,18 @@ class TrianglesBatchingRenderers {
         return this._colorTextureRendererWithSAO;
     }
     
-    get colorQualityRenderer() {
-        if (!this._colorQualityRenderer) {
-            this._colorQualityRenderer = new TrianglesBatchingColorQualityRenderer(this._scene, false);
+    get pbrRenderer() {
+        if (!this._pbrRenderer) {
+            this._pbrRenderer = new TrianglesBatchingPBRRenderer(this._scene, false);
         }
-        return this._colorQualityRenderer;
+        return this._pbrRenderer;
     }
 
-    get colorQualityRendererWithSAO() {
-        if (!this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO = new TrianglesBatchingColorQualityRenderer(this._scene, true);
+    get pbrRendererWithSAO() {
+        if (!this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO = new TrianglesBatchingPBRRenderer(this._scene, true);
         }
-        return this._colorQualityRendererWithSAO;
+        return this._pbrRendererWithSAO;
     }
 
     get silhouetteRenderer() {
@@ -254,11 +254,11 @@ class TrianglesBatchingRenderers {
         if (this._colorTextureRendererWithSAO) {
             this._colorTextureRendererWithSAO.destroy();
         }
-        if (this._colorQualityRenderer) {
-            this._colorQualityRenderer.destroy();
+        if (this._pbrRenderer) {
+            this._pbrRenderer.destroy();
         }
-        if (this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO.destroy();
+        if (this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO.destroy();
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();

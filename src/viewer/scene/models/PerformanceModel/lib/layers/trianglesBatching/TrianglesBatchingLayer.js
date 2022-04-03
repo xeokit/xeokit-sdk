@@ -417,15 +417,15 @@ class TrianglesBatchingLayer {
                 portion.offset = new Float32Array(3);
             }
         }
-        
+
         this._portions.push(portion);
-        
+
         this._numPortions++;
-        
+
         this.model.numPortions++;
-        
+
         this._numVerts += portion.numVerts;
-        
+
         return portionId;
     }
 
@@ -462,7 +462,7 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (buffer.normals.length > 0) { 
+        if (buffer.normals.length > 0) {
             const normals = new Int8Array(buffer.normals);
             let normalized = true; // For oct encoded UInts
             state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
@@ -935,8 +935,8 @@ class TrianglesBatchingLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-                if (this._batchingRenderers.colorQualityRendererWithSAO) {
-                    this._batchingRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._batchingRenderers.pbrRendererWithSAO) {
+                    this._batchingRenderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
                 if (this._batchingRenderers.colorTextureRendererWithSAO) {
@@ -953,8 +953,8 @@ class TrianglesBatchingLayer {
             }
         } else {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-                if (this._batchingRenderers.colorQualityRenderer) {
-                    this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (this._batchingRenderers.pbrRenderer) {
+                    this._batchingRenderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
                 if (this._batchingRenderers.colorTextureRenderer) {
@@ -991,8 +991,8 @@ class TrianglesBatchingLayer {
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-            if (this._batchingRenderers.colorQualityRenderer) {
-                this._batchingRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            if (this._batchingRenderers.pbrRenderer) {
+                this._batchingRenderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
             if (this._batchingRenderers.colorTextureRenderer) {

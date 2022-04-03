@@ -15,7 +15,7 @@ const TEXTURE_DECODE_FUNCS = {
 /**
  * @private
  */
-class TrianglesBatchingColorQualityRenderer {
+class TrianglesBatchingPBRRenderer {
 
     constructor(scene, withSAO) {
         this._scene = scene;
@@ -538,15 +538,6 @@ class TrianglesBatchingColorQualityRenderer {
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
             src.push("uniform vec4      uSAOParams;");
-
-            src.push("const float       packUpscale = 256. / 255.;");
-            src.push("const float       unpackDownScale = 255. / 256.;");
-            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-
-            src.push("float unpackRGBAToDepth( const in vec4 v ) {");
-            src.push("    return dot( v, unPackFactors );");
-            src.push("}");
         }
 
         src.push("uniform float gammaFactor;");
@@ -654,7 +645,7 @@ class TrianglesBatchingColorQualityRenderer {
         if (lightsState.reflectionMaps.length > 0) {
             src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
             src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-            src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(textureCube(reflectionMap, reflectVec, mipLevel)).rgb;");
+            src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
             src.push("  return envMapColor;");
             src.push("}");
         }
@@ -712,7 +703,7 @@ class TrianglesBatchingColorQualityRenderer {
         if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
             if (lightsState.lightMaps.length > 0) {
-                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(textureCube(lightMap, geometry.worldNormal)).rgb;");
+                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse +=  irradiance * diffuseBRDFContrib;");
@@ -856,7 +847,7 @@ class TrianglesBatchingColorQualityRenderer {
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture(uOcclusionTexture, uv))) * blendFactor;");
+            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, texture(uOcclusionTexture, uv).r) * blendFactor;");
             src.push("   fragColor               = vec4(outgoingLight.rgb * ambient * aoFactor, opacity);");
         } else {
             src.push("   fragColor            = vec4(outgoingLight.rgb * aoFactor, opacity);");
@@ -888,4 +879,4 @@ class TrianglesBatchingColorQualityRenderer {
     }
 }
 
-export {TrianglesBatchingColorQualityRenderer};
+export {TrianglesBatchingPBRRenderer};
