@@ -1082,7 +1082,7 @@ class PerformanceModel extends Component {
         this._colorize = [1, 1, 1];
 
         this._saoEnabled = (cfg.saoEnabled !== false);
-        this._pbrEnabled = (!!cfg.pbrEnabled);
+        this._pbrEnabled = (cfg.pbrEnabled !== false);
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
 
         this._isModel = cfg.isModel;
