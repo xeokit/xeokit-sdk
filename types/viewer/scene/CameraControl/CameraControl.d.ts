@@ -1,4 +1,6 @@
 import { Component } from "../Component";
+import { Entity } from "../Entity";
+import { PickResult } from "../webgl/PickResult";
 
 /**
  * Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -31,6 +33,86 @@ export declare class CameraControl extends Component {
    */
   on(event: "rightClick", callback: (e: {event: MouseEvent; pagePos: number[]; canvasPos: number[]; }) => void, scope?: any): string
 
+  /**
+   * Event fired when the pointer moves while hovering over an Entity.
+   * @param event The hover event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hover", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when the pointer moves while hovering over empty space.
+   * @param event The hoverOff event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hoverOff", callback: (e: {canvasPos: number[]; }) => void, scope?: any): string
+  
+  /**
+   * Event fired when the pointer moves onto an Entity.
+   * @param event The hoverEnter event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hoverEnter", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when the pointer moves off an Entity.
+   * @param event The hoverOut event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hoverOut", callback: (e: {entity: Entity; }) => void, scope?: any): string
+  
+  /**
+   * Event fired when we left-click or tap on an Entity.
+   * @param event The picked event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "picked", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when we left-click or tap on the surface of an Entity.
+   * @param event The pickedSurface event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "pickedSurface", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when we left-click or tap on empty space.
+   * @param event The pickedNothing event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "pickedNothing", callback: (e?: {canvasPos: number[]; }) => void, scope?: any): string
+  
+  /**
+   * Event fired wwhen we left-double-click or double-tap on an Entity.
+   * @param event The doublePicked event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "doublePicked", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when we left-double-click or double-tap on the surface of an Entity.
+   * @param event The doublePickedSurface event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "doublePickedSurface", callback: (e: PickResult) => void, scope?: any): string
+  
+  /**
+   * Event fired when we left-double-click or double-tap on empty space.
+   * @param event The doublePickedNothing event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "doublePickedNothing", callback: (e?: {canvasPos: number[]; }) => void, scope?: any): string
+  
   /**
    * Sets the current navigation mode.
    *
@@ -88,7 +170,7 @@ export declare class CameraControl extends Component {
    * which causes ````CameraControl```` to use the default key mappings for that layout.
    */
   set keyMap(arg: {
-    Number: number;
+    [key: number]: number;
   });
 
   /**
@@ -97,7 +179,7 @@ export declare class CameraControl extends Component {
    * @returns {{Number:Number}} Current key mappings.
    */
   get keyMap(): {
-    Number: number;
+    [key: number]: number;
   };
 
   /**
