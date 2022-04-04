@@ -42,8 +42,14 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        colorTextureEnabled: true,
+        pbrEnabled: false
     });
+
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.0;
 
     viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
     viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
@@ -65,7 +71,8 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/skatepark/scene.gltf"
+        src: "../assets/models/gltf/skatepark/scene.gltf",
+        performance: true
     });
 
     model.on("loaded", () => {

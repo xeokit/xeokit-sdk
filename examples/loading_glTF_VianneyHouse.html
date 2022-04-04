@@ -38,17 +38,19 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap} from "../dist/xeokit-sdk.min.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: false,
-        colorTextureEnabled: true
+        pbrEnabled: true,
+        colorTextureEnabled: false
     });
 
-    viewer.scene.gammaInput = true;
-    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaInput = false;
+    viewer.scene.gammaOutput = false;
+
+    viewer.scene.gamma = 1.8;
 
     viewer.camera.eye = [-2.56, 8.38, 8.27];
     viewer.camera.look = [13.44, 3.31, -14.83];
@@ -84,10 +86,8 @@
         id: "myModel",
         src: "../assets/models/gltf/VianneyHouse2/scene.gltf",
         edges: true,
-        pbrEnabled: false,
-        colorTextureEnabled: true,
         performance: true,
-        rotation:[-90,0,0]
+        rotation: [-90, 0, 0]
     });
 
     model.on("loaded", () => {

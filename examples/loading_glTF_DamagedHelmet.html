@@ -38,32 +38,76 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, DirLight, ReflectionMap, LightMap} from "../dist/xeokit-sdk.min.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: false,
+        pbrEnabled: true,
         colorTextureEnabled: true
     });
-
-    viewer.scene.gammaInput = true;
-    viewer.scene.gammaOutput = false;
 
     viewer.camera.eye = [-2.56, 8.38, 8.27];
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
-    viewer.scene.selectedMaterial.fillAlpha = 0.1;
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.2;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, 0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.2, -0.8, 0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    // new LightMap(viewer.scene, {
+    //     src: [
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+    //     ],
+    //     encoding: "sRGB"
+    // });
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
-      //  edges: true,
-        pbrEnabled: false,
-        colorTextureEnabled: true,
+        //  edges: true,
         performance: true,
         //rotation:[-90,0,0]
     });

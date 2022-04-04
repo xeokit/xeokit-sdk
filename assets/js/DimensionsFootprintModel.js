@@ -1,4 +1,4 @@
-import {PerformanceModel} from "../../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+import {PerformanceModel} from "../../src/viewer/scene/models/PerformanceModel/PerformanceModel.js";
 import {buildVectorTextGeometry} from "../../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
 import {utils} from "../../src/viewer/scene/utils.js";
 
