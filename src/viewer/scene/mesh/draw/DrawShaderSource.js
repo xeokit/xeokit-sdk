@@ -75,6 +75,7 @@ function buildVertexLambert(mesh) {
     const quantizedGeometry = !!geometryState.compressGeometry;
 
     const src = [];
+    src.push("#version 300 es");
     src.push("// Lambertian drawing vertex shader");
     src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");

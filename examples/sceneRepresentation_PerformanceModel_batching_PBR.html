@@ -85,7 +85,7 @@
         Mesh,
         buildVectorTextGeometry,
         DirLight
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -192,6 +192,7 @@
                 id: meshId,
                 primitive: "triangles",
                 positions: sphere.positions,
+                uv: sphere.uv,
                 normals: sphere.normals,
                 indices: sphere.indices,
                 position: [x, y, 0],
