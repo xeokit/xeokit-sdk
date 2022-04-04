@@ -92,9 +92,7 @@ export declare class AnnotationsPlugin extends Plugin {
       entity?: Entity;
       pickResult?: PickResult;
       occludable?: boolean;
-      values?: {
-          String: (string | number);
-      };
+      values?: { [key: string]: string | number };
       markerShown?: boolean;
       labelShown?: boolean;
       eye?: number[];
@@ -120,12 +118,33 @@ export declare class AnnotationsPlugin extends Plugin {
    * @param {String} event The annotationCreated event
    * @param {Function} callback Callback fired on the event
    */
-   on(event: "annotationCreated", callback: (annotationId: string)=> void): void;
+  on(event: "annotationCreated", callback: (annotationId: string)=> void): void;
 
-   /**
-    * Fires when a annotation is destroyed.
-    * @param {String} event The annotationDestroyed event
-    * @param {Function} callback Callback fired on the event
-    */
-   on(event: "annotationDestroyed", callback: (annotationId: string)=> void): void;
+  /**
+   * Fires when a annotation is destroyed.
+   * @param {String} event The annotationDestroyed event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "annotationDestroyed", callback: (annotationId: string)=> void): void;
+
+  /**
+   * Fires when a mouse enters a annotation.
+   * @param {String} event The markerMouseEnter event
+   * @param {Function} callback Callback fired on the event
+   */
+   on(event: "markerMouseEnter", callback: (annotation: Annotation)=> void): void;
+
+  /**
+   * Fires when a mouse leave an annotation.
+   * @param {String} event The markerMouseLeave event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "markerMouseLeave", callback: (annotation: Annotation)=> void): void;
+
+  /**
+   * Fires when a mouse leave an annotation.
+   * @param {String} event The markerClicked event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "markerClicked", callback: (annotation: Annotation)=> void): void;
 }
