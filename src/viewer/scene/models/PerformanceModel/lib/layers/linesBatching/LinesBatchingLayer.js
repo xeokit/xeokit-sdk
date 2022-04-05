@@ -139,8 +139,9 @@ class LinesBatchingLayer {
         const buffer = this._buffer;
         const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
-        const numVerts = positions.length / 3;
-        const lenPositions = positions.length;
+
+        let numVerts;
+
 
         if (this._preCompressedPositionsExpected) {
 
@@ -148,14 +149,16 @@ class LinesBatchingLayer {
                 throw "positionsCompressed expected";
             }
 
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
+            numVerts = positionsCompressed.length / 3;
+
+            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
+                buffer.positions.push(positionsCompressed[i]);
             }
 
-            const bounds = geometryCompressionUtils.getPositionsBounds(positions);
+            const bounds = geometryCompressionUtils.getPositionsBounds(positionsCompressed);
 
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, []);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, []);
+            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._state.positionsDecodeMatrix, []);
+            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._state.positionsDecodeMatrix, []);
 
             worldAABB[0] = min[0];
             worldAABB[1] = min[1];
@@ -175,6 +178,10 @@ class LinesBatchingLayer {
             if (!positions) {
                 throw "positions expected";
             }
+
+            numVerts = positions.length / 3;
+
+            const lenPositions = positions.length;
 
             const positionsBase = buffer.positions.length;
 

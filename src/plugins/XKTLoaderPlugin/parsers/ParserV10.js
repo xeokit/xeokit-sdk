@@ -115,7 +115,7 @@ function inflate(deflatedData) {
         eachMeshGeometriesPortion: new Uint32Array(inflate(deflatedData.eachMeshGeometriesPortion)),
         eachMeshMatricesPortion: new Uint32Array(inflate(deflatedData.eachMeshMatricesPortion)),
         eachMeshMaterial: new Int32Array(inflate(deflatedData.eachMeshMaterial)), // Can be -1
-        eachMeshMaterialAttributes: new Int8Array(inflate(deflatedData.eachMeshMaterialAttributes)),
+        eachMeshMaterialAttributes: new Uint8Array(inflate(deflatedData.eachMeshMaterialAttributes)),
 
         eachEntityId: JSON.parse(pako.inflate(deflatedData.eachEntityId, {to: 'string'})),
         eachEntityMeshesPortion: new Uint32Array(inflate(deflatedData.eachEntityMeshesPortion)),
@@ -416,16 +416,15 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 const textureSetId = (textureSetIndex >= 0) ? `textureSet-${textureSetIndex}` : null;
 
-                // const meshColor = decompressColor(eachMeshMaterialAttributes.subarray((meshIndex * 6), (meshIndex * 6) + 3));
-                // const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
-                // const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
-                // const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
+                const meshColor = decompressColor(eachMeshMaterialAttributes.subarray((meshIndex * 6), (meshIndex * 6) + 3));
+                //const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
+                const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
+                const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
 
-                const meshColor = [.3, .3, .3];
-                const meshOpacity = 1;
-                const meshMetallic = 0;
-                const meshRoughness = 1;
-
+                // const meshColor = [.3, .3, .3];
+                 const meshOpacity = 1;
+                // const meshMetallic = 0;
+                // const meshRoughness = 1;
 
                 const meshId = nextMeshId++;
 
