@@ -803,7 +803,7 @@ class TrianglesInstancingPBRRenderer {
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-        src.push("vec4 baseColorTexel = texture(uBaseColorMap, vUV);");
+        src.push("vec4 baseColorTexel = sRGBToLinear(texture(uBaseColorMap, vUV));");
         src.push("baseColor *= baseColorTexel.rgb;");
         // src.push("opacity = baseColorTexel.a;");
         src.push("opacity = 1.0;");
@@ -864,7 +864,7 @@ class TrianglesInstancingPBRRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 emissiveColor = linearToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+        src.push("vec3 emissiveColor = sRGBToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
 
         src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
         src.push("vec4 fragColor;");

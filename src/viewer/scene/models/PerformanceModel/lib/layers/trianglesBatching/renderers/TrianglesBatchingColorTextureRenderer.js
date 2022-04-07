@@ -510,7 +510,7 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
+            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, texture(uOcclusionTexture, uv).r) * blendFactor;");
 
             src.push("   outColor            = vec4(color.rgb * ambient, 1.0);"); // TODO: ignores texture opacity
         } else {

@@ -831,7 +831,7 @@ class TrianglesBatchingPBRRenderer {
             src.push("computePBRLighting(light, geometry, material, reflectedLight);");
         }
 
-        src.push("vec3 emissiveColor = linearToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+        src.push("vec3 emissiveColor = sRGBToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
         src.push("float aoFactor = texture(uAOMap, vUV).r;");
 
         src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");

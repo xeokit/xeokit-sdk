@@ -554,7 +554,7 @@ src.push("in float isPerspective;");
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
+            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, texture(uOcclusionTexture, uv).r) * blendFactor;");
             src.push("   outColor            = vec4(vColor.rgb * colorTexel.rgb * ambient, 1.0);");
         } else {
           //  src.push("    outColor           = vColor;");
