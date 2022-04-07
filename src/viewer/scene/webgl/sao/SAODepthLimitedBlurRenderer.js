@@ -99,13 +99,6 @@ class SAODepthLimitedBlurRenderer {
                 uniform vec2        uSampleOffsets[ KERNEL_RADIUS + 1 ];
                 uniform float       uSampleWeights[ KERNEL_RADIUS + 1 ];
 
-                const float         unpackDownscale = 255. / 256.; 
-
-                const vec3          packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
-                const vec4          unpackFactors = unpackDownscale / vec4( packFactors, 1. );   
-
-                const float packUpscale = 256. / 255.;
-       
                 const float shiftRights = 1. / 256.;                         
 
                 float viewZToOrthographicDepth( const in float viewZ) {

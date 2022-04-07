@@ -149,14 +149,13 @@ class SAOOcclusionRenderer {
 
         this._program = new Program(gl, {
 
-            vertex: [`#version 300 es
-                    precision highp float;
+            vertex: [`precision highp float;
                     precision highp int;
                     
-                    in vec3 aPosition;
-                    in vec2 aUV;            
+                    attribute vec3 aPosition;
+                    attribute vec2 aUV;            
                     
-                    out vec2 vUV;
+                    varying vec2 vUV;
                     
                     void main () {
                         gl_Position = vec4(aPosition, 1.0);
@@ -164,7 +163,7 @@ class SAOOcclusionRenderer {
                     }`],
 
             fragment: [
-                `#version 300 es      
+                `#extension GL_OES_standard_derivatives : require              
                 precision highp float;
                 precision highp int;           
                 
@@ -175,7 +174,7 @@ class SAOOcclusionRenderer {
                 #define NUM_SAMPLES ${this._numSamples}
                 #define NUM_RINGS 4              
             
-                in vec2        vUV;
+                varying vec2        vUV;
             
                 uniform sampler2D   uDepthTexture;
                
@@ -201,6 +200,32 @@ class SAOOcclusionRenderer {
                     highp float dt = dot( uv.xy, vec2( a,b ) ), sn = mod( dt, PI );
                     return fract(sin(sn) * c);
                 }
+
+                vec3 packNormalToRGB( const in vec3 normal ) {
+                    return normalize( normal ) * 0.5 + 0.5;
+                }
+
+                vec3 unpackRGBToNormal( const in vec3 rgb ) {
+                    return 2.0 * rgb.xyz - 1.0;
+                }
+
+                const float packUpscale = 256. / 255.;
+                const float unpackDownScale = 255. / 256.; 
+
+                const vec3 packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
+                const vec4 unPackFactors = unpackDownScale / vec4( packFactors, 1. );   
+
+                const float shiftRights = 1. / 256.;
+
+                vec4 packFloatToRGBA( const in float v ) {
+                    vec4 r = vec4( fract( v * packFactors ), v );
+                    r.yzw -= r.xyz * shiftRights; 
+                    return r * packUpscale;
+                }
+
+                float unpackRGBAToFloat( const in vec4 v ) {                   
+                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unPackFactors );
+                }
                 
                 float perspectiveDepthToViewZ( const in float invClipZ, const in float near, const in float far ) {
                     return ( near * far ) / ( ( far - near ) * invClipZ - far );
@@ -210,9 +235,9 @@ class SAOOcclusionRenderer {
                     return linearClipZ * ( near - far ) - near;
                 }
                 
-                float getDepth( const in vec2 screenPosition ) {
-                    return vec4(texture(uDepthTexture, screenPosition)).r;
-                }
+                float getDepth( const in vec2 screenPosition ) {`
+                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
+                `}
 
                 float getViewZ( const in float depth ) {
                      if (uPerspective) {
@@ -280,8 +305,6 @@ class SAOOcclusionRenderer {
                 	return occlusionSum * ( uIntensity / weightSum );
                 }
 
-                out vec4 outColor;
-   
                 void main() {
                 
                 	float centerDepth = getDepth( vUV );
@@ -295,7 +318,7 @@ class SAOOcclusionRenderer {
 
                 	float ambientOcclusion = getAmbientOcclusion( viewPosition );
                 
-                	outColor.r = (  1.0- ambientOcclusion );
+                	gl_FragColor = packFloatToRGBA(  1.0- ambientOcclusion );
                 }`]
         });
 

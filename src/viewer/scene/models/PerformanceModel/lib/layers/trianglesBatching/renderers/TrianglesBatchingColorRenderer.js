@@ -424,6 +424,14 @@ class TrianglesBatchingColorRenderer {
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
             src.push("uniform vec4      uSAOParams;");
+            src.push("const float       packUpscale = 256. / 255.;");
+            src.push("const float       unpackDownScale = 255. / 256.;");
+            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
+
+            src.push("float unpackRGBToFloat( const in vec4 v ) {");
+            src.push("    return dot( v, unPackFactors );");
+            src.push("}");
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
@@ -465,7 +473,7 @@ class TrianglesBatchingColorRenderer {
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, texture(uOcclusionTexture, uv).r) * blendFactor;");
+            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
             src.push("   outColor            = vec4(vColor.rgb * ambient, 1.0);");
         } else {
             src.push("   outColor            = vColor;");
