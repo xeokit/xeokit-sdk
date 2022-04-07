@@ -99,7 +99,24 @@ class SAODepthLimitedBlurRenderer {
                 uniform vec2        uSampleOffsets[ KERNEL_RADIUS + 1 ];
                 uniform float       uSampleWeights[ KERNEL_RADIUS + 1 ];
 
-                const float shiftRights = 1. / 256.;                         
+                const float         unpackDownscale = 255. / 256.; 
+
+                const vec3          packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );
+                const vec4          unpackFactors = unpackDownscale / vec4( packFactors, 1. );   
+
+                const float packUpscale = 256. / 255.;
+       
+                const float shiftRights = 1. / 256.;
+                
+                float unpackRGBAToFloat( const in vec4 v ) {
+                    return dot( floor( v * 255.0 + 0.5 ) / 255.0, unpackFactors );
+                }               
+
+                vec4 packFloatToRGBA( const in float v ) {
+                    vec4 r = vec4( fract( v * packFactors ), v );
+                    r.yzw -= r.xyz * shiftRights; 
+                    return r * packUpscale;
+                }
 
                 float viewZToOrthographicDepth( const in float viewZ) {
                     return ( viewZ + uCameraNear ) / ( uCameraNear - uCameraFar );
@@ -139,7 +156,7 @@ class SAODepthLimitedBlurRenderer {
                     bool lBreak = false;
 
                     float weightSum = uSampleWeights[0];
-                    float occlusionSum = texture( uOcclusionTexture, vUV ).r * weightSum;
+                    float occlusionSum = unpackRGBAToFloat(texture( uOcclusionTexture, vUV )) * weightSum;
 
                     for( int i = 1; i <= KERNEL_RADIUS; i ++ ) {
 
@@ -154,7 +171,7 @@ class SAODepthLimitedBlurRenderer {
                         }
 
                         if( ! rBreak ) {
-                            occlusionSum += texture( uOcclusionTexture, sampleUV ).r * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
 
@@ -166,12 +183,12 @@ class SAODepthLimitedBlurRenderer {
                         }
 
                         if( ! lBreak ) {
-                            occlusionSum += texture( uOcclusionTexture, sampleUV ).r * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
                     }
 
-                    outColor.r = (occlusionSum / weightSum);
+                    outColor = packFloatToRGBA(occlusionSum / weightSum);
                 }`]
         });
 
