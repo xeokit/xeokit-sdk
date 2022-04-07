@@ -414,7 +414,7 @@ class TrianglesBatchingColorTextureRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         if (clipping) {

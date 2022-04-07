@@ -1,7 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 
@@ -31,7 +30,6 @@ class LinesInstancingColorRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
-        const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const geometry = instancingLayer.geometry;
 
@@ -139,8 +137,6 @@ class LinesInstancingColorRenderer {
             this.errors = this._program.errors;
             return;
         }
-
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
 

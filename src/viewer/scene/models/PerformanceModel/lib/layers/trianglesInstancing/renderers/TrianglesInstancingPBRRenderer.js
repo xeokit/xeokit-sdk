@@ -15,7 +15,7 @@ const TEXTURE_DECODE_FUNCS = {
 /**
  * @private
  */
-class TrianglesInstancingColorQualityRenderer {
+class TrianglesInstancingPBRRenderer {
 
     constructor(scene, withSAO) {
         this._scene = scene;
@@ -45,8 +45,6 @@ class TrianglesInstancingColorQualityRenderer {
         const origin = state.origin;
         const textureSet = state.textureSet;
         const geometry = state.geometry;
-
-        const instanceExt = this._instanceExt;
 
         if (!this._program) {
             this._allocate();
@@ -187,8 +185,6 @@ class TrianglesInstancingColorQualityRenderer {
             this.errors = this._program.errors;
             return;
         }
-
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
 
@@ -813,7 +809,7 @@ class TrianglesInstancingColorQualityRenderer {
         src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
-        src.push("metallic *= metalRoughTexel.r;");
+        src.push("metallic *= metalRoughTexel.b;");
         src.push("roughness *= metalRoughTexel.g;");
 
         src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition.xyz, normalize(vViewNormal), vUV );");
@@ -913,4 +909,4 @@ class TrianglesInstancingColorQualityRenderer {
     }
 }
 
-export {TrianglesInstancingColorQualityRenderer};
+export {TrianglesInstancingPBRRenderer};

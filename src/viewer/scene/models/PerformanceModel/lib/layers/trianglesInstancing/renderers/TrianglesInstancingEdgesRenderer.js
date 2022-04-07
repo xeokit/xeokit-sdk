@@ -2,7 +2,6 @@ import {Program} from "../../../../../../webgl/Program.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 const defaultColor = new Float32Array([0,0,0,1]);
@@ -34,7 +33,6 @@ class TrianglesInstancingEdgesRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const geometry = state.geometry;
-        const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
 
         if (!this._program) {
@@ -159,8 +157,6 @@ class TrianglesInstancingEdgesRenderer {
             this.errors = this._program.errors;
             return;
         }
-
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
 

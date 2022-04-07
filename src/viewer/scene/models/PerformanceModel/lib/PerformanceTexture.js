@@ -42,7 +42,7 @@ export class PerformanceTexture {
         }
 
         if (cfg.image) {
-            const image = ensureImageSizePowerOfTwo(cfg.image);
+            const image = cfg.image;
             image.crossOrigin = "Anonymous";
             this.texture.setImage(image, {});
             this.texture.setProps({
@@ -59,8 +59,7 @@ export class PerformanceTexture {
             scene.canvas.spinner.processes++;
             const image = new Image();
             image.onload = () => {
-                image.crossOrigin = "Anonymous";
-                this.texture.setImage(ensureImageSizePowerOfTwo(image), {});
+                this.texture.setImage(image, {});
                 this.texture.setProps({
                     minFilter: cfg.minFilter || "linearMipmapLinear",
                     magFilter: cfg.magFilter || "linear",
@@ -86,30 +85,4 @@ export class PerformanceTexture {
             this.texture = null;
         }
     }
-}
-
-function ensureImageSizePowerOfTwo(image) {
-    if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
-        const canvas = document.createElement("canvas");
-        canvas.width = nextHighestPowerOfTwo(image.width);
-        canvas.height = nextHighestPowerOfTwo(image.height);
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image,
-            0, 0, image.width, image.height,
-            0, 0, canvas.width, canvas.height);
-        image = canvas;
-    }
-    return image;
-}
-
-function isPowerOfTwo(x) {
-    return (x & (x - 1)) === 0;
-}
-
-function nextHighestPowerOfTwo(x) {
-    --x;
-    for (let i = 1; i < 32; i <<= 1) {
-        x = x | x >> i;
-    }
-    return x + 1;
 }

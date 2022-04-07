@@ -36,7 +36,6 @@ class TrianglesInstancingColorTextureRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const geometry = state.geometry;
-        const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const textureSet = state.textureSet;
 
@@ -169,8 +168,6 @@ class TrianglesInstancingColorTextureRenderer {
             this.errors = this._program.errors;
             return;
         }
-
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
         const program = this._program;
 

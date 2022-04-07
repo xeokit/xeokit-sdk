@@ -89,8 +89,6 @@ class SAOOcclusionRenderer {
         tempVec2[0] = viewportWidth;
         tempVec2[1] = viewportHeight;
 
-        gl.getExtension("OES_standard_derivatives");
-
         gl.viewport(0, 0, viewportWidth, viewportHeight);
         gl.clearColor(0, 0, 0, 1);
         gl.disable(gl.DEPTH_TEST);

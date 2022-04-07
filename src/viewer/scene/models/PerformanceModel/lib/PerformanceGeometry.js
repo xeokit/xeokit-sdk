@@ -3,9 +3,6 @@ import {ArrayBuf} from "../../../webgl/ArrayBuf";
 import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils";
 import {octEncodeNormals, quantizePositions} from "./compression";
 import {buildEdgeIndices} from "../../../math/buildEdgeIndices";
-import {WEBGL_INFO} from "../../../webglInfo";
-
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 
 /**
  * Instantiated by PerformanceModel#createGeometry
@@ -34,7 +31,9 @@ export class PerformanceGeometry {
     constructor(id, model, cfg) {
 
         ///////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////
         // TODO: optional origin param, or create from positions automatically if required - then offset from mesh origin in createMesh
+
         /**
          * ID of this PerformanceGeometry, unique within the PerformanceModel.
          *
@@ -141,7 +140,7 @@ export class PerformanceGeometry {
         }
 
         if (cfg.indices && cfg.indices.length > 0) {
-            this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
+            this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
             if (pickSurfacePrecisionEnabled) {
                 this.indices = cfg.indices;
             }
@@ -153,7 +152,7 @@ export class PerformanceGeometry {
             if (!edgeIndices) {
                 edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, cfg.edgeThreshold || 10);
             }
-            this.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+            this.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
         }
     }
 

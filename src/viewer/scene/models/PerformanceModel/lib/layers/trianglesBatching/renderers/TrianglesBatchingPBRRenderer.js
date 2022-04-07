@@ -125,18 +125,16 @@ class TrianglesBatchingPBRRenderer {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
 
-        if (textureSet) {
-            this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uEmissiveMap, textureSet.emissiveTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uAOMap, textureSet.occlusionTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-        }
+        this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
+        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+        this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
+        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+        this._program.bindTexture(this._uEmissiveMap, textureSet.emissiveTexture.texture, frameCtx.textureUnit);
+        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+        this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
+        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+        this._program.bindTexture(this._uAOMap, textureSet.occlusionTexture.texture, frameCtx.textureUnit);
+        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
 
         state.indicesBuf.bind();
 
@@ -434,7 +432,7 @@ class TrianglesBatchingPBRRenderer {
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
 
         if (clipping) {
@@ -472,7 +470,7 @@ class TrianglesBatchingPBRRenderer {
         const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
 
-        src.push ('#version 300 es');
+        src.push('#version 300 es');
         src.push("// Triangles batching quality draw fragment shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -583,8 +581,8 @@ class TrianglesBatchingPBRRenderer {
 
         src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
         src.push("       vec3 texel = texture( uNormalMap, uv ).xyz;");
-        src.push("       if (texel[0] == 0.0 && texel[1] == 0.0 && texel[2] == 0.0) {");
-        src.push("              return normalize(surf_norm );");
+        src.push("       if (texel.x == 0.0 && texel.y == 0.0 && texel.z == 0.0) {");
+        src.push("              return surf_norm;");
         src.push("       }");
         src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
         src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
@@ -595,7 +593,7 @@ class TrianglesBatchingPBRRenderer {
         src.push("      vec3 N = normalize( surf_norm );");
         src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
         src.push("      mat3 tsn = mat3( S, T, N );");
-        //     src.push("      mapN *= 3.0;");
+            //src.push("      mapN *= 3.0;");
         src.push("      return normalize( tsn * mapN );");
         src.push("}");
 
@@ -774,16 +772,16 @@ class TrianglesBatchingPBRRenderer {
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-        src.push("vec4 baseColorTexel = texture(uBaseColorMap, vUV);");
+        src.push("vec4 baseColorTexel = sRGBToLinear(texture(uBaseColorMap, vUV));");
         src.push("baseColor *= baseColorTexel.rgb;");
         // src.push("opacity = baseColorTexel.a;");
         src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
-        src.push("metallic *= metalRoughTexel.r;");
+        src.push("metallic *= metalRoughTexel.b;");
         src.push("roughness *= metalRoughTexel.g;");
 
-        src.push("vec3 viewNormal = perturbNormal2Arb( vViewPosition.xyz, normalize(vViewNormal), vUV );");
+        src.push("vec3 viewNormal = perturbNormal2Arb(vViewPosition.xyz, normalize(vViewNormal), vUV );");
 
         src.push("material.diffuseColor      = baseColor * (1.0 - dielectricSpecular) * (1.0 - metallic);");
         src.push("material.specularRoughness = clamp(roughness, 0.04, 1.0);");

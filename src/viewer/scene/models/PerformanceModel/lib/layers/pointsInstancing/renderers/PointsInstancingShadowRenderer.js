@@ -32,7 +32,6 @@ class PointsInstancingShadowRenderer {
         const scene = model.scene;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
-        const instanceExt = this._instanceExt;
 
         if (!this._program) {
             this._allocate();
@@ -129,7 +128,6 @@ class PointsInstancingShadowRenderer {
             this.errors = this._program.errors;
             return;
         }
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
         const program = this._program;
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");

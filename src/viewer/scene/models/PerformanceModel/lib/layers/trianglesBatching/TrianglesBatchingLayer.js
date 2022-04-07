@@ -1,4 +1,3 @@
-import {WEBGL_INFO} from "../../../../../webglInfo.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 
@@ -517,14 +516,12 @@ class TrianglesBatchingLayer {
             }
         }
 
-        const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-
         if (buffer.indices.length > 0) {
-            const indices = bigIndicesSupported ? new Uint32Array(buffer.indices) : new Uint16Array(buffer.indices);
+            const indices = new Uint32Array(buffer.indices);
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
         }
         if (buffer.edgeIndices.length > 0) {
-            const edgeIndices = bigIndicesSupported ? new Uint32Array(buffer.edgeIndices) : new Uint16Array(buffer.edgeIndices);
+            const edgeIndices = new Uint32Array(buffer.edgeIndices);
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
         }
 

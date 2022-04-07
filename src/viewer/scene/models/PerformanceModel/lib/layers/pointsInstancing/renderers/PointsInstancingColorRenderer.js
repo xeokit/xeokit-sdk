@@ -1,7 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 
@@ -31,7 +30,6 @@ class PointsInstancingColorRenderer {
         const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
-        const instanceExt = this._instanceExt;
         const origin = instancingLayer._state.origin;
         const pointsMaterial = scene.pointsMaterial._state;
         const geometry = instancingLayer.geometry;
@@ -143,8 +141,6 @@ class PointsInstancingColorRenderer {
             return;
         }
 
-        this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
-
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
@@ -218,7 +214,7 @@ class PointsInstancingColorRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
-        src.push ('#version 300 es');
+        src.push('#version 300 es');
         src.push("// Points instancing color vertex shader");
 
         src.push("uniform int renderPass;");
@@ -296,7 +292,7 @@ class PointsInstancingColorRenderer {
         src.push("vec4 clipPos = projMatrix * viewPosition;");
 
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
 
         src.push("gl_Position = clipPos;");
@@ -320,7 +316,7 @@ class PointsInstancingColorRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push ('#version 300 es');
+        src.push('#version 300 es');
         src.push("// Points instancing color fragment shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -331,10 +327,8 @@ class PointsInstancingColorRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled) {
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("uniform float logDepthBufFC;");
-                src.push("in float vFragDepth;");
-            }
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");

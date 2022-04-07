@@ -10,7 +10,7 @@ import {TrianglesInstancingOcclusionRenderer} from "./renderers/TrianglesInstanc
 import {TrianglesInstancingDepthRenderer} from "./renderers/TrianglesInstancingDepthRenderer.js";
 import {TrianglesInstancingNormalsRenderer} from "./renderers/TrianglesInstancingNormalsRenderer.js";
 import {TrianglesInstancingShadowRenderer} from "./renderers/TrianglesInstancingShadowRenderer.js";
-import {TrianglesInstancingColorQualityRenderer} from "./renderers/TrianglesInstancingColorQualityRenderer.js";
+import {TrianglesInstancingPBRRenderer} from "./renderers/TrianglesInstancingPBRRenderer.js";
 import {TrianglesInstancingPickNormalsFlatRenderer} from "./renderers/TrianglesInstancingPickNormalsFlatRenderer.js";
 import {TrianglesInstancingColorTextureRenderer} from "./renderers/TrianglesInstancingColorTextureRenderer";
 
@@ -132,14 +132,14 @@ class TrianglesInstancingRenderers {
 
     get pbrRenderer() {
         if (!this._pbrRenderer) {
-            this._pbrRenderer = new TrianglesInstancingColorQualityRenderer(this._scene, false);
+            this._pbrRenderer = new TrianglesInstancingPBRRenderer(this._scene, false);
         }
         return this._pbrRenderer;
     }
 
     get pbrRendererWithSAO() {
         if (!this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO = new TrianglesInstancingColorQualityRenderer(this._scene, true);
+            this._pbrRendererWithSAO = new TrianglesInstancingPBRRenderer(this._scene, true);
         }
         return this._pbrRendererWithSAO;
     }

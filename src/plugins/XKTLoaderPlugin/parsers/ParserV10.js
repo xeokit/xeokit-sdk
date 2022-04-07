@@ -20,57 +20,33 @@ const tempVec4b = math.vec4();
 function extract(elements) {
 
     return {
-
-        // Metadata
-
         metadata: elements[0],
-
         textureData: elements[1],
         eachTextureDataPortion: elements[2],
-
         positions: elements[3],
         normals: elements[4],
         colors: elements[5],
         uvs: elements[6],
         indices: elements[7],
         edgeIndices: elements[8],
-
-        materialTextures: elements[9],
-        materialAttributes: elements[10],
-
-        // Transform matrices
-
-        matrices: elements[11],
-        reusedGeometriesDecodeMatrix: elements[12],
-
-        eachMaterialType: elements[13],
-        eachMaterialTexturesPortion: elements[14],
-        eachMaterialAttributesPortion: elements[15],
-
-        // Geometries
-
-        eachGeometryPrimitiveType: elements[16],
-        eachGeometryPositionsPortion: elements[17],
-        eachGeometryNormalsPortion: elements[18],
-        eachGeometryColorsPortion: elements[19],
-        eachGeometryUVsPortion: elements[20],
-        eachGeometryIndicesPortion: elements[21],
-        eachGeometryEdgeIndicesPortion: elements[22],
-
-        // Meshes are grouped in runs that are shared by the same entities
-
-        eachMeshGeometriesPortion: elements[23],
-        eachMeshMatricesPortion: elements[24],
-        eachMeshMaterial: elements[25],
-        eachMeshMaterialAttributes: elements[26],
-
-        // Entity elements in the following arrays are grouped in runs that are shared by the same tiles
-
-        eachEntityId: elements[27],
-        eachEntityMeshesPortion: elements[28],
-
-        eachTileAABB: elements[29],
-        eachTileEntitiesPortion: elements[30]
+        eachTextureSetTextures: elements[9],
+        matrices: elements[10],
+        reusedGeometriesDecodeMatrix: elements[11],
+        eachGeometryPrimitiveType: elements[12],
+        eachGeometryPositionsPortion: elements[13],
+        eachGeometryNormalsPortion: elements[14],
+        eachGeometryColorsPortion: elements[15],
+        eachGeometryUVsPortion: elements[16],
+        eachGeometryIndicesPortion: elements[17],
+        eachGeometryEdgeIndicesPortion: elements[18],
+        eachMeshGeometriesPortion: elements[19],
+        eachMeshMatricesPortion: elements[20],
+        eachMeshTextureSet: elements[21],
+        eachMeshMaterialAttributes: elements[22],
+        eachEntityId: elements[23],
+        eachEntityMeshesPortion: elements[24],
+        eachTileAABB: elements[25],
+        eachTileEntitiesPortion: elements[26]
     };
 }
 
@@ -81,29 +57,18 @@ function inflate(deflatedData) {
     }
 
     return {
-
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-
         textureData: new Uint8Array(inflate(deflatedData.textureData)),
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
-
         positions: new Uint16Array(inflate(deflatedData.positions)),
         normals: new Int8Array(inflate(deflatedData.normals)),
         colors: new Uint8Array(inflate(deflatedData.colors)),
         uvs: new Float32Array(inflate(deflatedData.uvs)),
         indices: new Uint32Array(inflate(deflatedData.indices)),
         edgeIndices: new Uint32Array(inflate(deflatedData.edgeIndices)),
-
-        materialTextures: new Uint32Array(inflate(deflatedData.materialTextures)),
-        materialAttributes: new Uint8Array(inflate(deflatedData.materialAttributes)),
-
+        eachTextureSetTextures: new Int32Array(inflate(deflatedData.eachTextureSetTextures)),
         matrices: new Float32Array(inflate(deflatedData.matrices)),
         reusedGeometriesDecodeMatrix: new Float32Array(inflate(deflatedData.reusedGeometriesDecodeMatrix)),
-
-        eachMaterialType: new Uint8Array(inflate(deflatedData.eachMaterialType)),
-        eachMaterialTexturesPortion: new Uint32Array(inflate(deflatedData.eachMaterialTexturesPortion)),
-        eachMaterialAttributesPortion: new Uint32Array(inflate(deflatedData.eachMaterialAttributesPortion)),
-
         eachGeometryPrimitiveType: new Uint8Array(inflate(deflatedData.eachGeometryPrimitiveType)),
         eachGeometryPositionsPortion: new Uint32Array(inflate(deflatedData.eachGeometryPositionsPortion)),
         eachGeometryNormalsPortion: new Uint32Array(inflate(deflatedData.eachGeometryNormalsPortion)),
@@ -111,15 +76,12 @@ function inflate(deflatedData) {
         eachGeometryUVsPortion: new Uint32Array(inflate(deflatedData.eachGeometryUVsPortion)),
         eachGeometryIndicesPortion: new Uint32Array(inflate(deflatedData.eachGeometryIndicesPortion)),
         eachGeometryEdgeIndicesPortion: new Uint32Array(inflate(deflatedData.eachGeometryEdgeIndicesPortion)),
-
         eachMeshGeometriesPortion: new Uint32Array(inflate(deflatedData.eachMeshGeometriesPortion)),
         eachMeshMatricesPortion: new Uint32Array(inflate(deflatedData.eachMeshMatricesPortion)),
-        eachMeshMaterial: new Int32Array(inflate(deflatedData.eachMeshMaterial)), // Can be -1
+        eachMeshTextureSet: new Int32Array(inflate(deflatedData.eachMeshTextureSet)), // Can be -1
         eachMeshMaterialAttributes: new Uint8Array(inflate(deflatedData.eachMeshMaterialAttributes)),
-
         eachEntityId: JSON.parse(pako.inflate(deflatedData.eachEntityId, {to: 'string'})),
         eachEntityMeshesPortion: new Uint32Array(inflate(deflatedData.eachEntityMeshesPortion)),
-
         eachTileAABB: new Float64Array(inflate(deflatedData.eachTileAABB)),
         eachTileEntitiesPortion: new Uint32Array(inflate(deflatedData.eachTileEntitiesPortion)),
     };
@@ -138,27 +100,17 @@ const decompressColor = (function () {
 function load(viewer, options, inflatedData, performanceModel) {
 
     const metadata = inflatedData.metadata;
-
     const textureData = inflatedData.textureData;
     const eachTextureDataPortion = inflatedData.eachTextureDataPortion;
-
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
     const colors = inflatedData.colors;
     const uvs = inflatedData.uvs;
     const indices = inflatedData.indices;
     const edgeIndices = inflatedData.edgeIndices;
-
-    const materialTextures = inflatedData.materialTextures;
-    const materialAttributes = inflatedData.materialAttributes;
-
+    const eachTextureSetTextures = inflatedData.eachTextureSetTextures;
     const matrices = inflatedData.matrices;
     const reusedGeometriesDecodeMatrix = inflatedData.reusedGeometriesDecodeMatrix;
-
-    const eachMaterialType = inflatedData.eachMaterialType;
-    const eachMaterialTexturesPortion = inflatedData.eachMaterialTexturesPortion;
-    const eachMaterialAttributesPortion = inflatedData.eachMaterialAttributesPortion;
-
     const eachGeometryPrimitiveType = inflatedData.eachGeometryPrimitiveType;
     const eachGeometryPositionsPortion = inflatedData.eachGeometryPositionsPortion;
     const eachGeometryNormalsPortion = inflatedData.eachGeometryNormalsPortion;
@@ -166,20 +118,17 @@ function load(viewer, options, inflatedData, performanceModel) {
     const eachGeometryUVsPortion = inflatedData.eachGeometryUVsPortion;
     const eachGeometryIndicesPortion = inflatedData.eachGeometryIndicesPortion;
     const eachGeometryEdgeIndicesPortion = inflatedData.eachGeometryEdgeIndicesPortion;
-
     const eachMeshGeometriesPortion = inflatedData.eachMeshGeometriesPortion;
     const eachMeshMatricesPortion = inflatedData.eachMeshMatricesPortion;
-    const eachMeshMaterial = inflatedData.eachMeshMaterial;
+    const eachMeshTextureSet = inflatedData.eachMeshTextureSet;
     const eachMeshMaterialAttributes = inflatedData.eachMeshMaterialAttributes;
-
     const eachEntityId = inflatedData.eachEntityId;
     const eachEntityMeshesPortion = inflatedData.eachEntityMeshesPortion;
-
     const eachTileAABB = inflatedData.eachTileAABB;
     const eachTileEntitiesPortion = inflatedData.eachTileEntitiesPortion;
 
     const numTextures = eachTextureDataPortion.length;
-    const numMaterials = eachMaterialType.length;
+    const numTextureSets = eachTextureSetTextures.length / 5;
     const numGeometries = eachGeometryPositionsPortion.length;
     const numMeshes = eachMeshGeometriesPortion.length;
     const numEntities = eachEntityMeshesPortion.length;
@@ -213,10 +162,8 @@ function load(viewer, options, inflatedData, performanceModel) {
         const textureDataPortionSize = textureDataPortionEnd - textureDataPortionStart;
         const textureDataPortionExists = (textureDataPortionSize > 0);
         if (textureDataPortionExists) {
-
             const imageData = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
             const base64String = URL.createObjectURL(new Blob([imageData.buffer], {type: 'image/jpeg'} /* (1) */));
-
             performanceModel.createTexture({
                 id: `texture-${textureIndex}`,
                 src: base64String,
@@ -225,77 +172,27 @@ function load(viewer, options, inflatedData, performanceModel) {
         }
     }
 
-
     // Create texture sets
 
-    for (let materialIndex = 0; materialIndex < numMaterials; materialIndex++) {
-
-        const atLastMaterial = (materialIndex === (numMaterials - 1));
-        const materialType = eachMaterialType[materialIndex];
-        const materialTexturesPortionStart = eachMaterialTexturesPortion[materialIndex];
-        const materialTexturesPortionEnd = atLastMaterial ? materialTextures.length : eachMaterialTexturesPortion[materialIndex + 1];
-        const materialAttributesPortionStart = eachMaterialAttributesPortion[materialIndex];
-        const materialAttributesPortionEnd = atLastMaterial ? materialAttributes.length : eachMaterialAttributesPortion[materialIndex + 1];
-
-        const materialTexturesPortionSize = materialTexturesPortionEnd - materialTexturesPortionStart;
-        const materialAttributesPortionSize = materialAttributesPortionEnd - materialAttributesPortionStart;
-
-        const materialTexturesPortionExists = (materialTexturesPortionSize > 0);
-        const materialAttributesPortionExists = (materialAttributesPortionSize > 0);
-
-        if (materialTexturesPortionExists) {
-
-            const textureIds = [];
-
-            const materialTexturesPortion = materialTextures.subarray(materialTexturesPortionStart, materialTexturesPortionEnd);
-            for (let textureIndex = 0, lenTextureIndex = materialTexturesPortion.length; textureIndex < lenTextureIndex; textureIndex++) {
-                textureIds.push(`texture-${textureIndex}`)
-            }
-
-            const attributesPortion = materialAttributes.subarray(materialAttributesPortionStart, materialAttributesPortionEnd);
-
-            let colorTextureId = null;
-            let normalsTextureId = null;
-            let metallicRoughnessTextureId = null;
-            let emissiveTextureId = null;
-            let occlusionTextureId = null;
-
-            for (let attributeIndex = 0, lenAttributes = attributesPortion.length; attributeIndex < lenAttributes; attributeIndex++) {
-                const textureType = attributesPortion[attributeIndex];
-                const textureId = textureIds[attributeIndex];
-                switch (textureType) {
-                    case 0:
-                        normalsTextureId = textureId;
-                        break;
-                    case 1:
-                        colorTextureId = textureId;
-                        break;
-                    case 2:
-                        metallicRoughnessTextureId = textureId;
-                        break;
-                    case 3:
-                        emissiveTextureId = textureId;
-                        break;
-                    case 4:
-                        occlusionTextureId = textureId;
-                        break
-                }
-            }
-
-            const textureSetId = `textureSet-${materialIndex}`;
-
-            performanceModel.createTextureSet({
-                id: textureSetId,
-                colorTextureId,
-                normalsTextureId,
-                metallicRoughnessTextureId,
-                emissiveTextureId,
-                occlusionTextureId
-            });
-        }
+    for (let textureSetIndex = 0; textureSetIndex < numTextureSets; textureSetIndex++) {
+        const eachTextureSetTexturesIndex = textureSetIndex * 5;
+        const textureSetId = `textureSet-${textureSetIndex}`;
+        const colorTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 0];
+        const metallicRoughnessTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 1];
+        const normalsTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 2];
+        const emissiveTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 3];
+        const occlusionTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 4];
+        performanceModel.createTextureSet({
+            id: textureSetId,
+            colorTextureId: colorTextureIndex >= 0 ? `texture-${colorTextureIndex}` : null,
+            normalsTextureId: normalsTextureIndex >= 0 ? `texture-${normalsTextureIndex}` : null,
+            metallicRoughnessTextureId: metallicRoughnessTextureIndex >= 0 ? `texture-${metallicRoughnessTextureIndex}` : null,
+            emissiveTextureId: emissiveTextureIndex >= 0 ? `texture-${emissiveTextureIndex}` : null,
+            occlusionTextureId: occlusionTextureIndex >= 0 ? `texture-${occlusionTextureIndex}` : null
+        });
     }
 
-// Count instances of each geometry
+    // Count instances of each geometry
 
     const geometryReuseCounts = new Uint32Array(numGeometries);
 
@@ -308,7 +205,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         }
     }
 
-// Iterate over tiles
+    // Iterate over tiles
 
     const tileCenter = math.vec3();
     const rtcAABB = math.AABB3();
@@ -412,7 +309,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 const atLastGeometry = (geometryIndex === (numGeometries - 1));
 
-                const textureSetIndex = eachMeshMaterial[meshIndex];
+                const textureSetIndex = eachMeshTextureSet[meshIndex];
 
                 const textureSetId = (textureSetIndex >= 0) ? `textureSet-${textureSetIndex}` : null;
 
@@ -422,7 +319,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
 
                 // const meshColor = [.3, .3, .3];
-                 const meshOpacity = 1;
+                const meshOpacity = 1;
                 // const meshMetallic = 0;
                 // const meshRoughness = 1;
 
