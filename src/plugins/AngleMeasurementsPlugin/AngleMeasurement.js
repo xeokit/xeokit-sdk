@@ -197,8 +197,9 @@ class AngleMeasurement extends Component {
 
             var canvas = scene.canvas.canvas;
             var offsets = canvas.getBoundingClientRect();
-            var top = offsets.top;
-            var left = offsets.left;
+            const containerOffsets = this._container.getBoundingClientRect();
+            var top = offsets.top - containerOffsets.top;
+            var left = offsets.left - containerOffsets.left;
             var aabb = scene.canvas.boundary;
             var canvasWidth = aabb[2];
             var canvasHeight = aabb[3];
