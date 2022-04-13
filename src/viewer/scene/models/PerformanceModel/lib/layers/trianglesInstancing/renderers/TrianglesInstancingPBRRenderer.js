@@ -150,6 +150,23 @@ class TrianglesInstancingPBRRenderer {
             frameCtx.bindTexture++;
         }
 
+        if (this._withSAO) {
+            const sao = scene.sao;
+            const saoEnabled = sao.possible;
+            if (saoEnabled) {
+                const viewportWidth = gl.drawingBufferWidth;
+                const viewportHeight = gl.drawingBufferHeight;
+                tempVec4[0] = viewportWidth;
+                tempVec4[1] = viewportHeight;
+                tempVec4[2] = sao.blendCutoff;
+                tempVec4[3] = sao.blendFactor;
+                gl.uniform4fv(this._uSAOParams, tempVec4);
+                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                frameCtx.bindTexture++;
+            }
+        }
+
         if (textureSet) {
             this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
             frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
@@ -324,23 +341,6 @@ class TrianglesInstancingPBRRenderer {
             }
             if (this._uLightDir[i]) {
                 gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                frameCtx.bindTexture++;
             }
         }
 
