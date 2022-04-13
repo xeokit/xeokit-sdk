@@ -46,7 +46,9 @@
   "dependencies": {
     "web-ifc": "0.0.30",
     "@loaders.gl/core": "^3.0.13",
-    "@loaders.gl/las": "^3.0.13"
+    "@loaders.gl/las": "^3.0.13",
+    "@loaders.gl/gltf": "^3.0.13",
+    "@loaders.gl/draco": "^3.0.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",

@@ -324,7 +324,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 this.viewer.scene.canvas.spinner.processes--;
 
-                var includeTypes;
+                let includeTypes;
                 if (params.includeTypes) {
                     includeTypes = {};
                     for (let i = 0, len = params.includeTypes.length; i < len; i++) {
@@ -332,7 +332,7 @@ class GLTFLoaderPlugin extends Plugin {
                     }
                 }
 
-                var excludeTypes;
+                let excludeTypes;
                 if (params.excludeTypes) {
                     excludeTypes = {};
                     if (!includeTypes) {

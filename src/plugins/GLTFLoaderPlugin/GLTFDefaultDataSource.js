@@ -45,6 +45,23 @@ class GLTFDefaultDataSource {
     }
 
     /**
+     * Gets binary glTF file.
+     *
+     * @param {String|Number} glbSrc Identifies the .glb asset.
+     * @param {Function} ok Fired on successful loading of the .glb asset.
+     * @param {Function} error Fired on error while loading the .glb asset.
+     */
+    getGLB(glbSrc, ok, error) {
+        utils.loadArraybuffer(glbSrc,
+            (arraybuffer) => {
+                ok(arraybuffer);
+            },
+            function (errMsg) {
+                error(errMsg);
+            });
+    }
+
+    /**
      * Gets glTF binary attachment.
      *
      * Note that this method requires the source of the glTF JSON asset. This is because the binary attachment
