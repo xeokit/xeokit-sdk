@@ -101,7 +101,7 @@ function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
             scene: performanceModel.scene,
             plugin: plugin,
             performanceModel: performanceModel,
-            geometryCreated: {},
+            //geometryCreated: {},
             numObjects: 0,
             nodes: [],
             nextId: 0
