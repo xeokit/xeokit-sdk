@@ -49,8 +49,8 @@ class Viewer {
      * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
-     * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable color texture rendering.
+     * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {

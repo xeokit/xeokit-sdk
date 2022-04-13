@@ -45,6 +45,7 @@ class TrianglesInstancingPBRRenderer {
         const origin = state.origin;
         const textureSet = state.textureSet;
         const geometry = state.geometry;
+        const lightsState = scene._lightsState;
 
         if (!this._program) {
             this._allocate();
@@ -135,6 +136,18 @@ class TrianglesInstancingPBRRenderer {
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
             gl.vertexAttribDivisor(this._aOffset.location, 1);
+        }
+
+        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
+            this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            frameCtx.bindTexture++;
+        }
+
+        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
+            this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
+            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            frameCtx.bindTexture++;
         }
 
         if (textureSet) {
@@ -312,18 +325,6 @@ class TrianglesInstancingPBRRenderer {
             if (this._uLightDir[i]) {
                 gl.uniform3fv(this._uLightDir[i], light.dir);
             }
-        }
-
-        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-            this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-            this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
         }
 
         if (this._withSAO) {
