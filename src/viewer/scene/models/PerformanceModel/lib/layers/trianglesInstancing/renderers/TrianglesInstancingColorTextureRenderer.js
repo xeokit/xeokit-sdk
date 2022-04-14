@@ -322,7 +322,7 @@ class TrianglesInstancingColorTextureRenderer {
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry drawing vertex shader");
-        
+
         src.push("uniform int renderPass;");
 
         src.push("in vec3 position;");
@@ -458,7 +458,7 @@ class TrianglesInstancingColorTextureRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
 
@@ -482,7 +482,7 @@ class TrianglesInstancingColorTextureRenderer {
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry drawing fragment shader");
-        
+
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -491,9 +491,9 @@ class TrianglesInstancingColorTextureRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled) {
-src.push("in float isPerspective;");
-                src.push("uniform float logDepthBufFC;");
-                src.push("in float vFragDepth;");
+            src.push("in float isPerspective;");
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
         }
         src.push("uniform sampler2D uColorMap;");
         if (this._withSAO) {
@@ -544,6 +544,7 @@ src.push("in float isPerspective;");
         }
 
         src.push("vec4 colorTexel = texture(uColorMap, vUV);");
+        src.push("float opacity = vColor.a;");
 
         // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
         // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
@@ -555,10 +556,9 @@ src.push("in float isPerspective;");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(vColor.rgb * colorTexel.rgb * ambient, 1.0);");
+            src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb * ambient, opacity);");
         } else {
-          //  src.push("    outColor           = vColor;");
-            src.push("   outColor            = vec4(vColor.rgb * colorTexel.rgb, 1.0);"); // TODO: ignores texture opacity
+            src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb, opacity);");
         }
         src.push("}");
         return src;

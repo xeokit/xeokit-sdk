@@ -816,7 +816,6 @@ class TrianglesInstancingPBRRenderer {
         src.push("vec4 baseColorTexel = sRGBToLinear(texture(uBaseColorMap, vUV));");
         src.push("baseColor *= baseColorTexel.rgb;");
         // src.push("opacity = baseColorTexel.a;");
-        src.push("opacity = 1.0;");
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
         src.push("metallic *= metalRoughTexel.b;");
