@@ -15,7 +15,17 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/gltf_logo.png"/>
     <h1>GLTFLoaderPlugin</h1>
-    <h1>Loading a glTF Model</h1>
+    <h2>Physically-based rendering of a binary glTF test model</h2>
+    <p>In this example, we're using a <a
+            href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load the <a
+            href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/DamagedHelmet"
+            target="_other">Damaged Helmet</a> demo model from
+        binary glTF (.glb).</p>
+    <p></p>We're also configuring our <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+                                         target="_other">Viewer</a> with a <a
+        href="../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html"
+        target="_other">ReflectionMap</a>, so that our model's shiny surfaces have something to reflect.</p>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -26,11 +36,15 @@
             <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
                target="_other">GLTFLoaderPlugin</a>
         </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html"
+               target="_other">ReflectionMap</a>
+        </li>
     </ul>
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="https://sketchfab.com/bimcc"
+            <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/DamagedHelmet"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -38,12 +52,13 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, DirLight, ReflectionMap, LightMap} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, GLTFLoaderPlugin, DirLight, ReflectionMap, LightMap} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
         pbrEnabled: true,
+        saoEnabled: true,
         colorTextureEnabled: true
     });
 
@@ -53,30 +68,7 @@
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
-    viewer.scene.gammaFactor = 2.2;
-
-    viewer.scene.clearLights();
-
-    new DirLight(viewer.scene, {
-        dir: [0.8, -0.6, 0.8],
-        color: [1.0, 1.0, 1.0],
-        intensity: 1.0,
-        space: "world"
-    });
-
-    new DirLight(viewer.scene, {
-        dir: [-0.8, -0.4, -0.4],
-        color: [1.0, 1.0, 1.0],
-        intensity: 1.0,
-        space: "world"
-    });
-
-    new DirLight(viewer.scene, {
-        dir: [-0.2, -0.8, 0.8],
-        color: [1.0, 1.0, 1.0],
-        intensity: 1.0,
-        space: "world"
-    });
+    viewer.scene.gammaFactor = 2.0;
 
     new ReflectionMap(viewer.scene, {
         src: [
@@ -106,21 +98,12 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
-        //  edges: true,
-        performance: true,
-        //rotation:[-90,0,0]
+        src: "../assets/models/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
     });
 
     model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+        viewer.cameraFlight.jumpTo(model);
     });
-
-    viewer.cameraControl.on("picked", function (e) {
-        console.log(e.entity.id);
-    })
-
-    window.viewer = viewer;
 
 </script>
 </html>

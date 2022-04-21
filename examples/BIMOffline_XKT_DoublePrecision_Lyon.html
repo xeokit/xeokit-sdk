@@ -87,6 +87,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
+        saoEnabled: true,
         transparent: true,
         logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
     });
@@ -190,7 +191,7 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-                //    viewer.scene.sao.enabled = true;
+                viewer.scene.sao.enabled = true;
                 viewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }

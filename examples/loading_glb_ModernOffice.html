@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/gltf_logo.png"/>
+    <h1>GLTFLoaderPlugin</h1>
+    <h2>Physically-based rendering of a binary glTF test model</h2>
+    <p>In this example, we're using a <a
+            href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load the <a
+            href="https://sketchfab.com/bimcc"
+            target="_other">Modern Office</a> demo model from
+        binary glTF (.glb).</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
+               target="_other">FastNavPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://sketchfab.com/bimcc"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, GLTFLoaderPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        pbrEnabled: true,
+        saoEnabled: true,
+        colorTextureEnabled: true,
+        logarithmicDepthBufferEnabled: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    viewer.camera.perspective.far = 100000;
+
+    viewer.scene.sao.enabled = true; // Higher-quality SAO settings
+    viewer.scene.sao.numSamples = 60;
+    viewer.scene.sao.kernelRadius = 170;
+
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.2;
+
+    const fastNavPlugin = new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: false,
+        hidePBR: false,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: true,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "../assets/models/gltf/ModernOffice/glTF-Binary/ModernOffice.glb",
+        edges: false,
+        pbrEnabled: true,
+        saoEnabled: true,
+        performance: true
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

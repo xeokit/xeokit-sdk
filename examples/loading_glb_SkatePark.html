@@ -15,7 +15,12 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/gltf_logo.png"/>
     <h1>GLTFLoaderPlugin</h1>
-    <h1>Loading a simple textured glTF Model</h1>
+    <h2>Viewing a binary glTF photogrammetry test model</h2>
+    <p>In this example, we're using a <a
+            href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load a photogrammetric scan from
+       a binary glTF (.glb) file.</p>
+    <p>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -30,7 +35,7 @@
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="https://sketchfab.com/bimcc"
+            <a href="https://sketchfab.com/matousekfoto"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -38,41 +43,36 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, LightMap, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: false,
-        colorTextureEnabled: true
+        colorTextureEnabled: true,
+        pbrEnabled:true
     });
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.4;
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
+    viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
+    viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/BoxTextured/BoxTextured.gltf",
-        edges: true,
-        colorTextureEnabled: true,
-        performance: true
+        src: "../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb"
     });
 
     model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+        viewer.cameraFlight.jumpTo(model);
     });
 
-    viewer.cameraControl.on("picked", function (e) {
-        console.log(e.entity.id);
-    })
 
-    window.viewer = viewer;    // For debugging
+    window.viewer = viewer;
 
 </script>
 </html>

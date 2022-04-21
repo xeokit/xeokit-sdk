@@ -15,7 +15,7 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/gltf_logo.png"/>
     <h1>GLTFLoaderPlugin</h1>
-    <h2>CLoading a photogrammetry model.</h2>
+    <h1>Loading a simple textured glTF Model</h1>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -30,7 +30,7 @@
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="https://sketchfab.com/matousekfoto"
+            <a href="https://github.com/KhronosGroup/glTF-Sample-Models"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -38,52 +38,41 @@
 </body>
 <script type="module">
 
-    import {Viewer, FastNavPlugin, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        colorTextureEnabled: true,
-        pbrEnabled: false
+        pbrEnabled: false,
+        colorTextureEnabled: true
     });
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
-    viewer.scene.gammaFactor = 2.0;
 
-    viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
-    viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
-    viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
-
-    // new FastNavPlugin(viewer, {
-    //     hideEdges: true,
-    //     hideSAO: true,
-    //     hideColorTexture: false,
-    //     hidePBR: true,
-    //     hideTransparentObjects: false,
-    //     scaleCanvasResolution: true,
-    //     scaleCanvasResolutionFactor: 0.5,
-    //     delayBeforeRestore: true,
-    //     delayBeforeRestoreSeconds: 0.4
-    // });
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/skatepark/scene.gltf",
+        src: "../assets/models/gltf/BoxTextured/glTF-Embedded/BoxTextured.gltf",
+        edges: true,
+        colorTextureEnabled: true,
         performance: true
     });
 
     model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+        viewer.cameraFlight.flyTo(model);
     });
 
     viewer.cameraControl.on("picked", function (e) {
         console.log(e.entity.id);
     })
 
-    window.viewer = viewer;
+    window.viewer = viewer;    // For debugging
 
 </script>
 </html>
