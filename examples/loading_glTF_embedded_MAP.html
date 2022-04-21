@@ -40,18 +40,25 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        logarithmicDepthEnabled: true
     });
 
     viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
     viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
     viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
 
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 10000000; // 10000km
+
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 10000000; // 10000km
+
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/MAP/MAP.gltf",
+        src: "../assets/models/gltf/MAP/glTF-Embedded/MAP.gltf",
         metaModelSrc: "../assets/models/gltf/MAP/MAP.json",
         edges: true
     });
