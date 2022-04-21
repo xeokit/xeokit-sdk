@@ -1,12 +1,9 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
-import {buildEdgeIndices} from '../../viewer/scene/math/buildEdgeIndices.js';
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
-
 import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
 import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
-import {DracoLoader} from '../../../node_modules/@loaders.gl/draco';
 
 /**
  * @private
@@ -62,17 +59,24 @@ function loadGLTF(plugin, performanceModel, src, options, ok, error) {
     const isGLB = (src.split('.').pop() === "glb");
     if (isGLB) {
         plugin.dataSource.getGLB(src, (arrayBuffer) => { // OK
+                options.basePath = getBasePath(src);
                 parseGLTF(plugin, arrayBuffer, src, options, performanceModel, ok, error);
                 spinner.processes--;
             },
-            error);
+            (err) => {
+                spinner.processes--;
+                error(err);
+            });
     } else {
         plugin.dataSource.getGLTF(src, (json) => { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(plugin, json, src, options, performanceModel, ok, error);
                 spinner.processes--;
             },
-            error);
+            (err) => {
+                spinner.processes--;
+                error(err);
+            });
     }
 }
 
@@ -86,12 +90,9 @@ function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
     spinner.processes++;
     const gl = performanceModel.scene.canvas.gl;
     parse(gltf, GLTFLoader, {
-        DracoLoader,
-        //   decompress: true,
+        baseUri: options.basePath,
         gl
     }).then((gltfData) => {
-        debugger;
-
         const ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
@@ -106,11 +107,9 @@ function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
             nodes: [],
             nextId: 0
         };
-
         loadTextures(ctx);
         loadMaterials(ctx);
         loadDefaultScene(ctx);
-
         performanceModel.finalize();
         spinner.processes--;
         ok();
@@ -148,7 +147,7 @@ function loadMaterials(ctx) {
         for (let i = 0, len = materials.length; i < len; i++) {
             const material = materials[i];
             material._textureSetId = loadTextureSet(ctx, material);
-            material._attributes = loadMaterialColorize(ctx, material);
+            material._attributes = loadMaterialAttributes(ctx, material);
         }
     }
 }
@@ -186,7 +185,11 @@ function loadTextureSet(ctx, material) {
         const pbrMetallicRoughness = material.pbrMetallicRoughness;
         const baseColorTexture = pbrMetallicRoughness.baseColorTexture || pbrMetallicRoughness.colorTexture;
         if (baseColorTexture) {
-            textureSetCfg.colorTextureId = baseColorTexture.texture._textureId;
+            if (baseColorTexture.texture) {
+                textureSetCfg.colorTextureId = baseColorTexture.texture._textureId;
+            } else {
+                textureSetCfg.colorTextureId = ctx.gltfData.textures[baseColorTexture.index]._textureId;
+            }
         }
         if (metallicPBR.metallicRoughnessTexture) {
             textureSetCfg.metallicRoughnessTextureId = metallicPBR.metallicRoughnessTexture.texture._textureId;
@@ -204,9 +207,9 @@ function loadTextureSet(ctx, material) {
     return null;
 }
 
-function loadMaterialColorize(ctx, material) { // Substitute RGBA for material, to use fast flat shading instead
+function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material, to use fast flat shading instead
     const extensions = material.extensions;
-    const result = {
+    const materialAttributes = {
         color: new Float32Array([1, 1, 1, 1]),
         opacity: 1,
         metallic: 0,
@@ -217,7 +220,7 @@ function loadMaterialColorize(ctx, material) { // Substitute RGBA for material, 
         if (specularPBR) {
             const diffuseFactor = specularPBR.diffuseFactor;
             if (diffuseFactor !== null && diffuseFactor !== undefined) {
-                result.color.set(diffuseFactor);
+                materialAttributes.color.set(diffuseFactor);
             }
         }
         const common = extensions["KHR_materials_common"];
@@ -230,16 +233,16 @@ function loadMaterialColorize(ctx, material) { // Substitute RGBA for material, 
             const diffuse = values.diffuse;
             if (diffuse && (blinn || phong || lambert)) {
                 if (!utils.isString(diffuse)) {
-                    result.color.set(diffuse);
+                    materialAttributes.color.set(diffuse);
                 }
             }
             const transparency = values.transparency;
             if (transparency !== null && transparency !== undefined) {
-                result.opacity = transparency;
+                materialAttributes.opacity = transparency;
             }
             const transparent = values.transparent;
             if (transparent !== null && transparent !== undefined) {
-                result.opacity = transparent;
+                materialAttributes.opacity = transparent;
             }
         }
     }
@@ -247,21 +250,21 @@ function loadMaterialColorize(ctx, material) { // Substitute RGBA for material, 
     if (metallicPBR) {
         const baseColorFactor = metallicPBR.baseColorFactor;
         if (baseColorFactor) {
-            result.color[0] = baseColorFactor[0];
-            result.color[1] = baseColorFactor[1];
-            result.color[2] = baseColorFactor[2];
-            result.opacity = baseColorFactor[3];
+            materialAttributes.color[0] = baseColorFactor[0];
+            materialAttributes.color[1] = baseColorFactor[1];
+            materialAttributes.color[2] = baseColorFactor[2];
+            materialAttributes.opacity = baseColorFactor[3];
         }
         const metallicFactor = metallicPBR.metallicFactor;
         if (metallicFactor !== null && metallicFactor !== undefined) {
-            result.metallic = metallicFactor;
+            materialAttributes.metallic = metallicFactor;
         }
         const roughnessFactor = metallicPBR.roughnessFactor;
         if (roughnessFactor !== null && roughnessFactor !== undefined) {
-            result.roughness = roughnessFactor;
+            materialAttributes.roughness = roughnessFactor;
         }
     }
-    return result;
+    return materialAttributes;
 }
 
 function loadDefaultScene(ctx) {
@@ -283,12 +286,10 @@ function loadScene(ctx, scene) {
         const node = nodes[i];
         countMeshUsage(ctx, node);
     }
-    ctx.plugin.viewer.scene.canvas.spinner.processes++;
     for (let i = 0, len = nodes.length; i < len; i++) {
         const node = nodes[i];
         loadNode(ctx, node, null);
     }
-    ctx.plugin.viewer.scene.canvas.spinner.processes--;
 }
 
 function countMeshUsage(ctx, node) {

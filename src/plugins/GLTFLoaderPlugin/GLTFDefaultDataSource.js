@@ -35,7 +35,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the glTF JSON asset.
      */
     getGLTF(glTFSrc, ok, error) {
-        utils.loadJSON(glTFSrc,
+        utils.loadArraybuffer(glTFSrc,
             (gltf) => {
                 ok(gltf);
             },
