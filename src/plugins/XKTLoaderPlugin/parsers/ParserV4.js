@@ -179,8 +179,8 @@ function load(viewer, options, inflatedData, performanceModel) {
             performanceModel.createGeometry({
                 id: geometryId,
                 primitive: "triangles",
-                positions: primitivePositions,
-                normals: primitiveNormals,
+                positionsCompressed: primitivePositions,
+                normalsCompressed: primitiveNormals,
                 indices: primitiveIndices,
                 edgeIndices: primitiveEdgeIndices,
                 positionsDecodeMatrix: primitiveDecodeMatrix
@@ -202,8 +202,8 @@ function load(viewer, options, inflatedData, performanceModel) {
             performanceModel.createMesh(utils.apply(meshDefaults, {
                 id: meshId,
                 primitive: "triangles",
-                positions: primitivePositions,
-                normals: primitiveNormals,
+                positionsCompressed: primitivePositions,
+                normalsCompressed: primitiveNormals,
                 indices: primitiveIndices,
                 edgeIndices: primitiveEdgeIndices,
                 positionsDecodeMatrix: primitiveDecodeMatrix,

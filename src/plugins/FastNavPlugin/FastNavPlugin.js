@@ -67,6 +67,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * new FastNavPlugin(viewer, {
  *      hideEdges: true,                // Don't show edges while we interact (default is true)
  *      hideSAO: true,                  // Don't show ambient shadows while we interact (default is true)
+ *      hideColorTexture: true,        // No color textures while we interact (default is true)
  *      hidePBR: true,                  // No physically-based rendering while we interact (default is true)
  *      hideTransparentObjects: true,   // Hide transparent objects while we interact (default is false)
  *      scaleCanvasResolution: true,    // Scale canvas resolution while we interact (default is false)
@@ -96,6 +97,7 @@ class FastNavPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg FastNavPlugin configuration.
      * @param {String} [cfg.id="FastNav"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Boolean} [cfg.hideColorTexture=true] Whether to temporarily hide color textures whenever we interact with the Viewer.
      * @param {Boolean} [cfg.hidePBR=true] Whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.
      * @param {Boolean} [cfg.hideSAO=true] Whether to temporarily hide scalable ambient occlusion (SAO) whenever we interact with the Viewer.
      * @param {Boolean} [cfg.hideEdges=true] Whether to temporarily hide edges whenever we interact with the Viewer.
@@ -109,6 +111,7 @@ class FastNavPlugin extends Plugin {
 
         super("FastNav", viewer);
 
+        this._hideColorTexture = cfg.hideColorTexture !== false;
         this._hidePBR = cfg.hidePBR !== false;
         this._hideSAO = cfg.hideSAO !== false;
         this._hideEdges = cfg.hideEdges !== false;
@@ -124,6 +127,7 @@ class FastNavPlugin extends Plugin {
         const switchToLowQuality = () => {
             timer = (this._delayBeforeRestoreSeconds * 1000);
             if (!fastMode) {
+                viewer.scene._renderer.setColorTextureEnabled(!this._hideColorTexture);
                 viewer.scene._renderer.setPBREnabled(!this._hidePBR);
                 viewer.scene._renderer.setSAOEnabled(!this._hideSAO);
                 viewer.scene._renderer.setTransparentEnabled(!this._hideTransparentObjects);
@@ -140,6 +144,7 @@ class FastNavPlugin extends Plugin {
         const switchToHighQuality = () => {
             viewer.scene.canvas.resolutionScale = 1;
             viewer.scene._renderer.setEdgesEnabled(true);
+            viewer.scene._renderer.setColorTextureEnabled(true);
             viewer.scene._renderer.setPBREnabled(true);
             viewer.scene._renderer.setSAOEnabled(true);
             viewer.scene._renderer.setTransparentEnabled(true);
@@ -177,6 +182,28 @@ class FastNavPlugin extends Plugin {
         });
     }
 
+    /**
+     * Gets whether to temporarily hide color textures whenever we interact with the Viewer.
+     *
+     * Default is ````true````.
+     *
+     * @return {Boolean} ````true```` if hiding color textures.
+     */
+    get hideColorTexture() {
+        return this._hideColorTexture;
+    }
+
+    /**
+     * Sets whether to temporarily hide color textures whenever we interact with the Viewer.
+     *
+     * Default is ````true````.
+     *
+     * @param {Boolean} hideColorTexture ````true```` to hide color textures.
+     */
+    set hideColorTexture(hideColorTexture) {
+        this._hideColorTexture = hideColorTexture;
+    }
+    
     /**
      * Gets whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer.
      *

@@ -190,6 +190,74 @@ class DistanceMeasurementsControl extends Component {
             }
         });
 
+        //-------------------------------------------------------------------------------------------------------------
+
+        // const canvas = this.scene.canvas.canvas;
+        // const tapStartCanvasPos = math.vec2();
+        // const tapCanvasPos0 = math.vec2();
+        // const tapCanvasPos1 = math.vec2();
+        // const touch0Vec = math.vec2();
+        // const lastCanvasTouchPosList = [];
+        // let numTouches = 0;
+        // let waitForTick = false;
+        //
+        // this._onTick = scene.on("tick", () => {
+        //     waitForTick = false;
+        // });
+        //
+        // canvas.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
+        //     event.preventDefault();
+        //     const touches = event.touches;
+        //     const changedTouches = event.changedTouches;
+        //     if (touches.length === 1 && changedTouches.length === 1) {
+        //         getCanvasPosFromEvent(touches[0], tapStartCanvasPos);
+        //
+        //         if (pickSurfacePrecisionEnabled) {
+        //             const pickResult = this.plugin.viewer.scene.pick({
+        //                 canvasPos: tapStartCanvasPos,
+        //                 pickSurface: true,
+        //                // pickSurfacePrecision: true
+        //             });
+        //             if (pickResult && pickResult.worldPos) {
+        //                // this._currentDistMeasurement.target.worldPos = pickResult.worldPos;
+        //             }
+        //        //     this._currentDistMeasurement.approximate = false;
+        //         }
+        //
+        //         // TODO: Create start of measurement
+        //     }
+        //     while (lastCanvasTouchPosList.length < touches.length) {
+        //         lastCanvasTouchPosList.push(math.vec2());
+        //     }
+        //     for (let i = 0, len = touches.length; i < len; ++i) {
+        //         getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+        //     }
+        //     numTouches = touches.length;
+        // });
+        //
+        // canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
+        //     event.stopPropagation();
+        //     event.preventDefault();
+        //     if (waitForTick) {  // Limit changes detection to one per frame
+        //         return;
+        //     }
+        //     waitForTick = true;
+        //     const touches = event.touches;
+        //     if (event.touches.length !== numTouches) {
+        //         // Two fingers were pressed, then one of them is removed
+        //         return;
+        //     }
+        //     if (numTouches === 1) {
+        //         getCanvasPosFromEvent(touches[0], tapCanvasPos0);
+        //         // TODO: update end of distance measurement
+        //     }
+        //     for (let i = 0; i < numTouches; ++i) {
+        //         getCanvasPosFromEvent(touches[i], lastCanvasTouchPosList[i]);
+        //     }
+        // });
+
+        //-------------------------------------------------------------------------------------------------------------
+
         this._active = true;
     }
 
@@ -255,5 +323,25 @@ class DistanceMeasurementsControl extends Component {
     }
 
 }
+
+const getCanvasPosFromEvent = function (event, canvasPos) {
+    if (!event) {
+        event = window.event;
+        canvasPos[0] = event.x;
+        canvasPos[1] = event.y;
+    } else {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        canvasPos[0] = event.pageX - totalOffsetLeft;
+        canvasPos[1] = event.pageY - totalOffsetTop;
+    }
+    return canvasPos;
+};
 
 export {DistanceMeasurementsControl};

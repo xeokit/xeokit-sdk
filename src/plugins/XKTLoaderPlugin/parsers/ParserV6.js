@@ -235,10 +235,9 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                         performanceModel.createGeometry({
                             id: geometryId,
-                            origin: tileCenter,
                             primitive: "triangles",
-                            positions: primitivePositions,
-                            normals: primitiveNormals,
+                            positionsCompressed: primitivePositions,
+                            normalsCompressed: primitiveNormals,
                             indices: primitiveIndices,
                             edgeIndices: primitiveEdgeIndices,
                             positionsDecodeMatrix: reusedPrimitivesDecodeMatrix
@@ -250,6 +249,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     performanceModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         geometryId: geometryId,
+                        origin: tileCenter,
                         matrix: entityMatrix,
                         color: color,
                         opacity: opacity
@@ -263,8 +263,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                         id: meshId,
                         origin: tileCenter,
                         primitive: "triangles",
-                        positions: primitivePositions,
-                        normals: primitiveNormals,
+                        positionsCompressed: primitivePositions,
+                        normalsCompressed: primitiveNormals,
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
                         positionsDecodeMatrix: tileDecodeMatrix,

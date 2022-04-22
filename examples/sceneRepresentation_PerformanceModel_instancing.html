@@ -39,7 +39,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, PerformanceModel} from "./../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -53,9 +53,6 @@
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
     viewer.scene.camera.look = [0, -5.75, 0];
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
-
-    viewer.cameraControl.followPointer = true;
-    viewer.cameraControl.smartPivot = true;
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a PerformanceModel representing a table with four legs, using geometry instancing

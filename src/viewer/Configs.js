@@ -13,7 +13,7 @@ import {math} from "./scene/math/math.js";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]
  *
  * ````javascript
- * import {Configs, Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
+ * import {Configs, Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.es.js";
  *
  * // Access xeoit-sdk global configs.
  * // We typically set configs only before we create any Viewers.

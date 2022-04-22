@@ -1,6 +1,6 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {PerformanceNode} from "../PerformanceModel/lib/PerformanceNode.js";
+import {PerformanceNode} from "../models/PerformanceModel/lib/PerformanceNode.js";
 import {worldToRTCPos} from "../math/rtcCoords.js";
 
 const tempVec4a = math.vec4();

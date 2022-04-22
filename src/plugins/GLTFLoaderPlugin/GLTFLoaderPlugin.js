@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {GLTFSceneGraphLoader} from "./GLTFSceneGraphLoader.js";
@@ -273,6 +273,9 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
+     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) is enabled for the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
+     * @param {Boolean} [params.pbrEnabled=true] Indicates if physically-based rendering (PBR) is enabled for the model. Overrides ````colorTextureEnabled````. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [params.performance=true] Set ````false```` to load all the materials and textures provided by the glTF file, otherwise leave ````true```` to load the default high-performance representation optimized for low memory usage and efficient rendering.
@@ -324,7 +327,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 this.viewer.scene.canvas.spinner.processes--;
 
-                var includeTypes;
+                let includeTypes;
                 if (params.includeTypes) {
                     includeTypes = {};
                     for (let i = 0, len = params.includeTypes.length; i < len; i++) {
@@ -332,7 +335,7 @@ class GLTFLoaderPlugin extends Plugin {
                     }
                 }
 
-                var excludeTypes;
+                let excludeTypes;
                 if (params.excludeTypes) {
                     excludeTypes = {};
                     if (!includeTypes) {

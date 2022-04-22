@@ -2614,6 +2614,24 @@ const math = {
     },
 
     /**
+     * Rotate a 2D vector around a center point.
+     *
+     * @param a
+     * @param center
+     * @param angle
+     * @returns {math}
+     */
+    rotateVec2(a, center, angle, dest = a) {
+        const c = Math.cos(angle);
+        const s = Math.sin(angle);
+        const x = a[0] - center[0];
+        const y = a[1] - center[1];
+        dest[0] = x * c - y * s + center[0];
+        dest[1] = x * s + y * c + center[1];
+        return a;
+    },
+
+    /**
      * Rotate a 3D vector around the x-axis
      *
      * @method rotateVec3X

@@ -1,15 +1,16 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
-import {buildEdgeIndices} from '../../viewer/scene/math/buildEdgeIndices.js';
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
+import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
+import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
 
 /**
  * @private
  */
 class GLTFPerformanceModelLoader {
 
-    constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
+    constructor(cfg) {
         cfg = cfg || {};
     }
 
@@ -52,440 +53,427 @@ class GLTFPerformanceModelLoader {
     }
 }
 
-const loadGLTF = (function () {
-
-    return function (plugin, performanceModel, src, options, ok, error) {
-        const spinner = plugin.viewer.scene.canvas.spinner;
-        spinner.processes++;
-        plugin.dataSource.getGLTF(src, function (json) { // OK
+function loadGLTF(plugin, performanceModel, src, options, ok, error) {
+    const spinner = plugin.viewer.scene.canvas.spinner;
+    spinner.processes++;
+    const isGLB = (src.split('.').pop() === "glb");
+    if (isGLB) {
+        plugin.dataSource.getGLB(src, (arrayBuffer) => { // OK
+                options.basePath = getBasePath(src);
+                parseGLTF(plugin, arrayBuffer, src, options, performanceModel, ok, error);
                 spinner.processes--;
-                parseGLTF(plugin, json, src, options, performanceModel, ok, error);
             },
-            error);
-    };
-
-    function getBasePath(src) {
-        const i = src.lastIndexOf("/");
-        return (i !== 0) ? src.substring(0, i + 1) : "";
+            (err) => {
+                spinner.processes--;
+                error(err);
+            });
+    } else {
+        plugin.dataSource.getGLTF(src, (json) => { // OK
+                options.basePath = getBasePath(src);
+                parseGLTF(plugin, json, src, options, performanceModel, ok, error);
+                spinner.processes--;
+            },
+            (err) => {
+                spinner.processes--;
+                error(err);
+            });
     }
-})();
+}
 
-const parseGLTF = (function () {
+function getBasePath(src) {
+    const i = src.lastIndexOf("/");
+    return (i !== 0) ? src.substring(0, i + 1) : "";
+}
 
-    const WEBGL_COMPONENT_TYPES = {
-        5120: Int8Array,
-        5121: Uint8Array,
-        5122: Int16Array,
-        5123: Uint16Array,
-        5125: Uint32Array,
-        5126: Float32Array
-    };
-
-    const WEBGL_TYPE_SIZES = {
-        'SCALAR': 1,
-        'VEC2': 2,
-        'VEC3': 3,
-        'VEC4': 4,
-        'MAT2': 4,
-        'MAT3': 9,
-        'MAT4': 16
-    };
-
-    return function (plugin, json, src, options, performanceModel, ok) {
+function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
+    const spinner = plugin.viewer.scene.canvas.spinner;
+    spinner.processes++;
+    const gl = performanceModel.scene.canvas.gl;
+    parse(gltf, GLTFLoader, {
+        baseUri: options.basePath,
+        gl
+    }).then((gltfData) => {
         const ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
-            handleGLTFNode: options.handleGLTFNode,
-            json: json,
+            basePath: options.basePath,
+            handlenode: options.handlenode,
+            gltfData: gltfData,
             scene: performanceModel.scene,
             plugin: plugin,
             performanceModel: performanceModel,
-            geometryCreated: {},
+            //geometryCreated: {},
             numObjects: 0,
-            nodes: []
+            nodes: [],
+            nextId: 0
         };
-        const spinner = plugin.viewer.scene.canvas.spinner;
-        spinner.processes++;
-        loadBuffers(ctx, function () {
-            loadBufferViews(ctx);
-            freeBuffers(ctx); // Don't need buffers once we've created views of them
-            loadMaterials(ctx);
-            spinner.processes--;
-            loadDefaultScene(ctx);
-            performanceModel.finalize();
-            ok();
-        });
-    };
+        loadTextures(ctx);
+        loadMaterials(ctx);
+        loadDefaultScene(ctx);
+        performanceModel.finalize();
+        spinner.processes--;
+        ok();
+    });
+}
 
-    function loadBuffers(ctx, ok) {
-        const buffers = ctx.json.buffers;
-        if (buffers) {
-            let numToLoad = buffers.length;
-            for (let i = 0, len = buffers.length; i < len; i++) {
-                loadBuffer(ctx, buffers[i], function () {
-                    if (--numToLoad === 0) {
-                        ok();
+function loadTextures(ctx) {
+    const gltfData = ctx.gltfData;
+    const textures = gltfData.textures;
+    if (textures) {
+        for (let i = 0, len = textures.length; i < len; i++) {
+            loadTexture(ctx, textures[i]);
+        }
+    }
+}
+
+function loadTexture(ctx, texture) {
+    if (!texture.source || !texture.source.image) {
+        return;
+    }
+    const textureId = `texture-${ctx.nextId++}`;
+    ctx.performanceModel.createTexture({
+        id: textureId,
+        image: texture.source.image,
+        flipY: !!texture.flipY,
+        //     encoding: "sRGB"
+    });
+    texture._textureId = textureId;
+}
+
+function loadMaterials(ctx) {
+    const gltfData = ctx.gltfData;
+    const materials = gltfData.materials;
+    if (materials) {
+        for (let i = 0, len = materials.length; i < len; i++) {
+            const material = materials[i];
+            material._textureSetId = loadTextureSet(ctx, material);
+            material._attributes = loadMaterialAttributes(ctx, material);
+        }
+    }
+}
+
+function loadTextureSet(ctx, material) {
+    const textureSetCfg = {};
+    if (material.normalTexture) {
+        textureSetCfg.normalTextureId = material.normalTexture.texture._textureId;
+    }
+    if (material.occlusionTexture) {
+        textureSetCfg.occlusionTextureId = material.occlusionTexture.texture._textureId;
+    }
+    if (material.emissiveTexture) {
+        textureSetCfg.emissiveTextureId = material.emissiveTexture.texture._textureId;
+    }
+    // const alphaMode = material.alphaMode;
+    // switch (alphaMode) {
+    //     case "NORMAL_OPAQUE":
+    //         materialCfg.alphaMode = "opaque";
+    //         break;
+    //     case "MASK":
+    //         materialCfg.alphaMode = "mask";
+    //         break;
+    //     case "BLEND":
+    //         materialCfg.alphaMode = "blend";
+    //         break;
+    //     default:
+    // }
+    // const alphaCutoff = material.alphaCutoff;
+    // if (alphaCutoff !== undefined) {
+    //     materialCfg.alphaCutoff = alphaCutoff;
+    // }
+    const metallicPBR = material.pbrMetallicRoughness;
+    if (material.pbrMetallicRoughness) {
+        const pbrMetallicRoughness = material.pbrMetallicRoughness;
+        const baseColorTexture = pbrMetallicRoughness.baseColorTexture || pbrMetallicRoughness.colorTexture;
+        if (baseColorTexture) {
+            if (baseColorTexture.texture) {
+                textureSetCfg.colorTextureId = baseColorTexture.texture._textureId;
+            } else {
+                textureSetCfg.colorTextureId = ctx.gltfData.textures[baseColorTexture.index]._textureId;
+            }
+        }
+        if (metallicPBR.metallicRoughnessTexture) {
+            textureSetCfg.metallicRoughnessTextureId = metallicPBR.metallicRoughnessTexture.texture._textureId;
+        }
+    }
+    if (textureSetCfg.normalTextureId !== undefined ||
+        textureSetCfg.occlusionTextureId !== undefined ||
+        textureSetCfg.emissiveTextureId !== undefined ||
+        textureSetCfg.colorTextureId !== undefined ||
+        textureSetCfg.metallicRoughnessTextureId !== undefined) {
+        textureSetCfg.id = `textureSet-${ctx.nextId++};`
+        ctx.performanceModel.createTextureSet(textureSetCfg);
+        return textureSetCfg.id;
+    }
+    return null;
+}
+
+function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material, to use fast flat shading instead
+    const extensions = material.extensions;
+    const materialAttributes = {
+        color: new Float32Array([1, 1, 1, 1]),
+        opacity: 1,
+        metallic: 0,
+        roughness: 1
+    };
+    if (extensions) {
+        const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
+        if (specularPBR) {
+            const diffuseFactor = specularPBR.diffuseFactor;
+            if (diffuseFactor !== null && diffuseFactor !== undefined) {
+                materialAttributes.color.set(diffuseFactor);
+            }
+        }
+        const common = extensions["KHR_materials_common"];
+        if (common) {
+            const technique = common.technique;
+            const values = common.values || {};
+            const blinn = technique === "BLINN";
+            const phong = technique === "PHONG";
+            const lambert = technique === "LAMBERT";
+            const diffuse = values.diffuse;
+            if (diffuse && (blinn || phong || lambert)) {
+                if (!utils.isString(diffuse)) {
+                    materialAttributes.color.set(diffuse);
+                }
+            }
+            const transparency = values.transparency;
+            if (transparency !== null && transparency !== undefined) {
+                materialAttributes.opacity = transparency;
+            }
+            const transparent = values.transparent;
+            if (transparent !== null && transparent !== undefined) {
+                materialAttributes.opacity = transparent;
+            }
+        }
+    }
+    const metallicPBR = material.pbrMetallicRoughness;
+    if (metallicPBR) {
+        const baseColorFactor = metallicPBR.baseColorFactor;
+        if (baseColorFactor) {
+            materialAttributes.color[0] = baseColorFactor[0];
+            materialAttributes.color[1] = baseColorFactor[1];
+            materialAttributes.color[2] = baseColorFactor[2];
+            materialAttributes.opacity = baseColorFactor[3];
+        }
+        const metallicFactor = metallicPBR.metallicFactor;
+        if (metallicFactor !== null && metallicFactor !== undefined) {
+            materialAttributes.metallic = metallicFactor;
+        }
+        const roughnessFactor = metallicPBR.roughnessFactor;
+        if (roughnessFactor !== null && roughnessFactor !== undefined) {
+            materialAttributes.roughness = roughnessFactor;
+        }
+    }
+    return materialAttributes;
+}
+
+function loadDefaultScene(ctx) {
+    const gltfData = ctx.gltfData;
+    const scene = gltfData.scene || gltfData.scenes[0];
+    if (!scene) {
+        error(ctx, "glTF has no default scene");
+        return;
+    }
+    loadScene(ctx, scene);
+}
+
+function loadScene(ctx, scene) {
+    const nodes = scene.nodes;
+    if (!nodes) {
+        return;
+    }
+    for (let i = 0, len = nodes.length; i < len; i++) {
+        const node = nodes[i];
+        countMeshUsage(ctx, node);
+    }
+    for (let i = 0, len = nodes.length; i < len; i++) {
+        const node = nodes[i];
+        loadNode(ctx, node, null);
+    }
+}
+
+function countMeshUsage(ctx, node) {
+    const mesh = node.mesh;
+    if (mesh) {
+        mesh.instances = mesh.instances ? mesh.instances + 1 : 1;
+    }
+    if (node.children) {
+        const children = node.children;
+        for (let i = 0, len = children.length; i < len; i++) {
+            const childNode = children[i];
+            if (!childNode) {
+                error(ctx, "Node not found: " + i);
+                continue;
+            }
+            countMeshUsage(ctx, childNode);
+        }
+    }
+}
+
+function loadNode(ctx, node, matrix) {
+    const gltfData = ctx.gltfData;
+    let localMatrix;
+    if (node.matrix) {
+        localMatrix = node.matrix;
+        if (matrix) {
+            matrix = math.mulMat4(matrix, localMatrix, math.mat4());
+        } else {
+            matrix = localMatrix;
+        }
+    }
+    if (node.translation) {
+        localMatrix = math.translationMat4v(node.translation);
+        if (matrix) {
+            matrix = math.mulMat4(matrix, localMatrix, math.mat4());
+        } else {
+            matrix = localMatrix;
+        }
+    }
+    if (node.rotation) {
+        localMatrix = math.quaternionToMat4(node.rotation);
+        if (matrix) {
+            matrix = math.mulMat4(matrix, localMatrix, math.mat4());
+        } else {
+            matrix = localMatrix;
+        }
+    }
+    if (node.scale) {
+        localMatrix = math.scalingMat4v(node.scale);
+        if (matrix) {
+            matrix = math.mulMat4(matrix, localMatrix, math.mat4());
+        } else {
+            matrix = localMatrix;
+        }
+    }
+    if (node.mesh) {
+        const mesh = node.mesh;
+        let createEntity;
+        if (ctx.handlenode) {
+            const actions = {};
+            if (!ctx.handlenode(ctx.performanceModel.id, node, actions)) {
+                return;
+            }
+            if (actions.createEntity) {
+                createEntity = actions.createEntity;
+            }
+        }
+        const performanceModel = ctx.performanceModel;
+        const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
+        const numPrimitives = mesh.primitives.length;
+
+        if (numPrimitives > 0) {
+
+            const meshIds = [];
+
+            for (let i = 0; i < numPrimitives; i++) {
+
+                const primitive = mesh.primitives[i];
+                if (primitive.mode < 4) {
+                    continue;
+                }
+
+                const meshCfg = {
+                    id: performanceModel.id + "." + ctx.numObjects++
+                };
+
+                switch (primitive.mode) {
+                    case 0: // POINTS
+                        meshCfg.primitive = "points";
+                        break;
+                    case 1: // LINES
+                        meshCfg.primitive = "lines";
+                        break;
+                    case 2: // LINE_LOOP
+                        meshCfg.primitive = "lines";
+                        break;
+                    case 3: // LINE_STRIP
+                        meshCfg.primitive = "lines";
+                        break;
+                    case 4: // TRIANGLES
+                        meshCfg.primitive = "triangles";
+                        break;
+                    case 5: // TRIANGLE_STRIP
+                        meshCfg.primitive = "triangles";
+                        break;
+                    case 6: // TRIANGLE_FAN
+                        meshCfg.primitive = "triangles";
+                        break;
+                    default:
+                        meshCfg.primitive = "triangles";
+                }
+
+                const POSITION = primitive.attributes.POSITION;
+                if (!POSITION) {
+                    continue;
+                }
+                meshCfg.localPositions = POSITION.value;
+                meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
+
+                if (primitive.attributes.NORMAL) {
+                    meshCfg.normals = primitive.attributes.NORMAL.value;
+                }
+
+                if (primitive.attributes.TEXCOORD_0) {
+                    meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
+                }
+
+                if (primitive.indices) {
+                    meshCfg.indices = primitive.indices.value;
+                }
+
+                math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
+                const origin = math.vec3();
+                const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
+                if (rtcNeeded) {
+                    meshCfg.origin = origin;
+                }
+
+                const material = primitive.material;
+                if (material) {
+                    meshCfg.textureSetId = material._textureSetId;
+                    meshCfg.color = material._attributes.color;
+                    meshCfg.opacity = material._attributes.opacity;
+                    meshCfg.metallic = material._attributes.metallic;
+                    meshCfg.roughness = material._attributes.roughness;
+                } else {
+                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                    meshCfg.opacity = 1.0;
+                }
+                if (createEntity) {
+                    if (createEntity.colorize) {
+                        meshCfg.color = createEntity.colorize;
                     }
-                }, function (msg) {
-                    ctx.plugin.error(msg);
-                    if (--numToLoad === 0) {
-                        ok();
+                    if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
+                        meshCfg.opacity = createEntity.opacity;
                     }
+                }
+
+                performanceModel.createMesh(meshCfg);
+                meshIds.push(meshCfg.id);
+            }
+            if (createEntity) {
+                performanceModel.createEntity(utils.apply(createEntity, {
+                    meshIds: meshIds
+                }));
+            } else {
+                performanceModel.createEntity({
+                    meshIds: meshIds
                 });
             }
-        } else {
-            ok();
         }
     }
 
-    function loadBuffer(ctx, bufferInfo, ok, err) {
-        const uri = bufferInfo.uri;
-        if (uri) {
-            ctx.plugin.dataSource.getArrayBuffer(ctx.src, uri, function (data) {
-                    bufferInfo._buffer = data;
-                    ok();
-                },
-                err);
-        } else {
-            err('gltf/handleBuffer missing uri in ' + JSON.stringify(bufferInfo));
+    if (node.children) {
+        const children = node.children;
+        for (let i = 0, len = children.length; i < len; i++) {
+            const childNode = children[i];
+            loadNode(ctx, childNode, matrix);
         }
     }
+}
 
-    function loadBufferViews(ctx) {
-        const bufferViewsInfo = ctx.json.bufferViews;
-        if (bufferViewsInfo) {
-            for (let i = 0, len = bufferViewsInfo.length; i < len; i++) {
-                loadBufferView(ctx, bufferViewsInfo[i]);
-            }
-        }
-    }
+function error(ctx, msg) {
+    ctx.plugin.error(msg);
+}
 
-    function loadBufferView(ctx, bufferViewInfo) {
-        const buffer = ctx.json.buffers[bufferViewInfo.buffer];
-        bufferViewInfo._typedArray = null;
-        const byteLength = bufferViewInfo.byteLength || 0;
-        const byteOffset = bufferViewInfo.byteOffset || 0;
-        bufferViewInfo._buffer = buffer._buffer.slice(byteOffset, byteOffset + byteLength);
-    }
-
-    function freeBuffers(ctx) {
-        const buffers = ctx.json.buffers;
-        if (buffers) {
-            for (let i = 0, len = buffers.length; i < len; i++) {
-                buffers[i]._buffer = null;
-            }
-        }
-    }
-
-    function loadMaterials(ctx) {
-        const materialsInfo = ctx.json.materials;
-        if (materialsInfo) {
-            for (let i = 0, len = materialsInfo.length; i < len; i++) {
-                const materialInfo = materialsInfo[i];
-                const material = loadMaterialColorize(ctx, materialInfo);
-                materialInfo._rgbaColor = material;
-            }
-        }
-    }
-
-    function loadMaterialColorize(ctx, materialInfo) { // Substitute RGBA for material, to use fast flat shading instead
-        const colorize = new Float32Array([1, 1, 1, 1]);
-        const extensions = materialInfo.extensions;
-        if (extensions) {
-            const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
-            if (specularPBR) {
-                const diffuseFactor = specularPBR.diffuseFactor;
-                if (diffuseFactor !== null && diffuseFactor !== undefined) {
-                    colorize.set(diffuseFactor);
-                }
-            }
-            const common = extensions["KHR_materials_common"];
-            if (common) {
-                const technique = common.technique;
-                const values = common.values || {};
-                const blinn = technique === "BLINN";
-                const phong = technique === "PHONG";
-                const lambert = technique === "LAMBERT";
-                const diffuse = values.diffuse;
-                if (diffuse && (blinn || phong || lambert)) {
-                    if (!utils.isString(diffuse)) {
-                        colorize.set(diffuse);
-                    }
-                }
-                const transparency = values.transparency;
-                if (transparency !== null && transparency !== undefined) {
-                    colorize[3] = transparency;
-                }
-                const transparent = values.transparent;
-                if (transparent !== null && transparent !== undefined) {
-                    colorize[3] = transparent;
-                }
-            }
-        }
-        const metallicPBR = materialInfo.pbrMetallicRoughness;
-        if (metallicPBR) {
-            const baseColorFactor = metallicPBR.baseColorFactor;
-            if (baseColorFactor) {
-                colorize.set(baseColorFactor);
-            }
-        }
-        return colorize;
-    }
-
-    function loadDefaultScene(ctx) {
-        const json = ctx.json;
-        const scene = json.scene || 0;
-        const defaultSceneInfo = json.scenes[scene];
-        if (!defaultSceneInfo) {
-            error(ctx, "glTF has no default scene");
-            return;
-        }
-        preprocessScene(ctx, defaultSceneInfo);
-        loadScene(ctx, defaultSceneInfo);
-    }
-
-    function preprocessScene(ctx, sceneInfo) {
-        const nodes = sceneInfo.nodes;
-        if (!nodes) {
-            return;
-        }
-        const json = ctx.json;
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const glTFNode = json.nodes[nodes[i]];
-            if (!glTFNode) {
-                error(ctx, "Node not found: " + i);
-                continue;
-            }
-            countMeshUsage(ctx, i, glTFNode);
-        }
-    }
-
-    function loadScene(ctx, sceneInfo) {
-        const nodes = sceneInfo.nodes;
-        if (!nodes) {
-            return;
-        }
-        const json = ctx.json;
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const glTFNode = json.nodes[nodes[i]];
-            if (!glTFNode) {
-                error(ctx, "Node not found: " + i);
-                continue;
-            }
-            countMeshUsage(ctx, glTFNode);
-        }
-        ctx.plugin.viewer.scene.canvas.spinner.processes++;
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const glTFNode = json.nodes[nodes[i]];
-            loadNode(ctx, glTFNode, null);
-        }
-        ctx.plugin.viewer.scene.canvas.spinner.processes--;
-    }
-
-    function countMeshUsage(ctx, glTFNode) {
-        const json = ctx.json;
-        const mesh = glTFNode.mesh;
-        if (mesh !== undefined) {
-            const meshInfo = json.meshes[glTFNode.mesh];
-            if (meshInfo) {
-                meshInfo.instances = meshInfo.instances ? meshInfo.instances + 1 : 1;
-            }
-        }
-        if (glTFNode.children) {
-            const children = glTFNode.children;
-            for (let i = 0, len = children.length; i < len; i++) {
-                const childNodeIdx = children[i];
-                const childNodeInfo = json.nodes[childNodeIdx];
-                if (!childNodeInfo) {
-                    error(ctx, "Node not found: " + i);
-                    continue;
-                }
-                countMeshUsage(ctx, childNodeInfo);
-            }
-        }
-    }
-
-    function loadNode(ctx, glTFNode, matrix) {
-
-        const json = ctx.json;
-        let localMatrix;
-
-        if (glTFNode.matrix) {
-            localMatrix = glTFNode.matrix;
-            if (matrix) {
-                matrix = math.mulMat4(matrix, localMatrix, math.mat4());
-            } else {
-                matrix = localMatrix;
-            }
-        }
-
-        if (glTFNode.translation) {
-            localMatrix = math.translationMat4v(glTFNode.translation);
-            if (matrix) {
-                matrix = math.mulMat4(matrix, localMatrix, math.mat4());
-            } else {
-                matrix = localMatrix;
-            }
-        }
-
-        if (glTFNode.rotation) {
-            localMatrix = math.quaternionToMat4(glTFNode.rotation);
-            if (matrix) {
-                matrix = math.mulMat4(matrix, localMatrix, math.mat4());
-            } else {
-                matrix = localMatrix;
-            }
-        }
-
-        if (glTFNode.scale) {
-            localMatrix = math.scalingMat4v(glTFNode.scale);
-            if (matrix) {
-                matrix = math.mulMat4(matrix, localMatrix, math.mat4());
-            } else {
-                matrix = localMatrix;
-            }
-        }
-
-        if (glTFNode.mesh !== undefined) {
-
-            const meshInfo = json.meshes[glTFNode.mesh];
-
-            if (meshInfo) {
-
-                let createEntity;
-
-                if (ctx.handleGLTFNode) {
-                    const actions = {};
-                    if (!ctx.handleGLTFNode(ctx.performanceModel.id, glTFNode, actions)) {
-                        return;
-                    }
-                    if (actions.createEntity) {
-                        createEntity = actions.createEntity;
-                    }
-                }
-
-                const performanceModel = ctx.performanceModel;
-                const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
-                const numPrimitives = meshInfo.primitives.length;
-
-                if (numPrimitives > 0) {
-
-                    const meshIds = [];
-
-                    for (let i = 0; i < numPrimitives; i++) {
-                        const primitiveInfo = meshInfo.primitives[i];
-                        if (primitiveInfo.mode < 4) {
-                            continue;
-                        }
-                        const meshCfg = {
-                            id: performanceModel.id + "." + ctx.numObjects++
-                        };
-
-                        const materialIndex = primitiveInfo.material;
-                        let materialInfo;
-                        if (materialIndex !== null && materialIndex !== undefined) {
-                            materialInfo = json.materials[materialIndex];
-                        }
-                        if (materialInfo) {
-                            meshCfg.color = materialInfo._rgbaColor;
-                            meshCfg.opacity = materialInfo._rgbaColor[3];
-
-                        } else {
-                            meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                            meshCfg.opacity = 1.0;
-                        }
-
-                        if (createEntity) {
-                            if (createEntity.colorize) {
-                                meshCfg.color = createEntity.colorize;
-                            }
-                            if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
-                                meshCfg.opacity = createEntity.opacity;
-                            }
-                        }
-
-                        loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
-                        math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
-                        const origin = math.vec3();
-                        const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
-                        if (rtcNeeded) {
-                            meshCfg.origin = origin;
-                        }
-
-                        performanceModel.createMesh(meshCfg);
-                        meshIds.push(meshCfg.id);
-                    }
-
-                    if (createEntity) {
-                        performanceModel.createEntity(utils.apply(createEntity, {
-                            meshIds: meshIds
-                        }));
-                    } else {
-                        performanceModel.createEntity({
-                            meshIds: meshIds
-                        });
-                    }
-                }
-            }
-        }
-
-        if (glTFNode.children) {
-            const children = glTFNode.children;
-            for (let i = 0, len = children.length; i < len; i++) {
-                const childNodeIdx = children[i];
-                const childNodeInfo = json.nodes[childNodeIdx];
-                if (!childNodeInfo) {
-                    error(ctx, "Node not found: " + i);
-                    continue;
-                }
-                loadNode(ctx, childNodeInfo, matrix);
-            }
-        }
-    }
-
-    function loadPrimitiveGeometry(ctx, primitiveInfo, geometryCfg) {
-        const attributes = primitiveInfo.attributes;
-        if (!attributes) {
-            return;
-        }
-        geometryCfg.primitive = "triangles";
-        const indicesIndex = primitiveInfo.indices;
-        if (indicesIndex !== null && indicesIndex !== undefined) {
-            const accessorInfo = ctx.json.accessors[indicesIndex];
-            geometryCfg.indices = loadAccessorTypedArray(ctx, accessorInfo);
-        }
-        const positionsIndex = attributes.POSITION;
-        if (positionsIndex !== null && positionsIndex !== undefined) {
-            const accessorInfo = ctx.json.accessors[positionsIndex];
-            geometryCfg.localPositions = loadAccessorTypedArray(ctx, accessorInfo);
-            geometryCfg.positions = new Float64Array(geometryCfg.localPositions.length);
-        }
-        const normalsIndex = attributes.NORMAL;
-        if (normalsIndex !== null && normalsIndex !== undefined) {
-            const accessorInfo = ctx.json.accessors[normalsIndex];
-            geometryCfg.normals = loadAccessorTypedArray(ctx, accessorInfo);
-        }
-        if (geometryCfg.indices) {
-            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.localPositions, geometryCfg.indices, null, 10); // Save PerformanceModel from building edges
-        }
-    }
-
-    function loadAccessorTypedArray(ctx, accessorInfo) {
-        const bufferViewInfo = ctx.json.bufferViews[accessorInfo.bufferView];
-        const itemSize = WEBGL_TYPE_SIZES[accessorInfo.type];
-        const TypedArray = WEBGL_COMPONENT_TYPES[accessorInfo.componentType];
-        const elementBytes = TypedArray.BYTES_PER_ELEMENT; // For VEC3: itemSize is 3, elementBytes is 4, itemBytes is 12.
-        const itemBytes = elementBytes * itemSize;
-        if (accessorInfo.byteStride && accessorInfo.byteStride !== itemBytes) { // The buffer is not interleaved if the stride is the item size in bytes.
-            error("interleaved buffer!"); // TODO
-        } else {
-            return new TypedArray(bufferViewInfo._buffer, accessorInfo.byteOffset || 0, accessorInfo.count * itemSize);
-        }
-    }
-
-    function error(ctx, msg) {
-        ctx.plugin.error(msg);
-    }
-})();
-
-export {GLTFPerformanceModelLoader}
+export {GLTFPerformanceModelLoader};

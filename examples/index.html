@@ -272,6 +272,11 @@
             ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing nine CityJSON models"],
             ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
 
+            // "# IFC models converted using IFC2glTFConverter from Creoox",
+            //
+            // ["BIMOffline_XKT_IFC2glTFConverter_HolterTower", "Viewing an IFC4 BIM model"],
+            // ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
+
             "# ",
 
             ["BIMOffline_XKT_includeTypes", "Loading only IfcWalls from an IFC4 BIM model"],
@@ -291,8 +296,6 @@
             ["loading_XKT_Schependomlaan_transform", "Viewing multiple copies of an IFC2x3 model"],
             ["loading_XKT_OTCConferenceCenter", "Viewing an IFC4 model"],
             ["loading_XKT_WestRiverSideHospital", "Viewing seven IFC4 models"],
-            ["loading_XKT_GearboxPropellorTurbine", "Viewing a CAD model"],
-            ["loading_XKT_GearboxPropellorTurbine_PBR", "Viewing a CAD model"],
             ["loading_XKT_APHS", "Viewing a large IFC4 model"],
 
             ["loading_XKT_dataSource", "Loading a model from XKT using a custom data source"],
@@ -350,9 +353,25 @@
 
             ["loading_glTF_Duplex_transform", "Viewing multiple copies of a glTF model"],
             ["loading_glTF_Schependomlaan", "Viewing a glTF model"],
-            ["loading_glTF_Schependomlaan_lowPerf", "Viewing a glTF model using scene graph representation"],
             ["loading_glTF_dataSource", "Viewing a glTF model using a custom data source"],
-            ["loading_glTF_MAP", "Viewing an IFC4 glTF BIM model placed at [1842022, 10, -5173301]"],
+            ["loading_glTF_embedded_Box", "Loading an untextured box from gltf-Embedded format"],
+            ["loading_glTF_embedded_MAP", "Viewing an IFC4 glTF BIM model placed at [1842022, 10, -5173301]"],
+
+         //   "#Loading glTF with textures",
+
+         //   ["loading_glTF_BoxTextured", "Loading a textured box from gltf-Embedded format"],
+          //  ["loading_glTF_SkatePark", "Viewing a photogrammetry model with textures from gltf-Embedded format"],
+        //    ["loading_glTF_VianneyHouse", "Viewing a glTF model with textures from gltf-Embedded format"],
+
+            "#Loading Binary glTF",
+
+            ["loading_glb_HousePlan", "Viewing a binary glTF house model with textures"],
+            ["loading_glb_VianneyHouse", "Viewing a binary glTF house model with textures"],
+            ["loading_glb_SkatePark", "Viewing a binary glTF photogrammetry model"],
+            ["loading_glb_2CylinderEngine", "Viewing a binary glTF CAD model without textures"],
+            ["loading_glb_Box", "Viewing a simple binary glTF model without textures"],
+            ["loading_glb_BoxTextured", "Viewing a simple binary glTF model with textures"],
+            ["loading_glb_DamagedHelmet", "Physically-based rendering of a binary glTF test model"],
 
             "#Loading OBJ models",
 
@@ -408,8 +427,6 @@
             ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"],
         ],
 
-
-
         "Annotating Models": [
             "#Pinning 3D labels on models",
             ["annotations_clickShowLabels", "Click annotation markers to show labels"],
@@ -428,10 +445,12 @@
             "#Measuring angles",
             ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
             ["measurements_angle_createWithMouse", "Click on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_photogrammetry", "Click on the model to create angle measurements"],
             ["measurements_angle_createWithMouse_precision", "Click on the model to create full-precision angle measurements"],
             "#Measuring distances",
             ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
             ["measurements_distance_createWithMouse", "Click on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_photogrammetry", "Click on the model to create distance measurements"],
             ["measurements_distance_createWithMouse_precision", "Click on the model to create full-precision distance measurements"],
             ["measurements_distance_unitsAndScale", "Click on the model to create distance measurements"],
         ],
@@ -454,10 +473,8 @@
             ["picking_canvas_mesh_colorize_click", "Click objects to colorize them"],
             ["picking_canvas_mesh_opacity", "Click objects to make them transparent"],
             ["picking_canvas_mesh_highlight", "Hover over objects to highlight them"],
-            ["picking_canvas_mesh_highlight_glowThroughFalse", "Hover over objects to highlight them"],
             ["picking_canvas_mesh_highlight_transparent", "Hover over objects to highlight them"],
             ["picking_canvas_mesh_select", "Hover over objects to select them"],
-            ["picking_canvas_mesh_select_glowThroughFalse", "Hover over objects to select them"],
             ["picking_canvas_mesh_select_transparent", "Hover over objects to select them"],
             ["picking_canvas_mesh_xray", "Hover over objects to X-ray them"],
             ["picking_canvas_mesh_xray_transparent", "Hover over objects to X-ray them"],
@@ -478,6 +495,7 @@
             ["gizmos_SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
             ["gizmos_SectionPlanesPlugin_ortho_OTCConferenceCenter", "Section plane with orthographic camera"],
             ["gizmos_SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
+            ["gizmos_SectionPlanesPlugin_createWithMouse_photogrammetry", "Click on the model to create a section plane"],
             ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
             ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
             ["gizmos_SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
@@ -601,6 +619,9 @@
             "#Geometry reuse",
 
             ["sceneRepresentation_PerformanceModel_instancing", "PerformanceModel with instanced triangle geometry"],
+            ["sceneRepresentation_PerformanceModel_instancing_autoNormals", "PerformanceModel with instanced triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_PerformanceModel_instancing_textures", "PerformanceModel with instanced triangle geometry and textures"],
+            ["sceneRepresentation_PerformanceModel_instancing_textures_pbr", "PerformanceModel with instanced triangle geometry, textures and PBR"],
             ["sceneRepresentation_PerformanceModel_instancing_geometries", "PerformanceModel with various types of instanced geometry"],
             ["sceneRepresentation_PerformanceModel_instancing_points", "PerformanceModel with instanced point cloud geometry"],
             ["sceneRepresentation_PerformanceModel_instancing_lines", "PerformanceModel with instanced line geometry"],
@@ -616,6 +637,9 @@
             "#Geometry batching",
 
             ["sceneRepresentation_PerformanceModel_batching", "PerformanceModel with batched triangle geometries"],
+            ["sceneRepresentation_PerformanceModel_batching_autoNormals", "PerformanceModel with batched triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_PerformanceModel_batching_textures", "PerformanceModel with batched triangle geometries and textures"],
+            ["sceneRepresentation_PerformanceModel_batching_textures_pbr", "PerformanceModel with batched triangle geometries, textures, and PBR"],
             ["sceneRepresentation_PerformanceModel_batching_geometryInMemory", "PerformanceModel with batched triangle geometries, stored in browser memory"],
             ["sceneRepresentation_PerformanceModel_batching_points", "PerformanceModel with batched point cloud geometries"],
             ["sceneRepresentation_PerformanceModel_batching_lines", "PerformanceModel with batched line geometries"],
@@ -626,6 +650,7 @@
             ["sceneRepresentation_PerformanceModel_batching_origin_SAO", "PerformanceModel with batched triangle geometries, RTC coordinates and SAO"],
             ["sceneRepresentation_PerformanceModel_batching_SAO", "PerformanceModel with batched triangle geometries and SAO"],
             ["sceneRepresentation_PerformanceModel_batching_PBR", "PerformanceModel with batched triangle geometries and PBR"],
+
 
             "#Classifying with metadata",
 

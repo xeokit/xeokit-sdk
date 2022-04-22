@@ -246,10 +246,15 @@ var parseGLTF = (function () {
     }
 
     function loadTexture(ctx, textureInfo) {
+        let uri = ctx.json.images[textureInfo.source].uri;
+        if (uri && !uri.match(/^data:(.*?)(;base64)?,(.*)$/)) {
+            uri = ctx.basePath + uri;
+        }
         textureInfo._texture = new Texture(ctx.modelNode, {
-            src: ctx.json.images[textureInfo.source].uri ? ctx.basePath + ctx.json.images[textureInfo.source].uri : undefined,
+            src: uri,
             flipY: !!textureInfo.flipY,
-            encoding: "sRGB"
+            //encoding: "sRGB"
+            encoding: "linear"
         });
     }
 
@@ -394,7 +399,7 @@ var parseGLTF = (function () {
                 var diffuse = values.diffuse;
                 if (diffuse && (blinn || phong || lambert)) {
                     if (utils.isString(diffuse)) {
-                        texture = ctx.textures[diffuse];
+                        texture = json.textures[diffuse];
                         if (texture) {
                             cfg.diffuseMap = texture;
                             //  cfg.diffuseMap.encoding = "sRGB";
@@ -409,7 +414,7 @@ var parseGLTF = (function () {
                 var specular = values.specular;
                 if (specular && (blinn || phong)) {
                     if (utils.isString(specular)) {
-                        texture = ctx.textures[specular];
+                        texture = json.textures[specular];
                         if (texture) {
                             cfg.specularMap = texture;
                         }
@@ -423,7 +428,7 @@ var parseGLTF = (function () {
                 var emission = values.emission;
                 if (emission) {
                     if (utils.isString(emission)) {
-                        texture = ctx.textures[emission];
+                        texture = json.textures[emission];
                         if (texture) {
                             cfg.emissiveMap = texture;
                         }
@@ -463,9 +468,9 @@ var parseGLTF = (function () {
                 cfg.alpha = baseColorFactor[3];
             }
 
-            var baseColorTexture = metallicPBR.baseColorTexture;
-            if (baseColorTexture) {
-                textureInfo = json.textures[baseColorTexture.index];
+            var colorTexture = metallicPBR.colorTexture;
+            if (colorTexture) {
+                textureInfo = json.textures[colorTexture.index];
                 if (textureInfo) {
                     cfg.baseColorMap = textureInfo._texture;
                     //cfg.baseColorMap.encoding = "sRGB";

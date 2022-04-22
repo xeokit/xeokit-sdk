@@ -47,7 +47,7 @@ class FrameContext {
         this.lastProgramId = null;
 
         /**
-         * Whether to render a quality representation for triangle surfaces.
+         * Whether to render a physically-based representation for triangle surfaces.
          *
          * When ````false````, we'll render them with a fast vertex-shaded Gouraud-shaded representation, which
          * is great for zillions of objects.
@@ -60,6 +60,15 @@ class FrameContext {
          * @type {Boolean}
          */
         this.pbrEnabled = false;
+
+        /**
+         * Whether to render color textures for triangle surfaces.
+         *
+         * @property quality
+         * @default false
+         * @type {Boolean}
+         */
+        this.colorTextureEnabled = false;
 
         /**
          * Whether SAO is currently enabled during the current frame.

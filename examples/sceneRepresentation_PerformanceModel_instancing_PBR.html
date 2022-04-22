@@ -85,7 +85,7 @@
         Mesh,
         buildVectorTextGeometry,
         DirLight
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -161,8 +161,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
-        id: "pbrMetalRoughness",
-        pbrEnabled: true
+        id: "pbrMetalRoughness"
     });
 
     let numObjects = 0;
