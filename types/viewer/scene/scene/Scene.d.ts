@@ -6,7 +6,7 @@ import { Entity } from "../Entity";
 import { ReadableGeometry } from "../geometry";
 import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
 import { Viewport } from "../viewport/Viewport";
-import { PerformanceModel } from "../PerformanceModel/PerformanceModel";
+import { PerformanceModel } from "../models/PerformanceModel/PerformanceModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
 

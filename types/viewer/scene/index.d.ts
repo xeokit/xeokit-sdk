@@ -10,7 +10,7 @@ export * from "./math/math";
 export * from "./mementos";
 export * from "./mesh";
 export * from "./nodes";
-export * from "./PerformanceModel";
+export * from "./models";
 export * from "./scene/Scene";
 export * from "./sectionPlane";
 export * from "./viewport";

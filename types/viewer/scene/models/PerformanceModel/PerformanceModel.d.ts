@@ -1,6 +1,6 @@
-import { Entity } from "../Entity";
-import { Component } from "../Component";
-import { EdgeMaterial, EmphasisMaterial } from "../materials";
+import { Entity } from "../../Entity";
+import { Component } from "../../Component";
+import { EdgeMaterial, EmphasisMaterial } from "../../materials";
 import { PerformanceNode } from "./PerformanceNode";
 
 /**
