@@ -1,0 +1,955 @@
+[
+  {
+    "name": "LinesBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 105,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 106,
+        "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 107,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 108,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 109,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 110,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 111,
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
+      },
+      {
+        "lineNumber": 112,
+        "line": "     * @param cfg.indices  Flat int indices array."
+      },
+      {
+        "lineNumber": 113,
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 114,
+        "line": "     * @param cfg.opacity Opacity [0..255]"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 116,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 118,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 119,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 120,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 121,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
+    "name": "PointsBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 114,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * Creates a new portion within this PointsBatchingLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 116,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 119,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 120,
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with PointsBatchingLayer positionsDecodeMatrix"
+      },
+      {
+        "lineNumber": 121,
+        "line": "     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 122,
+        "line": "     * @param [cfg.colors] Flat float colors array."
+      },
+      {
+        "lineNumber": 123,
+        "line": "     * @param cfg.color Float RGB color [0..1,0..1,0..1]"
+      },
+      {
+        "lineNumber": 124,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 127,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 128,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 129,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 130,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
+    "name": "TrianglesBatchingLayer#createPortion",
+    "filePath": "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
+    "lines": [
+      {
+        "lineNumber": 157,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 158,
+        "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
+      },
+      {
+        "lineNumber": 159,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 160,
+        "line": "     * Gives the portion the specified geometry, color and matrix."
+      },
+      {
+        "lineNumber": 161,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 162,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 163,
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
+      },
+      {
+        "lineNumber": 164,
+        "line": "     * @param [cfg.normals] Flat float normals array."
+      },
+      {
+        "lineNumber": 165,
+        "line": "     * @param [cfg.uv] Flat UVs array."
+      },
+      {
+        "lineNumber": 166,
+        "line": "     * @param [cfg.uvCompressed]"
+      },
+      {
+        "lineNumber": 167,
+        "line": "     * @param [cfg.colors] Flat float colors array."
+      },
+      {
+        "lineNumber": 168,
+        "line": "     * @param [cfg.colorsCompressed]"
+      },
+      {
+        "lineNumber": 169,
+        "line": "     * @param cfg.indices  Flat int indices array."
+      },
+      {
+        "lineNumber": 170,
+        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
+      },
+      {
+        "lineNumber": 171,
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 172,
+        "line": "     * @param cfg.metallic Metalness factor [0..255]"
+      },
+      {
+        "lineNumber": 173,
+        "line": "     * @param cfg.roughness Roughness factor [0..255]"
+      },
+      {
+        "lineNumber": 174,
+        "line": "     * @param cfg.opacity Opacity [0..255]"
+      },
+      {
+        "lineNumber": 175,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 176,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 177,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 178,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 179,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 180,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 181,
+        "line": "    createPortion(cfg) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": []
+  },
+  {
+    "name": "Drawable#drawColorOpaque",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 112,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 113,
+        "line": "     * Renders opaque edges using {@link Drawable#edgeMaterial}."
+      },
+      {
+        "lineNumber": 114,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * See {@link RenderFlags#colorOpaque}."
+      },
+      {
+        "lineNumber": 116,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 119,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 120,
+        "line": "    drawColorOpaque(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawColorTransparent",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 123,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 124,
+        "line": "     * Renders transparent filled surfaces using normal appearance attributes."
+      },
+      {
+        "lineNumber": 125,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * See {@link RenderFlags#colorTransparent}."
+      },
+      {
+        "lineNumber": 127,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 128,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 129,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 130,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 131,
+        "line": "    drawColorTransparent(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawDepth",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 136,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 137,
+        "line": "     * Renders pixel depths to an internally-managed depth target, for use in post-effects (eg. SAO)."
+      },
+      {
+        "lineNumber": 138,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 139,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 140,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 141,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 142,
+        "line": "    drawDepth(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawNormals",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 145,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 146,
+        "line": "     * Renders pixel normals to an internally-managed target, for use in post-effects (eg. SAO)."
+      },
+      {
+        "lineNumber": 147,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 148,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 149,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 150,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 151,
+        "line": "    drawNormals(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawSilhouetteXRayed",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 156,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 157,
+        "line": "     * Renders x-ray fill using {@link Drawable#xrayMaterial}."
+      },
+      {
+        "lineNumber": 158,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 159,
+        "line": "     * See {@link RenderFlags#xrayedSilhouetteOpaque} and {@link RenderFlags#xrayedSilhouetteTransparent}."
+      },
+      {
+        "lineNumber": 160,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 161,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 162,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 163,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 164,
+        "line": "    drawSilhouetteXRayed(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawSilhouetteHighlighted",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 167,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 168,
+        "line": "     * Renders highlighted transparent fill using {@link Drawable#highlightMaterial}."
+      },
+      {
+        "lineNumber": 169,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 170,
+        "line": "     * See {@link RenderFlags#highlightedSilhouetteOpaque} and {@link RenderFlags#highlightedSilhouetteTransparent}."
+      },
+      {
+        "lineNumber": 171,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 172,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 173,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 174,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 175,
+        "line": "    drawSilhouetteHighlighted(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawSilhouetteSelected",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 178,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 179,
+        "line": "     * Renders selected fill using {@link Drawable#selectedMaterial}."
+      },
+      {
+        "lineNumber": 180,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 181,
+        "line": "     * See {@link RenderFlags#selectedSilhouetteOpaque} and {@link RenderFlags#selectedSilhouetteTransparent}."
+      },
+      {
+        "lineNumber": 182,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 183,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 184,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 185,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 186,
+        "line": "    drawSilhouetteSelected(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawEdgesColorOpaque",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 191,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 192,
+        "line": "     * Renders opaque normal edges using {@link Drawable#edgeMaterial}."
+      },
+      {
+        "lineNumber": 193,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 194,
+        "line": "     * See {@link RenderFlags#edgesOpaque}."
+      },
+      {
+        "lineNumber": 195,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 196,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 197,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 198,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 199,
+        "line": "    drawEdgesColorOpaque(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawEdgesColorTransparent",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 202,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 203,
+        "line": "     * Renders transparent normal edges using {@link Drawable#edgeMaterial}."
+      },
+      {
+        "lineNumber": 204,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 205,
+        "line": "     * See {@link RenderFlags#edgesTransparent}."
+      },
+      {
+        "lineNumber": 206,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 207,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 208,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 209,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 210,
+        "line": "    drawEdgesColorTransparent(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawEdgesXRayed",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 213,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 214,
+        "line": "     * Renders x-rayed edges using {@link Drawable#xrayMaterial}."
+      },
+      {
+        "lineNumber": 215,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 216,
+        "line": "     * See {@link RenderFlags#xrayedEdgesOpaque}."
+      },
+      {
+        "lineNumber": 217,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 218,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 219,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 220,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 221,
+        "line": "    drawEdgesXRayed(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawEdgesHighlighted",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 224,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 225,
+        "line": "     * Renders highlighted edges using {@link Drawable#highlightMaterial}."
+      },
+      {
+        "lineNumber": 226,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 227,
+        "line": "     * See {@link RenderFlags#highlightedEdgesOpaque}."
+      },
+      {
+        "lineNumber": 228,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 229,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 230,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 231,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 232,
+        "line": "    drawEdgesHighlighted(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawEdgesSelected",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 235,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 236,
+        "line": "     * Renders selected edges using {@link Drawable#selectedMaterial}."
+      },
+      {
+        "lineNumber": 237,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 238,
+        "line": "     * See {@link RenderFlags#selectedEdgesOpaque}."
+      },
+      {
+        "lineNumber": 239,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 240,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 241,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 242,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 243,
+        "line": "    drawEdgesSelected(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawOcclusion",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 248,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 249,
+        "line": "     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers."
+      },
+      {
+        "lineNumber": 250,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 251,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 252,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 253,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 254,
+        "line": "    drawOcclusion(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Drawable#drawShadow",
+    "filePath": "src/viewer/scene/webgl/Drawable.js",
+    "lines": [
+      {
+        "lineNumber": 259,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 260,
+        "line": "     * Renders depths to a shadow map buffer.."
+      },
+      {
+        "lineNumber": 261,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 262,
+        "line": "     * @param {FrameContext} frameCtx Renderer frame context."
+      },
+      {
+        "lineNumber": 263,
+        "line": "     * @abstract"
+      },
+      {
+        "lineNumber": 264,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 265,
+        "line": "    drawShadow(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  },
+  {
+    "name": "Pickable#drawPickDepths",
+    "filePath": "src/viewer/scene/webgl/Pickable.js",
+    "lines": [
+      {
+        "lineNumber": 42,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 43,
+        "line": "     * Renders color-encoded fragment depths of this Pickable."
+      },
+      {
+        "lineNumber": 44,
+        "line": "     * @param frameCtx"
+      },
+      {
+        "lineNumber": 45,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 46,
+        "line": "    drawPickDepths(renderFlags, frameCtx) {"
+      }
+    ],
+    "codeParams": [
+      "renderFlags",
+      "frameCtx"
+    ],
+    "docParams": [
+      "frameCtx"
+    ]
+  }
+]
