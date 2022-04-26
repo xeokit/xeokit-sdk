@@ -15,6 +15,11 @@ Unreleased
 * GLTFLoaderPlugin
   * Extend GLTFLoaderPlugin to load binary glTF. [#854](https://github.com/xeokit/xeokit-sdk/issues/854) ([**@xeolabs**](https://github.com/xeolabs))
 
+### Fixes
+
+* CameraControl
+  * Fixed CameraControl picking and made double click time frame configurable. [#855](https://github.com/xeokit/xeokit-sdk/pull/855) ([**@MathiasTribia**](https://github.com/MathiasTribia))
+
 # 2.2.0
 
 Jan 10, 2022
