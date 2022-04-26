@@ -13,7 +13,8 @@
     "build-dev": "rollup --config rollup.config.js; cp dist/xeokit-sdk.es.js test/",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
-    "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json"
+    "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
+    "dev": "npx serve -s test"
   },
   "repository": {
     "type": "git",
