@@ -155,4 +155,4 @@ function buildFragment(mesh) {
     return src;
 }
 
-export {EmphasisEdgesShaderSource};
+export { EmphasisEdgesShaderSource };

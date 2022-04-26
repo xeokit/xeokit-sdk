@@ -2,8 +2,6 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
-import {WEBGL_INFO} from "../../webglInfo.js";
-
 /**
  * @private
  */
@@ -153,4 +151,4 @@ function buildFragment(mesh) {
     return src;
 }
 
-export {OcclusionShaderSource};
+export { OcclusionShaderSource };

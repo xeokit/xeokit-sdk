@@ -95,4 +95,4 @@ function buildFragment(mesh) {
     return src;
 }
 
-export {ShadowShaderSource};
+export { ShadowShaderSource };

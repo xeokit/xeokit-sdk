@@ -317,6 +317,7 @@ function buildFragmentLambert(mesh) {
     } else {
         src.push("outColor = vColor;");
     }
+
     src.push("}");
     return src;
 }
@@ -1562,9 +1563,11 @@ function buildFragmentDraw(mesh) {
         src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
     }
 
+    src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
+
     src.push("}");
 
     return src;
 }
 
-export {DrawShaderSource};
+export { DrawShaderSource };
