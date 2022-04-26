@@ -1,4 +1,3 @@
-import {WEBGL_INFO} from "../../webglInfo.js";
 
 /**
  * @private
@@ -258,4 +257,4 @@ function buildFragment(mesh) {
     return src;
 }
 
-export {EmphasisFillShaderSource};
+export { EmphasisFillShaderSource };

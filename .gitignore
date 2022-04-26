@@ -1,3 +1,7 @@
+dist/*
+xeokit-sdk.*
+
+
 # Logs
 logs
 *.log

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+        }
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: lightblue;
+            background-image: linear-gradient(lightblue, white);
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+</body>
+<script id="source" type="module">
+
+    import {Viewer, XKTLoaderPlugin, WebIFCLoaderPlugin, SectionPlanesPlugin} from
+                "./xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        logarithmicDepthBufferEnabled: true
+    });
+
+    // viewer.camera._perspective.far = 10;
+    console.log(viewer.camera)
+
+    const planes = new SectionPlanesPlugin(viewer, {})
+    const p = planes.createSectionPlane({
+        id: "mySectionPlane2",
+        dir: [0.14126007764697454, -0.11205684824857766, -0.9836101124041816],
+        pos: [-10.30, 0.46, -100.93],
+    });
+
+    planes.showControl("mySectionPlane2")
+
+    viewer.camera.eye = [-19.266391686980356, 4.592287358213766, -102.38357977797811]
+    viewer.camera.look = [-19.333333684947643, 4.5247180344748195, -102.69592288322313]
+    viewer.camera.up = [-0.04336858835457652, 0.9783520009990986, -0.20235248376333503]
+
+    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
+    });
+
+    // const webIFCLoader = new XKTLoaderPlugin(viewer, {});
+
+    const model = webIFCLoader.load({
+        // src: "/car.xkt",
+        src: "https://raw.githubusercontent.com/tomvandig/web-ifc/main/examples/example.ifc",
+        // edges: true
+    });
+
+    model.on("loaded", () => {
+        // viewer.cameraFlight.flyTo(model)
+    })
+
+</script>
+</html>

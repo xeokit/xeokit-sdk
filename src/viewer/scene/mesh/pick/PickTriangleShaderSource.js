@@ -1,7 +1,6 @@
 /**
  * @private
  */
-import {WEBGL_INFO} from "../../webglInfo.js";
 
 class PickTriangleShaderSource {
     constructor(mesh) {
@@ -113,4 +112,4 @@ function buildFragment(mesh) {
     return src;
 }
 
-export {PickTriangleShaderSource};
+export { PickTriangleShaderSource };

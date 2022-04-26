@@ -1,7 +1,7 @@
-import {Program} from "../../../../../../webgl/Program.js";
-import {math} from "../../../../../../math/math.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
+import { math } from "../../../../../../math/math.js";
+import { createRTCViewMat, getPlaneRTCPos } from "../../../../../../math/rtcCoords.js";
+import { Program } from "../../../../../../webgl/Program.js";
+import { WEBGL_INFO } from "../../../../../../webglInfo.js";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
@@ -560,6 +560,7 @@ class TrianglesInstancingColorTextureRenderer {
         } else {
             src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb, opacity);");
         }
+
         src.push("}");
         return src;
     }
@@ -576,4 +577,4 @@ class TrianglesInstancingColorTextureRenderer {
     }
 }
 
-export {TrianglesInstancingColorTextureRenderer};
+export { TrianglesInstancingColorTextureRenderer };

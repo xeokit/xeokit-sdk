@@ -1,6 +1,6 @@
 {
   "name": "@shapeci/xeokit-sdk",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "module": "/dist/xeokit-sdk.es.js",
   "main": "/dist/xeokit-sdk.cjs.js",
@@ -10,9 +10,11 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
+    "build-dev": "rollup --config rollup.config.js; cp dist/xeokit-sdk.es.js test/",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
-    "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json"
+    "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
+    "dev": "npx serve -s test"
   },
   "repository": {
     "type": "git",

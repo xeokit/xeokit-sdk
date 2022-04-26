@@ -1,6 +1,6 @@
-import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math/math.js";
+import { math } from "../../../../../../math/math.js";
+import { createRTCViewMat, getPlaneRTCPos } from "../../../../../../math/rtcCoords.js";
+import { Program } from "../../../../../../webgl/Program.js";
 
 const tempVec3a = math.vec3();
 
@@ -305,4 +305,4 @@ class TrianglesBatchingNormalsRenderer {
     }
 }
 
-export {TrianglesBatchingNormalsRenderer};
+export { TrianglesBatchingNormalsRenderer };

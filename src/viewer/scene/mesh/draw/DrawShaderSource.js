@@ -317,6 +317,7 @@ function buildFragmentLambert(mesh) {
     } else {
         src.push("outColor = vColor;");
     }
+
     src.push("}");
     return src;
 }
@@ -1567,4 +1568,4 @@ function buildFragmentDraw(mesh) {
     return src;
 }
 
-export {DrawShaderSource};
+export { DrawShaderSource };
