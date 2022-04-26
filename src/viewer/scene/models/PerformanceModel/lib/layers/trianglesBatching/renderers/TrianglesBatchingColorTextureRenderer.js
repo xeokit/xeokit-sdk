@@ -518,7 +518,6 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
         }
 
-        src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
         src.push("}");
         return src;
     }

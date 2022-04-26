@@ -252,7 +252,6 @@ function buildFragment(mesh) {
         src.push("outColor = linearToGamma(vColor, gammaFactor);");
     } else {
         src.push("outColor = vColor;");
-        src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
     }
     src.push("}");
     return src;

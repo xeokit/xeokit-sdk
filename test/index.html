@@ -32,8 +32,12 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        logarithmicDepthBufferEnabled: true
     });
+
+    // viewer.camera._perspective.far = 10;
+    console.log(viewer.camera)
 
     const planes = new SectionPlanesPlugin(viewer, {})
     const p = planes.createSectionPlane({

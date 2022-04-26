@@ -331,7 +331,6 @@ class LinesInstancingColorRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
         src.push("}");
         return src;
     }

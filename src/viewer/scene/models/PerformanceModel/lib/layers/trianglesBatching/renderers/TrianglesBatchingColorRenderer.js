@@ -479,8 +479,6 @@ class TrianglesBatchingColorRenderer {
             src.push("   outColor            = vColor;");
         }
 
-        src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
-
         src.push("}");
         return src;
     }

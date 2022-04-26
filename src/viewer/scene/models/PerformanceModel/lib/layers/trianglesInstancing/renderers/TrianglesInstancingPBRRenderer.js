@@ -897,7 +897,6 @@ class TrianglesInstancingPBRRenderer {
         }
 
         src.push("outColor = fragColor;");
-        src.push("if (!gl_FrontFacing) { outColor = vec4(1.0, 0.0, 0.0, 1.0); }")
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
