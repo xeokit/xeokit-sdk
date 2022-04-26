@@ -1606,7 +1606,7 @@ class CameraControl extends Component {
     /**
      * Sets the double click time frame length in milliseconds.
      * 
-     * If two mouse click events occurs within time frame, it is considered a double click. 
+     * If two mouse click events occur within this time frame, it is considered a double click. 
      * 
      * Default is ````250````
      * 
