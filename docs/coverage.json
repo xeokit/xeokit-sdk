@@ -1,7 +1,7 @@
 {
-  "coverage": "36.24%",
-  "expectCount": 6508,
-  "actualCount": 2359,
+  "coverage": "36.54%",
+  "expectCount": 6457,
+  "actualCount": 2360,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -1096,19 +1096,19 @@
       "undocumentLines": []
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
-      "expectCount": 87,
-      "actualCount": 77,
+      "expectCount": 89,
+      "actualCount": 79,
       "undocumentLines": [
         613,
         621,
-        667,
-        685,
-        698,
-        710,
-        722,
-        945,
-        1616,
-        1625
+        668,
+        686,
+        699,
+        711,
+        723,
+        946,
+        1641,
+        1650
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
@@ -1253,8 +1253,8 @@
         16,
         17,
         18,
-        337,
-        346
+        340,
+        349
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js": {
@@ -5100,43 +5100,6 @@
         143
       ]
     },
-    "src/viewer/scene/paths/Earcut.js": {
-      "expectCount": 32,
-      "actualCount": 1,
-      "undocumentLines": [
-        52,
-        78,
-        109,
-        176,
-        199,
-        260,
-        291,
-        327,
-        356,
-        363,
-        379,
-        453,
-        460,
-        481,
-        546,
-        567,
-        583,
-        592,
-        602,
-        609,
-        616,
-        635,
-        641,
-        648,
-        664,
-        673,
-        694,
-        718,
-        740,
-        750,
-        775
-      ]
-    },
     "src/viewer/scene/paths/Path.js": {
       "expectCount": 19,
       "actualCount": 11,
@@ -5160,45 +5123,6 @@
         88,
         113,
         151
-      ]
-    },
-    "src/viewer/scene/paths/Shape.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        5,
-        7,
-        10,
-        18
-      ]
-    },
-    "src/viewer/scene/paths/ShapePath.js": {
-      "expectCount": 10,
-      "actualCount": 0,
-      "undocumentLines": [
-        5,
-        6,
-        7,
-        8,
-        11,
-        18,
-        23,
-        28,
-        33,
-        38
-      ]
-    },
-    "src/viewer/scene/paths/ShapeUtils.js": {
-      "expectCount": 6,
-      "actualCount": 0,
-      "undocumentLines": [
-        39,
-        46,
-        3,
-        5,
-        14,
-        18
       ]
     },
     "src/viewer/scene/paths/SplineCurve.js": {

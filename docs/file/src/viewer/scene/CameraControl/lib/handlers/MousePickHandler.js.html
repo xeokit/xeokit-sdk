@@ -142,11 +142,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Shape.js~Shape.html">Shape</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/ShapePath.js~ShapePath.html">ShapePath</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.html">ShapeUtils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Earcut">Earcut</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
@@ -398,23 +394,26 @@ class MousePickHandler {
 
             if (this._clicks === 1) { // First click
 
+                pickController.pickCursorPos = states.pointerCanvasPos;
+                pickController.schedulePickEntity = configs.doublePickFlyTo;
+                pickController.schedulePickSurface = pickedSurfaceSubs;
+                pickController.update();
+
+                const firstClickPickResult = pickController.pickResult;
+                const firstClickPickSurface = pickController.pickedSurface;
+
                 this._timeout = setTimeout(() =&gt; {
 
-                    pickController.pickCursorPos = states.pointerCanvasPos;
-                    pickController.schedulePickEntity = configs.doublePickFlyTo;
-                    pickController.schedulePickSurface = pickedSurfaceSubs;
-                    pickController.update();
+                    if (firstClickPickResult) {
 
-                    if (pickController.pickResult) {
+                        cameraControl.fire(&quot;picked&quot;, firstClickPickResult, true);
 
-                        cameraControl.fire(&quot;picked&quot;, pickController.pickResult, true);
+                        if (firstClickPickSurface) {
 
-                        if (pickController.pickedSurface) {
-
-                            cameraControl.fire(&quot;pickedSurface&quot;, pickController.pickResult, true);
+                            cameraControl.fire(&quot;pickedSurface&quot;, firstClickPickResult, true);
 
                             if ((!configs.firstPerson) &amp;&amp; configs.followPointer) {
-                                controllers.pivotController.setPivotPos(pickController.pickResult.worldPos);
+                                controllers.pivotController.setPivotPos(firstClickPickResult.worldPos);
                                 if (controllers.pivotController.startPivot()) {
                                     controllers.pivotController.showPivot();
                                 }
@@ -428,7 +427,7 @@ class MousePickHandler {
 
                     this._clicks = 0;
 
-                }, 250);  // FIXME: Too short for track pads
+                }, configs.doubleClickTimeFrame);
 
             } else { // Second click
 

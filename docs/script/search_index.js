@@ -168,12 +168,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/paths/earcut.js~earcut",
-    "variable/index.html#static-variable-Earcut",
-    "<span>Earcut</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/Earcut.js</span>",
-    "variable"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/edgematerial.js~edgematerial",
     "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
     "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/EdgeMaterial.js</span>",
@@ -525,24 +519,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/shadow.js~shadow",
     "class/src/viewer/scene/lights/Shadow.js~Shadow.html",
     "<span>Shadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/Shadow.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/paths/shape.js~shape",
-    "class/src/viewer/scene/paths/Shape.js~Shape.html",
-    "<span>Shape</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/Shape.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/paths/shapepath.js~shapepath",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html",
-    "<span>ShapePath</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/ShapePath.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/paths/shapeutils.js~shapeutils",
-    "class/src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.html",
-    "<span>ShapeUtils</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/ShapeUtils.js</span>",
     "class"
   ],
   [
@@ -4191,6 +4167,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollytopointer",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dollyToPointer",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyToPointer",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#doubleclicktimeframe",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-doubleClickTimeFrame",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#doubleClickTimeFrame",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#doubleclicktimeframe",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-doubleClickTimeFrame",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#doubleClickTimeFrame",
     "member"
   ],
   [
@@ -11040,12 +11028,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/paths/earcut.js",
-    "file/src/viewer/scene/paths/Earcut.js.html",
-    "src/viewer/scene/paths/Earcut.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/paths/path.js",
     "file/src/viewer/scene/paths/Path.js.html",
     "src/viewer/scene/paths/Path.js",
@@ -11188,120 +11170,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-v2",
     "src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v2",
     "member"
-  ],
-  [
-    "src/viewer/scene/paths/shape.js",
-    "file/src/viewer/scene/paths/Shape.js.html",
-    "src/viewer/scene/paths/Shape.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/paths/shape.js~shape#constructor",
-    "class/src/viewer/scene/paths/Shape.js~Shape.html#instance-constructor-constructor",
-    "src/viewer/scene/paths/Shape.js~Shape#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shape.js~shape#extractpoints",
-    "class/src/viewer/scene/paths/Shape.js~Shape.html#instance-method-extractPoints",
-    "src/viewer/scene/paths/Shape.js~Shape#extractPoints",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shape.js~shape#getpointsholes",
-    "class/src/viewer/scene/paths/Shape.js~Shape.html#instance-method-getPointsHoles",
-    "src/viewer/scene/paths/Shape.js~Shape#getPointsHoles",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shape.js~shape#holes",
-    "class/src/viewer/scene/paths/Shape.js~Shape.html#instance-member-holes",
-    "src/viewer/scene/paths/Shape.js~Shape#holes",
-    "member"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js",
-    "file/src/viewer/scene/paths/ShapePath.js.html",
-    "src/viewer/scene/paths/ShapePath.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#beziercurveto",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-bezierCurveTo",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#bezierCurveTo",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#constructor",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-constructor-constructor",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#currentpath",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-member-currentPath",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#currentPath",
-    "member"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#lineto",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-lineTo",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#lineTo",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#moveto",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-moveTo",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#moveTo",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#quadraticcurveto",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-quadraticCurveTo",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#quadraticCurveTo",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#splinethru",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-splineThru",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#splineThru",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#subpaths",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-member-subPaths",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#subPaths",
-    "member"
-  ],
-  [
-    "src/viewer/scene/paths/shapepath.js~shapepath#toshapes",
-    "class/src/viewer/scene/paths/ShapePath.js~ShapePath.html#instance-method-toShapes",
-    "src/viewer/scene/paths/ShapePath.js~ShapePath#toShapes",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapeutils.js",
-    "file/src/viewer/scene/paths/ShapeUtils.js.html",
-    "src/viewer/scene/paths/ShapeUtils.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/paths/shapeutils.js~shapeutils.area",
-    "class/src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.html#static-method-area",
-    "src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.area",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapeutils.js~shapeutils.isclockwise",
-    "class/src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.html#static-method-isClockWise",
-    "src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.isClockWise",
-    "method"
-  ],
-  [
-    "src/viewer/scene/paths/shapeutils.js~shapeutils.triangulateshape",
-    "class/src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.html#static-method-triangulateShape",
-    "src/viewer/scene/paths/ShapeUtils.js~ShapeUtils.triangulateShape",
-    "method"
   ],
   [
     "src/viewer/scene/paths/splinecurve.js",
