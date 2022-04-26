@@ -2,9 +2,22 @@
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
 
-# 2.2.0
+# 2.3.0
 
 Unreleased
+
+### Features
+
+* General
+  * Add TypeScript definitions. [#841](https://github.com/xeokit/xeokit-sdk/pull/841) ([**@mlankamp**](https://github.com/mlankamp)), [#839](https://github.com/xeokit/xeokit-sdk/pull/839) ([**@mlankamp**](https://github.com/mlankamp)), [#841](https://github.com/xeokit/xeokit-sdk/pull/841) ([**@mlankamp**](https://github.com/mlankamp)),  [#829](https://github.com/xeokit/xeokit-sdk/pull/829) ([**@mlankamp**](https://github.com/mlankamp)), [#826](https://github.com/xeokit/xeokit-sdk/pull/826) ([**@mlankamp**](https://github.com/mlankamp)),  [#833](https://github.com/xeokit/xeokit-sdk/pull/833) ([**@mlankamp**](https://github.com/mlankamp)) 
+* Viewer, BIMViewer
+  * Performance textures.  [#847](https://github.com/xeokit/xeokit-sdk/pull/847) ([**@xeolabs**](https://github.com/xeolabs))
+* GLTFLoaderPlugin
+  * Extend GLTFLoaderPlugin to load binary glTF. [#854](https://github.com/xeokit/xeokit-sdk/issues/854) ([**@xeolabs**](https://github.com/xeolabs))
+
+# 2.2.0
+
+Jan 10, 2022
 
 ### Features
 
