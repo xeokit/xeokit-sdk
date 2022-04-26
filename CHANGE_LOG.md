@@ -9,7 +9,7 @@ Unreleased
 ### Features
 
 * General
-  * Add TypeScript definitions. [#841](https://github.com/xeokit/xeokit-sdk/pull/841) ([**@mlankamp**](https://github.com/mlankamp)), [#839](https://github.com/xeokit/xeokit-sdk/pull/839) ([**@mlankamp**](https://github.com/mlankamp)), [#841](https://github.com/xeokit/xeokit-sdk/pull/841) ([**@mlankamp**](https://github.com/mlankamp)),  [#829](https://github.com/xeokit/xeokit-sdk/pull/829) ([**@mlankamp**](https://github.com/mlankamp)), [#826](https://github.com/xeokit/xeokit-sdk/pull/826) ([**@mlankamp**](https://github.com/mlankamp)),  [#833](https://github.com/xeokit/xeokit-sdk/pull/833) ([**@mlankamp**](https://github.com/mlankamp)) 
+  * Add TypeScript definitions. [#841](https://github.com/xeokit/xeokit-sdk/pull/841), [#839](https://github.com/xeokit/xeokit-sdk/pull/839), [#841](https://github.com/xeokit/xeokit-sdk/pull/841),  [#829](https://github.com/xeokit/xeokit-sdk/pull/829), [#826](https://github.com/xeokit/xeokit-sdk/pull/826),  [#833](https://github.com/xeokit/xeokit-sdk/pull/833) ([**@mlankamp**](https://github.com/mlankamp)) 
 * Viewer, BIMViewer
   * Performance textures.  [#847](https://github.com/xeokit/xeokit-sdk/pull/847) ([**@xeolabs**](https://github.com/xeolabs))
 * GLTFLoaderPlugin
