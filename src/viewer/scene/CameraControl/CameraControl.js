@@ -1,19 +1,19 @@
-import {Component} from '../Component.js';
+import { Component } from '../Component.js';
+import { math } from "../math/math.js";
+import { utils } from "../utils.js";
+import { CameraFlightAnimation } from './../camera/CameraFlightAnimation.js';
+import { CameraUpdater } from "./lib/CameraUpdater.js";
+import { PanController } from "./lib/controllers/PanController.js";
+import { PickController } from "./lib/controllers/PickController.js";
+import { PivotController } from "./lib/controllers/PivotController.js";
+import { KeyboardAxisViewHandler } from "./lib/handlers/KeyboardAxisViewHandler.js";
+import { KeyboardPanRotateDollyHandler } from "./lib/handlers/KeyboardPanRotateDollyHandler.js";
+import { MouseMiscHandler } from "./lib/handlers/MouseMiscHandler.js";
+import { MousePanRotateDollyHandler } from "./lib/handlers/MousePanRotateDollyHandler.js";
+import { MousePickHandler } from "./lib/handlers/MousePickHandler.js";
+import { TouchPanRotateAndDollyHandler } from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
+import { TouchPickHandler } from "./lib/handlers/TouchPickHandler.js";
 
-import {CameraFlightAnimation} from './../camera/CameraFlightAnimation.js';
-import {PanController} from "./lib/controllers/PanController.js";
-import {PivotController} from "./lib/controllers/PivotController.js";
-import {PickController} from "./lib/controllers/PickController.js";
-import {MousePanRotateDollyHandler} from "./lib/handlers/MousePanRotateDollyHandler.js";
-import {KeyboardAxisViewHandler} from "./lib/handlers/KeyboardAxisViewHandler.js";
-import {MousePickHandler} from "./lib/handlers/MousePickHandler.js";
-import {KeyboardPanRotateDollyHandler} from "./lib/handlers/KeyboardPanRotateDollyHandler.js";
-import {CameraUpdater} from "./lib/CameraUpdater.js";
-import {MouseMiscHandler} from "./lib/handlers/MouseMiscHandler.js";
-import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDollyHandler.js";
-import {utils} from "../utils.js";
-import {math} from "../math/math.js";
-import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -659,7 +659,8 @@ class CameraControl extends Component {
             touchDollyRate: 0.2,
             dollyInertia: 0,
             dollyProximityThreshold: 30.0,
-            dollyMinSpeed: 0.04
+            dollyMinSpeed: 0.04,
+            dollyMaxSpeed: 0.04
         };
 
         // Current runtime state of the CameraControl

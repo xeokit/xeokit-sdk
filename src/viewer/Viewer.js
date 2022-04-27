@@ -1,8 +1,8 @@
-import {Scene} from "./scene/scene/Scene.js";
-import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
-import {CameraControl} from "./scene/CameraControl/CameraControl.js";
-import {MetaScene} from "./metadata/MetaScene.js";
-import {LocaleService} from "./localization/LocaleService.js";
+import { LocaleService } from "./localization/LocaleService.js";
+import { MetaScene } from "./metadata/MetaScene.js";
+import { CameraFlightAnimation } from "./scene/camera/CameraFlightAnimation.js";
+import { CameraControl } from "./scene/CameraControl/CameraControl.js";
+import { Scene } from "./scene/scene/Scene.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -54,6 +54,7 @@ class Viewer {
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {
+        console.log("VIEWER")
 
         /**
          * The Viewer's current language setting.
@@ -391,4 +392,5 @@ class Viewer {
     }
 }
 
-export {Viewer}
+export { Viewer };
+
