@@ -12,8 +12,6 @@ const tempVec3 = math.vec3();
 class CameraUpdater {
 
     constructor(scene, controllers, configs, states, updates) {
-        console.log("UPDATER")
-
         this._scene = scene;
         const camera = scene.camera;
         const pickController = controllers.pickController;
@@ -110,7 +108,10 @@ class CameraUpdater {
                 }
             }
 
-            const dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
+            let dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
+            if (Math.abs(dollyDeltaForDist) > configs.dollyMaxSpeed) {
+                dollyDeltaForDist = dollyDeltaForDist > 0 ? dollyDeltaForDist : -1 * dollyDeltaForDist;
+            }
 
             //----------------------------------------------------------------------------------------------------------
             // Rotation

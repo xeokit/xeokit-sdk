@@ -54,8 +54,6 @@ class Viewer {
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {
-        console.log("VIEWER")
-
         /**
          * The Viewer's current language setting.
          * @property language
