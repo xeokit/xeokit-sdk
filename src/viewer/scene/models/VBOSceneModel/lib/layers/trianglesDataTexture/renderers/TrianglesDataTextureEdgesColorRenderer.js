@@ -212,7 +212,7 @@ class TrianglesDataTextureEdgesColorRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform mediump sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
+        src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
         src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;"); // chipmunk

@@ -881,7 +881,7 @@ class DataTextureGenerator
         // 3 matrices per row
         const textureWidth = 4 * 3;
 
-        var texArray = new Float16Array(4 * textureWidth * textureHeight);
+        var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
         dataTextureRamStats.sizeDataPositionDecodeMatrices +=texArray.byteLength;
 
@@ -920,8 +920,8 @@ class DataTextureGenerator
             textureWidth,
             textureHeight,
             gl.RGBA,
-            gl.HALF_FLOAT,
-            new Uint16Array (texArray.buffer),
+            gl.FLOAT,
+            texArray,
             0
         );
 
