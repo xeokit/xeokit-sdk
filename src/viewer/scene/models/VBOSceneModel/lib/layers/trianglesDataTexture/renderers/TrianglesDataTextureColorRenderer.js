@@ -401,12 +401,20 @@ class TrianglesDataTextureColorRenderer {
         // get color
         src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(0, objectIndex), 0);"); // chipmunk
         
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
+
         // get normal
         src.push("vec3 normal = -normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
 
         src.push("vec3 position = positions[gl_VertexID % 3];");
         
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+
+        src.push("worldPosition.xyz /= worldPosition.w;");
+        src.push("worldPosition.w = 1.0;");
 
         // get XYZ offset
         src.push("vec3 offset = texelFetch (uTexturePerObjectIdOffsets, ivec2(0, objectIndex), 0).rgb;");

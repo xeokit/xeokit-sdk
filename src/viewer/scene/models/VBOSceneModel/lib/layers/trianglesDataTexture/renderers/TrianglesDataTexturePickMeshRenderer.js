@@ -301,6 +301,14 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
         src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
 
+        // get color
+        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(0, objectIndex), 0);"); // chipmunk
+
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
+
         // get pick-color
         src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(1, objectIndex), 0)) / 255.0;");
 

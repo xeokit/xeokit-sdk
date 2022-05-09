@@ -299,6 +299,14 @@ class TrianglesDataTexturePickDepthRenderer {
 
         src.push("vec3 position = positions[gl_VertexID % 3];");
         
+        // get color
+        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(0, objectIndex), 0);"); // chipmunk
+
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
+        
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
         // get XYZ offset
