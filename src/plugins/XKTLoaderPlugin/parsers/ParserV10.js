@@ -23,30 +23,31 @@ function extract(elements) {
         metadata: elements[0],
         textureData: elements[1],
         eachTextureDataPortion: elements[2],
-        positions: elements[3],
-        normals: elements[4],
-        colors: elements[5],
-        uvs: elements[6],
-        indices: elements[7],
-        edgeIndices: elements[8],
-        eachTextureSetTextures: elements[9],
-        matrices: elements[10],
-        reusedGeometriesDecodeMatrix: elements[11],
-        eachGeometryPrimitiveType: elements[12],
-        eachGeometryPositionsPortion: elements[13],
-        eachGeometryNormalsPortion: elements[14],
-        eachGeometryColorsPortion: elements[15],
-        eachGeometryUVsPortion: elements[16],
-        eachGeometryIndicesPortion: elements[17],
-        eachGeometryEdgeIndicesPortion: elements[18],
-        eachMeshGeometriesPortion: elements[19],
-        eachMeshMatricesPortion: elements[20],
-        eachMeshTextureSet: elements[21],
-        eachMeshMaterialAttributes: elements[22],
-        eachEntityId: elements[23],
-        eachEntityMeshesPortion: elements[24],
-        eachTileAABB: elements[25],
-        eachTileEntitiesPortion: elements[26]
+        eachTextureDimensions: elements[3],
+        positions: elements[4],
+        normals: elements[5],
+        colors: elements[6],
+        uvs: elements[7],
+        indices: elements[8],
+        edgeIndices: elements[9],
+        eachTextureSetTextures: elements[10],
+        matrices: elements[11],
+        reusedGeometriesDecodeMatrix: elements[12],
+        eachGeometryPrimitiveType: elements[13],
+        eachGeometryPositionsPortion: elements[14],
+        eachGeometryNormalsPortion: elements[15],
+        eachGeometryColorsPortion: elements[16],
+        eachGeometryUVsPortion: elements[17],
+        eachGeometryIndicesPortion: elements[18],
+        eachGeometryEdgeIndicesPortion: elements[19],
+        eachMeshGeometriesPortion: elements[20],
+        eachMeshMatricesPortion: elements[21],
+        eachMeshTextureSet: elements[22],
+        eachMeshMaterialAttributes: elements[23],
+        eachEntityId: elements[24],
+        eachEntityMeshesPortion: elements[25],
+        eachTileAABB: elements[26],
+        eachTileEntitiesPortion: elements[27]
     };
 }
 
@@ -58,8 +59,9 @@ function inflate(deflatedData) {
 
     return {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-        textureData: new Uint8Array(inflate(deflatedData.textureData)),
+        textureData: new Uint8ClampedArray(inflate(deflatedData.textureData)),
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
+        eachTextureDimensions: new Uint16Array(inflate(deflatedData.eachTextureDimensions)),
         positions: new Uint16Array(inflate(deflatedData.positions)),
         normals: new Int8Array(inflate(deflatedData.normals)),
         colors: new Uint8Array(inflate(deflatedData.colors)),
@@ -97,11 +99,23 @@ const decompressColor = (function () {
     };
 })();
 
+const imagDataToImage = (function () {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    return function (imagedata) {
+        canvas.width = imagedata.width;
+        canvas.height = imagedata.height;
+        context.putImageData(imagedata, 0, 0);
+        return canvas.toDataURL();
+    };
+})();
+
 function load(viewer, options, inflatedData, performanceModel) {
 
     const metadata = inflatedData.metadata;
     const textureData = inflatedData.textureData;
     const eachTextureDataPortion = inflatedData.eachTextureDataPortion;
+    const eachTextureDimensions = inflatedData.eachTextureDimensions;
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
     const colors = inflatedData.colors;
@@ -158,16 +172,23 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let textureIndex = 0; textureIndex < numTextures; textureIndex++) {
         const atLastTexture = (textureIndex === (numTextures - 1));
         const textureDataPortionStart = eachTextureDataPortion[textureIndex];
-        const textureDataPortionEnd = atLastTexture ? textureData.length : (eachTextureDataPortion[textureIndex + 1] - 1);
+        const textureDataPortionEnd = atLastTexture ? textureData.length : (eachTextureDataPortion[textureIndex + 1]);
         const textureDataPortionSize = textureDataPortionEnd - textureDataPortionStart;
         const textureDataPortionExists = (textureDataPortionSize > 0);
         if (textureDataPortionExists) {
-            const imageData = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
-            const base64String = URL.createObjectURL(new Blob([imageData.buffer], {type: 'image/jpeg'} /* (1) */));
+            const imageDataSubarray = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
+            const width = eachTextureDimensions[textureIndex * 2 + 0];
+            const height = eachTextureDimensions[textureIndex * 2 + 1];
+            const imageData = new ImageData(imageDataSubarray, width, height);
+
+            //////////////////////////////////////////////////////////////
+            // TODO: This is super inefficient - replace with Basis:
+            //////////////////////////////////////////////////////////////
+
+            const image = imagDataToImage(imageData);
             performanceModel.createTexture({
                 id: `texture-${textureIndex}`,
-                src: base64String,
-                //    flipY: true
+                src: image
             });
         }
     }
