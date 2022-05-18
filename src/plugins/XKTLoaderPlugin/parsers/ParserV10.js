@@ -1,8 +1,6 @@
 /*
-
  Parser for .XKT Format V10
-
- */
+*/
 
 import {utils} from "../../../viewer/scene/utils.js";
 import * as p from "./lib/pako.js";
@@ -335,14 +333,9 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const textureSetId = (textureSetIndex >= 0) ? `textureSet-${textureSetIndex}` : null;
 
                 const meshColor = decompressColor(eachMeshMaterialAttributes.subarray((meshIndex * 6), (meshIndex * 6) + 3));
-                //const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
+                const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
                 const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
-
-                // const meshColor = [.3, .3, .3];
-                const meshOpacity = 1;
-                // const meshMetallic = 0;
-                // const meshRoughness = 1;
 
                 const meshId = nextMeshId++;
 
