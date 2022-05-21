@@ -16,7 +16,8 @@ const createRTCViewMat = (function () {
     const rtcCenterWorld = new Float64Array(4);
     const rtcCenterView = new Float64Array(4);
 
-    return function (viewMat, rtcCenter, rtcViewMat = tempMat) {
+    return function (viewMat, rtcCenter, rtcViewMat) {
+        rtcViewMat = rtcViewMat || tempMat;
         rtcCenterWorld[0] = rtcCenter[0];
         rtcCenterWorld[1] = rtcCenter[1];
         rtcCenterWorld[2] = rtcCenter[2];
