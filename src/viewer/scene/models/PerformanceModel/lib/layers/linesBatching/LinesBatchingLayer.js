@@ -73,9 +73,9 @@ class LinesBatchingLayer {
 
         if (cfg.positionsDecodeMatrix) {
             this._state.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-            this._preCompressedPositionsExpectedPositionsExpected = true;
+            this._preCompressedPositionsExpected = true;
         } else {
-            this._preCompressedPositionsExpectedPositionsExpected = false;
+            this._preCompressedPositionsExpected = false;
         }
 
         if (cfg.origin) {
