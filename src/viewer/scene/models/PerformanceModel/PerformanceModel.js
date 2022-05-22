@@ -1870,7 +1870,6 @@ class PerformanceModel extends Component {
      * @param {Number[]} [cfg.uvDecodeMatrix] A 3x3 matrix for decompressing ````uvCompressed````.
      * @param {Number[]} [cfg.indices] Array of primitive connectivity indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only with 'triangles', 'solid' and 'surface' primitives. Automatically generated internally if not supplied, using the optional ````edgeThreshold```` given to the ````PerformanceModel```` constructor.
-     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link PerformanceModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      */
     createGeometry(cfg) {
         const geometryId = cfg.id;
