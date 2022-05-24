@@ -581,7 +581,9 @@ class TrianglesInstancingLayer {
         // Normal fill
 
         let f0;
-        if (!visible || culled || xrayed) { // Highlight & select are layered on top of color - not mutually exclusive
+        if (!visible || culled || xrayed
+            || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
+            || (selected && !this.model.scene.selectedMaterial.glowThrough) ) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
