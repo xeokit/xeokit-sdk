@@ -1,6 +1,6 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {PerformanceNode} from "../models/PerformanceModel/lib/PerformanceNode.js";
+import {VBOSceneModelNode} from "../models/VBOSceneModel/lib/VBOSceneModelNode.js";
 import {worldToRTCPos} from "../math/rtcCoords.js";
 
 const tempVec4a = math.vec4();
@@ -208,8 +208,8 @@ class Marker extends Component {
         }
         this._entity = entity;
         if (this._entity) {
-            if (this._entity instanceof PerformanceNode) {
-                this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // PerformanceNode does not fire events, and cannot exist beyond its PerformanceModel
+            if (this._entity instanceof VBOSceneModelNode) {
+                this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // VBOSceneModelNode does not fire events, and cannot exist beyond its VBOSceneModel
                     this._entity = null; // Marker now may become visible, if it was synched to invisible Entity
                     this._onEntityModelDestroyed = null;
                 });

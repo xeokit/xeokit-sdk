@@ -300,8 +300,8 @@
                                         let numEntities = 0;
 
                                         for (let id in viewer.scene.models) {
-                                            const model = viewer.scene.models[id];
-                                            numEntities += model.numEntities;
+                                            const sceneModel = viewer.scene.models[id];
+                                            numEntities += sceneModel.numEntities;
                                         }
 
                                         const t1 = performance.now();

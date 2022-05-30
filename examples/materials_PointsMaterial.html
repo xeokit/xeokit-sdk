@@ -26,8 +26,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-               target="_other">PerformanceModel</a>
+            <a href="../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
+               target="_other">VBOSceneModel</a>
         </li>
         <li>
             <a href="../docs/class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html"
@@ -43,7 +43,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, VBOSceneModel} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -79,12 +79,12 @@
     viewer.scene.pointsMaterial.maxPerspectivePointSize = 10;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a PerformanceModel containing a randomly-generated point cloud
+    // Create a VBOSceneModel containing a randomly-generated point cloud
     //------------------------------------------------------------------------------------------------------------------
 
-    const performanceModel = new PerformanceModel(viewer.scene, {
+    const vboSceneModel = new VBOSceneModel(viewer.scene, {
         id: "table",
-        isModel: true // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        isModel: true // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
     });
 
     const positions = [];
@@ -116,19 +116,19 @@
         i++;
     }
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "pointsMesh",
         primitive: "points",
         positions: positions,
         colors: colors
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "points",
         meshIds: ["pointsMesh"]
     });
 
-    performanceModel.finalize();
+    vboSceneModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
     // GUI to play with points material properties

@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -403,7 +403,7 @@ class XKTLoaderPlugin extends Plugin {
      * improve Viewer performance for models that have a lot of geometry reuse, but may also increase the amount of
      * browser and GPU memory they require. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
-     * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
+     * to limit the size of the batched geometry arrays that {@link VBOSceneModel} internally creates for batched geometries.
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
      * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
      * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
@@ -666,17 +666,17 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
             maxGeometryBatchSize: this._maxGeometryBatchSize,
             origin: params.origin
         }));
 
-        const modelId = performanceModel.id;  // In case ID was auto-generated
+        const modelId = sceneModel.id;  // In case ID was auto-generated
 
         if (!params.src && !params.xkt) {
             this.error("load() param expected: src or xkt");
-            return performanceModel; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const options = {};
@@ -722,13 +722,13 @@ class XKTLoaderPlugin extends Plugin {
                 }
 
                 if (params.src) {
-                    this._loadModel(params.src, params, options, performanceModel);
+                    this._loadModel(params.src, params, options, sceneModel);
                 } else {
-                    this._parseModel(params.xkt, params, options, performanceModel);
+                    this._parseModel(params.xkt, params, options, sceneModel);
                 }
 
-                performanceModel.once("destroyed", () => {
-                    this.viewer.metaScene.destroyMetaModel(performanceModel.id);
+                sceneModel.once("destroyed", () => {
+                    this.viewer.metaScene.destroyMetaModel(sceneModel.id);
                 });
 
                 return true;
@@ -742,7 +742,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
-                    if (performanceModel.destroyed) {
+                    if (sceneModel.destroyed) {
                         return;
                     }
 
@@ -750,7 +750,7 @@ class XKTLoaderPlugin extends Plugin {
 
                         this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
 
-                        performanceModel.fire("error", "Metadata not valid");
+                        sceneModel.fire("error", "Metadata not valid");
                     }
 
                     this.viewer.scene.canvas.spinner.processes--;
@@ -759,7 +759,7 @@ class XKTLoaderPlugin extends Plugin {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
 
-                    performanceModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
+                    sceneModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
 
                     this.viewer.scene.canvas.spinner.processes--;
                 });
@@ -770,41 +770,41 @@ class XKTLoaderPlugin extends Plugin {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
 
-                    performanceModel.fire("error", "Metadata not valid");
+                    sceneModel.fire("error", "Metadata not valid");
                 }
             }
 
         } else {
             if (params.src) {
-                this._loadModel(params.src, params, options, performanceModel);
+                this._loadModel(params.src, params, options, sceneModel);
             } else {
-                this._parseModel(params.xkt, params, options, performanceModel);
+                this._parseModel(params.xkt, params, options, sceneModel);
             }
         }
 
-        return performanceModel;
+        return sceneModel;
     }
 
-    _loadModel(src, params, options, performanceModel) {
+    _loadModel(src, params, options, sceneModel) {
 
         const spinner = this.viewer.scene.canvas.spinner;
 
         spinner.processes++;
 
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, performanceModel);
+                this._parseModel(arrayBuffer, params, options, sceneModel);
                 spinner.processes--;
             },
             (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
     }
 
-    _parseModel(arrayBuffer, params, options, performanceModel) {
+    _parseModel(arrayBuffer, params, options, sceneModel) {
 
-        if (performanceModel.destroyed) {
+        if (sceneModel.destroyed) {
             return;
         }
 
@@ -829,24 +829,24 @@ class XKTLoaderPlugin extends Plugin {
             byteOffset += elementSize;
         }
 
-        parser.parse(this.viewer, options, elements, performanceModel);
+        parser.parse(this.viewer, options, elements, sceneModel);
 
-        performanceModel.finalize();
+        sceneModel.finalize();
 
-        this._createDefaultMetaModelIfNeeded(performanceModel, params, options);
+        this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
 
-        performanceModel.scene.once("tick", () => {
-            if (performanceModel.destroyed) {
+        sceneModel.scene.once("tick", () => {
+            if (sceneModel.destroyed) {
                 return;
             }
-            performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-            performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+            sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });
     }
 
-    _createDefaultMetaModelIfNeeded(performanceModel, params, options) {
+    _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
 
-        const metaModelId = performanceModel.id;
+        const metaModelId = sceneModel.id;
 
         if (!this.viewer.metaScene.metaModels[metaModelId]) {
 
@@ -861,7 +861,7 @@ class XKTLoaderPlugin extends Plugin {
                 parent: null
             });
 
-            const entityList = performanceModel.entityList;
+            const entityList = sceneModel.entityList;
 
             for (let i = 0, len = entityList.length; i < len; i++) {
                 const entity = entityList[i];
@@ -888,7 +888,7 @@ class XKTLoaderPlugin extends Plugin {
                 }
             });
 
-            performanceModel.once("destroyed", () => {
+            sceneModel.once("destroyed", () => {
                 this.viewer.metaScene.destroyMetaModel(metaModelId);
             });
         }

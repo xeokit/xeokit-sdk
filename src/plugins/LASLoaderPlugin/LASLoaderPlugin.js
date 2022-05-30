@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer";
@@ -281,7 +281,7 @@ class LASLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const performanceModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 

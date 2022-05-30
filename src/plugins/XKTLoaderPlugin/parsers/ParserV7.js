@@ -118,7 +118,7 @@ function convertColorsRGBToRGBA(colorsRGB) {
     return colorsRGBA;
 }
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -203,7 +203,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const lastTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === lastTileEntityIndex);
@@ -283,7 +283,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
 
                     if (!geometryCreated[geometryId]) {
 
@@ -325,7 +325,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 continue;
                         }
 
-                        performanceModel.createGeometry({
+                        sceneModel.createGeometry({
                             id: geometryId,
                             primitive: primitiveName,
                             positionsCompressed: geometryPositions,
@@ -339,7 +339,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                         geometryCreated[geometryId] = true;
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         geometryId: geometryId,
                         origin: tileCenter,
@@ -392,7 +392,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                             continue;
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         origin: tileCenter,
                         primitive: primitiveName,
@@ -414,7 +414,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -427,10 +427,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV7 = {
     version: 7,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

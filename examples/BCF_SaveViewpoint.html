@@ -116,7 +116,7 @@
     // Load the .xkt model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true // Emphasise edges
@@ -138,7 +138,7 @@
     // The BCF viewpoint JSON is written to the JavaScript developer console
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         viewer.scene.setObjectsSelected([
             "3b2U496P5Ebhz5FROhTwFH",

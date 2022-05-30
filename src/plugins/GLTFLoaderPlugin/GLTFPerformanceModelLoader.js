@@ -14,12 +14,12 @@ class GLTFPerformanceModelLoader {
         cfg = cfg || {};
     }
 
-    load(plugin, performanceModel, src, options, ok, error) {
+    load(plugin, sceneModel, src, options, ok, error) {
         options = options || {};
-        loadGLTF(plugin, performanceModel, src, options, function () {
+        loadGLTF(plugin, sceneModel, src, options, function () {
                 core.scheduleTask(function () {
-                    performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-                    performanceModel.fire("loaded", true, false);
+                    sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                    sceneModel.fire("loaded", true, false);
                 });
                 if (ok) {
                     ok();
@@ -30,22 +30,22 @@ class GLTFPerformanceModelLoader {
                 if (error) {
                     error(msg);
                 }
-                performanceModel.fire("error", msg);
+                sceneModel.fire("error", msg);
             });
     }
 
-    parse(plugin, performanceModel, gltf, options, ok, error) {
+    parse(plugin, sceneModel, gltf, options, ok, error) {
         options = options || {};
-        parseGLTF(plugin, gltf, "", options, performanceModel, function () {
-                performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-                performanceModel.fire("loaded", true, false);
+        parseGLTF(plugin, gltf, "", options, sceneModel, function () {
+                sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                sceneModel.fire("loaded", true, false);
                 if (ok) {
                     ok();
                 }
             },
             function (msg) {
-                performanceModel.error(msg);
-                performanceModel.fire("error", msg);
+                sceneModel.error(msg);
+                sceneModel.fire("error", msg);
                 if (error) {
                     error(msg);
                 }
@@ -53,14 +53,14 @@ class GLTFPerformanceModelLoader {
     }
 }
 
-function loadGLTF(plugin, performanceModel, src, options, ok, error) {
+function loadGLTF(plugin, sceneModel, src, options, ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     const isGLB = (src.split('.').pop() === "glb");
     if (isGLB) {
         plugin.dataSource.getGLB(src, (arrayBuffer) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, arrayBuffer, src, options, performanceModel, ok, error);
+                parseGLTF(plugin, arrayBuffer, src, options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -70,7 +70,7 @@ function loadGLTF(plugin, performanceModel, src, options, ok, error) {
     } else {
         plugin.dataSource.getGLTF(src, (json) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, json, src, options, performanceModel, ok, error);
+                parseGLTF(plugin, json, src, options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -85,10 +85,10 @@ function getBasePath(src) {
     return (i !== 0) ? src.substring(0, i + 1) : "";
 }
 
-function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
+function parseGLTF(plugin, gltf, src, options, sceneModel, ok) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
-    const gl = performanceModel.scene.canvas.gl;
+    const gl = sceneModel.scene.canvas.gl;
     parse(gltf, GLTFLoader, {
         baseUri: options.basePath,
         gl
@@ -99,9 +99,9 @@ function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
             basePath: options.basePath,
             handlenode: options.handlenode,
             gltfData: gltfData,
-            scene: performanceModel.scene,
+            scene: sceneModel.scene,
             plugin: plugin,
-            performanceModel: performanceModel,
+            sceneModel: sceneModel,
             //geometryCreated: {},
             numObjects: 0,
             nodes: [],
@@ -110,7 +110,7 @@ function parseGLTF(plugin, gltf, src, options, performanceModel, ok) {
         loadTextures(ctx);
         loadMaterials(ctx);
         loadDefaultScene(ctx);
-        performanceModel.finalize();
+        sceneModel.finalize();
         spinner.processes--;
         ok();
     });
@@ -131,7 +131,7 @@ function loadTexture(ctx, texture) {
         return;
     }
     const textureId = `texture-${ctx.nextId++}`;
-    ctx.performanceModel.createTexture({
+    ctx.sceneModel.createTexture({
         id: textureId,
         image: texture.source.image,
         flipY: !!texture.flipY,
@@ -201,7 +201,7 @@ function loadTextureSet(ctx, material) {
         textureSetCfg.colorTextureId !== undefined ||
         textureSetCfg.metallicRoughnessTextureId !== undefined) {
         textureSetCfg.id = `textureSet-${ctx.nextId++};`
-        ctx.performanceModel.createTextureSet(textureSetCfg);
+        ctx.sceneModel.createTextureSet(textureSetCfg);
         return textureSetCfg.id;
     }
     return null;

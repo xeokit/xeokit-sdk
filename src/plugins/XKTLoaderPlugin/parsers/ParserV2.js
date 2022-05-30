@@ -76,10 +76,10 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
-    performanceModel.positionsCompression = "precompressed";
-    performanceModel.normalsCompression = "precompressed";
+    sceneModel.positionsCompression = "precompressed";
+    sceneModel.normalsCompression = "precompressed";
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -104,7 +104,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let i = 0; i < numEntities; i++) {
 
         const xktEntityId = entityIDs [i];
-        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
         const metaObject = viewer.metaScene.metaObjects[entityId];
         const entityDefaults = {};
         const meshDefaults = {};

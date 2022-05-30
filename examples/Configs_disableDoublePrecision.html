@@ -85,15 +85,15 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
         edges: true
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
         var t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
 </script>

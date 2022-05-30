@@ -17,7 +17,7 @@ const PRESETS = {
  * @desc Configures the shape of "lines" geometry primitives.
  *
  * * Located at {@link Scene#linesMaterial}.
- * * Globally configures "lines" primitives for all {@link PerformanceModel}s.
+ * * Globally configures "lines" primitives for all {@link VBOSceneModel}s.
  *
  * ## Usage
  *

@@ -1,12 +1,12 @@
-import {PerformanceModel} from "../../src/viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {buildVectorTextGeometry} from "../../src/viewer/scene/geometry/builders/buildVectorTextGeometry.js";
 import {utils} from "../../src/viewer/scene/utils.js";
 
 /**
- * An experimental {@link PerformanceModel} subclass that shows the dimensions of Entities
+ * An experimental {@link VBOSceneModel} subclass that shows the dimensions of Entities
  * as a 2D wireframe footprint in the ground plane.
  */
-class DimensionsFootprintModel extends PerformanceModel {
+class DimensionsFootprintModel extends VBOSceneModel {
 
     constructor(owner, cfg) {
 

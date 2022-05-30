@@ -100,24 +100,24 @@
 
     xktLoader.globalizeObjectIds = true;
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "model1",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
 
-        const model2 = xktLoader.load({
-            id: "model2",
+        const sceneModel2 = xktLoader.load({
+            id: "sceneModel2",
             src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
             edges: true,
             excludeUnclassifiedObjects: false,
             position: [30, 0, 0]
         });
 
-        model2.on("loaded", () => {
+        sceneModel2.on("loaded", () => {
 
             const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
@@ -196,7 +196,7 @@
             {
                 "ifc_guid": "2MGtJUm9nD$Re1_MDIv0g2",
                 "originating_system": "xeokit.io",
-                "authoring_tool_id": "model2#2MGtJUm9nD$Re1_MDIv0g2"
+                "authoring_tool_id": "sceneModel2#2MGtJUm9nD$Re1_MDIv0g2"
             }
         ]
     },

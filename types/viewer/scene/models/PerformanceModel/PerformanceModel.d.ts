@@ -1,7 +1,6 @@
 import { Entity } from "../../Entity";
 import { Component } from "../../Component";
 import { EdgeMaterial, EmphasisMaterial } from "../../materials";
-import { PerformanceNode } from "./PerformanceNode";
 
 /**
  * A high-performance model representation for efficient rendering and low memory usage.
@@ -25,16 +24,10 @@ export declare class PerformanceModel extends Component {
    on(event: "error", callback: (msg: string) => void, scope?: any): string;
 
   /**
-   * Returns true to indicate that this Component is a PerformanceModel.
-   * @type {Boolean}
-   */
-  get isPerformanceModel(): boolean;
-
-  /**
   * Returns the {@link Entity}s in this PerformanceModel.
   * @returns {*|{}}
   */
-  get objects(): {[key: string]: PerformanceNode}
+  get objects(): {[key: string]: Entity}
 
   /**
   * Gets the 3D World-space origin for this PerformanceModel.
@@ -592,7 +585,7 @@ export declare class PerformanceModel extends Component {
    * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link PerformanceModel.highlightMaterial}.
    * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link PerformanceModel.selectedMaterial}.
    * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link PerformanceModel.edgeMaterial}.
-   * @returns {PerformanceNode}
+   * @returns {Entity}
    */
   createEntity(cfg: {
     id: string;
@@ -609,7 +602,7 @@ export declare class PerformanceModel extends Component {
     highlighted?: boolean;
     selected?: boolean;
     edges?: boolean;
-  }): PerformanceNode;
+  }): Entity;
 
   /**
    * Finalizes this PerformanceModel.

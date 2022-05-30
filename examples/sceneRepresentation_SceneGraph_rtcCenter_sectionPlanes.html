@@ -199,7 +199,7 @@
             zSize: 1
         }));
 
-        const model = new Node(viewer.scene, {
+        const sceneModel = new Node(viewer.scene, {
             id: modelId,
             isModel: true, // <--------------------- Node represents a model
             rotation: [0, 0, 0],
@@ -271,7 +271,7 @@
             ]
         });
 
-        model.edges = true;
+        sceneModel.edges = true;
     }
 
 </script>

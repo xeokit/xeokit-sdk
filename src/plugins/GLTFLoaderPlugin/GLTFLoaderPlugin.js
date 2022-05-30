@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {GLTFSceneGraphLoader} from "./GLTFSceneGraphLoader.js";
@@ -290,12 +290,12 @@ class GLTFLoaderPlugin extends Plugin {
 
         const performance = params.performance !== false;
 
-        const model = performance
+        const sceneModel = performance
 
-            // PerformanceModel provides performance-oriented scene representation
+            // VBOSceneModel provides performance-oriented scene representation
             // converting glTF materials to simple flat-shading without textures
 
-            ? new PerformanceModel(this.viewer.scene, utils.apply(params, {
+            ? new VBOSceneModel(this.viewer.scene, utils.apply(params, {
                 isModel: true
             }))
 
@@ -305,11 +305,11 @@ class GLTFLoaderPlugin extends Plugin {
                 isModel: true
             }));
 
-        const modelId = model.id;  // In case ID was auto-generated
+        const modelId = sceneModel.id;  // In case ID was auto-generated
 
         if (!params.src && !params.gltf) {
             this.error("load() param expected: src or gltf");
-            return model; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const loader = performance ? this._performanceModelLoader : this._sceneGraphLoader;
@@ -390,9 +390,9 @@ class GLTFLoaderPlugin extends Plugin {
                 };
 
                 if (params.src) {
-                    loader.load(this, model, params.src, params);
+                    loader.load(this, sceneModel, params.src, params);
                 } else {
-                    loader.parse(this, model, params.gltf, params);
+                    loader.parse(this, sceneModel, params.gltf, params);
                 }
             };
 
@@ -439,17 +439,17 @@ class GLTFLoaderPlugin extends Plugin {
             };
 
             if (params.src) {
-                loader.load(this, model, params.src, params);
+                loader.load(this, sceneModel, params.src, params);
             } else {
-                loader.parse(this, model, params.gltf, params);
+                loader.parse(this, sceneModel, params.gltf, params);
             }
         }
 
-        model.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);
         });
 
-        return model;
+        return sceneModel;
     }
 
     /**

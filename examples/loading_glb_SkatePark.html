@@ -62,13 +62,13 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb"
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
 

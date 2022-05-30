@@ -204,7 +204,7 @@
     // Load nine CityGML models
     //
     // We'll configure XKTLoaderPlugin with a maximum geometry batch size, as number of vertices. This is optionally
-    // supplied to limit the size of the batched geometry arrays that PerformanceModel internally creates for batched
+    // supplied to limit the size of the batched geometry arrays that VBOSceneModel internally creates for batched
     // geometries. A low value means less heap allocation/de-allocation while loading batched geometries, but more draw
     // calls and slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less
     // draw calls and faster rendering speed. It's recommended to keep this somewhere
@@ -294,8 +294,8 @@
                                         let numEntities = 0;
 
                                         for (let id in viewer.scene.models) {
-                                            const model = viewer.scene.models[id];
-                                            numEntities += model.numEntities;
+                                            const sceneModel = viewer.scene.models[id];
+                                            numEntities += sceneModel.numEntities;
                                         }
 
                                         const t1 = performance.now();

@@ -79,7 +79,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
@@ -91,7 +91,7 @@
 
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         //------------------------------------------------------------------------------------------------------------------
         // Create some DistanceMeasurements

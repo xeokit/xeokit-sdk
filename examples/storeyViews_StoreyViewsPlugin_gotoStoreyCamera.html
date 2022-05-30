@@ -75,7 +75,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
@@ -92,7 +92,7 @@
     // arrange the camera for a 2D orthographic plan view of the objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         setTimeout(() => {
 
