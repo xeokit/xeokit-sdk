@@ -1,7 +1,7 @@
 import * as WebIFC from "web-ifc/web-ifc-api.js";
 
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {WebIFCDefaultDataSource} from "./WebIFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -576,13 +576,13 @@ class WebIFCLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 
         if (!params.src && !params.ifc) {
             this.error("load() param expected: src or IFC");
-            return performanceModel; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const options = {
@@ -619,31 +619,31 @@ class WebIFCLoaderPlugin extends Plugin {
 
         this.on("initialized", () => {
             if (params.src) {
-                this._loadModel(params.src, params, options, performanceModel);
+                this._loadModel(params.src, params, options, sceneModel);
             } else {
-                this._parseModel(params.ifc, params, options, performanceModel);
+                this._parseModel(params.ifc, params, options, sceneModel);
             }
         });
 
-        return performanceModel;
+        return sceneModel;
     }
 
-    _loadModel(src, params, options, performanceModel) {
+    _loadModel(src, params, options, sceneModel) {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
         this._dataSource.getIFC(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, performanceModel);
+                this._parseModel(arrayBuffer, params, options, sceneModel);
                 spinner.processes--;
             },
             (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
     }
 
-    _parseModel(arrayBuffer, params, options, performanceModel) {
-        if (performanceModel.destroyed) {
+    _parseModel(arrayBuffer, params, options, sceneModel) {
+        if (sceneModel.destroyed) {
             return;
         }
         const stats = params.stats || {};
@@ -684,7 +684,7 @@ class WebIFCLoaderPlugin extends Plugin {
 
         const ctx = {
             modelID,
-            performanceModel,
+            sceneModel,
             loadMetadata,
             metadata,
             metaObjects: {},

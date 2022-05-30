@@ -65,7 +65,7 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/Schependomlaan/gltf-Embedded/Schependomlaan.gltf",
         metaModelSrc: "../assets/models/gltf/Schependomlaan/Schependomlaan.json",
@@ -73,8 +73,8 @@
         performance: false
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.flyTo(sceneModel);
     });
 
     viewer.cameraControl.on("picked", function (e) {

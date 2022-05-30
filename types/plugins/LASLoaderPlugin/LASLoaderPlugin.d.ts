@@ -1,4 +1,4 @@
-import { PerformanceModel, Plugin, Viewer } from "../../viewer";
+import { Entity, Plugin, Viewer } from "../../viewer";
 import { ModelStats } from "../index";
 
 export declare interface ILASDefaultDataSource {
@@ -140,7 +140,7 @@ export declare class LASLoaderPlugin extends Plugin {
    * Loads an ````LAS```` model into this LASLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadLASModel} params Loading parameters.
-   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
+   * @returns {SceneModel} SceneModel representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params?: LoadLASModel): PerformanceModel;
+  load(params?: LoadLASModel): Entity;
 }

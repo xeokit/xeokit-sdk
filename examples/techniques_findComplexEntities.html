@@ -91,15 +91,15 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
         var t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -185,7 +185,7 @@
     // When the model has loaded, create a GUI to interactively control our complex-entity-finding function
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         const params = new function () {
             this.enableComplexityTest = true;

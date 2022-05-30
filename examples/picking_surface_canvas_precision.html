@@ -178,7 +178,7 @@
         XKTLoaderPlugin,
         DistanceMeasurementsPlugin,
         math,
-        PerformanceModel
+        VBOSceneModel
     } from "./../dist/xeokit-sdk.es.js";
     import {PickResult} from "../src/viewer/scene/webgl/PickResult.js";
     import {PickHitHelper} from "./libs/PickHitHelper.js";
@@ -196,16 +196,16 @@
     viewer.cameraControl.followPointer = true;
     viewer.cameraControl.smartPivot = true;
 
-    const performanceModel = new PerformanceModel(viewer.scene, {
+    const vboSceneModel = new VBOSceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         edges: true
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "redLegMesh",
         primitive: "triangles",
         positions: [
@@ -227,13 +227,13 @@
         color: [1, 0.3, 0.3]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "greenLegMesh",
         primitive: "triangles",
         positions: [
@@ -255,13 +255,13 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "blueLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -283,13 +283,13 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "yellowLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -310,13 +310,13 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "purpleTableTopMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -337,13 +337,13 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "purpleTableTop",
         meshIds: ["purpleTableTopMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
-    performanceModel.finalize();
+    vboSceneModel.finalize();
 
 
     const MEASUREMENT_OFFSET = 0.1;

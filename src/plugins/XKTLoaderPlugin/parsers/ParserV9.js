@@ -109,7 +109,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
     const metadata = inflatedData.metadata;
 
@@ -148,7 +148,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
     // Create metamodel, unless already loaded from external JSON file by XKTLoaderPlugin
 
-    const metaModelId = performanceModel.id;
+    const metaModelId = sceneModel.id;
 
     if (!viewer.metaScene.metaModels[metaModelId]) {
 
@@ -158,7 +158,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             globalizeObjectIds: options.globalizeObjectIds
         });
 
-        performanceModel.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             viewer.metaScene.destroyMetaModel(metaModelId);
         });
     }
@@ -294,7 +294,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 

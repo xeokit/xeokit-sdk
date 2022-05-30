@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel } from "../../viewer";
+import { Plugin, Viewer, Entity } from "../../viewer";
 
 export declare type LoadOBJModel = {
   /** ID to assign to the model's root {@link Entity}, unique among all components in the Viewer's {@link Scene}. */
@@ -38,7 +38,7 @@ export declare class OBJLoaderPlugin extends Plugin {
    * Loads an OBJ model from a file into this OBJLoader's {@link Viewer}.
    *
    * @param {LoadOBJModel} params  Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
+   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
-  load(params: LoadOBJModel): PerformanceModel;
+  load(params: LoadOBJModel): Entity;
 }

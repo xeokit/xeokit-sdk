@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel } from "../../viewer";
+import { Plugin, Viewer, Entity } from "../../viewer";
 import { ModelStats } from "../index";
 
 export declare interface ICityJSONDefaultDataSource {
@@ -77,5 +77,5 @@ export declare class CityJSONLoaderPlugin extends Plugin {
    *
    * @param {LoadCityJSONModel} params Loading parameters.
    */
-  load(params: LoadCityJSONModel): PerformanceModel;
+  load(params: LoadCityJSONModel): Entity;
 }

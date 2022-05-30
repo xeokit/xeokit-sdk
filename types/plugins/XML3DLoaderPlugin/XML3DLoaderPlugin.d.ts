@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel } from "../../viewer";
+import { Plugin, Viewer, VBOSceneModel } from "../../viewer";
 
 export declare type XML3DLoaderPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
@@ -61,5 +61,5 @@ export declare class XML3DLoaderPlugin extends Plugin {
    * @param {LoadXML3DModel} params  Loading parameters.
    * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
-  load(params: LoadXML3DModel): PerformanceModel;
+  load(params: LoadXML3DModel): VBOSceneModel;
 }

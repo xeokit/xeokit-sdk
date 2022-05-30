@@ -20,8 +20,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-               target="_other">PerformanceModel</a>
+            <a href="../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
+               target="_other">VBOSceneModel</a>
         </li>
     </ul>
 </div>
@@ -33,7 +33,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, PerformanceModel} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, VBOSceneModel} from "../dist/xeokit-sdk.es.js";
     import {DimensionsFootprintModel} from "../assets/js/DimensionsFootprintModel.js";
 
     const viewer = new Viewer({
@@ -49,7 +49,7 @@
     // Create a model
     //------------------------------------------------------------------------------------------------------------------
 
-    const performanceModel = new PerformanceModel(viewer.scene, {
+    const vboSceneModel = new VBOSceneModel(viewer.scene, {
         id: "table",
         isModel: true,
         position: [0, 0, 0],
@@ -58,7 +58,7 @@
         edges: true
     });
 
-    performanceModel.createGeometry({
+    vboSceneModel.createGeometry({
         id: "myBoxGeometry",
         primitive: "triangles",
         positions: [1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1,
@@ -75,7 +75,7 @@
 
     // Red table leg object
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "redLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, -4],
@@ -84,7 +84,7 @@
         color: [1, 0.3, 0.3]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true
@@ -92,7 +92,7 @@
 
     // Green table leg object
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "greenLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, -4],
@@ -101,7 +101,7 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true
@@ -109,7 +109,7 @@
 
     // Blue table leg
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "blueLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, 4],
@@ -118,7 +118,7 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true
@@ -126,7 +126,7 @@
 
     // Yellow table leg
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "yellowLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, 4],
@@ -135,7 +135,7 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true
@@ -143,7 +143,7 @@
 
     // Purple table top
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "purpleTableTopMesh",
         geometryId: "myBoxGeometry",
         position: [0, -3, 0],
@@ -152,16 +152,16 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "purpleTableTop",
         meshIds: ["purpleTableTopMesh"],
         isObject: true
     });
 
-    performanceModel.finalize();
+    vboSceneModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a DimensionsPlanModel that shows the dimensions of our first PerformanceModel
+    // Create a DimensionsPlanModel that shows the dimensions of our first VBOSceneModel
     //------------------------------------------------------------------------------------------------------------------
 
     const dimensionsPlanModel = new DimensionsFootprintModel(viewer.scene, {});

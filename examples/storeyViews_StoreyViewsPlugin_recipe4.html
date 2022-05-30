@@ -80,7 +80,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
@@ -98,7 +98,7 @@
     // view from whatever position we click within the 2D plan view
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         // Make all doors transparent
         viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.2);

@@ -25,7 +25,7 @@ const PRESETS = {
  * * Located at {@link Scene#pointsMaterial}.
  * * Supports round and square points.
  * * Optional perspective point scaling.
- * * Globally configures "points" primitives for all {@link PerformanceModel}s.
+ * * Globally configures "points" primitives for all {@link VBOSceneModel}s.
  *
  * ## Usage
  *

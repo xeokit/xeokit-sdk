@@ -143,8 +143,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
         edges: true
@@ -180,7 +179,7 @@
     });
 
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         //------------------------------------------------------------------------------------------------------------------
         // Create some Annotations
@@ -246,7 +245,6 @@
 
         annotations.createAnnotation({
             id: "myAnnotation4",
-            /////////////////////////////////////////  Entity
             worldPos: [3.796, 0.163, -1.115],
             occludable: true,
             markerShown: true,
@@ -262,7 +260,6 @@
 
         annotations.createAnnotation({
             id: "myAnnotation5",
-            /////////////////////////////////////////  Entity
             worldPos: [8.947, 4.257, 9.297],
             occludable: true,
             markerShown: true,

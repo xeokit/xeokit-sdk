@@ -82,7 +82,7 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/VianneyHouse2/glTF/VianneyHouse2.gltf",
         edges: true,
@@ -90,8 +90,8 @@
         rotation: [-90, 0, 0]
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.flyTo(sceneModel);
     });
 
     viewer.cameraControl.on("picked", function (e) {

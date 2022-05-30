@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {CityJSONDefaultDataSource} from "./CityJSONDefaultDataSource.js";
 import {math} from "../../viewer";
@@ -175,34 +175,34 @@ class CityJSONLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 
         if (!params.src && !params.cityJSON) {
             this.error("load() param expected: src or cityJSON");
-            return performanceModel; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const options = {};
 
         if (params.src) {
-            this._loadModel(params.src, params, options, performanceModel);
+            this._loadModel(params.src, params, options, sceneModel);
         } else {
             const spinner = this.viewer.scene.canvas.spinner;
             spinner.processes++;
-            this._parseModel(params.cityJSON, params, options, performanceModel);
+            this._parseModel(params.cityJSON, params, options, sceneModel);
             spinner.processes--;
         }
 
-        return performanceModel;
+        return sceneModel;
     }
 
-    _loadModel(src, params, options, performanceModel) {
+    _loadModel(src, params, options, sceneModel) {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
         this._dataSource.getCityJSON(params.src, (data) => {
-                this._parseModel(data, params, options, performanceModel);
+                this._parseModel(data, params, options, sceneModel);
                 spinner.processes--;
             },
             (errMsg) => {

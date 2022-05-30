@@ -889,7 +889,7 @@ class Node extends Component {
             this._aabb = math.AABB3();
         }
         if (this._buildAABB) {
-            this._buildAABB(this.worldMatrix, this._aabb); // Mesh or PerformanceModel
+            this._buildAABB(this.worldMatrix, this._aabb); // Mesh or VBOSceneModel
         } else { // Node | Node | Model
             math.collapseAABB3(this._aabb);
             let node;

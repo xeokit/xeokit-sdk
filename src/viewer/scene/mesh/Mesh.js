@@ -1355,7 +1355,7 @@ class Mesh extends Component {
         if (!this._aabb) {
             this._aabb = math.AABB3();
         }
-        this._buildAABB(this.worldMatrix, this._aabb); // Mesh or PerformanceModel
+        this._buildAABB(this.worldMatrix, this._aabb); // Mesh or VBOSceneModel
         this._aabbDirty = false;
     }
 

@@ -65,10 +65,10 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
-    performanceModel.positionsCompression = "precompressed";
-    performanceModel.normalsCompression = "precompressed";
+    sceneModel.positionsCompression = "precompressed";
+    sceneModel.normalsCompression = "precompressed";
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -148,7 +148,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     // Create 1) geometries for instanced primitives, and 2) meshes for batched primitives.  We create all the
     // batched meshes now, before we create entities, because we're creating the batched meshes in runs that share
     // the same decode matrices. Each run of meshes with the same decode matrix will end up in the same
-    // BatchingLayer; the PerformanceModel#createMesh() method starts a new BatchingLayer each time the decode
+    // BatchingLayer; the VBOSceneModel#createMesh() method starts a new BatchingLayer each time the decode
     // matrix has changed since the last invocation of that method, hence why we need to order batched meshes
     // in runs like this.
 
@@ -174,7 +174,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             // Primitive instanced by more than one entity, and has positions in Model-space
 
-            var geometryId = "geometry" + orderedPrimitiveIndex; // These IDs are local to the PerformanceModel
+            var geometryId = "geometry" + orderedPrimitiveIndex; // These IDs are local to the VBOSceneModel
 
             performanceModel.createGeometry({
                 id: geometryId,
@@ -192,7 +192,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             // Primitive is used only by one entity, and has positions pre-transformed into World-space
 
-            const meshId = orderedPrimitiveIndex; // These IDs are local to the PerformanceModel
+            const meshId = orderedPrimitiveIndex; // These IDs are local to the VBOSceneModel
 
             const entityIndex = batchedPrimitiveEntityIndexes[orderedPrimitiveIndex];
             const entityId = eachEntityId[entityIndex];

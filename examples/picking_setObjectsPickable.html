@@ -56,7 +56,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
         edges: true,
@@ -67,7 +67,7 @@
     // Set all objects un-pickable and grey, except for the slab in front of the door, which we'll set pickable and blue
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         viewer.scene.setObjectsColorized(viewer.scene.objectIds, [0.4, 0.4, 0.4]);
 

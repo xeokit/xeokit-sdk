@@ -108,14 +108,14 @@
 
     xktLoader.globalizeObjectIds = true;
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "model1",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
 
         const model2 = xktLoader.load({
             id: "model2",
