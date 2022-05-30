@@ -9,7 +9,7 @@ import {buildEdgeIndices} from "../../../math/buildEdgeIndices";
  *
  * @private
  */
-export class PerformanceGeometry {
+export class VBOSceneModelGeometry {
 
     /**
      * @param {*} cfg Geometry properties.
@@ -35,7 +35,7 @@ export class PerformanceGeometry {
         // TODO: optional origin param, or create from positions automatically if required - then offset from mesh origin in createMesh
 
         /**
-         * ID of this PerformanceGeometry, unique within the VBOSceneModel.
+         * ID of this VBOSceneModelGeometry, unique within the VBOSceneModel.
          *
          * @property id
          * @type {String}
@@ -44,7 +44,7 @@ export class PerformanceGeometry {
         this.id = cfg.id;
 
         /**
-         * The VBOSceneModel that contains this PerformanceGeometry.
+         * The VBOSceneModel that contains this VBOSceneModelGeometry.
          *
          * @property model
          * @type {VBOSceneModel}

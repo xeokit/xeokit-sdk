@@ -851,7 +851,7 @@ export class SceneModel  {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickDepths()
+     * Called by VBOSceneModelMesh.drawPickDepths()
      * @private
      * @abstract
      */
@@ -859,7 +859,7 @@ export class SceneModel  {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickNormals()
+     * Called by VBOSceneModelMesh.drawPickNormals()
      * @private
      * @abstract
      */

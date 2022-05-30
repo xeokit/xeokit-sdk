@@ -5,11 +5,11 @@ import {Texture2D} from "../../../webgl/Texture2D";
  *
  * @private
  */
-export class PerformanceTexture {
+export class VBOSceneModelTexture {
 
     /**
      * @param {*} cfg Texture properties.
-     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createMaterial}.
+     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTexture}.
      * @param {String} [cfg.model] VBOSceneModel that owns this texture.
      * @param {*} [cfg.image] Texture image data.
      * @param {String} [cfg.src] Texture image source.
@@ -19,7 +19,7 @@ export class PerformanceTexture {
     constructor(cfg) {
 
         /**
-         * ID of this PerformanceTexture, unique within the VBOSceneModel.
+         * ID of this VBOSceneModelTexture, unique within the VBOSceneModel.
          *
          * @property id
          * @type {String}

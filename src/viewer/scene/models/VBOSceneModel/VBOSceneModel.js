@@ -1,8 +1,8 @@
 import {Component} from "../../Component.js";
 import {math} from "../../math/math.js";
 import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
-import {PerformanceMesh} from './lib/PerformanceMesh.js';
-import {PerformanceNode} from './lib/PerformanceNode.js';
+import {VBOSceneModelMesh} from './lib/VBOSceneModelMesh.js';
+import {VBOSceneModelNode} from './lib/VBOSceneModelNode.js';
 import {getScratchMemory, putScratchMemory} from "./lib/ScratchMemory.js";
 import {TrianglesBatchingLayer} from './lib/layers/trianglesBatching/TrianglesBatchingLayer.js';
 import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
@@ -16,9 +16,9 @@ import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstanc
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {RenderFlags} from "../../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../../math/rtcCoords.js";
-import {PerformanceTextureSet} from "./lib/PerformanceTextureSet";
-import {PerformanceGeometry} from "./lib/PerformanceGeometry";
-import {PerformanceTexture} from "./lib/PerformanceTexture";
+import {VBOSceneModelTextureSet} from "./lib/VBOSceneModelTextureSet";
+import {VBOSceneModelGeometry} from "./lib/VBOSceneModelGeometry";
+import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture";
 import {SceneModel} from "../SceneModel";
 
 
@@ -1114,29 +1114,29 @@ class VBOSceneModel extends Component {
     }
 
     _createDefaultTextureSet() {
-        // Every PerformanceMesh gets at least the default TextureSet,
+        // Every VBOSceneModelMesh gets at least the default TextureSet,
         // which contains empty default textures filled with color
-        const defaultColorTexture = new PerformanceTexture({
+        const defaultColorTexture = new VBOSceneModelTexture({
             id: defaultColorTextureId,
             model: this,
             preloadColor: [1, 1, 1, 1] // [r, g, b, a]
         });
-        const defaultMetalRoughTexture = new PerformanceTexture({
+        const defaultMetalRoughTexture = new VBOSceneModelTexture({
             id: defaultMetalRoughTextureId,
             model: this,
             preloadColor: [0, 1, 1, 1] // [unused, roughness, metalness, unused]
         });
-        const defaultNormalsTexture = new PerformanceTexture({
+        const defaultNormalsTexture = new VBOSceneModelTexture({
             id: defaultNormalsTextureId,
             model: this,
             preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
         });
-        const defaultEmissiveTexture = new PerformanceTexture({
+        const defaultEmissiveTexture = new VBOSceneModelTexture({
             id: defaultEmissiveTextureId,
             model: this,
             preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
         });
-        const defaultOcclusionTexture = new PerformanceTexture({
+        const defaultOcclusionTexture = new VBOSceneModelTexture({
             id: defaultOcclusionTextureId,
             model: this,
             preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
@@ -1146,7 +1146,7 @@ class VBOSceneModel extends Component {
         this._textures[defaultNormalsTextureId] = defaultNormalsTexture;
         this._textures[defaultEmissiveTextureId] = defaultEmissiveTexture;
         this._textures[defaultOcclusionTextureId] = defaultOcclusionTexture;
-        this._textureSets[defaultTextureSetId] = new PerformanceTextureSet({
+        this._textureSets[defaultTextureSetId] = new VBOSceneModelTextureSet({
             id: defaultTextureSetId,
             model: this,
             colorTexture: defaultColorTexture,
@@ -1907,7 +1907,7 @@ class VBOSceneModel extends Component {
             this.error(`Param expected: indices (required for '${primitive}' primitive type)`);
             return null;
         }
-        const geometry = new PerformanceGeometry(geometryId, this, cfg);
+        const geometry = new VBOSceneModelGeometry(geometryId, this, cfg);
         this._geometries[geometryId] = geometry;
         this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
         this.numGeometries++;
@@ -1974,7 +1974,7 @@ class VBOSceneModel extends Component {
             this.error("Unsupported value for 'encoding': '${encoding}' - supported values are 'linear', 'sRGB', 'gamma'. Defaulting to 'linear'.");
             encoding = "linear";
         }
-        const texture = new PerformanceTexture({
+        const texture = new VBOSceneModelTexture({
             id: textureId,
             model: this,
             src: cfg.src,
@@ -2068,7 +2068,7 @@ class VBOSceneModel extends Component {
         } else {
             occlusionTexture = this._textures[defaultOcclusionTextureId];
         }
-        const textureSet = new PerformanceTextureSet({
+        const textureSet = new VBOSceneModelTextureSet({
             id: textureSetId,
             model: this,
             colorTexture,
@@ -2156,7 +2156,7 @@ class VBOSceneModel extends Component {
         const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
         const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-        const mesh = new PerformanceMesh(this, id, color, opacity);
+        const mesh = new VBOSceneModelMesh(this, id, color, opacity);
 
         const pickId = mesh.pickId;
 
@@ -2651,7 +2651,7 @@ class VBOSceneModel extends Component {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-        const node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        const node = new VBOSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodeList.push(node);
         this._nodes[id] = node;
         this.numEntities++;
@@ -3017,7 +3017,7 @@ class VBOSceneModel extends Component {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickDepths()
+     * Called by VBOSceneModelMesh.drawPickDepths()
      * @private
      */
     drawPickDepths(frameCtx) {
@@ -3032,7 +3032,7 @@ class VBOSceneModel extends Component {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickNormals()
+     * Called by VBOSceneModelMesh.drawPickNormals()
      * @private
      */
     drawPickNormals(frameCtx) {

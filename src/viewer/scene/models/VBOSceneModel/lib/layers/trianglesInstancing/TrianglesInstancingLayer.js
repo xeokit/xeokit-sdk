@@ -348,7 +348,7 @@ class TrianglesInstancingLayer {
         this._finalized = true;
     }
 
-    // The following setters are called by PerformanceMesh, in turn called by PerformanceNode, only after the layer is finalized.
+    // The following setters are called by VBOSceneModelMesh, in turn called by VBOSceneModelNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
     initFlags(portionId, flags, meshTransparent) {
