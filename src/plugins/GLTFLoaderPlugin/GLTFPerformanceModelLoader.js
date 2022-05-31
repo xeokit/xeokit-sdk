@@ -350,14 +350,14 @@ function loadNode(ctx, node, matrix) {
         let createEntity;
         if (ctx.handlenode) {
             const actions = {};
-            if (!ctx.handlenode(ctx.performanceModel.id, node, actions)) {
+            if (!ctx.handlenode(ctx.sceneModel.id, node, actions)) {
                 return;
             }
             if (actions.createEntity) {
                 createEntity = actions.createEntity;
             }
         }
-        const performanceModel = ctx.performanceModel;
+        const sceneModel = ctx.sceneModel;
         const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
         const numPrimitives = mesh.primitives.length;
 
@@ -373,7 +373,7 @@ function loadNode(ctx, node, matrix) {
                 }
 
                 const meshCfg = {
-                    id: performanceModel.id + "." + ctx.numObjects++
+                    id: sceneModel.id + "." + ctx.numObjects++
                 };
 
                 switch (primitive.mode) {
@@ -448,15 +448,15 @@ function loadNode(ctx, node, matrix) {
                     }
                 }
 
-                performanceModel.createMesh(meshCfg);
+                sceneModel.createMesh(meshCfg);
                 meshIds.push(meshCfg.id);
             }
             if (createEntity) {
-                performanceModel.createEntity(utils.apply(createEntity, {
+                sceneModel.createEntity(utils.apply(createEntity, {
                     meshIds: meshIds
                 }));
             } else {
-                performanceModel.createEntity({
+                sceneModel.createEntity({
                     meshIds: meshIds
                 });
             }
