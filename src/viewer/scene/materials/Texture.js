@@ -109,7 +109,7 @@ class Texture extends Component {
         super(owner, cfg);
 
         this._state = new RenderState({
-            texture: new Texture2D(this.scene.canvas.gl),
+            texture: new Texture2D({gl:this.scene.canvas.gl}),
             matrix: math.identityMat4(),
             hasMatrix: (cfg.translate && (cfg.translate[0] !== 0 || cfg.translate[1] !== 0)) || (!!cfg.rotate) || (cfg.scale && (cfg.scale[0] !== 0 || cfg.scale[1] !== 0)),
             minFilter: this._checkMinFilter(cfg.minFilter),
@@ -219,7 +219,7 @@ class Texture extends Component {
     }
 
     _webglContextRestored() {
-        this._state.texture = new Texture2D(this.scene.canvas.gl);
+        this._state.texture = new Texture2D({gl:this.scene.canvas.gl});
         if (this._image) {
             this.image = this._image;
         } else if (this._src) {

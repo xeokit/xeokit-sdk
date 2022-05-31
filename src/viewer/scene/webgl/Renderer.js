@@ -51,6 +51,15 @@ const Renderer = function (scene, options) {
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
 
+    this.capabilities = {
+        astcSupported: !!WEBGL_INFO.SUPPORTED_EXTENSIONS['WEBGL_compressed_texture_astc'],
+        etc1Supported: true, // WebGL2
+        etc2Supported: !!WEBGL_INFO.SUPPORTED_EXTENSIONS['WEBGL_compressed_texture_etc'],
+        dxtSupported: !!WEBGL_INFO.SUPPORTED_EXTENSIONS['WEBGL_compressed_texture_s3tc'],
+        bptcSupported: !!WEBGL_INFO.SUPPORTED_EXTENSIONS['EXT_texture_compression_bptc'],
+        pvrtcSupported: !!(WEBGL_INFO.SUPPORTED_EXTENSIONS['WEBGL_compressed_texture_pvrtc'] || WEBGL_INFO.SUPPORTED_EXTENSIONS['WEBKIT_WEBGL_compressed_texture_pvrtc'])
+    };
+
     this.setTransparentEnabled = function (enabled) {
         transparentEnabled = enabled;
         imageDirty = true;
@@ -742,7 +751,7 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                if ( scene.highlightMaterial.glowThrough) {
+                if (scene.highlightMaterial.glowThrough) {
                     gl.clear(gl.DEPTH_BUFFER_BIT);
                 }
 

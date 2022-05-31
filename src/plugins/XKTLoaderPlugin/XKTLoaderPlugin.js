@@ -407,13 +407,16 @@ class XKTLoaderPlugin extends Plugin {
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
      * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
      * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
+     * @param {KTX2TextureTranscoder} [cfg.textureTranscoder] Transcoder used internally to transcode KTX2
+     * textures within the XKT. Only required when the XKT is version 10 or later, and contains KTX2 textures.
      */
     constructor(viewer, cfg = {}) {
 
         super("XKTLoader", viewer, cfg);
-
+        
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
+        this.textureTranscoder = cfg.textureTranscoder;
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
         this.includeTypes = cfg.includeTypes;
@@ -428,6 +431,24 @@ class XKTLoaderPlugin extends Plugin {
      */
     get supportedVersions() {
         return Object.keys(parsers);
+    }
+
+    /**
+     * Gets the texture transcoder.
+     *
+     * @type {TextureTranscoder}
+     */
+    get textureTranscoder() {
+        return this._textureTranscoder;
+    }
+
+    /**
+     * Sets the texture transcoder.
+     *
+     * @type {TextureTranscoder}
+     */
+    set textureTranscoder(textureTranscoder) {
+        this._textureTranscoder = textureTranscoder;
     }
 
     /**
@@ -668,6 +689,7 @@ class XKTLoaderPlugin extends Plugin {
 
         const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
+            textureTranscoder: this._textureTranscoder,
             maxGeometryBatchSize: this._maxGeometryBatchSize,
             origin: params.origin
         }));

@@ -20,6 +20,8 @@ import {VBOSceneModelTextureSet} from "./lib/VBOSceneModelTextureSet";
 import {VBOSceneModelGeometry} from "./lib/VBOSceneModelGeometry";
 import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture";
 import {SceneModel} from "../SceneModel";
+import {Texture2D} from "../../webgl/Texture2D";
+import {utils} from "../../utils";
 
 
 const tempVec3a = math.vec3();
@@ -954,10 +956,16 @@ class VBOSceneModel extends Component {
      * A lower value means less heap allocation/de-allocation while creating/loading batched geometries, but more draw calls and
      * slower rendering speed. A high value means larger heap allocation/de-allocation while creating/loading, but less draw calls
      * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
+     * @param {TextureTranscoder} [cfg.textureTranscoder] Transcoder that will be used internally by {@link VBOSceneModel#createTexture}
+     * to convert transcoded texture data. Only required when we'll be providing transcoded data
+     * to {@link VBOSceneModel#createTexture}. We assume that all transcoded texture data added to a  ````VBOSceneModel````
+     * will then in a format supported by this transcoder.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this._textureTranscoder = cfg.textureTranscoder;
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
@@ -1920,8 +1928,11 @@ class VBOSceneModel extends Component {
      *
      * @param {*} cfg Texture properties.
      * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTextureSet}.
-     * @param {String} [cfg.src] Image source for the texture.
-     * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this Texture.
+     * @param {String} [cfg.src] Image file for the texture. Assumed to be transcoded if not having a recognized image file
+     * extension (jpg, jpeg, png etc.). If transcoded, then assumes ````VBOSceneModel```` is configured with a {@link TextureTranscoder}.
+     * @param {ArrayBuffer[]} [cfg.buffers] Transcoded texture data. Assumes ````VBOSceneModel```` is
+     * configured with a {@link TextureTranscoder}. Given as an array of buffers so we can potentially support multi-image textures, such as cube maps.
+     * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this texture. Overrides ````src```` and ````buffers````. Never transcoded.
      * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. Supported values are 'linear', 'linearMipmapNearest', 'nearestMipmapNearest', 'nearestMipmapLinear' and 'linearMipmapLinear'. Defaulting to 'linearMipmapLinear'.
      * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. Supported values are 'linear' and 'nearest'.
      * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. Supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'.
@@ -1974,21 +1985,78 @@ class VBOSceneModel extends Component {
             this.error("Unsupported value for 'encoding': '${encoding}' - supported values are 'linear', 'sRGB', 'gamma'. Defaulting to 'linear'.");
             encoding = "linear";
         }
-        const texture = new VBOSceneModelTexture({
-            id: textureId,
-            model: this,
-            src: cfg.src,
-            image: cfg.image,
-            magFilter,
-            minFilter,
-            wrapS,
-            wrapT,
-            encoding,
-            flipY: cfg.flipY
-        });
-        this._textures[textureId] = texture;
-    }
 
+        const texture = new Texture2D({gl: this.scene.canvas.gl});
+
+        if (cfg.preloadColor) {
+            texture.setPreloadColor(cfg.preloadColor);
+        }
+
+        if (cfg.image) { // Ignore transcoder for Images
+            const image = cfg.image;
+            image.crossOrigin = "Anonymous";
+            texture.setImage(image, {});
+            texture.setProps({
+                minFilter: cfg.minFilter || "linearMipmapLinear",
+                magFilter: cfg.magFilter || "linear",
+                wrapS: cfg.wrapS || "repeat",
+                wrapT: cfg.wrapT || "repeat",
+                flipY: cfg.flipY || false,
+                encoding: cfg.encoding || "linear"
+            });
+
+        } else if (cfg.src) {
+            const ext = cfg.src.split('.').pop();
+            switch (ext) { // Don't transcode recognized image file types
+                case "jpeg":
+                case "jpg":
+                case "png":
+                case "gif":
+                    const image = new Image();
+                    image.onload = () => {
+                        texture.setImage(image, {});
+                        texture.setProps({
+                            minFilter: cfg.minFilter || "linearMipmapLinear",
+                            magFilter: cfg.magFilter || "linear",
+                            wrapS: cfg.wrapS || "repeat",
+                            wrapT: cfg.wrapT || "repeat",
+                            flipY: cfg.flipY || false,
+                            encoding: cfg.encoding || "linear"
+                        });
+                    };
+                    image.src = cfg.src; // URL or Base64 string
+                    break;
+                default: // Assume other file types need transcoding
+                    if (!this._textureTranscoder) {
+                        this.error(`Can't create texture from 'src' - VBOSceneModel needs to be configured with a TextureTranscoder for this file type ('${ext}')`);
+                    } else {
+                        utils.loadArraybuffer(cfg.src, (arrayBuffer) => {
+                                if (!arrayBuffer.byteLength) {
+                                    this.error(`Can't create texture from 'src': file data is zero length`);
+                                    return;
+                                }
+                                this._textureTranscoder.transcode([arrayBuffer], texture).then(() => {
+                                    this.glRedraw();
+                                });
+                            },
+                            function (errMsg) {
+                                this.error(`Can't create texture from 'src': ${errMsg}`);
+                            });
+                    }
+                    break;
+            }
+        } else if (cfg.buffers) { // Buffers implicitly require transcoding
+            if (!this._textureTranscoder) {
+                this.error(`Can't create texture from 'buffers' - VBOSceneModel needs to be configured with a TextureTranscoder for this option`);
+            } else {
+                this._textureTranscoder.transcode(cfg.buffers, texture).then(() => {
+                    this.glRedraw();
+                });
+            }
+        }
+
+        this._textures[textureId] = new VBOSceneModelTexture({id: textureId, texture});
+    }
 
     /**
      * Creates a texture set within this VBOSceneModel.
@@ -2005,7 +2073,7 @@ class VBOSceneModel extends Component {
      * @param {*} [cfg.colorTextureId] ID of *RGBA* base color texture, with color in *RGB* and alpha in *A*.
      * @param {*} [cfg.metallicRoughnessTextureId] ID of *RGBA* metal-roughness texture, with the metallic factor in *R*, and roughness factor in *G*.
      * @param {*} [cfg.normalsTextureId] ID of *RGBA* normal map texture, with normal map vectors in *RGB*.
-     * @param {*} [cfg.emissiveTextureId] ID of *RGBA* emissive map texture, with emissive color in *RGB*. 
+     * @param {*} [cfg.emissiveTextureId] ID of *RGBA* emissive map texture, with emissive color in *RGB*.
      * @param {*} [cfg.occlusionTextureId] ID of *RGBA* occlusion map texture, with occlusion factor in *R*.
      */
     createTextureSet(cfg) {

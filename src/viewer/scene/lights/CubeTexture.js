@@ -57,7 +57,7 @@ class CubeTexture extends Component {
         const gl = this.scene.canvas.gl;
 
         this._state = new RenderState({
-            texture: new Texture2D(gl, gl.TEXTURE_CUBE_MAP),
+            texture: new Texture2D({gl, target: gl.TEXTURE_CUBE_MAP}),
             flipY: this._checkFlipY(cfg.minFilter),
             encoding: this._checkEncoding(cfg.encoding),
             minFilter: "linearMipmapLinear",
@@ -122,7 +122,7 @@ class CubeTexture extends Component {
                     if (numLoaded === 6) {
                         let texture = self._state.texture;
                         if (!texture) {
-                            texture = new Texture2D(gl, gl.TEXTURE_CUBE_MAP);
+                            texture = new Texture2D({gl, target: gl.TEXTURE_CUBE_MAP});
                             self._state.texture = texture;
                         }
                         texture.setImage(self._images, self._state);

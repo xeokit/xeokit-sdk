@@ -1148,6 +1148,16 @@ class Scene extends Component {
     }
 
     /**
+     * Returns the capabilities of this Scene.
+     *
+     * @private
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this._renderer.capabilities;
+    }
+
+    /**
      * Whether {@link Entity#offset} is enabled.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.

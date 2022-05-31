@@ -1,5 +1,6 @@
 import {utils} from '../utils.js';
 import {webglEnums} from './webglEnums.js';
+import {convertEncodingConstantToWebGL} from "./convertConstantToWebGL";
 
 function getGLEnum(gl, name, defaultVal) {
     if (name === undefined) {
@@ -63,12 +64,14 @@ function nextHighestPowerOfTwo(x) {
  */
 class Texture2D {
 
-    constructor(gl, target) {
+    constructor({gl, target, format, type}) {
         this.gl = gl;
         this.target = target || gl.TEXTURE_2D;
+        this.format = format || gl.RGBA;
+        this.type = type || gl.UNSIGNED_BYTE;
         this.texture = gl.createTexture();
-        this.setPreloadColor([0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
-        this.allocated = true;
+       // this.setPreloadColor([0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
+      //  this.allocated = true;
     }
 
     setPreloadColor(value) {
@@ -85,8 +88,6 @@ class Texture2D {
         }
         const gl = this.gl;
         gl.bindTexture(this.target, this.texture);
-        // gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        // gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         if (this.target === gl.TEXTURE_CUBE_MAP) {
             const faces = [
                 gl.TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -133,6 +134,34 @@ class Texture2D {
         }
         gl.bindTexture(this.target, null);
     }
+
+    setCompressedData({mipmaps, props = {}}) {
+
+        const gl = this.gl;
+        const levels = mipmaps.length;
+
+        // TODO?: gl.activeTexture( gl.TEXTURE0 + slot );
+        gl.bindTexture(this.target, this.texture);
+
+
+        const glFormat = props.format ? convertEncodingConstantToWebGL(gl, props.format, props.encoding) : gl.RGBA;
+
+        // TODO: minFilter and magFilter
+        gl.texStorage2D(gl.TEXTURE_2D, levels, glFormat, mipmaps[0].width, mipmaps[0].height);
+        for (let i = 0, il = mipmaps.length; i < il; i++) {
+            const mipmap = mipmaps[i];
+            //   if (this.format !== gl.RGBA) {
+
+            //gl.compressedTexSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, mipmap.data);
+            gl.compressedTexImage2D(gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data);
+
+            // } else {
+            //     gl.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, this.type, mipmap.data);
+            // }
+        }
+        gl.bindTexture(this.target, null);
+    }
+
 
     setProps(props) {
         const gl = this.gl;
