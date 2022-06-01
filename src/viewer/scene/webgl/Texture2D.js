@@ -64,14 +64,14 @@ function nextHighestPowerOfTwo(x) {
  */
 class Texture2D {
 
-    constructor({gl, target, format, type}) {
+    constructor({gl, target, format, type, preloadColor}) {
         this.gl = gl;
         this.target = target || gl.TEXTURE_2D;
         this.format = format || gl.RGBA;
         this.type = type || gl.UNSIGNED_BYTE;
         this.texture = gl.createTexture();
-       // this.setPreloadColor([0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
-      //  this.allocated = true;
+        this.setPreloadColor(preloadColor || [0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
+        this.allocated = true;
     }
 
     setPreloadColor(value) {

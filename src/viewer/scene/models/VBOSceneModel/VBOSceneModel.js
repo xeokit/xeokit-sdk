@@ -1126,28 +1126,38 @@ class VBOSceneModel extends Component {
         // which contains empty default textures filled with color
         const defaultColorTexture = new VBOSceneModelTexture({
             id: defaultColorTextureId,
-            model: this,
-            preloadColor: [1, 1, 1, 1] // [r, g, b, a]
+            texture: new Texture2D({
+                gl: this.scene.canvas.gl,
+                preloadColor: [1, 1, 1, 1] // [r, g, b, a]})
+            })
         });
         const defaultMetalRoughTexture = new VBOSceneModelTexture({
             id: defaultMetalRoughTextureId,
-            model: this,
-            preloadColor: [0, 1, 1, 1] // [unused, roughness, metalness, unused]
+            texture: new Texture2D({
+                gl: this.scene.canvas.gl,
+                preloadColor: [0, 1, 1, 1] // [unused, roughness, metalness, unused]
+            })
         });
         const defaultNormalsTexture = new VBOSceneModelTexture({
             id: defaultNormalsTextureId,
-            model: this,
-            preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
+            texture: new Texture2D({
+                gl: this.scene.canvas.gl,
+                preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
+            })
         });
         const defaultEmissiveTexture = new VBOSceneModelTexture({
             id: defaultEmissiveTextureId,
-            model: this,
-            preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
+            texture: new Texture2D({
+                gl: this.scene.canvas.gl,
+                preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
+            })
         });
         const defaultOcclusionTexture = new VBOSceneModelTexture({
             id: defaultOcclusionTextureId,
-            model: this,
-            preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
+            texture: new Texture2D({
+                gl: this.scene.canvas.gl,
+                preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
+            })
         });
         this._textures[defaultColorTextureId] = defaultColorTexture;
         this._textures[defaultMetalRoughTextureId] = defaultMetalRoughTexture;
@@ -3152,4 +3162,6 @@ class VBOSceneModel extends Component {
     }
 }
 
-export {VBOSceneModel};
+export {
+    VBOSceneModel
+}
