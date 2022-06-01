@@ -45,10 +45,11 @@ let activeTranscoders = 0;
  * ## Overview
  *
  * * Uses the Basis Universal codec to transcode KTX2 texture assets.
- * * An {@link XKTLoaderPlugin} that is configured with a KTX2TextureTranscoder will allow us to load XKT files that
- * contain KTX2 textures.
+ * * An {@link XKTLoaderPlugin} that is configured with a KTX2TextureTranscoder will allow us to load KTX2 textures in
+ * XKT files. Textures in XKT are always KTX2. If we do not configure a KTX2TextureTranscoder, the XKTLoaderPlugin will
+ * simply ignore the textures in the XKT.
  * * A {@link SceneModel} implementation (eg. {@link VBOSceneModel}) that is configured with a KTX2TextureTranscoder will
- * allow us to load textures into it from KTX2-transcoded buffers or files.
+ * allow us to load textures into it from KTX2 files or ArrayBuffers.
  *
  * ## What is KTX2?
  *
@@ -60,7 +61,7 @@ let activeTranscoders = 0;
  * ## Loading XKT files containing KTX2 textures
  *
  * An {@link XKTLoaderPlugin} that is configured with a KTX2TextureTranscoder will allow us to load XKT files that
- * contain KTX2 textures. If we don't configure a KTX2TextureDecoder, then the XKTLoaderPlugin will simply ignore
+ * contain KTX2 textures. If we don't configure a KTX2TextureTranscoder, then the XKTLoaderPlugin will simply ignore
  * the textures in the XKT.
  *
  * In the example below, we'll create a {@link Viewer} and add an {@link XKTLoaderPlugin}
@@ -93,9 +94,9 @@ let activeTranscoders = 0;
  * });
  * ````
  *
- * ## Loading KTX2 textures into a VBOSceneModel
+ * ## Loading KTX2 files into a VBOSceneModel
  *
- * A {@link SceneModel} implementation (eg. {@link VBOSceneModel}) that is configured with a KTX2TextureTranscoder will
+ * A {@link SceneModel} that is configured with a KTX2TextureTranscoder will
  * allow us to load textures into it from KTX2-transcoded buffers or files.
  *
  * In the example below, we'll create a {@link Viewer}, containing a {@link VBOSceneModel} configured with a
@@ -126,7 +127,7 @@ let activeTranscoders = 0;
  *
  * vboSceneModel.createTexture({
  *      id: "myColorTexture",
- *      src: "./sample_uastc_zstd.ktx2" // <<----- KTX2 texture asset
+ *      src: "../assets/textures/compressed/sample_uastc_zstd.ktx2" // <<----- KTX2 texture asset
  * });
  *
  * vboSceneModel.createTexture({
@@ -156,6 +157,73 @@ let activeTranscoders = 0;
  *  });
  *
  * vboSceneModel.finalize();
+ * ````
+ *
+ * ## Loading KTX2 ArrayBuffers into a VBOSceneModel
+ *
+ * A {@link SceneModel} that is configured with a KTX2TextureTranscoder will allow us to load textures into
+ * it from KTX2 ArrayBuffers.
+ *
+ * In the example below, we'll create a {@link Viewer}, containing a {@link VBOSceneModel} configured with a
+ * KTX2TextureTranscoder. We'll then programmatically create a simple object within the VBOSceneModel, consisting of
+ * a single mesh with a texture loaded from a KTX2 ArrayBuffer, which our VBOSceneModel internally transcodes, using
+ * its KTX2TextureTranscoder.
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+ * viewer.scene.camera.look = [0, -5.75, 0];
+ * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const textureTranscoder = new KTX2TextureTranscoder({
+ *     viewer,
+ *     transcoderPath: "./../dist/basis/" // <------ Path to BasisU transcoder module
+ * });
+ *
+ * const vboSceneModel = new VBOSceneModel(viewer.scene, {
+ *      id: "myModel",
+ *      textureTranscoder // <<-------------------- Configure loader with our transcoder
+ * });
+ *
+ * utils.loadArraybuffer("../assets/textures/compressed/sample_uastc_zstd.ktx2",(arrayBuffer) => {
+ *
+ *     vboSceneModel.createTexture({
+ *         id: "myColorTexture",
+ *         buffers: [arrayBuffer] // <<----- KTX2 texture asset
+ *     });
+ *
+ *     vboSceneModel.createTexture({
+ *         id: "myMetallicRoughnessTexture",
+ *         src: "../assets/textures/alpha/crosshatchAlphaMap.jpg" // <<----- JPEG texture asset
+ *     });
+ *
+ *     vboSceneModel.createTextureSet({
+ *        id: "myTextureSet",
+ *        colorTextureId: "myColorTexture",
+ *        metallicRoughnessTextureId: "myMetallicRoughnessTexture"
+ *     });
+ *
+ *     vboSceneModel.createMesh({
+ *          id: "myMesh",
+ *          textureSetId: "myTextureSet",
+ *          primitive: "triangles",
+ *          positions: [1, 1, 1, ...],
+ *          normals: [0, 0, 1, 0, ...],
+ *          uv: [1, 0, 0, ...],
+ *          indices: [0, 1, 2, ...],
+ *     });
+ *
+ *     vboSceneModel.createEntity({
+ *         id: "myEntity",
+ *         meshIds: ["myMesh"]
+ *     });
+ *
+ *     vboSceneModel.finalize();
+ * });
  * ````
  *
  * @implements {TextureTranscoder}
