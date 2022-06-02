@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~alphaformat",
+    "variable/index.html#static-variable-AlphaFormat",
+    "<span>AlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/ambientlight.js~ambientlight",
     "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html",
     "<span>AmbientLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/AmbientLight.js</span>",
@@ -46,6 +52,24 @@ window.esdocSearchIndex = [
     "class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html",
     "<span>BCFViewpointsPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~basicdepthpacking",
+    "variable/index.html#static-variable-BasicDepthPacking",
+    "<span>BasicDepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~bytetype",
+    "variable/index.html#static-variable-ByteType",
+    "<span>ByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/cache.js~cache",
+    "variable/index.html#static-variable-Cache",
+    "<span>Cache</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/Cache.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/camera/camera.js~camera",
@@ -102,6 +126,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~clamptoedgewrapping",
+    "variable/index.html#static-variable-ClampToEdgeWrapping",
+    "<span>ClampToEdgeWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/component.js~component",
     "class/src/viewer/scene/Component.js~Component.html",
     "<span>Component</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Component.js</span>",
@@ -144,6 +174,24 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/loadingmanager.js~defaultloadingmanager",
+    "variable/index.html#static-variable-DefaultLoadingManager",
+    "<span>DefaultLoadingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/LoadingManager.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthformat",
+    "variable/index.html#static-variable-DepthFormat",
+    "<span>DepthFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthstencilformat",
+    "variable/index.html#static-variable-DepthStencilFormat",
+    "<span>DepthStencilFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/dirlight.js~dirlight",
     "class/src/viewer/scene/lights/DirLight.js~DirLight.html",
     "<span>DirLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/DirLight.js</span>",
@@ -168,6 +216,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/drawshadersource.js~drawshadersource",
+    "function/index.html#static-function-DrawShaderSource",
+    "<span>DrawShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/DrawShaderSource.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/edgematerial.js~edgematerial",
     "class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
     "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/EdgeMaterial.js</span>",
@@ -190,6 +244,18 @@ window.esdocSearchIndex = [
     "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html",
     "<span>FastNavPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/fileloader.js~fileloader",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html",
+    "<span>FileLoader</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/FileLoader.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~floattype",
+    "variable/index.html#static-variable-FloatType",
+    "<span>FloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/fresnel.js~fresnel",
@@ -222,6 +288,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~halffloattype",
+    "variable/index.html#static-variable-HalfFloatType",
+    "<span>HalfFloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
     "variable/index.html#static-variable-IFCObjectDefaultColors",
     "<span>IFCObjectDefaultColors</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/metadata/IFCObjectDefaultColors.js</span>",
@@ -249,6 +321,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/input/input.js~input",
     "class/src/viewer/scene/input/Input.js~Input.html",
     "<span>Input</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/input/Input.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~inttype",
+    "variable/index.html#static-variable-IntType",
+    "<span>IntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html",
+    "<span>KTX2TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</span>",
     "class"
   ],
   [
@@ -282,9 +366,57 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearencoding",
+    "variable/index.html#static-variable-LinearEncoding",
+    "<span>LinearEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearfilter",
+    "variable/index.html#static-variable-LinearFilter",
+    "<span>LinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "variable/index.html#static-variable-LinearMipMapLinearFilter",
+    "<span>LinearMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "variable/index.html#static-variable-LinearMipMapNearestFilter",
+    "<span>LinearMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "variable/index.html#static-variable-LinearMipmapLinearFilter",
+    "<span>LinearMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "variable/index.html#static-variable-LinearMipmapNearestFilter",
+    "<span>LinearMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/linesmaterial.js~linesmaterial",
     "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html",
     "<span>LinesMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LinesMaterial.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/loader.js~loader",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html",
+    "<span>Loader</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/Loader.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/loadingmanager.js~loadingmanager",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html",
+    "<span>LoadingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/LoadingManager.js</span>",
     "class"
   ],
   [
@@ -292,6 +424,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/localization/LocaleService.js~LocaleService.html",
     "<span>LocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminancealphaformat",
+    "variable/index.html#static-variable-LuminanceAlphaFormat",
+    "<span>LuminanceAlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminanceformat",
+    "variable/index.html#static-variable-LuminanceFormat",
+    "<span>LuminanceFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/marker/marker.js~marker",
@@ -342,6 +486,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~mirroredrepeatwrapping",
+    "variable/index.html#static-variable-MirroredRepeatWrapping",
+    "<span>MirroredRepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/mementos/modelmemento.js~modelmemento",
     "class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html",
     "<span>ModelMemento</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</span>",
@@ -358,6 +508,30 @@ window.esdocSearchIndex = [
     "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html",
     "<span>NavCubePlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestfilter",
+    "variable/index.html#static-variable-NearestFilter",
+    "<span>NearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "variable/index.html#static-variable-NearestMipMapLinearFilter",
+    "<span>NearestMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmapnearestfilter",
+    "variable/index.html#static-variable-NearestMipMapNearestFilter",
+    "<span>NearestMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "variable/index.html#static-variable-NearestMipmapLinearFilter",
+    "<span>NearestMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/nodes/node.js~node",
@@ -468,16 +642,226 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbadepthpacking",
+    "variable/index.html#static-variable-RGBADepthPacking",
+    "<span>RGBADepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaformat",
+    "variable/index.html#static-variable-RGBAFormat",
+    "<span>RGBAFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaintegerformat",
+    "variable/index.html#static-variable-RGBAIntegerFormat",
+    "<span>RGBAIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x10_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x10_Format",
+    "<span>RGBA_ASTC_10x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x5_Format",
+    "<span>RGBA_ASTC_10x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x6_Format",
+    "<span>RGBA_ASTC_10x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x8_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x8_Format",
+    "<span>RGBA_ASTC_10x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x10_format",
+    "variable/index.html#static-variable-RGBA_ASTC_12x10_Format",
+    "<span>RGBA_ASTC_12x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x12_format",
+    "variable/index.html#static-variable-RGBA_ASTC_12x12_Format",
+    "<span>RGBA_ASTC_12x12_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_4x4_format",
+    "variable/index.html#static-variable-RGBA_ASTC_4x4_Format",
+    "<span>RGBA_ASTC_4x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x4_format",
+    "variable/index.html#static-variable-RGBA_ASTC_5x4_Format",
+    "<span>RGBA_ASTC_5x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_5x5_Format",
+    "<span>RGBA_ASTC_5x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_6x5_Format",
+    "<span>RGBA_ASTC_6x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_6x6_Format",
+    "<span>RGBA_ASTC_6x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x5_Format",
+    "<span>RGBA_ASTC_8x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x6_Format",
+    "<span>RGBA_ASTC_8x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x8_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x8_Format",
+    "<span>RGBA_ASTC_8x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_bptc_format",
+    "variable/index.html#static-variable-RGBA_BPTC_Format",
+    "<span>RGBA_BPTC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_etc2_eac_format",
+    "variable/index.html#static-variable-RGBA_ETC2_EAC_Format",
+    "<span>RGBA_ETC2_EAC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_2bppv1_format",
+    "variable/index.html#static-variable-RGBA_PVRTC_2BPPV1_Format",
+    "<span>RGBA_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_4bppv1_format",
+    "variable/index.html#static-variable-RGBA_PVRTC_4BPPV1_Format",
+    "<span>RGBA_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt1_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT1_Format",
+    "<span>RGBA_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt3_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT3_Format",
+    "<span>RGBA_S3TC_DXT3_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt5_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT5_Format",
+    "<span>RGBA_S3TC_DXT5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbformat",
+    "variable/index.html#static-variable-RGBFormat",
+    "<span>RGBFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc1_format",
+    "variable/index.html#static-variable-RGB_ETC1_Format",
+    "<span>RGB_ETC1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc2_format",
+    "variable/index.html#static-variable-RGB_ETC2_Format",
+    "<span>RGB_ETC2_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_2bppv1_format",
+    "variable/index.html#static-variable-RGB_PVRTC_2BPPV1_Format",
+    "<span>RGB_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_4bppv1_format",
+    "variable/index.html#static-variable-RGB_PVRTC_4BPPV1_Format",
+    "<span>RGB_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_s3tc_dxt1_format",
+    "variable/index.html#static-variable-RGB_S3TC_DXT1_Format",
+    "<span>RGB_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgformat",
+    "variable/index.html#static-variable-RGFormat",
+    "<span>RGFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgintegerformat",
+    "variable/index.html#static-variable-RGIntegerFormat",
+    "<span>RGIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/readablegeometry.js~readablegeometry",
     "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html",
     "<span>ReadableGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/ReadableGeometry.js</span>",
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redformat",
+    "variable/index.html#static-variable-RedFormat",
+    "<span>RedFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redintegerformat",
+    "variable/index.html#static-variable-RedIntegerFormat",
+    "<span>RedIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/reflectionmap.js~reflectionmap",
     "class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html",
     "<span>ReflectionMap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/ReflectionMap.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~repeatwrapping",
+    "variable/index.html#static-variable-RepeatWrapping",
+    "<span>RepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/postfx/sao.js~sao",
@@ -526,6 +910,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/lights/Shadow.js~Shadow.html",
     "<span>Shadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/Shadow.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~shorttype",
+    "variable/index.html#static-variable-ShortType",
+    "<span>ShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/skybox/skybox.js~skybox",
@@ -588,6 +978,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html",
+    "<span>TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/treeviewnode.js~treeviewnode",
     "class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html",
     "<span>TreeViewNode</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewNode.js</span>",
@@ -598,6 +994,42 @@ window.esdocSearchIndex = [
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html",
     "<span>TreeViewPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedbytetype",
+    "variable/index.html#static-variable-UnsignedByteType",
+    "<span>UnsignedByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedint248type",
+    "variable/index.html#static-variable-UnsignedInt248Type",
+    "<span>UnsignedInt248Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedinttype",
+    "variable/index.html#static-variable-UnsignedIntType",
+    "<span>UnsignedIntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort4444type",
+    "variable/index.html#static-variable-UnsignedShort4444Type",
+    "<span>UnsignedShort4444Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort5551type",
+    "variable/index.html#static-variable-UnsignedShort5551Type",
+    "<span>UnsignedShort5551Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshorttype",
+    "variable/index.html#static-variable-UnsignedShortType",
+    "<span>UnsignedShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/vbogeometry.js~vbogeometry",
@@ -639,6 +1071,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/webifcloaderplugin/webifcloaderplugin.js~webifcloaderplugin",
     "class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html",
     "<span>WebIFCLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/workerpool.js~workerpool",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html",
+    "<span>WorkerPool</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/WorkerPool.js</span>",
     "class"
   ],
   [
@@ -718,6 +1156,12 @@ window.esdocSearchIndex = [
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
     "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~srgbencoding",
+    "variable/index.html#static-variable-sRGBEncoding",
+    "<span>sRGBEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/stats.js~stats",
@@ -3240,6 +3684,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#texturetranscoder",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-textureTranscoder",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#textureTranscoder",
+    "member"
+  ],
+  [
+    "src/plugins/xktloaderplugin/xktloaderplugin.js~xktloaderplugin#texturetranscoder",
+    "class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-set-textureTranscoder",
+    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin#textureTranscoder",
+    "member"
+  ],
+  [
     "src/plugins/xktloaderplugin/index.js",
     "file/src/plugins/XKTLoaderPlugin/index.js.html",
     "src/plugins/XKTLoaderPlugin/index.js",
@@ -3495,6 +3951,12 @@ window.esdocSearchIndex = [
     "src/viewer/viewer.js~viewer#cameraflight",
     "class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight",
     "src/viewer/Viewer.js~Viewer#cameraFlight",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#capabilities",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-get-capabilities",
+    "src/viewer/Viewer.js~Viewer#capabilities",
     "member"
   ],
   [
@@ -5980,6 +6442,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/canvas/Spinner.js~Spinner.html#instance-get-processes",
     "src/viewer/scene/canvas/Spinner.js~Spinner#processes",
     "member"
+  ],
+  [
+    "src/viewer/scene/constants.js",
+    "file/src/viewer/scene/constants.js.html",
+    "src/viewer/scene/constants.js",
+    "file"
   ],
   [
     "src/viewer/scene/core.js",
@@ -12450,6 +12918,264 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/utils/cache.js",
+    "file/src/viewer/scene/utils/Cache.js.html",
+    "src/viewer/scene/utils/Cache.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js",
+    "file/src/viewer/scene/utils/FileLoader.js.html",
+    "src/viewer/scene/utils/FileLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#constructor",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#load",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-method-load",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#load",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#mimetype",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-member-mimeType",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#mimeType",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#responsetype",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-member-responseType",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#responseType",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#setmimetype",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-method-setMimeType",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#setMimeType",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/fileloader.js~fileloader#setresponsetype",
+    "class/src/viewer/scene/utils/FileLoader.js~FileLoader.html#instance-method-setResponseType",
+    "src/viewer/scene/utils/FileLoader.js~FileLoader#setResponseType",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js",
+    "file/src/viewer/scene/utils/Loader.js.html",
+    "src/viewer/scene/utils/Loader.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#constructor",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/Loader.js~Loader#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#crossorigin",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-crossOrigin",
+    "src/viewer/scene/utils/Loader.js~Loader#crossOrigin",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#load",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-load",
+    "src/viewer/scene/utils/Loader.js~Loader#load",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#loadasync",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-loadAsync",
+    "src/viewer/scene/utils/Loader.js~Loader#loadAsync",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#manager",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-manager",
+    "src/viewer/scene/utils/Loader.js~Loader#manager",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#parse",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-parse",
+    "src/viewer/scene/utils/Loader.js~Loader#parse",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#path",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-path",
+    "src/viewer/scene/utils/Loader.js~Loader#path",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#requestheader",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-requestHeader",
+    "src/viewer/scene/utils/Loader.js~Loader#requestHeader",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#resourcepath",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-resourcePath",
+    "src/viewer/scene/utils/Loader.js~Loader#resourcePath",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#setcrossorigin",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-setCrossOrigin",
+    "src/viewer/scene/utils/Loader.js~Loader#setCrossOrigin",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#setpath",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-setPath",
+    "src/viewer/scene/utils/Loader.js~Loader#setPath",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#setrequestheader",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-setRequestHeader",
+    "src/viewer/scene/utils/Loader.js~Loader#setRequestHeader",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#setresourcepath",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-setResourcePath",
+    "src/viewer/scene/utils/Loader.js~Loader#setResourcePath",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#setwithcredentials",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-method-setWithCredentials",
+    "src/viewer/scene/utils/Loader.js~Loader#setWithCredentials",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loader.js~loader#withcredentials",
+    "class/src/viewer/scene/utils/Loader.js~Loader.html#instance-member-withCredentials",
+    "src/viewer/scene/utils/Loader.js~Loader#withCredentials",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js",
+    "file/src/viewer/scene/utils/LoadingManager.js.html",
+    "src/viewer/scene/utils/LoadingManager.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#addhandler",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-addHandler",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#addHandler",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#constructor",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#gethandler",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-getHandler",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#getHandler",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#handlers",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-handlers",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#handlers",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#isloading",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-isLoading",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#isLoading",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#itemend",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-itemEnd",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#itemEnd",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#itemerror",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-itemError",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#itemError",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#itemstart",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-itemStart",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#itemStart",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#itemsloaded",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-itemsLoaded",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#itemsLoaded",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#itemstotal",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-itemsTotal",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#itemsTotal",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#onerror",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-onError",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#onError",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#onload",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-onLoad",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#onLoad",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#onprogress",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-onProgress",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#onProgress",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#onstart",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-onStart",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#onStart",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#removehandler",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-removeHandler",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#removeHandler",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#resolveurl",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-resolveURL",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#resolveURL",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#seturlmodifier",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-method-setURLModifier",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#setURLModifier",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/loadingmanager.js~loadingmanager#urlmodifier",
+    "class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html#instance-member-urlModifier",
+    "src/viewer/scene/utils/LoadingManager.js~LoadingManager#urlModifier",
+    "member"
+  ],
+  [
     "src/viewer/scene/utils/map.js",
     "file/src/viewer/scene/utils/Map.js.html",
     "src/viewer/scene/utils/Map.js",
@@ -12462,9 +13188,141 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/utils/workerpool.js",
+    "file/src/viewer/scene/utils/WorkerPool.js.html",
+    "src/viewer/scene/utils/WorkerPool.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#constructor",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#destroy",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-method-destroy",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#pool",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-pool",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#pool",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#postmessage",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-method-postMessage",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#postMessage",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#queue",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-queue",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#queue",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#setworkercreator",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-method-setWorkerCreator",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#setWorkerCreator",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#setworkerlimit",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-method-setWorkerLimit",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#setWorkerLimit",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#workercreator",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-workerCreator",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#workerCreator",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#workerstatus",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-workerStatus",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#workerStatus",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#workers",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-workers",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#workers",
+    "member"
+  ],
+  [
+    "src/viewer/scene/utils/workerpool.js~workerpool#workersresolve",
+    "class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html#instance-member-workersResolve",
+    "src/viewer/scene/utils/WorkerPool.js~WorkerPool#workersResolve",
+    "member"
+  ],
+  [
     "src/viewer/scene/utils/index.js",
     "file/src/viewer/scene/utils/index.js.html",
     "src/viewer/scene/utils/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#constructor",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#destroy",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-destroy",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#transcode",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-transcode",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#transcode",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/basis/basis_transcoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/index.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder#destroy",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-destroy",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder#transcode",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-transcode",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder#transcode",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/index.js",
+    "file/src/viewer/scene/utils/textureTranscoders/index.js.html",
+    "src/viewer/scene/utils/textureTranscoders/index.js",
     "file"
   ],
   [
@@ -12669,6 +13527,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/texture2d.js",
     "file/src/viewer/scene/webgl/Texture2D.js.html",
     "src/viewer/scene/webgl/Texture2D.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/convertconstant.js",
+    "file/src/viewer/scene/webgl/convertConstant.js.html",
+    "src/viewer/scene/webgl/convertConstant.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/getextension.js",
+    "file/src/viewer/scene/webgl/getExtension.js.html",
+    "src/viewer/scene/webgl/getExtension.js",
     "file"
   ],
   [

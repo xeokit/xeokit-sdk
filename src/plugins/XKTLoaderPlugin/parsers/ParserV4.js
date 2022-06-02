@@ -176,7 +176,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             var geometryId = "geometry" + orderedPrimitiveIndex; // These IDs are local to the VBOSceneModel
 
-            performanceModel.createGeometry({
+            sceneModel.createGeometry({
                 id: geometryId,
                 primitive: "triangles",
                 positionsCompressed: primitivePositions,
@@ -199,7 +199,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             const meshDefaults = {}; // TODO: get from lookup from entity IDs
 
-            performanceModel.createMesh(utils.apply(meshDefaults, {
+            sceneModel.createMesh(utils.apply(meshDefaults, {
                 id: meshId,
                 primitive: "triangles",
                 positionsCompressed: primitivePositions,
@@ -240,7 +240,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                 const matricesIndex = (eachEntityMatricesPortion [entityIndex]) * 16;
                 const matrix = matrices.subarray(matricesIndex, matricesIndex + 16);
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     geometryId: geometryId,
                     matrix: matrix
@@ -257,7 +257,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             const entityDefaults = {}; // TODO: get from lookup from entity IDs
 
-            performanceModel.createEntity(utils.apply(entityDefaults, {
+            sceneModel.createEntity(utils.apply(entityDefaults, {
                 id: entityId,
                 isObject: true, ///////////////// TODO: If metaobject exists
                 meshIds: meshIds
@@ -269,10 +269,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV4 = {
     version: 4,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

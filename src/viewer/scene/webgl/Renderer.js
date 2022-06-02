@@ -9,6 +9,7 @@ import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
+import {getExtension} from "./getExtension";
 
 /**
  * @private
@@ -50,6 +51,15 @@ const Renderer = function (scene, options) {
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
+
+    this.capabilities = {
+        astcSupported: !!getExtension(gl, 'WEBGL_compressed_texture_astc'),
+        etc1Supported: true, // WebGL2
+        etc2Supported: !!getExtension(gl, 'WEBGL_compressed_texture_etc'),
+        dxtSupported: !!getExtension(gl, 'WEBGL_compressed_texture_s3tc'),
+        bptcSupported: !!getExtension(gl, 'EXT_texture_compression_bptc'),
+        pvrtcSupported: !!(getExtension(gl, 'WEBGL_compressed_texture_pvrtc') || getExtension(gl, 'WEBKIT_WEBGL_compressed_texture_pvrtc'))
+    };
 
     this.setTransparentEnabled = function (enabled) {
         transparentEnabled = enabled;
@@ -742,7 +752,7 @@ const Renderer = function (scene, options) {
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                if ( scene.highlightMaterial.glowThrough) {
+                if (scene.highlightMaterial.glowThrough) {
                     gl.clear(gl.DEPTH_BUFFER_BIT);
                 }
 

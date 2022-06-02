@@ -2,6 +2,7 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {Texture2D} from '../webgl/Texture2D.js';
 import {stats} from '../stats.js';
+import {ClampToEdgeWrapping, LinearEncoding, LinearFilter, LinearMipmapLinearFilter, sRGBEncoding} from "../constants";
 
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
@@ -48,7 +49,7 @@ class CubeTexture extends Component {
      * @param {String} [cfg.id] Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
      * @param {String[]} [cfg.src=null]  Paths to six image files to load into this CubeTexture.
      * @param {Boolean} [cfg.flipY=false] Flips this CubeTexture's source data along its vertical axis when true.
-     * @param {String} [cfg.encoding="linear"] Encoding format.  See the {@link CubeTexture/encoding} property for more info.
+     * @param {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      */
     constructor(owner, cfg = {}) {
 
@@ -57,13 +58,13 @@ class CubeTexture extends Component {
         const gl = this.scene.canvas.gl;
 
         this._state = new RenderState({
-            texture: new Texture2D(gl, gl.TEXTURE_CUBE_MAP),
+            texture: new Texture2D({gl, target: gl.TEXTURE_CUBE_MAP}),
             flipY: this._checkFlipY(cfg.minFilter),
             encoding: this._checkEncoding(cfg.encoding),
-            minFilter: "linearMipmapLinear",
-            magFilter: "linear",
-            wrapS: "clampToEdge",
-            wrapT: "clampToEdge",
+            minFilter: LinearMipmapLinearFilter,
+            magFilter: LinearFilter,
+            wrapS: ClampToEdgeWrapping,
+            wrapT: ClampToEdgeWrapping,
             mipmaps: true
         });
 
@@ -80,10 +81,10 @@ class CubeTexture extends Component {
     }
 
     _checkEncoding(value) {
-        value = value || "linear";
-        if (value !== "linear" && value !== "sRGB" && value !== "gamma") {
-            this.error("Unsupported value for 'encoding': '" + value + "' - supported values are 'linear', 'sRGB', 'gamma'. Defaulting to 'linear'.");
-            value = "linear";
+        value = value || LinearEncoding;
+        if (value !== LinearEncoding && value !== sRGBEncoding) {
+            this.error("Unsupported value for 'encoding' - supported values are LinearEncoding and sRGBEncoding. Defaulting to LinearEncoding.");
+            value = LinearEncoding;
         }
         return value;
     }
@@ -122,11 +123,10 @@ class CubeTexture extends Component {
                     if (numLoaded === 6) {
                         let texture = self._state.texture;
                         if (!texture) {
-                            texture = new Texture2D(gl, gl.TEXTURE_CUBE_MAP);
+                            texture = new Texture2D({gl, target: gl.TEXTURE_CUBE_MAP});
                             self._state.texture = texture;
                         }
                         texture.setImage(self._images, self._state);
-                        texture.setProps(self._state);
                         self.fire("loaded", self._src, false);
                         self.glRedraw();
                     }

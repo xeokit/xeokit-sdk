@@ -208,13 +208,13 @@ class CityJSONLoaderPlugin extends Plugin {
             (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
     }
 
-    _parseModel(data, params, options, performanceModel) {
+    _parseModel(data, params, options, sceneModel) {
 
-        if (performanceModel.destroyed) {
+        if (sceneModel.destroyed) {
             return;
         }
 
@@ -255,7 +255,7 @@ class CityJSONLoaderPlugin extends Plugin {
         const ctx = {
             data,
             vertices,
-            performanceModel,
+            sceneModel,
             loadMetadata,
             metadata,
             rootMetaObject,
@@ -265,19 +265,19 @@ class CityJSONLoaderPlugin extends Plugin {
 
         this._parseCityJSON(ctx)
 
-        performanceModel.finalize();
+        sceneModel.finalize();
 
         if (loadMetadata) {
-            const metaModelId = performanceModel.id;
+            const metaModelId = sceneModel.id;
             this.viewer.metaScene.createMetaModel(metaModelId, ctx.metadata, options);
         }
 
-        performanceModel.scene.once("tick", () => {
-            if (performanceModel.destroyed) {
+        sceneModel.scene.once("tick", () => {
+            if (sceneModel.destroyed) {
                 return;
             }
-            performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-            performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+            sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });
     }
 
@@ -311,7 +311,7 @@ class CityJSONLoaderPlugin extends Plugin {
 
     _parseCityObject(ctx, cityObject, objectId) {
 
-        const performanceModel = ctx.performanceModel;
+        const sceneModel = ctx.sceneModel;
         const data = ctx.data;
 
         if (ctx.loadMetadata) {
@@ -381,7 +381,7 @@ class CityJSONLoaderPlugin extends Plugin {
         }
 
         if (meshIds.length > 0) {
-            performanceModel.createEntity({
+            sceneModel.createEntity({
                 id: objectId,
                 meshIds: meshIds,
                 isObject: true
@@ -438,7 +438,7 @@ class CityJSONLoaderPlugin extends Plugin {
     _parseSurfacesWithOwnMaterials(ctx, surfaceMaterials, surfaces, meshIds) {
 
         const vertices = ctx.vertices;
-        const performanceModel = ctx.performanceModel;
+        const sceneModel = ctx.sceneModel;
 
         for (let i = 0; i < surfaces.length; i++) {
 
@@ -515,7 +515,7 @@ class CityJSONLoaderPlugin extends Plugin {
 
             const meshId = "" + ctx.nextId++;
 
-            performanceModel.createMesh({
+            sceneModel.createMesh({
                 id: meshId,
                 primitive: "triangles",
                 positions: geometryCfg.positions,
@@ -534,7 +534,7 @@ class CityJSONLoaderPlugin extends Plugin {
 
     _parseGeometrySurfacesWithSharedMaterial(ctx, geometry, objectMaterial, meshIds) {
 
-        const performanceModel = ctx.performanceModel;
+        const sceneModel = ctx.performanceModel;
         const sharedIndices = [];
         const geometryCfg = {
             positions: [],

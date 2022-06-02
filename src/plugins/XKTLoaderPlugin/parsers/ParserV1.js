@@ -61,10 +61,10 @@ function inflate(deflatedData) {
     };
 }
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
-    performanceModel.positionsCompression = "precompressed";
-    performanceModel.normalsCompression = "precompressed";
+    sceneModel.positionsCompression = "precompressed";
+    sceneModel.normalsCompression = "precompressed";
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -83,7 +83,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let i = 0; i < numEntities; i++) {
 
         const xktEntityId = entityIDs [i];
-        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
         const metaObject = viewer.metaScene.metaObjects[entityId];
         const entityDefaults = {};
         const meshDefaults = {};
@@ -131,7 +131,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             const color = decompressColor(meshColors.subarray((j * 4), (j * 4) + 3));
             const opacity = meshColors[(j * 4) + 3] / 255.0;
 
-            performanceModel.createMesh(utils.apply(meshDefaults, {
+            sceneModel.createMesh(utils.apply(meshDefaults, {
                 id: meshId,
                 primitive: "triangles",
                 positionsCompressed: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
@@ -146,7 +146,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             meshIds.push(meshId);
         }
 
-        performanceModel.createEntity(utils.apply(entityDefaults, {
+        sceneModel.createEntity(utils.apply(entityDefaults, {
             id: entityId,
             isObject: (entityIsObjects [i] === 1),
             meshIds: meshIds
@@ -157,10 +157,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV1 = {
     version: 1,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

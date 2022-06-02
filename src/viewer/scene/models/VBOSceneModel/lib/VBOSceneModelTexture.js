@@ -32,48 +32,7 @@ export class VBOSceneModelTexture {
          * @property texture
          * @type {Texture2D}
          */
-        this.texture = new Texture2D(cfg.model.scene.canvas.gl);
-
-        const scene = cfg.model.scene;
-
-        if (cfg.preloadColor) {
-            this.texture.setPreloadColor(cfg.preloadColor);
-            scene.glRedraw();
-        }
-
-        if (cfg.image) {
-            const image = cfg.image;
-            image.crossOrigin = "Anonymous";
-            this.texture.setImage(image, {});
-            this.texture.setProps({
-                minFilter: cfg.minFilter || "linearMipmapLinear",
-                magFilter: cfg.magFilter || "linear",
-                wrapS: cfg.wrapS || "repeat",
-                wrapT: cfg.wrapT || "repeat",
-                flipY: cfg.flipY || false,
-                encoding: cfg.encoding || "linear"
-            });
-            scene.glRedraw();
-        } else if (cfg.src) {
-            scene.loading++;
-            scene.canvas.spinner.processes++;
-            const image = new Image();
-            image.onload = () => {
-                this.texture.setImage(image, {});
-                this.texture.setProps({
-                    minFilter: cfg.minFilter || "linearMipmapLinear",
-                    magFilter: cfg.magFilter || "linear",
-                    wrapS: cfg.wrapS || "repeat",
-                    wrapT: cfg.wrapT || "repeat",
-                    flipY: cfg.flipY || false,
-                    encoding: cfg.encoding || "linear"
-                });
-                scene.glRedraw();
-                scene.loading--;
-                scene.canvas.spinner.processes--;
-            };
-            image.src = cfg.src;
-        }
+        this.texture = cfg.texture;
     }
 
     /**

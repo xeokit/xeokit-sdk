@@ -160,7 +160,7 @@ function load(viewer, options, inflatedData, sceneModel) {
             globalizeObjectIds: options.globalizeObjectIds
         });
 
-        performanceModel.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             viewer.metaScene.destroyMetaModel(metaModelId);
         });
     }
@@ -184,7 +184,8 @@ function load(viewer, options, inflatedData, sceneModel) {
             //////////////////////////////////////////////////////////////
 
             const image = imagDataToImage(imageData);
-            performanceModel.createTexture({
+
+            sceneModel.createTexture({
                 id: `texture-${textureIndex}`,
                 src: image
             });
@@ -201,7 +202,7 @@ function load(viewer, options, inflatedData, sceneModel) {
         const normalsTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 2];
         const emissiveTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 3];
         const occlusionTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 4];
-        performanceModel.createTextureSet({
+        sceneModel.createTextureSet({
             id: textureSetId,
             colorTextureId: colorTextureIndex >= 0 ? `texture-${colorTextureIndex}` : null,
             normalsTextureId: normalsTextureIndex >= 0 ? `texture-${normalsTextureIndex}` : null,
@@ -262,7 +263,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
 
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const finalTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
@@ -437,7 +438,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                                 transformedAndRecompressedPositions[i + 2] = tempVec4a[2];
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 textureSetId: textureSetId,
                                 origin: tileCenter,
@@ -461,7 +462,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
                             if (!geometryCreatedInTile[geometryId]) {
 
-                                performanceModel.createGeometry({
+                                sceneModel.createGeometry({
                                     id: geometryId,
                                     primitive: geometryArrays.primitiveName,
                                     positionsCompressed: geometryArrays.geometryPositions,
@@ -476,7 +477,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                                 geometryCreatedInTile[geometryId] = true;
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 geometryId: geometryId,
                                 textureSetId: textureSetId,
@@ -542,7 +543,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
                     if (geometryValid) {
 
-                        performanceModel.createMesh(utils.apply(meshDefaults, {
+                        sceneModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             textureSetId: textureSetId,
                             origin: tileCenter,
@@ -567,7 +568,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -580,10 +581,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV10 = {
     version: 10,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

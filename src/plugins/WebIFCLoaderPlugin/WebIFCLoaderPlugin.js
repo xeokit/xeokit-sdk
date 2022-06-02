@@ -717,19 +717,19 @@ class WebIFCLoaderPlugin extends Plugin {
 
         this._parseGeometry(ctx);
 
-        performanceModel.finalize();
+        sceneModel.finalize();
 
         if (loadMetadata) {
-            const metaModelId = performanceModel.id;
+            const metaModelId = sceneModel.id;
             this.viewer.metaScene.createMetaModel(metaModelId, ctx.metadata, options);
         }
 
-        performanceModel.scene.once("tick", () => {
-            if (performanceModel.destroyed) {
+        sceneModel.scene.once("tick", () => {
+            if (sceneModel.destroyed) {
                 return;
             }
-            performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-            performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+            sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });
     }
 
@@ -906,7 +906,7 @@ class WebIFCLoaderPlugin extends Plugin {
                 ctx.stats.numVertices += (positions.length / 3);
                 ctx.stats.numTriangles += (indices.length / 3);
                 const meshId = ("mesh" + ctx.nextId++);
-                ctx.performanceModel.createMesh({
+                ctx.sceneModel.createMesh({
                     id: meshId,
                     primitive: "triangles", // TODO
                     origin: rtcNeeded ? origin : null,
@@ -918,8 +918,8 @@ class WebIFCLoaderPlugin extends Plugin {
                 });
                 meshIds.push(meshId);
             }
-            const entityId = ctx.options.globalizeObjectIds ? math.globalizeObjectId(ctx.performanceModel.id, globalId) : globalId;
-            ctx.performanceModel.createEntity({
+            const entityId = ctx.options.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, globalId) : globalId;
+            ctx.sceneModel.createEntity({
                 id: entityId,
                 meshIds: meshIds,
                 isObject: true

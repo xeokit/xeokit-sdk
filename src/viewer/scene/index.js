@@ -16,3 +16,4 @@ export * from "./utils/index.js";
 export * from "./Component.js";
 export * from "./utils.js";
 export * from "./stats.js";
+export * from "./constants.js";

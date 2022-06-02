@@ -163,7 +163,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
                 if (!(geometryId in alreadyCreatedGeometries)) {
 
-                    performanceModel.createGeometry({
+                    sceneModel.createGeometry({
                         id: geometryId,
                         positionsCompressed: tmpPositions,
                         normalsCompressed: tmpNormals,
@@ -176,7 +176,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                     alreadyCreatedGeometries [geometryId] = true;
                 }
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     color: color,
                     opacity: opacity,
@@ -188,7 +188,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             } else {
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     primitive: "triangles",
                     positionsCompressed: tmpPositions,
@@ -206,7 +206,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
         if (meshIds.length) {
 
-            performanceModel.createEntity(utils.apply(entityDefaults, {
+            sceneModel.createEntity(utils.apply(entityDefaults, {
                 id: entityId,
                 isObject: (entityIsObjects [i] === 1),
                 meshIds: meshIds
@@ -218,10 +218,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV2 = {
     version: 2,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

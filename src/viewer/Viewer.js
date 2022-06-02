@@ -86,7 +86,6 @@ class Viewer {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
             keyboardEventsElement: cfg.keyboardEventsElement,
-            webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,
                 premultipliedAlpha: (!!cfg.premultipliedAlpha),
@@ -163,6 +162,15 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
+    }
+
+    /**
+     * Returns the capabilities of this Viewer.
+     *
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this.scene.capabilities;
     }
 
     /**
