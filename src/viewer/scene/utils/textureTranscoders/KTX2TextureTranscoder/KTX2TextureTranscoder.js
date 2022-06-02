@@ -1,38 +1,21 @@
-import {FileLoader} from "../../../utils/FileLoader";
-import {WorkerPool} from "../../../utils/WorkerPool";
-
-const CONSTANTS = {
-    RGB_S3TC_DXT1_Format: 33776,
-    RGBA_S3TC_DXT1_Format: 33777,
-    RGBA_S3TC_DXT3_Format: 33778,
-    RGBA_S3TC_DXT5_Format: 33779,
-    RGB_PVRTC_4BPPV1_Format: 35840,
-    RGB_PVRTC_2BPPV1_Format: 35841,
-    RGBA_PVRTC_4BPPV1_Format: 35842,
-    RGBA_PVRTC_2BPPV1_Format: 35843,
-    RGB_ETC1_Format: 36196,
-    RGB_ETC2_Format: 37492,
-    RGBA_ETC2_EAC_Format: 37496,
-    RGBA_ASTC_4x4_Format: 37808,
-    RGBA_ASTC_5x4_Format: 37809,
-    RGBA_ASTC_5x5_Format: 37810,
-    RGBA_ASTC_6x5_Format: 37811,
-    RGBA_ASTC_6x6_Format: 37812,
-    RGBA_ASTC_8x5_Format: 37813,
-    RGBA_ASTC_8x6_Format: 37814,
-    RGBA_ASTC_8x8_Format: 37815,
-    RGBA_ASTC_10x5_Format: 37816,
-    RGBA_ASTC_10x6_Format: 37817,
-    RGBA_ASTC_10x8_Format: 37818,
-    RGBA_ASTC_10x10_Format: 37819,
-    RGBA_ASTC_12x10_Format: 37820,
-    RGBA_ASTC_12x12_Format: 37821,
-    UnsignedByteType: 1009,
-    LinearFilter: 1006,
-    LinearMipmapLinearFilter: 1008,
-    sRGBEncoding: 3001,
-    LinearEncoding: 3000
-};
+import {FileLoader} from "../../FileLoader";
+import {WorkerPool} from "../../WorkerPool";
+import {
+    LinearEncoding,
+    LinearFilter,
+    LinearMipmapLinearFilter,
+    RGB_ETC1_Format,
+    RGB_ETC2_Format,
+    RGB_PVRTC_4BPPV1_Format,
+    RGB_S3TC_DXT1_Format,
+    RGBA_ASTC_4x4_Format,
+    RGBA_BPTC_Format,
+    RGBA_ETC2_EAC_Format,
+    RGBA_PVRTC_4BPPV1_Format,
+    RGBA_S3TC_DXT5_Format,
+    RGBAFormat,
+    sRGBEncoding
+} from "../../../constants";
 
 const KTX2TransferSRGB = 2;
 const KTX2_ALPHA_PREMULTIPLIED = 1;
@@ -122,7 +105,7 @@ let activeTranscoders = 0;
  *
  * const vboSceneModel = new VBOSceneModel(viewer.scene, {
  *      id: "myModel",
- *      textureTranscoder // <<-------------------- Configure loader with our transcoder
+ *      textureTranscoder // <<-------------------- Configure model with our transcoder
  *  });
  *
  * vboSceneModel.createTexture({
@@ -186,7 +169,7 @@ let activeTranscoders = 0;
  *
  * const vboSceneModel = new VBOSceneModel(viewer.scene, {
  *      id: "myModel",
- *      textureTranscoder // <<-------------------- Configure loader with our transcoder
+ *      textureTranscoder // <<-------------------- Configure model with our transcoder
  * });
  *
  * utils.loadArraybuffer("../assets/textures/compressed/sample_uastc_zstd.ktx2",(arrayBuffer) => {
@@ -333,18 +316,14 @@ class KTX2TextureTranscoder {
                 if (type === 'error') {
                     return reject(error);
                 }
-                const minFilter = mipmaps.length === 1 ? CONSTANTS.LinearFilter : CONSTANTS.LinearMipmapLinearFilter;
-                const magFilter = mipmaps.length === 1 ? CONSTANTS.LinearFilter : CONSTANTS.LinearMipmapLinearFilter;
-                const encoding = dfdTransferFn === KTX2TransferSRGB ? CONSTANTS.sRGBEncoding : CONSTANTS.LinearEncoding;
-                const premultiplyAlpha = !!(dfdFlags & KTX2_ALPHA_PREMULTIPLIED);
-                debugger;
                 texture.setCompressedData({
                     mipmaps,
                     props: {
-                        // minFilter: mipmaps.length === 1 ? "linear" : "linearMipmapLinear",
-                        // maxFilter: mipmaps.length === 1 ? "linear" : "linearMipmapLinear",
-                        format,
-                        encoding
+                        format: format,
+                        minFilter: mipmaps.length === 1 ? LinearFilter : LinearMipmapLinearFilter,
+                        magFilter: mipmaps.length === 1 ? LinearFilter : LinearMipmapLinearFilter,
+                        encoding: dfdTransferFn === KTX2TransferSRGB ? sRGBEncoding : LinearEncoding,
+                        premultiplyAlpha : !!(dfdFlags & KTX2_ALPHA_PREMULTIPLIED)
                     }
                 });
                 resolve()
@@ -397,16 +376,16 @@ KTX2TextureTranscoder.TranscoderFormat = {
  * @private
  */
 KTX2TextureTranscoder.EngineFormat = {
-    RGBAFormat: CONSTANTS.RGBAFormat,
-    RGBA_ASTC_4x4_Format: CONSTANTS.RGBA_ASTC_4x4_Format,
-    RGBA_BPTC_Format: CONSTANTS.RGBA_BPTC_Format,
-    RGBA_ETC2_EAC_Format: CONSTANTS.RGBA_ETC2_EAC_Format,
-    RGBA_PVRTC_4BPPV1_Format: CONSTANTS.RGBA_PVRTC_4BPPV1_Format,
-    RGBA_S3TC_DXT5_Format: CONSTANTS.RGBA_S3TC_DXT5_Format,
-    RGB_ETC1_Format: CONSTANTS.RGB_ETC1_Format,
-    RGB_ETC2_Format: CONSTANTS.RGB_ETC2_Format,
-    RGB_PVRTC_4BPPV1_Format: CONSTANTS.RGB_PVRTC_4BPPV1_Format,
-    RGB_S3TC_DXT1_Format: CONSTANTS.RGB_S3TC_DXT1_Format
+    RGBAFormat: RGBAFormat,
+    RGBA_ASTC_4x4_Format: RGBA_ASTC_4x4_Format,
+    RGBA_BPTC_Format: RGBA_BPTC_Format,
+    RGBA_ETC2_EAC_Format: RGBA_ETC2_EAC_Format,
+    RGBA_PVRTC_4BPPV1_Format: RGBA_PVRTC_4BPPV1_Format,
+    RGBA_S3TC_DXT5_Format: RGBA_S3TC_DXT5_Format,
+    RGB_ETC1_Format: RGB_ETC1_Format,
+    RGB_ETC2_Format: RGB_ETC2_Format,
+    RGB_PVRTC_4BPPV1_Format: RGB_PVRTC_4BPPV1_Format,
+    RGB_S3TC_DXT1_Format: RGB_S3TC_DXT1_Format
 };
 
 /* WEB WORKER */
@@ -427,19 +406,13 @@ KTX2TextureTranscoder.BasisWorker = function () {
 
     self.addEventListener('message', function (e) {
         const message = e.data;
-
-        console.log("worker: " + message.type)
-
         switch (message.type) {
             case 'init':
                 config = message.config;
                 init(message.transcoderBinary);
                 break;
             case 'transcode':
-                debugger;
-                console.log("worker transcoding A...");
                 transcoderPending.then(() => {
-                    console.log("worker transcoding B...");
                     try {
                         const {
                             width,
@@ -454,17 +427,6 @@ KTX2TextureTranscoder.BasisWorker = function () {
                         for (let i = 0; i < mipmaps.length; ++i) {
                             buffers.push(mipmaps[i].data.buffer);
                         }
-                        console.log({
-                            type: 'transcode',
-                            id: message.id,
-                            width,
-                            height,
-                            hasAlpha,
-                            mipmaps,
-                            format,
-                            dfdTransferFn,
-                            dfdFlags
-                        });
                         self.postMessage({
                             type: 'transcode',
                             id: message.id,
@@ -477,7 +439,6 @@ KTX2TextureTranscoder.BasisWorker = function () {
                             dfdFlags
                         }, buffers);
                     } catch (error) {
-                        debugger;
                         console.error(`[KTX2TextureTranscoder.BasisWorker]: ${error}`);
                         self.postMessage({type: 'error', id: message.id, error: error.message});
                     }
@@ -642,23 +603,4 @@ KTX2TextureTranscoder.BasisWorker = function () {
     }
 };
 
-const cachedTranscoders = {};
-
-/**
- * @private
- */
-function getKTX2Transcoder(viewer) {
-    const sceneId = viewer.scene.id;
-    let transcoder = cachedTranscoders[sceneId];
-    if (!transcoder) {
-        transcoder = new KTX2TextureTranscoder(viewer);
-        cachedTranscoders[sceneId] = transcoder;
-        viewer.scene.on("destroyed", () => {
-            delete cachedTranscoders[sceneId];
-            transcoder.destroy();
-        });
-    }
-    return transcoder;
-}
-
-export {getKTX2Transcoder, KTX2TextureTranscoder};
+export {KTX2TextureTranscoder};

@@ -1,5 +1,5 @@
 /**
- * Abstract texture transcoder class.
+ * Transcodes texture data.
  *
  * A {@link SceneModel} configured with an appropriate TextureTranscoder will allow us to add textures from
  * transcoded buffers or files. For a concrete example, see {@link VBOSceneModel}, which can be configured with
@@ -8,18 +8,6 @@
  * @interface
  */
 class TextureTranscoder {
-
-    /**
-     * Transcodes texture data from a file into a {@link Texture2D}.
-     *
-     * @param {String} src Path to the file. Must be of a format compatible with this transcoder.
-     * @param {*} config Transcoding options.
-     * @param {Texture2D} texture The texture to load.
-     * @returns {Promise} Resolves when the texture has loaded.
-     */
-    load(src, config={}, texture) {
-
-    }
 
     /**
      * Transcodes texture data from transcoded buffers into a {@link Texture2D}.

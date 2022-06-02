@@ -2,15 +2,14 @@ import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../../webglInfo.js";
+import {LinearEncoding, sRGBEncoding} from "../../../../../../constants";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
-const TEXTURE_DECODE_FUNCS = {
-    "linear": "linearToLinear",
-    "sRGB": "sRGBToLinear",
-    "gamma": "gammaToLinear"
-};
+const TEXTURE_DECODE_FUNCS = {};
+TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
+TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 /**
  * @private

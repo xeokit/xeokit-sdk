@@ -49,12 +49,22 @@ import {
     UnsignedByteType,
     RGBA_BPTC_Format,
     sRGBEncoding,
-    _SRGBAFormat
-} from '../constants';
+    _SRGBAFormat,
+    RepeatWrapping,
+    ClampToEdgeWrapping,
+    NearestFilter,
+    LinearFilter,
+    NearestMipMapNearestFilter,
+    LinearMipMapNearestFilter,
+    NearestMipMapLinearFilter, LinearMipMapLinearFilter
+} from './../constants.js';
 
 import {WEBGL_INFO} from '../webglInfo.js';
 
-function convertEncodingConstantToWebGL(gl, constantVal, encoding = null) {
+/**
+ * @private
+ */
+function convertConstant(gl, constantVal, encoding = null) {
 
     let extension;
     const p = constantVal;
@@ -202,6 +212,36 @@ function convertEncodingConstantToWebGL(gl, constantVal, encoding = null) {
     if (p === UnsignedInt248Type) {
         return gl.UNSIGNED_INT_24_8;
     }
+    if (p === RepeatWrapping) {
+        return gl.REPEAT;
+    }
+    if (p === ClampToEdgeWrapping) {
+        return gl.CLAMP_TO_EDGE;
+    }
+    if (p === NearestMipMapNearestFilter) {
+        return gl.NEAREST_MIPMAP_LINEAR;
+    }
+    if (p === NearestMipMapLinearFilter) {
+        return gl.NEAREST_MIPMAP_LINEAR;
+    }
+    if (p === LinearMipMapNearestFilter) {
+        return gl.LINEAR_MIPMAP_NEAREST;
+    }
+    if (p === LinearMipMapLinearFilter) {
+        return gl.LINEAR_MIPMAP_LINEAR;
+    }
+    if (p === NearestMipMapLinearFilter) {
+        return gl.NEAREST_MIPMAP_LINEAR;
+    }
+    if (p === NearestFilter) {
+        return gl.NEAREST;
+    }
+    if (p === LinearFilter) {
+        return gl.LINEAR;
+    }
+
+    return null;
 }
 
-export {convertEncodingConstantToWebGL};
+
+export {convertConstant};

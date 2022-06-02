@@ -135,7 +135,7 @@ function loadTexture(ctx, texture) {
         id: textureId,
         image: texture.source.image,
         flipY: !!texture.flipY,
-        //     encoding: "sRGB"
+        //     encoding: sRGBEncoding
     });
     texture._textureId = textureId;
 }

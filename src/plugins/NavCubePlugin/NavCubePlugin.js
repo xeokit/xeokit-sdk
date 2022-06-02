@@ -8,6 +8,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../viewer/scene/materials/Texture.js";
 import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
+import {ClampToEdgeWrapping} from "../../viewer/scene/constants";
 
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
@@ -168,8 +169,8 @@ class NavCubePlugin extends Plugin {
         this._cubeSampler = new Texture(navCubeScene, {
             image: this._cubeTextureCanvas.getImage(),
             flipY: true,
-            wrapS: "clampToEdge",
-            wrapT: "clampToEdge"
+            wrapS: ClampToEdgeWrapping,
+            wrapT: ClampToEdgeWrapping
         });
 
         this._cubeMesh = new Mesh(navCubeScene, {

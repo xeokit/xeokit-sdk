@@ -1,61 +1,19 @@
 import {utils} from '../utils.js';
-import {webglEnums} from './webglEnums.js';
-import {convertEncodingConstantToWebGL} from "./convertConstantToWebGL";
-
-function getGLEnum(gl, name, defaultVal) {
-    if (name === undefined) {
-        return defaultVal;
-    }
-    const glName = webglEnums[name];
-    if (glName === undefined) {
-        return defaultVal;
-    }
-    return gl[glName];
-}
+import {convertConstant} from "./convertConstant";
+import {
+    NearestFilter,
+    NearestMipmapLinearFilter,
+    NearestMipMapNearestFilter,
+    RGBAFormat,
+    sRGBEncoding,
+    UnsignedByteType,
+    RepeatWrapping,
+    ClampToEdgeWrapping,
+    LinearFilter
+} from "../constants";
+import {WEBGL_INFO} from "../webglInfo";
 
 const color = new Uint8Array([0, 0, 0, 1]);
-
-function clampImageSize(image, numPixels) {
-    const n = image.width * image.height;
-    if (n > numPixels) {
-        const ratio = numPixels / n;
-        const width = image.width * ratio;
-        const height = image.height * ratio;
-        const canvas = document.createElement("canvas");
-        canvas.width = nextHighestPowerOfTwo(width);
-        canvas.height = nextHighestPowerOfTwo(height);
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
-        image = canvas;
-    }
-    return image;
-}
-
-function ensureImageSizePowerOfTwo(image) {
-    if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
-        const canvas = document.createElement("canvas");
-        canvas.width = nextHighestPowerOfTwo(image.width);
-        canvas.height = nextHighestPowerOfTwo(image.height);
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image,
-            0, 0, image.width, image.height,
-            0, 0, canvas.width, canvas.height);
-        image = canvas;
-    }
-    return image;
-}
-
-function isPowerOfTwo(x) {
-    return (x & (x - 1)) === 0;
-}
-
-function nextHighestPowerOfTwo(x) {
-    --x;
-    for (let i = 1; i < 32; i <<= 1) {
-        x = x | x >> i;
-    }
-    return x + 1;
-}
 
 /**
  * @desc A low-level component that represents a 2D WebGL texture.
@@ -64,13 +22,27 @@ function nextHighestPowerOfTwo(x) {
  */
 class Texture2D {
 
-    constructor({gl, target, format, type, preloadColor}) {
+    constructor({gl, target, format, type, wrapS, wrapT, wrapR, preloadColor, premultiplyAlpha, flipY}) {
+
         this.gl = gl;
+
         this.target = target || gl.TEXTURE_2D;
-        this.format = format || gl.RGBA;
-        this.type = type || gl.UNSIGNED_BYTE;
+        this.format = format || RGBAFormat;
+        this.type = type || UnsignedByteType;
+        this.internalFormat = null;
+        this.premultiplyAlpha = !!premultiplyAlpha;
+        this.flipY = (flipY !== false);
+        this.unpackAlignment = 4;
+        this.wrapS = wrapS || RepeatWrapping;
+        this.wrapT = wrapT || RepeatWrapping;
+        this.wrapR = wrapR || RepeatWrapping;
+
         this.texture = gl.createTexture();
-        this.setPreloadColor(preloadColor || [0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
+
+        if (preloadColor) {
+            this.setPreloadColor(preloadColor || [0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
+        }
+
         this.allocated = true;
     }
 
@@ -87,6 +59,9 @@ class Texture2D {
             color[3] = Math.floor((value[3] !== undefined ? value[3] : 1) * 255);
         }
         const gl = this.gl;
+        const glFormat = convertConstant(gl, this.format, this.encoding);
+        const glType = convertConstant(gl, this.type);
+        const glInternalFormat = getInternalFormat(gl, this.internalFormat, glFormat, glType, this.encoding, false);
         gl.bindTexture(this.target, this.texture);
         if (this.target === gl.TEXTURE_CUBE_MAP) {
             const faces = [
@@ -98,10 +73,10 @@ class Texture2D {
                 gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
             ];
             for (let i = 0, len = faces.length; i < len; i++) {
-                gl.texImage2D(faces[i], 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
+                gl.texImage2D(faces[i], 0, glInternalFormat, 1, 1, 0, glFormat, glType, color);
             }
         } else {
-            gl.texImage2D(this.target, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
+            gl.texImage2D(this.target, 0, glInternalFormat, 1, 1, 0, glFormat, glType, color);
         }
         gl.bindTexture(this.target, null);
     }
@@ -110,10 +85,84 @@ class Texture2D {
         this.target = target || this.gl.TEXTURE_2D;
     }
 
-    setImage(image, props) {
+    setImage(image, props = {}) {
+
         const gl = this.gl;
+
         gl.bindTexture(this.target, this.texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, props.flipY);
+
+        // Cache props
+
+        if (props.format !== undefined) {
+            this.format = props.format;
+        }
+        if (props.internalFormat !== undefined) {
+            this.internalFormat = props.internalFormat;
+        }
+        if (props.encoding !== undefined) {
+            this.encoding = props.encoding;
+        }
+        if (props.type !== undefined) {
+            this.type = props.type;
+        }
+        if (props.flipY !== undefined) {
+            this.flipY = props.flipY;
+        }
+        if (props.premultiplyAlpha !== undefined) {
+            this.premultiplyAlpha = props.premultiplyAlpha;
+        }
+        if (props.unpackAlignment !== undefined) {
+            this.unpackAlignment = props.unpackAlignment;
+        }
+        if (props.minFilter !== undefined) {
+            this.minFilter = props.minFilter;
+        }
+        if (props.magFilter !== undefined) {
+            this.magFilter = props.magFilter;
+        }
+        if (props.wrapS !== undefined) {
+            this.wrapS = props.wrapS;
+        }
+        if (props.wrapT !== undefined) {
+            this.wrapT = props.wrapT;
+        }
+        if (props.wrapR !== undefined) {
+            this.wrapR = props.wrapR;
+        }
+
+        let generateMipMap = false;
+
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, this.unpackAlignment);
+        gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+
+        const minFilter = convertConstant(gl, this.minFilter);
+        gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
+        if (minFilter === gl.NEAREST_MIPMAP_NEAREST || minFilter === gl.LINEAR_MIPMAP_NEAREST || minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
+            generateMipMap = true;
+        }
+
+        const magFilter = convertConstant(gl, this.magFilter);
+        if (magFilter) {
+            gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, magFilter);
+        }
+
+        const wrapS = convertConstant(gl, this.wrapS);
+        if (wrapS) {
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, wrapS);
+        }
+
+        const wrapT = convertConstant(gl, this.wrapT);
+        if (wrapT) {
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, wrapT);
+        }
+
+        const glFormat = convertConstant(gl, this.format, this.encoding);
+        const glType = convertConstant(gl, this.type);
+        const glInternalFormat = getInternalFormat(gl, this.internalFormat, glFormat, glType, this.encoding, false);
+
         if (this.target === gl.TEXTURE_CUBE_MAP) {
             if (utils.isArray(image)) {
                 const images = image;
@@ -126,12 +175,17 @@ class Texture2D {
                     gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
                 ];
                 for (let i = 0, len = faces.length; i < len; i++) {
-                    gl.texImage2D(faces[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
+                    gl.texImage2D(faces[i], 0, glInternalFormat, glFormat, glType, images[i]);
                 }
             }
         } else {
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+            gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glType, image);
         }
+
+        if (generateMipMap) {
+            gl.generateMipmap(this.target);
+        }
+
         gl.bindTexture(this.target, null);
     }
 
@@ -140,64 +194,180 @@ class Texture2D {
         const gl = this.gl;
         const levels = mipmaps.length;
 
-        // TODO?: gl.activeTexture( gl.TEXTURE0 + slot );
+        // Cache props
+
+        if (props.format !== undefined) {
+            this.format = props.format;
+        }
+        if (props.internalFormat !== undefined) {
+            this.internalFormat = props.internalFormat;
+        }
+        if (props.encoding !== undefined) {
+            this.encoding = props.encoding;
+        }
+        if (props.type !== undefined) {
+            this.type = props.type;
+        }
+        if (props.flipY !== undefined) {
+            this.flipY = props.flipY;
+        }
+        if (props.premultiplyAlpha !== undefined) {
+            this.premultiplyAlpha = props.premultiplyAlpha;
+        }
+        if (props.unpackAlignment !== undefined) {
+            this.unpackAlignment = props.unpackAlignment;
+        }
+        if (props.minFilter !== undefined) {
+            this.minFilter = props.minFilter;
+        }
+        if (props.magFilter !== undefined) {
+            this.magFilter = props.magFilter;
+        }
+        if (props.wrapS !== undefined) {
+            this.wrapS = props.wrapS;
+        }
+        if (props.wrapT !== undefined) {
+            this.wrapT = props.wrapT;
+        }
+        if (props.wrapR !== undefined) {
+            this.wrapR = props.wrapR;
+        }
+
+        gl.activeTexture(gl.TEXTURE0 + 0);
         gl.bindTexture(this.target, this.texture);
 
+        let generateMipMap = false;
+        let supportsMips = false;
 
-        const glFormat = props.format ? convertEncodingConstantToWebGL(gl, props.format, props.encoding) : gl.RGBA;
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, this.unpackAlignment);
+        gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
 
-        // TODO: minFilter and magFilter
-        gl.texStorage2D(gl.TEXTURE_2D, levels, glFormat, mipmaps[0].width, mipmaps[0].height);
-        for (let i = 0, il = mipmaps.length; i < il; i++) {
-            const mipmap = mipmaps[i];
-            //   if (this.format !== gl.RGBA) {
+        if (supportsMips) {
 
-            //gl.compressedTexSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, mipmap.data);
-            gl.compressedTexImage2D(gl.TEXTURE_2D, i, glFormat, mipmap.width, mipmap.height, 0, mipmap.data);
+            const minFilter = convertConstant(gl, this.minFilter);
+            gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
+            if (minFilter === gl.NEAREST_MIPMAP_NEAREST || minFilter === gl.LINEAR_MIPMAP_NEAREST || minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
+                generateMipMap = true;
+            }
 
-            // } else {
-            //     gl.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, this.type, mipmap.data);
-            // }
+            const magFilter = convertConstant(gl, this.magFilter);
+            if (magFilter) {
+                gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, magFilter);
+            }
+
+            const wrapS = convertConstant(gl, this.wrapS);
+            if (wrapS) {
+                gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, wrapS);
+            }
+
+            const wrapT = convertConstant(gl, this.wrapT);
+            if (wrapT) {
+                gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, wrapT);
+            }
+
+            if (this.type === gl.TEXTURE_3D || this.type === gl.TEXTURE_2D_ARRAY) {
+                const wrapR = convertConstant(gl, this.wrapR);
+                if (wrapR) {
+                    gl.texParameteri(this.target, gl.TEXTURE_WRAP_R, wrapR);
+                }
+                gl.texParameteri(this.type, gl.TEXTURE_WRAP_R, wrapR);
+            }
+
+        } else {
+
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            if (this.target === gl.TEXTURE_3D || this.type === gl.TEXTURE_2D_ARRAY) {
+                gl.texParameteri(this.target, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+            }
+
+            gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, convertConstant(gl, this.magFilter));
+            gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, convertConstant(gl, this.minFilter));
         }
+
+        const glFormat = convertConstant(gl, this.format, this.encoding);
+        const glType = convertConstant(gl, this.type);
+        const glInternalFormat = getInternalFormat(gl, this.internalFormat, glFormat, glType, this.encoding, false);
+
+        gl.texStorage2D(gl.TEXTURE_2D, levels, glInternalFormat, mipmaps[0].width, mipmaps[0].height);
+
+        for (let i = 0, len = mipmaps.length; i < len; i++) {
+
+            const mipmap = mipmaps[i];
+
+            if (this.format !== RGBAFormat) {
+                if (glFormat !== null) {
+                    gl.compressedTexSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, mipmap.data);
+                } else {
+                    console.warn('Attempt to load unsupported compressed texture format in .setCompressedData()');
+                }
+            } else {
+                    gl.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, glType, mipmap.data);
+            }
+        }
+
+        if (generateMipMap) {
+            gl.generateMipmap(this.target);
+        }
+
         gl.bindTexture(this.target, null);
     }
-
 
     setProps(props) {
         const gl = this.gl;
         gl.bindTexture(this.target, this.texture);
-        if (props.minFilter) {
-            const minFilter = getGLEnum(gl, props.minFilter);
-            if (minFilter) {
-                gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
-                if (minFilter === gl.NEAREST_MIPMAP_NEAREST ||
-                    minFilter === gl.LINEAR_MIPMAP_NEAREST ||
-                    minFilter === gl.NEAREST_MIPMAP_LINEAR ||
-                    minFilter === gl.LINEAR_MIPMAP_LINEAR) {
+        this._uploadProps(props);
+        gl.bindTexture(this.target, null);
+    }
 
+    _uploadProps(props) {
+        const gl = this.gl;
+        if (props.format !== undefined) {
+            this.format = props.format;
+        }
+        if (props.internalFormat !== undefined) {
+            this.internalFormat = props.internalFormat;
+        }
+        if (props.encoding !== undefined) {
+            this.encoding = props.encoding;
+        }
+        if (props.type !== undefined) {
+            this.type = props.type;
+        }
+        if (props.minFilter !== undefined) {
+            const minFilter = convertConstant(gl, props.minFilter);
+            if (minFilter) {
+                this.minFilter = props.minFilter;
+                gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
+                if (minFilter === gl.NEAREST_MIPMAP_NEAREST || minFilter === gl.LINEAR_MIPMAP_NEAREST || minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
                     gl.generateMipmap(this.target);
                 }
             }
         }
-        if (props.magFilter) {
-            const magFilter = getGLEnum(gl, props.magFilter);
+        if (props.magFilter !== undefined) {
+            const magFilter = convertConstant(gl, props.magFilter);
             if (magFilter) {
+                this.magFilter = props.magFilter;
                 gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, magFilter);
             }
         }
-        if (props.wrapS) {
-            const wrapS = getGLEnum(gl, props.wrapS);
+        if (props.wrapS !== undefined) {
+            const wrapS = convertConstant(gl, props.wrapS);
             if (wrapS) {
+                this.wrapS = props.wrapS;
                 gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, wrapS);
             }
         }
-        if (props.wrapT) {
-            const wrapT = getGLEnum(gl, props.wrapT);
+        if (props.wrapT !== undefined) {
+            const wrapT = convertConstant(gl, props.wrapT);
             if (wrapT) {
+                this.wrapT = props.wrapT;
                 gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, wrapT);
             }
         }
-        gl.bindTexture(this.target, null);
     }
 
     bind(unit) {
@@ -233,6 +403,46 @@ class Texture2D {
             this.texture = null;
         }
     }
+}
+
+function getInternalFormat(gl, internalFormatName, glFormat, glType, encoding, isVideoTexture = false) {
+    if (internalFormatName !== null) {
+        if (gl[internalFormatName] !== undefined) {
+            return gl[internalFormatName];
+        }
+        console.warn('Attempt to use non-existing WebGL internal format \'' + internalFormatName + '\'');
+    }
+    let internalFormat = glFormat;
+    if (glFormat === gl.RED) {
+        if (glType === gl.FLOAT) internalFormat = gl.R32F;
+        if (glType === gl.HALF_FLOAT) internalFormat = gl.R16F;
+        if (glType === gl.UNSIGNED_BYTE) internalFormat = gl.R8;
+    }
+    if (glFormat === gl.RG) {
+        if (glType === gl.FLOAT) internalFormat = gl.RG32F;
+        if (glType === gl.HALF_FLOAT) internalFormat = gl.RG16F;
+        if (glType === gl.UNSIGNED_BYTE) internalFormat = gl.RG8;
+    }
+    if (glFormat === gl.RGBA) {
+        if (glType === gl.FLOAT) internalFormat = gl.RGBA32F;
+        if (glType === gl.HALF_FLOAT) internalFormat = gl.RGBA16F;
+        if (glType === gl.UNSIGNED_BYTE) internalFormat = (encoding === sRGBEncoding && isVideoTexture === false) ? gl.SRGB8_ALPHA8 : gl.RGBA8;
+        if (glType === gl.UNSIGNED_SHORT_4_4_4_4) internalFormat = gl.RGBA4;
+        if (glType === gl.UNSIGNED_SHORT_5_5_5_1) internalFormat = gl.RGB5_A1;
+    }
+    if (internalFormat === gl.R16F || internalFormat === gl.R32F ||
+        internalFormat === gl.RG16F || internalFormat === gl.RG32F ||
+        internalFormat === gl.RGBA16F || internalFormat === gl.RGBA32F) {
+        WEBGL_INFO.getExtension('EXT_color_buffer_float');
+    }
+    return internalFormat;
+}
+
+function filterFallback(gl, f) {
+    if (f === NearestFilter || f === NearestMipMapNearestFilter || f === NearestMipmapLinearFilter) {
+        return gl.NEAREST;
+    }
+    return gl.LINEAR;
 }
 
 export {Texture2D};

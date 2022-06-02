@@ -2,15 +2,14 @@ import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../../webglInfo.js";
+import {LinearEncoding, sRGBEncoding} from "../../../../../../constants";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
-const TEXTURE_DECODE_FUNCS = {
-    "linear": "linearToLinear",
-    "sRGB": "sRGBToLinear",
-    "gamma": "gammaToLinear"
-};
+// const TEXTURE_DECODE_FUNCS = {};
+// TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
+// TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 /**
  * @private
@@ -653,7 +652,7 @@ class TrianglesBatchingPBRRenderer {
         if (lightsState.reflectionMaps.length > 0) {
             src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
             src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-            src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
+            src.push("   vec3 envMapColor = sRGBToLinear(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
             src.push("  return envMapColor;");
             src.push("}");
         }
@@ -711,7 +710,7 @@ class TrianglesBatchingPBRRenderer {
         if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
             if (lightsState.lightMaps.length > 0) {
-                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
+                src.push("   vec3 irradiance = sRGBToLinear(texture(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse +=  irradiance * diffuseBRDFContrib;");

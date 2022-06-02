@@ -8,11 +8,8 @@ import {TrianglesBatchingLayer} from './lib/layers/trianglesBatching/TrianglesBa
 import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
 import {LinesBatchingLayer} from './lib/layers/linesBatching/LinesBatchingLayer.js';
 import {LinesInstancingLayer} from './lib/layers/linesInstancing/LinesInstancingLayer.js';
-
 import {PointsBatchingLayer} from './lib/layers/pointsBatching/PointsBatchingLayer.js';
 import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstancingLayer.js';
-
-
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {RenderFlags} from "../../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../../math/rtcCoords.js";
@@ -22,7 +19,19 @@ import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture";
 import {SceneModel} from "../SceneModel";
 import {Texture2D} from "../../webgl/Texture2D";
 import {utils} from "../../utils";
-
+import {
+    LinearFilter,
+    LinearMipmapLinearFilter,
+    NearestMipMapLinearFilter,
+    RepeatWrapping,
+    LinearEncoding,
+    sRGBEncoding,
+    NearestMipMapNearestFilter,
+    ClampToEdgeWrapping,
+    MirroredRepeatWrapping,
+    LinearMipMapNearestFilter,
+    NearestFilter
+} from "../../constants";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
@@ -913,6 +922,140 @@ const defaultTextureSetId = "defaultTextureSet";
  * vboSceneModel.createEntity({
  *     meshIds: ["top"],
  *     isObject: true
+ * });
+ * ````
+ *
+ * # Textures
+ *
+ * ## Loading KTX2 Texture Files into a VBOSceneModel
+ *
+ * A {@link VBOSceneModel} that is configured with a {@link KTX2TextureTranscoder} will
+ * allow us to load textures into it from KTX2 buffers or files.
+ *
+ * In the example below, we'll create a {@link Viewer}, containing a {@link VBOSceneModel} configured with a
+ * {@link KTX2TextureTranscoder}. We'll then programmatically create a simple object within the VBOSceneModel, consisting of
+ * a single mesh with a texture loaded from a KTX2 file, which our VBOSceneModel internally transcodes, using
+ * its {@link KTX2TextureTranscoder}. Note how we configure our {@link KTX2TextureTranscoder} with a path to the Basis Universal
+ * transcoder WASM module.
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+ * viewer.scene.camera.look = [0, -5.75, 0];
+ * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const textureTranscoder = new KTX2TextureTranscoder({
+ *     viewer,
+ *     transcoderPath: "./../dist/basis/" // <------ Path to BasisU transcoder module
+ * });
+ *
+ * const vboSceneModel = new VBOSceneModel(viewer.scene, {
+ *      id: "myModel",
+ *      textureTranscoder // <<-------------------- Configure model with our transcoder
+ *  });
+ *
+ * vboSceneModel.createTexture({
+ *      id: "myColorTexture",
+ *      src: "../assets/textures/compressed/sample_uastc_zstd.ktx2" // <<----- KTX2 texture asset
+ * });
+ *
+ * vboSceneModel.createTexture({
+ *      id: "myMetallicRoughnessTexture",
+ *      src: "../assets/textures/alpha/crosshatchAlphaMap.jpg" // <<----- JPEG texture asset
+ * });
+ *
+ * vboSceneModel.createTextureSet({
+ *      id: "myTextureSet",
+ *      colorTextureId: "myColorTexture",
+ *      metallicRoughnessTextureId: "myMetallicRoughnessTexture"
+ *  });
+ *
+ * vboSceneModel.createMesh({
+ *      id: "myMesh",
+ *      textureSetId: "myTextureSet",
+ *      primitive: "triangles",
+ *      positions: [1, 1, 1, ...],
+ *      normals: [0, 0, 1, 0, ...],
+ *      uv: [1, 0, 0, ...],
+ *      indices: [0, 1, 2, ...],
+ *  });
+ *
+ * vboSceneModel.createEntity({
+ *      id: "myEntity",
+ *      meshIds: ["myMesh"]
+ *  });
+ *
+ * vboSceneModel.finalize();
+ * ````
+ *
+ * ## Loading KTX2 Textures from ArrayBuffers into a VBOSceneModel
+ *
+ * A VBOSceneModel that is configured with a {@link KTX2TextureTranscoder} will allow us to load textures into
+ * it from KTX2 ArrayBuffers.
+ *
+ * In the example below, we'll create a {@link Viewer}, containing a {@link VBOSceneModel} configured with a
+ * {@link KTX2TextureTranscoder}. We'll then programmatically create a simple object within the VBOSceneModel, consisting of
+ * a single mesh with a texture loaded from a KTX2 ArrayBuffer, which our VBOSceneModel internally transcodes, using
+ * its {@link KTX2TextureTranscoder}.
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+ * viewer.scene.camera.look = [0, -5.75, 0];
+ * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * const textureTranscoder = new KTX2TextureTranscoder({
+ *     viewer,
+ *     transcoderPath: "./../dist/basis/" // <------ Path to BasisU transcoder module
+ * });
+ *
+ * const vboSceneModel = new VBOSceneModel(viewer.scene, {
+ *      id: "myModel",
+ *      textureTranscoder // <<-------------------- Configure model with our transcoder
+ * });
+ *
+ * utils.loadArraybuffer("../assets/textures/compressed/sample_uastc_zstd.ktx2",(arrayBuffer) => {
+ *
+ *     vboSceneModel.createTexture({
+ *         id: "myColorTexture",
+ *         buffers: [arrayBuffer] // <<----- KTX2 texture asset
+ *     });
+ *
+ *     vboSceneModel.createTexture({
+ *         id: "myMetallicRoughnessTexture",
+ *         src: "../assets/textures/alpha/crosshatchAlphaMap.jpg" // <<----- JPEG texture asset
+ *     });
+ *
+ *     vboSceneModel.createTextureSet({
+ *        id: "myTextureSet",
+ *        colorTextureId: "myColorTexture",
+ *        metallicRoughnessTextureId: "myMetallicRoughnessTexture"
+ *     });
+ *
+ *     vboSceneModel.createMesh({
+ *          id: "myMesh",
+ *          textureSetId: "myTextureSet",
+ *          primitive: "triangles",
+ *          positions: [1, 1, 1, ...],
+ *          normals: [0, 0, 1, 0, ...],
+ *          uv: [1, 0, 0, ...],
+ *          indices: [0, 1, 2, ...],
+ *     });
+ *
+ *     vboSceneModel.createEntity({
+ *         id: "myEntity",
+ *         meshIds: ["myMesh"]
+ *     });
+ *
+ *     vboSceneModel.finalize();
  * });
  * ````
  *
@@ -1943,12 +2086,13 @@ class VBOSceneModel extends Component {
      * @param {ArrayBuffer[]} [cfg.buffers] Transcoded texture data. Assumes ````VBOSceneModel```` is
      * configured with a {@link TextureTranscoder}. Given as an array of buffers so we can potentially support multi-image textures, such as cube maps.
      * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this texture. Overrides ````src```` and ````buffers````. Never transcoded.
-     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. Supported values are 'linear', 'linearMipmapNearest', 'nearestMipmapNearest', 'nearestMipmapLinear' and 'linearMipmapLinear'. Defaulting to 'linearMipmapLinear'.
-     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. Supported values are 'linear' and 'nearest'.
-     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. Supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'.
-     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *T*. Supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'.
+     * @param {Number} [cfg.minFilter=LinearMipmapLinearFilter] How the texture is sampled when a texel covers less than one pixel.
+     * Supported values are {@link LinearMipmapLinearFilter}, {@link LinearMipMapNearestFilter}, {@link NearestMipMapNearestFilter}, {@link NearestMipMapLinearFilter} and {@link LinearMipMapLinearFilter}.
+     * @param {Number} [cfg.magFilter=LinearFilter] How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}.
+     * @param {Number} [cfg.wrapS=RepeatWrapping] Wrap parameter for texture coordinate *S*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
+     * @param {Number} [cfg.wrapT=RepeatWrapping] Wrap parameter for texture coordinate *T*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}..
      * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when ````true````.
-     * @param  {String} [cfg.encoding="linear"] Encoding format. Supported values are 'linear', 'sRGB', 'gamma'
+     * @param  {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      */
     createTexture(cfg) {
         const textureId = cfg.id;
@@ -1964,56 +2108,45 @@ class VBOSceneModel extends Component {
             this.error("Param expected: `src` or `image'");
             return null;
         }
-        let minFilter = cfg.minFilter || "linearMipmapLinear";
-        if (minFilter !== "linear" &&
-            minFilter !== "linearMipmapNearest" &&
-            minFilter !== "linearMipmapLinear" &&
-            minFilter !== "nearestMipmapLinear" &&
-            minFilter !== "nearestMipmapNearest") {
-            this.error(`[createTexture] Unsupported value for 'minFilter': ${minFilter} - 
-            supported values are 'linear', 'linearMipmapNearest', 'nearestMipmapNearest', 
-            'nearestMipmapLinear' and 'linearMipmapLinear'. Defaulting to 'linearMipmapLinear'.`);
-            minFilter = "linearMipmapLinear";
+        let minFilter = cfg.minFilter || LinearMipmapLinearFilter;
+        if (minFilter !== LinearFilter &&
+            minFilter !== LinearMipMapNearestFilter &&
+            minFilter !== LinearMipmapLinearFilter &&
+            minFilter !== NearestMipMapLinearFilter &&
+            minFilter !== NearestMipMapNearestFilter) {
+            this.error(`[createTexture] Unsupported value for 'minFilter' - 
+            supported values are LinearFilter, LinearMipMapNearestFilter, NearestMipMapNearestFilter, 
+            NearestMipMapLinearFilter and LinearMipmapLinearFilter. Defaulting to LinearMipmapLinearFilter.`);
+            minFilter = LinearMipmapLinearFilter;
         }
-        let magFilter = cfg.magFilter || "linear";
-        if (magFilter !== "linear" && magFilter !== "nearest") {
-            this.error(`Unsupported value for 'magFilter': ${value} - supported values are 'linear' and 'nearest'. Defaulting to 'linear'.`);
-            magFilter = "linear";
+        let magFilter = cfg.magFilter || LinearFilter;
+        if (magFilter !== LinearFilter && magFilter !== NearestFilter) {
+            this.error(`[createTexture] Unsupported value for 'magFilter' - supported values are LinearFilter and NearestFilter. Defaulting to LinearFilter.`);
+            magFilter = LinearFilter;
         }
-        let wrapS = cfg.wrapS || "repeat";
-        if (wrapS !== "clampToEdge" && wrapS !== "mirroredRepeat" && wrapS !== "repeat") {
-            this.error(`Unsupported value for 'wrapS': '${wrapS}' - supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'. Defaulting to 'repeat'.`);
-            wrapS = "repeat";
+        let wrapS = cfg.wrapS || RepeatWrapping;
+        if (wrapS !== ClampToEdgeWrapping && wrapS !== MirroredRepeatWrapping && wrapS !== RepeatWrapping) {
+            this.error(`[createTexture] Unsupported value for 'wrapS' - supported values are ClampToEdgeWrapping, MirroredRepeatWrapping and RepeatWrapping. Defaulting to RepeatWrapping.`);
+            wrapS = RepeatWrapping;
         }
-        let wrapT = cfg.wrapT || "repeat";
-        if (wrapT !== "clampToEdge" && wrapT !== "mirroredRepeat" && wrapT !== "repeat") {
-            this.error(`Unsupported value for 'wrapT': '${wrapT}' - supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'. Defaulting to 'repeat'.`);
-            wrapT = "repeat";
+        let wrapT = cfg.wrapT || RepeatWrapping;
+        if (wrapT !== ClampToEdgeWrapping && wrapT !== MirroredRepeatWrapping && wrapT !== RepeatWrapping) {
+            this.error(`[createTexture] Unsupported value for 'wrapT' - supported values are ClampToEdgeWrapping, MirroredRepeatWrapping and RepeatWrapping. Defaulting to RepeatWrapping.`);
+            wrapT = RepeatWrapping;
         }
-        let encoding = cfg.encoding || "linear";
-        if (encoding !== "linear" && encoding !== "sRGB" && encoding !== "gamma") {
-            this.error("Unsupported value for 'encoding': '${encoding}' - supported values are 'linear', 'sRGB', 'gamma'. Defaulting to 'linear'.");
-            encoding = "linear";
+        let encoding = cfg.encoding || LinearEncoding;
+        if (encoding !== LinearEncoding && encoding !== sRGBEncoding) {
+            this.error("[createTexture] Unsupported value for 'encoding' - supported values are LinearEncoding and sRGBEncoding. Defaulting to LinearEncoding.");
+            encoding = LinearEncoding;
         }
-
         const texture = new Texture2D({gl: this.scene.canvas.gl});
-
         if (cfg.preloadColor) {
             texture.setPreloadColor(cfg.preloadColor);
         }
-
         if (cfg.image) { // Ignore transcoder for Images
             const image = cfg.image;
             image.crossOrigin = "Anonymous";
-            texture.setImage(image, {});
-            texture.setProps({
-                minFilter: cfg.minFilter || "linearMipmapLinear",
-                magFilter: cfg.magFilter || "linear",
-                wrapS: cfg.wrapS || "repeat",
-                wrapT: cfg.wrapT || "repeat",
-                flipY: cfg.flipY || false,
-                encoding: cfg.encoding || "linear"
-            });
+            texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, flipY: cfg.flipY, encoding});
 
         } else if (cfg.src) {
             const ext = cfg.src.split('.').pop();
@@ -2024,15 +2157,7 @@ class VBOSceneModel extends Component {
                 case "gif":
                     const image = new Image();
                     image.onload = () => {
-                        texture.setImage(image, {});
-                        texture.setProps({
-                            minFilter: cfg.minFilter || "linearMipmapLinear",
-                            magFilter: cfg.magFilter || "linear",
-                            wrapS: cfg.wrapS || "repeat",
-                            wrapT: cfg.wrapT || "repeat",
-                            flipY: cfg.flipY || false,
-                            encoding: cfg.encoding || "linear"
-                        });
+                        texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, flipY: cfg.flipY, encoding});
                     };
                     image.src = cfg.src; // URL or Base64 string
                     break;
