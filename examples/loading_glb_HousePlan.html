@@ -48,7 +48,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin} from "./../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin, sRGBEncoding} from "./../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -91,7 +91,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
