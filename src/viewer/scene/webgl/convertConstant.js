@@ -59,7 +59,7 @@ import {
     NearestMipMapLinearFilter, LinearMipMapLinearFilter
 } from './../constants.js';
 
-import {WEBGL_INFO} from '../webglInfo.js';
+import {getExtension} from "./getExtension";
 
 /**
  * @private
@@ -107,7 +107,7 @@ function convertConstant(gl, constantVal, encoding = null) {
 
     if (p === RGB_S3TC_DXT1_Format || p === RGBA_S3TC_DXT1_Format || p === RGBA_S3TC_DXT3_Format || p === RGBA_S3TC_DXT5_Format) {
         if (encoding === sRGBEncoding) {
-            const extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_s3tc_srgb');
+            const extension = getExtension(gl, 'WEBGL_compressed_texture_s3tc_srgb');
             if (extension !== null) {
                 if (p === RGB_S3TC_DXT1_Format) return extension.COMPRESSED_SRGB_S3TC_DXT1_EXT;
                 if (p === RGBA_S3TC_DXT1_Format) return extension.COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
@@ -117,7 +117,7 @@ function convertConstant(gl, constantVal, encoding = null) {
                 return null;
             }
         } else {
-            extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_s3tc');
+            extension = getExtension(gl, 'WEBGL_compressed_texture_s3tc');
             if (extension !== null) {
                 if (p === RGB_S3TC_DXT1_Format) return extension.COMPRESSED_RGB_S3TC_DXT1_EXT;
                 if (p === RGBA_S3TC_DXT1_Format) return extension.COMPRESSED_RGBA_S3TC_DXT1_EXT;
@@ -132,7 +132,7 @@ function convertConstant(gl, constantVal, encoding = null) {
     // PVRTC
 
     if (p === RGB_PVRTC_4BPPV1_Format || p === RGB_PVRTC_2BPPV1_Format || p === RGBA_PVRTC_4BPPV1_Format || p === RGBA_PVRTC_2BPPV1_Format) {
-        const extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_pvrtc');
+        const extension = getExtension(gl, 'WEBGL_compressed_texture_pvrtc');
         if (extension !== null) {
             if (p === RGB_PVRTC_4BPPV1_Format) return extension.COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
             if (p === RGB_PVRTC_2BPPV1_Format) return extension.COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
@@ -146,7 +146,7 @@ function convertConstant(gl, constantVal, encoding = null) {
     // ETC1
 
     if (p === RGB_ETC1_Format) {
-        const extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_etc1');
+        const extension = getExtension(gl, 'WEBGL_compressed_texture_etc1');
         if (extension !== null) {
             return extension.COMPRESSED_RGB_ETC1_WEBGL;
         } else {
@@ -157,7 +157,7 @@ function convertConstant(gl, constantVal, encoding = null) {
     // ETC2
 
     if (p === RGB_ETC2_Format || p === RGBA_ETC2_EAC_Format) {
-        const extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_etc');
+        const extension = getExtension(gl, 'WEBGL_compressed_texture_etc');
         if (extension !== null) {
             if (p === RGB_ETC2_Format) return (encoding === sRGBEncoding) ? extension.COMPRESSED_SRGB8_ETC2 : extension.COMPRESSED_RGB8_ETC2;
             if (p === RGBA_ETC2_EAC_Format) return (encoding === sRGBEncoding) ? extension.COMPRESSED_SRGB8_ALPHA8_ETC2_EAC : extension.COMPRESSED_RGBA8_ETC2_EAC;
@@ -173,7 +173,7 @@ function convertConstant(gl, constantVal, encoding = null) {
         p === RGBA_ASTC_8x6_Format || p === RGBA_ASTC_8x8_Format || p === RGBA_ASTC_10x5_Format ||
         p === RGBA_ASTC_10x6_Format || p === RGBA_ASTC_10x8_Format || p === RGBA_ASTC_10x10_Format ||
         p === RGBA_ASTC_12x10_Format || p === RGBA_ASTC_12x12_Format) {
-        const extension = WEBGL_INFO.getExtension('WEBGL_compressed_texture_astc');
+        const extension = getExtension(gl, 'WEBGL_compressed_texture_astc');
         if (extension !== null) {
             if (p === RGBA_ASTC_4x4_Format) return (encoding === sRGBEncoding) ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR : extension.COMPRESSED_RGBA_ASTC_4x4_KHR;
             if (p === RGBA_ASTC_5x4_Format) return (encoding === sRGBEncoding) ? extension.COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR : extension.COMPRESSED_RGBA_ASTC_5x4_KHR;
@@ -197,7 +197,7 @@ function convertConstant(gl, constantVal, encoding = null) {
     // BPTC
 
     if (p === RGBA_BPTC_Format) {
-        const extension = WEBGL_INFO.getExtension('EXT_texture_compression_bptc');
+        const extension = getExtension(gl, 'EXT_texture_compression_bptc');
         if (extension !== null) {
             if (p === RGBA_BPTC_Format) {
                 return (encoding === sRGBEncoding) ? extension.COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT : extension.COMPRESSED_RGBA_BPTC_UNORM_EXT;

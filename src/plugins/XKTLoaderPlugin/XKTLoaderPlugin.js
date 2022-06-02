@@ -159,6 +159,42 @@ parsers[ParserV10.version] = ParserV10;
  * model.destroy();
  * ````
  *
+ * ## Loading XKT files containing KTX2 textures
+ *
+ * An XKTLoaderPlugin that is configured with a {@link KTX2TextureTranscoder} will allow us to load XKT files that
+ * contain KTX2 textures. If we don't configure a KTX2TextureTranscoder, then the XKTLoaderPlugin will simply ignore
+ * the textures in the XKT.
+ *
+ * In the example below, we'll create a {@link Viewer} and add an XKTLoaderPlugin
+ * configured with a KTX2TextureTranscoder. Then we'll use the XKTLoaderPlugin to load an
+ * XKT file that contains KTX2 textures, which the plugin will transcode using
+ * its KTX2TextureTranscoder.
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * const textureTranscoder = new KTX2TextureTranscoder({
+ *     viewer,
+ *     transcoderPath: "./../dist/basis/" // <------ Path to Basis Universal transcoder
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer, {
+ *     textureTranscoder // <<------------- Transcodes KTX2 textures in XKT files
+ * });
+ *
+ * const sceneModel = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./HousePlan.xkt" // <<------ XKT file with KTX2 textures
+ * });
+ * ````
+ *
  * ## Transforming
  *
  * We have the option to rotate, scale and translate each  *````.XKT````* model as we load it.

@@ -431,7 +431,7 @@ function getInternalFormat(gl, internalFormatName, glFormat, glType, encoding, i
     if (internalFormat === gl.R16F || internalFormat === gl.R32F ||
         internalFormat === gl.RG16F || internalFormat === gl.RG32F ||
         internalFormat === gl.RGBA16F || internalFormat === gl.RGBA32F) {
-        WEBGL_INFO.getExtension('EXT_color_buffer_float');
+        getExtension(gl, 'EXT_color_buffer_float');
     }
     return internalFormat;
 }
