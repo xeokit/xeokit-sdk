@@ -31,7 +31,7 @@ class Texture2D {
         this.type = type || UnsignedByteType;
         this.internalFormat = null;
         this.premultiplyAlpha = !!premultiplyAlpha;
-        this.flipY = (flipY !== false);
+        this.flipY = !!flipY;
         this.unpackAlignment = 4;
         this.wrapS = wrapS || RepeatWrapping;
         this.wrapT = wrapT || RepeatWrapping;
@@ -89,9 +89,6 @@ class Texture2D {
 
         const gl = this.gl;
 
-        gl.bindTexture(this.target, this.texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, props.flipY);
-
         // Cache props
 
         if (props.format !== undefined) {
@@ -133,6 +130,7 @@ class Texture2D {
 
         let generateMipMap = false;
 
+        gl.bindTexture(this.target, this.texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
         gl.pixelStorei(gl.UNPACK_ALIGNMENT, this.unpackAlignment);
