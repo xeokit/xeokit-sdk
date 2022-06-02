@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~alphaformat",
+    "variable/index.html#static-variable-AlphaFormat",
+    "<span>AlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/ambientlight.js~ambientlight",
     "class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html",
     "<span>AmbientLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/AmbientLight.js</span>",
@@ -46,6 +52,18 @@ window.esdocSearchIndex = [
     "class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html",
     "<span>BCFViewpointsPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~basicdepthpacking",
+    "variable/index.html#static-variable-BasicDepthPacking",
+    "<span>BasicDepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~bytetype",
+    "variable/index.html#static-variable-ByteType",
+    "<span>ByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/utils/cache.js~cache",
@@ -108,6 +126,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~clamptoedgewrapping",
+    "variable/index.html#static-variable-ClampToEdgeWrapping",
+    "<span>ClampToEdgeWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/component.js~component",
     "class/src/viewer/scene/Component.js~Component.html",
     "<span>Component</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Component.js</span>",
@@ -156,6 +180,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthformat",
+    "variable/index.html#static-variable-DepthFormat",
+    "<span>DepthFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthstencilformat",
+    "variable/index.html#static-variable-DepthStencilFormat",
+    "<span>DepthStencilFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/dirlight.js~dirlight",
     "class/src/viewer/scene/lights/DirLight.js~DirLight.html",
     "<span>DirLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/DirLight.js</span>",
@@ -178,6 +214,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html",
     "<span>DistanceMeasurementsPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/drawshadersource.js~drawshadersource",
+    "function/index.html#static-function-DrawShaderSource",
+    "<span>DrawShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/DrawShaderSource.js</span>",
+    "function"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/edgematerial.js~edgematerial",
@@ -210,6 +252,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~floattype",
+    "variable/index.html#static-variable-FloatType",
+    "<span>FloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/fresnel.js~fresnel",
     "class/src/viewer/scene/materials/Fresnel.js~Fresnel.html",
     "<span>Fresnel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/Fresnel.js</span>",
@@ -238,6 +286,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/geometry/Geometry.js~Geometry.html",
     "<span>Geometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/Geometry.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~halffloattype",
+    "variable/index.html#static-variable-HalfFloatType",
+    "<span>HalfFloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/metadata/ifcobjectdefaultcolors.js~ifcobjectdefaultcolors",
@@ -270,9 +324,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder",
-    "class/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html",
-    "<span>KTX2TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~inttype",
+    "variable/index.html#static-variable-IntType",
+    "<span>IntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html",
+    "<span>KTX2TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</span>",
     "class"
   ],
   [
@@ -306,6 +366,42 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearencoding",
+    "variable/index.html#static-variable-LinearEncoding",
+    "<span>LinearEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearfilter",
+    "variable/index.html#static-variable-LinearFilter",
+    "<span>LinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "variable/index.html#static-variable-LinearMipMapLinearFilter",
+    "<span>LinearMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "variable/index.html#static-variable-LinearMipMapNearestFilter",
+    "<span>LinearMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "variable/index.html#static-variable-LinearMipmapLinearFilter",
+    "<span>LinearMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "variable/index.html#static-variable-LinearMipmapNearestFilter",
+    "<span>LinearMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/linesmaterial.js~linesmaterial",
     "class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html",
     "<span>LinesMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LinesMaterial.js</span>",
@@ -328,6 +424,18 @@ window.esdocSearchIndex = [
     "class/src/viewer/localization/LocaleService.js~LocaleService.html",
     "<span>LocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminancealphaformat",
+    "variable/index.html#static-variable-LuminanceAlphaFormat",
+    "<span>LuminanceAlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminanceformat",
+    "variable/index.html#static-variable-LuminanceFormat",
+    "<span>LuminanceFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/marker/marker.js~marker",
@@ -378,6 +486,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~mirroredrepeatwrapping",
+    "variable/index.html#static-variable-MirroredRepeatWrapping",
+    "<span>MirroredRepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/mementos/modelmemento.js~modelmemento",
     "class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html",
     "<span>ModelMemento</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</span>",
@@ -394,6 +508,30 @@ window.esdocSearchIndex = [
     "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html",
     "<span>NavCubePlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestfilter",
+    "variable/index.html#static-variable-NearestFilter",
+    "<span>NearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "variable/index.html#static-variable-NearestMipMapLinearFilter",
+    "<span>NearestMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmapnearestfilter",
+    "variable/index.html#static-variable-NearestMipMapNearestFilter",
+    "<span>NearestMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "variable/index.html#static-variable-NearestMipmapLinearFilter",
+    "<span>NearestMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/nodes/node.js~node",
@@ -504,16 +642,226 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbadepthpacking",
+    "variable/index.html#static-variable-RGBADepthPacking",
+    "<span>RGBADepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaformat",
+    "variable/index.html#static-variable-RGBAFormat",
+    "<span>RGBAFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaintegerformat",
+    "variable/index.html#static-variable-RGBAIntegerFormat",
+    "<span>RGBAIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x10_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x10_Format",
+    "<span>RGBA_ASTC_10x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x5_Format",
+    "<span>RGBA_ASTC_10x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x6_Format",
+    "<span>RGBA_ASTC_10x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x8_format",
+    "variable/index.html#static-variable-RGBA_ASTC_10x8_Format",
+    "<span>RGBA_ASTC_10x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x10_format",
+    "variable/index.html#static-variable-RGBA_ASTC_12x10_Format",
+    "<span>RGBA_ASTC_12x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x12_format",
+    "variable/index.html#static-variable-RGBA_ASTC_12x12_Format",
+    "<span>RGBA_ASTC_12x12_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_4x4_format",
+    "variable/index.html#static-variable-RGBA_ASTC_4x4_Format",
+    "<span>RGBA_ASTC_4x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x4_format",
+    "variable/index.html#static-variable-RGBA_ASTC_5x4_Format",
+    "<span>RGBA_ASTC_5x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_5x5_Format",
+    "<span>RGBA_ASTC_5x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_6x5_Format",
+    "<span>RGBA_ASTC_6x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_6x6_Format",
+    "<span>RGBA_ASTC_6x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x5_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x5_Format",
+    "<span>RGBA_ASTC_8x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x6_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x6_Format",
+    "<span>RGBA_ASTC_8x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x8_format",
+    "variable/index.html#static-variable-RGBA_ASTC_8x8_Format",
+    "<span>RGBA_ASTC_8x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_bptc_format",
+    "variable/index.html#static-variable-RGBA_BPTC_Format",
+    "<span>RGBA_BPTC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_etc2_eac_format",
+    "variable/index.html#static-variable-RGBA_ETC2_EAC_Format",
+    "<span>RGBA_ETC2_EAC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_2bppv1_format",
+    "variable/index.html#static-variable-RGBA_PVRTC_2BPPV1_Format",
+    "<span>RGBA_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_4bppv1_format",
+    "variable/index.html#static-variable-RGBA_PVRTC_4BPPV1_Format",
+    "<span>RGBA_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt1_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT1_Format",
+    "<span>RGBA_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt3_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT3_Format",
+    "<span>RGBA_S3TC_DXT3_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt5_format",
+    "variable/index.html#static-variable-RGBA_S3TC_DXT5_Format",
+    "<span>RGBA_S3TC_DXT5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbformat",
+    "variable/index.html#static-variable-RGBFormat",
+    "<span>RGBFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc1_format",
+    "variable/index.html#static-variable-RGB_ETC1_Format",
+    "<span>RGB_ETC1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc2_format",
+    "variable/index.html#static-variable-RGB_ETC2_Format",
+    "<span>RGB_ETC2_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_2bppv1_format",
+    "variable/index.html#static-variable-RGB_PVRTC_2BPPV1_Format",
+    "<span>RGB_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_4bppv1_format",
+    "variable/index.html#static-variable-RGB_PVRTC_4BPPV1_Format",
+    "<span>RGB_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_s3tc_dxt1_format",
+    "variable/index.html#static-variable-RGB_S3TC_DXT1_Format",
+    "<span>RGB_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgformat",
+    "variable/index.html#static-variable-RGFormat",
+    "<span>RGFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgintegerformat",
+    "variable/index.html#static-variable-RGIntegerFormat",
+    "<span>RGIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/readablegeometry.js~readablegeometry",
     "class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html",
     "<span>ReadableGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/ReadableGeometry.js</span>",
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redformat",
+    "variable/index.html#static-variable-RedFormat",
+    "<span>RedFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redintegerformat",
+    "variable/index.html#static-variable-RedIntegerFormat",
+    "<span>RedIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/reflectionmap.js~reflectionmap",
     "class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html",
     "<span>ReflectionMap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/ReflectionMap.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~repeatwrapping",
+    "variable/index.html#static-variable-RepeatWrapping",
+    "<span>RepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/postfx/sao.js~sao",
@@ -562,6 +910,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/lights/Shadow.js~Shadow.html",
     "<span>Shadow</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/Shadow.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~shorttype",
+    "variable/index.html#static-variable-ShortType",
+    "<span>ShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/skybox/skybox.js~skybox",
@@ -624,9 +978,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/texturetranscoders/texturetranscoder.js~texturetranscoder",
-    "class/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html",
-    "<span>TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html",
+    "<span>TextureTranscoder</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js</span>",
     "class"
   ],
   [
@@ -640,6 +994,42 @@ window.esdocSearchIndex = [
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html",
     "<span>TreeViewPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedbytetype",
+    "variable/index.html#static-variable-UnsignedByteType",
+    "<span>UnsignedByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedint248type",
+    "variable/index.html#static-variable-UnsignedInt248Type",
+    "<span>UnsignedInt248Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedinttype",
+    "variable/index.html#static-variable-UnsignedIntType",
+    "<span>UnsignedIntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort4444type",
+    "variable/index.html#static-variable-UnsignedShort4444Type",
+    "<span>UnsignedShort4444Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort5551type",
+    "variable/index.html#static-variable-UnsignedShort5551Type",
+    "<span>UnsignedShort5551Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshorttype",
+    "variable/index.html#static-variable-UnsignedShortType",
+    "<span>UnsignedShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/vbogeometry.js~vbogeometry",
@@ -766,6 +1156,12 @@ window.esdocSearchIndex = [
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
     "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~srgbencoding",
+    "variable/index.html#static-variable-sRGBEncoding",
+    "<span>sRGBEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/stats.js~stats",
@@ -6048,6 +6444,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/constants.js",
+    "file/src/viewer/scene/constants.js.html",
+    "src/viewer/scene/constants.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/core.js",
     "file/src/viewer/scene/core.js.html",
     "src/viewer/scene/core.js",
@@ -10908,72 +11310,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js",
-    "file/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#constructor",
-    "class/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-constructor-constructor",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#destroy",
-    "class/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-destroy",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#transcode",
-    "class/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-transcode",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#transcode",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/basis/basis_transcoder.js",
-    "file/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js.html",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/ktx2texturetranscoder/index.js",
-    "file/src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/index.js.html",
-    "src/viewer/scene/models/textureTranscoders/KTX2TextureTranscoder/index.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/texturetranscoder.js",
-    "file/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js.html",
-    "src/viewer/scene/models/textureTranscoders/TextureTranscoder.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/texturetranscoder.js~texturetranscoder#destroy",
-    "class/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-destroy",
-    "src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/texturetranscoder.js~texturetranscoder#load",
-    "class/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-load",
-    "src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder#load",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/texturetranscoder.js~texturetranscoder#transcode",
-    "class/src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-transcode",
-    "src/viewer/scene/models/textureTranscoders/TextureTranscoder.js~TextureTranscoder#transcode",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/texturetranscoders/index.js",
-    "file/src/viewer/scene/models/textureTranscoders/index.js.html",
-    "src/viewer/scene/models/textureTranscoders/index.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/nodes/node.js",
     "file/src/viewer/scene/nodes/Node.js.html",
     "src/viewer/scene/nodes/Node.js",
@@ -12930,6 +13266,66 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#constructor",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-constructor-constructor",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#destroy",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-destroy",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/ktx2texturetranscoder.js~ktx2texturetranscoder#transcode",
+    "class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html#instance-method-transcode",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder#transcode",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/basis/basis_transcoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/index.js",
+    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js.html",
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js",
+    "file/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js.html",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder#destroy",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-destroy",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/texturetranscoder.js~texturetranscoder#transcode",
+    "class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html#instance-method-transcode",
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder#transcode",
+    "method"
+  ],
+  [
+    "src/viewer/scene/utils/texturetranscoders/index.js",
+    "file/src/viewer/scene/utils/textureTranscoders/index.js.html",
+    "src/viewer/scene/utils/textureTranscoders/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/viewport/viewport.js",
     "file/src/viewer/scene/viewport/Viewport.js.html",
     "src/viewer/scene/viewport/Viewport.js",
@@ -13131,6 +13527,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/texture2d.js",
     "file/src/viewer/scene/webgl/Texture2D.js.html",
     "src/viewer/scene/webgl/Texture2D.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/convertconstant.js",
+    "file/src/viewer/scene/webgl/convertConstant.js.html",
+    "src/viewer/scene/webgl/convertConstant.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/getextension.js",
+    "file/src/viewer/scene/webgl/getExtension.js.html",
+    "src/viewer/scene/webgl/getExtension.js",
     "file"
   ],
   [

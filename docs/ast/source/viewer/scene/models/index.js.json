@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 138,
+  "end": 100,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 138,
+    "end": 100,
     "loc": {
       "start": {
         "line": 1,
@@ -30,43 +30,8 @@
     "body": [
       {
         "type": "ExportAllDeclaration",
-        "start": 0,
-        "end": 38,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 38
-          }
-        },
-        "source": {
-          "type": "StringLiteral",
-          "start": 14,
-          "end": 37,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 14
-            },
-            "end": {
-              "line": 1,
-              "column": 37
-            }
-          },
-          "extra": {
-            "rawValue": "./textureTranscoders/",
-            "raw": "\"./textureTranscoders/\""
-          },
-          "value": "./textureTranscoders/"
-        }
-      },
-      {
-        "type": "ExportAllDeclaration",
-        "start": 39,
-        "end": 68,
+        "start": 1,
+        "end": 30,
         "loc": {
           "start": {
             "line": 2,
@@ -79,8 +44,8 @@
         },
         "source": {
           "type": "StringLiteral",
-          "start": 53,
-          "end": 67,
+          "start": 15,
+          "end": 29,
           "loc": {
             "start": {
               "line": 2,
@@ -100,8 +65,8 @@
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 69,
-        "end": 101,
+        "start": 31,
+        "end": 63,
         "loc": {
           "start": {
             "line": 3,
@@ -114,8 +79,8 @@
         },
         "source": {
           "type": "StringLiteral",
-          "start": 83,
-          "end": 100,
+          "start": 45,
+          "end": 62,
           "loc": {
             "start": {
               "line": 3,
@@ -135,8 +100,8 @@
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 102,
-        "end": 137,
+        "start": 64,
+        "end": 99,
         "loc": {
           "start": {
             "line": 4,
@@ -149,8 +114,8 @@
         },
         "source": {
           "type": "StringLiteral",
-          "start": 116,
-          "end": 136,
+          "start": 78,
+          "end": 98,
           "loc": {
             "start": {
               "line": 4,
@@ -188,142 +153,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 0,
-      "end": 6,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "*",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": 10,
-        "updateContext": null
-      },
-      "value": "*",
-      "start": 7,
-      "end": 8,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 7
-        },
-        "end": {
-          "line": 1,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 9,
-      "end": 13,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 9
-        },
-        "end": {
-          "line": 1,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./textureTranscoders/",
-      "start": 14,
-      "end": 37,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 14
-        },
-        "end": {
-          "line": 1,
-          "column": 37
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 37,
-      "end": 38,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 37
-        },
-        "end": {
-          "line": 1,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 39,
-      "end": 45,
+      "start": 1,
+      "end": 7,
       "loc": {
         "start": {
           "line": 2,
@@ -349,8 +180,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 46,
-      "end": 47,
+      "start": 8,
+      "end": 9,
       "loc": {
         "start": {
           "line": 2,
@@ -375,8 +206,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 48,
-      "end": 52,
+      "start": 10,
+      "end": 14,
       "loc": {
         "start": {
           "line": 2,
@@ -402,8 +233,8 @@
         "updateContext": null
       },
       "value": "./SceneModel",
-      "start": 53,
-      "end": 67,
+      "start": 15,
+      "end": 29,
       "loc": {
         "start": {
           "line": 2,
@@ -428,8 +259,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 67,
-      "end": 68,
+      "start": 29,
+      "end": 30,
       "loc": {
         "start": {
           "line": 2,
@@ -456,8 +287,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 69,
-      "end": 75,
+      "start": 31,
+      "end": 37,
       "loc": {
         "start": {
           "line": 3,
@@ -483,8 +314,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 76,
-      "end": 77,
+      "start": 38,
+      "end": 39,
       "loc": {
         "start": {
           "line": 3,
@@ -509,8 +340,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 78,
-      "end": 82,
+      "start": 40,
+      "end": 44,
       "loc": {
         "start": {
           "line": 3,
@@ -536,8 +367,8 @@
         "updateContext": null
       },
       "value": "./VBOSceneModel",
-      "start": 83,
-      "end": 100,
+      "start": 45,
+      "end": 62,
       "loc": {
         "start": {
           "line": 3,
@@ -562,8 +393,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 100,
-      "end": 101,
+      "start": 62,
+      "end": 63,
       "loc": {
         "start": {
           "line": 3,
@@ -590,8 +421,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 102,
-      "end": 108,
+      "start": 64,
+      "end": 70,
       "loc": {
         "start": {
           "line": 4,
@@ -617,8 +448,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 109,
-      "end": 110,
+      "start": 71,
+      "end": 72,
       "loc": {
         "start": {
           "line": 4,
@@ -643,8 +474,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 111,
-      "end": 115,
+      "start": 73,
+      "end": 77,
       "loc": {
         "start": {
           "line": 4,
@@ -670,8 +501,8 @@
         "updateContext": null
       },
       "value": "./PerformanceModel",
-      "start": 116,
-      "end": 136,
+      "start": 78,
+      "end": 98,
       "loc": {
         "start": {
           "line": 4,
@@ -696,8 +527,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 136,
-      "end": 137,
+      "start": 98,
+      "end": 99,
       "loc": {
         "start": {
           "line": 4,
@@ -722,8 +553,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 138,
-      "end": 138,
+      "start": 100,
+      "end": 100,
       "loc": {
         "start": {
           "line": 5,
