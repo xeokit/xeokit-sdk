@@ -89,8 +89,6 @@ class Texture2D {
 
         const gl = this.gl;
 
-        // Cache props
-
         if (props.format !== undefined) {
             this.format = props.format;
         }
@@ -138,7 +136,11 @@ class Texture2D {
 
         const minFilter = convertConstant(gl, this.minFilter);
         gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
-        if (minFilter === gl.NEAREST_MIPMAP_NEAREST || minFilter === gl.LINEAR_MIPMAP_NEAREST || minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
+
+        if (minFilter === gl.NEAREST_MIPMAP_NEAREST
+            || minFilter === gl.LINEAR_MIPMAP_NEAREST
+            || minFilter === gl.NEAREST_MIPMAP_LINEAR
+            || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
             generateMipMap = true;
         }
 
@@ -235,7 +237,7 @@ class Texture2D {
         gl.bindTexture(this.target, this.texture);
 
         let generateMipMap = false;
-        let supportsMips = false;
+        let supportsMips = true; // WebGL2
 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
