@@ -44,7 +44,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder, sRGBEncoding, LinearEncoding} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder,FastNavPlugin, sRGBEncoding, LinearEncoding} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -61,6 +61,24 @@
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
     viewer.scene.gammaFactor = 2.2;
+
+    viewer.scene.sao.enabled = true; // Higher-quality SAO settings
+    viewer.scene.sao.numSamples = 100;
+    viewer.scene.sao.kernelRadius = 170;
+    viewer.scene.sao.intensity = 0.3;
+
+    const fastNavPlugin = new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: false,
+        hidePBR: false,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: true,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
 
     new ReflectionMap(viewer.scene, {
         src: [
@@ -90,7 +108,7 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v10/glb/HousePlan.textures.glb.xkt",
-        edges: true
+        edges: false
     });
 
     sceneModel.on("loaded", () => {
