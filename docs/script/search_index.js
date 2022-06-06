@@ -13290,12 +13290,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/basis/basis_transcoder.js",
-    "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js.html",
-    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/basis/basis_transcoder.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/utils/texturetranscoders/ktx2texturetranscoder/index.js",
     "file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js.html",
     "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/index.js",

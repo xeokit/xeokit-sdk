@@ -44,7 +44,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder, sRGBEncoding, LinearEncoding} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -56,7 +56,7 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
-    viewer.camera.perspective.far = 100000;
+    viewer.camera.perspective.far = 10000;
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
@@ -71,7 +71,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     const textureTranscoder = new KTX2TextureTranscoder({
@@ -90,7 +90,7 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v10/glb/HousePlan.textures.glb.xkt",
-        edges: false
+        edges: true
     });
 
     sceneModel.on("loaded", () => {

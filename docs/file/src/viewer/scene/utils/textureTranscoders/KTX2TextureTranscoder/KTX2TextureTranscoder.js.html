@@ -261,7 +261,8 @@ let activeTranscoders = 0;
  *
  * ## Overview
  *
- * * Uses the Basis Universal codec to transcode KTX2 texture assets.
+ * * Uses the [Basis Universal Supercompressed GPU Texture Codec](https://github.com/BinomialLLC/basis_universal) to
+ * transcode [KTX2](https://github.khronos.org/KTX-Specification/) texture assets.
  * * An {@link XKTLoaderPlugin} that is configured with a KTX2TextureTranscoder will allow us to load KTX2 textures in
  * XKT files. Textures in XKT are always KTX2. If we do not configure a KTX2TextureTranscoder, the XKTLoaderPlugin will
  * simply ignore the textures in the XKT.
@@ -458,7 +459,7 @@ class KTX2TextureTranscoder {
      */
     constructor({viewer, transcoderPath, workerLimit}) {
 
-        this._transcoderPath = transcoderPath;
+        this._transcoderPath = transcoderPath || &quot;https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/&quot;;
         this._transcoderBinary = null;
         this._transcoderPending = null;
         this._workerPool = new WorkerPool();
@@ -837,7 +838,31 @@ KTX2TextureTranscoder.BasisWorker = function () {
     }
 };
 
-export {KTX2TextureTranscoder};
+const cachedTranscoders = {};
+
+/**
+ * Returns a new {@link KTX2TextureTranscoder}.
+ *
+ * The ````transcoderPath```` config will be set to: &quot;https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/&quot;
+ * 
+ * @private
+ */
+function getKTX2TextureTranscoder(viewer) {
+    const sceneId = viewer.scene.id;
+    let transcoder = cachedTranscoders[sceneId];
+    if (!transcoder) {
+        transcoder = new KTX2TextureTranscoder(viewer);
+        cachedTranscoders[sceneId] = transcoder;
+        viewer.scene.on(&quot;destroyed&quot;, () =&gt; {
+            delete cachedTranscoders[sceneId];
+            transcoder.destroy();
+        });
+    }
+    return transcoder;
+}
+
+export {getKTX2TextureTranscoder, KTX2TextureTranscoder};
+
 </code></pre>
 
 </div>

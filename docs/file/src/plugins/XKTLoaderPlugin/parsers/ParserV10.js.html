@@ -411,17 +411,14 @@ function load(viewer, options, inflatedData, sceneModel) {
             const imageDataSubarray = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
             const width = eachTextureDimensions[textureIndex * 2 + 0];
             const height = eachTextureDimensions[textureIndex * 2 + 1];
-            const imageData = new ImageData(imageDataSubarray, width, height);
 
-            //////////////////////////////////////////////////////////////
-            // TODO: This is super inefficient - replace with Basis:
-            //////////////////////////////////////////////////////////////
 
-            const image = imagDataToImage(imageData);
+            //const imageData = new ImageData(imageDataSubarray, width, height);
+            //const image = imagDataToImage(imageData);
 
             sceneModel.createTexture({
                 id: `texture-${textureIndex}`,
-                src: image
+                buffers: [imageDataSubarray]
             });
         }
     }
