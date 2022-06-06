@@ -57,7 +57,7 @@ function inflate(deflatedData) {
 
     return {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-        textureData: new Uint8ClampedArray(inflate(deflatedData.textureData)),
+        textureData: new Uint8Array(deflatedData.textureData),
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
         eachTextureDimensions: new Uint16Array(inflate(deflatedData.eachTextureDimensions)),
         positions: new Uint16Array(inflate(deflatedData.positions)),
@@ -174,20 +174,13 @@ function load(viewer, options, inflatedData, sceneModel) {
         const textureDataPortionSize = textureDataPortionEnd - textureDataPortionStart;
         const textureDataPortionExists = (textureDataPortionSize > 0);
         if (textureDataPortionExists) {
-            const imageDataSubarray = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
-            const width = eachTextureDimensions[textureIndex * 2 + 0];
-            const height = eachTextureDimensions[textureIndex * 2 + 1];
-            const imageData = new ImageData(imageDataSubarray, width, height);
 
-            //////////////////////////////////////////////////////////////
-            // TODO: This is super inefficient - replace with Basis:
-            //////////////////////////////////////////////////////////////
-
-            const image = imagDataToImage(imageData);
+            const imageDataSubarray = new Uint8Array(textureData.subarray(textureDataPortionStart, textureDataPortionEnd));
+            const arrayBuffer = imageDataSubarray.buffer;
 
             sceneModel.createTexture({
                 id: `texture-${textureIndex}`,
-                src: image
+                buffers: [arrayBuffer]
             });
         }
     }

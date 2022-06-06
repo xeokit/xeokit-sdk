@@ -18,7 +18,8 @@ import {VBOSceneModelGeometry} from "./lib/VBOSceneModelGeometry";
 import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture";
 import {SceneModel} from "../SceneModel";
 import {Texture2D} from "../../webgl/Texture2D";
-import {utils} from "../../utils";
+import {utils} from "../../utils.js";
+import {getKTX2TextureTranscoder} from "../../utils/";
 import {
     LinearFilter,
     LinearMipmapLinearFilter,
@@ -1108,7 +1109,7 @@ class VBOSceneModel extends Component {
 
         super(owner, cfg);
 
-        this._textureTranscoder = cfg.textureTranscoder;
+        this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
@@ -2084,7 +2085,7 @@ class VBOSceneModel extends Component {
      * @param {String} [cfg.src] Image file for the texture. Assumed to be transcoded if not having a recognized image file
      * extension (jpg, jpeg, png etc.). If transcoded, then assumes ````VBOSceneModel```` is configured with a {@link TextureTranscoder}.
      * @param {ArrayBuffer[]} [cfg.buffers] Transcoded texture data. Assumes ````VBOSceneModel```` is
-     * configured with a {@link TextureTranscoder}. Given as an array of buffers so we can potentially support multi-image textures, such as cube maps.
+     * configured with a {@link TextureTranscoder}. This parameter is given as an array of buffers so we can potentially support multi-image textures, such as cube maps.
      * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this texture. Overrides ````src```` and ````buffers````. Never transcoded.
      * @param {Number} [cfg.minFilter=LinearMipmapLinearFilter] How the texture is sampled when a texel covers less than one pixel.
      * Supported values are {@link LinearMipmapLinearFilter}, {@link LinearMipMapNearestFilter}, {@link NearestMipMapNearestFilter}, {@link NearestMipMapLinearFilter} and {@link LinearMipMapLinearFilter}.
@@ -2104,8 +2105,8 @@ class VBOSceneModel extends Component {
             this.error("Texture already created: " + textureId);
             return;
         }
-        if (!cfg.src && !cfg.image) {
-            this.error("Param expected: `src` or `image'");
+        if (!cfg.src && !cfg.image && !cfg.buffers) {
+            this.error("Param expected: `src`, `image' or 'buffers'");
             return null;
         }
         let minFilter = cfg.minFilter || LinearMipmapLinearFilter;

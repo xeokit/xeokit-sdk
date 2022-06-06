@@ -40,7 +40,7 @@ class Texture2D {
         this.texture = gl.createTexture();
 
         if (preloadColor) {
-            this.setPreloadColor(preloadColor || [0, 0, 0, 1]); // Prevents "there is no texture bound to the unit 0" error
+            this.setPreloadColor(preloadColor); // Prevents "there is no texture bound to the unit 0" error
         }
 
         this.allocated = true;
@@ -59,9 +59,6 @@ class Texture2D {
             color[3] = Math.floor((value[3] !== undefined ? value[3] : 1) * 255);
         }
         const gl = this.gl;
-        const glFormat = convertConstant(gl, this.format, this.encoding);
-        const glType = convertConstant(gl, this.type);
-        const glInternalFormat = getInternalFormat(gl, this.internalFormat, glFormat, glType, this.encoding, false);
         gl.bindTexture(this.target, this.texture);
         if (this.target === gl.TEXTURE_CUBE_MAP) {
             const faces = [
@@ -73,10 +70,10 @@ class Texture2D {
                 gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
             ];
             for (let i = 0, len = faces.length; i < len; i++) {
-                gl.texImage2D(faces[i], 0, glInternalFormat, 1, 1, 0, glFormat, glType, color);
+                gl.texImage2D(faces[i], 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
             }
         } else {
-            gl.texImage2D(this.target, 0, glInternalFormat, 1, 1, 0, glFormat, glType, color);
+            gl.texImage2D(this.target, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, color);
         }
         gl.bindTexture(this.target, null);
     }
@@ -310,7 +307,7 @@ class Texture2D {
         }
 
         if (generateMipMap) {
-            gl.generateMipmap(this.target);
+     //       gl.generateMipmap(this.target); // Only for roughness textures?
         }
 
         gl.bindTexture(this.target, null);
