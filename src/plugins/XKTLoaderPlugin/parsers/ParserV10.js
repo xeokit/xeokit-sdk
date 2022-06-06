@@ -57,7 +57,7 @@ function inflate(deflatedData) {
 
     return {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-        textureData: new Uint8Array(deflatedData.textureData),
+        textureData: new Uint8Array(inflate(deflatedData.textureData)),
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
         eachTextureDimensions: new Uint16Array(inflate(deflatedData.eachTextureDimensions)),
         positions: new Uint16Array(inflate(deflatedData.positions)),
