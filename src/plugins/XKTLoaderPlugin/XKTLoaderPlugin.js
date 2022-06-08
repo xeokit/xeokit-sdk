@@ -41,6 +41,7 @@ parsers[ParserV10.version] = ParserV10;
  * * An *````.XKT````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
  * * Supports double-precision coordinates.
+ * * Supports compressed textures.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
@@ -159,16 +160,25 @@ parsers[ParserV10.version] = ParserV10;
  * model.destroy();
  * ````
  *
- * ## Loading XKT files containing KTX2 textures
+ * ## Loading XKT files containing textures
  *
- * An XKTLoaderPlugin that is configured with a {@link KTX2TextureTranscoder} will allow us to load XKT files that
- * contain KTX2 textures. If we don't configure a KTX2TextureTranscoder, then the XKTLoaderPlugin will simply ignore
- * the textures in the XKT.
+ * XKTLoaderPlugin uses a {@link KTX2TextureTranscoder} to load textures in XKT files (XKT v10+). An XKTLoaderPlugin has its own
+ * default KTX2TextureTranscoder, configured to load the Basis Codec from the CDN. If we wish, we can override that with our own
+ * KTX2TextureTranscoder instance that's configured to load the Codec locally.
  *
  * In the example below, we'll create a {@link Viewer} and add an XKTLoaderPlugin
- * configured with a KTX2TextureTranscoder. Then we'll use the XKTLoaderPlugin to load an
- * XKT file that contains KTX2 textures, which the plugin will transcode using
+ * configured with a KTX2TextureTranscoder that finds the Codec in our local file system. Then we'll use the
+ * XKTLoaderPlugin to load an XKT file that contains KTX2 textures, which the plugin will transcode using
  * its KTX2TextureTranscoder.
+ *
+ * We'll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
+ * Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+ * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
+ * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
+ *
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
  *
  * ````javascript
  * const viewer = new Viewer({
