@@ -230,9 +230,6 @@ function convertConstant(gl, constantVal, encoding = null) {
     if (p === LinearMipMapLinearFilter) {
         return gl.LINEAR_MIPMAP_LINEAR;
     }
-    if (p === NearestMipMapLinearFilter) {
-        return gl.NEAREST_MIPMAP_LINEAR;
-    }
     if (p === NearestFilter) {
         return gl.NEAREST;
     }

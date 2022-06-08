@@ -9,9 +9,9 @@ import {
     UnsignedByteType,
     RepeatWrapping,
     ClampToEdgeWrapping,
-    LinearFilter
+    LinearFilter,
+    NearestMipmapNearestFilter
 } from "../constants";
-import {WEBGL_INFO} from "../webglInfo";
 import {getExtension} from "./getExtension";
 
 const color = new Uint8Array([0, 0, 0, 1]);
@@ -234,56 +234,38 @@ class Texture2D {
         gl.activeTexture(gl.TEXTURE0 + 0);
         gl.bindTexture(this.target, this.texture);
 
-        let generateMipMap = false;
-        let supportsMips = true; // WebGL2
+        let supportsMips = mipmaps.length > 1;
 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
         gl.pixelStorei(gl.UNPACK_ALIGNMENT, this.unpackAlignment);
         gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
 
+        const wrapS = convertConstant(gl, this.wrapS);
+        if (wrapS) {
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, wrapS);
+        }
+
+        const wrapT = convertConstant(gl, this.wrapT);
+        if (wrapT) {
+            gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, wrapT);
+        }
+
+        if (this.type === gl.TEXTURE_3D || this.type === gl.TEXTURE_2D_ARRAY) {
+            const wrapR = convertConstant(gl, this.wrapR);
+            if (wrapR) {
+                gl.texParameteri(this.target, gl.TEXTURE_WRAP_R, wrapR);
+            }
+            gl.texParameteri(this.type, gl.TEXTURE_WRAP_R, wrapR);
+        }
+
         if (supportsMips) {
-
-            const minFilter = convertConstant(gl, this.minFilter);
-            gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, minFilter);
-            if (minFilter === gl.NEAREST_MIPMAP_NEAREST || minFilter === gl.LINEAR_MIPMAP_NEAREST || minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR) {
-                generateMipMap = true;
-            }
-
-            const magFilter = convertConstant(gl, this.magFilter);
-            if (magFilter) {
-                gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, magFilter);
-            }
-
-            const wrapS = convertConstant(gl, this.wrapS);
-            if (wrapS) {
-                gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, wrapS);
-            }
-
-            const wrapT = convertConstant(gl, this.wrapT);
-            if (wrapT) {
-                gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, wrapT);
-            }
-
-            if (this.type === gl.TEXTURE_3D || this.type === gl.TEXTURE_2D_ARRAY) {
-                const wrapR = convertConstant(gl, this.wrapR);
-                if (wrapR) {
-                    gl.texParameteri(this.target, gl.TEXTURE_WRAP_R, wrapR);
-                }
-                gl.texParameteri(this.type, gl.TEXTURE_WRAP_R, wrapR);
-            }
+            gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, filterFallback(gl, this.minFilter));
+            gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, filterFallback(gl, this.magFilter));
 
         } else {
-
-            gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-            if (this.target === gl.TEXTURE_3D || this.type === gl.TEXTURE_2D_ARRAY) {
-                gl.texParameteri(this.target, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
-            }
-
-            gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, convertConstant(gl, this.magFilter));
             gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, convertConstant(gl, this.minFilter));
+            gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, convertConstant(gl, this.magFilter));
         }
 
         const glFormat = convertConstant(gl, this.format, this.encoding);
@@ -303,13 +285,13 @@ class Texture2D {
                     console.warn('Attempt to load unsupported compressed texture format in .setCompressedData()');
                 }
             } else {
-                    gl.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, glType, mipmap.data);
+                gl.texSubImage2D(gl.TEXTURE_2D, i, 0, 0, mipmap.width, mipmap.height, glFormat, glType, mipmap.data);
             }
         }
 
-        if (generateMipMap) {
-     //       gl.generateMipmap(this.target); // Only for roughness textures?
-        }
+        //    if (generateMipMap) {
+        // //       gl.generateMipmap(this.target); // Only for roughness textures?
+        //    }
 
         gl.bindTexture(this.target, null);
     }
@@ -434,6 +416,14 @@ function getInternalFormat(gl, internalFormatName, glFormat, glType, encoding, i
         getExtension(gl, 'EXT_color_buffer_float');
     }
     return internalFormat;
+}
+
+function filterFallback(gl, f) {
+    if (f === NearestFilter || f === NearestMipmapNearestFilter || f === NearestMipmapLinearFilter) {
+        return gl.NEAREST;
+    }
+    return gl.LINEAR;
+
 }
 
 export {Texture2D};

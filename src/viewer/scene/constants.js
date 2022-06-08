@@ -3,6 +3,7 @@ export const ClampToEdgeWrapping = 1001;
 export const MirroredRepeatWrapping = 1002;
 export const NearestFilter = 1003;
 export const NearestMipMapNearestFilter = 1004;
+export const NearestMipmapNearestFilter = 1004;
 export const NearestMipmapLinearFilter = 1005;
 export const NearestMipMapLinearFilter = 1005;
 export const LinearFilter = 1006;
