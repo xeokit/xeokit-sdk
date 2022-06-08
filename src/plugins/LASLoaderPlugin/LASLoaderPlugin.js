@@ -399,11 +399,9 @@ class LASLoaderPlugin extends Plugin {
             try {
                 parse(arrayBuffer, LASLoader, options).then((parsedData) => {
 
-                    const loaderData = parsedData.loaderData;
-                    const loaderDataHeader = loaderData.header;
-                    const pointsFormatId = loaderDataHeader.pointsFormatId;
-
                     const attributes = parsedData.attributes;
+                    const loaderData = parsedData.loaderData;
+                    const pointsFormatId = loaderData.pointsFormatId !== undefined ? loaderData.pointsFormatId : -1;
 
                     if (!attributes.POSITION) {
                         sceneModel.finalize();
