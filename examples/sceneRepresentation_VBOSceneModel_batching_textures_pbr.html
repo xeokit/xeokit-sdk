@@ -41,7 +41,8 @@
         ReflectionMap,
         LightMap,
         loadOBJGeometry,
-        VBOSceneModel
+        VBOSceneModel,
+        sRGBEncoding
     } from "./../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
@@ -90,7 +91,7 @@
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     const vboSceneModel = new VBOSceneModel(viewer.scene, {

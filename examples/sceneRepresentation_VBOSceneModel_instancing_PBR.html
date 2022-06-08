@@ -84,7 +84,8 @@
         ReadableGeometry,
         Mesh,
         buildVectorTextGeometry,
-        DirLight
+        DirLight,
+        sRGBEncoding
     } from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -141,7 +142,7 @@
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     new LightMap(viewer.scene, {
@@ -153,7 +154,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
     //------------------------------------------------------------------------------------------------------------------

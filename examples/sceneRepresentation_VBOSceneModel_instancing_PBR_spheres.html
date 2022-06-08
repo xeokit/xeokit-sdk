@@ -69,7 +69,8 @@
         ReflectionMap,
         LightMap,
         buildSphereGeometry,
-        DirLight
+        DirLight,
+        sRGBEncoding
     } from "./../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -119,7 +120,7 @@
             "../assets/textures/reflect/desertRoad/pz.png",
             "../assets/textures/reflect/desertRoad/nz.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
     //
     // new LightMap(viewer.scene, {
