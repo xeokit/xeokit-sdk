@@ -12,6 +12,7 @@ import {
     LinearFilter
 } from "../constants";
 import {WEBGL_INFO} from "../webglInfo";
+import {getExtension} from "./getExtension";
 
 const color = new Uint8Array([0, 0, 0, 1]);
 
@@ -433,13 +434,6 @@ function getInternalFormat(gl, internalFormatName, glFormat, glType, encoding, i
         getExtension(gl, 'EXT_color_buffer_float');
     }
     return internalFormat;
-}
-
-function filterFallback(gl, f) {
-    if (f === NearestFilter || f === NearestMipMapNearestFilter || f === NearestMipmapLinearFilter) {
-        return gl.NEAREST;
-    }
-    return gl.LINEAR;
 }
 
 export {Texture2D};
