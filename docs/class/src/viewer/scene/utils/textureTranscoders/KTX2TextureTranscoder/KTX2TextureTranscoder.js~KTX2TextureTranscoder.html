@@ -104,6 +104,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapLinearFilter">NearestMipMapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
@@ -232,13 +233,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {KTX2TextureTranscoder} from &apos;<span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber233">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {KTX2TextureTranscoder} from &apos;<span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber231">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber233">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber231">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -273,14 +274,14 @@ a texture asset compressed with Basis Universal (BasisU) supercompression that c
 depending on the support provided by the target devices. KTX2 provides a lightweight format for distributing texture
 assets to GPUs. Due to BasisU compression, KTX2 files can store any image format supported by GPUs.</p>
 <h2 id="loading-xkt-files-containing-ktx2-textures">Loading XKT files containing KTX2 textures</h2><p><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> uses a KTX2TextureTranscoder to load textures in XKT files. An XKTLoaderPlugin has its own
-default KTX2TextureTranscoder, configured load the Basis Codec from the CDN. If we wish, we can override that with our own
+default KTX2TextureTranscoder, configured load the Basis Codec from the <a href="https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/">CDN</a>. If we wish, we can override that with our own
 KTX2TextureTranscoder, configured to load the Codec locally.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> and add an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>
 configured with a KTX2TextureTranscoder. Then we&apos;ll use the XKTLoaderPlugin to load an
 XKT file that contains KTX2 textures, which the plugin will transcode using
 its KTX2TextureTranscoder.</p>
 <p>We&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
-Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+Codec from our <a href="https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/">CDN</a> (ie. our app will always have an Internet connection) then we could just leave out the
 KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
 load the Codec from the CDN. We&apos;ll stick with loading our own Codec, in case we want to run our app without an Internet connection.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a></p>
@@ -317,9 +318,7 @@ KTX2TextureTranscoder.</p>
 <p>We&apos;ll then programmatically create a simple object within the VBOSceneModel, consisting of
 a single box mesh with a texture loaded from a KTX2 file, which our VBOSceneModel internally transcodes, using
 its KTX2TextureTranscoder.</p>
-<p>As in the previous example, we&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
-Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
-KTX2TextureTranscoder altogether, and let the VBOSceneModel use its internal default KTX2TextureTranscoder.</p>
+<p>As in the previous example, we&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory.</p>
 <ul>
 <li><a href="http://localhost:8080/examples/sceneRepresentation_VBOSceneModel_batching_textures_ktx2.html">Run a similar example</a></li>
 </ul>
@@ -572,7 +571,7 @@ utils.loadArraybuffer(&quot;../assets/textures/compressed/sample_uastc_zstd.ktx2
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber245">source</a></span></span>
     </span>
   </h3>
 
@@ -657,7 +656,7 @@ default. Therefore, make sure your application is connected to the internet if y
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber359">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber357">source</a></span></span>
     </span>
   </h3>
 
@@ -701,7 +700,7 @@ default. Therefore, make sure your application is connected to the internet if y
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber324">source</a></span></span>
     </span>
   </h3>
 

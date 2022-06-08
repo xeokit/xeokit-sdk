@@ -104,6 +104,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapLinearFilter">NearestMipMapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
@@ -368,8 +369,8 @@ model = viewer.scene.models[&quot;myModel&quot;];
 // Destroy the model
 model.destroy();</code>
 </code></pre>
-<h2 id="loading-xkt-files-containing-textures">Loading XKT files containing textures</h2><p>XKTLoaderPlugin uses a <span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span> to load textures in XKT files. An XKTLoaderPlugin has its own
-default KTX2TextureTranscoder, configured load the Basis Codec from the CDN. If we wish, we can override that with our own
+<h2 id="loading-xkt-files-containing-textures">Loading XKT files containing textures</h2><p>XKTLoaderPlugin uses a <span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span> to load textures in XKT files (XKT v10+). An XKTLoaderPlugin has its own
+default KTX2TextureTranscoder, configured to load the Basis Codec from the CDN. If we wish, we can override that with our own
 KTX2TextureTranscoder instance that&apos;s configured to load the Codec locally.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> and add an XKTLoaderPlugin
 configured with a KTX2TextureTranscoder that finds the Codec in our local file system. Then we&apos;ll use the

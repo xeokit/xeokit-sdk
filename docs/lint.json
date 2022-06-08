@@ -270,39 +270,39 @@
     "filePath": "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js",
     "lines": [
       {
-        "lineNumber": 317,
+        "lineNumber": 315,
         "line": "    /**"
       },
       {
-        "lineNumber": 318,
+        "lineNumber": 316,
         "line": "     * Transcodes texture data from transcoded buffers into a {@link Texture2D}."
       },
       {
-        "lineNumber": 319,
+        "lineNumber": 317,
         "line": "     *"
       },
       {
-        "lineNumber": 320,
+        "lineNumber": 318,
         "line": "     * @param {ArrayBuffer[]} buffers Transcoded texture data. Given as an array of buffers so that we can support multi-image textures, such as cube maps."
       },
       {
-        "lineNumber": 321,
+        "lineNumber": 319,
         "line": "     * @param {*} config Transcoding options."
       },
       {
-        "lineNumber": 322,
+        "lineNumber": 320,
         "line": "     * @param {Texture2D} texture The texture to load."
       },
       {
-        "lineNumber": 323,
+        "lineNumber": 321,
         "line": "     * @returns {Promise} Resolves when the texture has loaded."
       },
       {
-        "lineNumber": 324,
+        "lineNumber": 322,
         "line": "     */"
       },
       {
-        "lineNumber": 325,
+        "lineNumber": 323,
         "line": "    transcode(buffers, texture, config = {}) {"
       }
     ],

@@ -534,6 +534,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmapnearestfilter",
+    "variable/index.html#static-variable-NearestMipmapNearestFilter",
+    "<span>NearestMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/nodes/node.js~node",
     "class/src/viewer/scene/nodes/Node.js~Node.html",
     "<span>Node</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/nodes/Node.js</span>",

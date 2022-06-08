@@ -1,6 +1,6 @@
 {
   "coverage": "36.67%",
-  "expectCount": 6707,
+  "expectCount": 6708,
   "actualCount": 2460,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -1521,7 +1521,7 @@
       ]
     },
     "src/viewer/scene/constants.js": {
-      "expectCount": 66,
+      "expectCount": 67,
       "actualCount": 0,
       "undocumentLines": [
         1,
@@ -1586,10 +1586,11 @@
         60,
         61,
         62,
-        64,
+        63,
         65,
         66,
-        67
+        67,
+        68
       ]
     },
     "src/viewer/scene/core.js": {
@@ -5450,15 +5451,15 @@
         20,
         21,
         23,
-        628,
+        626,
+        247,
+        248,
         249,
         250,
         251,
-        252,
-        253,
-        261,
-        270,
-        273
+        259,
+        268,
+        271
       ]
     },
     "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js": {
@@ -5684,8 +5685,8 @@
       "actualCount": 1,
       "undocumentLines": [
         17,
-        406,
-        439,
+        388,
+        421,
         26,
         28,
         30,
@@ -5707,11 +5708,11 @@
         112,
         115,
         190,
-        317,
-        324,
-        371,
-        384,
-        395
+        299,
+        306,
+        353,
+        366,
+        377
       ]
     },
     "src/viewer/scene/webgl/convertConstant.js": {
