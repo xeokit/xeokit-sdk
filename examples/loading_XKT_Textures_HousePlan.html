@@ -15,7 +15,11 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a BIM model from the file system</h2>
+    <h2>Loading BIM geometry with compressed textures from the file system</h2>
+    <p>In this example, we're loading an XKT file containing compressed textures formatted as <a href="https://github.khronos.org/KTX-Specification/">KTX2</a>.</p>
+    <p>To support KTX2, we configure our XKTLoaderPlugin with a <a href="../docs/class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html"
+           target="_other">KTX2TextureTranscoder</a>, which uses the <a href="https://github.com/BinomialLLC/basis_universal">Basis Universal codec</a> to transcode the files into a compressed
+        format for the user's GPU.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -31,6 +35,10 @@
         <li>
             <a href="../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
                target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html"
+               target="_other">KTX2TextureTranscoder</a>
         </li>
     </ul>
     <h3>Resources</h3>
@@ -52,9 +60,9 @@
         pbrEnabled: true
     });
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
 
     viewer.camera.perspective.far = 10000;
 
@@ -73,12 +81,11 @@
         hideColorTexture: false,
         hidePBR: false,
         hideTransparentObjects: false,
-        scaleCanvasResolution: true,
+        scaleCanvasResolution: false,
         scaleCanvasResolutionFactor: 0.5,
         delayBeforeRestore: true,
         delayBeforeRestoreSeconds: 0.4
     });
-
 
     new ReflectionMap(viewer.scene, {
         src: [
@@ -89,7 +96,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding: sRGBEncoding
+        encoding: LinearEncoding
     });
 
     const textureTranscoder = new KTX2TextureTranscoder({
@@ -112,7 +119,7 @@
     });
 
     sceneModel.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(sceneModel);
+        //viewer.cameraFlight.jumpTo(sceneModel);
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
