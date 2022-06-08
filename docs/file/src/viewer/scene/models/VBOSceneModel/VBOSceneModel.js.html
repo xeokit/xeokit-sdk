@@ -2339,8 +2339,8 @@ class VBOSceneModel extends Component {
             this.error(&quot;Texture already created: &quot; + textureId);
             return;
         }
-        if (!cfg.src &amp;&amp; !cfg.image) {
-            this.error(&quot;Param expected: `src` or `image&apos;&quot;);
+        if (!cfg.src &amp;&amp; !cfg.image &amp;&amp; !cfg.buffers) {
+            this.error(&quot;Param expected: `src`, `image&apos; or &apos;buffers&apos;&quot;);
             return null;
         }
         let minFilter = cfg.minFilter || LinearMipmapLinearFilter;

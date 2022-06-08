@@ -232,13 +232,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {KTX2TextureTranscoder} from &apos;<span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber215">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {KTX2TextureTranscoder} from &apos;<span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber233">@xeokit/xeokit-sdk/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber215">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber233">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -260,25 +260,33 @@
   
   <div class="description" data-ice="description"><p>Transcodes texture data from KTX2.</p>
 <h2 id="overview">Overview</h2><ul>
-<li>Uses the <a href="https://github.com/BinomialLLC/basis_universal">Basis Universal Supercompressed GPU Texture Codec</a> to
-transcode <a href="https://github.khronos.org/KTX-Specification/">KTX2</a> texture assets.</li>
-<li>An <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> that is configured with a KTX2TextureTranscoder will allow us to load KTX2 textures in
-XKT files. Textures in XKT are always KTX2. If we do not configure a KTX2TextureTranscoder, the XKTLoaderPlugin will
-simply ignore the textures in the XKT.</li>
-<li>A <span><a href="class/src/viewer/scene/models/SceneModel.js~SceneModel.html">SceneModel</a></span> implementation (eg. <span><a href="class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span>) that is configured with a KTX2TextureTranscoder will
-allow us to load textures into it from KTX2 files or ArrayBuffers.</li>
+<li>Uses the <a href="https://github.com/BinomialLLC/basis_universal">Basis Universal GPU Texture Codec</a> to
+transcode <a href="https://github.khronos.org/KTX-Specification/">KTX2</a> textures.</li>
+<li><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> uses a KTX2TextureTranscoder to load textures in XKT files.</li>
+<li><span><a href="class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span> uses a KTX2TextureTranscoder to enable us to add KTX2-encoded textures.</li>
+<li>Loads the Basis Codec from <a href="https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/">CDN</a> by default, but can
+also be configured to load the Codec from local files.</li>
+<li>We also bundle the Basis Codec with the xeokit-sdk npm package, and in the <a href="https://github.com/xeokit/xeokit-sdk/tree/master/dist/basis">repository</a>.</li>
 </ul>
-<h2 id="what-is-ktx2-">What is KTX2?</h2><p>A KTX2 file stores GPU texture data in the Khronos Texture 2.0 (KTX2) container format. It contains image data for
+<h2 id="what-is-ktx2-">What is KTX2?</h2><p>A <a href="https://github.khronos.org/KTX-Specification/">KTX2</a> file stores GPU texture data in the Khronos Texture 2.0 (KTX2) container format. It contains image data for
 a texture asset compressed with Basis Universal (BasisU) supercompression that can be transcoded to different formats
 depending on the support provided by the target devices. KTX2 provides a lightweight format for distributing texture
 assets to GPUs. Due to BasisU compression, KTX2 files can store any image format supported by GPUs.</p>
-<h2 id="loading-xkt-files-containing-ktx2-textures">Loading XKT files containing KTX2 textures</h2><p>An <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> that is configured with a KTX2TextureTranscoder will allow us to load XKT files that
-contain KTX2 textures. If we don&apos;t configure a KTX2TextureTranscoder, then the XKTLoaderPlugin will simply ignore
-the textures in the XKT.</p>
+<h2 id="loading-xkt-files-containing-ktx2-textures">Loading XKT files containing KTX2 textures</h2><p><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> uses a KTX2TextureTranscoder to load textures in XKT files. An XKTLoaderPlugin has its own
+default KTX2TextureTranscoder, configured load the Basis Codec from the CDN. If we wish, we can override that with our own
+KTX2TextureTranscoder, configured to load the Codec locally.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> and add an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>
 configured with a KTX2TextureTranscoder. Then we&apos;ll use the XKTLoaderPlugin to load an
 XKT file that contains KTX2 textures, which the plugin will transcode using
 its KTX2TextureTranscoder.</p>
+<p>We&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
+Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
+load the Codec from the CDN. We&apos;ll stick with loading our own Codec, in case we want to run our app without an Internet connection.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan">Run this example</a>]</li>
+</ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
     transparent: true
@@ -305,10 +313,16 @@ const sceneModel = xktLoader.load({
 <h2 id="loading-ktx2-files-into-a-vboscenemodel">Loading KTX2 files into a VBOSceneModel</h2><p>A <span><a href="class/src/viewer/scene/models/SceneModel.js~SceneModel.html">SceneModel</a></span> that is configured with a KTX2TextureTranscoder will
 allow us to load textures into it from KTX2-transcoded buffers or files.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, containing a <span><a href="class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span> configured with a
-KTX2TextureTranscoder. We&apos;ll then programmatically create a simple object within the VBOSceneModel, consisting of
-a single mesh with a texture loaded from a KTX2 file, which our VBOSceneModel internally transcodes, using
-its KTX2TextureTranscoder. Note how we configure our KTX2TextureTranscoder with a path to the Basis Universal
-transcoder WASM module.</p>
+KTX2TextureTranscoder.</p>
+<p>We&apos;ll then programmatically create a simple object within the VBOSceneModel, consisting of
+a single box mesh with a texture loaded from a KTX2 file, which our VBOSceneModel internally transcodes, using
+its KTX2TextureTranscoder.</p>
+<p>As in the previous example, we&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
+Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+KTX2TextureTranscoder altogether, and let the VBOSceneModel use its internal default KTX2TextureTranscoder.</p>
+<ul>
+<li><a href="http://localhost:8080/examples/sceneRepresentation_VBOSceneModel_batching_textures_ktx2.html">Run a similar example</a></li>
+</ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
     transparent: true
@@ -361,10 +375,11 @@ vboSceneModel.createEntity({
 
 vboSceneModel.finalize();</code>
 </code></pre>
-<h2 id="loading-ktx2-arraybuffers-into-a-vboscenemodel">Loading KTX2 ArrayBuffers into a VBOSceneModel</h2><p>A <span><a href="class/src/viewer/scene/models/SceneModel.js~SceneModel.html">SceneModel</a></span> that is configured with a KTX2TextureTranscoder will allow us to load textures into
+<h2 id="loading-ktx2-arraybuffers-into-a-vboscenemodel">Loading KTX2 ArrayBuffers into a VBOSceneModel</h2><p>A <span><a href="class/src/viewer/scene/models/SceneModel.js~SceneModel.html">SceneModel</a></span> that is configured with a KTX2TextureTranscoder will also allow us to load textures into
 it from KTX2 ArrayBuffers.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, containing a <span><a href="class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span> configured with a
-KTX2TextureTranscoder. We&apos;ll then programmatically create a simple object within the VBOSceneModel, consisting of
+KTX2TextureTranscoder.</p>
+<p>We&apos;ll then programmatically create a simple object within the VBOSceneModel, consisting of
 a single mesh with a texture loaded from a KTX2 ArrayBuffer, which our VBOSceneModel internally transcodes, using
 its KTX2TextureTranscoder.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const viewer = new Viewer({
@@ -557,7 +572,7 @@ utils.loadArraybuffer(&quot;../assets/textures/compressed/sample_uastc_zstd.ktx2
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber226">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -589,8 +604,12 @@ what target GPU formats this KTX2TextureTranscoder will transcode to.</p>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">transcoderPath</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Path to the Basis transcoder module that internally does the heavy lifting for our KTX2TextureTranscoder.</p>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/&quot;</li></ul></td>
+      <td data-ice="description"><p>Path to the Basis
+transcoder module that internally does the heavy lifting for our KTX2TextureTranscoder. If we omit this configuration,
+then our KTX2TextureTranscoder will load it from <code>https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/</code> by
+default. Therefore, make sure your application is connected to the internet if you wish to use the default transcoder path.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -638,7 +657,7 @@ what target GPU formats this KTX2TextureTranscoder will transcode to.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber338">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
@@ -682,7 +701,7 @@ what target GPU formats this KTX2TextureTranscoder will transcode to.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js.html#lineNumber326">source</a></span></span>
     </span>
   </h3>
 

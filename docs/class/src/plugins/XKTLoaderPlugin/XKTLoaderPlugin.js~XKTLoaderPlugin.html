@@ -232,13 +232,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber424">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber434">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber424">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber434">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -266,6 +266,7 @@
 <li>An <em><code>.XKT</code></em> file is a single BLOB containing a model, compressed using geometry quantization
 and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
 <li>Supports double-precision coordinates.</li>
+<li>Supports compressed textures.</li>
 <li>Set the position, scale and rotation of each model as you load it.</li>
 <li>Filter which IFC types get loaded.</li>
 <li>Configure initial default appearances for IFC types.</li>
@@ -367,13 +368,21 @@ model = viewer.scene.models[&quot;myModel&quot;];
 // Destroy the model
 model.destroy();</code>
 </code></pre>
-<h2 id="loading-xkt-files-containing-ktx2-textures">Loading XKT files containing KTX2 textures</h2><p>An XKTLoaderPlugin that is configured with a <span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span> will allow us to load XKT files that
-contain KTX2 textures. If we don&apos;t configure a KTX2TextureTranscoder, then the XKTLoaderPlugin will simply ignore
-the textures in the XKT.</p>
+<h2 id="loading-xkt-files-containing-textures">Loading XKT files containing textures</h2><p>XKTLoaderPlugin uses a <span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span> to load textures in XKT files. An XKTLoaderPlugin has its own
+default KTX2TextureTranscoder, configured load the Basis Codec from the CDN. If we wish, we can override that with our own
+KTX2TextureTranscoder instance that&apos;s configured to load the Codec locally.</p>
 <p>In the example below, we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> and add an XKTLoaderPlugin
-configured with a KTX2TextureTranscoder. Then we&apos;ll use the XKTLoaderPlugin to load an
-XKT file that contains KTX2 textures, which the plugin will transcode using
+configured with a KTX2TextureTranscoder that finds the Codec in our local file system. Then we&apos;ll use the
+XKTLoaderPlugin to load an XKT file that contains KTX2 textures, which the plugin will transcode using
 its KTX2TextureTranscoder.</p>
+<p>We&apos;ll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
+Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
+load the Codec from the CDN. We&apos;ll stick with loading our own Codec, in case we want to run our app without an Internet connection.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan">Run this example</a>]</li>
+</ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
     transparent: true
@@ -1421,7 +1430,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1567,7 +1576,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber497">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber507">source</a></span></span>
     </span>
   </h3>
 
@@ -1612,7 +1621,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber508">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber518">source</a></span></span>
     </span>
   </h3>
 
@@ -1657,7 +1666,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber572">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber582">source</a></span></span>
     </span>
   </h3>
 
@@ -1704,7 +1713,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber586">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber596">source</a></span></span>
     </span>
   </h3>
 
@@ -1751,7 +1760,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber600">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber610">source</a></span></span>
     </span>
   </h3>
 
@@ -1798,7 +1807,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber614">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber624">source</a></span></span>
     </span>
   </h3>
 
@@ -1845,7 +1854,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber625">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber635">source</a></span></span>
     </span>
   </h3>
 
@@ -1890,7 +1899,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber646">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber656">source</a></span></span>
     </span>
   </h3>
 
@@ -1941,7 +1950,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber544">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber554">source</a></span></span>
     </span>
   </h3>
 
@@ -1988,7 +1997,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber558">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber568">source</a></span></span>
     </span>
   </h3>
 
@@ -2035,7 +2044,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber519">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber529">source</a></span></span>
     </span>
   </h3>
 
@@ -2080,7 +2089,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber530">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -2125,7 +2134,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber657">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber667">source</a></span></span>
     </span>
   </h3>
 
@@ -2170,7 +2179,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber676">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber686">source</a></span></span>
     </span>
   </h3>
 
@@ -2220,7 +2229,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber478">source</a></span></span>
     </span>
   </h3>
 
@@ -2276,7 +2285,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber487">source</a></span></span>
     </span>
   </h3>
 
@@ -2320,7 +2329,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber486">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
@@ -2367,7 +2376,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber719">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber729">source</a></span></span>
     </span>
   </h3>
 
