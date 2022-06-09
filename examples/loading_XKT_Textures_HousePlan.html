@@ -64,11 +64,9 @@
     viewer.camera.look = [1391.46, 0.89, -244.24];
     viewer.camera.up = [-0.41, 0.81, 0.40];
 
-    viewer.camera.perspective.far = 10000;
-
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
-    viewer.scene.gammaFactor = 2.2;
+    viewer.scene.gammaFactor = 2.4;
 
     viewer.scene.sao.enabled = true; // Higher-quality SAO settings
     viewer.scene.sao.numSamples = 100;
@@ -96,7 +94,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding: LinearEncoding
+        encoding: sRGBEncoding
     });
 
     const textureTranscoder = new KTX2TextureTranscoder({
@@ -119,7 +117,6 @@
     });
 
     sceneModel.on("loaded", () => {
-        //viewer.cameraFlight.jumpTo(sceneModel);
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });

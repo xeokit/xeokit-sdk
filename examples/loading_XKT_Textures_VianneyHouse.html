@@ -44,13 +44,18 @@
 </body>
 <script type="module">
 
-    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder, sRGBEncoding} from "../dist/xeokit-sdk.es.js";
+    import {
+        Viewer,
+        ReflectionMap,
+        XKTLoaderPlugin,
+        KTX2TextureTranscoder,
+        sRGBEncoding
+    } from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: true,
-        colorTextureEnabled: true
+        pbrEnabled: true
     });
 
     viewer.scene.gammaInput = true;
@@ -61,16 +66,6 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
-    // const sao = viewer.scene.sao;
-    //
-    // sao.enabled = true; // Only works if supported
-    // sao.intensity = 0.20;
-    // sao.bias = 0.5;
-    // sao.scale = 230.0; // <<------- Scale the SAO effect for this model
-    // sao.minResolution = 0.0;
-    // sao.kernelRadius = 100;
-    // sao.blur = true;
-
     new ReflectionMap(viewer.scene, {
         src: [
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
@@ -80,7 +75,7 @@
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
             "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
-        encoding:sRGBEncoding
+        encoding: sRGBEncoding
     });
 
     const textureTranscoder = new KTX2TextureTranscoder({
@@ -98,10 +93,9 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v10/glb/VianneyHouse.textures.glb.xkt",
-       // edges: true,
-        rotation: [-90, 0, 0],
-        saoEnabled: false
+        src: "../assets/models/xkt/v10/glb/VianneyHouse.glb.xkt",
+        edges: false,
+        rotation: [-90, 0, 0]
     });
 
     sceneModel.on("loaded", () => {

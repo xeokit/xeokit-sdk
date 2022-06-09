@@ -53,10 +53,13 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        colorTextureEnabled: true,
         pbrEnabled: true,
         saoEnabled: true
     });
+
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
@@ -65,10 +68,11 @@
     viewer.scene.sao.enabled = true; // Higher-quality SAO settings
     viewer.scene.sao.numSamples = 60;
     viewer.scene.sao.kernelRadius = 170;
+    viewer.scene.sao.intensity = 0.2;
 
-    viewer.camera.eye = [1396.88, 6.27, -252.07];
-    viewer.camera.look = [1390.22, 2.34, -244.75];
-    viewer.camera.up = [-0.24, 0.92, 0.27];
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
 
     const fastNavPlugin = new FastNavPlugin(viewer, {
         hideEdges: true,

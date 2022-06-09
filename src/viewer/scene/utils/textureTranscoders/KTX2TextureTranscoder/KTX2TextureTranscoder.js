@@ -45,7 +45,7 @@ let activeTranscoders = 0;
  * ## Loading XKT files containing KTX2 textures
  *
  * {@link XKTLoaderPlugin} uses a KTX2TextureTranscoder to load textures in XKT files. An XKTLoaderPlugin has its own
- * default KTX2TextureTranscoder, configured load the Basis Codec from the [CDN](https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/). If we wish, we can override that with our own
+ * default KTX2TextureTranscoder, configured to load the Basis Codec from the [CDN](https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/). If we wish, we can override that with our own
  * KTX2TextureTranscoder, configured to load the Codec locally.
  *
  * In the example below, we'll create a {@link Viewer} and add an {@link XKTLoaderPlugin}
