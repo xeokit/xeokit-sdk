@@ -534,7 +534,7 @@ class CityJSONLoaderPlugin extends Plugin {
 
     _parseGeometrySurfacesWithSharedMaterial(ctx, geometry, objectMaterial, meshIds) {
 
-        const sceneModel = ctx.performanceModel;
+        const sceneModel = ctx.sceneModel;
         const sharedIndices = [];
         const geometryCfg = {
             positions: [],
@@ -583,7 +583,7 @@ class CityJSONLoaderPlugin extends Plugin {
 
             const meshId = "" + ctx.nextId++;
 
-            performanceModel.createMesh({
+            sceneModel.createMesh({
                 id: meshId,
                 primitive: "triangles",
                 positions: geometryCfg.positions,
