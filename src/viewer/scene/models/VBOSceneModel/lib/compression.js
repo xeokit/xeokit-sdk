@@ -185,8 +185,8 @@ function octDecodeVec2(oct) { // Decode an oct-encoded normal
 /**
  * @private
  */
-function dot(p, vec3) { // Dot product of a normal in an array against a candidate decoding
-    return p[0] * vec3[0] + p[1] * vec3[1] + p[2] * vec3[2];
+function dot(array, i, vec3) {
+    return array[i] * vec3[0] + array[i + 1] * vec3[1] + array[i + 2] * vec3[2];
 }
 
 export {
