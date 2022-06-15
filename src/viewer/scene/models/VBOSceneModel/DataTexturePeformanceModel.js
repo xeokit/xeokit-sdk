@@ -2289,10 +2289,11 @@ class DataTexturePeformanceModel extends Component {
      * Once finalized, you can't add anything more to this DataTexturePeformanceModel.
      */
     finalize() {
-
         if (this.destroyed) {
             return;
         }
+
+        this.beginDeferredFlagsInAllLayers ();
 
         if (this._vfcManager) {
             this._vfcManager.finalize (
@@ -2339,6 +2340,8 @@ class DataTexturePeformanceModel extends Component {
             const layer = this._layerList[i];
             layer.layerIndex = i;
         }
+
+        this.commitDeferredFlagsInAllLayers ();
 
         this.glRedraw();
 
