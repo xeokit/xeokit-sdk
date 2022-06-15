@@ -910,7 +910,7 @@ class DataTextureGenerator
 
         gl.bindTexture (gl.TEXTURE_2D, texture);
         
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA16F, textureWidth, textureHeight);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA32F, textureWidth, textureHeight);
 
         gl.texSubImage2D(
             gl.TEXTURE_2D,
