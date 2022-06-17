@@ -706,22 +706,6 @@ const Renderer = function (scene, options) {
                     gl.depthMask(false);
                 }
 
-                // Transparent X-ray edges
-
-                if (xrayEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
-                    }
-                }
-
-                // Transparent X-ray fill
-
-                if (xrayedFillTransparentBinLen > 0) {
-                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
-                    }
-                }
-
                 // Transparent color edges
 
                 if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
@@ -742,6 +726,23 @@ const Renderer = function (scene, options) {
                         drawable.drawColorTransparent(frameCtx);
                     }
                 }
+
+                // Transparent X-ray edges
+
+                if (xrayEdgesTransparentBinLen > 0) {
+                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
+                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
+                    }
+                }
+
+                // Transparent X-ray fill
+
+                if (xrayedFillTransparentBinLen > 0) {
+                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
+                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
+                    }
+                }
+
                 gl.disable(gl.BLEND);
                 if (!alphaDepthMask) {
                     gl.depthMask(true);
