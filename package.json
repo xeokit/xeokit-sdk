@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "2.3.0-beta-14",
+  "version": "2.3.0-beta-16",
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "module": "/dist/xeokit-sdk.es.js",
   "main": "/dist/xeokit-sdk.cjs.js",
