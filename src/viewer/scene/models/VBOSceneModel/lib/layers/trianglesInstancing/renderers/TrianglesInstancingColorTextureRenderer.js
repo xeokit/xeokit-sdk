@@ -54,10 +54,7 @@ class TrianglesInstancingColorTextureRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
-
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -97,16 +94,7 @@ class TrianglesInstancingColorTextureRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
 
-        this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-        this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-        this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
-
         this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
         this._aUV.bindArrayBuffer(geometry.uvBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
@@ -134,9 +122,6 @@ class TrianglesInstancingColorTextureRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 0);
         gl.vertexAttribDivisor(this._aColor.location, 0);
         gl.vertexAttribDivisor(this._aFlags.location, 0);
 
@@ -192,10 +177,8 @@ class TrianglesInstancingColorTextureRenderer {
         this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
 
         this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
 
         this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
         this._uLightAmbient = program.getLocation("lightAmbient");
@@ -241,7 +224,6 @@ class TrianglesInstancingColorTextureRenderer {
         }
 
         this._aPosition = program.getAttribute("position");
-        this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aUV = program.getAttribute("uv");
         this._aFlags = program.getAttribute("flags");
@@ -251,10 +233,6 @@ class TrianglesInstancingColorTextureRenderer {
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
-        this._aModelNormalMatrixCol0 = program.getAttribute("modelNormalMatrixCol0");
-        this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
-        this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
 
         this._uColorMap = "uColorMap";
 
@@ -314,11 +292,7 @@ class TrianglesInstancingColorTextureRenderer {
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        let i;
-        let len;
-        let light;
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry drawing vertex shader");
@@ -326,7 +300,6 @@ class TrianglesInstancingColorTextureRenderer {
         src.push("uniform int renderPass;");
 
         src.push("in vec3 position;");
-        src.push("in vec3 normal;");
         src.push("in vec4 color;");
         src.push("in vec2 uv;");
         src.push("in vec4 flags;");
@@ -340,14 +313,8 @@ class TrianglesInstancingColorTextureRenderer {
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("in vec4 modelNormalMatrixCol0;");
-        src.push("in vec4 modelNormalMatrixCol1;");
-        src.push("in vec4 modelNormalMatrixCol2;");
-
         src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 worldNormalMatrix;");
         src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
         src.push("uniform mat3 uvDecodeMatrix;")
@@ -361,38 +328,11 @@ class TrianglesInstancingColorTextureRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("uniform vec4 lightAmbient;");
-
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            src.push("uniform vec4 lightColor" + i + ";");
-            if (light.type === "dir") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            }
-            if (light.type === "spot") {
-                src.push("uniform vec3 lightPos" + i + ";");
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-        }
-
-        src.push("vec3 octDecode(vec2 oct) {");
-        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-        src.push("    if (v.z < 0.0) {");
-        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-        src.push("    }");
-        src.push("    return normalize(v);");
-        src.push("}");
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out vec4 vFlags2;");
         }
+        src.push("out vec4 vViewPosition;");
         src.push("out vec4 vColor;");
         src.push("out vec2 vUV;");
 
@@ -413,47 +353,8 @@ class TrianglesInstancingColorTextureRenderer {
         }
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-
-        src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-        src.push("vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);");
-
-        src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-        src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-
-        src.push("float lambertian = 1.0;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "point") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
-                } else {
-                    src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "spot") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else {
-                continue;
-            }
-            src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
-            src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
-        }
-
-        src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
-        src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
+        src.push("vViewPosition = viewPosition;");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
         src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -476,6 +377,7 @@ class TrianglesInstancingColorTextureRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
+        const lightsState = scene._lightsState;
         let i;
         let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
@@ -519,9 +421,31 @@ class TrianglesInstancingColorTextureRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform vec4 lightAmbient;");
+        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
+            if (light.type === "ambient") {
+                continue;
+            }
+            src.push("uniform vec4 lightColor" + i + ";");
+            if (light.type === "dir") {
+                src.push("uniform vec3 lightDir" + i + ";");
+            }
+            if (light.type === "point") {
+                src.push("uniform vec3 lightPos" + i + ";");
+            }
+            if (light.type === "spot") {
+                src.push("uniform vec3 lightPos" + i + ";");
+                src.push("uniform vec3 lightDir" + i + ";");
+            }
+        }
+
+        src.push("in vec4 vViewPosition;");
         src.push("in vec4 vColor;");
         src.push("in vec2 vUV;");
         src.push("out vec4 outColor;");
+
         src.push("void main(void) {");
 
         if (clipping) {
@@ -539,17 +463,52 @@ class TrianglesInstancingColorTextureRenderer {
             src.push("}");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+        src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
+        src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
+
+        src.push("float lambertian = 1.0;");
+
+        src.push("vec3 xTangent = dFdx( vViewPosition.xyz );");
+        src.push("vec3 yTangent = dFdy( vViewPosition.xyz );");
+        src.push("vec3 viewNormal = normalize( cross( xTangent, yTangent ) );");
+
+        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
+            if (light.type === "ambient") {
+                continue;
+            }
+            if (light.type === "dir") {
+                if (light.space === "view") {
+                    src.push("viewLightDir = normalize(lightDir" + i + ");");
+                } else {
+                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
+                }
+            } else if (light.type === "point") {
+                if (light.space === "view") {
+                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
+                } else {
+                    src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
+                }
+            } else if (light.type === "spot") {
+                if (light.space === "view") {
+                    src.push("viewLightDir = normalize(lightDir" + i + ");");
+                } else {
+                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
+                }
+            } else {
+                continue;
+            }
+            src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
+            src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
-        src.push("vec4 colorTexel = texture(uColorMap, vUV);");
-        src.push("float opacity = vColor.a;");
-
-        // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-        // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
+        src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+        src.push("float opacity = color.a;");
 
         if (this._withSAO) {
+            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
             src.push("   float viewportWidth     = uSAOParams[0];");
             src.push("   float viewportHeight    = uSAOParams[1];");
             src.push("   float blendCutoff       = uSAOParams[2];");
@@ -560,6 +519,11 @@ class TrianglesInstancingColorTextureRenderer {
         } else {
             src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb, opacity);");
         }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+        }
+
         src.push("}");
         return src;
     }

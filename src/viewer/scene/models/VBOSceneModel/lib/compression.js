@@ -38,6 +38,11 @@ function quantizePositions(positions, aabb, positionsDecodeMatrix) { // http://c
  */
 function transformAndOctEncodeNormals(worldNormalMatrix, normals, lenNormals, compressedNormals, lenCompressedNormals) {
     // http://jcgt.org/published/0003/02/01/
+
+    function dot(array, vec3) {
+        return array[0] * vec3[0] + array[1] * vec3[1] + array[2] * vec3[2];
+    }
+
     let oct, dec, best, currentCos, bestCos;
     let i, ei;
     let localNormal = new Float32Array([0, 0, 0, 0]);

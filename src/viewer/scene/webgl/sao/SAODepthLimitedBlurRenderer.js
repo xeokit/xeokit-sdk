@@ -189,7 +189,8 @@ class SAODepthLimitedBlurRenderer {
                     }
 
                     outColor = packFloatToRGBA(occlusionSum / weightSum);
-                }`]
+                }`
+            ]
         });
 
         if (this._program.errors) {
@@ -279,7 +280,7 @@ class SAODepthLimitedBlurRenderer {
 
         gl.uniform1fv(this._uSampleWeights, sampleWeights);
 
-        const depthTexture =  depthRenderBuffer.getDepthTexture();
+        const depthTexture = depthRenderBuffer.getDepthTexture();
         const occlusionTexture = occlusionRenderBuffer.getTexture();
 
         program.bindTexture(this._uDepthTexture, depthTexture, 0); // TODO: use FrameCtx.textureUnit

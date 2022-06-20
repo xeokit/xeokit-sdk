@@ -535,7 +535,6 @@ class TrianglesBatchingLayer {
 
         this._state.colorTextureSupported
             = !!state.uvBuf
-            && !!state.normalsBuf
             && !!state.textureSet
             && !!state.textureSet.colorTexture;
 

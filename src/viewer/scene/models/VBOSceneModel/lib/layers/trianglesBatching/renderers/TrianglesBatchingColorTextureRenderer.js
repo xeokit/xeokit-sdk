@@ -54,10 +54,7 @@ class TrianglesBatchingColorTextureRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
-
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -90,10 +87,6 @@ class TrianglesBatchingColorTextureRenderer {
         }
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-
-        if (this._aNormal) {
-            this._aNormal.bindArrayBuffer(state.normalsBuf);
-        }
 
         if (this._aUV) {
             this._aUV.bindArrayBuffer(state.uvBuf);
@@ -165,9 +158,7 @@ class TrianglesBatchingColorTextureRenderer {
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
         this._uLightAmbient = program.getLocation("lightAmbient");
@@ -214,7 +205,6 @@ class TrianglesBatchingColorTextureRenderer {
 
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
-        this._aNormal = program.getAttribute("normal");
         this._aUV = program.getAttribute("uv");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
@@ -283,9 +273,7 @@ class TrianglesBatchingColorTextureRenderer {
 
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        let light;
         const src = [];
         src.push("#version 300 es");
         src.push("// Triangles batching color texture vertex shader");
@@ -293,7 +281,6 @@ class TrianglesBatchingColorTextureRenderer {
         src.push("uniform int renderPass;");
 
         src.push("in vec3 position;");
-        src.push("in vec3 normal;");
         src.push("in vec4 color;");
         src.push("in vec2 uv;");
         src.push("in vec4 flags;");
@@ -304,11 +291,9 @@ class TrianglesBatchingColorTextureRenderer {
         }
 
         src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 worldNormalMatrix;");
 
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
         src.push("uniform mat3 uvDecodeMatrix;")
 
@@ -321,38 +306,11 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("uniform vec4 lightAmbient;");
-
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            src.push("uniform vec4 lightColor" + i + ";");
-            if (light.type === "dir") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            }
-            if (light.type === "spot") {
-                src.push("uniform vec3 lightPos" + i + ";");
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-        }
-
-        src.push("vec3 octDecode(vec2 oct) {");
-        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-        src.push("    if (v.z < 0.0) {");
-        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-        src.push("    }");
-        src.push("    return normalize(v);");
-        src.push("}");
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out vec4 vFlags2;");
         }
+        src.push("out vec4 vViewPosition;");
         src.push("out vec4 vColor;");
         src.push("out vec2 vUV;");
 
@@ -371,15 +329,123 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-        src.push("vec4 worldNormal =  worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+        src.push("vViewPosition = viewPosition;");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
+        src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
+
+        src.push("vec4 clipPos = projMatrix * viewPosition;");
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+        }
+        if (clipping) {
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags2 = flags2;");
+        }
+        src.push("gl_Position = clipPos;");
+        src.push("}");
+        src.push("}");
+        return src;
+    }
+
+    _buildFragmentShader() {
+        const scene = this._scene;
+        const lightsState = scene._lightsState;
+        const sectionPlanesState = scene._sectionPlanesState;
+        const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const src = [];
+        src.push("#version 300 es");
+        src.push("// Triangles batching color texture fragment shader");
+
+        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+        src.push("precision highp float;");
+        src.push("precision highp int;");
+        src.push("#else");
+        src.push("precision mediump float;");
+        src.push("precision mediump int;");
+        src.push("#endif");
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("in float isPerspective;");
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
+        }
+        src.push("uniform sampler2D uColorMap;");
+        if (this._withSAO) {
+            src.push("uniform sampler2D uOcclusionTexture;");
+            src.push("uniform vec4      uSAOParams;");
+
+            src.push("const float       packUpscale = 256. / 255.;");
+            src.push("const float       unpackDownScale = 255. / 256.;");
+            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
+
+            src.push("float unpackRGBToFloat( const in vec4 v ) {");
+            src.push("    return dot( v, unPackFactors );");
+            src.push("}");
+        }
+        if (clipping) {
+            src.push("in vec4 vWorldPosition;");
+            src.push("in vec4 vFlags2;");
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+                src.push("uniform bool sectionPlaneActive" + i + ";");
+                src.push("uniform vec3 sectionPlanePos" + i + ";");
+                src.push("uniform vec3 sectionPlaneDir" + i + ";");
+            }
+        }
+        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform vec4 lightAmbient;");
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+            const light = lightsState.lights[i];
+            if (light.type === "ambient") {
+                continue;
+            }
+            src.push("uniform vec4 lightColor" + i + ";");
+            if (light.type === "dir") {
+                src.push("uniform vec3 lightDir" + i + ";");
+            }
+            if (light.type === "point") {
+                src.push("uniform vec3 lightPos" + i + ";");
+            }
+            if (light.type === "spot") {
+                src.push("uniform vec3 lightPos" + i + ";");
+                src.push("uniform vec3 lightDir" + i + ";");
+            }
+        }
+
+        src.push("in vec4 vViewPosition;");
+        src.push("in vec4 vColor;");
+        src.push("in vec2 vUV;");
+        src.push("out vec4 outColor;");
+
+        src.push("void main(void) {");
+
+        if (clipping) {
+            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  if (clippable) {");
+            src.push("  float dist = 0.0;");
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+                src.push("if (sectionPlaneActive" + i + ") {");
+                src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
+                src.push("}");
+            }
+            src.push("  if (dist > 0.0) { ");
+            src.push("      discard;")
+            src.push("  }");
+            src.push("}");
+        }
 
         src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
         src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
 
         src.push("float lambertian = 1.0;");
+
+        src.push("vec3 xTangent = dFdx( vViewPosition.xyz );");
+        src.push("vec3 yTangent = dFdy( vViewPosition.xyz );");
+        src.push("vec3 viewNormal = normalize( cross( xTangent, yTangent ) );");
+
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -404,104 +470,14 @@ class TrianglesBatchingColorTextureRenderer {
             } else {
                 continue;
             }
+
             src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
-        src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
-        src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
-        src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
-
-        src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
-        }
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
-        }
-        src.push("gl_Position = clipPos;");
-        src.push("}");
-        src.push("}");
-        return src;
-    }
-
-    _buildFragmentShader() {
-        const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
-        const src = [];
-        src.push("#version 300 es");
-        src.push("// Triangles batching color texture fragment shader");
-
-        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-        src.push("precision highp float;");
-        src.push("precision highp int;");
-        src.push("#else");
-        src.push("precision mediump float;");
-        src.push("precision mediump int;");
-        src.push("#endif");
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("in float isPerspective;");
-            src.push("uniform float logDepthBufFC;");
-            src.push("in float vFragDepth;");
-        }
-
-        src.push("uniform sampler2D uColorMap;");
-
-        if (this._withSAO) {
-            src.push("uniform sampler2D uOcclusionTexture;");
-            src.push("uniform vec4      uSAOParams;");
-
-            src.push("const float       packUpscale = 256. / 255.;");
-            src.push("const float       unpackDownScale = 255. / 256.;");
-            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-
-            src.push("float unpackRGBToFloat( const in vec4 v ) {");
-            src.push("    return dot( v, unPackFactors );");
-            src.push("}");
-        }
-
-        if (clipping) {
-            src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
-                src.push("uniform bool sectionPlaneActive" + i + ";");
-                src.push("uniform vec3 sectionPlanePos" + i + ";");
-                src.push("uniform vec3 sectionPlaneDir" + i + ";");
-            }
-        }
-
-        src.push("in vec4 vColor;");
-        src.push("in vec2 vUV;");
-        src.push("out vec4 outColor;");
-
-        src.push("void main(void) {");
-
-        if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
-            src.push("  if (clippable) {");
-            src.push("  float dist = 0.0;");
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
-                src.push("if (sectionPlaneActive" + i + ") {");
-                src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-                src.push("}");
-            }
-            src.push("  if (dist > 0.0) { ");
-            src.push("      discard;")
-            src.push("  }");
-            src.push("}");
-        }
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-        }
-
-        src.push("vec4 colorTexel = vColor * texture(uColorMap, vUV);");
-        src.push("float opacity = vColor.a;");
+        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
+        src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+        src.push("float opacity = color.a;");
 
         if (this._withSAO) {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
@@ -516,6 +492,10 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   outColor                = vec4(colorTexel.rgb * ambient, opacity);");
         } else {
             src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
+        }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
         src.push("}");

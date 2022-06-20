@@ -341,7 +341,6 @@ class TrianglesInstancingLayer {
 
         this._state.colorTextureSupported
             = !!geometry.uvBuf
-            && !!geometry.normalsBuf
             && !!textureSet
             && !!textureSet.colorTexture;
 

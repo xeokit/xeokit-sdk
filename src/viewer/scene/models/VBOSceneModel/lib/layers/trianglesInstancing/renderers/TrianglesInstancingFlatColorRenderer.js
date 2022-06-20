@@ -418,8 +418,8 @@ class TrianglesInstancingFlatColorRenderer {
 
         src.push("in vec4 vViewPosition;");
         src.push("in vec4 vColor;");
-
         src.push("out vec4 outColor;");
+
         src.push("void main(void) {");
 
         if (clipping) {
