@@ -1,8 +1,14 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
+import {Bitmap} from "../../viewer/scene/Bitmap";
+import {LineSet} from "../../viewer/scene/LineSet";
+
 import {math} from "../../viewer/scene/math/math.js";
 
 const tempVec3 = math.vec3();
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
 
 /**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
@@ -192,7 +198,7 @@ const tempVec3 = math.vec3();
  * models loaded, with their objects having globalized IDs, following the same prefixing scheme we're using in
  * xeokit. Then, the viewpoint's ````authoring_tool_id```` fields will be able to resolve to their objects within the
  * target viewer.
-*
+ *
  * @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {
@@ -259,24 +265,35 @@ class BCFViewpointsPlugin extends Plugin {
      *
      * {
      *     perspective_camera: {
-     *         camera_view_point: {
+     *          camera_view_point: {
      *             x: 0.0,
      *             y: 0.0,
      *             z: 0.0
-     *         },
-     *         camera_direction: {
+     *          },
+     *          camera_direction: {
      *             x: 1.0,
      *             y: 1.0,
      *             z: 2.0
-     *         },
-     *         camera_up_vector: {
+     *          },
+     *          camera_up_vector: {
      *             x: 0.0,
      *             y: 0.0,
      *             z: 1.0
-     *         },
-     *         field_of_view: 90.0
-     *     },
-     *     lines: [],
+     *          },
+     *          field_of_view: 90.0
+     *      },
+     *      lineSets: [{
+     *          start_point: {
+     *              x: 1.0,
+     *              y: 1.0,
+     *              z: 1.0
+     *          },
+     *          end_point: {
+     *              x: 0.0,
+     *              y: 0.0,
+     *              z: 0.0
+     *          }
+     *     }],
      *     clipping_planes: [{
      *         location: {
      *             x: 0.5,
@@ -346,7 +363,7 @@ class BCFViewpointsPlugin extends Plugin {
             };
         }
 
-        // Clipping planes
+        // Section planes
 
         const sectionPlanes = scene.sectionPlanes;
         for (let id in sectionPlanes) {
@@ -375,6 +392,67 @@ class BCFViewpointsPlugin extends Plugin {
                     bcfViewpoint.clipping_planes = [];
                 }
                 bcfViewpoint.clipping_planes.push({location, direction});
+            }
+        }
+
+        // Lines
+
+        const lineSets = scene.lineSets;
+        for (let id in lineSets) {
+            if (lineSets.hasOwnProperty(id)) {
+                const lineSet = lineSets[id];
+                if (!bcfViewpoint.lines) {
+                    bcfViewpoint.lines = [];
+                }
+                const positions = lineSet.positions;
+                const indices = lineSet.indices;
+                for (let i = 0, len = indices.length / 2; i < len; i++) {
+                    const a = indices[i * 2];
+                    const b = indices[(i * 2) + 1];
+                    bcfViewpoint.lines.push({
+                        start_point: {
+                            x: positions[a * 3 + 0],
+                            y: positions[a * 3 + 1],
+                            z: positions[a * 3 + 2]
+                        },
+                        end_point: {
+                            x: positions[b * 3 + 0],
+                            y: positions[b * 3 + 1],
+                            z: positions[b * 3 + 2]
+                        }
+                    });
+                }
+
+            }
+        }
+
+        // Bitmaps
+
+        const bitmaps = scene.bitmaps;
+        for (let id in bitmaps) {
+            if (bitmaps.hasOwnProperty(id)) {
+                let bitmap = bitmaps[id];
+                let location = bitmap.pos;
+                let normal = bitmap.normal;
+                let up = bitmap.up;
+                if (camera.yUp) {
+                    // BCF is Z up
+                    location = YToZ(location);
+                    normal = YToZ(normal);
+                    up = YToZ(up);
+                }
+                math.addVec3(location, realWorldOffset);
+                if (!bcfViewpoint.bitmaps) {
+                    bcfViewpoint.bitmaps = [];
+                }
+                bcfViewpoint.bitmaps.push({
+                    bitmap_type: bitmap.type,
+                    bitmap_data: bitmap.imageData,
+                    location: xyzArrayToObject(location),
+                    normal: xyzArrayToObject(normal),
+                    up: xyzArrayToObject(up),
+                    height: bitmap.height
+                });
             }
         }
 
@@ -543,6 +621,73 @@ class BCFViewpointsPlugin extends Plugin {
                     dir = ZToY(dir);
                 }
                 new SectionPlane(scene, {pos, dir});
+            });
+        }
+
+        scene.clearLines();
+
+        if (bcfViewpoint.lines) {
+            const positions = [];
+            const indices = [];
+            let i = 0;
+            bcfViewpoint.lines.forEach((e) => {
+                if (!e.start_point) {
+                    return;
+                }
+                if (!e.end_point) {
+                    return;
+                }
+                positions.push(e.start_point.x);
+                positions.push(e.start_point.y);
+                positions.push(e.start_point.z);
+                positions.push(e.end_point.x);
+                positions.push(e.end_point.y);
+                positions.push(e.end_point.z);
+                indices.push(i++);
+                indices.push(i++);
+            });
+            new LineSet(scene, {
+                positions,
+                indices
+            });
+        }
+
+        scene.clearBitmaps();
+
+        if (bcfViewpoint.bitmaps) {
+            bcfViewpoint.bitmaps.forEach(function (e) {
+                const bitmap_type = e.bitmap_type || "jpg"; // "jpg" | "png"
+                const bitmap_data = e.bitmap_data; // base64
+                let location = xyzObjectToArray(e.location, tempVec3a);
+                let normal = xyzObjectToArray(e.normal, tempVec3b);
+                let up = xyzObjectToArray(e.up, tempVec3c);
+                if (!bitmap_type) {
+                    return;
+                }
+                if (!bitmap_data) {
+                    return;
+                }
+                if (!location) {
+                    return;
+                }
+                if (!normal) {
+                    return;
+                }
+                if (!up) {
+                    return;
+                }
+                if (camera.yUp) {
+                    location = ZToY(location);
+                    normal = ZToY(normal);
+                    up = ZToY(up);
+                }
+                new Bitmap(scene, {
+                    src: bitmap_data,
+                    type: bitmap_type,
+                    pos: location,
+                    normal: normal,
+                    up: up
+                });
             });
         }
 
@@ -731,7 +876,7 @@ class BCFViewpointsPlugin extends Plugin {
                     const metaObject = viewer.metaScene.metaObjects[id];
                     if (metaObject) {
                         scene.withObjects(viewer.metaScene.getObjectIDsInSubtree(id), callback);
-                        return;
+
                     }
                 }
             });

@@ -569,6 +569,20 @@ class Scene extends Component {
         this.reflectionMaps = {};
 
         /**
+         * The {@link Bitmaps}s in this Scene, each mapped to its {@link Bitmap#id}.
+         *
+         * @type {{String:Bitmap}}
+         */
+        this.bitmaps = {};
+
+        /**
+         * The {@link Line}s in this Scene, each mapped to its {@link Line#id}.
+         *
+         * @type {{String:Line}}
+         */
+        this.lineSets = {};
+
+        /**
          * The real world offset for this Scene
          *
          * @type {Number[]}
@@ -939,6 +953,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapCreated(bitmap) {
+        this.bitmaps[bitmap.id] = bitmap;
+        this.scene.fire("bitmapCreated", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetCreated(lineSet) {
+        this.lineSets[lineSet.id] = lineSet;
+        this.scene.fire("lineSetCreated", lineSet, true /* Don't retain event */);
+    }
+
     _lightCreated(light) {
         this.lights[light.id] = light;
         this.scene._lightsState.addLight(light._state);
@@ -964,6 +988,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapDestroyed(bitmap) {
+        delete this.bitmaps[bitmap.id];
+        this.scene.fire("bitmapDestroyed", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetDestroyed(lineSet) {
+        delete this.lineSets[lineSet.id];
+        this.scene.fire("lineSetDestroyed", lineSet, true /* Don't retain event */);
+    }
+    
     _lightDestroyed(light) {
         delete this.lights[light.id];
         this.scene._lightsState.removeLight(light._state);
@@ -2154,6 +2188,27 @@ class Scene extends Component {
         }
     }
 
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearBitmaps() {
+        const ids = Object.keys(this.bitmaps);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.bitmaps[ids[i]].destroy();
+        }
+    }
+
+
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearLines() {
+        const ids = Object.keys(this.lineSets);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.lineSets[ids[i]].destroy();
+        }
+    }
+    
     /**
      * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
      *
