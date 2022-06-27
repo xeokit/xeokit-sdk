@@ -60,6 +60,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/bitmap/bitmap.js~bitmap",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html",
+    "<span>Bitmap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Bitmap/Bitmap.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~bytetype",
     "variable/index.html#static-variable-ByteType",
     "<span>ByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
@@ -363,6 +369,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/lightmap.js~lightmap",
     "class/src/viewer/scene/lights/LightMap.js~LightMap.html",
     "<span>LightMap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/LightMap.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/lineset/lineset.js~lineset",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html",
+    "<span>LineSet</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/LineSet/LineSet.js</span>",
     "class"
   ],
   [
@@ -4464,6 +4476,168 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/bitmap/bitmap.js",
+    "file/src/viewer/scene/Bitmap/Bitmap.js.html",
+    "src/viewer/scene/Bitmap/Bitmap.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#clippable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-clippable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#clippable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-clippable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#collidable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-collidable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#collidable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-collidable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#constructor",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-constructor-constructor",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#destroy",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-method-destroy",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#height",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-height",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#height",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#height",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-height",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#height",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#image",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-image",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#image",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-image",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#image",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#imagedata",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-imageData",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#imageData",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#imagedata",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-imageData",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#imageData",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#normal",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-normal",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#normal",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#opacity",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-opacity",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#opacity",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-opacity",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#pickable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-pickable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#pickable",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-pickable",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#pos",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-pos",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#pos",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#src",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-src",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#src",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-src",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#src",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#type",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-type",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#type",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#type",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-type",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#type",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#up",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-up",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#up",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#visible",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-set-visible",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/bitmap.js~bitmap#visible",
+    "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html#instance-get-visible",
+    "src/viewer/scene/Bitmap/Bitmap.js~Bitmap#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/bitmap/index.js",
+    "file/src/viewer/scene/Bitmap/index.js.html",
+    "src/viewer/scene/Bitmap/index.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/cameracontrol/cameracontrol.js",
     "file/src/viewer/scene/CameraControl/CameraControl.js.html",
     "src/viewer/scene/CameraControl/CameraControl.js",
@@ -5511,6 +5685,54 @@ window.esdocSearchIndex = [
     "src/viewer/scene/imageplane/index.js",
     "file/src/viewer/scene/ImagePlane/index.js.html",
     "src/viewer/scene/ImagePlane/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js",
+    "file/src/viewer/scene/LineSet/LineSet.js.html",
+    "src/viewer/scene/LineSet/LineSet.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#constructor",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-constructor-constructor",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#destroy",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-method-destroy",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#indices",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-get-indices",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#indices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#positions",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-get-positions",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#positions",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#visible",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-set-visible",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lineset/lineset.js~lineset#visible",
+    "class/src/viewer/scene/LineSet/LineSet.js~LineSet.html#instance-get-visible",
+    "src/viewer/scene/LineSet/LineSet.js~LineSet#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lineset/index.js",
+    "file/src/viewer/scene/LineSet/index.js.html",
+    "src/viewer/scene/LineSet/index.js",
     "file"
   ],
   [
@@ -12252,6 +12474,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#bitmaps",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-bitmaps",
+    "src/viewer/scene/scene/Scene.js~Scene#bitmaps",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#camera",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-camera",
     "src/viewer/scene/scene/Scene.js~Scene#camera",
@@ -12276,6 +12504,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#clearbitmaps",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-clearBitmaps",
+    "src/viewer/scene/scene/Scene.js~Scene#clearBitmaps",
+    "method"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#cleareachpass",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass",
     "src/viewer/scene/scene/Scene.js~Scene#clearEachPass",
@@ -12291,6 +12525,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#clearlights",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-clearLights",
     "src/viewer/scene/scene/Scene.js~Scene#clearLights",
+    "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#clearlines",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-clearLines",
+    "src/viewer/scene/scene/Scene.js~Scene#clearLines",
     "method"
   ],
   [
@@ -12441,6 +12681,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#lights",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-lights",
     "src/viewer/scene/scene/Scene.js~Scene#lights",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#linesets",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-lineSets",
+    "src/viewer/scene/scene/Scene.js~Scene#lineSets",
     "member"
   ],
   [

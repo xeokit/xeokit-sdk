@@ -149,8 +149,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShortType">UnsignedShortType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sRGBEncoding">sRGBEncoding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-bitmap">viewer/scene/Bitmap</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lineset">viewer/scene/LineSet</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
@@ -289,10 +291,7 @@ class TrianglesInstancingColorTextureRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
-
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes &gt; 0) {
@@ -332,16 +331,7 @@ class TrianglesInstancingColorTextureRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
 
-        this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-        this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-        this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
-
         this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
         this._aUV.bindArrayBuffer(geometry.uvBuf);
 
         this._aColor.bindArrayBuffer(state.colorsBuf);
@@ -369,9 +359,6 @@ class TrianglesInstancingColorTextureRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 0);
         gl.vertexAttribDivisor(this._aColor.location, 0);
         gl.vertexAttribDivisor(this._aFlags.location, 0);
 
@@ -427,10 +414,8 @@ class TrianglesInstancingColorTextureRenderer {
         this._uUVDecodeMatrix = program.getLocation(&quot;uvDecodeMatrix&quot;);
 
         this._uWorldMatrix = program.getLocation(&quot;worldMatrix&quot;);
-        this._uWorldNormalMatrix = program.getLocation(&quot;worldNormalMatrix&quot;);
 
         this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
-        this._uViewNormalMatrix = program.getLocation(&quot;viewNormalMatrix&quot;);
         this._uProjMatrix = program.getLocation(&quot;projMatrix&quot;);
 
         this._uLightAmbient = program.getLocation(&quot;lightAmbient&quot;);
@@ -476,7 +461,6 @@ class TrianglesInstancingColorTextureRenderer {
         }
 
         this._aPosition = program.getAttribute(&quot;position&quot;);
-        this._aNormal = program.getAttribute(&quot;normal&quot;);
         this._aColor = program.getAttribute(&quot;color&quot;);
         this._aUV = program.getAttribute(&quot;uv&quot;);
         this._aFlags = program.getAttribute(&quot;flags&quot;);
@@ -486,10 +470,6 @@ class TrianglesInstancingColorTextureRenderer {
         this._aModelMatrixCol0 = program.getAttribute(&quot;modelMatrixCol0&quot;);
         this._aModelMatrixCol1 = program.getAttribute(&quot;modelMatrixCol1&quot;);
         this._aModelMatrixCol2 = program.getAttribute(&quot;modelMatrixCol2&quot;);
-
-        this._aModelNormalMatrixCol0 = program.getAttribute(&quot;modelNormalMatrixCol0&quot;);
-        this._aModelNormalMatrixCol1 = program.getAttribute(&quot;modelNormalMatrixCol1&quot;);
-        this._aModelNormalMatrixCol2 = program.getAttribute(&quot;modelNormalMatrixCol2&quot;);
 
         this._uColorMap = &quot;uColorMap&quot;;
 
@@ -549,11 +529,7 @@ class TrianglesInstancingColorTextureRenderer {
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
-        let i;
-        let len;
-        let light;
         const src = [];
         src.push(&quot;#version 300 es&quot;);
         src.push(&quot;// Instancing geometry drawing vertex shader&quot;);
@@ -561,7 +537,6 @@ class TrianglesInstancingColorTextureRenderer {
         src.push(&quot;uniform int renderPass;&quot;);
 
         src.push(&quot;in vec3 position;&quot;);
-        src.push(&quot;in vec3 normal;&quot;);
         src.push(&quot;in vec4 color;&quot;);
         src.push(&quot;in vec2 uv;&quot;);
         src.push(&quot;in vec4 flags;&quot;);
@@ -575,14 +550,8 @@ class TrianglesInstancingColorTextureRenderer {
         src.push(&quot;in vec4 modelMatrixCol1;&quot;);
         src.push(&quot;in vec4 modelMatrixCol2;&quot;);
 
-        src.push(&quot;in vec4 modelNormalMatrixCol0;&quot;);
-        src.push(&quot;in vec4 modelNormalMatrixCol1;&quot;);
-        src.push(&quot;in vec4 modelNormalMatrixCol2;&quot;);
-
         src.push(&quot;uniform mat4 worldMatrix;&quot;);
-        src.push(&quot;uniform mat4 worldNormalMatrix;&quot;);
         src.push(&quot;uniform mat4 viewMatrix;&quot;);
-        src.push(&quot;uniform mat4 viewNormalMatrix;&quot;);
         src.push(&quot;uniform mat4 projMatrix;&quot;);
         src.push(&quot;uniform mat4 positionsDecodeMatrix;&quot;);
         src.push(&quot;uniform mat3 uvDecodeMatrix;&quot;)
@@ -596,38 +565,11 @@ class TrianglesInstancingColorTextureRenderer {
             src.push(&quot;out float isPerspective;&quot;);
         }
 
-        src.push(&quot;uniform vec4 lightAmbient;&quot;);
-
-        for (i = 0, len = lightsState.lights.length; i &lt; len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === &quot;ambient&quot;) {
-                continue;
-            }
-            src.push(&quot;uniform vec4 lightColor&quot; + i + &quot;;&quot;);
-            if (light.type === &quot;dir&quot;) {
-                src.push(&quot;uniform vec3 lightDir&quot; + i + &quot;;&quot;);
-            }
-            if (light.type === &quot;point&quot;) {
-                src.push(&quot;uniform vec3 lightPos&quot; + i + &quot;;&quot;);
-            }
-            if (light.type === &quot;spot&quot;) {
-                src.push(&quot;uniform vec3 lightPos&quot; + i + &quot;;&quot;);
-                src.push(&quot;uniform vec3 lightDir&quot; + i + &quot;;&quot;);
-            }
-        }
-
-        src.push(&quot;vec3 octDecode(vec2 oct) {&quot;);
-        src.push(&quot;    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));&quot;);
-        src.push(&quot;    if (v.z &lt; 0.0) {&quot;);
-        src.push(&quot;        v.xy = (1.0 - abs(v.yx)) * vec2(v.x &gt;= 0.0 ? 1.0 : -1.0, v.y &gt;= 0.0 ? 1.0 : -1.0);&quot;);
-        src.push(&quot;    }&quot;);
-        src.push(&quot;    return normalize(v);&quot;);
-        src.push(&quot;}&quot;);
-
         if (clipping) {
             src.push(&quot;out vec4 vWorldPosition;&quot;);
             src.push(&quot;out vec4 vFlags2;&quot;);
         }
+        src.push(&quot;out vec4 vViewPosition;&quot;);
         src.push(&quot;out vec4 vColor;&quot;);
         src.push(&quot;out vec2 vUV;&quot;);
 
@@ -648,47 +590,8 @@ class TrianglesInstancingColorTextureRenderer {
         }
 
         src.push(&quot;vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
-
-        src.push(&quot;vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); &quot;);
-        src.push(&quot;vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);&quot;);
-        src.push(&quot;vec3 viewNormal = normalize(vec4(viewNormalMatrix * worldNormal).xyz);&quot;);
-
-        src.push(&quot;vec3 reflectedColor = vec3(0.0, 0.0, 0.0);&quot;);
-        src.push(&quot;vec3 viewLightDir = vec3(0.0, 0.0, -1.0);&quot;);
-
-        src.push(&quot;float lambertian = 1.0;&quot;);
-        for (i = 0, len = lightsState.lights.length; i &lt; len; i++) {
-            light = lightsState.lights[i];
-            if (light.type === &quot;ambient&quot;) {
-                continue;
-            }
-            if (light.type === &quot;dir&quot;) {
-                if (light.space === &quot;view&quot;) {
-                    src.push(&quot;viewLightDir = normalize(lightDir&quot; + i + &quot;);&quot;);
-                } else {
-                    src.push(&quot;viewLightDir = normalize((viewMatrix * vec4(lightDir&quot; + i + &quot;, 0.0)).xyz);&quot;);
-                }
-            } else if (light.type === &quot;point&quot;) {
-                if (light.space === &quot;view&quot;) {
-                    src.push(&quot;viewLightDir = -normalize(lightPos&quot; + i + &quot; - viewPosition.xyz);&quot;);
-                } else {
-                    src.push(&quot;viewLightDir = -normalize((viewMatrix * vec4(lightPos&quot; + i + &quot;, 0.0)).xyz);&quot;);
-                }
-            } else if (light.type === &quot;spot&quot;) {
-                if (light.space === &quot;view&quot;) {
-                    src.push(&quot;viewLightDir = normalize(lightDir&quot; + i + &quot;);&quot;);
-                } else {
-                    src.push(&quot;viewLightDir = normalize((viewMatrix * vec4(lightDir&quot; + i + &quot;, 0.0)).xyz);&quot;);
-                }
-            } else {
-                continue;
-            }
-            src.push(&quot;lambertian = max(dot(-viewNormal, viewLightDir), 0.0);&quot;);
-            src.push(&quot;reflectedColor += lambertian * (lightColor&quot; + i + &quot;.rgb * lightColor&quot; + i + &quot;.a);&quot;);
-        }
-
-        src.push(&quot;vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));&quot;);
-        src.push(&quot;vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);&quot;);
+        src.push(&quot;vViewPosition = viewPosition;&quot;);
+        src.push(&quot;vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);&quot;);
         src.push(&quot;vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;&quot;);
 
         src.push(&quot;vec4 clipPos = projMatrix * viewPosition;&quot;);
@@ -711,6 +614,7 @@ class TrianglesInstancingColorTextureRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
+        const lightsState = scene._lightsState;
         let i;
         let len;
         const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
@@ -754,9 +658,31 @@ class TrianglesInstancingColorTextureRenderer {
                 src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
             }
         }
+        src.push(&quot;uniform mat4 viewMatrix;&quot;);
+        src.push(&quot;uniform vec4 lightAmbient;&quot;);
+        for (i = 0, len = lightsState.lights.length; i &lt; len; i++) {
+            const light = lightsState.lights[i];
+            if (light.type === &quot;ambient&quot;) {
+                continue;
+            }
+            src.push(&quot;uniform vec4 lightColor&quot; + i + &quot;;&quot;);
+            if (light.type === &quot;dir&quot;) {
+                src.push(&quot;uniform vec3 lightDir&quot; + i + &quot;;&quot;);
+            }
+            if (light.type === &quot;point&quot;) {
+                src.push(&quot;uniform vec3 lightPos&quot; + i + &quot;;&quot;);
+            }
+            if (light.type === &quot;spot&quot;) {
+                src.push(&quot;uniform vec3 lightPos&quot; + i + &quot;;&quot;);
+                src.push(&quot;uniform vec3 lightDir&quot; + i + &quot;;&quot;);
+            }
+        }
+
+        src.push(&quot;in vec4 vViewPosition;&quot;);
         src.push(&quot;in vec4 vColor;&quot;);
         src.push(&quot;in vec2 vUV;&quot;);
         src.push(&quot;out vec4 outColor;&quot;);
+
         src.push(&quot;void main(void) {&quot;);
 
         if (clipping) {
@@ -774,17 +700,52 @@ class TrianglesInstancingColorTextureRenderer {
             src.push(&quot;}&quot;);
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push(&quot;    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+        src.push(&quot;vec3 reflectedColor = vec3(0.0, 0.0, 0.0);&quot;);
+        src.push(&quot;vec3 viewLightDir = vec3(0.0, 0.0, -1.0);&quot;);
+
+        src.push(&quot;float lambertian = 1.0;&quot;);
+
+        src.push(&quot;vec3 xTangent = dFdx( vViewPosition.xyz );&quot;);
+        src.push(&quot;vec3 yTangent = dFdy( vViewPosition.xyz );&quot;);
+        src.push(&quot;vec3 viewNormal = normalize( cross( xTangent, yTangent ) );&quot;);
+
+        for (i = 0, len = lightsState.lights.length; i &lt; len; i++) {
+            const light = lightsState.lights[i];
+            if (light.type === &quot;ambient&quot;) {
+                continue;
+            }
+            if (light.type === &quot;dir&quot;) {
+                if (light.space === &quot;view&quot;) {
+                    src.push(&quot;viewLightDir = normalize(lightDir&quot; + i + &quot;);&quot;);
+                } else {
+                    src.push(&quot;viewLightDir = normalize((viewMatrix * vec4(lightDir&quot; + i + &quot;, 0.0)).xyz);&quot;);
+                }
+            } else if (light.type === &quot;point&quot;) {
+                if (light.space === &quot;view&quot;) {
+                    src.push(&quot;viewLightDir = -normalize(lightPos&quot; + i + &quot; - viewPosition.xyz);&quot;);
+                } else {
+                    src.push(&quot;viewLightDir = -normalize((viewMatrix * vec4(lightPos&quot; + i + &quot;, 0.0)).xyz);&quot;);
+                }
+            } else if (light.type === &quot;spot&quot;) {
+                if (light.space === &quot;view&quot;) {
+                    src.push(&quot;viewLightDir = normalize(lightDir&quot; + i + &quot;);&quot;);
+                } else {
+                    src.push(&quot;viewLightDir = normalize((viewMatrix * vec4(lightDir&quot; + i + &quot;, 0.0)).xyz);&quot;);
+                }
+            } else {
+                continue;
+            }
+            src.push(&quot;lambertian = max(dot(-viewNormal, viewLightDir), 0.0);&quot;);
+            src.push(&quot;reflectedColor += lambertian * (lightColor&quot; + i + &quot;.rgb * lightColor&quot; + i + &quot;.a);&quot;);
         }
 
-        src.push(&quot;vec4 colorTexel = texture(uColorMap, vUV);&quot;);
-        src.push(&quot;float opacity = vColor.a;&quot;);
-
-        // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-        // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+        src.push(&quot;vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);&quot;);
+        src.push(&quot;vec4 colorTexel = color * texture(uColorMap, vUV);&quot;);
+        src.push(&quot;float opacity = color.a;&quot;);
 
         if (this._withSAO) {
+            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
             src.push(&quot;   float viewportWidth     = uSAOParams[0];&quot;);
             src.push(&quot;   float viewportHeight    = uSAOParams[1];&quot;);
             src.push(&quot;   float blendCutoff       = uSAOParams[2];&quot;);
@@ -795,6 +756,11 @@ class TrianglesInstancingColorTextureRenderer {
         } else {
             src.push(&quot;   outColor                = vec4(vColor.rgb * colorTexel.rgb, opacity);&quot;);
         }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push(&quot;    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+        }
+
         src.push(&quot;}&quot;);
         return src;
     }

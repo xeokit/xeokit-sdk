@@ -149,8 +149,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShortType">UnsignedShortType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sRGBEncoding">sRGBEncoding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-bitmap">viewer/scene/Bitmap</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lineset">viewer/scene/LineSet</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
@@ -804,6 +806,20 @@ class Scene extends Component {
         this.reflectionMaps = {};
 
         /**
+         * The {@link Bitmaps}s in this Scene, each mapped to its {@link Bitmap#id}.
+         *
+         * @type {{String:Bitmap}}
+         */
+        this.bitmaps = {};
+
+        /**
+         * The {@link Line}s in this Scene, each mapped to its {@link Line#id}.
+         *
+         * @type {{String:Line}}
+         */
+        this.lineSets = {};
+
+        /**
          * The real world offset for this Scene
          *
          * @type {Number[]}
@@ -1174,6 +1190,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapCreated(bitmap) {
+        this.bitmaps[bitmap.id] = bitmap;
+        this.scene.fire(&quot;bitmapCreated&quot;, bitmap, true /* Don&apos;t retain event */);
+    }
+
+    _lineSetCreated(lineSet) {
+        this.lineSets[lineSet.id] = lineSet;
+        this.scene.fire(&quot;lineSetCreated&quot;, lineSet, true /* Don&apos;t retain event */);
+    }
+
     _lightCreated(light) {
         this.lights[light.id] = light;
         this.scene._lightsState.addLight(light._state);
@@ -1199,6 +1225,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapDestroyed(bitmap) {
+        delete this.bitmaps[bitmap.id];
+        this.scene.fire(&quot;bitmapDestroyed&quot;, bitmap, true /* Don&apos;t retain event */);
+    }
+
+    _lineSetDestroyed(lineSet) {
+        delete this.lineSets[lineSet.id];
+        this.scene.fire(&quot;lineSetDestroyed&quot;, lineSet, true /* Don&apos;t retain event */);
+    }
+    
     _lightDestroyed(light) {
         delete this.lights[light.id];
         this.scene._lightsState.removeLight(light._state);
@@ -2389,6 +2425,27 @@ class Scene extends Component {
         }
     }
 
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearBitmaps() {
+        const ids = Object.keys(this.bitmaps);
+        for (let i = 0, len = ids.length; i &lt; len; i++) {
+            this.bitmaps[ids[i]].destroy();
+        }
+    }
+
+
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearLines() {
+        const ids = Object.keys(this.lineSets);
+        for (let i = 0, len = ids.length; i &lt; len; i++) {
+            this.lineSets[ids[i]].destroy();
+        }
+    }
+    
     /**
      * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
      *

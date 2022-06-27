@@ -13,10 +13,10 @@ import {VBOGeometry} from "../geometry";
  * * Configure color using the {@link LinesMaterial} located at {@link Scene#linesMaterial}.
  * * Created when we use {@link BCFViewpointsPlugin#setViewpoint} to load a BCF viewpoint that contains lines.
  *
+ * ## Usage
+ *
  * In the example below, we'll load the Schependomlaan model, then use
  * a ````LineSet```` to show a grid underneath the model.
- *
- * <img src="http://xeokit.io/img/docs/Bitmap/BCF_SaveViewpoint_BitmapsAndLines.png">
  *
  * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)
  *

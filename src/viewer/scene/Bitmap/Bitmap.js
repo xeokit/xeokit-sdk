@@ -18,7 +18,7 @@ import {worldToRTCPos} from "../math/rtcCoords.js";
  * In the example below, we'll load the Schependomlaan model, then use
  * an ````Bitmap```` to show a storey plan next to the model.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_grid.png">](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_grid)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_storeyPlan.png">](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_storeyPlan)
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_grid)]
  *
