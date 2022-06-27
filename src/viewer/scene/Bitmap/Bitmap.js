@@ -6,27 +6,21 @@ import {buildPlaneGeometry, ReadableGeometry} from "../geometry";
 import {math} from "../math/";
 import {worldToRTCPos} from "../math/rtcCoords.js";
 
-const tempVec3 = math.vec3();
-const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
-const zeroVec = math.vec3([0, -1, 0]);
-const tempQuat = math.vec4([0, 0, 0, 1]);
-
 /**
- *  @desc A plane-shaped 3D object containing a bitmap image.
+ *  A plane-shaped 3D object containing a bitmap image.
  *
- * Use ````Bitmap```` to embed bitmap images in your scenes.
+ * * Creates a 3D quad containing our bitmap, located and oriented using ````pos````, ````normal```` and ````up```` vectors.
+ * * Registered by {@link Bitmap#id} in {@link Scene#bitmaps}.
+ * * Created when we use {@link BCFViewpointsPlugin#setViewpoint} to load a BCF viewpoint that contains bitmaps.
  *
- * # Example
+ * ## Usage
  *
  * In the example below, we'll load the Schependomlaan model, then use
  * an ````Bitmap```` to show a storey plan next to the model.
  *
- * <img src="http://xeokit.io/img/docs/Bitmap/BCF_SaveViewpoint_BitmapsAndLines.png">
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_grid.png">](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_grid)
  *
- * [<img src="http://xeokit.io/img/docs/Bitmap/Bitmap.png">](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_BitmapsAndLines)
- *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_BitmapsAndLines)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_grid)]
  *
  * ````javascript
  * import {Viewer, Bitmap, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -72,9 +66,7 @@ class Bitmap extends Component {
      * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the ````Bitmap````.
      * @param {Number[]} [cfg.normal=[0,0,1]] Normal vector indicating the direction the ````Bitmap```` faces.
      * @param {Number[]} [cfg.up=[0,1,0]] Direction of "up" for the ````Bitmap````.
-     * @param {Number[]} [cfg.height=1] World-space height of the longest edge of the ````Bitmap````. Note that
-     * ````Bitmap```` sets its aspect ratio to match its image. If we set a value of ````1000````, and the image
-     * has height ````400x300````, then the ````Bitmap```` will then have height ````1000 x 750````.
+     * @param {Number[]} [cfg.height=1] World-space height of the ````Bitmap````.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Modelling transform matrix for the ````Bitmap````. Overrides the ````position````, ````height```, ````rotation```` and ````normal```` parameters.
      * @param {Boolean} [cfg.collidable=true] Indicates if the ````Bitmap```` is initially included in boundary calculations.
      * @param {Boolean} [cfg.clippable=true] Indicates if the ````Bitmap```` is initially clippable.
@@ -83,7 +75,7 @@ class Bitmap extends Component {
      * @param {String} [cfg.src] URL of image. Accepted file types are PNG and JPEG.
      * @param {HTMLImageElement} [cfg.image] An ````HTMLImageElement```` to source the image from. Overrides ````src````.
      * @param {String} [cfg.imageData]    Image data as a base64 encoded string.
-     * @param {String} [cfg.type="jpg"] Image MIME type. Accepted values are "jpg" and "png".
+     * @param {String} [cfg.type="jpg"] Image MIME type. Accepted values are "jpg" and "png". Default is "jpg". Normally only needed with ````image```` or ````imageData````. Automatically inferred from file extension of ````src````, if the file has a recognized extension.
      */
     constructor(owner, cfg = {}) {
 
@@ -180,6 +172,8 @@ class Bitmap extends Component {
      *
      * Sets {@link Texture#src} null.
      *
+     * You may also need to set {@link Bitmap#type}, if you want to read the image data with {@link Bitmap#imageData}.
+     *
      * @type {HTMLImageElement}
      */
     set image(image) {
@@ -206,6 +200,8 @@ class Bitmap extends Component {
     /**
      * Sets an image file path that the ````Bitmap````'s image is sourced from.
      *
+     * If the file extension is a recognized MIME type, also sets {@link Bitmap#type} to that MIME type.
+     *
      * Accepted file types are PNG and JPEG.
      *
      * @type {String}
@@ -219,6 +215,15 @@ class Bitmap extends Component {
                 this._updateBitmapMeshScale();
             };
             this._image.src = src;
+            const ext = src.split('.').pop();
+            switch (ext) {
+                case "jpeg":
+                case "jpg":
+                    this._type = "jpg";
+                    break;
+                case "png":
+                    this._type = "png";
+            }
         }
     }
 
@@ -239,6 +244,8 @@ class Bitmap extends Component {
      * Accepted file types are PNG and JPEG.
      *
      * Sets {@link Texture#image} null.
+     *
+     * You may also need to set {@link Bitmap#type}, if you want to read the image data with {@link Bitmap#imageData}.
      *
      * @type {String}
      */
@@ -265,11 +272,13 @@ class Bitmap extends Component {
         canvas.width = this._image.width;
         canvas.height = this._image.height;
         context.drawImage(this._image, 0, 0);
-        return canvas.toDataURL('image/jpeg');
+        return canvas.toDataURL(this._type === "jpg" ? 'image/jpeg' : 'image/png');
     }
 
     /**
      * Sets the MIME type of this Bitmap.
+     *
+     * This is used by ````Bitmap```` when getting image data with {@link Bitmap#imageData}.
      *
      * Supported values are "jpg" and "png",
      *

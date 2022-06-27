@@ -1,12 +1,62 @@
 import {Component} from '../Component.js';
 import {Mesh} from "../mesh";
-import {PhongMaterial, Texture} from "../materials";
+import {PhongMaterial} from "../materials";
 import {math} from "../math/";
 import {worldToRTCPos} from "../math/rtcCoords.js";
 import {VBOGeometry} from "../geometry";
 
 /**
- *  A set of 3D line segments.
+ * A set of 3D line segments.
+ *
+ * * Creates a set of 3D line segments.
+ * * Registered by {@link LineSet#id} in {@link Scene#lineSets}.
+ * * Configure color using the {@link LinesMaterial} located at {@link Scene#linesMaterial}.
+ * * Created when we use {@link BCFViewpointsPlugin#setViewpoint} to load a BCF viewpoint that contains lines.
+ *
+ * In the example below, we'll load the Schependomlaan model, then use
+ * a ````LineSet```` to show a grid underneath the model.
+ *
+ * <img src="http://xeokit.io/img/docs/Bitmap/BCF_SaveViewpoint_BitmapsAndLines.png">
+ *
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)
+ *
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, LineSet, buildGridGeometry} from "../dist/xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas",
+ *      transparent: true
+ *  });
+ *
+ * const camera = viewer.camera;
+ *
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *      id: "myModel",
+ *      src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+ *
+ *  position: [0,1,0],
+ *      edges: true,
+ *      saoEnabled: true
+ *  });
+ *
+ * const geometryArrays = buildGridGeometry({
+ *      size: 100,
+ *      divisions: 30
+ *  });
+ *
+ * new LineSet(viewer.scene, {
+ *      positions: geometryArrays.positions,
+ *      indices: geometryArrays.indices
+ * });
+ * ````
  */
 class LineSet extends Component {
 
@@ -17,6 +67,7 @@ class LineSet extends Component {
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {Number[]} cfg.positions World-space vertex positions.
      * @param {Number[]} [cfg.indices] Indices
+     * @param {Number[]} [cfg.color=[0,0,0]] The color of this ````LineSet````.
      * @param {Boolean} [cfg.visible=true] Indicates whether or not this ````LineSet```` is visible.
      * @param {Number} [cfg.opacity=1.0] ````LineSet````'s initial opacity factor, multiplies by the rendered fragment alpha.
      */
@@ -49,7 +100,8 @@ class LineSet extends Component {
                 origin: cfg.origin
             }),
             material: new PhongMaterial(this, {
-                diffuse: [1, 0, 0]
+                diffuse: cfg.color || [0, 0, 0],
+                emissive: cfg.color || [0, 0, 0]
             })
         });
 
