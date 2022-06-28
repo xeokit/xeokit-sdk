@@ -16,22 +16,39 @@ const tempVec3c = math.vec3();
  * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
  * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
  *
+ * ## Supported BCF Elements
+ *
+ * A BCF viewpoint saves and loads the following state into a xeokit {@link Viewer}:
+ *
+ * * {@link Camera} position, orientation and projection
+ * * {@link SectionPlane}s to slice the model
+ * * {@link LineSet}s to show 3D lines
+ * * {@link Bitmap}s to show images
+ * * {@link Entity} visibilities and selection states
+ *
  * ## Saving a BCF Viewpoint
  *
  * In the example below we'll create a {@link Viewer}, load an ````.XKT```` model into it using an {@link XKTLoaderPlugin},
- * slice the model in half using a {@link SectionPlanesPlugin}, then use a {@link BCFViewpointsPlugin#getViewpoint}
+ * slice the model in half using a {@link SectionPlanesPlugin}, create a grid ground plane using a {@link LineSet} and a 2D
+ * plan view using a {@link Bitmap}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
  * * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
  * ````javascript
- * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, LineSet, Bitmap, BCFViewpointsPlugin} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",
  *      transparent: true
  * });
+ *
+ * // Set camera position and orientation
+ * viewer.scene.camera.eye = [-48.93, 54.54, 50.41];
+ * viewer.scene.camera.look = [0.55, -0.61, -0.55];
+ * viewer.scene.camera.up = [0, -1, 0];
+ * viewer.scene.camera.perspective.fov = 60;
  *
  * // Add a XKTLoaderPlugin
  * const xktLoader = new XKTLoaderPlugin(viewer);
@@ -56,15 +73,37 @@ const tempVec3c = math.vec3();
  *      dir: [0.5, 0.0, 0.5]
  * });
  *
- * // When model is loaded, set camera, select some objects and capture a BCF viewpoint to the console
+ * // Create a bitmap
+ * const bitmap = new Bitmap(viewer.scene, {
+ *     src: "../assets/images/schependomlaanPlanView.png",
+ *      visible: true,
+ *      height: 24.0,
+ *      pos: [-15, 0, -10],
+ *      normal: [0, -1, 0],
+ *      up: [0, 0, 1],
+ *      collidable: false,
+ *      opacity: 1.0,
+ *      clippable: false,
+ *      pickable: true
+ *  });
+ *
+ * // Create a grid ground plane
+ * const geometryArrays = buildGridGeometry({
+ *      size: 60,
+ *      divisions: 10
+ *  });
+ *
+ * new LineSet(viewer.scene, {
+ *      positions: geometryArrays.positions,
+ *      indices: geometryArrays.indices,
+ *      position: [10,0,10],
+ *      clippable: false
+ *  });
+ *
+ * // When model is loaded, select some objects and capture a BCF viewpoint to the console
  * modelNode.on("loaded", () => {
  *
  *      const scene = viewer.scene;
- *      const camera = scene.camera;
- *
- *      camera.eye = [-2.37, 18.97, -26.12];
- *      camera.look = [10.97, 5.82, -11.22];
- *      camera.up = [0.36, 0.83, 0.40];
  *
  *      scene.setObjectsSelected([
  *          "3b2U496P5Ebhz5FROhTwFH",
@@ -79,6 +118,57 @@ const tempVec3c = math.vec3();
  *
  *      console.log(viewpointStr);
  * });
+ * ````
+ *
+ * The saved BCF viewpoint would look something like below. Note that some elements are truncated for brevity.
+ *
+ * ````json
+ * {
+ *      "perspective_camera": {
+ *          "camera_view_point": { "x": -48.93, "y": 54.54, "z": 50.41 },
+ *          "camera_direction": { "x": 0.55, "y": -0.61, "z": -0.55},
+ *          "camera_up_vector": { "x": 0.37, "y": -0.41, "z": 0.83 },
+ *          "field_of_view": 60.0
+ *      },
+ *      "lines": [{
+ *          "start_point": { "x": 1.0, "y": 1.0, "z": 1.0 },
+ *          "end_point": { "x": 0.0, "y": 0.0, "z": 0.0 },
+ *          //...(truncated)
+ *      }],
+ *      "bitmaps": [{
+ *          "bitmap_type": "png",
+ *          "bitmap_data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9AAAAdp...", //...(truncated)
+ *          "location": { "x": -15, "y": 10, "z": 0 },
+ *          "normal": { "x": 0, "y": 0, "z": -1 },
+ *          "up": { "x": 0, "y": -1, "z": 0 },
+ *          "height": 24
+ *      }],
+ *      "clipping_planes": [{
+ *          "location": { "x": 0.0, "y": 0.0, "z": 0.0 },
+ *          "direction": { "x": 0.5, "y": 0.0, "z": 0.5 }
+ *      }],
+ *      "snapshot": {
+ *          "snapshot_type": "png",
+ *          "snapshot_data": "data:image/png;base64,......"
+ *      },
+ *      "components": {
+ *          "visibility": {
+ *              "default_visibility": false,
+ *              "exceptions": [{
+ *                      "ifc_guid": "4$cshxZO9AJBebsni$z9Yk",
+ *                      "originating_system": "xeokit.io",
+ *                      "authoring_tool_id": "xeokit/v3.2"
+ *                  },
+ *                  //...
+ *              ]
+ *          },
+ *          "selection": [{
+ *                  "ifc_guid": "4$cshxZO9AJBebsni$z9Yk",
+ *              },
+ *              //...
+ *          ]
+ *      }
+ * }
  * ````
  *
  * ## Saving View Setup Hints
@@ -124,7 +214,7 @@ const tempVec3c = math.vec3();
  * });
  * ````
  *
- * ## Dealing With Loaded Models That Are Not in the Viewpoint
+ * ## Dealing With Loaded Models that are not in the Viewpoint
  *
  * If, for example, we load model "duplex", hide some objects, then save a BCF viewpoint with
  * ````BCFViewpointsPlugin#getViewpoint````, then load another model, "schependomlaan", then load the viewpoint again
@@ -233,8 +323,7 @@ class BCFViewpointsPlugin extends Plugin {
     /**
      * Saves viewer state to a BCF viewpoint.
      *
-     * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
-     * direction vector. Therefore, we save ````camera_direction```` as the vector from {@link Camera#eye} to {@link Camera#look}.
+     * See ````BCFViewpointsPlugin```` class comments for more info.
      *
      * @param {*} [options] Options for getting the viewpoint.
      * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
@@ -247,84 +336,6 @@ class BCFViewpointsPlugin extends Plugin {
      * objects in the viewpoint will be visible.
      * @param {Boolean} [options.reverseClippingPlanes=false] When ````true````, clipping planes are reversed (https://github.com/buildingSMART/BCF-XML/issues/193)
      * @returns {*} BCF JSON viewpoint object
-     * @example
-     *
-     * const viewer = new Viewer();
-     *
-     * const bcfPlugin = new BCFPlugin(viewer, {
-     *     //...
-     * });
-     *
-     * const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
-     *     spacesVisible: false,          // Default
-     *     spaceBoundariesVisible: false, // Default
-     *     openingsVisible: false         // Default
-     * });
-     *
-     * // viewpoint will resemble the following:
-     *
-     * {
-     *     perspective_camera: {
-     *          camera_view_point: {
-     *             x: 0.0,
-     *             y: 0.0,
-     *             z: 0.0
-     *          },
-     *          camera_direction: {
-     *             x: 1.0,
-     *             y: 1.0,
-     *             z: 2.0
-     *          },
-     *          camera_up_vector: {
-     *             x: 0.0,
-     *             y: 0.0,
-     *             z: 1.0
-     *          },
-     *          field_of_view: 90.0
-     *      },
-     *      lineSets: [{
-     *          start_point: {
-     *              x: 1.0,
-     *              y: 1.0,
-     *              z: 1.0
-     *          },
-     *          end_point: {
-     *              x: 0.0,
-     *              y: 0.0,
-     *              z: 0.0
-     *          }
-     *     }],
-     *     clipping_planes: [{
-     *         location: {
-     *             x: 0.5,
-     *             y: 0.5,
-     *             z: 0.5
-     *         },
-     *         direction: {
-     *             x: 1.0,
-     *             y: 0.0,
-     *             z: 0.0
-     *         }
-     *     }],
-     *     bitmaps: [],
-     *     snapshot: {
-     *         snapshot_type: png,
-     *         snapshot_data: "data:image/png;base64,......"
-     *     },
-     *     components: {
-     *         visibility: {
-     *             default_visibility: false,
-     *             exceptions: [{
-     *                 ifc_guid: 4$cshxZO9AJBebsni$z9Yk,
-     *                 originating_system: xeokit.io,
-     *                 authoring_tool_id: xeokit/v1.0
-     *             }]
-     *        },
-     *         selection: [{
-     *            ifc_guid: "4$cshxZO9AJBebsni$z9Yk",
-     *         }]
-     *     }
-     * }
      */
     getViewpoint(options = {}) {
         const scene = this.viewer.scene;
@@ -455,6 +466,39 @@ class BCFViewpointsPlugin extends Plugin {
                 });
             }
         }
+        //
+        // // Annotations
+        //
+        // const annotations = scene.annotations;
+        // for (let id in annotations) {
+        //     if (annotations.hasOwnProperty(id)) {
+        //         let annotation = annotations[id];
+        //         let location = annotation.pos;
+        //         let normal = annotation.normal;
+        //         let up = annotation.up;
+        //         if (camera.yUp) {
+        //             // BCF is Z up
+        //             location = YToZ(location);
+        //             normal = YToZ(normal);
+        //             up = YToZ(up);
+        //         }
+        //         math.addVec3(location, realWorldOffset);
+        //         if (!bcfViewpoint.extensions) {
+        //             bcfViewpoint.extensions = {};
+        //         }
+        //         if (!bcfViewpoint.extensions.annotations) {
+        //             bcfViewpoint.extensions.annotations = [];
+        //         }
+        //         bcfViewpoint.extensions.annotations.push({
+        //             annotation_type: annotation.type,
+        //             annotation_data: annotation.imageData,
+        //             location: xyzArrayToObject(location),
+        //             normal: xyzArrayToObject(normal),
+        //             up: xyzArrayToObject(up),
+        //             height: annotation.height
+        //         });
+        //     }
+        // }
 
         // Entity states
 
@@ -471,8 +515,6 @@ class BCFViewpointsPlugin extends Plugin {
         const opacityObjectIds = new Set(scene.opacityObjectIds);
         const xrayedObjectIds = new Set(scene.xrayedObjectIds);
         const colorizedObjectIds = new Set(scene.colorizedObjectIds);
-
-        const originalSystemColoringMap = {};
 
         const coloringMap = Object.values(scene.objects)
             .filter(entity => opacityObjectIds.has(entity.id) || colorizedObjectIds.has(entity.id) || xrayedObjectIds.has(entity.id))
@@ -648,7 +690,9 @@ class BCFViewpointsPlugin extends Plugin {
             });
             new LineSet(scene, {
                 positions,
-                indices
+                indices,
+                clippable: false,
+                collidable: true
             });
         }
 
@@ -661,6 +705,7 @@ class BCFViewpointsPlugin extends Plugin {
                 let location = xyzObjectToArray(e.location, tempVec3a);
                 let normal = xyzObjectToArray(e.normal, tempVec3b);
                 let up = xyzObjectToArray(e.up, tempVec3c);
+                let height = e.height || 1;
                 if (!bitmap_type) {
                     return;
                 }
@@ -686,7 +731,10 @@ class BCFViewpointsPlugin extends Plugin {
                     type: bitmap_type,
                     pos: location,
                     normal: normal,
-                    up: up
+                    up: up,
+                    clippable: false,
+                    collidable: true,
+                    height
                 });
             });
         }

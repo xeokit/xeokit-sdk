@@ -9,7 +9,7 @@ import {
     LinearMipMapLinearFilter,
     LinearMipMapNearestFilter, MirroredRepeatWrapping, NearestFilter,
     NearestMipMapLinearFilter, NearestMipMapNearestFilter, RepeatWrapping, sRGBEncoding
-} from "../constants";
+} from "../constants/constants";
 
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {

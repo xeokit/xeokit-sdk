@@ -15,7 +15,7 @@ import {
     RGBA_S3TC_DXT5_Format,
     RGBAFormat,
     sRGBEncoding
-} from "../../../constants";
+} from "../../../constants/constants";
 
 const KTX2TransferSRGB = 2;
 const KTX2_ALPHA_PREMULTIPLIED = 1;

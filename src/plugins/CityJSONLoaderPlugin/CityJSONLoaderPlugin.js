@@ -21,9 +21,11 @@ const tempVec3c = math.vec3();
  * ## Overview
  *
  * * Loads small-to-medium sized models directly from [CityJSON 1.0.0](https://www.cityjson.org/specs/1.0.0/) files.
- * * Not recommended for large models. For best performance with large CityJSON datasets, we recommend using {@link XKTLoaderPlugin}.
  * * Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.
  * * Allows to set the position, scale and rotation of each model as you load it.
+ * * Not recommended for large models. For best performance with large CityJSON datasets, we recommend
+ * converting them to ````.xkt```` format (eg. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
+ * the ````.xkt```` using {@link XKTLoaderPlugin}.
  *
  * ## Limitations
  *

@@ -2,7 +2,7 @@ import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../../webglInfo.js";
-import {LinearEncoding, sRGBEncoding} from "../../../../../../constants";
+import {LinearEncoding, sRGBEncoding} from "../../../../../../constants/constants";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();

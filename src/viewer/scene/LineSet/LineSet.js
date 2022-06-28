@@ -11,7 +11,7 @@ import {VBOGeometry} from "../geometry";
  * * Creates a set of 3D line segments.
  * * Registered by {@link LineSet#id} in {@link Scene#lineSets}.
  * * Configure color using the {@link LinesMaterial} located at {@link Scene#linesMaterial}.
- * * Created when we use {@link BCFViewpointsPlugin#setViewpoint} to load a BCF viewpoint that contains lines.
+ * * {@link BCFViewpointsPlugin} will save and load Linesets in BCF viewpoints.
  *
  * ## Usage
  *
@@ -41,8 +41,7 @@ import {VBOGeometry} from "../geometry";
  * const model = xktLoader.load({
  *      id: "myModel",
  *      src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
- *
- *  position: [0,1,0],
+ *      position: [0,1,0],
  *      edges: true,
  *      saoEnabled: true
  *  });
@@ -61,15 +60,19 @@ import {VBOGeometry} from "../geometry";
 class LineSet extends Component {
 
     /**
+     * Creates a new LineSet.
+     *
+     * Registers the LineSet in {@link Scene#lineSets}; causes Scene to fire a "lineSetCreated" event.
+     *
      * @constructor
      * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this ````LineSet```` as well.
      * @param {*} [cfg]  ````LineSet```` configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Number[]} cfg.positions World-space vertex positions.
-     * @param {Number[]} [cfg.indices] Indices
-     * @param {Number[]} [cfg.color=[0,0,0]] The color of this ````LineSet````.
+     * @param {Number[]} cfg.positions World-space 3D vertex positions.
+     * @param {Number[]} [cfg.indices] Indices to connect ````positions```` into line segments. Note that these are separate line segments, not a polyline.
+     * @param {Number[]} [cfg.color=[0,0,0]] The color of this ````LineSet````. This is both emissive and diffuse.
      * @param {Boolean} [cfg.visible=true] Indicates whether or not this ````LineSet```` is visible.
-     * @param {Number} [cfg.opacity=1.0] ````LineSet````'s initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Number} [cfg.opacity=1.0] ````LineSet````'s initial opacity factor.
      */
     constructor(owner, cfg = {}) {
 
@@ -109,7 +112,7 @@ class LineSet extends Component {
     }
 
     /**
-     * Sets if this ````LineSet```` is visible or not.
+     * Sets if this ````LineSet```` is visible.
      *
      * Default value is ````true````.
      *
@@ -120,7 +123,7 @@ class LineSet extends Component {
     }
 
     /**
-     * Gets if this ````LineSet```` is visible or not.
+     * Gets if this ````LineSet```` is visible.
      *
      * Default value is ````true````.
      *
@@ -131,7 +134,7 @@ class LineSet extends Component {
     }
 
     /**
-     * Gets the vertex positions of the lines in this ````LineSet````.
+     * Gets the 3D World-space vertex positions of the lines in this ````LineSet````.
      *
      * @returns {Number[]}
      */
@@ -149,7 +152,9 @@ class LineSet extends Component {
     }
 
     /**
-     * @destroy
+     * Destroys this ````LineSet````.
+     *
+     * Removes the ```LineSet```` from {@link Scene#lineSets}; causes Scene to fire a "lineSetDestroyed" event.
      */
     destroy() {
         super.destroy();

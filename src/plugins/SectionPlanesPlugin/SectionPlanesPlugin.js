@@ -22,6 +22,7 @@ const tempVec3 = math.vec3();
  * this example).
  * * Click a plane in the overview to activate a 3D control with which you can interactively
  * reposition its SectionPlane in the main canvas.
+ * * Use {@lin BCFViewpointsPlugin} to save and load SectionPlanes in BCF viewpoints.
  *
  * ## Usage
  *
@@ -87,7 +88,7 @@ const tempVec3 = math.vec3();
  * // Programmatically reposition one of our SectionPlanes
  * // This also updates its position as shown in the overview gizmo
  *
- * mySectionPlane2.pos = [11.0, 6.-, -12];
+ * mySectionPlane2.pos = [11.0, 6.0, -12];
  * mySectionPlane2.dir = [0.4, 0.0, 0.5];
  * ````
  */

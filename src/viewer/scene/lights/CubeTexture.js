@@ -2,7 +2,7 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {Texture2D} from '../webgl/Texture2D.js';
 import {stats} from '../stats.js';
-import {ClampToEdgeWrapping, LinearEncoding, LinearFilter, LinearMipmapLinearFilter, sRGBEncoding} from "../constants";
+import {ClampToEdgeWrapping, LinearEncoding, LinearFilter, LinearMipmapLinearFilter, sRGBEncoding} from "../constants/constants";
 
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {

@@ -32,7 +32,7 @@ import {
     MirroredRepeatWrapping,
     LinearMipMapNearestFilter,
     NearestFilter
-} from "../../constants";
+} from "../../constants/constants";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();

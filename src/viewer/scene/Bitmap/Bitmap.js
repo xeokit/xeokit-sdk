@@ -11,7 +11,7 @@ import {worldToRTCPos} from "../math/rtcCoords.js";
  *
  * * Creates a 3D quad containing our bitmap, located and oriented using ````pos````, ````normal```` and ````up```` vectors.
  * * Registered by {@link Bitmap#id} in {@link Scene#bitmaps}.
- * * Created when we use {@link BCFViewpointsPlugin#setViewpoint} to load a BCF viewpoint that contains bitmaps.
+ * * {@link BCFViewpointsPlugin} will save and load Bitmaps in BCF viewpoints.
  *
  * ## Usage
  *
@@ -58,6 +58,10 @@ import {worldToRTCPos} from "../math/rtcCoords.js";
 class Bitmap extends Component {
 
     /**
+     * Creates a new Bitmap.
+     *
+     * Registers the Bitmap in {@link Scene#bitmaps}; causes Scene to fire a "bitmapCreated" event.
+     *
      * @constructor
      * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this ````Bitmap```` as well.
      * @param {*} [cfg]  ````Bitmap```` configuration
@@ -449,7 +453,9 @@ class Bitmap extends Component {
     }
 
     /**
-     * @destroy
+     * Destroys this ````Bitmap````.
+     *
+     * Removes the ```Bitmap```` from {@link Scene#bitmaps}; causes Scene to fire a "bitmapDestroyed" event.
      */
     destroy() {
         super.destroy();

@@ -11,7 +11,7 @@ import {
     ClampToEdgeWrapping,
     LinearFilter,
     NearestMipmapNearestFilter
-} from "../constants";
+} from "../constants/constants";
 import {getExtension} from "./getExtension";
 
 const color = new Uint8Array([0, 0, 0, 1]);

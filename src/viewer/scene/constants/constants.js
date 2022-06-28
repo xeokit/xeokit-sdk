@@ -1,6 +1,21 @@
+/**
+ * Texture repeat wrapping mode.
+ * @type {number}
+ */
 export const RepeatWrapping = 1000;
+
+/**
+ * Texture clamp-to-edge wrapping mode.
+ * @type {number}
+ */
 export const ClampToEdgeWrapping = 1001;
+
+/**
+ * Texture mirrored-repeat wrapping mode.
+ * @type {number}
+ */
 export const MirroredRepeatWrapping = 1002;
+
 export const NearestFilter = 1003;
 export const NearestMipMapNearestFilter = 1004;
 export const NearestMipmapNearestFilter = 1004;
