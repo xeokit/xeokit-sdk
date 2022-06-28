@@ -1,6 +1,6 @@
 {
-  "coverage": "36.94%",
-  "expectCount": 6759,
+  "coverage": "36.98%",
+  "expectCount": 6752,
   "actualCount": 2497,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -177,13 +177,13 @@
         9,
         10,
         11,
-        894,
-        898,
-        906,
-        910,
-        914,
-        550,
-        823
+        942,
+        946,
+        954,
+        958,
+        962,
+        592,
+        871
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {
@@ -201,19 +201,19 @@
         10,
         11,
         12,
-        152,
-        201,
-        215,
-        284,
-        301,
-        312,
-        394,
-        438,
-        535,
-        604,
-        659,
-        686,
-        703
+        154,
+        203,
+        217,
+        286,
+        303,
+        314,
+        396,
+        440,
+        537,
+        606,
+        661,
+        688,
+        705
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
@@ -331,14 +331,15 @@
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js": {
-      "expectCount": 12,
-      "actualCount": 10,
+      "expectCount": 11,
+      "actualCount": 8,
       "undocumentLines": [
-        222,
-        244
+        183,
+        197,
+        219
       ]
     },
-    "src/plugins/GLTFLoaderPlugin/GLTFPerformanceModelLoader.js": {
+    "src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js": {
       "expectCount": 17,
       "actualCount": 1,
       "undocumentLines": [
@@ -358,17 +359,6 @@
         13,
         17,
         37
-      ]
-    },
-    "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js": {
-      "expectCount": 6,
-      "actualCount": 1,
-      "undocumentLines": [
-        70,
-        85,
-        18,
-        22,
-        46
       ]
     },
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js": {
@@ -544,15 +534,15 @@
       "undocumentLines": [
         7,
         8,
-        108,
         109,
         110,
         111,
-        122,
-        163,
-        235,
-        325,
-        393
+        112,
+        123,
+        164,
+        236,
+        326,
+        394
       ]
     },
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
@@ -1104,18 +1094,18 @@
       "expectCount": 38,
       "actualCount": 26,
       "undocumentLines": [
-        84,
-        85,
-        86,
-        87,
         88,
+        89,
         90,
         91,
         92,
         94,
         95,
-        102,
-        459
+        96,
+        98,
+        99,
+        106,
+        465
       ]
     },
     "src/viewer/scene/CameraControl/CameraControl.js": {
@@ -1364,10 +1354,10 @@
       "expectCount": 11,
       "actualCount": 7,
       "undocumentLines": [
-        78,
-        80,
+        81,
         83,
-        92
+        86,
+        95
       ]
     },
     "src/viewer/scene/camera/Camera.js": {
@@ -1551,28 +1541,10 @@
         311
       ]
     },
-    "src/viewer/scene/constants.js": {
+    "src/viewer/scene/constants/constants.js": {
       "expectCount": 67,
-      "actualCount": 0,
+      "actualCount": 3,
       "undocumentLines": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
         19,
         20,
         21,
@@ -1618,10 +1590,25 @@
         61,
         62,
         63,
+        64,
         65,
         66,
         67,
-        68
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83
       ]
     },
     "src/viewer/scene/core.js": {

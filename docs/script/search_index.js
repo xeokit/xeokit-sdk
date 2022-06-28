@@ -1,8 +1,8 @@
 window.esdocSearchIndex = [
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~alphaformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~alphaformat",
     "variable/index.html#static-variable-AlphaFormat",
-    "<span>AlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>AlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -54,9 +54,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~basicdepthpacking",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~basicdepthpacking",
     "variable/index.html#static-variable-BasicDepthPacking",
-    "<span>BasicDepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>BasicDepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -66,9 +66,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~bytetype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~bytetype",
     "variable/index.html#static-variable-ByteType",
-    "<span>ByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>ByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -132,9 +132,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~clamptoedgewrapping",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~clamptoedgewrapping",
     "variable/index.html#static-variable-ClampToEdgeWrapping",
-    "<span>ClampToEdgeWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>ClampToEdgeWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -186,15 +186,15 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~depthformat",
     "variable/index.html#static-variable-DepthFormat",
-    "<span>DepthFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>DepthFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~depthstencilformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~depthstencilformat",
     "variable/index.html#static-variable-DepthStencilFormat",
-    "<span>DepthStencilFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>DepthStencilFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -258,9 +258,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~floattype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~floattype",
     "variable/index.html#static-variable-FloatType",
-    "<span>FloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>FloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -294,9 +294,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~halffloattype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~halffloattype",
     "variable/index.html#static-variable-HalfFloatType",
-    "<span>HalfFloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>HalfFloatType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -330,9 +330,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~inttype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~inttype",
     "variable/index.html#static-variable-IntType",
-    "<span>IntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>IntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -378,39 +378,39 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearencoding",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearencoding",
     "variable/index.html#static-variable-LinearEncoding",
-    "<span>LinearEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearfilter",
     "variable/index.html#static-variable-LinearFilter",
-    "<span>LinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearmipmaplinearfilter",
     "variable/index.html#static-variable-LinearMipMapLinearFilter",
-    "<span>LinearMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearmipmapnearestfilter",
     "variable/index.html#static-variable-LinearMipMapNearestFilter",
-    "<span>LinearMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmaplinearfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearmipmaplinearfilter",
     "variable/index.html#static-variable-LinearMipmapLinearFilter",
-    "<span>LinearMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~linearmipmapnearestfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~linearmipmapnearestfilter",
     "variable/index.html#static-variable-LinearMipmapNearestFilter",
-    "<span>LinearMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LinearMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -438,15 +438,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminancealphaformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~luminancealphaformat",
     "variable/index.html#static-variable-LuminanceAlphaFormat",
-    "<span>LuminanceAlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LuminanceAlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~luminanceformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~luminanceformat",
     "variable/index.html#static-variable-LuminanceFormat",
-    "<span>LuminanceFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>LuminanceFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -498,9 +498,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~mirroredrepeatwrapping",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~mirroredrepeatwrapping",
     "variable/index.html#static-variable-MirroredRepeatWrapping",
-    "<span>MirroredRepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>MirroredRepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -522,33 +522,33 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~nearestfilter",
     "variable/index.html#static-variable-NearestFilter",
-    "<span>NearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>NearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~nearestmipmaplinearfilter",
     "variable/index.html#static-variable-NearestMipMapLinearFilter",
-    "<span>NearestMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>NearestMipMapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmapnearestfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~nearestmipmapnearestfilter",
     "variable/index.html#static-variable-NearestMipMapNearestFilter",
-    "<span>NearestMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>NearestMipMapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmaplinearfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~nearestmipmaplinearfilter",
     "variable/index.html#static-variable-NearestMipmapLinearFilter",
-    "<span>NearestMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>NearestMipmapLinearFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~nearestmipmapnearestfilter",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~nearestmipmapnearestfilter",
     "variable/index.html#static-variable-NearestMipmapNearestFilter",
-    "<span>NearestMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>NearestMipmapNearestFilter</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -660,195 +660,195 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbadepthpacking",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbadepthpacking",
     "variable/index.html#static-variable-RGBADepthPacking",
-    "<span>RGBADepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBADepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbaformat",
     "variable/index.html#static-variable-RGBAFormat",
-    "<span>RGBAFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBAFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbaintegerformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbaintegerformat",
     "variable/index.html#static-variable-RGBAIntegerFormat",
-    "<span>RGBAIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBAIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x10_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_10x10_format",
     "variable/index.html#static-variable-RGBA_ASTC_10x10_Format",
-    "<span>RGBA_ASTC_10x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_10x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x5_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_10x5_format",
     "variable/index.html#static-variable-RGBA_ASTC_10x5_Format",
-    "<span>RGBA_ASTC_10x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_10x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x6_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_10x6_format",
     "variable/index.html#static-variable-RGBA_ASTC_10x6_Format",
-    "<span>RGBA_ASTC_10x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_10x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_10x8_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_10x8_format",
     "variable/index.html#static-variable-RGBA_ASTC_10x8_Format",
-    "<span>RGBA_ASTC_10x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_10x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x10_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_12x10_format",
     "variable/index.html#static-variable-RGBA_ASTC_12x10_Format",
-    "<span>RGBA_ASTC_12x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_12x10_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_12x12_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_12x12_format",
     "variable/index.html#static-variable-RGBA_ASTC_12x12_Format",
-    "<span>RGBA_ASTC_12x12_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_12x12_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_4x4_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_4x4_format",
     "variable/index.html#static-variable-RGBA_ASTC_4x4_Format",
-    "<span>RGBA_ASTC_4x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_4x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x4_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_5x4_format",
     "variable/index.html#static-variable-RGBA_ASTC_5x4_Format",
-    "<span>RGBA_ASTC_5x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_5x4_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_5x5_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_5x5_format",
     "variable/index.html#static-variable-RGBA_ASTC_5x5_Format",
-    "<span>RGBA_ASTC_5x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_5x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x5_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_6x5_format",
     "variable/index.html#static-variable-RGBA_ASTC_6x5_Format",
-    "<span>RGBA_ASTC_6x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_6x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_6x6_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_6x6_format",
     "variable/index.html#static-variable-RGBA_ASTC_6x6_Format",
-    "<span>RGBA_ASTC_6x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_6x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x5_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_8x5_format",
     "variable/index.html#static-variable-RGBA_ASTC_8x5_Format",
-    "<span>RGBA_ASTC_8x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_8x5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x6_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_8x6_format",
     "variable/index.html#static-variable-RGBA_ASTC_8x6_Format",
-    "<span>RGBA_ASTC_8x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_8x6_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_astc_8x8_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_astc_8x8_format",
     "variable/index.html#static-variable-RGBA_ASTC_8x8_Format",
-    "<span>RGBA_ASTC_8x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ASTC_8x8_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_bptc_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_bptc_format",
     "variable/index.html#static-variable-RGBA_BPTC_Format",
-    "<span>RGBA_BPTC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_BPTC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_etc2_eac_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_etc2_eac_format",
     "variable/index.html#static-variable-RGBA_ETC2_EAC_Format",
-    "<span>RGBA_ETC2_EAC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_ETC2_EAC_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_2bppv1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_pvrtc_2bppv1_format",
     "variable/index.html#static-variable-RGBA_PVRTC_2BPPV1_Format",
-    "<span>RGBA_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_pvrtc_4bppv1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_pvrtc_4bppv1_format",
     "variable/index.html#static-variable-RGBA_PVRTC_4BPPV1_Format",
-    "<span>RGBA_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_s3tc_dxt1_format",
     "variable/index.html#static-variable-RGBA_S3TC_DXT1_Format",
-    "<span>RGBA_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt3_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_s3tc_dxt3_format",
     "variable/index.html#static-variable-RGBA_S3TC_DXT3_Format",
-    "<span>RGBA_S3TC_DXT3_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_S3TC_DXT3_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgba_s3tc_dxt5_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgba_s3tc_dxt5_format",
     "variable/index.html#static-variable-RGBA_S3TC_DXT5_Format",
-    "<span>RGBA_S3TC_DXT5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBA_S3TC_DXT5_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgbformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbformat",
     "variable/index.html#static-variable-RGBFormat",
-    "<span>RGBFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGBFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgb_etc1_format",
     "variable/index.html#static-variable-RGB_ETC1_Format",
-    "<span>RGB_ETC1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGB_ETC1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_etc2_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgb_etc2_format",
     "variable/index.html#static-variable-RGB_ETC2_Format",
-    "<span>RGB_ETC2_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGB_ETC2_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_2bppv1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgb_pvrtc_2bppv1_format",
     "variable/index.html#static-variable-RGB_PVRTC_2BPPV1_Format",
-    "<span>RGB_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGB_PVRTC_2BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_pvrtc_4bppv1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgb_pvrtc_4bppv1_format",
     "variable/index.html#static-variable-RGB_PVRTC_4BPPV1_Format",
-    "<span>RGB_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGB_PVRTC_4BPPV1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgb_s3tc_dxt1_format",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgb_s3tc_dxt1_format",
     "variable/index.html#static-variable-RGB_S3TC_DXT1_Format",
-    "<span>RGB_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGB_S3TC_DXT1_Format</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgformat",
     "variable/index.html#static-variable-RGFormat",
-    "<span>RGFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~rgintegerformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgintegerformat",
     "variable/index.html#static-variable-RGIntegerFormat",
-    "<span>RGIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RGIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -858,15 +858,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~redformat",
     "variable/index.html#static-variable-RedFormat",
-    "<span>RedFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RedFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~redintegerformat",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~redintegerformat",
     "variable/index.html#static-variable-RedIntegerFormat",
-    "<span>RedIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RedIntegerFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -876,9 +876,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~repeatwrapping",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~repeatwrapping",
     "variable/index.html#static-variable-RepeatWrapping",
-    "<span>RepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>RepeatWrapping</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -930,9 +930,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~shorttype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~shorttype",
     "variable/index.html#static-variable-ShortType",
-    "<span>ShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>ShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -1014,39 +1014,39 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedbytetype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedbytetype",
     "variable/index.html#static-variable-UnsignedByteType",
-    "<span>UnsignedByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedint248type",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedint248type",
     "variable/index.html#static-variable-UnsignedInt248Type",
-    "<span>UnsignedInt248Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedInt248Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedinttype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedinttype",
     "variable/index.html#static-variable-UnsignedIntType",
-    "<span>UnsignedIntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedIntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort4444type",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedshort4444type",
     "variable/index.html#static-variable-UnsignedShort4444Type",
-    "<span>UnsignedShort4444Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedShort4444Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshort5551type",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedshort5551type",
     "variable/index.html#static-variable-UnsignedShort5551Type",
-    "<span>UnsignedShort5551Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedShort5551Type</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~unsignedshorttype",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedshorttype",
     "variable/index.html#static-variable-UnsignedShortType",
-    "<span>UnsignedShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>UnsignedShortType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -1176,9 +1176,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants.js~srgbencoding",
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~srgbencoding",
     "variable/index.html#static-variable-sRGBEncoding",
-    "<span>sRGBEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants.js</span>",
+    "<span>sRGBEncoding</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -2604,15 +2604,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/gltfloaderplugin/gltfperformancemodelloader.js",
-    "file/src/plugins/GLTFLoaderPlugin/GLTFPerformanceModelLoader.js.html",
-    "src/plugins/GLTFLoaderPlugin/GLTFPerformanceModelLoader.js",
-    "file"
-  ],
-  [
-    "src/plugins/gltfloaderplugin/gltfscenegraphloader.js",
-    "file/src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js.html",
-    "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js",
+    "src/plugins/gltfloaderplugin/gltfvboscenemodelloader.js",
+    "file/src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js.html",
+    "src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js",
     "file"
   ],
   [
@@ -6672,9 +6666,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/constants.js",
-    "file/src/viewer/scene/constants.js.html",
-    "src/viewer/scene/constants.js",
+    "src/viewer/scene/constants/constants.js",
+    "file/src/viewer/scene/constants/constants.js.html",
+    "src/viewer/scene/constants/constants.js",
     "file"
   ],
   [
