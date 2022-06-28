@@ -8,7 +8,7 @@ import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-l
 /**
  * @private
  */
-class GLTFPerformanceModelLoader {
+class GLTFVBOSceneModelLoader {
 
     constructor(cfg) {
         cfg = cfg || {};
@@ -476,4 +476,4 @@ function error(ctx, msg) {
     ctx.plugin.error(msg);
 }
 
-export {GLTFPerformanceModelLoader};
+export {GLTFVBOSceneModelLoader};
