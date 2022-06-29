@@ -1,5 +1,5 @@
-import {FileLoader} from "../../FileLoader";
-import {WorkerPool} from "../../WorkerPool";
+import {FileLoader} from "../../FileLoader.js";
+import {WorkerPool} from "../../WorkerPool.js";
 import {
     LinearEncoding,
     LinearFilter,
@@ -15,7 +15,7 @@ import {
     RGBA_S3TC_DXT5_Format,
     RGBAFormat,
     sRGBEncoding
-} from "../../../constants/constants";
+} from "../../../constants/constants.js";
 
 const KTX2TransferSRGB = 2;
 const KTX2_ALPHA_PREMULTIPLIED = 1;

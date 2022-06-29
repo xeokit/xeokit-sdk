@@ -1,8 +1,8 @@
-import {math} from "../../../math";
-import {ArrayBuf} from "../../../webgl/ArrayBuf";
-import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils";
-import {octEncodeNormals, quantizePositions} from "./compression";
-import {buildEdgeIndices} from "../../../math/buildEdgeIndices";
+import {math} from "../../../math/math.js";
+import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
+import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
+import {octEncodeNormals, quantizePositions} from "./compression.js";
+import {buildEdgeIndices} from "../../../math/buildEdgeIndices.js";
 
 /**
  * Instantiated by VBOSceneModel#createGeometry

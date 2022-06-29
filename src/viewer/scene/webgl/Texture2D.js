@@ -1,5 +1,5 @@
 import {utils} from '../utils.js';
-import {convertConstant} from "./convertConstant";
+import {convertConstant} from "./convertConstant.js";
 import {
     NearestFilter,
     NearestMipmapLinearFilter,
@@ -11,8 +11,8 @@ import {
     ClampToEdgeWrapping,
     LinearFilter,
     NearestMipmapNearestFilter
-} from "../constants/constants";
-import {getExtension} from "./getExtension";
+} from "../constants/constants.js";
+import {getExtension} from "./getExtension.js";
 
 const color = new Uint8Array([0, 0, 0, 1]);
 

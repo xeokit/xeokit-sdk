@@ -9,7 +9,7 @@ import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
-import {getExtension} from "./getExtension";
+import {getExtension} from "./getExtension.js";
 
 /**
  * @private
