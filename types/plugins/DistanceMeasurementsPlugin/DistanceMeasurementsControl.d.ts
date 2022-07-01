@@ -14,7 +14,7 @@ export declare class DistanceMeasurementsControl extends Component {
   
   /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
    *
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get active(): boolean;
 

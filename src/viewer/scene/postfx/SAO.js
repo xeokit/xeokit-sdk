@@ -240,7 +240,7 @@ class SAO extends Component {
      * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.
      * Called internally by renderer logic.
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get possible() {
         if (!this._supported) {

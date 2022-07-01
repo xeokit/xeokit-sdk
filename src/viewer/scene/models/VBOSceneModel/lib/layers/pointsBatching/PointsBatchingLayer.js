@@ -103,7 +103,7 @@ class PointsBatchingLayer {
      * Tests if there is room for another portion in this PointsBatchingLayer.
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
-     * @returns {boolean} True if OK to create another portion.
+     * @returns {Boolean} True if OK to create another portion.
      */
     canCreatePortion(lenPositions) {
         if (this._finalized) {

@@ -201,7 +201,7 @@ const Renderer = function (scene, options) {
 
     /**
      * Returns true if the next call to render() will draw something
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     this.needsRender = function () {
         return (imageDirty || drawableListDirty || stateSortDirty);

@@ -243,7 +243,7 @@ function isArray(value) {
 /**
  Tests if the given value is a string
  @param value
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isString(value) {
@@ -253,7 +253,7 @@ function isString(value) {
 /**
  Tests if the given value is a number
  @param value
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isNumeric(value) {
@@ -263,7 +263,7 @@ function isNumeric(value) {
 /**
  Tests if the given value is an ID
  @param value
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isID(value) {
@@ -274,7 +274,7 @@ function isID(value) {
  Tests if the given components are the same, where the components can be either IDs or instances.
  @param c1
  @param c2
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isSameComponent(c1, c2) {
@@ -289,7 +289,7 @@ function isSameComponent(c1, c2) {
 /**
  Tests if the given value is a function
  @param value
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isFunction(value) {
@@ -299,7 +299,7 @@ function isFunction(value) {
 /**
  Tests if the given value is a JavaScript JSON object, eg, ````{ foo: "bar" }````.
  @param value
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isObject(value) {
@@ -357,7 +357,7 @@ function applyIf(o, o2) {
 /**
  Returns true if the given map is empty.
  @param obj
- @returns {boolean}
+ @returns {Boolean}
  @private
  */
 function isEmptyObject(obj) {

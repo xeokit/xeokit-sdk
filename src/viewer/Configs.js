@@ -60,7 +60,7 @@ class Configs {
      *
      * This should only be set once, before creating any Viewers.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     set doublePrecisionEnabled(doublePrecision) {
         math.setDoublePrecisionEnabled(doublePrecision);
@@ -69,7 +69,7 @@ class Configs {
     /**
      * Gets whether double precision mode is enabled for all Viewers.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get doublePrecisionEnabled() {
         return math.getDoublePrecisionEnabled();

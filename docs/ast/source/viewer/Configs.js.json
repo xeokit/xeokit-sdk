@@ -260,7 +260,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 1527,
                   "end": 2154,
                   "loc": {
@@ -454,7 +454,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 1527,
                   "end": 2154,
                   "loc": {
@@ -472,7 +472,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 2273,
                   "end": 2387,
                   "loc": {
@@ -629,7 +629,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 2273,
                   "end": 2387,
                   "loc": {
@@ -861,7 +861,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 1527,
                     "end": 2154,
                     "loc": {
@@ -1055,7 +1055,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 1527,
                     "end": 2154,
                     "loc": {
@@ -1073,7 +1073,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 2273,
                     "end": 2387,
                     "loc": {
@@ -1230,7 +1230,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 2273,
                     "end": 2387,
                     "loc": {
@@ -1311,7 +1311,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
       "start": 1527,
       "end": 2154,
       "loc": {
@@ -1327,7 +1327,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
       "start": 2273,
       "end": 2387,
       "loc": {
@@ -1765,7 +1765,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
       "start": 1527,
       "end": 2154,
       "loc": {
@@ -2139,7 +2139,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
       "start": 2273,
       "end": 2387,
       "loc": {

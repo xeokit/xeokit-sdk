@@ -36,7 +36,8 @@ const tempVec3c = math.vec3();
  * * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
  * ````javascript
- * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, LineSet, Bitmap, BCFViewpointsPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin,
+ *      LineSet, Bitmap, buildGridGeometry, BCFViewpointsPlugin} from "xeokit-sdk.es.js";
  *
  * // Create a Viewer
  * const viewer = new Viewer({
@@ -466,39 +467,6 @@ class BCFViewpointsPlugin extends Plugin {
                 });
             }
         }
-        //
-        // // Annotations
-        //
-        // const annotations = scene.annotations;
-        // for (let id in annotations) {
-        //     if (annotations.hasOwnProperty(id)) {
-        //         let annotation = annotations[id];
-        //         let location = annotation.pos;
-        //         let normal = annotation.normal;
-        //         let up = annotation.up;
-        //         if (camera.yUp) {
-        //             // BCF is Z up
-        //             location = YToZ(location);
-        //             normal = YToZ(normal);
-        //             up = YToZ(up);
-        //         }
-        //         math.addVec3(location, realWorldOffset);
-        //         if (!bcfViewpoint.extensions) {
-        //             bcfViewpoint.extensions = {};
-        //         }
-        //         if (!bcfViewpoint.extensions.annotations) {
-        //             bcfViewpoint.extensions.annotations = [];
-        //         }
-        //         bcfViewpoint.extensions.annotations.push({
-        //             annotation_type: annotation.type,
-        //             annotation_data: annotation.imageData,
-        //             location: xyzArrayToObject(location),
-        //             normal: xyzArrayToObject(normal),
-        //             up: xyzArrayToObject(up),
-        //             height: annotation.height
-        //         });
-        //     }
-        // }
 
         // Entity states
 

@@ -177,13 +177,13 @@
         9,
         10,
         11,
-        942,
-        946,
-        954,
-        958,
-        962,
-        592,
-        871
+        910,
+        914,
+        922,
+        926,
+        930,
+        560,
+        839
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {

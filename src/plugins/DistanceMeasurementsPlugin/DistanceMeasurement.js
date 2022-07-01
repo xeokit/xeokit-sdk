@@ -414,7 +414,7 @@ class DistanceMeasurement extends Component {
     /**
      * Sets whether this DistanceMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     set visible(value) {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultVisible;
@@ -435,7 +435,7 @@ class DistanceMeasurement extends Component {
     /**
      * Gets whether this DistanceMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     get visible() {
         return this._visible;

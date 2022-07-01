@@ -814,7 +814,7 @@ class Camera extends Component {
 
     /**
      * Gets if the World-space X-axis is &quot;up&quot;.
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get xUp() {
         return this._worldUp[0] &gt; this._worldUp[1] &amp;&amp; this._worldUp[0] &gt; this._worldUp[2];
@@ -822,7 +822,7 @@ class Camera extends Component {
 
     /**
      * Gets if the World-space Y-axis is &quot;up&quot;.
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get yUp() {
         return this._worldUp[1] &gt; this._worldUp[0] &amp;&amp; this._worldUp[1] &gt; this._worldUp[2];
@@ -830,7 +830,7 @@ class Camera extends Component {
 
     /**
      * Gets if the World-space Z-axis is &quot;up&quot;.
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get zUp() {
         return this._worldUp[2] &gt; this._worldUp[0] &amp;&amp; this._worldUp[2] &gt; this._worldUp[1];

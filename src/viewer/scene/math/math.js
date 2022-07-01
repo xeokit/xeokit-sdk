@@ -224,7 +224,7 @@ const math = {
      * Returns true if the two 3-element vectors are the same.
      * @param v1
      * @param v2
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     compareVec3(v1, v2) {
         return (v1[0] === v2[0] && v1[1] === v2[1] && v1[2] === v2[2]);
@@ -2380,7 +2380,7 @@ const math = {
      * Returns true if the two 4x4 matrices are the same.
      * @param m1
      * @param m2
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     compareMat4(m1, m2) {
         return m1[0] === m2[0] &&
@@ -3287,7 +3287,7 @@ const math = {
     /** Returns true if the first AABB contains the second AABB.
      * @param aabb1
      * @param aabb2
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     containsAABB3: function (aabb1, aabb2) {
         const result = (

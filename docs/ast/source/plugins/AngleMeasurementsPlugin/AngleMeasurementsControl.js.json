@@ -1672,7 +1672,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 1521,
                   "end": 1657,
                   "loc": {
@@ -1812,7 +1812,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 1521,
                   "end": 1657,
                   "loc": {
@@ -22238,7 +22238,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 1521,
                     "end": 1657,
                     "loc": {
@@ -22378,7 +22378,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 1521,
                     "end": 1657,
                     "loc": {
@@ -41709,7 +41709,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+      "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
       "start": 1521,
       "end": 1657,
       "loc": {
@@ -44727,7 +44727,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean}\n     ",
+      "value": "* Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {Boolean}\n     ",
       "start": 1521,
       "end": 1657,
       "loc": {

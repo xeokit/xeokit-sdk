@@ -321,10 +321,23 @@ class AngleMeasurement extends Component {
         return this._angle;
     }
 
+    /**
+     * Gets the color of the angle measurement.
+     *
+     * The color is an HTML string representation, eg. "#00BBFF" and "blue".
+     *
+     * @type {String}
+     */
     get color() {
         return this._color;
     }
 
+    /** Sets the color of the angle measurement.
+     *
+     * The color is given as an HTML string representation, eg. "#00BBFF" and "blue".
+     *
+     * @type {String}
+     */
     set color(value) {
         this._originDot.setFillColor(value);
         this._cornerDot.setFillColor(value);
@@ -339,7 +352,7 @@ class AngleMeasurement extends Component {
     /**
      * Sets whether this AngleMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     set visible(value) {
         value = value !== false;
@@ -355,7 +368,7 @@ class AngleMeasurement extends Component {
     /**
      * Gets whether this AngleMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     get visible() {
         return this._visible;

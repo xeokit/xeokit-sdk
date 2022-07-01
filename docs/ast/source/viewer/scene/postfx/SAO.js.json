@@ -3293,7 +3293,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
                   "start": 8412,
                   "end": 8634,
                   "loc": {
@@ -4067,7 +4067,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
                   "start": 8412,
                   "end": 8634,
                   "loc": {
@@ -14600,7 +14600,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
                     "start": 8412,
                     "end": 8634,
                     "loc": {
@@ -15374,7 +15374,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
                     "start": 8412,
                     "end": 8634,
                     "loc": {
@@ -22873,7 +22873,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
       "start": 8412,
       "end": 8634,
       "loc": {
@@ -29126,7 +29126,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.\n     * Called internally by renderer logic.\n     * @private\n     * @returns {Boolean}\n     ",
       "start": 8412,
       "end": 8634,
       "loc": {

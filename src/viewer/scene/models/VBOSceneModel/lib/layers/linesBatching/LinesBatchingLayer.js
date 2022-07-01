@@ -94,7 +94,7 @@ class LinesBatchingLayer {
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
      * @param lenIndices Number of indices we'd like to create in this portion.
-     * @returns {boolean} True if OK to create another portion.
+     * @returns {Boolean} True if OK to create another portion.
      */
     canCreatePortion(lenPositions, lenIndices) {
         if (this._finalized) {
