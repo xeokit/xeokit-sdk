@@ -13,13 +13,13 @@ import {PointsInstancingLayer} from './lib/layers/pointsInstancing/PointsInstanc
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {RenderFlags} from "../../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../../math/rtcCoords.js";
-import {VBOSceneModelTextureSet} from "./lib/VBOSceneModelTextureSet";
-import {VBOSceneModelGeometry} from "./lib/VBOSceneModelGeometry";
-import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture";
-import {SceneModel} from "../SceneModel";
-import {Texture2D} from "../../webgl/Texture2D";
+import {VBOSceneModelTextureSet} from "./lib/VBOSceneModelTextureSet.js";
+import {VBOSceneModelGeometry} from "./lib/VBOSceneModelGeometry.js";
+import {VBOSceneModelTexture} from "./lib/VBOSceneModelTexture.js";
+import {SceneModel} from "../SceneModel.js";
+import {Texture2D} from "../../webgl/Texture2D.js";
 import {utils} from "../../utils.js";
-import {getKTX2TextureTranscoder} from "../../utils/";
+import {getKTX2TextureTranscoder} from "../../utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js";
 import {
     LinearFilter,
     LinearMipmapLinearFilter,
@@ -32,7 +32,7 @@ import {
     MirroredRepeatWrapping,
     LinearMipMapNearestFilter,
     NearestFilter
-} from "../../constants/constants";
+} from "../../constants/constants.js";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();

@@ -12,7 +12,7 @@ import {TrianglesBatchingNormalsRenderer} from "./renderers/TrianglesBatchingNor
 import {TrianglesBatchingShadowRenderer} from "./renderers/TrianglesBatchingShadowRenderer.js";
 import {TrianglesBatchingPBRRenderer} from "./renderers/TrianglesBatchingPBRRenderer.js";
 import {TrianglesBatchingPickNormalsFlatRenderer} from "./renderers/TrianglesBatchingPickNormalsFlatRenderer.js";
-import {TrianglesBatchingColorTextureRenderer} from "./renderers/TrianglesBatchingColorTextureRenderer";
+import {TrianglesBatchingColorTextureRenderer} from "./renderers/TrianglesBatchingColorTextureRenderer.js";
 
 /**
  * @private

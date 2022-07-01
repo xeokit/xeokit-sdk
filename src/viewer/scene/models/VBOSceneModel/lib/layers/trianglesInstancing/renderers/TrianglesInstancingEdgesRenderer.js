@@ -1,7 +1,7 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math";
+import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
 const defaultColor = new Float32Array([0,0,0,1]);
