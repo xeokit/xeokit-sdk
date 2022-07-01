@@ -12,7 +12,7 @@ import {TrianglesInstancingNormalsRenderer} from "./renderers/TrianglesInstancin
 import {TrianglesInstancingShadowRenderer} from "./renderers/TrianglesInstancingShadowRenderer.js";
 import {TrianglesInstancingPBRRenderer} from "./renderers/TrianglesInstancingPBRRenderer.js";
 import {TrianglesInstancingPickNormalsFlatRenderer} from "./renderers/TrianglesInstancingPickNormalsFlatRenderer.js";
-import {TrianglesInstancingColorTextureRenderer} from "./renderers/TrianglesInstancingColorTextureRenderer";
+import {TrianglesInstancingColorTextureRenderer} from "./renderers/TrianglesInstancingColorTextureRenderer.js";
 
 /**
  * @private

@@ -59,7 +59,7 @@ import {
     NearestMipMapLinearFilter, LinearMipMapLinearFilter
 } from '../constants/constants.js';
 
-import {getExtension} from "./getExtension";
+import {getExtension} from "./getExtension.js";
 
 /**
  * @private
