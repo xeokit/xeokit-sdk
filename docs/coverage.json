@@ -1,7 +1,7 @@
 {
-  "coverage": "36.98%",
+  "coverage": "37.01%",
   "expectCount": 6752,
-  "actualCount": 2497,
+  "actualCount": 2499,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -53,7 +53,7 @@
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 62,
-      "actualCount": 24,
+      "actualCount": 26,
       "undocumentLines": [
         8,
         9,
@@ -90,9 +90,7 @@
         113,
         131,
         237,
-        270,
-        324,
-        328
+        270
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js": {
@@ -177,13 +175,13 @@
         9,
         10,
         11,
-        910,
-        914,
-        922,
-        926,
-        930,
-        560,
-        839
+        912,
+        916,
+        924,
+        928,
+        932,
+        562,
+        841
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {

@@ -558,10 +558,23 @@ class AngleMeasurement extends Component {
         return this._angle;
     }
 
+    /**
+     * Gets the color of the angle measurement.
+     *
+     * The color is an HTML string representation, eg. &quot;#00BBFF&quot; and &quot;blue&quot;.
+     *
+     * @type {String}
+     */
     get color() {
         return this._color;
     }
 
+    /** Sets the color of the angle measurement.
+     *
+     * The color is given as an HTML string representation, eg. &quot;#00BBFF&quot; and &quot;blue&quot;.
+     *
+     * @type {String}
+     */
     set color(value) {
         this._originDot.setFillColor(value);
         this._cornerDot.setFillColor(value);

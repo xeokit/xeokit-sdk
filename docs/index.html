@@ -237,7 +237,7 @@
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="xeokit-sdk">xeokit-sdk</h1><p><a href="https://percy.io/73524691/xeokit-sdk"><img src="https://percy.io/static/images/percy-badge.svg" alt="This project is using Percy.io for visual regression testing."></a>
 <a href="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk"><img src="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg" alt="npm version"></a>
 <a href="https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk"><img src="https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge" alt></a></p>
-<p><a href="http://xeokit.io">xeokit</a> is a JavaScript software development kit from <a href="http://xeolabs.com">xeolabs</a> for viewing
+<p><a href="http://xeokit.io">xeokit</a> is a JavaScript software development kit created by <a href="http://xeolabs.com">xeolabs</a> for viewing
 high-detail, full-precision 3D engineering and BIM models in the browser.</p>
 <h2 id="installing">Installing</h2><pre><code class="lang-bash"><code class="source-code prettyprint">npm i @xeokit/xeokit-sdk</code>
 </code></pre>
@@ -246,6 +246,13 @@ plugins. Let&apos;s create a <a href="https://xeokit.github.io/xeokit-sdk/docs/c
 a <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a>
 to view a IFC model in the browser, then view a sample IFC model from
 the <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Open IFC Model Database</a>.</p>
+<p>This is just one way to load our models into xeokit. We can also load multiple models from other formats, 
+including <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSON</a>, 
+<a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">glTF</a>, 
+<a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LAZ</a> 
+and <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJ</a>, 
+as well as xeokit&apos;s own native highly-compressed <a href="https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKT</a> format, 
+which we can pre-convert offline from other formats.  </p>
 <ul>
 <li><a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex">Run this example</a></li>
 <li><a href="https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251">Read the full tutorial</a></li>

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1183,
+  "end": 1186,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1183,
+    "end": 1186,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "ImportDeclaration",
         "start": 0,
-        "end": 51,
+        "end": 54,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 1,
-            "column": 51
+            "column": 54
           }
         },
         "specifiers": [
@@ -96,7 +96,7 @@
         "source": {
           "type": "StringLiteral",
           "start": 24,
-          "end": 50,
+          "end": 53,
           "loc": {
             "start": {
               "line": 1,
@@ -104,21 +104,21 @@
             },
             "end": {
               "line": 1,
-              "column": 50
+              "column": 53
             }
           },
           "extra": {
-            "rawValue": "../../../webgl/Texture2D",
-            "raw": "\"../../../webgl/Texture2D\""
+            "rawValue": "../../../webgl/Texture2D.js",
+            "raw": "\"../../../webgl/Texture2D.js\""
           },
-          "value": "../../../webgl/Texture2D"
+          "value": "../../../webgl/Texture2D.js"
         },
         "trailingComments": [
           {
             "type": "CommentBlock",
             "value": "*\n * Instantiated by VBOSceneModel#createTexture\n *\n * @private\n ",
-            "start": 53,
-            "end": 122,
+            "start": 56,
+            "end": 125,
             "loc": {
               "start": {
                 "line": 3,
@@ -134,8 +134,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 123,
-        "end": 1182,
+        "start": 126,
+        "end": 1185,
         "loc": {
           "start": {
             "line": 8,
@@ -150,8 +150,8 @@
         "source": null,
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 130,
-          "end": 1182,
+          "start": 133,
+          "end": 1185,
           "loc": {
             "start": {
               "line": 8,
@@ -164,8 +164,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 136,
-            "end": 156,
+            "start": 139,
+            "end": 159,
             "loc": {
               "start": {
                 "line": 8,
@@ -183,8 +183,8 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 157,
-            "end": 1182,
+            "start": 160,
+            "end": 1185,
             "loc": {
               "start": {
                 "line": 8,
@@ -198,8 +198,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 651,
-                "end": 1018,
+                "start": 654,
+                "end": 1021,
                 "loc": {
                   "start": {
                     "line": 19,
@@ -214,8 +214,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 651,
-                  "end": 662,
+                  "start": 654,
+                  "end": 665,
                   "loc": {
                     "start": {
                       "line": 19,
@@ -238,8 +238,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 663,
-                    "end": 666,
+                    "start": 666,
+                    "end": 669,
                     "loc": {
                       "start": {
                         "line": 19,
@@ -256,8 +256,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 668,
-                  "end": 1018,
+                  "start": 671,
+                  "end": 1021,
                   "loc": {
                     "start": {
                       "line": 19,
@@ -271,8 +271,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 841,
-                      "end": 858,
+                      "start": 844,
+                      "end": 861,
                       "loc": {
                         "start": {
                           "line": 27,
@@ -285,8 +285,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 841,
-                        "end": 857,
+                        "start": 844,
+                        "end": 860,
                         "loc": {
                           "start": {
                             "line": 27,
@@ -300,8 +300,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 841,
-                          "end": 848,
+                          "start": 844,
+                          "end": 851,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -314,8 +314,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 841,
-                            "end": 845,
+                            "start": 844,
+                            "end": 848,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -330,8 +330,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 846,
-                            "end": 848,
+                            "start": 849,
+                            "end": 851,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -350,8 +350,8 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 851,
-                          "end": 857,
+                          "start": 854,
+                          "end": 860,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -364,8 +364,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 851,
-                            "end": 854,
+                            "start": 854,
+                            "end": 857,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -381,8 +381,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 855,
-                            "end": 857,
+                            "start": 858,
+                            "end": 860,
                             "loc": {
                               "start": {
                                 "line": 27,
@@ -404,8 +404,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * ID of this VBOSceneModelTexture, unique within the VBOSceneModel.\n         *\n         * @property id\n         * @type {String}\n         ",
-                          "start": 679,
-                          "end": 832,
+                          "start": 682,
+                          "end": 835,
                           "loc": {
                             "start": {
                               "line": 21,
@@ -422,8 +422,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The texture.\n         *\n         * @property texture\n         * @type {Texture2D}\n         ",
-                          "start": 868,
-                          "end": 976,
+                          "start": 871,
+                          "end": 979,
                           "loc": {
                             "start": {
                               "line": 29,
@@ -439,8 +439,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 985,
-                      "end": 1012,
+                      "start": 988,
+                      "end": 1015,
                       "loc": {
                         "start": {
                           "line": 35,
@@ -453,8 +453,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 985,
-                        "end": 1011,
+                        "start": 988,
+                        "end": 1014,
                         "loc": {
                           "start": {
                             "line": 35,
@@ -468,8 +468,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 985,
-                          "end": 997,
+                          "start": 988,
+                          "end": 1000,
                           "loc": {
                             "start": {
                               "line": 35,
@@ -482,8 +482,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 985,
-                            "end": 989,
+                            "start": 988,
+                            "end": 992,
                             "loc": {
                               "start": {
                                 "line": 35,
@@ -498,8 +498,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 990,
-                            "end": 997,
+                            "start": 993,
+                            "end": 1000,
                             "loc": {
                               "start": {
                                 "line": 35,
@@ -518,8 +518,8 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 1000,
-                          "end": 1011,
+                          "start": 1003,
+                          "end": 1014,
                           "loc": {
                             "start": {
                               "line": 35,
@@ -532,8 +532,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 1000,
-                            "end": 1003,
+                            "start": 1003,
+                            "end": 1006,
                             "loc": {
                               "start": {
                                 "line": 35,
@@ -549,8 +549,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1004,
-                            "end": 1011,
+                            "start": 1007,
+                            "end": 1014,
                             "loc": {
                               "start": {
                                 "line": 35,
@@ -572,8 +572,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The texture.\n         *\n         * @property texture\n         * @type {Texture2D}\n         ",
-                          "start": 868,
-                          "end": 976,
+                          "start": 871,
+                          "end": 979,
                           "loc": {
                             "start": {
                               "line": 29,
@@ -595,8 +595,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @param {*} cfg Texture properties.\n     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTexture}.\n     * @param {String} [cfg.model] VBOSceneModel that owns this texture.\n     * @param {*} [cfg.image] Texture image data.\n     * @param {String} [cfg.src] Texture image source.\n     * @param {Boolean} [cfg.flipY] Whether to flip on Y-axis.\n     * @param {number[]} [cfg.preloadColor] Texture preload color.\n     ",
-                    "start": 164,
-                    "end": 646,
+                    "start": 167,
+                    "end": 649,
                     "loc": {
                       "start": {
                         "line": 10,
@@ -613,8 +613,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @private\n     ",
-                    "start": 1024,
-                    "end": 1051,
+                    "start": 1027,
+                    "end": 1054,
                     "loc": {
                       "start": {
                         "line": 38,
@@ -630,8 +630,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1056,
-                "end": 1180,
+                "start": 1059,
+                "end": 1183,
                 "loc": {
                   "start": {
                     "line": 41,
@@ -646,8 +646,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1056,
-                  "end": 1063,
+                  "start": 1059,
+                  "end": 1066,
                   "loc": {
                     "start": {
                       "line": 41,
@@ -670,8 +670,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1066,
-                  "end": 1180,
+                  "start": 1069,
+                  "end": 1183,
                   "loc": {
                     "start": {
                       "line": 41,
@@ -685,8 +685,8 @@
                   "body": [
                     {
                       "type": "IfStatement",
-                      "start": 1076,
-                      "end": 1174,
+                      "start": 1079,
+                      "end": 1177,
                       "loc": {
                         "start": {
                           "line": 42,
@@ -699,8 +699,8 @@
                       },
                       "test": {
                         "type": "MemberExpression",
-                        "start": 1080,
-                        "end": 1092,
+                        "start": 1083,
+                        "end": 1095,
                         "loc": {
                           "start": {
                             "line": 42,
@@ -713,8 +713,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1080,
-                          "end": 1084,
+                          "start": 1083,
+                          "end": 1087,
                           "loc": {
                             "start": {
                               "line": 42,
@@ -728,8 +728,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1085,
-                          "end": 1092,
+                          "start": 1088,
+                          "end": 1095,
                           "loc": {
                             "start": {
                               "line": 42,
@@ -747,8 +747,8 @@
                       },
                       "consequent": {
                         "type": "BlockStatement",
-                        "start": 1094,
-                        "end": 1174,
+                        "start": 1097,
+                        "end": 1177,
                         "loc": {
                           "start": {
                             "line": 42,
@@ -762,8 +762,8 @@
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 1108,
-                            "end": 1131,
+                            "start": 1111,
+                            "end": 1134,
                             "loc": {
                               "start": {
                                 "line": 43,
@@ -776,8 +776,8 @@
                             },
                             "expression": {
                               "type": "CallExpression",
-                              "start": 1108,
-                              "end": 1130,
+                              "start": 1111,
+                              "end": 1133,
                               "loc": {
                                 "start": {
                                   "line": 43,
@@ -790,8 +790,8 @@
                               },
                               "callee": {
                                 "type": "MemberExpression",
-                                "start": 1108,
-                                "end": 1128,
+                                "start": 1111,
+                                "end": 1131,
                                 "loc": {
                                   "start": {
                                     "line": 43,
@@ -804,8 +804,8 @@
                                 },
                                 "object": {
                                   "type": "MemberExpression",
-                                  "start": 1108,
-                                  "end": 1120,
+                                  "start": 1111,
+                                  "end": 1123,
                                   "loc": {
                                     "start": {
                                       "line": 43,
@@ -818,8 +818,8 @@
                                   },
                                   "object": {
                                     "type": "ThisExpression",
-                                    "start": 1108,
-                                    "end": 1112,
+                                    "start": 1111,
+                                    "end": 1115,
                                     "loc": {
                                       "start": {
                                         "line": 43,
@@ -833,8 +833,8 @@
                                   },
                                   "property": {
                                     "type": "Identifier",
-                                    "start": 1113,
-                                    "end": 1120,
+                                    "start": 1116,
+                                    "end": 1123,
                                     "loc": {
                                       "start": {
                                         "line": 43,
@@ -852,8 +852,8 @@
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 1121,
-                                  "end": 1128,
+                                  "start": 1124,
+                                  "end": 1131,
                                   "loc": {
                                     "start": {
                                       "line": 43,
@@ -874,8 +874,8 @@
                           },
                           {
                             "type": "ExpressionStatement",
-                            "start": 1144,
-                            "end": 1164,
+                            "start": 1147,
+                            "end": 1167,
                             "loc": {
                               "start": {
                                 "line": 44,
@@ -888,8 +888,8 @@
                             },
                             "expression": {
                               "type": "AssignmentExpression",
-                              "start": 1144,
-                              "end": 1163,
+                              "start": 1147,
+                              "end": 1166,
                               "loc": {
                                 "start": {
                                   "line": 44,
@@ -903,8 +903,8 @@
                               "operator": "=",
                               "left": {
                                 "type": "MemberExpression",
-                                "start": 1144,
-                                "end": 1156,
+                                "start": 1147,
+                                "end": 1159,
                                 "loc": {
                                   "start": {
                                     "line": 44,
@@ -917,8 +917,8 @@
                                 },
                                 "object": {
                                   "type": "ThisExpression",
-                                  "start": 1144,
-                                  "end": 1148,
+                                  "start": 1147,
+                                  "end": 1151,
                                   "loc": {
                                     "start": {
                                       "line": 44,
@@ -932,8 +932,8 @@
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 1149,
-                                  "end": 1156,
+                                  "start": 1152,
+                                  "end": 1159,
                                   "loc": {
                                     "start": {
                                       "line": 44,
@@ -951,8 +951,8 @@
                               },
                               "right": {
                                 "type": "NullLiteral",
-                                "start": 1159,
-                                "end": 1163,
+                                "start": 1162,
+                                "end": 1166,
                                 "loc": {
                                   "start": {
                                     "line": 44,
@@ -978,8 +978,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @private\n     ",
-                    "start": 1024,
-                    "end": 1051,
+                    "start": 1027,
+                    "end": 1054,
                     "loc": {
                       "start": {
                         "line": 38,
@@ -999,8 +999,8 @@
             {
               "type": "CommentBlock",
               "value": "*\n * Instantiated by VBOSceneModel#createTexture\n *\n * @private\n ",
-              "start": 53,
-              "end": 122,
+              "start": 56,
+              "end": 125,
               "loc": {
                 "start": {
                   "line": 3,
@@ -1019,8 +1019,8 @@
           {
             "type": "CommentBlock",
             "value": "*\n * Instantiated by VBOSceneModel#createTexture\n *\n * @private\n ",
-            "start": 53,
-            "end": 122,
+            "start": 56,
+            "end": 125,
             "loc": {
               "start": {
                 "line": 3,
@@ -1041,8 +1041,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n * Instantiated by VBOSceneModel#createTexture\n *\n * @private\n ",
-      "start": 53,
-      "end": 122,
+      "start": 56,
+      "end": 125,
       "loc": {
         "start": {
           "line": 3,
@@ -1057,8 +1057,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @param {*} cfg Texture properties.\n     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTexture}.\n     * @param {String} [cfg.model] VBOSceneModel that owns this texture.\n     * @param {*} [cfg.image] Texture image data.\n     * @param {String} [cfg.src] Texture image source.\n     * @param {Boolean} [cfg.flipY] Whether to flip on Y-axis.\n     * @param {number[]} [cfg.preloadColor] Texture preload color.\n     ",
-      "start": 164,
-      "end": 646,
+      "start": 167,
+      "end": 649,
       "loc": {
         "start": {
           "line": 10,
@@ -1073,8 +1073,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of this VBOSceneModelTexture, unique within the VBOSceneModel.\n         *\n         * @property id\n         * @type {String}\n         ",
-      "start": 679,
-      "end": 832,
+      "start": 682,
+      "end": 835,
       "loc": {
         "start": {
           "line": 21,
@@ -1089,8 +1089,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The texture.\n         *\n         * @property texture\n         * @type {Texture2D}\n         ",
-      "start": 868,
-      "end": 976,
+      "start": 871,
+      "end": 979,
       "loc": {
         "start": {
           "line": 29,
@@ -1105,8 +1105,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @private\n     ",
-      "start": 1024,
-      "end": 1051,
+      "start": 1027,
+      "end": 1054,
       "loc": {
         "start": {
           "line": 38,
@@ -1263,9 +1263,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "../../../webgl/Texture2D",
+      "value": "../../../webgl/Texture2D.js",
       "start": 24,
-      "end": 50,
+      "end": 53,
       "loc": {
         "start": {
           "line": 1,
@@ -1273,7 +1273,7 @@
         },
         "end": {
           "line": 1,
-          "column": 50
+          "column": 53
         }
       }
     },
@@ -1290,24 +1290,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 50,
-      "end": 51,
+      "start": 53,
+      "end": 54,
       "loc": {
         "start": {
           "line": 1,
-          "column": 50
+          "column": 53
         },
         "end": {
           "line": 1,
-          "column": 51
+          "column": 54
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n * Instantiated by VBOSceneModel#createTexture\n *\n * @private\n ",
-      "start": 53,
-      "end": 122,
+      "start": 56,
+      "end": 125,
       "loc": {
         "start": {
           "line": 3,
@@ -1334,8 +1334,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 123,
-      "end": 129,
+      "start": 126,
+      "end": 132,
       "loc": {
         "start": {
           "line": 8,
@@ -1362,8 +1362,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 130,
-      "end": 135,
+      "start": 133,
+      "end": 138,
       "loc": {
         "start": {
           "line": 8,
@@ -1388,8 +1388,8 @@
         "binop": null
       },
       "value": "VBOSceneModelTexture",
-      "start": 136,
-      "end": 156,
+      "start": 139,
+      "end": 159,
       "loc": {
         "start": {
           "line": 8,
@@ -1413,8 +1413,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 157,
-      "end": 158,
+      "start": 160,
+      "end": 161,
       "loc": {
         "start": {
           "line": 8,
@@ -1429,8 +1429,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @param {*} cfg Texture properties.\n     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTexture}.\n     * @param {String} [cfg.model] VBOSceneModel that owns this texture.\n     * @param {*} [cfg.image] Texture image data.\n     * @param {String} [cfg.src] Texture image source.\n     * @param {Boolean} [cfg.flipY] Whether to flip on Y-axis.\n     * @param {number[]} [cfg.preloadColor] Texture preload color.\n     ",
-      "start": 164,
-      "end": 646,
+      "start": 167,
+      "end": 649,
       "loc": {
         "start": {
           "line": 10,
@@ -1455,8 +1455,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 651,
-      "end": 662,
+      "start": 654,
+      "end": 665,
       "loc": {
         "start": {
           "line": 19,
@@ -1480,8 +1480,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 662,
-      "end": 663,
+      "start": 665,
+      "end": 666,
       "loc": {
         "start": {
           "line": 19,
@@ -1506,8 +1506,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 663,
-      "end": 666,
+      "start": 666,
+      "end": 669,
       "loc": {
         "start": {
           "line": 19,
@@ -1531,8 +1531,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 666,
-      "end": 667,
+      "start": 669,
+      "end": 670,
       "loc": {
         "start": {
           "line": 19,
@@ -1556,8 +1556,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 668,
-      "end": 669,
+      "start": 671,
+      "end": 672,
       "loc": {
         "start": {
           "line": 19,
@@ -1572,8 +1572,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of this VBOSceneModelTexture, unique within the VBOSceneModel.\n         *\n         * @property id\n         * @type {String}\n         ",
-      "start": 679,
-      "end": 832,
+      "start": 682,
+      "end": 835,
       "loc": {
         "start": {
           "line": 21,
@@ -1600,8 +1600,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 841,
-      "end": 845,
+      "start": 844,
+      "end": 848,
       "loc": {
         "start": {
           "line": 27,
@@ -1626,8 +1626,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 845,
-      "end": 846,
+      "start": 848,
+      "end": 849,
       "loc": {
         "start": {
           "line": 27,
@@ -1652,8 +1652,8 @@
         "binop": null
       },
       "value": "id",
-      "start": 846,
-      "end": 848,
+      "start": 849,
+      "end": 851,
       "loc": {
         "start": {
           "line": 27,
@@ -1679,8 +1679,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 849,
-      "end": 850,
+      "start": 852,
+      "end": 853,
       "loc": {
         "start": {
           "line": 27,
@@ -1705,8 +1705,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 851,
-      "end": 854,
+      "start": 854,
+      "end": 857,
       "loc": {
         "start": {
           "line": 27,
@@ -1731,8 +1731,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 854,
-      "end": 855,
+      "start": 857,
+      "end": 858,
       "loc": {
         "start": {
           "line": 27,
@@ -1757,8 +1757,8 @@
         "binop": null
       },
       "value": "id",
-      "start": 855,
-      "end": 857,
+      "start": 858,
+      "end": 860,
       "loc": {
         "start": {
           "line": 27,
@@ -1783,8 +1783,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 857,
-      "end": 858,
+      "start": 860,
+      "end": 861,
       "loc": {
         "start": {
           "line": 27,
@@ -1799,8 +1799,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The texture.\n         *\n         * @property texture\n         * @type {Texture2D}\n         ",
-      "start": 868,
-      "end": 976,
+      "start": 871,
+      "end": 979,
       "loc": {
         "start": {
           "line": 29,
@@ -1827,8 +1827,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 985,
-      "end": 989,
+      "start": 988,
+      "end": 992,
       "loc": {
         "start": {
           "line": 35,
@@ -1853,8 +1853,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 989,
-      "end": 990,
+      "start": 992,
+      "end": 993,
       "loc": {
         "start": {
           "line": 35,
@@ -1879,8 +1879,8 @@
         "binop": null
       },
       "value": "texture",
-      "start": 990,
-      "end": 997,
+      "start": 993,
+      "end": 1000,
       "loc": {
         "start": {
           "line": 35,
@@ -1906,8 +1906,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 998,
-      "end": 999,
+      "start": 1001,
+      "end": 1002,
       "loc": {
         "start": {
           "line": 35,
@@ -1932,8 +1932,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1000,
-      "end": 1003,
+      "start": 1003,
+      "end": 1006,
       "loc": {
         "start": {
           "line": 35,
@@ -1958,8 +1958,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1003,
-      "end": 1004,
+      "start": 1006,
+      "end": 1007,
       "loc": {
         "start": {
           "line": 35,
@@ -1984,8 +1984,8 @@
         "binop": null
       },
       "value": "texture",
-      "start": 1004,
-      "end": 1011,
+      "start": 1007,
+      "end": 1014,
       "loc": {
         "start": {
           "line": 35,
@@ -2010,8 +2010,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1011,
-      "end": 1012,
+      "start": 1014,
+      "end": 1015,
       "loc": {
         "start": {
           "line": 35,
@@ -2035,8 +2035,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1017,
-      "end": 1018,
+      "start": 1020,
+      "end": 1021,
       "loc": {
         "start": {
           "line": 36,
@@ -2051,8 +2051,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @private\n     ",
-      "start": 1024,
-      "end": 1051,
+      "start": 1027,
+      "end": 1054,
       "loc": {
         "start": {
           "line": 38,
@@ -2077,8 +2077,8 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 1056,
-      "end": 1063,
+      "start": 1059,
+      "end": 1066,
       "loc": {
         "start": {
           "line": 41,
@@ -2102,8 +2102,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1063,
-      "end": 1064,
+      "start": 1066,
+      "end": 1067,
       "loc": {
         "start": {
           "line": 41,
@@ -2127,8 +2127,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1064,
-      "end": 1065,
+      "start": 1067,
+      "end": 1068,
       "loc": {
         "start": {
           "line": 41,
@@ -2152,8 +2152,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1066,
-      "end": 1067,
+      "start": 1069,
+      "end": 1070,
       "loc": {
         "start": {
           "line": 41,
@@ -2180,8 +2180,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 1076,
-      "end": 1078,
+      "start": 1079,
+      "end": 1081,
       "loc": {
         "start": {
           "line": 42,
@@ -2205,8 +2205,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1079,
-      "end": 1080,
+      "start": 1082,
+      "end": 1083,
       "loc": {
         "start": {
           "line": 42,
@@ -2233,8 +2233,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1080,
-      "end": 1084,
+      "start": 1083,
+      "end": 1087,
       "loc": {
         "start": {
           "line": 42,
@@ -2259,8 +2259,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1084,
-      "end": 1085,
+      "start": 1087,
+      "end": 1088,
       "loc": {
         "start": {
           "line": 42,
@@ -2285,8 +2285,8 @@
         "binop": null
       },
       "value": "texture",
-      "start": 1085,
-      "end": 1092,
+      "start": 1088,
+      "end": 1095,
       "loc": {
         "start": {
           "line": 42,
@@ -2310,8 +2310,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1092,
-      "end": 1093,
+      "start": 1095,
+      "end": 1096,
       "loc": {
         "start": {
           "line": 42,
@@ -2335,8 +2335,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1094,
-      "end": 1095,
+      "start": 1097,
+      "end": 1098,
       "loc": {
         "start": {
           "line": 42,
@@ -2363,8 +2363,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1108,
-      "end": 1112,
+      "start": 1111,
+      "end": 1115,
       "loc": {
         "start": {
           "line": 43,
@@ -2389,8 +2389,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1112,
-      "end": 1113,
+      "start": 1115,
+      "end": 1116,
       "loc": {
         "start": {
           "line": 43,
@@ -2415,8 +2415,8 @@
         "binop": null
       },
       "value": "texture",
-      "start": 1113,
-      "end": 1120,
+      "start": 1116,
+      "end": 1123,
       "loc": {
         "start": {
           "line": 43,
@@ -2441,8 +2441,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1120,
-      "end": 1121,
+      "start": 1123,
+      "end": 1124,
       "loc": {
         "start": {
           "line": 43,
@@ -2467,8 +2467,8 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 1121,
-      "end": 1128,
+      "start": 1124,
+      "end": 1131,
       "loc": {
         "start": {
           "line": 43,
@@ -2492,8 +2492,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1128,
-      "end": 1129,
+      "start": 1131,
+      "end": 1132,
       "loc": {
         "start": {
           "line": 43,
@@ -2517,8 +2517,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1129,
-      "end": 1130,
+      "start": 1132,
+      "end": 1133,
       "loc": {
         "start": {
           "line": 43,
@@ -2543,8 +2543,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1130,
-      "end": 1131,
+      "start": 1133,
+      "end": 1134,
       "loc": {
         "start": {
           "line": 43,
@@ -2571,8 +2571,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1144,
-      "end": 1148,
+      "start": 1147,
+      "end": 1151,
       "loc": {
         "start": {
           "line": 44,
@@ -2597,8 +2597,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1148,
-      "end": 1149,
+      "start": 1151,
+      "end": 1152,
       "loc": {
         "start": {
           "line": 44,
@@ -2623,8 +2623,8 @@
         "binop": null
       },
       "value": "texture",
-      "start": 1149,
-      "end": 1156,
+      "start": 1152,
+      "end": 1159,
       "loc": {
         "start": {
           "line": 44,
@@ -2650,8 +2650,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1157,
-      "end": 1158,
+      "start": 1160,
+      "end": 1161,
       "loc": {
         "start": {
           "line": 44,
@@ -2678,8 +2678,8 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 1159,
-      "end": 1163,
+      "start": 1162,
+      "end": 1166,
       "loc": {
         "start": {
           "line": 44,
@@ -2704,8 +2704,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1163,
-      "end": 1164,
+      "start": 1166,
+      "end": 1167,
       "loc": {
         "start": {
           "line": 44,
@@ -2729,8 +2729,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1173,
-      "end": 1174,
+      "start": 1176,
+      "end": 1177,
       "loc": {
         "start": {
           "line": 45,
@@ -2754,8 +2754,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1179,
-      "end": 1180,
+      "start": 1182,
+      "end": 1183,
       "loc": {
         "start": {
           "line": 46,
@@ -2779,8 +2779,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1181,
-      "end": 1182,
+      "start": 1184,
+      "end": 1185,
       "loc": {
         "start": {
           "line": 47,
@@ -2805,8 +2805,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1183,
-      "end": 1183,
+      "start": 1186,
+      "end": 1186,
       "loc": {
         "start": {
           "line": 48,

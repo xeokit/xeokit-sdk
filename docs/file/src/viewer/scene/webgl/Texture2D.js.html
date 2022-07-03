@@ -236,7 +236,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/webgl/Texture2D.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {utils} from &apos;../utils.js&apos;;
-import {convertConstant} from &quot;./convertConstant&quot;;
+import {convertConstant} from &quot;./convertConstant.js&quot;;
 import {
     NearestFilter,
     NearestMipmapLinearFilter,
@@ -248,8 +248,8 @@ import {
     ClampToEdgeWrapping,
     LinearFilter,
     NearestMipmapNearestFilter
-} from &quot;../constants/constants&quot;;
-import {getExtension} from &quot;./getExtension&quot;;
+} from &quot;../constants/constants.js&quot;;
+import {getExtension} from &quot;./getExtension.js&quot;;
 
 const color = new Uint8Array([0, 0, 0, 1]);
 

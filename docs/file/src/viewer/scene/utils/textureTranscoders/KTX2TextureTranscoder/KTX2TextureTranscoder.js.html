@@ -235,8 +235,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {FileLoader} from &quot;../../FileLoader&quot;;
-import {WorkerPool} from &quot;../../WorkerPool&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {FileLoader} from &quot;../../FileLoader.js&quot;;
+import {WorkerPool} from &quot;../../WorkerPool.js&quot;;
 import {
     LinearEncoding,
     LinearFilter,
@@ -252,7 +252,7 @@ import {
     RGBA_S3TC_DXT5_Format,
     RGBAFormat,
     sRGBEncoding
-} from &quot;../../../constants/constants&quot;;
+} from &quot;../../../constants/constants.js&quot;;
 
 const KTX2TransferSRGB = 2;
 const KTX2_ALPHA_PREMULTIPLIED = 1;

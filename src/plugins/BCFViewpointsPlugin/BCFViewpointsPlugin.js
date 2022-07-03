@@ -13,6 +13,8 @@ const tempVec3c = math.vec3();
 /**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  *
+ * * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)
+ *
  * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
  * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
  *
@@ -33,7 +35,7 @@ const tempVec3c = math.vec3();
  * plan view using a {@link Bitmap}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
- * * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin,
