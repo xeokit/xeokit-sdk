@@ -13,20 +13,33 @@ const tempVec3c = math.vec3();
 /**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  *
- * * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)
  *
- * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
- * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
+ * * [[Example 1: Saving viewer state to a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ * * [[Example 2: Loading viewer state from a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint)]
+ *
+ * ## Overview
+ *
+ * BCF is an open standard that enables workflow communications between BIM software tools. An XML schema, called
+ * Building Collaboration Format (BCF), encodes messages that inform one BIM tool of issues found by another.
+ *
+ * A BCF viewpoint captures a viewpoint of a model that highlights an issue. The viewpoint can then be loaded by another
+ * viewer to examine the issue.
+ *
+ * Using this plugin, a xeokit {@link Viewer} can exchange BCF-encoded viewpoints with other BIM software,
+ * allowing us to use the Viewer to report and view issues in BIM models.
+ *
+ * This plugin's viewpoints conform to the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
  *
  * ## Supported BCF Elements
  *
- * A BCF viewpoint saves and loads the following state into a xeokit {@link Viewer}:
+ * BCFViewpointsPlugin saves and loads the following state in BCF viewpoints:
  *
  * * {@link Camera} position, orientation and projection
+ * * {@link Entity} visibilities and selection states
  * * {@link SectionPlane}s to slice the model
  * * {@link LineSet}s to show 3D lines
  * * {@link Bitmap}s to show images
- * * {@link Entity} visibilities and selection states
  *
  * ## Saving a BCF Viewpoint
  *

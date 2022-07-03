@@ -235,13 +235,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber297">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber310">@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber297">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber310">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -262,18 +262,25 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that saves and loads BCF viewpoints as JSON objects.</p>
+<p><a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint"><img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png"></a></p>
 <ul>
-<li><a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint"><img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png"></a></li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Example 1: Saving viewer state to a BCF viewpoint</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint">Example 2: Loading viewer state from a BCF viewpoint</a>]</li>
 </ul>
-<p>BCF is a format for managing issues on a BIM project. This plugin&apos;s viewpoints conform to
-the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.</p>
-<h2 id="supported-bcf-elements">Supported BCF Elements</h2><p>A BCF viewpoint saves and loads the following state into a xeokit <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>:</p>
+<h2 id="overview">Overview</h2><p>BCF is an open standard that enables workflow communications between BIM software tools. An XML schema, called
+Building Collaboration Format (BCF), encodes messages that inform one BIM tool of issues found by another.</p>
+<p>A BCF viewpoint captures a viewpoint of a model that highlights an issue. The viewpoint can then be loaded by another
+viewer to examine the issue.</p>
+<p>Using this plugin, a xeokit <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> can exchange BCF-encoded viewpoints with other BIM software,
+allowing us to use the Viewer to report and view issues in BIM models.</p>
+<p>This plugin&apos;s viewpoints conform to the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.</p>
+<h2 id="supported-bcf-elements">Supported BCF Elements</h2><p>BCFViewpointsPlugin saves and loads the following state in BCF viewpoints:</p>
 <ul>
 <li><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position, orientation and projection</li>
+<li><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> visibilities and selection states</li>
 <li><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s to slice the model</li>
 <li><span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span>s to show 3D lines</li>
 <li><span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span>s to show images</li>
-<li><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> visibilities and selection states</li>
 </ul>
 <h2 id="saving-a-bcf-viewpoint">Saving a BCF Viewpoint</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load an <code>.XKT</code> model into it using an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>,
 slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>, create a grid ground plane using a <span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span> and a 2D
@@ -957,7 +964,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
@@ -1050,7 +1057,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1110,7 +1117,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber316">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -1173,7 +1180,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber907">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber920">source</a></span></span>
     </span>
   </h3>
 
@@ -1217,7 +1224,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber343">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber356">source</a></span></span>
     </span>
   </h3>
 
@@ -1343,7 +1350,7 @@ objects in the viewpoint will be visible.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber605">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber618">source</a></span></span>
     </span>
   </h3>
 
