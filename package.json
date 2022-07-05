@@ -6,7 +6,7 @@
   "main": "/dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
+    "build": "rollup --config rollup.config.js && rollup --config rollup.minified.config.js && cp node_modules/web-ifc/web-ifc.wasm dist/.",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
@@ -46,13 +46,16 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
+    "@babel/preset-env": "^7.18.6",
     "@loaders.gl/core": "^3.1.8",
-    "@loaders.gl/las": "^3.1.8",
-    "@loaders.gl/gltf": "^3.1.8",
     "@loaders.gl/draco": "^3.1.8",
+    "@loaders.gl/gltf": "^3.1.8",
+    "@loaders.gl/las": "^3.1.8",
+    "@rollup/plugin-babel": "^5.3.1",
     "web-ifc": "0.0.34"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.1",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
     "esdoc-publish-html-plugin": "^1.1.2",
@@ -60,7 +63,6 @@
     "eslint": "^8.13.0",
     "parse5": "^7.0.0",
     "rollup": "^2.70.2",
-    "@rollup/plugin-node-resolve": "^13.2.1",
     "rollup-plugin-terser": "^7.0.2",
     "typedoc": "^0.22.15"
   },
